@@ -1,0 +1,529 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the app described below in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 with shadcn/ui (new-york style, neutral theme) is set up, every shadcn/ui component is already installed under `@/components/ui/*`, lucide-react is installed, sonner's `<Toaster />` is mounted in the root layout, and the shadcn/ui documentation is in the `docs/` folder, which you can read (start with `docs/README.md`).\n\nTask: Lumen has a new visual identity, and its marketing site must carry it through the design system's own theming, not one-off styles on each element. Apply the brand from the data: the brand colour for primary buttons, links and focus rings; a warm stone-grey neutral palette; a 4px corner radius on buttons, inputs, cards and menus; the serif heading font and the sans body font given (both are system fonts, so load nothing); and a dark theme by default with a light/dark toggle in the header that switches the whole site. Build the home page at `/` (a header with the logo text, navigation and the theme toggle; a hero with the tagline and two calls to action; a row of customer logos as text; three feature sections; a footer) and a pricing page at `/pricing` (a monthly/yearly switch that shows yearly prices at two months free, three plan cards with the Team plan highlighted, a feature comparison table, and the FAQ as an accordion), sharing the header and footer.\n\nUse this data for the content (define it in the code; you may put it in `lib/data.ts`):\n\n```json\n{\n  \"product\": \"Lumen, a product-analytics and issue-tracking app for small software teams\",\n  \"brand\": {\n    \"name\": \"Lumen\",\n    \"tagline\": \"Product analytics and issue tracking that small teams actually read\",\n    \"brand_color\": \"#E8590C\",\n    \"neutral\": \"warm stone grey\",\n    \"radius\": \"4px on buttons, inputs, cards and menus\",\n    \"heading_font\": \"Georgia, \\\"Times New Roman\\\", serif\",\n    \"body_font\": \"ui-sans-serif, system-ui, sans-serif\",\n    \"default_theme\": \"dark\",\n    \"plans\": [\n      {\n        \"name\": \"Free\",\n        \"price_month\": 0,\n        \"seats\": \"1\",\n        \"features\": [\n          \"1 project\",\n          \"7-day history\",\n          \"Community support\"\n        ]\n      },\n      {\n        \"name\": \"Team\",\n        \"price_month\": 12,\n        \"seats\": \"per seat\",\n        \"features\": [\n          \"Unlimited projects\",\n          \"1-year history\",\n          \"Issue tracker\",\n          \"Email support\"\n        ],\n        \"highlight\": true\n      },\n      {\n        \"name\": \"Business\",\n        \"price_month\": 29,\n        \"seats\": \"per seat\",\n        \"features\": [\n          \"Everything in Team\",\n          \"SSO and audit log\",\n          \"Unlimited history\",\n          \"Priority support\"\n        ]\n      }\n    ],\n    \"faq\": [\n      {\n        \"q\": \"Can I switch plans later?\",\n        \"a\": \"Yes. Upgrades apply at once; downgrades at the end of the billing period.\"\n      },\n      {\n        \"q\": \"Do you offer a discount for non-profits?\",\n        \"a\": \"Yes, 50% off Team and Business for registered non-profits.\"\n      },\n      {\n        \"q\": \"Where is my data stored?\",\n        \"a\": \"In the EU, encrypted at rest.\"\n      }\n    ],\n    \"logos\": [\n      \"Acme Labs\",\n      \"Northwind Studio\",\n      \"Hooli\",\n      \"Globex\",\n      \"Initech\"\n    ]\n  }\n}\n```\n\nRequirements:\n- The app must serve these routes: `/`, `/pricing`. Each route default-exports its page from its `page.tsx`; nested layouts are allowed.\n- Write as many files as the app needs, under `app/`, `components/` or `lib/`. Do not change any file that already exists in the project except `app/page.tsx`, `app/globals.css`, `app/layout.tsx` (send the whole new file). The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Put \"use client\" at the top of every file that uses state, effects or event handlers.\n- Use realistic placeholder content defined in the files (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The app must type-check under strict TypeScript, pass `next build`, and render every route without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with every file, each in its own fenced code block whose opening line names the file's path, like ```tsx app/settings/page.tsx, and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by exploring the project and docs."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Udfv6L1W5UJi2jZmvKiHkE",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_016D9nVwT59CrhhUtp8DNuiM",
+          "name": "read_file",
+          "input": {
+            "path": "docs/README.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01GMxXBjqmV6m4AQMgkDM9JY",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01SE4zUWpQw6ijNuULUu5RYo",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Udfv6L1W5UJi2jZmvKiHkE",
+          "content": "docs/\nproject/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016D9nVwT59CrhhUtp8DNuiM",
+          "content": "# shadcn/ui documentation (local copy)\n\nThis folder is a local copy of the shadcn/ui documentation and agent skill, pinned to one\ncommit of github.com/shadcn-ui/ui. Everything listed here is already set up in the project.\n\n- `skill/SKILL.md`: the official shadcn/ui agent skill (rules in `skill/rules/`). The\n  shadcn CLI is **not** available in this environment: every component is already\n  installed under `@/components/ui/*`, so skip any step that says to run `npx shadcn`.\n- `llms.txt`: the official documentation index. A link of the form\n  `https://ui.shadcn.com/docs/components/<name>` is available here as\n  `components/<name>.mdx`.\n- `components/*.mdx`: per-component docs (Radix flavour, matching the installed components).\n  A `<ComponentPreview name=\"x\" />` tag refers to the example source in `examples/x.tsx`.\n- `examples/*.tsx`: the example source behind each docs preview.\n- `blocks/`: the official shadcn/ui blocks (dashboard, login, sidebar, ...).\n- `installation/next.mdx`: Next.js setup notes (already done).\n\nImports in `examples/` and `blocks/` have been rewritten to the project's paths\n(`@/components/ui/*`, `@/lib/utils`, `@/hooks/*`), as the shadcn CLI does.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GMxXBjqmV6m4AQMgkDM9JY",
+          "content": "@import \"tailwindcss\";\n@import \"tw-animate-css\";\n\n@custom-variant dark (&:is(.dark *));\n\n@theme inline {\n  --radius-sm: calc(var(--radius) * 0.6);\n  --radius-md: calc(var(--radius) * 0.8);\n  --radius-lg: var(--radius);\n  --radius-xl: calc(var(--radius) * 1.4);\n  --radius-2xl: calc(var(--radius) * 1.8);\n  --radius-3xl: calc(var(--radius) * 2.2);\n  --radius-4xl: calc(var(--radius) * 2.6);\n  --color-background: var(--background);\n  --color-foreground: var(--foreground);\n  --color-card: var(--card);\n  --color-card-foreground: var(--card-foreground);\n  --color-popover: var(--popover);\n  --color-popover-foreground: var(--popover-foreground);\n  --color-primary: var(--primary);\n  --color-primary-foreground: var(--primary-foreground);\n  --color-secondary: var(--secondary);\n  --color-secondary-foreground: var(--secondary-foreground);\n  --color-muted: var(--muted);\n  --color-muted-foreground: var(--muted-foreground);\n  --color-accent: var(--accent);\n  --color-accent-foreground: var(--accent-foreground);\n  --color-destructive: var(--destructive);\n  --color-border: var(--border);\n  --color-input: var(--input);\n  --color-ring: var(--ring);\n  --color-chart-1: var(--chart-1);\n  --color-chart-2: var(--chart-2);\n  --color-chart-3: var(--chart-3);\n  --color-chart-4: var(--chart-4);\n  --color-chart-5: var(--chart-5);\n  --color-sidebar: var(--sidebar);\n  --color-sidebar-foreground: var(--sidebar-foreground);\n  --color-sidebar-primary: var(--sidebar-primary);\n  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);\n  --color-sidebar-accent: var(--sidebar-accent);\n  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);\n  --color-sidebar-border: var(--sidebar-border);\n  --color-sidebar-ring: var(--sidebar-ring);\n}\n\n:root {\n  --radius: 0.625rem;\n  --background: oklch(1 0 0);\n  --foreground: oklch(0.145 0 0);\n  --card: oklch(1 0 0);\n  --card-foreground: oklch(0.145 0 0);\n  --popover: oklch(1 0 0);\n  --popover-foreground: oklch(0.145 0 0);\n  --primary: oklch(0.205 0 0);\n  --primary-foreground: oklch(0.985 0 0);\n  --secondary: oklch(0.97 0 0);\n  --secondary-foreground: oklch(0.205 0 0);\n  --muted: oklch(0.97 0 0);\n  --muted-foreground: oklch(0.556 0 0);\n  --accent: oklch(0.97 0 0);\n  --accent-foreground: oklch(0.205 0 0);\n  --destructive: oklch(0.577 0.245 27.325);\n  --border: oklch(0.922 0 0);\n  --input: oklch(0.922 0 0);\n  --ring: oklch(0.708 0 0);\n  --chart-1: oklch(0.646 0.222 41.116);\n  --chart-2: oklch(0.6 0.118 184.704);\n  --chart-3: oklch(0.398 0.07 227.392);\n  --chart-4: oklch(0.828 0.189 84.429);\n  --chart-5: oklch(0.769 0.188 70.08);\n  --sidebar: oklch(0.985 0 0);\n  --sidebar-foreground: oklch(0.145 0 0);\n  --sidebar-primary: oklch(0.205 0 0);\n  --sidebar-primary-foreground: oklch(0.985 0 0);\n  --sidebar-accent: oklch(0.97 0 0);\n  --sidebar-accent-foreground: oklch(0.205 0 0);\n  --sidebar-border: oklch(0.922 0 0);\n  --sidebar-ring: oklch(0.708 0 0);\n}\n\n.dark {\n  --background: oklch(0.145 0 0);\n  --foreground: oklch(0.985 0 0);\n  --card: oklch(0.205 0 0);\n  --card-foreground: oklch(0.985 0 0);\n  --popover: oklch(0.205 0 0);\n  --popover-foreground: oklch(0.985 0 0);\n  --primary: oklch(0.922 0 0);\n  --primary-foreground: oklch(0.205 0 0);\n  --secondary: oklch(0.269 0 0);\n  --secondary-foreground: oklch(0.985 0 0);\n  --muted: oklch(0.269 0 0);\n  --muted-foreground: oklch(0.708 0 0);\n  --accent: oklch(0.269 0 0);\n  --accent-foreground: oklch(0.985 0 0);\n  --destructive: oklch(0.704 0.191 22.216);\n  --border: oklch(1 0 0 / 10%);\n  --input: oklch(1 0 0 / 15%);\n  --ring: oklch(0.556 0 0);\n  --chart-1: oklch(0.488 0.243 264.376);\n  --chart-2: oklch(0.696 0.17 162.48);\n  --chart-3: oklch(0.769 0.188 70.08);\n  --chart-4: oklch(0.627 0.265 303.9);\n  --chart-5: oklch(0.645 0.246 16.439);\n  --sidebar: oklch(0.205 0 0);\n  --sidebar-foreground: oklch(0.985 0 0);\n  --sidebar-primary: oklch(0.488 0.243 264.376);\n  --sidebar-primary-foreground: oklch(0.985 0 0);\n  --sidebar-accent: oklch(0.269 0 0);\n  --sidebar-accent-foreground: oklch(0.985 0 0);\n  --sidebar-border: oklch(1 0 0 / 10%);\n  --sidebar-ring: oklch(0.556 0 0);\n}\n\n@layer base {\n  * {\n    @apply border-border outline-ring/50;\n  }\n  body {\n    @apply bg-background text-foreground;\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01SE4zUWpQw6ijNuULUu5RYo",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\" suppressHydrationWarning>\n      <body className=\"font-sans antialiased\">\n        {children}\n        <Toaster />\n      </body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check the existing project files and the relevant UI components."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01E79nRbEpShKVBiZdAsfKrH",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01MPKaJpVNoYQTSCmtzjLMBJ",
+          "name": "list_dir",
+          "input": {
+            "path": "project/components"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01RT44Y1CamPMNJaon3vGBmx",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/sonner.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01LNuSk2yPTSxYCyQxjUieoN",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/button.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Dpus2g9yvc3mmKS43eGcr1",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/card.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01EasyEbNEnHXTjWvDGXfH7K",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/switch.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01E79nRbEpShKVBiZdAsfKrH",
+          "content": "app/\ncomponents.json\ncomponents/\nhooks/\nlib/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01MPKaJpVNoYQTSCmtzjLMBJ",
+          "content": "ui/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RT44Y1CamPMNJaon3vGBmx",
+          "content": "\"use client\"\n\nimport {\n  CircleCheckIcon,\n  InfoIcon,\n  Loader2Icon,\n  OctagonXIcon,\n  TriangleAlertIcon,\n} from \"lucide-react\"\nimport { useTheme } from \"next-themes\"\nimport { Toaster as Sonner, type ToasterProps } from \"sonner\"\n\nconst Toaster = ({ ...props }: ToasterProps) => {\n  const { theme = \"system\" } = useTheme()\n\n  return (\n    <Sonner\n      theme={theme as ToasterProps[\"theme\"]}\n      className=\"toaster group\"\n      icons={{\n        success: <CircleCheckIcon className=\"size-4\" />,\n        info: <InfoIcon className=\"size-4\" />,\n        warning: <TriangleAlertIcon className=\"size-4\" />,\n        error: <OctagonXIcon className=\"size-4\" />,\n        loading: <Loader2Icon className=\"size-4 animate-spin\" />,\n      }}\n      style={\n        {\n          \"--normal-bg\": \"var(--popover)\",\n          \"--normal-text\": \"var(--popover-foreground)\",\n          \"--normal-border\": \"var(--border)\",\n          \"--border-radius\": \"var(--radius)\",\n        } as React.CSSProperties\n      }\n      {...props}\n    />\n  )\n}\n\nexport { Toaster }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LNuSk2yPTSxYCyQxjUieoN",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst buttonVariants = cva(\n  \"inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground hover:bg-primary/90\",\n        destructive:\n          \"bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40\",\n        outline:\n          \"border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50\",\n        secondary:\n          \"bg-secondary text-secondary-foreground hover:bg-secondary/80\",\n        ghost:\n          \"hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50\",\n        link: \"text-primary underline-offset-4 hover:underline\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2 has-[>svg]:px-3\",\n        xs: \"h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3\",\n        sm: \"h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5\",\n        lg: \"h-10 rounded-md px-6 has-[>svg]:px-4\",\n        icon: \"size-9\",\n        \"icon-xs\": \"size-6 rounded-md [&_svg:not([class*='size-'])]:size-3\",\n        \"icon-sm\": \"size-8\",\n        \"icon-lg\": \"size-10\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Button({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"button\"> &\n  VariantProps<typeof buttonVariants> & {\n    asChild?: boolean\n  }) {\n  const Comp = asChild ? Slot.Root : \"button\"\n\n  return (\n    <Comp\n      data-slot=\"button\"\n      data-variant={variant}\n      data-size={size}\n      className={cn(buttonVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Button, buttonVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Dpus2g9yvc3mmKS43eGcr1",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Card({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card\"\n      className={cn(\n        \"flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-header\"\n      className={cn(\n        \"@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-title\"\n      className={cn(\"leading-none font-semibold\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardDescription({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-description\"\n      className={cn(\"text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardAction({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-action\"\n      className={cn(\n        \"col-start-2 row-span-2 row-start-1 self-start justify-self-end\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-content\"\n      className={cn(\"px-6\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-footer\"\n      className={cn(\"flex items-center px-6 [.border-t]:pt-6\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Card,\n  CardHeader,\n  CardFooter,\n  CardTitle,\n  CardAction,\n  CardDescription,\n  CardContent,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01EasyEbNEnHXTjWvDGXfH7K",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { Switch as SwitchPrimitive } from \"radix-ui\"\n\nfunction Switch({\n  className,\n  size = \"default\",\n  ...props\n}: React.ComponentProps<typeof SwitchPrimitive.Root> & {\n  size?: \"sm\" | \"default\"\n}) {\n  return (\n    <SwitchPrimitive.Root\n      data-slot=\"switch\"\n      data-size={size}\n      className={cn(\n        \"peer group/switch inline-flex shrink-0 items-center rounded-full border border-transparent shadow-xs transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-[1.15rem] data-[size=default]:w-8 data-[size=sm]:h-3.5 data-[size=sm]:w-6 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80\",\n        className\n      )}\n      {...props}\n    >\n      <SwitchPrimitive.Thumb\n        data-slot=\"switch-thumb\"\n        className={cn(\n          \"pointer-events-none block rounded-full bg-background ring-0 transition-transform group-data-[size=default]/switch:size-4 group-data-[size=sm]/switch:size-3 data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0 dark:data-[state=checked]:bg-primary-foreground dark:data-[state=unchecked]:bg-foreground\"\n        )}\n      />\n    </SwitchPrimitive.Root>\n  )\n}\n\nexport { Switch }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "The sonner component uses `next-themes`, so I'll check that it's installed, along with the other components I plan to use."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01AmcWxPrGFesS36FNAekP25",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01LmMjYWE6AVNdGnvzvfirAg",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/table.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012XTqihdwmpm759FMKLPxfm",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/accordion.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Q5n2nj48kMkyY6kH5HT8Dp",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/dropdown-menu.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018Ax63Kg9axDXVfganBrdB6",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/sheet.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01SrN7BMasc2DxFD8P7wQFzV",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/badge.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01WUthVt3MjApr3gk4vNqwtP",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/toggle-group.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012JfeMW6X5PHLr5omgAT822",
+          "name": "list_dir",
+          "input": {
+            "path": "project/lib"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01AmcWxPrGFesS36FNAekP25",
+          "content": "{\n  \"name\": \"bench-arm-shadcn\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@base-ui/react\": \"1.9.0\",\n    \"@shadcn/react\": \"0.3.1\",\n    \"class-variance-authority\": \"0.7.1\",\n    \"clsx\": \"2.1.1\",\n    \"cmdk\": \"1.1.1\",\n    \"date-fns\": \"4.4.0\",\n    \"embla-carousel-react\": \"8.6.0\",\n    \"input-otp\": \"1.5.0\",\n    \"lucide-react\": \"1.55.0\",\n    \"maplibre-gl\": \"5.24.0\",\n    \"next\": \"16.2.12\",\n    \"next-themes\": \"0.4.6\",\n    \"radix-ui\": \"1.7.0\",\n    \"react\": \"19.2.8\",\n    \"react-day-picker\": \"10.0.2\",\n    \"react-dom\": \"19.2.8\",\n    \"react-hook-form\": \"7.89.0\",\n    \"react-map-gl\": \"8.1.3\",\n    \"react-resizable-panels\": \"4.14.4\",\n    \"recharts\": \"3.10.1\",\n    \"sonner\": \"2.0.8\",\n    \"tailwind-merge\": \"3.7.0\",\n    \"vaul\": \"1.1.2\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"tw-animate-css\": \"1.4.0\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LmMjYWE6AVNdGnvzvfirAg",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Table({ className, ...props }: React.ComponentProps<\"table\">) {\n  return (\n    <div\n      data-slot=\"table-container\"\n      className=\"relative w-full overflow-x-auto\"\n    >\n      <table\n        data-slot=\"table\"\n        className={cn(\"w-full caption-bottom text-sm\", className)}\n        {...props}\n      />\n    </div>\n  )\n}\n\nfunction TableHeader({ className, ...props }: React.ComponentProps<\"thead\">) {\n  return (\n    <thead\n      data-slot=\"table-header\"\n      className={cn(\"[&_tr]:border-b\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction TableBody({ className, ...props }: React.ComponentProps<\"tbody\">) {\n  return (\n    <tbody\n      data-slot=\"table-body\"\n      className={cn(\"[&_tr:last-child]:border-0\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction TableFooter({ className, ...props }: React.ComponentProps<\"tfoot\">) {\n  return (\n    <tfoot\n      data-slot=\"table-footer\"\n      className={cn(\n        \"border-t bg-muted/50 font-medium [&>tr]:last:border-b-0\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction TableRow({ className, ...props }: React.ComponentProps<\"tr\">) {\n  return (\n    <tr\n      data-slot=\"table-row\"\n      className={cn(\n        \"border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction TableHead({ className, ...props }: React.ComponentProps<\"th\">) {\n  return (\n    <th\n      data-slot=\"table-head\"\n      className={cn(\n        \"h-10 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction TableCell({ className, ...props }: React.ComponentProps<\"td\">) {\n  return (\n    <td\n      data-slot=\"table-cell\"\n      className={cn(\n        \"p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction TableCaption({\n  className,\n  ...props\n}: React.ComponentProps<\"caption\">) {\n  return (\n    <caption\n      data-slot=\"table-caption\"\n      className={cn(\"mt-4 text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Table,\n  TableHeader,\n  TableBody,\n  TableFooter,\n  TableHead,\n  TableRow,\n  TableCell,\n  TableCaption,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012XTqihdwmpm759FMKLPxfm",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { ChevronDownIcon } from \"lucide-react\"\nimport { Accordion as AccordionPrimitive } from \"radix-ui\"\n\nfunction Accordion({\n  ...props\n}: React.ComponentProps<typeof AccordionPrimitive.Root>) {\n  return <AccordionPrimitive.Root data-slot=\"accordion\" {...props} />\n}\n\nfunction AccordionItem({\n  className,\n  ...props\n}: React.ComponentProps<typeof AccordionPrimitive.Item>) {\n  return (\n    <AccordionPrimitive.Item\n      data-slot=\"accordion-item\"\n      className={cn(\"border-b last:border-b-0\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction AccordionTrigger({\n  className,\n  children,\n  ...props\n}: React.ComponentProps<typeof AccordionPrimitive.Trigger>) {\n  return (\n    <AccordionPrimitive.Header className=\"flex\">\n      <AccordionPrimitive.Trigger\n        data-slot=\"accordion-trigger\"\n        className={cn(\n          \"flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>svg]:rotate-180\",\n          className\n        )}\n        {...props}\n      >\n        {children}\n        <ChevronDownIcon className=\"pointer-events-none size-4 shrink-0 translate-y-0.5 text-muted-foreground transition-transform duration-200\" />\n      </AccordionPrimitive.Trigger>\n    </AccordionPrimitive.Header>\n  )\n}\n\nfunction AccordionContent({\n  className,\n  children,\n  ...props\n}: React.ComponentProps<typeof AccordionPrimitive.Content>) {\n  return (\n    <AccordionPrimitive.Content\n      data-slot=\"accordion-content\"\n      className=\"overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down\"\n      {...props}\n    >\n      <div className={cn(\"pt-0 pb-4\", className)}>{children}</div>\n    </AccordionPrimitive.Content>\n  )\n}\n\nexport { Accordion, AccordionItem, AccordionTrigger, AccordionContent }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Q5n2nj48kMkyY6kH5HT8Dp",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { CheckIcon, ChevronRightIcon, CircleIcon } from \"lucide-react\"\nimport { DropdownMenu as DropdownMenuPrimitive } from \"radix-ui\"\n\nfunction DropdownMenu({\n  ...props\n}: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) {\n  return <DropdownMenuPrimitive.Root data-slot=\"dropdown-menu\" {...props} />\n}\n\nfunction DropdownMenuPortal({\n  ...props\n}: React.ComponentProps<typeof DropdownMenuPrimitive.Portal>) {\n  return (\n    <DropdownMenuPrimitive.Portal data-slot=\"dropdown-menu-portal\" {...props} />\n  )\n}\n\nfunction DropdownMenuTrigger({\n  ...props\n}: React.ComponentProps<typeof DropdownMenuPrimitive.Trigger>) {\n  return (\n    <DropdownMenuPrimitive.Trigger\n      data-slot=\"dropdown-menu-trigger\"\n      {...props}\n    />\n  )\n}\n\nfunction DropdownMenuContent({\n  className,\n  sideOffset = 4,\n  ...props\n}: React.ComponentProps<typeof DropdownMenuPrimitive.Content>) {\n  return (\n    <DropdownMenuPrimitive.Portal>\n      <DropdownMenuPrimitive.Content\n        data-slot=\"dropdown-menu-content\"\n        sideOffset={sideOffset}\n        className={cn(\n          \"z-50 max-h-(--radix-dropdown-menu-content-available-height) min-w-[8rem] origin-(--radix-dropdown-menu-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md border bg-popover p-1 text-popover-foreground shadow-md data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95\",\n          className\n        )}\n        {...props}\n      />\n    </DropdownMenuPrimitive.Portal>\n  )\n}\n\nfunction DropdownMenuGroup({\n  ...props\n}: React.ComponentProps<typeof DropdownMenuPrimitive.Group>) {\n  return (\n    <DropdownMenuPrimitive.Group data-slot=\"dropdown-menu-group\" {...props} />\n  )\n}\n\nfunction DropdownMenuItem({\n  className,\n  inset,\n  variant = \"default\",\n  ...props\n}: React.ComponentProps<typeof DropdownMenuPrimitive.Item> & {\n  inset?: boolean\n  variant?: \"default\" | \"destructive\"\n}) {\n  return (\n    <DropdownMenuPrimitive.Item\n      data-slot=\"dropdown-menu-item\"\n      data-inset={inset}\n      data-variant={variant}\n      className={cn(\n        \"relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground data-[variant=destructive]:*:[svg]:text-destructive!\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction DropdownMenuCheckboxItem({\n  className,\n  children,\n  checked,\n  ...props\n}: React.ComponentProps<typeof DropdownMenuPrimitive.CheckboxItem>) {\n  return (\n    <DropdownMenuPrimitive.CheckboxItem\n      data-slot=\"dropdown-menu-checkbox-item\"\n      className={cn(\n        \"relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n        className\n      )}\n      checked={checked}\n      {...props}\n    >\n      <span className=\"pointer-events-none absolute left-2 flex size-3.5 items-center justify-center\">\n        <DropdownMenuPrimitive.ItemIndicator>\n          <CheckIcon className=\"size-4\" />\n        </DropdownMenuPrimitive.ItemIndicator>\n      </span>\n      {children}\n    </DropdownMenuPrimitive.CheckboxItem>\n  )\n}\n\nfunction DropdownMenuRadioGroup({\n  ...props\n}: React.ComponentProps<typeof DropdownMenuPrimitive.RadioGroup>) {\n  return (\n    <DropdownMenuPrimitive.RadioGroup\n      data-slot=\"dropdown-menu-radio-group\"\n      {...props}\n    />\n  )\n}\n\nfunction DropdownMenuRadioItem({\n  className,\n  children,\n  ...props\n}: React.ComponentProps<typeof DropdownMenuPrimitive.RadioItem>) {\n  return (\n    <DropdownMenuPrimitive.RadioItem\n      data-slot=\"dropdown-menu-radio-item\"\n      className={cn(\n        \"relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n        className\n      )}\n      {...props}\n    >\n      <span className=\"pointer-events-none absolute left-2 flex size-3.5 items-center justify-center\">\n        <DropdownMenuPrimitive.ItemIndicator>\n          <CircleIcon className=\"size-2 fill-current\" />\n        </DropdownMenuPrimitive.ItemIndicator>\n      </span>\n      {children}\n    </DropdownMenuPrimitive.RadioItem>\n  )\n}\n\nfunction DropdownMenuLabel({\n  className,\n  inset,\n  ...props\n}: React.ComponentProps<typeof DropdownMenuPrimitive.Label> & {\n  inset?: boolean\n}) {\n  return (\n    <DropdownMenuPrimitive.Label\n      data-slot=\"dropdown-menu-label\"\n      data-inset={inset}\n      className={cn(\n        \"px-2 py-1.5 text-sm font-medium data-[inset]:pl-8\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction DropdownMenuSeparator({\n  className,\n  ...props\n}: React.ComponentProps<typeof DropdownMenuPrimitive.Separator>) {\n  return (\n    <DropdownMenuPrimitive.Separator\n      data-slot=\"dropdown-menu-separator\"\n      className={cn(\"-mx-1 my-1 h-px bg-border\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction DropdownMenuShortcut({\n  className,\n  ...props\n}: React.ComponentProps<\"span\">) {\n  return (\n    <span\n      data-slot=\"dropdown-menu-shortcut\"\n      className={cn(\n        \"ml-auto text-xs tracking-widest text-muted-foreground\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction DropdownMenuSub({\n  ...props\n}: React.ComponentProps<typeof DropdownMenuPrimitive.Sub>) {\n  return <DropdownMenuPrimitive.Sub data-slot=\"dropdown-menu-sub\" {...props} />\n}\n\nfunction DropdownMenuSubTrigger({\n  className,\n  inset,\n  children,\n  ...props\n}: React.ComponentProps<typeof DropdownMenuPrimitive.SubTrigger> & {\n  inset?: boolean\n}) {\n  return (\n    <DropdownMenuPrimitive.SubTrigger\n      data-slot=\"dropdown-menu-sub-trigger\"\n      data-inset={inset}\n      className={cn(\n        \"flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[inset]:pl-8 data-[state=open]:bg-accent data-[state=open]:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground\",\n        className\n      )}\n      {...props}\n    >\n      {children}\n      <ChevronRightIcon className=\"ml-auto size-4\" />\n    </DropdownMenuPrimitive.SubTrigger>\n  )\n}\n\nfunction DropdownMenuSubContent({\n  className,\n  ...props\n}: React.ComponentProps<typeof DropdownMenuPrimitive.SubContent>) {\n  return (\n    <DropdownMenuPrimitive.SubContent\n      data-slot=\"dropdown-menu-sub-content\"\n      className={cn(\n        \"z-50 min-w-[8rem] origin-(--radix-dropdown-menu-content-transform-origin) overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-lg data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport {\n  DropdownMenu,\n  DropdownMenuPortal,\n  DropdownMenuTrigger,\n  DropdownMenuContent,\n  DropdownMenuGroup,\n  DropdownMenuLabel,\n  DropdownMenuItem,\n  DropdownMenuCheckboxItem,\n  DropdownMenuRadioGroup,\n  DropdownMenuRadioItem,\n  DropdownMenuSeparator,\n  DropdownMenuShortcut,\n  DropdownMenuSub,\n  DropdownMenuSubTrigger,\n  DropdownMenuSubContent,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018Ax63Kg9axDXVfganBrdB6",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { XIcon } from \"lucide-react\"\nimport { Dialog as SheetPrimitive } from \"radix-ui\"\n\nfunction Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {\n  return <SheetPrimitive.Root data-slot=\"sheet\" {...props} />\n}\n\nfunction SheetTrigger({\n  ...props\n}: React.ComponentProps<typeof SheetPrimitive.Trigger>) {\n  return <SheetPrimitive.Trigger data-slot=\"sheet-trigger\" {...props} />\n}\n\nfunction SheetClose({\n  ...props\n}: React.ComponentProps<typeof SheetPrimitive.Close>) {\n  return <SheetPrimitive.Close data-slot=\"sheet-close\" {...props} />\n}\n\nfunction SheetPortal({\n  ...props\n}: React.ComponentProps<typeof SheetPrimitive.Portal>) {\n  return <SheetPrimitive.Portal data-slot=\"sheet-portal\" {...props} />\n}\n\nfunction SheetOverlay({\n  className,\n  ...props\n}: React.ComponentProps<typeof SheetPrimitive.Overlay>) {\n  return (\n    <SheetPrimitive.Overlay\n      data-slot=\"sheet-overlay\"\n      className={cn(\n        \"fixed inset-0 z-50 bg-black/50 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction SheetContent({\n  className,\n  children,\n  side = \"right\",\n  showCloseButton = true,\n  ...props\n}: React.ComponentProps<typeof SheetPrimitive.Content> & {\n  side?: \"top\" | \"right\" | \"bottom\" | \"left\"\n  showCloseButton?: boolean\n}) {\n  return (\n    <SheetPortal>\n      <SheetOverlay />\n      <SheetPrimitive.Content\n        data-slot=\"sheet-content\"\n        className={cn(\n          \"fixed z-50 flex flex-col gap-4 bg-background shadow-lg transition ease-in-out data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:animate-in data-[state=open]:duration-500\",\n          side === \"right\" &&\n            \"inset-y-0 right-0 h-full w-3/4 border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm\",\n          side === \"left\" &&\n            \"inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm\",\n          side === \"top\" &&\n            \"inset-x-0 top-0 h-auto border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top\",\n          side === \"bottom\" &&\n            \"inset-x-0 bottom-0 h-auto border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom\",\n          className\n        )}\n        {...props}\n      >\n        {children}\n        {showCloseButton && (\n          <SheetPrimitive.Close className=\"absolute top-4 right-4 rounded-xs opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none data-[state=open]:bg-secondary\">\n            <XIcon className=\"size-4\" />\n            <span className=\"sr-only\">Close</span>\n          </SheetPrimitive.Close>\n        )}\n      </SheetPrimitive.Content>\n    </SheetPortal>\n  )\n}\n\nfunction SheetHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"sheet-header\"\n      className={cn(\"flex flex-col gap-1.5 p-4\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction SheetFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"sheet-footer\"\n      className={cn(\"mt-auto flex flex-col gap-2 p-4\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction SheetTitle({\n  className,\n  ...props\n}: React.ComponentProps<typeof SheetPrimitive.Title>) {\n  return (\n    <SheetPrimitive.Title\n      data-slot=\"sheet-title\"\n      className={cn(\"font-semibold text-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction SheetDescription({\n  className,\n  ...props\n}: React.ComponentProps<typeof SheetPrimitive.Description>) {\n  return (\n    <SheetPrimitive.Description\n      data-slot=\"sheet-description\"\n      className={cn(\"text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Sheet,\n  SheetTrigger,\n  SheetClose,\n  SheetContent,\n  SheetHeader,\n  SheetFooter,\n  SheetTitle,\n  SheetDescription,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01SrN7BMasc2DxFD8P7wQFzV",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst badgeVariants = cva(\n  \"inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground [a&]:hover:bg-primary/90\",\n        secondary:\n          \"bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90\",\n        destructive:\n          \"bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90\",\n        outline:\n          \"border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        ghost: \"[a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        link: \"text-primary underline-offset-4 [a&]:hover:underline\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  }\n)\n\nfunction Badge({\n  className,\n  variant = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"span\"> &\n  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {\n  const Comp = asChild ? Slot.Root : \"span\"\n\n  return (\n    <Comp\n      data-slot=\"badge\"\n      data-variant={variant}\n      className={cn(badgeVariants({ variant }), className)}\n      {...props}\n    />\n  )\n}\n\nexport { Badge, badgeVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01WUthVt3MjApr3gk4vNqwtP",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { ToggleGroup as ToggleGroupPrimitive } from \"radix-ui\"\n\nimport { toggleVariants } from \"@/components/ui/toggle\"\n\nconst ToggleGroupContext = React.createContext<\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number\n  }\n>({\n  size: \"default\",\n  variant: \"default\",\n  spacing: 0,\n})\n\nfunction ToggleGroup({\n  className,\n  variant,\n  size,\n  spacing = 0,\n  children,\n  ...props\n}: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number\n  }) {\n  return (\n    <ToggleGroupPrimitive.Root\n      data-slot=\"toggle-group\"\n      data-variant={variant}\n      data-size={size}\n      data-spacing={spacing}\n      style={{ \"--gap\": spacing } as React.CSSProperties}\n      className={cn(\n        \"group/toggle-group flex w-fit items-center gap-[--spacing(var(--gap))] rounded-md data-[spacing=default]:data-[variant=outline]:shadow-xs\",\n        className\n      )}\n      {...props}\n    >\n      <ToggleGroupContext.Provider value={{ variant, size, spacing }}>\n        {children}\n      </ToggleGroupContext.Provider>\n    </ToggleGroupPrimitive.Root>\n  )\n}\n\nfunction ToggleGroupItem({\n  className,\n  children,\n  variant,\n  size,\n  ...props\n}: React.ComponentProps<typeof ToggleGroupPrimitive.Item> &\n  VariantProps<typeof toggleVariants>) {\n  const context = React.useContext(ToggleGroupContext)\n\n  return (\n    <ToggleGroupPrimitive.Item\n      data-slot=\"toggle-group-item\"\n      data-variant={context.variant || variant}\n      data-size={context.size || size}\n      data-spacing={context.spacing}\n      className={cn(\n        toggleVariants({\n          variant: context.variant || variant,\n          size: context.size || size,\n        }),\n        \"w-auto min-w-0 shrink-0 px-3 focus:z-10 focus-visible:z-10\",\n        \"data-[spacing=0]:rounded-none data-[spacing=0]:shadow-none data-[spacing=0]:first:rounded-l-md data-[spacing=0]:last:rounded-r-md data-[spacing=0]:data-[variant=outline]:border-l-0 data-[spacing=0]:data-[variant=outline]:first:border-l\",\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </ToggleGroupPrimitive.Item>\n  )\n}\n\nexport { ToggleGroup, ToggleGroupItem }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012JfeMW6X5PHLr5omgAT822",
+          "content": "utils.ts",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "Setting the radius scale in the theme tokens gives the components a 4px radius, and I'm adding a dark-default ThemeProvider with dark text on the orange primary for contrast. Links will get a slightly darker orange in light mode.\n\n",
+          "signature": "CAQS7wwKEQgTGAI4AUIJbmFycmF0aW9uEgybkdYW9jYdqH4c8BoaDGf1KU7usp+ZAEfy0yIw/ZixCEKh4PeYhe8WoPd0L9f9eJQrGvKwY+C4hEBx7YdaBHnirNUibnDXE1BLhaovKosMzsq5AHW/IrbOFp7LMVHhu9WzpAnzOiZjaX4mhx5aEaiSCMnJB3YU5Lrq8oIOGEODwYYp6JQrS6aU76J/BC37og5CPl7PBP7uRQIKUmViYnUYG3m7kROS/8svS/BYsShEwbKYviOHugkd6cwUonIsW4RdJdakqjdADsKvHkf3itdIfdsyN73uYLQQkt1QR8fEfhA26WGatsKIF6pQll67KQyCJjlQvzEVLvSr3RkbCVKBDykiAFFqck3LIslmeiWBTXQkVoBb3EUZnf1UIfAVKMsfth5TJZrJqe38nlkln7kqIQsfCmfUBb9n1o221glPTfOiQ3DBU0vhrul/hc72JJS56FkYPEF7bkyhigyN04s9V5t7mvsNj/ikODX0EzvL166LES/A4Cney+tPnaDVuI2hdNS6QUkTHJ3a7FFoEKuDFB0p7kmzfYyXYCggHIEl1Xf9kogK2X3iocUoODHk3wC7x12Dd7bGHJu0GzQFG5af1PmUR1VzAEZyjLgjbd+d4GXwPYCft8jggZecdSQNGhby42yjdqSJCfFZQMoz5vWAB0WzII6zNdoUOwRFp7L3mHjQBhh26Vgky/5sMkSq0qhtr0/VKqtNRtOUuAzGB1edm0i5gYk3xpkaulxorsIhvbO08i4PW7Ahsq1rmWzLPoaEZKteuO4HLKx54KTKxfEnk/MkExzEis7bqJZ8HGY7+sTE7HqJ8DKfxgM+8hbivjA60+30TistX0L+08f/3KvxicanGBEyUrIn4KEWA6UrPJo+F2h3rZHB1dOQRGHRBkEZxBho6+5J8vOp8a8mPvRnawgY+7ogb0kXav+bwQX7xvug6+U/6H64K5RrZ5n0ITEYvdFszFRDl9vKEypvnAg5CcD49x0O8FmfovdSq56RgKlKKThpezLwjsCWd50ZHLEJJQ0LcG2C8gd2RxmmdcqaXvak7kLpbf79c115ubGFg18vM+ywBGi1Sv+QiSlRC+PVt030YkNNRAlegdN3+XNkzVCX1+NmV8L5vVh6DZ5EO9gSX2yr1Kmw+eE5XZ/JM2Ft0Id+X/vJ8OyOjafg3V188sFQOuZWGDrX83yMqYhAYFGMe1TKdUpoE9jL/I4MZQa/zH+Co5xDrZjw/ogziJiBQiPzys0XPSubq9rDfy9XKQHpLZqQGuNmI2YvLx/nT7GuJMApfwNuvqKM5Aa7lnIygo/4gem5kmB7zDjWdSuchbzF8o5SHJV/q+tXqcogiAbUXOegeGiZdAXjh8gypDsxg7iKeiLdrbCiwvB07rwTF4zVy5500SAldheEGv7Xny49M8W8J+WtejKxZxVvD1NEEN7I7t0smR9Ppqe3ZXQZmfb/CNUpdBKfSpiql8E8OHglmPo/QjBa/DgFNDxeLuTlKivIuQuxcp2zdbd9aUisTMKJw2ThLgHRjlO5D03G8jRqjwv8yldOjUfhftTIGvniwngrMqx8dIaQ4bUAAXSwMm4yewdzzCbTUvLLwN4vmycJePhCBAV8rXj99r7ujPjsyzlh9+pDWKIkwwQ659qPjp0qusGH+aFt5OoXq0xvVTSu0Is7TEe5mCC/XWFldMsG0mLiYQyNkgCIZtpVcxOIRB1wdRkjLzz+rhTEo3nPag+mFgmY6bTnK+4hMiPUYAzeGUz0uhq3Fl3ydS+KQV452iCliNICgep4npyku46kiE/iALzw2gYm4X3tn+Eoxd7b9uKlNQ9vldOnCeUDIn3k6OE/iGXS9h2y+b03WpEVdNw5GxzVBAjK6Uh4ZcMsBnIee98wKH8Vh70IfA3CB0EcUYolkeJ6HRvGhURW3n+EjWILpr0Yge0fOzANUlSVPsrfWgUa5VUxffnO0I8jBrpl+xYSV2vC2b1lqhiUaDK9UsSn4/CiF3MVkf1LooeN51CT/5qFaMjZ8oRzbnppkVjDlgFjaZDy8uz8eQBi/jQk+vX479iwHmXFRKYUVybjlRzLygHC0T3Rn3uRnME6y9QGuWyRzwJrLhpq4P1fC1K7kihZu1rjBxjpLiUCxAi/71gtqo43P6YGn3KQdiTssnVJLDGUY+kUFs6bVMcYAQ=="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Y6PzgxevD5hFAKwuDVCjvL",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/navigation-menu.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017TcjhA49GWQ2q1eQ61rzj3",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/separator.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_015CddfkP1HQ96eHk2edMi4N",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/label.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01RKKeAmAWyUJHrwMbbDLxfG",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Y6PzgxevD5hFAKwuDVCjvL",
+          "content": "import * as React from \"react\"\nimport { cva } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { ChevronDownIcon } from \"lucide-react\"\nimport { NavigationMenu as NavigationMenuPrimitive } from \"radix-ui\"\n\nfunction NavigationMenu({\n  className,\n  children,\n  viewport = true,\n  ...props\n}: React.ComponentProps<typeof NavigationMenuPrimitive.Root> & {\n  viewport?: boolean\n}) {\n  return (\n    <NavigationMenuPrimitive.Root\n      data-slot=\"navigation-menu\"\n      data-viewport={viewport}\n      className={cn(\n        \"group/navigation-menu relative flex max-w-max flex-1 items-center justify-center\",\n        className\n      )}\n      {...props}\n    >\n      {children}\n      {viewport && <NavigationMenuViewport />}\n    </NavigationMenuPrimitive.Root>\n  )\n}\n\nfunction NavigationMenuList({\n  className,\n  ...props\n}: React.ComponentProps<typeof NavigationMenuPrimitive.List>) {\n  return (\n    <NavigationMenuPrimitive.List\n      data-slot=\"navigation-menu-list\"\n      className={cn(\n        \"group flex flex-1 list-none items-center justify-center gap-1\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction NavigationMenuItem({\n  className,\n  ...props\n}: React.ComponentProps<typeof NavigationMenuPrimitive.Item>) {\n  return (\n    <NavigationMenuPrimitive.Item\n      data-slot=\"navigation-menu-item\"\n      className={cn(\"relative\", className)}\n      {...props}\n    />\n  )\n}\n\nconst navigationMenuTriggerStyle = cva(\n  \"group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-[color,box-shadow] outline-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=open]:bg-accent/50 data-[state=open]:text-accent-foreground data-[state=open]:hover:bg-accent data-[state=open]:focus:bg-accent\"\n)\n\nfunction NavigationMenuTrigger({\n  className,\n  children,\n  ...props\n}: React.ComponentProps<typeof NavigationMenuPrimitive.Trigger>) {\n  return (\n    <NavigationMenuPrimitive.Trigger\n      data-slot=\"navigation-menu-trigger\"\n      className={cn(navigationMenuTriggerStyle(), \"group\", className)}\n      {...props}\n    >\n      {children}{\" \"}\n      <ChevronDownIcon\n        className=\"relative top-[1px] ml-1 size-3 transition duration-300 group-data-[state=open]:rotate-180\"\n        aria-hidden=\"true\"\n      />\n    </NavigationMenuPrimitive.Trigger>\n  )\n}\n\nfunction NavigationMenuContent({\n  className,\n  ...props\n}: React.ComponentProps<typeof NavigationMenuPrimitive.Content>) {\n  return (\n    <NavigationMenuPrimitive.Content\n      data-slot=\"navigation-menu-content\"\n      className={cn(\n        \"top-0 left-0 w-full p-2 pr-2.5 data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 data-[motion^=from-]:animate-in data-[motion^=from-]:fade-in data-[motion^=to-]:animate-out data-[motion^=to-]:fade-out md:absolute md:w-auto\",\n        \"group-data-[viewport=false]/navigation-menu:top-full group-data-[viewport=false]/navigation-menu:mt-1.5 group-data-[viewport=false]/navigation-menu:overflow-hidden group-data-[viewport=false]/navigation-menu:rounded-md group-data-[viewport=false]/navigation-menu:border group-data-[viewport=false]/navigation-menu:bg-popover group-data-[viewport=false]/navigation-menu:text-popover-foreground group-data-[viewport=false]/navigation-menu:shadow group-data-[viewport=false]/navigation-menu:duration-200 **:data-[slot=navigation-menu-link]:focus:ring-0 **:data-[slot=navigation-menu-link]:focus:outline-none group-data-[viewport=false]/navigation-menu:data-[state=closed]:animate-out group-data-[viewport=false]/navigation-menu:data-[state=closed]:fade-out-0 group-data-[viewport=false]/navigation-menu:data-[state=closed]:zoom-out-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:animate-in group-data-[viewport=false]/navigation-menu:data-[state=open]:fade-in-0 group-data-[viewport=false]/navigation-menu:data-[state=open]:zoom-in-95\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction NavigationMenuViewport({\n  className,\n  ...props\n}: React.ComponentProps<typeof NavigationMenuPrimitive.Viewport>) {\n  return (\n    <div\n      className={cn(\n        \"absolute top-full left-0 isolate z-50 flex justify-center\"\n      )}\n    >\n      <NavigationMenuPrimitive.Viewport\n        data-slot=\"navigation-menu-viewport\"\n        className={cn(\n          \"origin-top-center relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-md border bg-popover text-popover-foreground shadow data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:zoom-in-90 md:w-[var(--radix-navigation-menu-viewport-width)]\",\n          className\n        )}\n        {...props}\n      />\n    </div>\n  )\n}\n\nfunction NavigationMenuLink({\n  className,\n  ...props\n}: React.ComponentProps<typeof NavigationMenuPrimitive.Link>) {\n  return (\n    <NavigationMenuPrimitive.Link\n      data-slot=\"navigation-menu-link\"\n      className={cn(\n        \"flex flex-col gap-1 rounded-sm p-2 text-sm transition-all outline-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 data-[active=true]:bg-accent/50 data-[active=true]:text-accent-foreground data-[active=true]:hover:bg-accent data-[active=true]:focus:bg-accent [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction NavigationMenuIndicator({\n  className,\n  ...props\n}: React.ComponentProps<typeof NavigationMenuPrimitive.Indicator>) {\n  return (\n    <NavigationMenuPrimitive.Indicator\n      data-slot=\"navigation-menu-indicator\"\n      className={cn(\n        \"top-full z-[1] flex h-1.5 items-end justify-center overflow-hidden data-[state=hidden]:animate-out data-[state=hidden]:fade-out data-[state=visible]:animate-in data-[state=visible]:fade-in\",\n        className\n      )}\n      {...props}\n    >\n      <div className=\"relative top-[60%] h-2 w-2 rotate-45 rounded-tl-sm bg-border shadow-md\" />\n    </NavigationMenuPrimitive.Indicator>\n  )\n}\n\nexport {\n  NavigationMenu,\n  NavigationMenuList,\n  NavigationMenuItem,\n  NavigationMenuContent,\n  NavigationMenuTrigger,\n  NavigationMenuLink,\n  NavigationMenuIndicator,\n  NavigationMenuViewport,\n  navigationMenuTriggerStyle,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017TcjhA49GWQ2q1eQ61rzj3",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { Separator as SeparatorPrimitive } from \"radix-ui\"\n\nfunction Separator({\n  className,\n  orientation = \"horizontal\",\n  decorative = true,\n  ...props\n}: React.ComponentProps<typeof SeparatorPrimitive.Root>) {\n  return (\n    <SeparatorPrimitive.Root\n      data-slot=\"separator\"\n      decorative={decorative}\n      orientation={orientation}\n      className={cn(\n        \"shrink-0 bg-border data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Separator }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015CddfkP1HQ96eHk2edMi4N",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { Label as LabelPrimitive } from \"radix-ui\"\n\nfunction Label({\n  className,\n  ...props\n}: React.ComponentProps<typeof LabelPrimitive.Root>) {\n  return (\n    <LabelPrimitive.Root\n      data-slot=\"label\"\n      className={cn(\n        \"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Label }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RKKeAmAWyUJHrwMbbDLxfG",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'm writing the files next, with the theme tokens in globals.css, a dark default with a header toggle, and links in the brand colour.\n\n",
+          "signature": "CAQS/QoKEQgTGAI4AUIJbmFycmF0aW9uEgw0j7nxZ3r3t12dUU0aDPww19vEJLnFobqM7iIwwOOScafPw7xmVQiYYF3IG0DG8OL9Hc7BDTcT5pPLog//qY+jYTd/VP103ts5Sv6kKpkKfrfDMwZT49pu7zd78TKhPybdlPhFymoYg2r/kNdYOfFuu1xPjv/nhbgpn6zzeH+vx+VdrGYHRfzwdYq4mIPwulb06rjPKbV9oAsEVjBE4DmiV+DIFuettknf0OLg5Ylq7Um80xv1KC/0xBuGqp3V29Nc433a7clC6TPmIAz89nB00Wibj4fAplVjSxpIF0EBdSyVqeLt6ti5Ht5uPyw6FUNJOOAxpunFCMZkFl0/sUIEYzJDJEWq1WO3ugtRiHRHp6yaXzs36CIfKJKUqRuWwcm598RzZUK7QoB7Fw1BhyNPkXOCfR5hnMcRgWKHla0+F0kWeNg69NOvQraE1qP2JeaAokB2hwxdicUWbnpEAn1GuTyzZm6NjJ5eu4X0Z44N2S6Iyr39UXgaXVU4vo48QzQPu4jNzNxTpahVy7n4HS7eurUy/dK6RRQOyc21EexHMZILank69tFCS+Da28JBzIkqnNEP73ySkuStcWVvCpOH0rphDBY6YjHwqPrbCksdPhh53Unb35kMzfPUIBvbvIFvFVjwlSAiMPbD87Ggqq7UyyecKtUYjEeuMf3UWwQzmG11Kfw8sAxeYMd3cW4qeaeZmlK8QQGRnBgrj5GIpDTrIHGjtdj9MVdCUukCLg852d8VQY8fScoKtVhTbxvE5zLXoVAx+higdVs8yHuhzHY55Oz1D3UnnAcha5bz45M9d1gRTNKoi2WrgCDJLT2fdO5/L3TVwXpbz/5L+wUPoL7PrCRBoAL00YqqhoGmxrMLh07aoBS5CwKeamFAEZpw/OiuEpWymcYlj8jUqyA6iiLh1YFaSTb9u7eutZ5nQ3MUPe2gRAa9RG0XSOdivLHckDyjtaKNBZQyrw68D8WcmQCUyGLIrRCIfA1KEBAqBD5CTlPj64biih06ZSPs3J0dg2qnnHzmV1eSESkk0QcmbhZ4duX1YvdeJf2tDC+MJQM1/ibMRGV73M4e0624jrmrUXunHTRh2UrDPmmhc4FV3P6kCl5M3nMLIqoUgfO4Mr5GuDhog2X92fpKmmGSvQjF6JKo0ERioQPYbbmxtpTCGsbU4UaHb25IPYUr47lBc569hLfO34ghh0ykP2gLbRu7Eq/OYxUnecnsVcLgFQsyEH231dckqiRzOjSiEe16ubygAxcU1ebB9dVuFUsSsGufItKo8kLiPpDk0FUaQrZbaV6DvzCs9qUo9NucF+tZCdWv0XabSIoUysD3r49g4EYB7X/UjG1mc9iIOSfiQ+tXz/ujEj/kPOrwSBRJygv4DHcm51yxcTB340neMngJ0OStTIp7MstslzJzG/GrbDhlRxHi3S2tVUfOxsjv4bihdSQwhKOg7lyBDkwqhthO2MxLuOdvu6Q6oE+Ga++n3EspbYaeubc77KyI6oOlYjWN5r51aMnVnV0OJWViTQFQcCO+TgBBopjbDYpsXrvrOF7XU3j5yAOzw4ke+5V6QPA1eZeBlnIir5fgwg33nIQ3/dkyz4jTQ27/aQokWuBjnkej9q/O/6pXGzlm5MNIysb+cLThCqChbyq/laVKEzwbszBVDsi0e6IdnIDEBanOeqB/n1ocimQg+060uyX4qcgjAcduQNCOsfno/YvrtgLM5JRB4kh+uSJOYS9ckGECceLi8rI+F9zk6RUrym925OM3Hyj9fXs6Cs6N2VFAeS/Vet200h5fdvVZGCe4R4dNMQGEmCDCrpZppJOVcnswSL4oYW2TGlzZ4q2GlkTLGAE="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01KhGWRStEiV7oHNbvgkcuKV",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/toggle.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011P4NTWELcxQpDAoVNS45c3",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/input.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01KhGWRStEiV7oHNbvgkcuKV",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Toggle as TogglePrimitive } from \"radix-ui\"\n\nconst toggleVariants = cva(\n  \"inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-transparent\",\n        outline:\n          \"border border-input bg-transparent shadow-xs hover:bg-accent hover:text-accent-foreground\",\n      },\n      size: {\n        default: \"h-9 min-w-9 px-2\",\n        sm: \"h-8 min-w-8 px-1.5\",\n        lg: \"h-10 min-w-10 px-2.5\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Toggle({\n  className,\n  variant,\n  size,\n  ...props\n}: React.ComponentProps<typeof TogglePrimitive.Root> &\n  VariantProps<typeof toggleVariants>) {\n  return (\n    <TogglePrimitive.Root\n      data-slot=\"toggle\"\n      className={cn(toggleVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Toggle, toggleVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011P4NTWELcxQpDAoVNS45c3",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Input({ className, type, ...props }: React.ComponentProps<\"input\">) {\n  return (\n    <input\n      type={type}\n      data-slot=\"input\"\n      className={cn(\n        \"h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30\",\n        \"focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50\",\n        \"aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Input }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Now the global stylesheet, with the whole brand expressed as tokens."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01NXniVJSuFzCycwWpEKvRyG",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/tooltip.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01NXniVJSuFzCycwWpEKvRyG",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { Tooltip as TooltipPrimitive } from \"radix-ui\"\n\nfunction TooltipProvider({\n  delayDuration = 0,\n  ...props\n}: React.ComponentProps<typeof TooltipPrimitive.Provider>) {\n  return (\n    <TooltipPrimitive.Provider\n      data-slot=\"tooltip-provider\"\n      delayDuration={delayDuration}\n      {...props}\n    />\n  )\n}\n\nfunction Tooltip({\n  ...props\n}: React.ComponentProps<typeof TooltipPrimitive.Root>) {\n  return <TooltipPrimitive.Root data-slot=\"tooltip\" {...props} />\n}\n\nfunction TooltipTrigger({\n  ...props\n}: React.ComponentProps<typeof TooltipPrimitive.Trigger>) {\n  return <TooltipPrimitive.Trigger data-slot=\"tooltip-trigger\" {...props} />\n}\n\nfunction TooltipContent({\n  className,\n  sideOffset = 0,\n  children,\n  ...props\n}: React.ComponentProps<typeof TooltipPrimitive.Content>) {\n  return (\n    <TooltipPrimitive.Portal>\n      <TooltipPrimitive.Content\n        data-slot=\"tooltip-content\"\n        sideOffset={sideOffset}\n        className={cn(\n          \"z-50 w-fit origin-(--radix-tooltip-content-transform-origin) animate-in rounded-md bg-foreground px-3 py-1.5 text-xs text-balance text-background fade-in-0 zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95\",\n          className\n        )}\n        {...props}\n      >\n        {children}\n        <TooltipPrimitive.Arrow className=\"z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px] bg-foreground fill-foreground\" />\n      </TooltipPrimitive.Content>\n    </TooltipPrimitive.Portal>\n  )\n}\n\nexport { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Writing the files now.\n\n```css app/globals.css\n@import \"tailwindcss\";\n@import \"tw-animate-css\";\n\n@custom-variant dark (&:is(.dark *));\n\n@theme inline {\n  /* Brand corner radius: every component radius step resolves to the one brand value */\n  --radius-xs: 2px;\n  --radius-sm: var(--radius);\n  --radius-md: var(--radius);\n  --radius-lg: var(--radius);\n  --radius-xl: var(--radius);\n  --radius-2xl: calc(var(--radius) * 2);\n  --radius-3xl: calc(var(--radius) * 3);\n  --radius-4xl: calc(var(--radius) * 4);\n\n  /* Brand fonts (system stacks, nothing to load) */\n  --font-sans: ui-sans-serif, system-ui, sans-serif;\n  --font-serif: Georgia, \"Times New Roman\", serif;\n  --font-heading: var(--font-serif);\n\n  --color-background: var(--background);\n  --color-foreground: var(--foreground);\n  --color-card: var(--card);\n  --color-card-foreground: var(--card-foreground);\n  --color-popover: var(--popover);\n  --color-popover-foreground: var(--popover-foreground);\n  --color-primary: var(--primary);\n  --color-primary-foreground: var(--primary-foreground);\n  --color-secondary: var(--secondary);\n  --color-secondary-foreground: var(--secondary-foreground);\n  --color-muted: var(--muted);\n  --color-muted-foreground: var(--muted-foreground);\n  --color-accent: var(--accent);\n  --color-accent-foreground: var(--accent-foreground);\n  --color-destructive: var(--destructive);\n  --color-border: var(--border);\n  --color-input: var(--input);\n  --color-ring: var(--ring);\n  --color-chart-1: var(--chart-1);\n  --color-chart-2: var(--chart-2);\n  --color-chart-3: var(--chart-3);\n  --color-chart-4: var(--chart-4);\n  --color-chart-5: var(--chart-5);\n  --color-sidebar: var(--sidebar);\n  --color-sidebar-foreground: var(--sidebar-foreground);\n  --color-sidebar-primary: var(--sidebar-primary);\n  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);\n  --color-sidebar-accent: var(--sidebar-accent);\n  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);\n  --color-sidebar-border: var(--sidebar-border);\n  --color-sidebar-ring: var(--sidebar-ring);\n}\n\n/* Light theme: warm stone neutrals + Lumen orange (#E8590C family) */\n:root {\n  --radius: 4px;\n  --background: oklch(0.985 0.003 75);\n  --foreground: oklch(0.216 0.006 56);\n  --card: oklch(1 0.002 75);\n  --card-foreground: oklch(0.216 0.006 56);\n  --popover: oklch(1 0.002 75);\n  --popover-foreground: oklch(0.216 0.006 56);\n  /* Slightly deeper than #E8590C so links and white text pass contrast on light surfaces */\n  --primary: oklch(0.57 0.19 42);\n  --primary-foreground: oklch(0.985 0.003 75);\n  --secondary: oklch(0.953 0.005 75);\n  --secondary-foreground: oklch(0.268 0.007 34);\n  --muted: oklch(0.953 0.005 75);\n  --muted-foreground: oklch(0.47 0.012 56);\n  --accent: oklch(0.937 0.008 75);\n  --accent-foreground: oklch(0.216 0.006 56);\n  --destructive: oklch(0.577 0.245 27.325);\n  --border: oklch(0.88 0.008 75);\n  --input: oklch(0.88 0.008 75);\n  --ring: oklch(0.57 0.19 42);\n  --chart-1: oklch(0.65 0.2 43);\n  --chart-2: oklch(0.6 0.05 60);\n  --chart-3: oklch(0.45 0.02 56);\n  --chart-4: oklch(0.78 0.14 70);\n  --chart-5: oklch(0.7 0.1 30);\n  --sidebar: oklch(0.97 0.004 75);\n  --sidebar-foreground: oklch(0.216 0.006 56);\n  --sidebar-primary: oklch(0.57 0.19 42);\n  --sidebar-primary-foreground: oklch(0.985 0.003 75);\n  --sidebar-accent: oklch(0.937 0.008 75);\n  --sidebar-accent-foreground: oklch(0.216 0.006 56);\n  --sidebar-border: oklch(0.88 0.008 75);\n  --sidebar-ring: oklch(0.57 0.19 42);\n}\n\n/* Dark theme (default) */\n.dark {\n  --background: oklch(0.147 0.004 49);\n  --foreground: oklch(0.97 0.003 75);\n  --card: oklch(0.216 0.006 56);\n  --card-foreground: oklch(0.97 0.003 75);\n  --popover: oklch(0.216 0.006 56);\n  --popover-foreground: oklch(0.97 0.003 75);\n  /* Brand colour #E8590C */\n  --primary: oklch(0.65 0.2 43);\n  --primary-foreground: oklch(0.147 0.004 49);\n  --secondary: oklch(0.268 0.007 34);\n  --secondary-foreground: oklch(0.97 0.003 75);\n  --muted: oklch(0.268 0.007 34);\n  --muted-foreground: oklch(0.74 0.012 75);\n  --accent: oklch(0.268 0.007 34);\n  --accent-foreground: oklch(0.97 0.003 75);\n  --destructive: oklch(0.704 0.191 22.216);\n  --border: oklch(0.97 0.003 75 / 12%);\n  --input: oklch(0.97 0.003 75 / 16%);\n  --ring: oklch(0.65 0.2 43);\n  --chart-1: oklch(0.65 0.2 43);\n  --chart-2: oklch(0.7 0.05 60);\n  --chart-3: oklch(0.8 0.02 75);\n  --chart-4: oklch(0.78 0.14 70);\n  --chart-5: oklch(0.7 0.1 30);\n  --sidebar: oklch(0.216 0.006 56);\n  --sidebar-foreground: oklch(0.97 0.003 75);\n  --sidebar-primary: oklch(0.65 0.2 43);\n  --sidebar-primary-foreground: oklch(0.147 0.004 49);\n  --sidebar-accent: oklch(0.268 0.007 34);\n  --sidebar-accent-foreground: oklch(0.97 0.003 75);\n  --sidebar-border: oklch(0.97 0.003 75 / 12%);\n  --sidebar-ring: oklch(0.65 0.2 43);\n}\n\n@layer base {\n  * {\n    @apply border-border outline-ring/50;\n  }\n  html {\n    font-family: var(--font-sans);\n  }\n  body {\n    @apply bg-background text-foreground;\n  }\n  h1,\n  h2,\n  h3,\n  h4 {\n    font-family: var(--font-heading);\n    letter-spacing: -0.01em;\n  }\n  a:not([data-slot=\"button\"]) {\n    text-underline-offset: 4px;\n  }\n  .prose-link {\n    @apply font-medium text-primary underline-offset-4 hover:underline;\n  }\n}\n```\n\n```tsx app/layout.tsx\nimport \"./globals.css\";\n\nimport type { Metadata } from \"next\";\nimport { Toaster } from \"@/components/ui/sonner\";\nimport { ThemeProvider } from \"@/components/theme-provider\";\n\nexport const metadata: Metadata = {\n  title: {\n    default: \"Lumen: product analytics and issue tracking for small teams\",\n    template: \"%s | Lumen\",\n  },\n  description:\n    \"Product analytics and issue tracking that small teams actually read.\",\n};\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\" className=\"dark\" suppressHydrationWarning>\n      <body className=\"font-sans antialiased\">\n        <ThemeProvider\n          attribute=\"class\"\n          defaultTheme=\"dark\"\n          enableSystem={false}\n          disableTransitionOnChange\n        >\n          {children}\n          <Toaster />\n        </ThemeProvider>\n      </body>\n    </html>\n  );\n}\n```\n\n```tsx components/theme-provider.tsx\n\"use client\";\n\nimport * as React from \"react\";\nimport { ThemeProvider as NextThemesProvider } from \"next-themes\";\n\nexport function ThemeProvider({\n  children,\n  ...props\n}: React.ComponentProps<typeof NextThemesProvider>) {\n  return <NextThemesProvider {...props}>{children}</NextThemesProvider>;\n}\n```\n\n```tsx components/theme-toggle.tsx\n\"use client\";\n\nimport * as React from \"react\";\nimport { MoonIcon, SunIcon } from \"lucide-react\";\nimport { useTheme } from \"next-themes\";\n\nimport { Button } from \"@/components/ui/button\";\nimport {\n  DropdownMenu,\n  DropdownMenuContent,\n  DropdownMenuRadioGroup,\n  DropdownMenuRadioItem,\n  DropdownMenuTrigger,\n} from \"@/components/ui/dropdown-menu\";\n\nexport function ThemeToggle() {\n  const { theme, setTheme } = useTheme();\n\n  return (\n    <DropdownMenu>\n      <DropdownMenuTrigger asChild>\n        <Button variant=\"outline\" size=\"icon\" aria-label=\"Toggle theme\">\n          <SunIcon className=\"size-4 scale-100 rotate-0 transition-transform dark:scale-0 dark:-rotate-90\" />\n          <MoonIcon className=\"absolute size-4 scale-0 rotate-90 transition-transform dark:scale-100 dark:rotate-0\" />\n        </Button>\n      </DropdownMenuTrigger>\n      <DropdownMenuContent align=\"end\">\n        <DropdownMenuRadioGroup\n          value={theme === \"light\" ? \"light\" : \"dark\"}\n          onValueChange={(value) => setTheme(value)}\n        >\n          <DropdownMenuRadioItem value=\"light\">Light</DropdownMenuRadioItem>\n          <DropdownMenuRadioItem value=\"dark\">Dark</DropdownMenuRadioItem>\n        </DropdownMenuRadioGroup>\n      </DropdownMenuContent>\n    </DropdownMenu>\n  );\n}\n```\n\n```ts lib/data.ts\nexport const brand = {\n  name: \"Lumen\",\n  product:\n    \"Lumen, a product-analytics and issue-tracking app for small software teams\",\n  tagline: \"Product analytics and issue tracking that small teams actually read\",\n  brandColor: \"#E8590C\",\n};\n\nexport const navLinks = [\n  { href: \"/\", label: \"Home\" },\n  { href: \"/pricing\", label: \"Pricing\" },\n] as const;\n\nexport const logos = [\n  \"Acme Labs\",\n  \"Northwind Studio\",\n  \"Hooli\",\n  \"Globex\",\n  \"Initech\",\n] as const;\n\nexport type Plan = {\n  name: string;\n  priceMonth: number;\n  seats: string;\n  blurb: string;\n  features: string[];\n  highlight?: boolean;\n  cta: string;\n};\n\nexport const plans: Plan[] = [\n  {\n    name: \"Free\",\n    priceMonth: 0,\n    seats: \"1 seat\",\n    blurb: \"For solo builders trying out Lumen on a side project.\",\n    features: [\"1 project\", \"7-day history\", \"Community support\"],\n    cta: \"Start for free\",\n  },\n  {\n    name: \"Team\",\n    priceMonth: 12,\n    seats: \"per seat\",\n    blurb: \"For small software teams who ship every week.\",\n    features: [\n      \"Unlimited projects\",\n      \"1-year history\",\n      \"Issue tracker\",\n      \"Email support\",\n    ],\n    highlight: true,\n    cta: \"Start Team trial\",\n  },\n  {\n    name: \"Business\",\n    priceMonth: 29,\n    seats: \"per seat\",\n    blurb: \"For growing teams that need control and compliance.\",\n    features: [\n      \"Everything in Team\",\n      \"SSO and audit log\",\n      \"Unlimited history\",\n      \"Priority support\",\n    ],\n    cta: \"Talk to sales\",\n  },\n];\n\n/** Yearly billing = two months free, i.e. 10 months charged. Returns the per-month equivalent. */\nexport function yearlyMonthlyEquivalent(priceMonth: number): number {\n  return (priceMonth * 10) / 12;\n}\n\nexport function yearlyTotal(priceMonth: number): number {\n  return priceMonth * 10;\n}\n\nexport type ComparisonRow = {\n  feature: string;\n  values: [boolean | string, boolean | string, boolean | string];\n};\n\nexport const comparison: ComparisonRow[] = [\n  { feature: \"Projects\", values: [\"1\", \"Unlimited\", \"Unlimited\"] },\n  { feature: \"Event history\", values: [\"7 days\", \"1 year\", \"Unlimited\"] },\n  { feature: \"Issue tracker\", values: [false, true, true] },\n  { feature: \"SSO and audit log\", values: [false, false, true] },\n  {\n    feature: \"Support\",\n    values: [\"Community\", \"Email\", \"Priority\"],\n  },\n];\n\nexport const faq = [\n  {\n    q: \"Can I switch plans later?\",\n    a: \"Yes. Upgrades apply at once; downgrades at the end of the billing period.\",\n  },\n  {\n    q: \"Do you offer a discount for non-profits?\",\n    a: \"Yes, 50% off Team and Business for registered non-profits.\",\n  },\n  {\n    q: \"Where is my data stored?\",\n    a: \"In the EU, encrypted at rest.\",\n  },\n] as const;\n\nexport const features = [\n  {\n    title: \"Analytics you can read in a minute\",\n    body: \"One page per product area, with the five numbers your team actually discusses. No dashboards to build, no query language to learn, and no chart that needs a legend to decode.\",\n    points: [\n      \"Weekly digest written in plain sentences\",\n      \"Funnels and retention without setup\",\n      \"Shareable links that never expire\",\n    ],\n  },\n  {\n    title: \"An issue tracker that lives next to the data\",\n    body: \"Spot a drop in signups, open an issue from the chart, and the evidence travels with it. When the fix ships, Lumen shows you whether the number moved.\",\n    points: [\n      \"Issues linked to the metric that triggered them\",\n      \"Lightweight boards, no sprints required\",\n      \"Before-and-after view on every release\",\n    ],\n  },\n  {\n    title: \"Built for teams of three to thirty\",\n    body: \"Predictable per-seat pricing, EU data residency and encryption at rest from day one. Add SSO and an audit log when your customers ask for them.\",\n    points: [\n      \"Data stored in the EU, encrypted at rest\",\n      \"Per-seat pricing with no event quotas\",\n      \"Upgrade or downgrade whenever you like\",\n    ],\n  },\n] as const;\n\nexport const footerLinks = [\n  {\n    heading: \"Product\",\n    links: [\n      { label: \"Pricing\", href: \"/pricing\" },\n      { label: \"Features\", href: \"/#features\" },\n      { label: \"Customers\", href: \"/#customers\" },\n    ],\n  },\n  {\n    heading: \"Company\",\n    links: [\n      { label: \"About\", href: \"/\" },\n      { label: \"Changelog\", href: \"/\" },\n      { label: \"Contact\", href: \"/\" },\n    ],\n  },\n] as const;\n```\n\n```tsx components/site-header.tsx\n\"use client\";\n\nimport Link from \"next/link\";\nimport { usePathname } from \"next/navigation\";\nimport { MenuIcon } from \"lucide-react\";\n\nimport { Button } from \"@/components/ui/button\";\nimport {\n  Sheet,\n  SheetClose,\n  SheetContent,\n  SheetDescription,\n  SheetHeader,\n  SheetTitle,\n  SheetTrigger,\n} from \"@/components/ui/sheet\";\nimport { ThemeToggle } from \"@/components/theme-toggle\";\nimport { brand, navLinks } from \"@/lib/data\";\nimport { cn } from \"@/lib/utils\";\n\nexport function SiteHeader() {\n  const pathname = usePathname();\n\n  return (\n    <header className=\"sticky top-0 z-40 border-b bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/70\">\n      <div className=\"mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6\">\n        <Link\n          href=\"/\"\n          className=\"rounded-md font-serif text-2xl font-bold tracking-tight outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50\"\n        >\n          {brand.name}\n          <span className=\"text-primary\" aria-hidden=\"true\">\n            .\n          </span>\n        </Link>\n\n        <nav aria-label=\"Main\" className=\"hidden items-center gap-1 md:flex\">\n          {navLinks.map((link) => {\n            const active = pathname === link.href;\n            return (\n              <Button\n                key={link.href}\n                asChild\n                variant=\"ghost\"\n                className={cn(active && \"bg-accent text-accent-foreground\")}\n              >\n                <Link href={link.href} aria-current={active ? \"page\" : undefined}>\n                  {link.label}\n                </Link>\n              </Button>\n            );\n          })}\n        </nav>\n\n        <div className=\"flex items-center gap-2\">\n          <Button asChild variant=\"ghost\" className=\"hidden sm:inline-flex\">\n            <Link href=\"/\">Sign in</Link>\n          </Button>\n          <Button asChild className=\"hidden sm:inline-flex\">\n            <Link href=\"/pricing\">Get started</Link>\n          </Button>\n          <ThemeToggle />\n\n          <Sheet>\n            <SheetTrigger asChild>\n              <Button\n                variant=\"outline\"\n                size=\"icon\"\n                className=\"md:hidden\"\n                aria-label=\"Open menu\"\n              >\n                <MenuIcon />\n              </Button>\n            </SheetTrigger>\n            <SheetContent side=\"right\">\n              <SheetHeader>\n                <SheetTitle>{brand.name}</SheetTitle>\n                <SheetDescription>Site navigation</SheetDescription>\n              </SheetHeader>\n              <nav aria-label=\"Mobile\" className=\"flex flex-col gap-1 px-4\">\n                {navLinks.map((link) => (\n                  <SheetClose asChild key={link.href}>\n                    <Button\n                      asChild\n                      variant=\"ghost\"\n                      className=\"justify-start\"\n                    >\n                      <Link\n                        href={link.href}\n                        aria-current={pathname === link.href ? \"page\" : undefined}\n                      >\n                        {link.label}\n                      </Link>\n                    </Button>\n                  </SheetClose>\n                ))}\n                <SheetClose asChild>\n                  <Button asChild className=\"mt-2\">\n                    <Link href=\"/pricing\">Get started</Link>\n                  </Button>\n                </SheetClose>\n              </nav>\n            </SheetContent>\n          </Sheet>\n        </div>\n      </div>\n    </header>\n  );\n}\n```\n\n```tsx components/site-footer.tsx\nimport Link from \"next/link\";\n\nimport { Separator } from \"@/components/ui/separator\";\nimport { brand, footerLinks } from \"@/lib/data\";\n\nexport function SiteFooter() {\n  return (\n    <footer className=\"border-t bg-card/40\">\n      <div className=\"mx-auto w-full max-w-6xl px-4 py-12 sm:px-6\">\n        <div className=\"grid gap-10 sm:grid-cols-2 lg:grid-cols-4\">\n          <div className=\"lg:col-span-2\">\n            <p className=\"font-serif text-2xl font-bold\">\n              {brand.name}\n              <span className=\"text-primary\" aria-hidden=\"true\">\n                .\n              </span>\n            </p>\n            <p className=\"mt-3 max-w-sm text-sm text-muted-foreground\">\n              {brand.tagline}.\n            </p>\n          </div>\n          {footerLinks.map((group) => (\n            <nav key={group.heading} aria-label={group.heading}>\n              <h2 className=\"font-sans text-sm font-semibold\">\n                {group.heading}\n              </h2>\n              <ul className=\"mt-3 space-y-2 text-sm\">\n                {group.links.map((link) => (\n                  <li key={link.label}>\n                    <Link\n                      href={link.href}\n                      className=\"rounded-sm text-muted-foreground outline-none hover:text-primary hover:underline focus-visible:ring-[3px] focus-visible:ring-ring/50\"\n                    >\n                      {link.label}\n                    </Link>\n                  </li>\n                ))}\n              </ul>\n            </nav>\n          ))}\n        </div>\n        <Separator className=\"my-8\" />\n        <div className=\"flex flex-col gap-2 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between\">\n          <p>&copy; 2025 Lumen. All rights reserved.</p>\n          <p>Your data stays in the EU, encrypted at rest.</p>\n        </div>\n      </div>\n    </footer>\n  );\n}\n```\n\n```tsx components/site-shell.tsx\nimport { SiteHeader } from \"@/components/site-header\";\nimport { SiteFooter } from \"@/components/site-footer\";\n\nexport function SiteShell({ children }: { children: React.ReactNode }) {\n  return (\n    <div className=\"flex min-h-screen flex-col\">\n      <a\n        href=\"#main\"\n        className=\"sr-only z-50 rounded-md bg-primary px-4 py-2 text-primary-foreground focus:not-sr-only focus:fixed focus:top-2 focus:left-2\"\n      >\n        Skip to content\n      </a>\n      <SiteHeader />\n      <main id=\"main\" className=\"flex-1\">\n        {children}\n      </main>\n      <SiteFooter />\n    </div>\n  );\n}\n```\n\n```tsx app/page.tsx\nimport Link from \"next/link\";\nimport { ArrowRightIcon, CheckIcon } from \"lucide-react\";\n\nimport { Button } from \"@/components/ui/button\";\nimport { SiteShell } from \"@/components/site-shell\";\nimport { brand, features, logos } from \"@/lib/data\";\n\nexport default function HomePage() {\n  return (\n    <SiteShell>\n      <section className=\"mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-24 lg:py-32\">\n        <div className=\"max-w-3xl\">\n          <p className=\"text-sm font-medium tracking-wide text-primary uppercase\">\n            For small software teams\n          </p>\n          <h1 className=\"mt-4 text-4xl font-bold text-balance sm:text-5xl lg:text-6xl\">\n            {brand.tagline}\n          </h1>\n          <p className=\"mt-6 max-w-2xl text-lg text-muted-foreground text-pretty\">\n            Lumen turns your product data into a short, honest page your whole\n            team reads on Monday morning, and lets you open an issue the moment\n            a number looks wrong.\n          </p>\n          <div className=\"mt-8 flex flex-col gap-3 sm:flex-row\">\n            <Button asChild size=\"lg\">\n              <Link href=\"/pricing\">\n                Start free\n                <ArrowRightIcon />\n              </Link>\n            </Button>\n            <Button asChild size=\"lg\" variant=\"outline\">\n              <Link href=\"/pricing\">See pricing</Link>\n            </Button>\n          </div>\n        </div>\n      </section>\n\n      <section\n        id=\"customers\"\n        aria-labelledby=\"customers-heading\"\n        className=\"border-y bg-card/40\"\n      >\n        <div className=\"mx-auto w-full max-w-6xl px-4 py-10 sm:px-6\">\n          <h2\n            id=\"customers-heading\"\n            className=\"text-center font-sans text-sm font-medium text-muted-foreground\"\n          >\n            Trusted by small teams at\n          </h2>\n          <ul className=\"mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-4\">\n            {logos.map((logo) => (\n              <li\n                key={logo}\n                className=\"font-serif text-xl font-semibold text-muted-foreground\"\n              >\n                {logo}\n              </li>\n            ))}\n          </ul>\n        </div>\n      </section>\n\n      <div id=\"features\" className=\"mx-auto w-full max-w-6xl px-4 sm:px-6\">\n        {features.map((feature, index) => (\n          <section\n            key={feature.title}\n            aria-labelledby={`feature-${index}`}\n            className=\"grid items-center gap-8 border-b py-14 last:border-b-0 sm:py-20 lg:grid-cols-2 lg:gap-16\"\n          >\n            <div className={index % 2 === 1 ? \"lg:order-2\" : undefined}>\n              <p className=\"text-sm font-medium text-primary\">\n                0{index + 1}\n              </p>\n              <h2\n                id={`feature-${index}`}\n                className=\"mt-2 text-3xl font-bold text-balance\"\n              >\n                {feature.title}\n              </h2>\n              <p className=\"mt-4 text-muted-foreground text-pretty\">\n                {feature.body}\n              </p>\n            </div>\n            <ul className=\"space-y-3 rounded-lg border bg-card p-6 text-card-foreground\">\n              {feature.points.map((point) => (\n                <li key={point} className=\"flex items-start gap-3 text-sm\">\n                  <CheckIcon\n                    className=\"mt-0.5 size-4 shrink-0 text-primary\"\n                    aria-hidden=\"true\"\n                  />\n                  <span>{point}</span>\n                </li>\n              ))}\n            </ul>\n          </section>\n        ))}\n      </div>\n\n      <section className=\"border-t bg-card/40\">\n        <div className=\"mx-auto flex w-full max-w-6xl flex-col items-start gap-6 px-4 py-14 sm:px-6 md:flex-row md:items-center md:justify-between\">\n          <h2 className=\"max-w-xl text-3xl font-bold text-balance\">\n            Give your team one page worth reading.\n          </h2>\n          <Button asChild size=\"lg\">\n            <Link href=\"/pricing\">\n              Compare plans\n              <ArrowRightIcon />\n            </Link>\n          </Button>\n        </div>\n      </section>\n    </SiteShell>\n  );\n}\n```\n\n```tsx app/pricing/page.tsx\nimport type { Metadata } from \"next\";\n\nimport { SiteShell } from \"@/components/site-shell\";\nimport { PricingView } from \"@/components/pricing-view\";\n\nexport const metadata: Metadata = {\n  title: \"Pricing\",\n  description:\n    \"Simple per-seat pricing for Lumen. Free for one seat, Team and Business for growing teams. Yearly billing includes two months free.\",\n};\n\nexport default function PricingPage() {\n  return (\n    <SiteShell>\n      <PricingView />\n    </SiteShell>\n  );\n}\n```\n\n```tsx components/pricing-view.tsx\n\"use client\";\n\nimport * as React from \"react\";\nimport { CheckIcon, MinusIcon } from \"lucide-react\";\nimport { toast } from \"sonner\";\n\nimport { Badge } from \"@/components/ui/badge\";\nimport { Button } from \"@/components/ui/button\";\nimport {\n  Card,\n  CardContent,\n  CardDescription,\n  CardFooter,\n  CardHeader,\n  CardTitle,\n} from \"@/components/ui/card\";\nimport {\n  Accordion,\n  AccordionContent,\n  AccordionItem,\n  AccordionTrigger,\n} from \"@/components/ui/accordion\";\nimport { Label } from \"@/components/ui/label\";\nimport { Switch } from \"@/components/ui/switch\";\nimport {\n  Table,\n  TableBody,\n  TableCell,\n  TableHead,\n  TableHeader,\n  TableRow,\n} from \"@/components/ui/table\";\nimport {\n  comparison,\n  faq,\n  plans,\n  yearlyMonthlyEquivalent,\n  yearlyTotal,\n  type Plan,\n} from \"@/lib/data\";\nimport { cn } from \"@/lib/utils\";\n\nfunction formatPrice(value: number): string {\n  return Number.isInteger(value) ? `$${value}` : `$${value.toFixed(2)}`;\n}\n\nfunction PlanCard({ plan, yearly }: { plan: Plan; yearly: boolean }) {\n  const free = plan.priceMonth === 0;\n  const shown = yearly\n    ? yearlyMonthlyEquivalent(plan.priceMonth)\n    : plan.priceMonth;\n\n  return (\n    <Card\n      className={cn(\n        \"relative\",\n        plan.highlight && \"border-2 border-primary shadow-lg\"\n      )}\n    >\n      <CardHeader>\n        <div className=\"flex items-center justify-between gap-2\">\n          <CardTitle className=\"font-serif text-xl\">{plan.name}</CardTitle>\n          {plan.highlight && <Badge>Most popular</Badge>}\n        </div>\n        <CardDescription>{plan.blurb}</CardDescription>\n      </CardHeader>\n      <CardContent className=\"flex flex-1 flex-col gap-6\">\n        <div>\n          <p className=\"flex items-baseline gap-1\">\n            <span className=\"font-serif text-4xl font-bold\">\n              {formatPrice(shown)}\n            </span>\n            <span className=\"text-sm text-muted-foreground\">\n              {free ? \"forever\" : `/ ${plan.seats} / month`}\n            </span>\n          </p>\n          <p className=\"mt-1 min-h-5 text-sm text-muted-foreground\">\n            {free\n              ? plan.seats\n              : yearly\n                ? `Billed ${formatPrice(yearlyTotal(plan.priceMonth))} per seat yearly (2 months free)`\n                : \"Billed monthly\"}\n          </p>\n        </div>\n        <ul className=\"space-y-2 text-sm\">\n          {plan.features.map((feature) => (\n            <li key={feature} className=\"flex items-start gap-2\">\n              <CheckIcon\n                className=\"mt-0.5 size-4 shrink-0 text-primary\"\n                aria-hidden=\"true\"\n              />\n              <span>{feature}</span>\n            </li>\n          ))}\n        </ul>\n      </CardContent>\n      <CardFooter>\n        <Button\n          className=\"w-full\"\n          variant={plan.highlight ? \"default\" : \"outline\"}\n          onClick={() =>\n            toast.success(`${plan.name} selected`, {\n              description: \"This is a demo, so nothing was charged.\",\n            })\n          }\n        >\n          {plan.cta}\n        </Button>\n      </CardFooter>\n    </Card>\n  );\n}\n\nfunction Cell({ value }: { value: boolean | string }) {\n  if (value === true) {\n    return (\n      <>\n        <CheckIcon\n          className=\"mx-auto size-4 text-primary\"\n          aria-hidden=\"true\"\n        />\n        <span className=\"sr-only\">Included</span>\n      </>\n    );\n  }\n  if (value === false) {\n    return (\n      <>\n        <MinusIcon\n          className=\"mx-auto size-4 text-muted-foreground\"\n          aria-hidden=\"true\"\n        />\n        <span className=\"sr-only\">Not included</span>\n      </>\n    );\n  }\n  return <span>{value}</span>;\n}\n\nexport function PricingView() {\n  const [yearly, setYearly] = React.useState(false);\n\n  return (\n    <div className=\"mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 sm:py-20\">\n      <div className=\"mx-auto max-w-2xl text-center\">\n        <h1 className=\"text-4xl font-bold text-balance sm:text-5xl\">\n          Simple pricing for small teams\n        </h1>\n        <p className=\"mt-4 text-muted-foreground text-pretty\">\n          Start free, upgrade when your team grows. Pay yearly and get two\n          months free.\n        </p>\n\n        <div className=\"mt-8 flex items-center justify-center gap-3\">\n          <Label\n            htmlFor=\"billing-switch\"\n            className={cn(!yearly && \"text-foreground\", yearly && \"text-muted-foreground\")}\n          >\n            Monthly\n          </Label>\n          <Switch\n            id=\"billing-switch\"\n            checked={yearly}\n            onCheckedChange={setYearly}\n            aria-label=\"Bill yearly\"\n          />\n          <Label\n            htmlFor=\"billing-switch\"\n            className={cn(yearly ? \"text-foreground\" : \"text-muted-foreground\")}\n          >\n            Yearly\n          </Label>\n          <Badge variant=\"secondary\">2 months free</Badge>\n        </div>\n        <p className=\"sr-only\" role=\"status\" aria-live=\"polite\">\n          {yearly\n            ? \"Showing yearly prices, two months free\"\n            : \"Showing monthly prices\"}\n        </p>\n      </div>\n\n      <section\n        aria-label=\"Plans\"\n        className=\"mt-12 grid gap-6 md:grid-cols-3\"\n      >\n        {plans.map((plan) => (\n          <PlanCard key={plan.name} plan={plan} yearly={yearly} />\n        ))}\n      </section>\n\n      <section aria-labelledby=\"compare-heading\" className=\"mt-20\">\n        <h2 id=\"compare-heading\" className=\"text-3xl font-bold\">\n          Compare plans\n        </h2>\n        <div className=\"mt-6 rounded-lg border bg-card\">\n          <Table>\n            <TableHeader>\n              <TableRow className=\"hover:bg-transparent\">\n                <TableHead scope=\"col\" className=\"h-12 px-4\">\n                  Feature\n                </TableHead>\n                {plans.map((plan) => (\n                  <TableHead\n                    key={plan.name}\n                    scope=\"col\"\n                    className={cn(\n                      \"h-12 px-4 text-center\",\n                      plan.highlight && \"text-primary\"\n                    )}\n                  >\n                    {plan.name}\n                  </TableHead>\n                ))}\n              </TableRow>\n            </TableHeader>\n            <TableBody>\n              {comparison.map((row) => (\n                <TableRow key={row.feature}>\n                  <TableHead scope=\"row\" className=\"px-4 py-3 font-medium\">\n                    {row.feature}\n                  </TableHead>\n                  {row.values.map((value, i) => (\n                    <TableCell\n                      key={plans[i].name}\n                      className={cn(\n                        \"px-4 py-3 text-center\",\n                        plans[i].highlight && \"bg-primary/5\"\n                      )}\n                    >\n                      <Cell value={value} />\n                    </TableCell>\n                  ))}\n                </TableRow>\n              ))}\n            </TableBody>\n          </Table>\n        </div>\n      </section>\n\n      <section\n        aria-labelledby=\"faq-heading\"\n        className=\"mx-auto mt-20 max-w-3xl\"\n      >\n        <h2 id=\"faq-heading\" className=\"text-3xl font-bold\">\n          Frequently asked questions\n        </h2>\n        <Accordion type=\"single\" collapsible className=\"mt-6\">\n          {faq.map((item, index) => (\n            <AccordionItem key={item.q} value={`faq-${index}`}>\n              <AccordionTrigger className=\"text-base\">\n                {item.q}\n              </AccordionTrigger>\n              <AccordionContent className=\"text-muted-foreground\">\n                {item.a}\n              </AccordionContent>\n            </AccordionItem>\n          ))}\n        </Accordion>\n      </section>\n    </div>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}
