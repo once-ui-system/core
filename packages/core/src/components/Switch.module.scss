@@ -52,6 +52,8 @@
         .element {
             left: calc(100% - var(--static-space-20));
             transform-origin: right;
+            background-color: var(--brand-on-solid-strong);
+            color: var(--brand-solid-medium);
         }
     }
 }
@@ -62,7 +64,12 @@
     width: var(--static-space-16);
     height: var(--static-space-16);
     border-radius: var(--radius-l);
-    background-color: var(--brand-on-solid-strong);
+    /* The thumb takes the on-solid colour of the track it sits on: neutral when
+       off, brand when on. The brand one is black in the inverse style, which
+       vanished on the grey off track. The spinner (currentColor) takes the
+       track colour so it reads as a cut-out of the thumb. */
+    background-color: var(--neutral-on-solid-strong);
+    color: var(--neutral-solid-medium);
     position: absolute;
     top: 50%;
     transform: translateY(-50%);

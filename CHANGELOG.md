@@ -15,6 +15,12 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **`emphasis` on `Flex` and `Grid`.** Draws attention to an element with an animated
+  brand-to-accent edge that travels round the border. Each value names a look: `edge` is
+  the edge alone, `glow` (or `true`) adds a soft halo for bars and inputs, `aura` a wide
+  one for panels. It is a class, so the element stays a server component; it stands still
+  with reduced motion, lies over a `border` of any width, and takes `--emphasis-from`,
+  `--emphasis-to`, `--emphasis-width` and `--emphasis-duration`.
 - **Globe and 3D buildings on `Map`.** `projection="globe"` curves the world when zoomed
   out, and `buildings="3d"` raises buildings to their height from zoom 13, coloured from
   the neutral surface up to the brand colour and repainted when the theme changes. A

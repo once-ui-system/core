@@ -1,0 +1,742 @@
+{
+  "exact": true,
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 20,
+      "input_tokens": 1090641,
+      "output_tokens": 29357
+    },
+    {
+      "attempt": 1,
+      "calls": 1,
+      "input_tokens": 138270,
+      "output_tokens": 11846
+    }
+  ],
+  "calls": [
+    {
+      "attempt": 0,
+      "id": "msg_011CgfsviAHi549mrWxByt8M",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 2015,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 165,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgfsvsqiNRmCVc4Swp3t1",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 5153,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 97,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cgfsw1mwyyFZcxY5zUq1m",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 5410,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 160,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgfswAwrS5viNefYQd7CZ",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 24547,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 270,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgfswR9dACrQMrsqRahvv",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 25958,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 242,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cgfswekh4bipBtJeRVrjB",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 34701,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 221,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgfswtPia3ALLiNkuGaRE",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 39730,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 83,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cgfsx47NfdJr1bd4LP8M6",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 39827,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 120,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgfsxFeAZMv4sR6LNGDrE",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 40036,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 135,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgfsxQBcLqWrdTMuBPWNP",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 41331,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 240,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cgfsxbsq6FMCVEmns4wAp",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 46338,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 181,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgfsxqhHDtJX9nPf51AF4",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 57661,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 213,
+        "output_tokens_details": {
+          "thinking_tokens": 100
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgfsyAHixdygrU4BgxQbe",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 66847,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 230,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgfsyShTMSiwkeb8bxKQj",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 70980,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 163,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgfsygPUC4xX3C3GZLAsc",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 75122,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 163,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgfsyvZFeEv6B7kLYt6jX",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 80662,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 132,
+        "output_tokens_details": {
+          "thinking_tokens": 77
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgfszBdNRUr9BPbWuH6kD",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 94285,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 481,
+        "output_tokens_details": {
+          "thinking_tokens": 364
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cgfszd3LUa2NY8hRCQZvz",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 104292,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 332,
+        "output_tokens_details": {
+          "thinking_tokens": 273
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cgft1u331bHY82eMwYpVq",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 109517,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 13859,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cgft7bo7LVPPPoFxxk5Nu",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "end_turn",
+      "usage": {
+        "input_tokens": 126229,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 11870,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 1,
+      "id": "msg_011CgftBzG5wCjuiW6cAb9ix",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "end_turn",
+      "usage": {
+        "input_tokens": 138270,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 11846,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/AGENTS.md",
+      "chars": 7389
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": ".",
+      "chars": 14
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "docs",
+      "chars": 13
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project",
+      "chars": 47
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "docs/ai",
+      "chars": 172
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/app",
+      "chars": 43
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/next.config.mjs",
+      "chars": 197
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/bundles/pricing.md",
+      "chars": 44238
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/layout.tsx",
+      "chars": 627
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/providers.tsx",
+      "chars": 657
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/fonts.css",
+      "chars": 295
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/page.tsx",
+      "chars": 124
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/package.json",
+      "chars": 631
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "docs/ai/starters",
+      "chars": 4
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/components/ThemeProvider.json",
+      "chars": 3144
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/gotchas.json",
+      "chars": 16226
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "docs/ai/starters/app",
+      "chars": 19
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "docs/ai/tasks",
+      "chars": 162
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/tokens.json",
+      "chars": 8885
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "docs/ai/starters/app/src",
+      "chars": 27
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "docs/ai/starters/app/src/resources",
+      "chars": 24
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "docs/ai/starters/app/src/app",
+      "chars": 26
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/starters/app/src/resources/once-ui.config.ts",
+      "chars": 1180
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/starters/app/src/app/layout.tsx",
+      "chars": 1578
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "docs/ai/starters/app/src/components",
+      "chars": 26
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/components/ThemeInit.json",
+      "chars": 3325
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/components/ThemeSwitcher.json",
+      "chars": 5574
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/starters/app/src/components/Providers.tsx",
+      "chars": 750
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/rules.md",
+      "chars": 25908
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/manifest.json",
+      "chars": 8050
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/components/Accordion.json",
+      "chars": 9653
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/recipes.md",
+      "chars": 7677
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/components/Logo.json",
+      "chars": 1414
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/components/OnceUIConfig.json",
+      "chars": 0,
+      "error": "no such file or directory: docs/ai/components/OnceUIConfig.json"
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/layouts.md",
+      "chars": 7500
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/components/Dropdown.json",
+      "chars": 1845
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/rules.compact.md",
+      "chars": 10859
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/tasks/pricing.json",
+      "chars": 1128
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/functions.json",
+      "chars": 28027
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/components/SegmentedControl.json",
+      "chars": 9549
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/components/Table.json",
+      "chars": 9108
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/components/Accordion.json",
+      "chars": 9653
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/examples/pricing.tsx",
+      "chars": 8340
+    }
+  ]
+}

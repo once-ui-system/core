@@ -17,6 +17,16 @@
     border-color: var(--danger-alpha-medium);
 }
 
+// An option sits in a panel of radius l with 4px of padding (Dropdown,
+// ContextMenu, Select, DatePicker), so its corners follow the panel's:
+// outer radius minus the padding, for every data-border setting. radius-m
+// only matched that in playful and conservative; in rounded it was 1.25rem
+// in a 1.75rem panel and the corners did not nest. :where() keeps it at zero
+// specificity, so a radius prop on the option still wins.
+:where(.option) {
+    border-radius: max(0rem, calc(var(--radius-l) - 0.25rem));
+}
+
 .option {
     border-color: var(--static-transparent);
   

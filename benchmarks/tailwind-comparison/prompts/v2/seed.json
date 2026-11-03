@@ -1,44 +1,878 @@
 {
   "product": "Lumen, a product-analytics and issue-tracking app for small software teams",
-  "user": { "name": "Maya Okafor", "email": "maya@acmelabs.io", "role": "Owner" },
+  "user": {
+    "name": "Maya Okafor",
+    "email": "maya@acmelabs.io",
+    "role": "Owner"
+  },
   "orgs": [
-    { "name": "Acme Labs", "plan": "Team", "members": 8, "current": true },
-    { "name": "Northwind Studio", "plan": "Starter", "members": 3 },
-    { "name": "Okafor Consulting", "plan": "Free", "members": 1 }
+    {
+      "name": "Acme Labs",
+      "plan": "Team",
+      "members": 8,
+      "current": true
+    },
+    {
+      "name": "Northwind Studio",
+      "plan": "Starter",
+      "members": 3
+    },
+    {
+      "name": "Okafor Consulting",
+      "plan": "Free",
+      "members": 1
+    }
   ],
   "projects": [
-    { "key": "WEB", "name": "Marketing site", "status": "Active", "issues": 12, "updated": "2026-10-12" },
-    { "key": "APP", "name": "Customer app", "status": "Active", "issues": 31, "updated": "2026-10-14" },
-    { "key": "API", "name": "Public API", "status": "Active", "issues": 9, "updated": "2026-10-09" },
-    { "key": "MOB", "name": "Mobile beta", "status": "Paused", "issues": 4, "updated": "2026-09-28" },
-    { "key": "OPS", "name": "Internal tools", "status": "Archived", "issues": 0, "updated": "2026-08-30" }
+    {
+      "key": "WEB",
+      "name": "Marketing site",
+      "status": "Active",
+      "issues": 12,
+      "updated": "2026-10-12"
+    },
+    {
+      "key": "APP",
+      "name": "Customer app",
+      "status": "Active",
+      "issues": 31,
+      "updated": "2026-10-14"
+    },
+    {
+      "key": "API",
+      "name": "Public API",
+      "status": "Active",
+      "issues": 9,
+      "updated": "2026-10-09"
+    },
+    {
+      "key": "MOB",
+      "name": "Mobile beta",
+      "status": "Paused",
+      "issues": 4,
+      "updated": "2026-09-28"
+    },
+    {
+      "key": "OPS",
+      "name": "Internal tools",
+      "status": "Archived",
+      "issues": 0,
+      "updated": "2026-08-30"
+    }
   ],
   "members": [
-    { "id": "m-01", "name": "Maya Okafor", "email": "maya@acmelabs.io", "role": "Owner", "status": "Active", "joined": "2024-03-02" },
-    { "id": "m-02", "name": "Daniel Reyes", "email": "daniel@acmelabs.io", "role": "Admin", "status": "Active", "joined": "2024-05-19" },
-    { "id": "m-03", "name": "Priya Natarajan", "email": "priya@acmelabs.io", "role": "Member", "status": "Active", "joined": "2024-11-07" },
-    { "id": "m-04", "name": "Tomás Lindqvist", "email": "tomas@acmelabs.io", "role": "Member", "status": "Active", "joined": "2025-02-14" },
-    { "id": "m-05", "name": "Hana Sato", "email": "hana@acmelabs.io", "role": "Member", "status": "Invited", "joined": null },
-    { "id": "m-06", "name": "Grace Mensah", "email": "grace@acmelabs.io", "role": "Viewer", "status": "Active", "joined": "2025-06-30" },
-    { "id": "m-07", "name": "Leo Brandt", "email": "leo@acmelabs.io", "role": "Member", "status": "Suspended", "joined": "2025-01-21" },
-    { "id": "m-08", "name": "Ines Duarte", "email": "ines@acmelabs.io", "role": "Viewer", "status": "Invited", "joined": null }
+    {
+      "id": "m-01",
+      "name": "Maya Okafor",
+      "email": "maya@acmelabs.io",
+      "role": "Owner",
+      "status": "Active",
+      "joined": "2024-03-02"
+    },
+    {
+      "id": "m-02",
+      "name": "Daniel Reyes",
+      "email": "daniel@acmelabs.io",
+      "role": "Admin",
+      "status": "Active",
+      "joined": "2024-05-19"
+    },
+    {
+      "id": "m-03",
+      "name": "Priya Natarajan",
+      "email": "priya@acmelabs.io",
+      "role": "Member",
+      "status": "Active",
+      "joined": "2024-11-07"
+    },
+    {
+      "id": "m-04",
+      "name": "Tomás Lindqvist",
+      "email": "tomas@acmelabs.io",
+      "role": "Member",
+      "status": "Active",
+      "joined": "2025-02-14"
+    },
+    {
+      "id": "m-05",
+      "name": "Hana Sato",
+      "email": "hana@acmelabs.io",
+      "role": "Member",
+      "status": "Invited",
+      "joined": null
+    },
+    {
+      "id": "m-06",
+      "name": "Grace Mensah",
+      "email": "grace@acmelabs.io",
+      "role": "Viewer",
+      "status": "Active",
+      "joined": "2025-06-30"
+    },
+    {
+      "id": "m-07",
+      "name": "Leo Brandt",
+      "email": "leo@acmelabs.io",
+      "role": "Member",
+      "status": "Suspended",
+      "joined": "2025-01-21"
+    },
+    {
+      "id": "m-08",
+      "name": "Ines Duarte",
+      "email": "ines@acmelabs.io",
+      "role": "Viewer",
+      "status": "Invited",
+      "joined": null
+    }
   ],
   "issues": [
-    { "id": "LUM-104", "title": "Checkout fails on Safari 17", "status": "In progress", "priority": "Urgent", "assignee": "Daniel Reyes", "project": "APP", "updated": "2026-10-14" },
-    { "id": "LUM-103", "title": "Export to CSV drops the last row", "status": "Todo", "priority": "High", "assignee": "Priya Natarajan", "project": "APP", "updated": "2026-10-13" },
-    { "id": "LUM-101", "title": "Rate limit headers missing on 429", "status": "In review", "priority": "Medium", "assignee": "Tomás Lindqvist", "project": "API", "updated": "2026-10-12" },
-    { "id": "LUM-098", "title": "Pricing page shows old annual price", "status": "Todo", "priority": "High", "assignee": null, "project": "WEB", "updated": "2026-10-11" },
-    { "id": "LUM-095", "title": "Dark mode contrast on charts", "status": "Backlog", "priority": "Low", "assignee": "Grace Mensah", "project": "APP", "updated": "2026-10-08" },
-    { "id": "LUM-091", "title": "Push notifications arrive twice", "status": "Done", "priority": "Medium", "assignee": "Daniel Reyes", "project": "MOB", "updated": "2026-10-02" }
+    {
+      "id": "LUM-104",
+      "title": "Checkout fails on Safari 17",
+      "status": "In progress",
+      "priority": "Urgent",
+      "assignee": "Daniel Reyes",
+      "project": "APP",
+      "updated": "2026-10-14"
+    },
+    {
+      "id": "LUM-103",
+      "title": "Export to CSV drops the last row",
+      "status": "Todo",
+      "priority": "High",
+      "assignee": "Priya Natarajan",
+      "project": "APP",
+      "updated": "2026-10-13"
+    },
+    {
+      "id": "LUM-101",
+      "title": "Rate limit headers missing on 429",
+      "status": "In review",
+      "priority": "Medium",
+      "assignee": "Tomás Lindqvist",
+      "project": "API",
+      "updated": "2026-10-12"
+    },
+    {
+      "id": "LUM-098",
+      "title": "Pricing page shows old annual price",
+      "status": "Todo",
+      "priority": "High",
+      "assignee": null,
+      "project": "WEB",
+      "updated": "2026-10-11"
+    },
+    {
+      "id": "LUM-095",
+      "title": "Dark mode contrast on charts",
+      "status": "Backlog",
+      "priority": "Low",
+      "assignee": "Grace Mensah",
+      "project": "APP",
+      "updated": "2026-10-08"
+    },
+    {
+      "id": "LUM-091",
+      "title": "Push notifications arrive twice",
+      "status": "Done",
+      "priority": "Medium",
+      "assignee": "Daniel Reyes",
+      "project": "MOB",
+      "updated": "2026-10-02"
+    }
   ],
   "metrics": {
-    "kpis": { "visitors": 48210, "signups": 1342, "conversion": 0.0278, "mrr": 18450, "change_vs_previous": { "visitors": 0.12, "signups": 0.08, "conversion": -0.004, "mrr": 0.05 } },
-    "daily_last_14_days": {
-      "dates": ["2026-10-01","2026-10-02","2026-10-03","2026-10-04","2026-10-05","2026-10-06","2026-10-07","2026-10-08","2026-10-09","2026-10-10","2026-10-11","2026-10-12","2026-10-13","2026-10-14"],
-      "visitors": [3120,3290,3010,2480,2390,3410,3560,3480,3620,3390,2710,2580,3730,3820],
-      "signups": [88,97,85,61,58,102,109,104,111,98,72,69,118,121]
+    "kpis": {
+      "visitors": 48210,
+      "signups": 1342,
+      "conversion": 0.0278,
+      "mrr": 18450,
+      "change_vs_previous": {
+        "visitors": 0.12,
+        "signups": 0.08,
+        "conversion": -0.004,
+        "mrr": 0.05
+      }
     },
-    "signups_by_channel": [ { "channel": "Organic", "signups": 512 }, { "channel": "Paid search", "signups": 341 }, { "channel": "Referral", "signups": 228 }, { "channel": "Social", "signups": 167 }, { "channel": "Direct", "signups": 94 } ],
-    "segments": ["All users", "New users", "Returning users"]
+    "daily_last_14_days": {
+      "dates": [
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-14"
+      ],
+      "visitors": [
+        3120,
+        3290,
+        3010,
+        2480,
+        2390,
+        3410,
+        3560,
+        3480,
+        3620,
+        3390,
+        2710,
+        2580,
+        3730,
+        3820
+      ],
+      "signups": [
+        88,
+        97,
+        85,
+        61,
+        58,
+        102,
+        109,
+        104,
+        111,
+        98,
+        72,
+        69,
+        118,
+        121
+      ]
+    },
+    "signups_by_channel": [
+      {
+        "channel": "Organic",
+        "signups": 512
+      },
+      {
+        "channel": "Paid search",
+        "signups": 341
+      },
+      {
+        "channel": "Referral",
+        "signups": 228
+      },
+      {
+        "channel": "Social",
+        "signups": 167
+      },
+      {
+        "channel": "Direct",
+        "signups": 94
+      }
+    ],
+    "segments": [
+      "All users",
+      "New users",
+      "Returning users"
+    ]
+  },
+  "brand": {
+    "name": "Lumen",
+    "tagline": "Product analytics and issue tracking that small teams actually read",
+    "brand_color": "#E8590C",
+    "neutral": "warm stone grey",
+    "radius": "4px on buttons, inputs, cards and menus",
+    "heading_font": "Georgia, \"Times New Roman\", serif",
+    "body_font": "ui-sans-serif, system-ui, sans-serif",
+    "default_theme": "dark",
+    "plans": [
+      {
+        "name": "Free",
+        "price_month": 0,
+        "seats": "1",
+        "features": [
+          "1 project",
+          "7-day history",
+          "Community support"
+        ]
+      },
+      {
+        "name": "Team",
+        "price_month": 12,
+        "seats": "per seat",
+        "features": [
+          "Unlimited projects",
+          "1-year history",
+          "Issue tracker",
+          "Email support"
+        ],
+        "highlight": true
+      },
+      {
+        "name": "Business",
+        "price_month": 29,
+        "seats": "per seat",
+        "features": [
+          "Everything in Team",
+          "SSO and audit log",
+          "Unlimited history",
+          "Priority support"
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "q": "Can I switch plans later?",
+        "a": "Yes. Upgrades apply at once; downgrades at the end of the billing period."
+      },
+      {
+        "q": "Do you offer a discount for non-profits?",
+        "a": "Yes, 50% off Team and Business for registered non-profits."
+      },
+      {
+        "q": "Where is my data stored?",
+        "a": "In the EU, encrypted at rest."
+      }
+    ],
+    "logos": [
+      "Acme Labs",
+      "Northwind Studio",
+      "Hooli",
+      "Globex",
+      "Initech"
+    ]
+  },
+  "listings": {
+    "site": "Haven, a home search site for one city",
+    "city": "Lisbon",
+    "map_style_url": "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+    "map_center": [
+      -9.1393,
+      38.7223
+    ],
+    "currency": "EUR",
+    "agent": {
+      "name": "Inês Carvalho",
+      "agency": "Haven Homes",
+      "phone": "+351 210 000 123",
+      "email": "ines@havenhomes.example"
+    },
+    "homes": [
+      {
+        "id": "h-101",
+        "title": "Sunlit flat with river view",
+        "type": "Apartment",
+        "price": 485000,
+        "beds": 2,
+        "baths": 1,
+        "area_m2": 84,
+        "district": "Alfama",
+        "lat": 38.7114,
+        "lng": -9.1305,
+        "year": 1962,
+        "energy": "C",
+        "features": [
+          "Balcony",
+          "River view",
+          "Renovated kitchen"
+        ],
+        "listed": "2026-10-21"
+      },
+      {
+        "id": "h-102",
+        "title": "Family house with garden",
+        "type": "House",
+        "price": 895000,
+        "beds": 4,
+        "baths": 3,
+        "area_m2": 210,
+        "district": "Restelo",
+        "lat": 38.7037,
+        "lng": -9.2129,
+        "year": 1988,
+        "energy": "B",
+        "features": [
+          "Garden",
+          "Garage",
+          "Fireplace"
+        ],
+        "listed": "2026-10-18"
+      },
+      {
+        "id": "h-103",
+        "title": "Compact studio near the metro",
+        "type": "Studio",
+        "price": 219000,
+        "beds": 0,
+        "baths": 1,
+        "area_m2": 31,
+        "district": "Arroios",
+        "lat": 38.7316,
+        "lng": -9.1358,
+        "year": 1975,
+        "energy": "D",
+        "features": [
+          "Metro 2 min",
+          "Furnished"
+        ],
+        "listed": "2026-10-29"
+      },
+      {
+        "id": "h-104",
+        "title": "Loft in a converted warehouse",
+        "type": "Apartment",
+        "price": 640000,
+        "beds": 2,
+        "baths": 2,
+        "area_m2": 120,
+        "district": "Marvila",
+        "lat": 38.7486,
+        "lng": -9.1031,
+        "year": 2019,
+        "energy": "A",
+        "features": [
+          "High ceilings",
+          "Terrace",
+          "Parking"
+        ],
+        "listed": "2026-10-11"
+      },
+      {
+        "id": "h-105",
+        "title": "Classic flat with tiled facade",
+        "type": "Apartment",
+        "price": 529000,
+        "beds": 3,
+        "baths": 2,
+        "area_m2": 112,
+        "district": "Campo de Ourique",
+        "lat": 38.7181,
+        "lng": -9.1662,
+        "year": 1940,
+        "energy": "C",
+        "features": [
+          "Original tiles",
+          "Lift",
+          "Storage room"
+        ],
+        "listed": "2026-10-25"
+      },
+      {
+        "id": "h-106",
+        "title": "Penthouse with rooftop pool",
+        "type": "Apartment",
+        "price": 1450000,
+        "beds": 3,
+        "baths": 3,
+        "area_m2": 168,
+        "district": "Avenidas Novas",
+        "lat": 38.7392,
+        "lng": -9.1467,
+        "year": 2021,
+        "energy": "A",
+        "features": [
+          "Rooftop pool",
+          "Concierge",
+          "2 parking spaces"
+        ],
+        "listed": "2026-10-02"
+      },
+      {
+        "id": "h-107",
+        "title": "Townhouse on a quiet lane",
+        "type": "House",
+        "price": 735000,
+        "beds": 3,
+        "baths": 2,
+        "area_m2": 156,
+        "district": "Graça",
+        "lat": 38.7176,
+        "lng": -9.1295,
+        "year": 1910,
+        "energy": "D",
+        "features": [
+          "Patio",
+          "Restored beams"
+        ],
+        "listed": "2026-10-27"
+      },
+      {
+        "id": "h-108",
+        "title": "Two-bed flat by the park",
+        "type": "Apartment",
+        "price": 412000,
+        "beds": 2,
+        "baths": 1,
+        "area_m2": 78,
+        "district": "Alvalade",
+        "lat": 38.753,
+        "lng": -9.1445,
+        "year": 1958,
+        "energy": "C",
+        "features": [
+          "Park view",
+          "Lift"
+        ],
+        "listed": "2026-10-30"
+      },
+      {
+        "id": "h-109",
+        "title": "Riverside new build",
+        "type": "Apartment",
+        "price": 780000,
+        "beds": 3,
+        "baths": 2,
+        "area_m2": 131,
+        "district": "Parque das Nações",
+        "lat": 38.7681,
+        "lng": -9.0947,
+        "year": 2024,
+        "energy": "A+",
+        "features": [
+          "Gym",
+          "Pool",
+          "Concierge"
+        ],
+        "listed": "2026-10-15"
+      },
+      {
+        "id": "h-110",
+        "title": "Bright studio with mezzanine",
+        "type": "Studio",
+        "price": 265000,
+        "beds": 1,
+        "baths": 1,
+        "area_m2": 42,
+        "district": "Bairro Alto",
+        "lat": 38.7127,
+        "lng": -9.145,
+        "year": 1900,
+        "energy": "E",
+        "features": [
+          "Mezzanine",
+          "Central"
+        ],
+        "listed": "2026-10-22"
+      },
+      {
+        "id": "h-111",
+        "title": "Villa with sea glimpse",
+        "type": "House",
+        "price": 1290000,
+        "beds": 5,
+        "baths": 4,
+        "area_m2": 290,
+        "district": "Belém",
+        "lat": 38.6979,
+        "lng": -9.2063,
+        "year": 2001,
+        "energy": "B",
+        "features": [
+          "Pool",
+          "Garden",
+          "Sea glimpse"
+        ],
+        "listed": "2026-09-30"
+      },
+      {
+        "id": "h-112",
+        "title": "Renovated flat near the market",
+        "type": "Apartment",
+        "price": 455000,
+        "beds": 2,
+        "baths": 2,
+        "area_m2": 89,
+        "district": "Cais do Sodré",
+        "lat": 38.7066,
+        "lng": -9.1442,
+        "year": 1930,
+        "energy": "C",
+        "features": [
+          "Renovated",
+          "Air conditioning"
+        ],
+        "listed": "2026-10-28"
+      }
+    ]
+  },
+  "video": {
+    "app": "Cutline, a browser video editor",
+    "project": {
+      "name": "Spring launch teaser",
+      "fps": 30,
+      "duration_s": 42,
+      "resolution": "1920x1080"
+    },
+    "media": [
+      {
+        "id": "md-1",
+        "name": "Intro drone shot.mp4",
+        "kind": "video",
+        "duration_s": 8,
+        "color": "#3B82F6"
+      },
+      {
+        "id": "md-2",
+        "name": "Product close-up.mp4",
+        "kind": "video",
+        "duration_s": 12,
+        "color": "#8B5CF6"
+      },
+      {
+        "id": "md-3",
+        "name": "Team at work.mp4",
+        "kind": "video",
+        "duration_s": 10,
+        "color": "#10B981"
+      },
+      {
+        "id": "md-4",
+        "name": "Logo reveal.mov",
+        "kind": "video",
+        "duration_s": 5,
+        "color": "#F59E0B"
+      },
+      {
+        "id": "md-5",
+        "name": "Upbeat theme.wav",
+        "kind": "audio",
+        "duration_s": 42
+      },
+      {
+        "id": "md-6",
+        "name": "Voice-over take 3.wav",
+        "kind": "audio",
+        "duration_s": 30
+      }
+    ],
+    "tracks": [
+      {
+        "id": "v1",
+        "name": "Video 1",
+        "kind": "video",
+        "clips": [
+          {
+            "id": "c-1",
+            "media": "md-1",
+            "start_s": 0,
+            "in_s": 0,
+            "length_s": 8
+          },
+          {
+            "id": "c-2",
+            "media": "md-2",
+            "start_s": 8,
+            "in_s": 1,
+            "length_s": 11
+          },
+          {
+            "id": "c-3",
+            "media": "md-3",
+            "start_s": 19,
+            "in_s": 0,
+            "length_s": 10
+          },
+          {
+            "id": "c-4",
+            "media": "md-2",
+            "start_s": 29,
+            "in_s": 4,
+            "length_s": 8
+          },
+          {
+            "id": "c-5",
+            "media": "md-4",
+            "start_s": 37,
+            "in_s": 0,
+            "length_s": 5
+          }
+        ]
+      },
+      {
+        "id": "t1",
+        "name": "Titles",
+        "kind": "title",
+        "clips": [
+          {
+            "id": "c-6",
+            "text": "Spring is here",
+            "start_s": 1,
+            "length_s": 4
+          },
+          {
+            "id": "c-7",
+            "text": "Built by a team of 12",
+            "start_s": 20,
+            "length_s": 5
+          },
+          {
+            "id": "c-8",
+            "text": "Available May 1",
+            "start_s": 37,
+            "length_s": 5
+          }
+        ]
+      },
+      {
+        "id": "a1",
+        "name": "Music",
+        "kind": "audio",
+        "clips": [
+          {
+            "id": "c-9",
+            "media": "md-5",
+            "start_s": 0,
+            "in_s": 0,
+            "length_s": 42,
+            "volume_db": -6
+          }
+        ]
+      },
+      {
+        "id": "a2",
+        "name": "Voice-over",
+        "kind": "audio",
+        "clips": [
+          {
+            "id": "c-10",
+            "media": "md-6",
+            "start_s": 6,
+            "in_s": 0,
+            "length_s": 28,
+            "volume_db": 0
+          }
+        ]
+      }
+    ],
+    "export_presets": [
+      {
+        "name": "1080p MP4 (H.264)",
+        "size_mb_est": 64
+      },
+      {
+        "name": "4K MP4 (H.265)",
+        "size_mb_est": 180
+      },
+      {
+        "name": "Vertical 1080x1920 for social",
+        "size_mb_est": 58
+      },
+      {
+        "name": "GIF preview, 480p",
+        "size_mb_est": 22
+      }
+    ]
+  },
+  "assistant": {
+    "app": "Orbit, an AI assistant workspace for a product team",
+    "user": {
+      "name": "Maya Okafor",
+      "email": "maya@acmelabs.io"
+    },
+    "models": [
+      "Orbit Fast",
+      "Orbit Pro",
+      "Orbit Reasoning"
+    ],
+    "threads": [
+      {
+        "id": "th-1",
+        "title": "Q3 churn analysis",
+        "updated": "Today"
+      },
+      {
+        "id": "th-2",
+        "title": "Draft release notes for 4.2",
+        "updated": "Today"
+      },
+      {
+        "id": "th-3",
+        "title": "SQL for weekly active teams",
+        "updated": "Yesterday"
+      },
+      {
+        "id": "th-4",
+        "title": "Interview questions, design lead",
+        "updated": "Yesterday"
+      },
+      {
+        "id": "th-5",
+        "title": "Summarise the pricing survey",
+        "updated": "Oct 28"
+      },
+      {
+        "id": "th-6",
+        "title": "Rewrite onboarding emails",
+        "updated": "Oct 24"
+      }
+    ],
+    "conversation": {
+      "thread": "th-3",
+      "messages": [
+        {
+          "role": "user",
+          "text": "Write a Postgres query for weekly active teams over the last 8 weeks. A team is active if any member created an event that week."
+        },
+        {
+          "role": "assistant",
+          "text": "Here is a query that buckets events by ISO week and counts distinct teams:",
+          "code": {
+            "lang": "sql",
+            "source": "SELECT date_trunc('week', e.created_at) AS week,\n       count(DISTINCT m.team_id)        AS active_teams\nFROM events e\nJOIN members m ON m.user_id = e.user_id\nWHERE e.created_at >= now() - interval '8 weeks'\nGROUP BY 1\nORDER BY 1;"
+          },
+          "after": "On last week's data it returns:",
+          "table": {
+            "columns": [
+              "week",
+              "active_teams"
+            ],
+            "rows": [
+              [
+                "2026-09-07",
+                "412"
+              ],
+              [
+                "2026-09-14",
+                "431"
+              ],
+              [
+                "2026-09-21",
+                "428"
+              ],
+              [
+                "2026-09-28",
+                "455"
+              ],
+              [
+                "2026-10-05",
+                "470"
+              ],
+              [
+                "2026-10-12",
+                "466"
+              ],
+              [
+                "2026-10-19",
+                "489"
+              ],
+              [
+                "2026-10-26",
+                "501"
+              ]
+            ]
+          }
+        },
+        {
+          "role": "user",
+          "text": "Can you add the week-over-week change as a percentage?"
+        },
+        {
+          "role": "assistant",
+          "text": "Yes: use the lag window function over the weekly counts. Weekly active teams grew 21.6% over the 8 weeks, with one small dip in the week of 12 October."
+        }
+      ]
+    },
+    "suggestions": [
+      "Explain this query",
+      "Turn the table into a chart",
+      "Write a Slack update"
+    ]
   }
 }
