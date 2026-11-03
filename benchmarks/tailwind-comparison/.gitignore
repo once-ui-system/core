@@ -5,3 +5,7 @@ next-env.d.ts
 work/
 arms/once/vendor/*.tgz
 arms/stack/
+# Bench v1 screenshots live in the gallery artifact and project files, not git
+results/bench-v1/**/*.jpg
+results/bench-v1-invalid-chakra/**/*.jpg
+results/bench-v1/blind/
