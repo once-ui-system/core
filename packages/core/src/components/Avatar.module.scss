@@ -38,6 +38,14 @@
     }
 }
 
+// The placeholder icon scales with the circle. Icon's own size classes top
+// out at 24px for "m", which overflowed the 20px xs circle.
+.xs .icon { font-size: var(--static-space-12); }
+.s .icon { font-size: var(--static-space-16); }
+.m .icon { font-size: var(--static-space-20); }
+.l .icon { font-size: var(--static-space-24); }
+.xl .icon { font-size: var(--static-space-64); }
+
 .value {
     white-space: nowrap;
     overflow: hidden;
