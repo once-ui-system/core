@@ -15,6 +15,8 @@ import { meta } from "@/resources";
 import { currentVersion } from "@/resources/versions";
 import { Providers } from '@/product/Providers';
 
+import Script from "next/script";
+import { feedback } from "@/resources/feedback";
 import { Geist } from "next/font/google";
 import { Geist_Mono } from "next/font/google";
 
@@ -128,6 +130,14 @@ export default function RootLayout({
           </Column>
         </Providers>
         <Analytics />
+        {/* Chirio's board widget, filling the header's Feedback and What's new
+            drawer (FeedbackButtons), so it draws no button of its own. */}
+        <Script
+          src={`${feedback.chirio}/board-widget.js`}
+          data-board={feedback.board}
+          data-launcher="false"
+          strategy="afterInteractive"
+        />
       </Flex>
     </>
   );
