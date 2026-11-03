@@ -11,7 +11,6 @@ import {
 } from "@once-ui-system/core";
 import type React from "react";
 import { type ReactNode, useState } from "react";
-import { schema } from "@/resources";
 
 interface Faq3Props extends Omit<React.ComponentProps<typeof Column>, "content" | "title"> {
   title?: ReactNode;
@@ -22,9 +21,18 @@ interface Faq3Props extends Omit<React.ComponentProps<typeof Column>, "content" 
     value: string;
     content: Array<{ title: ReactNode; content: ReactNode }>;
   }[];
+  /** Where the "still have questions" line points. */
+  email?: string;
 }
 
-export const Faq3: React.FC<Faq3Props> = ({ title, description, content, categories, ...flex }) => {
+export const Faq3: React.FC<Faq3Props> = ({
+  title,
+  description,
+  content,
+  categories,
+  email = "support@once-ui.com",
+  ...flex
+}) => {
   const [activeCategory, setActiveCategory] = useState(categories?.[0]?.value || "");
 
   const displayContent = categories
@@ -55,8 +63,7 @@ export const Faq3: React.FC<Faq3Props> = ({ title, description, content, categor
           onBackground="neutral-medium"
           marginTop="20"
         >
-          Got more questions? Email us at{" "}
-          <SmartLink href={`mailto:${schema.email}`}>{schema.email}</SmartLink>
+          Got more questions? Email us at <SmartLink href={`mailto:${email}`}>{email}</SmartLink>
         </Text>
       </Column>
       <Column fillWidth paddingTop="24" paddingLeft="24">

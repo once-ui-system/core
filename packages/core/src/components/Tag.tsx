@@ -31,7 +31,7 @@ export interface TagProps extends Omit<React.ComponentProps<typeof Flex>, "onCli
   tone?: Tone;
   /**
    * How the tag looks: `default`, `gradient` (2.x's `scheme="gradient"`) or
-   * `announce`, the pill with a shine (2.x's Badge).
+   * `announce`, the pill with a beam round its edge (2.x's Badge).
    */
   variant?: "default" | "gradient" | "announce";
   /**
@@ -46,7 +46,10 @@ export interface TagProps extends Omit<React.ComponentProps<typeof Flex>, "onCli
   href?: string;
   /** An arrow that slides in on hover. Defaults to true with `href`. */
   arrow?: boolean;
-  /** A shine that sweeps across now and then. Defaults to true on `announce`. */
+  /**
+   * A short brand-to-accent beam that travels round the edge, faster on
+   * hover and still under reduced motion. Defaults to true on `announce`.
+   */
   effect?: boolean;
   /** Makes the tag a toggle, pressed when true. Defaults to false. */
   selected?: boolean;
@@ -86,21 +89,22 @@ const LOOK = {
       xl: "label-default-m",
     },
   },
+  // A compact pill: m is 28px tall, with the padding beside an icon or arrow tightened.
   announce: {
-    paddingX: { xs: "8", s: "12", m: "20", l: "24", xl: "32" },
-    paddingY: { xs: "4", s: "8", m: "12", l: "16", xl: "20" },
+    paddingX: { xs: "8", s: "8", m: "12", l: "16", xl: "20" },
+    paddingY: { xs: "2", s: "2", m: "4", l: "8", xl: "12" },
     text: {
-      xs: "label-strong-xs",
-      s: "label-strong-s",
-      m: "label-strong-s",
-      l: "label-strong-m",
-      xl: "label-strong-l",
+      xs: "label-default-xs",
+      s: "label-default-s",
+      m: "label-default-s",
+      l: "label-default-m",
+      xl: "label-default-l",
     },
   },
 } as const;
 
 const ICON = { xs: "xs", s: "xs", m: "xs", l: "xs", xl: "s" } as const;
-const ANNOUNCE_ICON = { xs: "xs", s: "xs", m: "s", l: "s", xl: "m" } as const;
+const ANNOUNCE_ICON = { xs: "xs", s: "xs", m: "xs", l: "s", xl: "s" } as const;
 
 const Tag = ({
   ref,
@@ -189,16 +193,33 @@ const Tag = ({
   const box = (
     <Row
       fitWidth
-      background={announce ? "neutral-weak" : gradient ? undefined : `${palette}-weak`}
+      // An announcement is a quiet pill on the surface; the icon and the beam
+      // carry the colour. A `tone` still tints its edge and text.
+      background={announce ? "surface" : gradient ? undefined : `${palette}-weak`}
       border={
-        announce ? `${palette}-alpha-medium` : gradient ? "brand-medium" : `${palette}-alpha-medium`
+        announce
+          ? tone
+            ? `${tone}-alpha-medium`
+            : "neutral-alpha-medium"
+          : gradient
+            ? "brand-medium"
+            : `${palette}-alpha-medium`
       }
-      onBackground={announce ? `${palette}-strong` : gradient ? undefined : `${palette}-medium`}
-      paddingX={look.paddingX[size]}
+      onBackground={
+        announce
+          ? tone
+            ? `${tone}-strong`
+            : "neutral-strong"
+          : gradient
+            ? undefined
+            : `${palette}-medium`
+      }
+      paddingLeft={announce && prefixIcon ? "8" : look.paddingX[size]}
+      paddingRight={announce && arrow ? "8" : look.paddingX[size]}
       paddingY={look.paddingY[size]}
       vertical="center"
       radius={announce ? "full" : "s"}
-      gap={announce ? undefined : "4"}
+      gap={announce ? "8" : "4"}
       textVariant={announce ? (textVariant ?? look.text[size]) : undefined}
       ref={ref}
       as={as}
@@ -208,7 +229,7 @@ const Tag = ({
         styles.tag,
         auto && styles.auto,
         gradient ? styles.gradient : undefined,
-        effect ? styles.shine : undefined,
+        effect ? styles.beam : undefined,
         announce ? styles.announce : undefined,
         className,
       )}
@@ -219,7 +240,6 @@ const Tag = ({
       {prefixIcon &&
         (announce ? (
           <Icon
-            marginRight="8"
             size={ANNOUNCE_ICON[size]}
             className={iconClass}
             name={prefixIcon}

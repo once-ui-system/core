@@ -129,6 +129,15 @@ const DropdownMenu = ({
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState(-1);
+  /**
+   * What the open panel hands focus to: its list (`"options"`), or the
+   * field it leads with (`"field"`) — a switcher's or command menu's search.
+   * Null until the panel has rendered and been looked at. ArrowNavigation's
+   * `autoFocus` waits on it: started on positioning alone, it put focus on
+   * the selected option a frame after the field had it, so the caret
+   * blinked once and typing went nowhere.
+   */
+  const [opensOn, setOpensOn] = useState<"options" | "field" | null>(null);
 
   // Use provided dropdownId or generate a unique ID for this dropdown
   const dropdownId = useRef(propDropdownId || `dropdown-${dropdownCounter++}`);
@@ -288,8 +297,8 @@ const DropdownMenu = ({
   });
 
   /**
-   * Where the open animation grows from. The panel scales 0.9 -> 1, so the
-   * corner this names stays put while the opposite one travels by 10% of the
+   * Where the open animation grows from. The panel scales 0.96 -> 1, so the
+   * corner this names stays put while the opposite one travels by 4% of the
    * panel's size. It has to be the edge anchored to the trigger, or the
    * panel visibly slides as it opens: measured in a browser, a 480px panel
    * on a "-start" placement drifted 48px sideways with this hardcoded to
@@ -310,6 +319,33 @@ const DropdownMenu = ({
     const y = align === "start" ? "top" : align === "end" ? "bottom" : "center";
     return `${x} ${y}`;
   })();
+
+  /**
+   * Puts the caret in a leading field once the panel can actually take it.
+   * The open effect's own `focus()` runs while the panel is still
+   * `visibility: hidden`, and in a browser the field stays hidden for one
+   * more frame after `isPositioned`: Input transitions `all`, visibility
+   * included. Retries for a few frames, and never moves focus that is
+   * already inside the panel — the user may have arrowed into the list.
+   */
+  useEffect(() => {
+    if (!isOpen || !isPositioned || opensOn !== "field") return;
+    let frame = 0;
+    let tries = 0;
+    const focusField = () => {
+      const panel = dropdownRef.current;
+      if (!panel || panel.contains(document.activeElement)) return;
+      const field = panel.querySelector<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      );
+      field?.focus({ preventScroll: true });
+      if (field && document.activeElement !== field && ++tries < 10) {
+        frame = requestAnimationFrame(focusField);
+      }
+    };
+    frame = requestAnimationFrame(focusField);
+    return () => cancelAnimationFrame(frame);
+  }, [isOpen, isPositioned, opensOn]);
 
   useImperativeHandle(ref, () => wrapperRef.current as HTMLDivElement);
 
@@ -378,8 +414,8 @@ const DropdownMenu = ({
    * the nearest scroller inside the panel.
    *
    * Measured in layout pixels — `offsetTop` and `clientHeight` — rather than
-   * through `getBoundingClientRect`. The panel scales from 0.9 to 1 as it
-   * opens, so rects taken during that animation are up to a tenth short
+   * through `getBoundingClientRect`. The panel scales from 0.96 to 1 as it
+   * opens, so rects taken during that animation are up to 4% short
    * while `scrollTop` is always layout pixels: mixing the two left the
    * selected row 35px below the scrollport, just off the bottom edge.
    */
@@ -442,6 +478,7 @@ const DropdownMenu = ({
           const leadsWithOptions =
             focusableElements.length > 0 && optionElements.includes(focusableElements[0]);
           const target = leadsWithOptions ? optionElements[openIndex] : focusableElements[0];
+          setOpensOn(leadsWithOptions || focusableElements.length === 0 ? "options" : "field");
 
           target?.focus({ preventScroll: true });
 
@@ -463,6 +500,7 @@ const DropdownMenu = ({
       // last session's index behind meant the next open started from it and
       // never resolved the current selection at all.
       setFocusedIndex(-1);
+      setOpensOn(null);
 
       if (previouslyFocusedElement.current) {
         // A combobox's field had focus all along, so focus that is now
@@ -937,7 +975,8 @@ const DropdownMenu = ({
                     onSelect={handleOptionSelect}
                     onFocusChange={handleFocusChange}
                     wrap
-                    autoFocus={isPositioned}
+                    // A leading field keeps focus; the list is one ArrowDown away.
+                    autoFocus={isPositioned && opensOn === "options"}
                     initialFocusedIndex={focusedIndex}
                     itemSelector='.option, [role="option"], [data-value]'
                     role={navigationLayout === "grid" ? "grid" : "listbox"}

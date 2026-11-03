@@ -209,6 +209,9 @@
 .font-weight-inherit
 .font-xl
 .font-xs
+.fx-emphasis
+.fx-emphasis-aura
+.fx-emphasis-glow
 .g-0
 .g-1
 .g-104

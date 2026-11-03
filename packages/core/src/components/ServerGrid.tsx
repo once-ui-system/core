@@ -152,6 +152,7 @@ const ServerGrid = ({
   cursor,
   zIndex,
   shadow,
+  emphasis,
   userSelect,
   blendMode,
   blur,
@@ -292,6 +293,8 @@ const ServerGrid = ({
     pointerEvents && `pointer-events-${pointerEvents}`,
     transition && `transition-${transition}`,
     shadow && `shadow-${shadow}`,
+    emphasis && "fx-emphasis",
+    emphasis && `fx-emphasis-${emphasis === true ? "glow" : emphasis}`,
     zIndex && `z-index-${zIndex}`,
     // The preset's three classes, as Flex writes them. 2.x typed
     // `textVariant` here and never applied it.

@@ -134,6 +134,11 @@ const ENTRY_POINTS = [
     peer: "maplibre-gl",
   },
   {
+    specifier: "@once-ui-system/core/map",
+    use: "Map with React markers, clustering, popups and areas on free OpenStreetMap tiles",
+    peer: "maplibre-gl",
+  },
+  {
     specifier: "@once-ui-system/core/mdx",
     use: "MDX content through Once UI: mdxComponents for next-mdx-remote or @next/mdx, createMdxComponents(overrides) to replace elements or register tags, and the Mdx* elements to wrap",
     peer: "prismjs",

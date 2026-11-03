@@ -96,7 +96,7 @@ comes from when it is not the root:
 
 | Import | From |
 |--------|------|
-| charts, gauges, chart chrome | `@once-ui-system/core/data` (needs `recharts`) |
+| charts, gauges, chart chrome | `@once-ui-system/core/data` |
 | `CodeBlock` | `@once-ui-system/core/code` (needs `prismjs`) |
 | `MediaUpload` | `@once-ui-system/core/media` (needs `compressorjs`) |
 | `Map`, `MapMarker(s)`, `MapPin`, `MapPopup`, `MapCircle` | `@once-ui-system/core/map` (needs `maplibre-gl`) |
@@ -310,6 +310,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - base, stack?: boolean
 - flush?: boolean = false
 - showClose, closeOnClickaway?: boolean = true
+- closeLabel?: string = Close
 - onHeightChange?: (height: number) => void
 - minHeight?: number
 
@@ -387,10 +388,11 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - borderWidth?: 1 | 2 | 4 | 8 | "1" | "2" | "4" | "8"
 - topRadius, rightRadius, bottomRadius, leftRadius, topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius?: RadiusSize
 - shadow?: ShadowSize
+- emphasis?: boolean | "edge" | "glow" | "aura"
 - cursor?: CSSProperties["cursor"] | "interactive" | CursorPresetValue | ReactNode
 - blendMode?: BlendMode
 - blur, backdropBlur?: BlurSize | number | CSSUnit
-- theme?: "light" | "dark"
+- theme?: "light" | "dark" | "invert"
 - themeBorder?: BorderStyle
 - themeSolid?: SolidType
 - themeSurface?: SurfaceStyle

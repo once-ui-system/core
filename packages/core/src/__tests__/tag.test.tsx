@@ -62,26 +62,27 @@ describe("Tag, static", () => {
 });
 
 describe("Tag, as an announcement (2.x Badge)", () => {
-  it("is a link with href, with an arrow and the shine by default", () => {
+  it("is a link with href, with an arrow and the beam by default", () => {
     const { container } = render(<Tag variant="announce" label="New" href="/changelog" />, {
       wrapper,
     });
     const link = screen.getByRole("link", { name: /New/ });
     expect(link).toHaveAttribute("href", "/changelog");
     const box = container.querySelector('[class*="_tag_"]');
-    expect(box?.className).toMatch(/_shine_/);
+    expect(box?.className).toMatch(/_beam_/);
     expect(box?.className).toMatch(/radius-full/);
-    expect(box?.className).toMatch(/brand-on-background-strong/);
+    // A quiet pill: neutral text, the colour comes from the icon and the beam.
+    expect(box?.className).toMatch(/neutral-on-background-strong/);
     expect(box).toHaveAttribute("data-tag-arrow");
   });
 
-  it("turns the shine and the arrow off on request", () => {
+  it("turns the beam and the arrow off on request", () => {
     const { container } = render(
       <Tag variant="announce" label="New" href="/x" effect={false} arrow={false} />,
       { wrapper },
     );
     const box = container.querySelector('[class*="_tag_"]');
-    expect(box?.className).not.toMatch(/_shine_/);
+    expect(box?.className).not.toMatch(/_beam_/);
     expect(box).not.toHaveAttribute("data-tag-arrow");
   });
 

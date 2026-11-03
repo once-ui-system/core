@@ -1,0 +1,30 @@
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--mantine-color-body);
+  color: var(--mantine-color-text);
+}
+
+.main {
+  flex: 1;
+  outline: none;
+}
+
+.skip {
+  position: absolute;
+  left: var(--mantine-spacing-md);
+  top: -4rem;
+  z-index: 1000;
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
+  background-color: var(--mantine-color-body);
+  color: var(--mantine-color-text);
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: var(--mantine-radius-default);
+
+  &:focus {
+    top: var(--mantine-spacing-md);
+    outline: 2px solid var(--mantine-primary-color-filled);
+    outline-offset: 2px;
+  }
+}

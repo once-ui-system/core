@@ -12,7 +12,9 @@
  "props": {
   "stickToBottom": "boolean = true",
   "onReachStart": "() => void",
-  "aria-label": "string"
+  "aria-label": "string",
+  "stack": "boolean = false",
+  "stackWithin": "number = 5"
  },
  "tags": [
   "chat"
@@ -128,11 +130,12 @@
    "bottomLeftRadius": "RadiusSize",
    "bottomRightRadius": "RadiusSize",
    "shadow": "ShadowSize",
+   "emphasis": "boolean | \"edge\" | \"glow\" | \"aura\"",
    "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | CursorPresetValue | ReactNode",
    "blendMode": "BlendMode",
    "blur": "BlurSize | number | CSSUnit",
    "backdropBlur": "BlurSize | number | CSSUnit",
-   "theme": "\"light\" | \"dark\"",
+   "theme": "\"light\" | \"dark\" | \"invert\"",
    "themeBorder": "BorderStyle",
    "themeSolid": "SolidType",
    "themeSurface": "SurfaceStyle",
