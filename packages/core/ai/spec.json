@@ -3745,6 +3745,7 @@
     "fillWidth": "boolean = true",
     "compact": "boolean = false",
     "semantics": "\"tabs\" | \"radio\" = tabs",
+    "sliding": "boolean = true",
     "scroll": "boolean = true",
     "className": "string",
     "style": "React.CSSProperties"
