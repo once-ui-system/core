@@ -16,7 +16,7 @@
     "@mui/material-nextjs": "9.5.0",
     "@mui/x-charts": "9.17.0",
     "@mui/x-data-grid": "9.17.0",
-    "maplibre-gl": "6.16.0",
+    "maplibre-gl": "5.24.0",
     "next": "16.2.12",
     "react": "19.2.8",
     "react-dom": "19.2.8",

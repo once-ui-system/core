@@ -23,6 +23,15 @@ const taskIds = arg("tasks", "all") === "all" ? tasks.map((t) => t.id) : String(
 const arms = String(arg("arms", "A,B,C,D")).split(",");
 const runs = Number(arg("runs", config.runs_per_task));
 const dryRun = process.argv.includes("--dry-run");
+// Hard spend stop at list prices, uncached (the pessimistic price): before each
+// API call the process checks what it has spent; at the stop it makes no new
+// call and exits. Runs are resumable, so a stopped run picks up where it was.
+const budgetUsd = Number(arg("budget-usd", Infinity));
+let spentUsd = 0;
+const P = config.pricing_usd_per_mtok;
+const callCost = (u) =>
+  ((u.input_tokens + (u.cache_creation_input_tokens ?? 0) + (u.cache_read_input_tokens ?? 0)) * P.input + u.output_tokens * P.output) / 1e6;
+class BudgetStop extends Error {}
 
 const TOOLS = [
   {
@@ -84,10 +93,12 @@ async function runOne(client, letter, task, run) {
         system,
         messages,
         tools: TOOLS,
-        max_tokens: config.generation.max_tokens,
+        // A task may need a longer reply than its set (the Pro apps).
+        max_tokens: taskById(task)?.max_tokens ?? config.generation.max_tokens,
         thinking: config.generation.thinking,
         output_config: { effort: config.generation.effort },
       };
+      if (spentUsd >= budgetUsd) throw new BudgetStop(`budget stop: $${spentUsd.toFixed(2)} spent of $${budgetUsd}`);
       let res;
       for (let i = 0; ; i++) {
         try {
@@ -100,6 +111,7 @@ async function runOne(client, letter, task, run) {
           await new Promise((r) => setTimeout(r, 2000 * 2 ** i));
         }
       }
+      spentUsd += callCost(res.usage);
       calls.push({ attempt, id: res.id, model: res.model, stop_reason: res.stop_reason, usage: res.usage });
       messages.push({ role: "assistant", content: res.content });
       const uses = res.content.filter((b) => b.type === "tool_use");
@@ -211,8 +223,16 @@ const client = new Anthropic({
   ...(process.env.ANTHROPIC_WORKSPACE_ID ? { defaultHeaders: { "anthropic-workspace-id": process.env.ANTHROPIC_WORKSPACE_ID } } : {}),
 });
 // Arms run in parallel (one gate working copy each); runs within an arm are sequential.
-await Promise.all(
+// allSettled: an arm that hits the stop must not abandon the others mid-run;
+// each stops at its own next call.
+const settled = await Promise.allSettled(
   arms.map(async (letter) => {
     for (const task of taskIds) for (let run = 1; run <= runs; run++) await runOne(client, letter, task, run);
   }),
 );
+for (const r of settled.filter((r) => r.status === "rejected")) {
+  if (!(r.reason instanceof BudgetStop)) throw r.reason;
+  console.error(r.reason.message);
+  process.exitCode = 3;
+}
+console.log(`spent this process: $${spentUsd.toFixed(2)} (list price, uncached)`);

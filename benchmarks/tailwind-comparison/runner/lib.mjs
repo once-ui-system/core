@@ -24,6 +24,8 @@ if (taskSet.generation) Object.assign(config.generation, taskSet.generation);
 export const interactions = process.env.BENCH_TASKS
   ? (taskSet.interactions ?? {})
   : JSON.parse(fs.readFileSync(path.join(ROOT, "prompts/interactions.json"), "utf8")).tasks;
+// Named extra views per task (screenshotted for the gallery, never gated).
+export const views = process.env.BENCH_TASKS ? (taskSet.views ?? {}) : {};
 export const taskById = (id) => tasks.find((t) => t.id === id);
 // A multi-file task's reply is several files; a single-file task's is app/page.tsx.
 export const isMulti = (task) => task?.output === "multi";
@@ -81,7 +83,9 @@ export function buildPrompt(armLetter, taskId) {
     .replace("{{STACK}}", stacks[armLetter])
     .replace("{{TASK}}", task.prompt)
     .replace("{{ROUTES}}", routesOf(task).map((r) => `\`${r}\``).join(", "))
-    .replace("{{FILES_RULE}}", filesRule(armLetter, task));
+    .replace("{{FILES_RULE}}", filesRule(armLetter, task))
+    // A src/ project (Stack) keeps its data file under src/lib.
+    .replaceAll("`lib/data.ts`", replacesAnything(armLetter) ? "`src/lib/data.ts`" : "`lib/data.ts`");
   const system = fs.readFileSync(path.join(ROOT, "prompts/system.md"), "utf8").trim();
   return { system, user };
 }

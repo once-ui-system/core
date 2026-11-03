@@ -10,7 +10,7 @@
   "dependencies": {
     "@once-ui-system/core": "file:./vendor/once-ui-system-core.tgz",
     "compressorjs": "1.4.0",
-    "maplibre-gl": "6.16.0",
+    "maplibre-gl": "5.24.0",
     "next": "16.2.12",
     "prismjs": "1.30.0",
     "react": "19.2.8",

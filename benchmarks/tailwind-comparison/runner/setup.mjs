@@ -98,6 +98,12 @@ if (stackArm) {
   const after = before.replace(/\n  async redirects\(\) \{\n    return \[\n      \{ source: "\/", destination: "\/app", permanent: false \},\n    \];\n  \},/, "");
   if (after === before) console.warn("WARNING: the Stack scaffold's root redirect was not found; check next.config.mjs");
   fs.writeFileSync(nc, after);
+  // The map library every arm gets (the Pro listing task), at the same versions.
+  const pj = path.join(out, "package.json");
+  const pkgJson = JSON.parse(fs.readFileSync(pj, "utf8"));
+  const tw = JSON.parse(fs.readFileSync(path.join(ROOT, "arms/tailwind/package.json"), "utf8")).dependencies;
+  for (const d of ["maplibre-gl", "react-map-gl"]) pkgJson.dependencies[d] = tw[d];
+  fs.writeFileSync(pj, `${JSON.stringify(pkgJson, null, 2)}\n`);
   // Same placeholder page as every arm, so "/" exists before the agent writes it.
   fs.copyFileSync(path.join(ROOT, "arms/tailwind/app/page.tsx"), path.join(out, "src/app/page.tsx"));
   const pinnedLock = path.join(ROOT, "arms/stack.package-lock.json");

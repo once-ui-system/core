@@ -13,7 +13,8 @@ import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { chromium } from "playwright-core";
-import { ROOT, WORK, armByLetter, config, editableFiles, interactions, replacesAnything, routesOf, shotName, taskById } from "./lib.mjs";
+import { brandCheck, styleDiscipline } from "./design-metrics.mjs";
+import { ROOT, WORK, armByLetter, config, editableFiles, interactions, replacesAnything, routesOf, shotName, taskById, views } from "./lib.mjs";
 
 // The pre-installed Chromium's folder carries its build number; take whichever is there.
 const CHROMIUM =
@@ -35,7 +36,7 @@ const INTERACTION_VIEWPORTS = ["phone", "desktop"];
 // the page), `type` text (into a target, or whatever has focus). `route` and
 // `viewports` say where it runs (default "/" at phone and desktop).
 export const interactionViewports = (spec) => spec?.viewports ?? INTERACTION_VIEWPORTS;
-async function interact(page, spec, outDir, vp, ignored) {
+async function interact(page, spec, outDir, vp, ignored, shot = `screenshot-${vp.name}-interaction.jpg`) {
   if (!spec || spec.action === "none") return { action: "none" };
   const steps = spec.steps ?? [{ action: spec.action, target: spec.target, fallback: spec.fallback }];
   const locate = (t) =>
@@ -73,7 +74,7 @@ async function interact(page, spec, outDir, vp, ignored) {
     if (out.found) {
       await page.waitForTimeout(400);
       await page.screenshot({
-        path: path.join(outDir, `screenshot-${vp.name}-interaction.jpg`),
+        path: path.join(outDir, shot),
         type: config.screenshot.type,
         quality: config.screenshot.quality,
       });
@@ -211,7 +212,7 @@ async function waitForServer(url, ms = 30_000) {
 // One route at one viewport: load, settle, check, screenshot; axe on desktop,
 // the task's scripted interaction on "/" at phone and desktop.
 async function renderOne(browser, origin, route, vp, outDir, task) {
-  const out = { viewport: null, errors: [], axe: null, interaction: null, settle: null };
+  const out = { viewport: null, errors: [], axe: null, interaction: null, settle: null, style: null, brand: null };
   const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height } });
   try {
     const page = await ctx.newPage();
@@ -266,6 +267,10 @@ async function renderOne(browser, origin, route, vp, outDir, task) {
       clip: { x: 0, y: 0, width: vp.width, height: capH },
     });
     if (vp.name === "desktop") {
+      // Before axe is injected, so its own nodes aren't counted.
+      out.style = await styleDiscipline(page).catch((e) => ({ error: e.message }));
+      const brand = taskById(task)?.brand_check;
+      if (brand && route === "/") out.brand = await brandCheck(page, brand).catch((e) => ({ error: e.message }));
       await page.addScriptTag({ content: AXE });
       out.axe = await page.evaluate(async () => {
         // biome-ignore lint: axe is injected at runtime
@@ -291,6 +296,22 @@ async function renderOne(browser, origin, route, vp, outDir, task) {
   }
 }
 
+async function renderView(browser, origin, view, vp, outDir) {
+  const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height } });
+  try {
+    const page = await ctx.newPage();
+    await page.goto(`${origin}${view.route ?? "/"}`, { waitUntil: "load", timeout: 30_000 });
+    await settle(page);
+    const file = `view-${view.name}-${vp.name}.jpg`;
+    const r = await interact(page, { steps: view.steps }, outDir, vp, new Set(), file);
+    return { found: r.found, steps: r.steps, errors: r.errors, file: r.found ? file : null };
+  } catch (e) {
+    return { found: false, errors: [e.message.split("\n")[0]] };
+  } finally {
+    await ctx.close();
+  }
+}
+
 async function renderGate(letter, dir, outDir, task) {
   const routes = routesOf(taskById(task));
   const port = PORTS[letter];
@@ -310,7 +331,15 @@ async function renderGate(letter, dir, outDir, task) {
       result.errors.push(`server did not start:\n${stripAnsi(serverLog).slice(-2000)}`);
       return result;
     }
-    const browser = await chromium.launch({ executablePath: CHROMIUM });
+    // Through the environment's proxy when there is one, so the Pro listing
+    // task's map tiles load; the local server stays direct (loopback bypass).
+    const proxy = process.env.HTTPS_PROXY ?? process.env.https_proxy;
+    // Chromium flags, not Playwright's proxy option: that one adds <-loopback>
+    // and would send the local server through the proxy too.
+    const browser = await chromium.launch({
+      executablePath: CHROMIUM,
+      args: proxy ? [`--proxy-server=${proxy}`, "--proxy-bypass-list=127.0.0.1;localhost"] : [],
+    });
     try {
       for (const route of routes) {
         for (const vp of config.viewports) {
@@ -325,8 +354,18 @@ async function renderGate(letter, dir, outDir, task) {
             if (r.axe) result.routes[route].axe = r.axe;
           }
           if (r.settle) result.settle[`${route} ${vp.name}`] = r.settle;
+          if (r.style) (result.style ??= {})[route] = r.style;
+          if (r.brand) result.brand = r.brand;
           const where = routes.length > 1 ? `${route} ` : "";
           result.errors.push(...r.errors.map((e) => `[${where}${vp.width}px] ${e}`));
+        }
+      }
+      // The task's named views (Pro set, rebrand): each at every viewport, for
+      // the side-by-side gallery. After the gate's checks; never gated.
+      for (const v of views[String(task)] ?? []) {
+        for (const vp of config.viewports) {
+          result.views ??= {};
+          result.views[`${v.name} ${vp.name}`] = await renderView(browser, origin, v, vp, outDir);
         }
       }
     } finally {
