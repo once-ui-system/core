@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-03T13:24:03.448Z",
+  "generated": "2026-11-03T23:44:45.669Z",
   "results": [
     "results/bench-v1"
   ],
@@ -8,8 +8,8 @@
   ],
   "spend_usd": 8.49,
   "arena": {
-    "games": 124,
-    "position_bias_first_wins": 0.5645161290322581
+    "games": 142,
+    "position_bias_first_wins": 0.5704225352112676
   },
   "board": [
     {
@@ -24,10 +24,10 @@
       "cost_usd": 0.501,
       "tokens": 165909,
       "quality_per_usd": 141.3,
-      "arena_elo": 1296,
+      "arena_elo": 1277,
       "arena_range": [
-        1161,
-        1539
+        1180,
+        1446
       ],
       "distinct_font_sizes": 6,
       "distinct_colors": 6,
@@ -47,15 +47,15 @@
       "runs": 1,
       "pass1": 0,
       "accepted": 1,
-      "quality": 66.7,
+      "quality": 70.8,
       "intentionality": 3,
       "cost_usd": 1.576,
       "tokens": 609554,
-      "quality_per_usd": 42.3,
-      "arena_elo": 1166,
+      "quality_per_usd": 44.9,
+      "arena_elo": 1208,
       "arena_range": [
-        1047,
-        1334
+        1097,
+        1370
       ],
       "distinct_font_sizes": 8,
       "distinct_colors": 7,
@@ -75,15 +75,15 @@
       "runs": 1,
       "pass1": 1,
       "accepted": 1,
-      "quality": 70.8,
+      "quality": 62.5,
       "intentionality": 3,
       "cost_usd": 1.217,
       "tokens": 345102,
-      "quality_per_usd": 58.2,
-      "arena_elo": 986,
+      "quality_per_usd": 51.4,
+      "arena_elo": 980,
       "arena_range": [
-        863,
-        1108
+        881,
+        1088
       ],
       "distinct_font_sizes": 9.5,
       "distinct_colors": 7.5,
@@ -108,10 +108,10 @@
       "cost_usd": 0.837,
       "tokens": 182054,
       "quality_per_usd": 74.7,
-      "arena_elo": 986,
+      "arena_elo": 976,
       "arena_range": [
-        880,
-        1087
+        869,
+        1072
       ],
       "distinct_font_sizes": 5.5,
       "distinct_colors": 8.5,
@@ -131,15 +131,15 @@
       "runs": 1,
       "pass1": 0,
       "accepted": 1,
-      "quality": 62.5,
+      "quality": 66.7,
       "intentionality": 3,
       "cost_usd": 1.392,
       "tokens": 501416,
-      "quality_per_usd": 44.9,
+      "quality_per_usd": 47.9,
       "arena_elo": 936,
       "arena_range": [
-        815,
-        1042
+        790,
+        1050
       ],
       "distinct_font_sizes": 8,
       "distinct_colors": 9,
@@ -159,15 +159,15 @@
       "runs": 1,
       "pass1": 0,
       "accepted": 1,
-      "quality": 70.8,
+      "quality": 75,
       "intentionality": 3,
       "cost_usd": 0.741,
       "tokens": 181021,
-      "quality_per_usd": 95.6,
-      "arena_elo": 897,
+      "quality_per_usd": 101.2,
+      "arena_elo": 894,
       "arena_range": [
-        756,
-        1014
+        762,
+        1009
       ],
       "distinct_font_sizes": 6.5,
       "distinct_colors": 9,
@@ -187,15 +187,15 @@
       "runs": 1,
       "pass1": 0,
       "accepted": 1,
-      "quality": 54.2,
+      "quality": 50,
       "intentionality": 3,
       "cost_usd": 2.227,
       "tokens": 779927,
-      "quality_per_usd": 24.3,
-      "arena_elo": 731,
+      "quality_per_usd": 22.5,
+      "arena_elo": 730,
       "arena_range": [
-        504,
-        862
+        503,
+        850
       ],
       "distinct_font_sizes": 7.5,
       "distinct_colors": 6.5,
@@ -219,7 +219,7 @@
       "cost": 0.741242,
       "tokens": 181021,
       "calls": 11,
-      "quality": 70.83333333333334,
+      "quality": 75,
       "intentionality": 3,
       "code_lines": 1248,
       "distinct_fontSize": 6.5,
@@ -241,7 +241,7 @@
       "cost": 1.391544,
       "tokens": 501416,
       "calls": 14,
-      "quality": 62.5,
+      "quality": 66.66666666666666,
       "intentionality": 3,
       "code_lines": 1866,
       "distinct_fontSize": 8,
@@ -263,7 +263,7 @@
       "cost": 2.226518,
       "tokens": 779927,
       "calls": 17,
-      "quality": 54.166666666666664,
+      "quality": 50,
       "intentionality": 3,
       "code_lines": 1579,
       "distinct_fontSize": 7.5,
@@ -285,7 +285,7 @@
       "cost": 1.216852,
       "tokens": 345102,
       "calls": 10,
-      "quality": 70.83333333333334,
+      "quality": 62.5,
       "intentionality": 3,
       "code_lines": 2087,
       "distinct_fontSize": 9.5,
@@ -329,7 +329,7 @@
       "cost": 1.576452,
       "tokens": 609554,
       "calls": 14,
-      "quality": 66.66666666666666,
+      "quality": 70.83333333333334,
       "intentionality": 3,
       "code_lines": 1606,
       "distinct_fontSize": 8,
@@ -399,11 +399,11 @@
         "polish": 4,
         "completeness": 4,
         "responsiveness": 4,
-        "restraint": 4,
+        "restraint": 5,
         "coherence": 4,
         "intentionality": 3
       },
-      "quality": 70.83333333333334
+      "quality": 75
     },
     {
       "dir": "results/bench-v1/raw/t10/mantine-docs/run1",
@@ -436,13 +436,13 @@
       "code_lines": 1866,
       "rating": {
         "polish": 4,
-        "completeness": 3,
+        "completeness": 4,
         "responsiveness": 3,
         "restraint": 4,
         "coherence": 4,
         "intentionality": 3
       },
-      "quality": 62.5
+      "quality": 66.66666666666666
     },
     {
       "dir": "results/bench-v1/raw/t10/mui-docs/run1",
@@ -478,10 +478,10 @@
         "completeness": 3,
         "responsiveness": 2,
         "restraint": 4,
-        "coherence": 4,
+        "coherence": 3,
         "intentionality": 3
       },
-      "quality": 54.166666666666664
+      "quality": 50
     },
     {
       "dir": "results/bench-v1/raw/t10/once-harness/run1",
@@ -514,13 +514,13 @@
       "code_lines": 2087,
       "rating": {
         "polish": 4,
-        "completeness": 4,
-        "responsiveness": 4,
+        "completeness": 3,
+        "responsiveness": 3,
         "restraint": 4,
         "coherence": 4,
         "intentionality": 3
       },
-      "quality": 70.83333333333334
+      "quality": 62.5
     },
     {
       "dir": "results/bench-v1/raw/t10/shadcn-docs/run1",
@@ -595,10 +595,10 @@
         "completeness": 4,
         "responsiveness": 4,
         "restraint": 4,
-        "coherence": 3,
+        "coherence": 4,
         "intentionality": 3
       },
-      "quality": 66.66666666666666
+      "quality": 70.83333333333334
     },
     {
       "dir": "results/bench-v1/raw/t10/tailwind-memory/run1",

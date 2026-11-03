@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-03T13:24:03.303Z",
+  "generated": "2026-11-03T23:44:45.411Z",
   "results": [
     "results/bench-v1"
   ],
@@ -10,67 +10,95 @@
     8,
     9
   ],
-  "spend_usd": 45.94,
+  "spend_usd": 56.34,
   "arena": {
-    "games": 124,
-    "position_bias_first_wins": 0.5645161290322581
+    "games": 142,
+    "position_bias_first_wins": 0.5704225352112676
   },
   "board": [
     {
       "arm": "C",
       "system": "shadcn/ui",
       "tasks": 5,
-      "runs": 5,
-      "pass1": 0.4,
+      "runs": 11,
+      "pass1": 0.545,
       "accepted": 1,
-      "quality": 79.2,
+      "quality": 75,
       "intentionality": 3,
-      "cost_usd": 0.733,
-      "tokens": 255722,
-      "quality_per_usd": 107.9,
-      "arena_elo": 1296,
+      "cost_usd": 0.622,
+      "tokens": 252085,
+      "quality_per_usd": 120.5,
+      "arena_elo": 1277,
       "arena_range": [
-        1161,
-        1539
+        1180,
+        1446
       ],
       "distinct_font_sizes": 5,
       "distinct_colors": 4,
       "distinct_spacing": 9,
       "spacing_on_4px_grid": 0.865,
       "axe_serious_per_route": 1,
-      "code_lines": 973,
-      "js_kb_gzip": 200.6,
-      "css_kb_gzip": 43,
+      "code_lines": 986,
+      "js_kb_gzip": 211.2,
+      "css_kb_gzip": 42.9,
       "cls": 0,
-      "long_task_ms": 20
+      "long_task_ms": 10
     },
     {
       "arm": "S",
       "system": "Once UI Stack",
       "tasks": 5,
-      "runs": 5,
-      "pass1": 0.4,
+      "runs": 11,
+      "pass1": 0.545,
       "accepted": 1,
-      "quality": 70.8,
+      "quality": 75,
       "intentionality": 3,
-      "cost_usd": 1.708,
-      "tokens": 691407,
-      "quality_per_usd": 41.5,
-      "arena_elo": 1166,
+      "cost_usd": 0.739,
+      "tokens": 301510,
+      "quality_per_usd": 101.5,
+      "arena_elo": 1208,
       "arena_range": [
-        1047,
-        1334
+        1097,
+        1370
       ],
       "distinct_font_sizes": 7.7,
       "distinct_colors": 5,
-      "distinct_spacing": 8,
-      "spacing_on_4px_grid": 0.978,
+      "distinct_spacing": 9,
+      "spacing_on_4px_grid": 0.907,
       "axe_serious_per_route": 0,
-      "code_lines": 1045,
-      "js_kb_gzip": 393.6,
-      "css_kb_gzip": 49.3,
+      "code_lines": 940,
+      "js_kb_gzip": 393.5,
+      "css_kb_gzip": 49.6,
       "cls": 0,
-      "long_task_ms": 14
+      "long_task_ms": 5
+    },
+    {
+      "arm": "A",
+      "system": "Once UI",
+      "tasks": 5,
+      "runs": 11,
+      "pass1": 0.727,
+      "accepted": 1,
+      "quality": 70.8,
+      "intentionality": 3,
+      "cost_usd": 0.829,
+      "tokens": 341040,
+      "quality_per_usd": 85.5,
+      "arena_elo": 980,
+      "arena_range": [
+        881,
+        1088
+      ],
+      "distinct_font_sizes": 7,
+      "distinct_colors": 5,
+      "distinct_spacing": 11,
+      "spacing_on_4px_grid": 0.895,
+      "axe_serious_per_route": 0,
+      "code_lines": 881,
+      "js_kb_gzip": 294,
+      "css_kb_gzip": 48.6,
+      "cls": 0.001,
+      "long_task_ms": 0
     },
     {
       "arm": "D",
@@ -84,10 +112,10 @@
       "cost_usd": 0.164,
       "tokens": 25004,
       "quality_per_usd": 456.7,
-      "arena_elo": 986,
+      "arena_elo": 976,
       "arena_range": [
-        880,
-        1087
+        869,
+        1072
       ],
       "distinct_font_sizes": 4.7,
       "distinct_colors": 6.3,
@@ -101,49 +129,21 @@
       "long_task_ms": 2
     },
     {
-      "arm": "A",
-      "system": "Once UI",
-      "tasks": 5,
-      "runs": 5,
-      "pass1": 0.4,
-      "accepted": 1,
-      "quality": 70.8,
-      "intentionality": 3,
-      "cost_usd": 0.932,
-      "tokens": 392302,
-      "quality_per_usd": 76,
-      "arena_elo": 986,
-      "arena_range": [
-        863,
-        1108
-      ],
-      "distinct_font_sizes": 7.5,
-      "distinct_colors": 4.7,
-      "distinct_spacing": 11,
-      "spacing_on_4px_grid": 0.846,
-      "axe_serious_per_route": 0,
-      "code_lines": 881,
-      "js_kb_gzip": 294.3,
-      "css_kb_gzip": 48.8,
-      "cls": 0.001,
-      "long_task_ms": 5
-    },
-    {
       "arm": "T",
       "system": "Mantine",
       "tasks": 5,
       "runs": 5,
       "pass1": 0,
       "accepted": 1,
-      "quality": 70.8,
+      "quality": 75,
       "intentionality": 3,
       "cost_usd": 1.055,
       "tokens": 407590,
-      "quality_per_usd": 67.1,
+      "quality_per_usd": 71.1,
       "arena_elo": 936,
       "arena_range": [
-        815,
-        1042
+        790,
+        1050
       ],
       "distinct_font_sizes": 7,
       "distinct_colors": 6,
@@ -168,10 +168,10 @@
       "cost_usd": 1.223,
       "tokens": 445931,
       "quality_per_usd": 61.3,
-      "arena_elo": 897,
+      "arena_elo": 894,
       "arena_range": [
-        756,
-        1014
+        762,
+        1009
       ],
       "distinct_font_sizes": 5,
       "distinct_colors": 6.5,
@@ -196,10 +196,10 @@
       "cost_usd": 1.979,
       "tokens": 832424,
       "quality_per_usd": 37.9,
-      "arena_elo": 731,
+      "arena_elo": 730,
       "arena_range": [
-        504,
-        862
+        503,
+        850
       ],
       "distinct_font_sizes": 6,
       "distinct_colors": 5,
@@ -267,7 +267,7 @@
       "cost": 0.555048,
       "tokens": 221172,
       "calls": 11,
-      "quality": 75,
+      "quality": 70.83333333333334,
       "intentionality": 3,
       "code_lines": 1094,
       "distinct_fontSize": 5.5,
@@ -333,7 +333,7 @@
       "cost": 1.05542,
       "tokens": 407590,
       "calls": 10,
-      "quality": 70.83333333333334,
+      "quality": 79.16666666666667,
       "intentionality": 3,
       "code_lines": 918,
       "distinct_fontSize": 7,
@@ -399,7 +399,7 @@
       "cost": 0.416148,
       "tokens": 131654,
       "calls": 9,
-      "quality": 70.83333333333334,
+      "quality": 62.5,
       "intentionality": 3,
       "code_lines": 656,
       "distinct_fontSize": 6,
@@ -443,7 +443,7 @@
       "cost": 2.083264,
       "tokens": 893012,
       "calls": 14,
-      "quality": 75,
+      "quality": 79.16666666666667,
       "intentionality": 3,
       "code_lines": 1044,
       "distinct_fontSize": 5.666666666666667,
@@ -465,7 +465,7 @@
       "cost": 1.979072,
       "tokens": 832424,
       "calls": 15,
-      "quality": 79.16666666666667,
+      "quality": 75,
       "intentionality": 3,
       "code_lines": 967,
       "distinct_fontSize": 6,
@@ -487,8 +487,8 @@
       "cost": 1.160606,
       "tokens": 412387,
       "calls": 12,
-      "quality": 75,
-      "intentionality": 3,
+      "quality": 66.66666666666666,
+      "intentionality": 2,
       "code_lines": 1128,
       "distinct_fontSize": 6,
       "distinct_color": 5,
@@ -547,24 +547,24 @@
     {
       "arm": "A",
       "task": 1,
-      "runs": 1,
+      "runs": 3,
       "pass1": 1,
       "accepted": 1,
-      "cost": 0.696424,
-      "tokens": 281228,
+      "cost": 0.82866,
+      "tokens": 341040,
       "calls": 9,
-      "quality": 66.66666666666666,
+      "quality": 75,
       "intentionality": 3,
       "code_lines": 743,
       "distinct_fontSize": 7.666666666666667,
-      "distinct_color": 4.666666666666667,
+      "distinct_color": 5,
       "distinct_spacing": 13,
-      "spacing_on_4px_grid": 0.6026666666666666,
-      "axe_serious": 0.5,
-      "js_kb": 371.3,
-      "css_kb": 55.1,
+      "spacing_on_4px_grid": 0.6,
+      "axe_serious": 0,
+      "js_kb": 345.8,
+      "css_kb": 54.79999999999999,
       "cls": 0.001,
-      "long_task_ms": 4
+      "long_task_ms": 0
     },
     {
       "arm": "A",
@@ -575,7 +575,7 @@
       "cost": 1.9445,
       "tokens": 797362,
       "calls": 18,
-      "quality": 66.66666666666666,
+      "quality": 58.333333333333336,
       "intentionality": 3,
       "code_lines": 881,
       "distinct_fontSize": 7,
@@ -591,46 +591,46 @@
     {
       "arm": "A",
       "task": 5,
-      "runs": 1,
+      "runs": 3,
       "pass1": 1,
       "accepted": 1,
-      "cost": 0.363924,
-      "tokens": 134662,
+      "cost": 0.37108,
+      "tokens": 140352,
       "calls": 6,
-      "quality": 75,
+      "quality": 66.66666666666666,
       "intentionality": 3,
       "code_lines": 882,
-      "distinct_fontSize": 6,
+      "distinct_fontSize": 6.5,
       "distinct_color": 6.5,
-      "distinct_spacing": 9.5,
-      "spacing_on_4px_grid": 0.846,
+      "distinct_spacing": 8.5,
+      "spacing_on_4px_grid": 0.8945,
       "axe_serious": 0,
-      "js_kb": 343.1,
-      "css_kb": 55.4,
+      "js_kb": 342.4,
+      "css_kb": 55.1,
       "cls": 0.001,
       "long_task_ms": 0
     },
     {
       "arm": "A",
       "task": 8,
-      "runs": 1,
-      "pass1": 0,
+      "runs": 3,
+      "pass1": 0.6666666666666666,
       "accepted": 1,
-      "cost": 0.931572,
-      "tokens": 392302,
-      "calls": 13,
+      "cost": 0.43847,
+      "tokens": 182447,
+      "calls": 8,
       "quality": 70.83333333333334,
       "intentionality": 3,
-      "code_lines": 797,
-      "distinct_fontSize": 7.5,
+      "code_lines": 708,
+      "distinct_fontSize": 7,
       "distinct_color": 4.5,
       "distinct_spacing": 9,
       "spacing_on_4px_grid": 0.8995,
       "axe_serious": 0,
-      "js_kb": 225.45,
+      "js_kb": 222.3,
       "css_kb": 40.7,
       "cls": 0,
-      "long_task_ms": 5.5
+      "long_task_ms": 0
     },
     {
       "arm": "A",
@@ -657,21 +657,21 @@
     {
       "arm": "C",
       "task": 1,
-      "runs": 1,
-      "pass1": 0,
+      "runs": 3,
+      "pass1": 0.6666666666666666,
       "accepted": 1,
-      "cost": 1.34893,
-      "tokens": 584697,
-      "calls": 16,
+      "cost": 0.336294,
+      "tokens": 128647,
+      "calls": 7,
       "quality": 79.16666666666667,
       "intentionality": 3,
-      "code_lines": 815,
+      "code_lines": 763,
       "distinct_fontSize": 4.333333333333333,
       "distinct_color": 4.666666666666667,
       "distinct_spacing": 8.333333333333334,
       "spacing_on_4px_grid": 0.9353333333333333,
       "axe_serious": 1,
-      "js_kb": 205.9,
+      "js_kb": 203.9,
       "css_kb": 42.9,
       "cls": 0,
       "long_task_ms": 20.333333333333332
@@ -685,7 +685,7 @@
       "cost": 0.733468,
       "tokens": 255722,
       "calls": 12,
-      "quality": 79.16666666666667,
+      "quality": 75,
       "intentionality": 3,
       "code_lines": 986,
       "distinct_fontSize": 5.333333333333333,
@@ -701,46 +701,46 @@
     {
       "arm": "C",
       "task": 5,
-      "runs": 1,
-      "pass1": 1,
+      "runs": 3,
+      "pass1": 0.6666666666666666,
       "accepted": 1,
-      "cost": 0.471266,
-      "tokens": 172961,
-      "calls": 8,
+      "cost": 0.622266,
+      "tokens": 252085,
+      "calls": 10,
       "quality": 75,
       "intentionality": 3,
       "code_lines": 1081,
-      "distinct_fontSize": 3.5,
+      "distinct_fontSize": 4,
       "distinct_color": 4,
       "distinct_spacing": 9,
-      "spacing_on_4px_grid": 0.766,
+      "spacing_on_4px_grid": 0.771,
       "axe_serious": 1.6666666666666667,
       "js_kb": 227.6,
       "css_kb": 42.8,
       "cls": 0,
-      "long_task_ms": 42.5
+      "long_task_ms": 0
     },
     {
       "arm": "C",
       "task": 8,
-      "runs": 1,
-      "pass1": 0,
+      "runs": 3,
+      "pass1": 0.3333333333333333,
       "accepted": 1,
-      "cost": 1.267054,
-      "tokens": 454139,
-      "calls": 15,
+      "cost": 0.808764,
+      "tokens": 277478,
+      "calls": 10,
       "quality": 75,
       "intentionality": 3,
-      "code_lines": 800,
+      "code_lines": 1006,
       "distinct_fontSize": 5,
       "distinct_color": 3,
       "distinct_spacing": 8.5,
       "spacing_on_4px_grid": 0.8654999999999999,
-      "axe_serious": 1.3333333333333333,
-      "js_kb": 187.85,
-      "css_kb": 43,
+      "axe_serious": 0,
+      "js_kb": 218.55,
+      "css_kb": 42.9,
       "cls": 0,
-      "long_task_ms": 5
+      "long_task_ms": 0
     },
     {
       "arm": "C",
@@ -767,24 +767,24 @@
     {
       "arm": "S",
       "task": 1,
-      "runs": 1,
+      "runs": 3,
       "pass1": 1,
       "accepted": 1,
-      "cost": 0.936288,
-      "tokens": 401360,
-      "calls": 13,
+      "cost": 0.559802,
+      "tokens": 240477,
+      "calls": 9,
       "quality": 79.16666666666667,
       "intentionality": 3,
-      "code_lines": 682,
+      "code_lines": 643,
       "distinct_fontSize": 7.666666666666667,
       "distinct_color": 5,
-      "distinct_spacing": 8.333333333333334,
-      "spacing_on_4px_grid": 0.912,
+      "distinct_spacing": 9,
+      "spacing_on_4px_grid": 0.9033333333333333,
       "axe_serious": 0,
-      "js_kb": null,
-      "css_kb": null,
-      "cls": null,
-      "long_task_ms": null
+      "js_kb": 390.76666666666665,
+      "css_kb": 49.349999999999994,
+      "cls": 0,
+      "long_task_ms": 5.166666666666667
     },
     {
       "arm": "S",
@@ -811,32 +811,32 @@
     {
       "arm": "S",
       "task": 5,
-      "runs": 1,
-      "pass1": 0,
+      "runs": 3,
+      "pass1": 0.6666666666666666,
       "accepted": 1,
-      "cost": 1.70795,
-      "tokens": 691407,
-      "calls": 17,
-      "quality": 66.66666666666666,
+      "cost": 0.7387,
+      "tokens": 301510,
+      "calls": 11,
+      "quality": 75,
       "intentionality": 3,
-      "code_lines": 1045,
-      "distinct_fontSize": 5.5,
-      "distinct_color": 7,
-      "distinct_spacing": 7.5,
-      "spacing_on_4px_grid": 0.993,
+      "code_lines": 940,
+      "distinct_fontSize": 6.5,
+      "distinct_color": 6.5,
+      "distinct_spacing": 9,
+      "spacing_on_4px_grid": 0.907,
       "axe_serious": 0,
-      "js_kb": 391.8,
-      "css_kb": 48.8,
+      "js_kb": 392.2,
+      "css_kb": 49.7,
       "cls": 0,
       "long_task_ms": 0.5
     },
     {
       "arm": "S",
       "task": 8,
-      "runs": 1,
-      "pass1": 1,
+      "runs": 3,
+      "pass1": 0.3333333333333333,
       "accepted": 1,
-      "cost": 0.56463,
+      "cost": 0.594146,
       "tokens": 240287,
       "calls": 11,
       "quality": 70.83333333333334,
@@ -848,9 +848,9 @@
       "spacing_on_4px_grid": 0.983,
       "axe_serious": 0,
       "js_kb": 393.75,
-      "css_kb": 49.7,
+      "css_kb": 49.6,
       "cls": 0,
-      "long_task_ms": 3.5
+      "long_task_ms": 0.5
     },
     {
       "arm": "S",
@@ -861,7 +861,7 @@
       "cost": 3.679312,
       "tokens": 1703664,
       "calls": 22,
-      "quality": 70.83333333333334,
+      "quality": 83.33333333333333,
       "intentionality": 4,
       "code_lines": 1088,
       "distinct_fontSize": 9.5,
@@ -905,7 +905,7 @@
       "cost": 0.403212,
       "tokens": 95314,
       "calls": 8,
-      "quality": 75,
+      "quality": 70.83333333333334,
       "intentionality": 3,
       "code_lines": 858,
       "distinct_fontSize": 4.666666666666667,
@@ -1049,13 +1049,13 @@
       "code_lines": 918,
       "rating": {
         "polish": 4,
-        "completeness": 3,
-        "responsiveness": 3,
+        "completeness": 4,
+        "responsiveness": 4,
         "restraint": 5,
         "coherence": 5,
         "intentionality": 3
       },
-      "quality": 70.83333333333334
+      "quality": 79.16666666666667
     },
     {
       "dir": "results/bench-v1/raw/t01/mui-docs/run1",
@@ -1083,11 +1083,11 @@
         "polish": 4,
         "completeness": 4,
         "responsiveness": 4,
-        "restraint": 4,
+        "restraint": 5,
         "coherence": 5,
         "intentionality": 3
       },
-      "quality": 75
+      "quality": 79.16666666666667
     },
     {
       "dir": "results/bench-v1/raw/t01/once-harness/run1",
@@ -1122,11 +1122,89 @@
         "polish": 4,
         "completeness": 4,
         "responsiveness": 3,
-        "restraint": 4,
-        "coherence": 4,
+        "restraint": 5,
+        "coherence": 5,
         "intentionality": 3
       },
-      "quality": 66.66666666666666
+      "quality": 75
+    },
+    {
+      "dir": "results/bench-v1/raw/t01/once-harness/run2",
+      "task": 1,
+      "arm": "A",
+      "run": 2,
+      "status": "accepted",
+      "pass1": true,
+      "accepted": true,
+      "cost": 0.82866,
+      "tokens": 353478,
+      "calls": 11,
+      "style": {
+        "distinct_fontSize": 7,
+        "distinct_color": 5.333333333333333,
+        "distinct_background": 4.666666666666667,
+        "distinct_radius": 5,
+        "distinct_shadow": 1,
+        "distinct_spacing": 12.666666666666666,
+        "spacing_on_4px_grid": 0.5093333333333333
+      },
+      "weight": {
+        "js_kb": 329.4,
+        "css_kb": 54.79999999999999,
+        "fcp_ms": 138.66666666666666,
+        "cls": 0,
+        "long_task_ms": 0
+      },
+      "axe_serious": 0,
+      "code_lines": 673,
+      "rating": {
+        "polish": 4,
+        "completeness": 4,
+        "responsiveness": 4,
+        "restraint": 5,
+        "coherence": 5,
+        "intentionality": 3
+      },
+      "quality": 79.16666666666667
+    },
+    {
+      "dir": "results/bench-v1/raw/t01/once-harness/run3",
+      "task": 1,
+      "arm": "A",
+      "run": 3,
+      "status": "accepted",
+      "pass1": true,
+      "accepted": true,
+      "cost": 0.845664,
+      "tokens": 341040,
+      "calls": 9,
+      "style": {
+        "distinct_fontSize": 7.666666666666667,
+        "distinct_color": 5,
+        "distinct_background": 4.333333333333333,
+        "distinct_radius": 5,
+        "distinct_shadow": 1,
+        "distinct_spacing": 13,
+        "spacing_on_4px_grid": 0.6
+      },
+      "weight": {
+        "js_kb": 345.8,
+        "css_kb": 54.70000000000001,
+        "fcp_ms": 125.33333333333333,
+        "cls": 0.001,
+        "long_task_ms": 0
+      },
+      "axe_serious": 0,
+      "code_lines": 811,
+      "rating": {
+        "polish": 4,
+        "completeness": 4,
+        "responsiveness": 4,
+        "restraint": 4,
+        "coherence": 5,
+        "intentionality": 3
+      },
+      "quality": 75
     },
     {
       "dir": "results/bench-v1/raw/t01/shadcn-docs/run1",
@@ -1168,6 +1246,84 @@
       "quality": 79.16666666666667
     },
     {
+      "dir": "results/bench-v1/raw/t01/shadcn-docs/run2",
+      "task": 1,
+      "arm": "C",
+      "run": 2,
+      "status": "accepted",
+      "pass1": true,
+      "accepted": true,
+      "cost": 0.336294,
+      "tokens": 128647,
+      "calls": 7,
+      "style": {
+        "distinct_fontSize": 4.333333333333333,
+        "distinct_color": 4.666666666666667,
+        "distinct_background": 6,
+        "distinct_radius": 4,
+        "distinct_shadow": 1.6666666666666667,
+        "distinct_spacing": 8.666666666666666,
+        "spacing_on_4px_grid": 0.9323333333333332
+      },
+      "weight": {
+        "js_kb": 203.9,
+        "css_kb": 42.9,
+        "fcp_ms": 156,
+        "cls": 0,
+        "long_task_ms": 36
+      },
+      "axe_serious": 1,
+      "code_lines": 654,
+      "rating": {
+        "polish": 4,
+        "completeness": 3,
+        "responsiveness": 3,
+        "restraint": 5,
+        "coherence": 4,
+        "intentionality": 3
+      },
+      "quality": 66.66666666666666
+    },
+    {
+      "dir": "results/bench-v1/raw/t01/shadcn-docs/run3",
+      "task": 1,
+      "arm": "C",
+      "run": 3,
+      "status": "accepted",
+      "pass1": true,
+      "accepted": true,
+      "cost": 0.33537,
+      "tokens": 126505,
+      "calls": 7,
+      "style": {
+        "distinct_fontSize": 4.333333333333333,
+        "distinct_color": 4.666666666666667,
+        "distinct_background": 6,
+        "distinct_radius": 3.6666666666666665,
+        "distinct_shadow": 1.6666666666666667,
+        "distinct_spacing": 8.333333333333334,
+        "spacing_on_4px_grid": 0.9353333333333333
+      },
+      "weight": {
+        "js_kb": 201.9,
+        "css_kb": 43,
+        "fcp_ms": 129.33333333333334,
+        "cls": 0,
+        "long_task_ms": 0
+      },
+      "axe_serious": 1,
+      "code_lines": 763,
+      "rating": {
+        "polish": 4,
+        "completeness": 4,
+        "responsiveness": 4,
+        "restraint": 5,
+        "coherence": 5,
+        "intentionality": 3
+      },
+      "quality": 79.16666666666667
+    },
+    {
       "dir": "results/bench-v1/raw/t01/stack/run1",
       "task": 1,
       "arm": "S",
@@ -1189,6 +1345,84 @@
       },
       "axe_serious": 0,
       "code_lines": 682,
+      "rating": {
+        "polish": 4,
+        "completeness": 4,
+        "responsiveness": 4,
+        "restraint": 5,
+        "coherence": 5,
+        "intentionality": 3
+      },
+      "quality": 79.16666666666667
+    },
+    {
+      "dir": "results/bench-v1/raw/t01/stack/run2",
+      "task": 1,
+      "arm": "S",
+      "run": 2,
+      "status": "accepted",
+      "pass1": true,
+      "accepted": true,
+      "cost": 0.559802,
+      "tokens": 240477,
+      "calls": 9,
+      "style": {
+        "distinct_fontSize": 7.666666666666667,
+        "distinct_color": 4.666666666666667,
+        "distinct_background": 4.333333333333333,
+        "distinct_radius": 4,
+        "distinct_shadow": 0.3333333333333333,
+        "distinct_spacing": 9.666666666666666,
+        "spacing_on_4px_grid": 0.9033333333333333
+      },
+      "weight": {
+        "js_kb": 390.5666666666666,
+        "css_kb": 49.4,
+        "fcp_ms": 156,
+        "cls": 0,
+        "long_task_ms": 0
+      },
+      "axe_serious": 0,
+      "code_lines": 643,
+      "rating": {
+        "polish": 4,
+        "completeness": 4,
+        "responsiveness": 4,
+        "restraint": 5,
+        "coherence": 5,
+        "intentionality": 3
+      },
+      "quality": 79.16666666666667
+    },
+    {
+      "dir": "results/bench-v1/raw/t01/stack/run3",
+      "task": 1,
+      "arm": "S",
+      "run": 3,
+      "status": "accepted",
+      "pass1": true,
+      "accepted": true,
+      "cost": 0.451298,
+      "tokens": 186909,
+      "calls": 9,
+      "style": {
+        "distinct_fontSize": 8,
+        "distinct_color": 5,
+        "distinct_background": 4.333333333333333,
+        "distinct_radius": 4.333333333333333,
+        "distinct_shadow": 0.3333333333333333,
+        "distinct_spacing": 9,
+        "spacing_on_4px_grid": 0.9003333333333333
+      },
+      "weight": {
+        "js_kb": 390.9666666666667,
+        "css_kb": 49.29999999999999,
+        "fcp_ms": 168,
+        "cls": 0,
+        "long_task_ms": 10.333333333333334
+      },
+      "axe_serious": 0,
+      "code_lines": 597,
       "rating": {
         "polish": 4,
         "completeness": 4,
@@ -1347,13 +1581,13 @@
       "code_lines": 967,
       "rating": {
         "polish": 4,
-        "completeness": 4,
+        "completeness": 3,
         "responsiveness": 4,
         "restraint": 5,
         "coherence": 5,
         "intentionality": 3
       },
-      "quality": 79.16666666666667
+      "quality": 75
     },
     {
       "dir": "results/bench-v1/raw/t03/once-harness/run1",
@@ -1387,12 +1621,12 @@
       "rating": {
         "polish": 4,
         "completeness": 2,
-        "responsiveness": 4,
-        "restraint": 5,
+        "responsiveness": 3,
+        "restraint": 4,
         "coherence": 4,
         "intentionality": 3
       },
-      "quality": 66.66666666666666
+      "quality": 58.333333333333336
     },
     {
       "dir": "results/bench-v1/raw/t03/shadcn-docs/run1",
@@ -1425,13 +1659,13 @@
       "code_lines": 986,
       "rating": {
         "polish": 4,
-        "completeness": 4,
+        "completeness": 3,
         "responsiveness": 4,
         "restraint": 5,
         "coherence": 5,
         "intentionality": 3
       },
-      "quality": 79.16666666666667
+      "quality": 75
     },
     {
       "dir": "results/bench-v1/raw/t03/stack/run1",
@@ -1503,13 +1737,13 @@
       "code_lines": 858,
       "rating": {
         "polish": 4,
-        "completeness": 4,
+        "completeness": 3,
         "responsiveness": 3,
         "restraint": 5,
         "coherence": 5,
         "intentionality": 3
       },
-      "quality": 75
+      "quality": 70.83333333333334
     },
     {
       "dir": "results/bench-v1/raw/t05/chakra-docs/run1",
@@ -1542,13 +1776,13 @@
       "code_lines": 1094,
       "rating": {
         "polish": 4,
-        "completeness": 4,
+        "completeness": 3,
         "responsiveness": 3,
         "restraint": 5,
         "coherence": 5,
         "intentionality": 3
       },
-      "quality": 75
+      "quality": 70.83333333333334
     },
     {
       "dir": "results/bench-v1/raw/t05/mantine-docs/run1",
@@ -1623,10 +1857,10 @@
         "completeness": 4,
         "responsiveness": 4,
         "restraint": 5,
-        "coherence": 4,
-        "intentionality": 3
+        "coherence": 3,
+        "intentionality": 2
       },
-      "quality": 75
+      "quality": 66.66666666666666
     },
     {
       "dir": "results/bench-v1/raw/t05/once-harness/run1",
@@ -1662,10 +1896,88 @@
         "completeness": 4,
         "responsiveness": 4,
         "restraint": 5,
-        "coherence": 4,
+        "coherence": 3,
         "intentionality": 3
       },
-      "quality": 75
+      "quality": 70.83333333333334
+    },
+    {
+      "dir": "results/bench-v1/raw/t05/once-harness/run2",
+      "task": 5,
+      "arm": "A",
+      "run": 2,
+      "status": "accepted",
+      "pass1": true,
+      "accepted": true,
+      "cost": 0.37108,
+      "tokens": 140352,
+      "calls": 6,
+      "style": {
+        "distinct_fontSize": 6.5,
+        "distinct_color": 6.5,
+        "distinct_background": 1.5,
+        "distinct_radius": 4,
+        "distinct_shadow": 0.5,
+        "distinct_spacing": 8.5,
+        "spacing_on_4px_grid": 0.8945
+      },
+      "weight": {
+        "js_kb": 342.4,
+        "css_kb": 55.1,
+        "fcp_ms": 158,
+        "cls": 0.001,
+        "long_task_ms": 3
+      },
+      "axe_serious": 0,
+      "code_lines": 876,
+      "rating": {
+        "polish": 4,
+        "completeness": 4,
+        "responsiveness": 3,
+        "restraint": 5,
+        "coherence": 3,
+        "intentionality": 3
+      },
+      "quality": 66.66666666666666
+    },
+    {
+      "dir": "results/bench-v1/raw/t05/once-harness/run3",
+      "task": 5,
+      "arm": "A",
+      "run": 3,
+      "status": "accepted",
+      "pass1": true,
+      "accepted": true,
+      "cost": 0.54987,
+      "tokens": 193475,
+      "calls": 7,
+      "style": {
+        "distinct_fontSize": 7.5,
+        "distinct_color": 6.5,
+        "distinct_background": 2,
+        "distinct_radius": 4,
+        "distinct_shadow": 0.5,
+        "distinct_spacing": 8.5,
+        "spacing_on_4px_grid": 0.897
+      },
+      "weight": {
+        "js_kb": 226.9,
+        "css_kb": 40.1,
+        "fcp_ms": 112,
+        "cls": 0.001,
+        "long_task_ms": 0
+      },
+      "axe_serious": 0,
+      "code_lines": 968,
+      "rating": {
+        "polish": 4,
+        "completeness": 3,
+        "responsiveness": 4,
+        "restraint": 5,
+        "coherence": 3,
+        "intentionality": 3
+      },
+      "quality": 66.66666666666666
     },
     {
       "dir": "results/bench-v1/raw/t05/shadcn-docs/run1",
@@ -1696,6 +2008,84 @@
       },
       "axe_serious": 1.6666666666666667,
       "code_lines": 1081,
+      "rating": {
+        "polish": 4,
+        "completeness": 4,
+        "responsiveness": 4,
+        "restraint": 5,
+        "coherence": 4,
+        "intentionality": 3
+      },
+      "quality": 75
+    },
+    {
+      "dir": "results/bench-v1/raw/t05/shadcn-docs/run2",
+      "task": 5,
+      "arm": "C",
+      "run": 2,
+      "status": "accepted",
+      "pass1": false,
+      "accepted": true,
+      "cost": 1.071982,
+      "tokens": 416919,
+      "calls": 12,
+      "style": {
+        "distinct_fontSize": 4.5,
+        "distinct_color": 4,
+        "distinct_background": 3,
+        "distinct_radius": 3.5,
+        "distinct_shadow": 2,
+        "distinct_spacing": 9,
+        "spacing_on_4px_grid": 0.8265
+      },
+      "weight": {
+        "js_kb": 214.5,
+        "css_kb": 42.8,
+        "fcp_ms": 108,
+        "cls": 0,
+        "long_task_ms": 0
+      },
+      "axe_serious": 1.6666666666666667,
+      "code_lines": 1193,
+      "rating": {
+        "polish": 4,
+        "completeness": 4,
+        "responsiveness": 4,
+        "restraint": 5,
+        "coherence": 4,
+        "intentionality": 3
+      },
+      "quality": 75
+    },
+    {
+      "dir": "results/bench-v1/raw/t05/shadcn-docs/run3",
+      "task": 5,
+      "arm": "C",
+      "run": 3,
+      "status": "accepted",
+      "pass1": true,
+      "accepted": true,
+      "cost": 0.622266,
+      "tokens": 252085,
+      "calls": 10,
+      "style": {
+        "distinct_fontSize": 4,
+        "distinct_color": 4,
+        "distinct_background": 4,
+        "distinct_radius": 3.5,
+        "distinct_shadow": 1.5,
+        "distinct_spacing": 9,
+        "spacing_on_4px_grid": 0.771
+      },
+      "weight": {
+        "js_kb": 228.9,
+        "css_kb": 42.8,
+        "fcp_ms": 104,
+        "cls": 0,
+        "long_task_ms": 0
+      },
+      "axe_serious": 1.6666666666666667,
+      "code_lines": 969,
       "rating": {
         "polish": 4,
         "completeness": 4,
@@ -1744,6 +2134,84 @@
         "intentionality": 3
       },
       "quality": 66.66666666666666
+    },
+    {
+      "dir": "results/bench-v1/raw/t05/stack/run2",
+      "task": 5,
+      "arm": "S",
+      "run": 2,
+      "status": "accepted",
+      "pass1": true,
+      "accepted": true,
+      "cost": 0.7387,
+      "tokens": 301510,
+      "calls": 11,
+      "style": {
+        "distinct_fontSize": 8,
+        "distinct_color": 6.5,
+        "distinct_background": 1.5,
+        "distinct_radius": 4,
+        "distinct_shadow": 1,
+        "distinct_spacing": 9.5,
+        "spacing_on_4px_grid": 0.907
+      },
+      "weight": {
+        "js_kb": 392.2,
+        "css_kb": 49.8,
+        "fcp_ms": 224,
+        "cls": 0,
+        "long_task_ms": 0
+      },
+      "axe_serious": 0,
+      "code_lines": 935,
+      "rating": {
+        "polish": 4,
+        "completeness": 4,
+        "responsiveness": 3,
+        "restraint": 5,
+        "coherence": 5,
+        "intentionality": 3
+      },
+      "quality": 75
+    },
+    {
+      "dir": "results/bench-v1/raw/t05/stack/run3",
+      "task": 5,
+      "arm": "S",
+      "run": 3,
+      "status": "accepted",
+      "pass1": true,
+      "accepted": true,
+      "cost": 0.534566,
+      "tokens": 207403,
+      "calls": 9,
+      "style": {
+        "distinct_fontSize": 6.5,
+        "distinct_color": 6.5,
+        "distinct_background": 2.5,
+        "distinct_radius": 3.5,
+        "distinct_shadow": 0.5,
+        "distinct_spacing": 9,
+        "spacing_on_4px_grid": 0.9039999999999999
+      },
+      "weight": {
+        "js_kb": 392.5,
+        "css_kb": 49.7,
+        "fcp_ms": 152,
+        "cls": 0,
+        "long_task_ms": 2
+      },
+      "axe_serious": 0,
+      "code_lines": 940,
+      "rating": {
+        "polish": 4,
+        "completeness": 4,
+        "responsiveness": 3,
+        "restraint": 5,
+        "coherence": 5,
+        "intentionality": 3
+      },
+      "quality": 75
     },
     {
       "dir": "results/bench-v1/raw/t05/tailwind-memory/run1",
@@ -1853,14 +2321,14 @@
       "axe_serious": 1,
       "code_lines": 656,
       "rating": {
-        "polish": 4,
+        "polish": 3,
         "completeness": 3,
         "responsiveness": 4,
         "restraint": 5,
-        "coherence": 4,
+        "coherence": 3,
         "intentionality": 3
       },
-      "quality": 70.83333333333334
+      "quality": 62.5
     },
     {
       "dir": "results/bench-v1/raw/t08/mui-docs/run1",
@@ -1941,6 +2409,84 @@
       "quality": 70.83333333333334
     },
     {
+      "dir": "results/bench-v1/raw/t08/once-harness/run2",
+      "task": 8,
+      "arm": "A",
+      "run": 2,
+      "status": "accepted",
+      "pass1": true,
+      "accepted": true,
+      "cost": 0.43847,
+      "tokens": 182447,
+      "calls": 8,
+      "style": {
+        "distinct_fontSize": 7,
+        "distinct_color": 5,
+        "distinct_background": 5,
+        "distinct_radius": 4,
+        "distinct_shadow": 1,
+        "distinct_spacing": 9,
+        "spacing_on_4px_grid": 0.8795
+      },
+      "weight": {
+        "js_kb": 216.10000000000002,
+        "css_kb": 41.3,
+        "fcp_ms": 146,
+        "cls": 0,
+        "long_task_ms": 0
+      },
+      "axe_serious": 0,
+      "code_lines": 708,
+      "rating": {
+        "polish": 4,
+        "completeness": 3,
+        "responsiveness": 4,
+        "restraint": 5,
+        "coherence": 4,
+        "intentionality": 3
+      },
+      "quality": 70.83333333333334
+    },
+    {
+      "dir": "results/bench-v1/raw/t08/once-harness/run3",
+      "task": 8,
+      "arm": "A",
+      "run": 3,
+      "status": "accepted",
+      "pass1": true,
+      "accepted": true,
+      "cost": 0.265016,
+      "tokens": 96492,
+      "calls": 6,
+      "style": {
+        "distinct_fontSize": 7,
+        "distinct_color": 4.5,
+        "distinct_background": 5.5,
+        "distinct_radius": 4,
+        "distinct_shadow": 1,
+        "distinct_spacing": 9,
+        "spacing_on_4px_grid": 0.966
+      },
+      "weight": {
+        "js_kb": 222.3,
+        "css_kb": 40.5,
+        "fcp_ms": 108,
+        "cls": 0,
+        "long_task_ms": 0
+      },
+      "axe_serious": 0,
+      "code_lines": 696,
+      "rating": {
+        "polish": 4,
+        "completeness": 3,
+        "responsiveness": 4,
+        "restraint": 5,
+        "coherence": 4,
+        "intentionality": 3
+      },
+      "quality": 70.83333333333334
+    },
+    {
       "dir": "results/bench-v1/raw/t08/shadcn-docs/run1",
       "task": 8,
       "arm": "C",
@@ -1980,6 +2526,84 @@
       "quality": 75
     },
     {
+      "dir": "results/bench-v1/raw/t08/shadcn-docs/run2",
+      "task": 8,
+      "arm": "C",
+      "run": 2,
+      "status": "accepted",
+      "pass1": false,
+      "accepted": true,
+      "cost": 0.808764,
+      "tokens": 277478,
+      "calls": 10,
+      "style": {
+        "distinct_fontSize": 4.5,
+        "distinct_color": 3.5,
+        "distinct_background": 5,
+        "distinct_radius": 3.5,
+        "distinct_shadow": 2.5,
+        "distinct_spacing": 8,
+        "spacing_on_4px_grid": 0.863
+      },
+      "weight": {
+        "js_kb": 219,
+        "css_kb": 42.9,
+        "fcp_ms": 130,
+        "cls": 0,
+        "long_task_ms": 0
+      },
+      "axe_serious": 0,
+      "code_lines": 1102,
+      "rating": {
+        "polish": 4,
+        "completeness": 4,
+        "responsiveness": 4,
+        "restraint": 5,
+        "coherence": 4,
+        "intentionality": 3
+      },
+      "quality": 75
+    },
+    {
+      "dir": "results/bench-v1/raw/t08/shadcn-docs/run3",
+      "task": 8,
+      "arm": "C",
+      "run": 3,
+      "status": "accepted",
+      "pass1": true,
+      "accepted": true,
+      "cost": 0.317524,
+      "tokens": 106106,
+      "calls": 6,
+      "style": {
+        "distinct_fontSize": 5,
+        "distinct_color": 3,
+        "distinct_background": 4.5,
+        "distinct_radius": 4,
+        "distinct_shadow": 2.5,
+        "distinct_spacing": 8.5,
+        "spacing_on_4px_grid": 0.8885000000000001
+      },
+      "weight": {
+        "js_kb": 218.55,
+        "css_kb": 42.9,
+        "fcp_ms": 116,
+        "cls": 0,
+        "long_task_ms": 0
+      },
+      "axe_serious": 0,
+      "code_lines": 1006,
+      "rating": {
+        "polish": 4,
+        "completeness": 3,
+        "responsiveness": 4,
+        "restraint": 5,
+        "coherence": 4,
+        "intentionality": 3
+      },
+      "quality": 70.83333333333334
+    },
+    {
       "dir": "results/bench-v1/raw/t08/stack/run1",
       "task": 8,
       "arm": "S",
@@ -2017,6 +2641,84 @@
         "intentionality": 3
       },
       "quality": 70.83333333333334
+    },
+    {
+      "dir": "results/bench-v1/raw/t08/stack/run2",
+      "task": 8,
+      "arm": "S",
+      "run": 2,
+      "status": "accepted",
+      "pass1": false,
+      "accepted": true,
+      "cost": 0.727714,
+      "tokens": 279029,
+      "calls": 11,
+      "style": {
+        "distinct_fontSize": 6.5,
+        "distinct_color": 4.5,
+        "distinct_background": 4.5,
+        "distinct_radius": 5,
+        "distinct_shadow": 1,
+        "distinct_spacing": 9,
+        "spacing_on_4px_grid": 0.937
+      },
+      "weight": {
+        "js_kb": 394.65,
+        "css_kb": 49.6,
+        "fcp_ms": 150,
+        "cls": 0,
+        "long_task_ms": 0
+      },
+      "axe_serious": 0,
+      "code_lines": 850,
+      "rating": {
+        "polish": 4,
+        "completeness": 3,
+        "responsiveness": 4,
+        "restraint": 5,
+        "coherence": 4,
+        "intentionality": 3
+      },
+      "quality": 70.83333333333334
+    },
+    {
+      "dir": "results/bench-v1/raw/t08/stack/run3",
+      "task": 8,
+      "arm": "S",
+      "run": 3,
+      "status": "accepted",
+      "pass1": false,
+      "accepted": true,
+      "cost": 0.594146,
+      "tokens": 209201,
+      "calls": 10,
+      "style": {
+        "distinct_fontSize": 7,
+        "distinct_color": 5,
+        "distinct_background": 5.5,
+        "distinct_radius": 4,
+        "distinct_shadow": 1,
+        "distinct_spacing": 7,
+        "spacing_on_4px_grid": 1
+      },
+      "weight": {
+        "js_kb": 391.1,
+        "css_kb": 49.4,
+        "fcp_ms": 142,
+        "cls": 0,
+        "long_task_ms": 0.5
+      },
+      "axe_serious": 0,
+      "code_lines": 711,
+      "rating": {
+        "polish": 3,
+        "completeness": 3,
+        "responsiveness": 4,
+        "restraint": 5,
+        "coherence": 3,
+        "intentionality": 3
+      },
+      "quality": 62.5
     },
     {
       "dir": "results/bench-v1/raw/t08/tailwind-memory/run1",
@@ -2329,13 +3031,13 @@
       "code_lines": 1088,
       "rating": {
         "polish": 4,
-        "completeness": 3,
+        "completeness": 4,
         "responsiveness": 4,
-        "restraint": 4,
-        "coherence": 4,
+        "restraint": 5,
+        "coherence": 5,
         "intentionality": 4
       },
-      "quality": 70.83333333333334
+      "quality": 83.33333333333333
     },
     {
       "dir": "results/bench-v1/raw/t09/tailwind-memory/run1",

@@ -9,3 +9,4 @@ arms/stack/
 results/bench-v1/**/*.jpg
 results/bench-v1-invalid-chakra/**/*.jpg
 results/bench-v1/blind/
+results/bench-v1-blind-n1/
