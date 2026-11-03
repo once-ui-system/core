@@ -10,6 +10,7 @@
   "dependencies": {
     "@chakra-ui/charts": "3.37.0",
     "@chakra-ui/react": "3.37.0",
+    "@emotion/cache": "11.14.0",
     "@emotion/react": "11.14.0",
     "maplibre-gl": "5.24.0",
     "next": "16.2.12",
