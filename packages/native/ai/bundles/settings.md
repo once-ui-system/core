@@ -127,6 +127,8 @@ An image, or initials on a neutral circle.
 - empty?: boolean — Shows the icon (`person` by default) instead of an image or initials.
 - icon?: IconName — The icon of an empty avatar, as in core.
 - statusIndicator?: { scheme: "green" | "yellow" | "red" | "gray" } — A status dot; `scheme` is its palette hue, as in core 3.0 (2.x called it `color`).
+- ring?: boolean | ColorScheme — A coloured ring around the avatar, with a gap of page background between, as for a story or a live state.
+- testID?: string — For tests and tools such as Maestro, on the avatar's outer view.
 - style?: ViewStyle
 
 ### Button
@@ -148,6 +150,7 @@ Also takes React Native's PressableProps.
 - horizontal?: "start" | "center" | "end" | "between" = "center"
 - onClick?: () => void — Core's name for `onPress`, so the same JSX works on both; `onPress` wins.
 - href?: string — Opens this URL with `Linking`, as core's `href` makes the button a link.
+- wrap?: boolean = false — Lets a long label wrap onto more lines instead of being cut off with an ellipsis; the button grows taller to fit.
 - style?: ViewStyle
 
 ### Switch
@@ -162,6 +165,7 @@ Mixins: ControlChromeProps.
 - reverse?: boolean = false — Puts the switch after the label.
 - aria-label?: string — The name when there is no text `label`, as core's `aria-label` (2.x's `ariaLabel`).
 - style?: ViewStyle
+- testID?: string — Finds the switch, the pressable a test taps, in end-to-end tests.
 
 ### Select
 An `Input`-styled field that opens its options in a bottom sheet.
@@ -185,6 +189,7 @@ An `Input`-styled field that opens its options in a bottom sheet.
 - accessibilityLabel?: string — The spoken name and the sheet's title without a `label`, as a `Field` passes it.
 - accessibilityHint?: string
 - style?: ViewStyle
+- testID?: string — Finds the field a test taps in end-to-end tests.
 
 ### Input
 A bordered field with a floating label, error and description lines.
@@ -210,6 +215,7 @@ A 1px divider in `neutral-alpha-medium`.
 - vert?: boolean — Vertical, filling the parent's height.
 - background?: Colors = "neutral-alpha-medium"
 - style?: ViewStyle
+- testID?: string — Finds the line in end-to-end tests.
 
 ### Feedback
 An inline alert tinted by its tone, announced when it appears.
@@ -221,6 +227,7 @@ An inline alert tinted by its tone, announced when it appears.
 - onClose?: () => void
 - children?: ReactNode
 - style?: ViewStyle
+- testID?: string — Finds the alert in end-to-end tests.
 
 ### Dialog
 Core's `Dialog`, shown as a bottom sheet by default: the shape phones use for a modal task (`variant="center"` for a card in the middle).
@@ -235,6 +242,7 @@ Core's `Dialog`, shown as a bottom sheet by default: the shape phones use for a 
 - closeOnClickaway?: boolean = true — A tap on the backdrop closes the dialog.
 - flush?: boolean = false — Edge to edge, without the sheet's padding, as core's `flush`.
 - style?: ViewStyle
+- testID?: string — Finds the sheet in end-to-end tests while it is open.
 
 ### IconButton
 A square button holding one icon.
@@ -264,6 +272,7 @@ One of the built-in icons, or one registered with `IconProvider`.
 - decorative?: boolean = true — Hidden from screen readers unless `false`, as in core.
 - aria-label?: string — The name of a non-decorative icon; its `name` by default, as in core.
 - style?: ViewStyle
+- testID?: string — Finds the icon in end-to-end tests.
 
 ### Card
 Pressable surface (onPress), with every Flex prop; a static panel is a Column with background, border and radius instead

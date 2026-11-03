@@ -13,7 +13,8 @@
   "items": "!BreadcrumbItem[]",
   "separator": "ReactNode",
   "maxItems": "number",
-  "onNavigate": "(href: string, item: BreadcrumbItem) => void"
+  "onNavigate": "(href: string, item: BreadcrumbItem) => void",
+  "testID": "string"
  },
  "resolvedMixins": {
   "FlexProps": {

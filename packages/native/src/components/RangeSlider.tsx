@@ -30,6 +30,8 @@ export interface RangeSliderProps {
   thumbLabels?: [string, string];
   disabled?: boolean;
   style?: ViewStyle;
+  /** Finds the track in end-to-end tests; the thumbs get `${testID}-start` and `${testID}-end`. */
+  testID?: string;
 }
 
 type Thumb = 0 | 1;
@@ -59,6 +61,7 @@ export function RangeSlider({
   thumbLabels = ["Minimum", "Maximum"],
   disabled = false,
   style,
+  testID,
 }: RangeSliderProps) {
   const theme = useTheme();
   const [raw, setValue] = useControlledValue(value, defaultValue ?? [min, max], onValueChange);
@@ -145,6 +148,7 @@ export function RangeSlider({
       )}
       <View
         hitSlop={touchSlop(theme, height, Number.POSITIVE_INFINITY)}
+        testID={testID}
         onLayout={gesture.onLayout}
         {...gesture.panHandlers}
         style={{ height, justifyContent: "center", opacity: disabled ? 0.4 : 1 }}
@@ -158,6 +162,7 @@ export function RangeSlider({
             accessible
             accessibilityRole="adjustable"
             accessibilityLabel={thumbLabels[thumb]}
+            testID={testID && `${testID}-${thumb === 0 ? "start" : "end"}`}
             accessibilityValue={{
               min: bounds(thumb, values)[0],
               max: bounds(thumb, values)[1],

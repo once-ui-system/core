@@ -97,6 +97,21 @@ const [open, setOpen] = useState<Listing>();
 </Map>
 ```
 
+## Globe and 3D buildings
+
+`projection="globe"` curves the world into a globe when zoomed out and flattens it as you zoom in, so a camera travelling between cities reads as a journey. `buildings="3d"` raises buildings to their real height from zoom 13. They run from the neutral surface up to the brand colour for the tallest, and follow the theme like the rest of the map. Tilt the camera with `pitch` to see them.
+
+<MapGlobeExample />
+
+```tsx
+<Map
+  height={512}
+  projection="globe"
+  buildings="3d"
+  defaultViewport={{ center: [19.0457, 47.507], zoom: 15.5, pitch: 60, bearing: -20 }}
+/>
+```
+
 ## Controlled viewport
 
 `viewport`, `defaultViewport` and `onViewportChange` follow the same contract as every other controlled prop in Once UI. `onViewportChange` fires when a pan or zoom ends, which is also the moment to search the visible area.
@@ -153,6 +168,8 @@ The map is a focusable region: arrow keys pan, `+` and `-` zoom, and the frame s
     boundsMaxZoom: "The closest a fit zooms in. Default 15.",
     mapStyle: "Any MapLibre style URL or object, or a `{ light, dark }` pair. Default OpenFreeMap.",
     tint: "Paint the basemap background with the page background token. Default true.",
+    projection: '`"globe"` curves the world when zoomed out. Default `"mercator"`.',
+    buildings: '`"3d"` extrudes buildings to their height from zoom 13, in theme colours. Default `"flat"`.',
     controls: "Show the zoom buttons. Default true.",
     interactive: "False draws a static map. Default true.",
     cooperativeGestures: "Scroll zooms only with Ctrl/⌘ and touch pans with two fingers.",

@@ -25,7 +25,8 @@
   "labels": "{ search?: string }",
   "accessibilityLabel": "string",
   "accessibilityHint": "string",
-  "style": "ViewStyle"
+  "style": "ViewStyle",
+  "testID": "string"
  },
  "resolvedMixins": {},
  "types": {

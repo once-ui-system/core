@@ -17,7 +17,8 @@
   "onHeightChange": "(height: number) => void",
   "closeOnClickaway": "boolean = true",
   "flush": "boolean = false",
-  "style": "ViewStyle"
+  "style": "ViewStyle",
+  "testID": "string"
  },
  "resolvedMixins": {},
  "types": {}

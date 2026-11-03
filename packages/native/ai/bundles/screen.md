@@ -137,6 +137,7 @@ Also takes React Native's PressableProps.
 - horizontal?: "start" | "center" | "end" | "between" = "center"
 - onClick?: () => void — Core's name for `onPress`, so the same JSX works on both; `onPress` wins.
 - href?: string — Opens this URL with `Linking`, as core's `href` makes the button a link.
+- wrap?: boolean = false — Lets a long label wrap onto more lines instead of being cut off with an ellipsis; the button grows taller to fit.
 - style?: ViewStyle
 
 ### IconButton
@@ -167,12 +168,14 @@ One of the built-in icons, or one registered with `IconProvider`.
 - decorative?: boolean = true — Hidden from screen readers unless `false`, as in core.
 - aria-label?: string — The name of a non-decorative icon; its `name` by default, as in core.
 - style?: ViewStyle
+- testID?: string — Finds the icon in end-to-end tests.
 
 ### Line
 A 1px divider in `neutral-alpha-medium`.
 - vert?: boolean — Vertical, filling the parent's height.
 - background?: Colors = "neutral-alpha-medium"
 - style?: ViewStyle
+- testID?: string — Finds the line in end-to-end tests.
 
 ### Card
 Pressable surface (onPress), with every Flex prop; a static panel is a Column with background, border and radius instead

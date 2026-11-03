@@ -30,6 +30,7 @@
    "fillWidth": "boolean",
    "horizontal": "\"start\" | \"center\" | \"end\" | \"between\"",
    "href": "string",
+   "wrap": "boolean",
    "style": "ViewStyle"
   }
  },

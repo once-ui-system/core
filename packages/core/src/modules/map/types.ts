@@ -22,3 +22,9 @@ export type MapStyle = MapStyleSource | { light: MapStyleSource; dark: MapStyleS
 
 /** A token colour family for map shapes and pins. */
 export type MapColor = "brand" | "accent" | "neutral" | "danger" | "warning" | "success" | "info";
+
+/** How the map draws the earth: flat, or a globe once zoomed out. */
+export type MapProjection = "mercator" | "globe";
+
+/** The basemap's buildings: its own flat footprints, or extruded to their height. */
+export type MapBuildings = "flat" | "3d";

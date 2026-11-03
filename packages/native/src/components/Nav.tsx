@@ -335,6 +335,8 @@ export interface NavGroupProps extends Omit<FlexProps, "children"> {
   onOpenChange?: (open: boolean) => void;
   /** Marks the header itself as the current page. */
   selected?: boolean;
+  /** Finds the header a test taps in end-to-end tests; the items under it get `${testID}-content`. */
+  testID?: string;
 }
 
 /** Core's `NavGroup`: a collapsible set of NavItems, indented behind a rail. */
@@ -346,6 +348,7 @@ export function NavGroup({
   defaultOpen = false,
   onOpenChange,
   selected = false,
+  testID,
   ...row
 }: NavGroupProps) {
   const { variant, rail, sizes } = useNavStyle();
@@ -366,6 +369,7 @@ export function NavGroup({
       <Accordion
         open={isOpen}
         onOpenChange={toggle}
+        testID={testID}
         size={sizes.text === "s" ? "s" : "m"}
         headerProps={{ paddingLeft: sizes.x, minHeight: sizes.height }}
         contentProps={{ paddingTop: "4", paddingBottom: "8" }}

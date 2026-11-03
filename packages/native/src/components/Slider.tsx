@@ -30,6 +30,8 @@ export interface SliderProps {
   /** The accessible name, when there is no visible `label`. */
   "aria-label"?: string;
   style?: ViewStyle;
+  /** Finds the track, the adjustable element a test drags, in end-to-end tests. */
+  testID?: string;
 }
 
 const decimals = (n: number) => {
@@ -189,6 +191,7 @@ export function Slider({
   disabled = false,
   "aria-label": ariaLabel,
   style,
+  testID,
 }: SliderProps) {
   const theme = useTheme();
   const [raw, setValue] = useControlledValue(value, defaultValue ?? min, onValueChange);
@@ -236,6 +239,7 @@ export function Slider({
         accessible
         accessibilityRole="adjustable"
         accessibilityLabel={ariaLabel ?? label}
+        testID={testID}
         accessibilityValue={{ min, max, now: current }}
         aria-disabled={disabled}
         accessibilityActions={[{ name: "increment" }, { name: "decrement" }]}

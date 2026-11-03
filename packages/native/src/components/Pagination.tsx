@@ -68,6 +68,12 @@ export interface PaginationProps extends Omit<FlexProps, "children"> {
   disabled?: boolean;
   /** The buttons' names and the per-page label, to translate them. */
   labels?: Partial<PaginationLabels>;
+  /**
+   * Finds the row in end-to-end tests. Each page button gets `${testID}-${page}`,
+   * the arrows `${testID}-first`, `-previous`, `-next` and `-last`, and the
+   * page-size select `${testID}-per-page`.
+   */
+  testID?: string;
 }
 
 /** A page number, or a gap standing for the pages left out on that side. */
@@ -131,6 +137,7 @@ export function Pagination({
   size = "m",
   disabled = false,
   labels,
+  testID,
   ...flex
 }: PaginationProps) {
   const theme = useTheme();
@@ -196,11 +203,12 @@ export function Pagination({
       aria-label={label}
       disabled={off}
       onPress={() => goTo(target)}
+      testID={testID && `${testID}-${key}`}
     />
   );
 
   return (
-    <Row gap="16" vertical="center" wrap {...flex}>
+    <Row gap="16" vertical="center" wrap testID={testID} {...flex}>
       {perPageOptions && perPageOptions.length > 0 && (
         // The select's field is `fillWidth`: it needs a parent with a width of its own,
         // or it stretches across the whole row, under the page buttons.
@@ -212,6 +220,7 @@ export function Pagination({
             value={String(currentPerPage)}
             disabled={disabled}
             onValueChange={changePerPage}
+            testID={testID && `${testID}-per-page`}
             options={perPageOptions.map((option) => ({
               label: String(option),
               value: String(option),
@@ -236,6 +245,7 @@ export function Pagination({
                 accessibilityState={{ selected: item === current, disabled }}
                 disabled={disabled}
                 onPress={() => goTo(item)}
+                testID={testID && `${testID}-${item}`}
                 style={{ minWidth: theme.space(MIN_WIDTH[size]) }}
               />
             ) : (

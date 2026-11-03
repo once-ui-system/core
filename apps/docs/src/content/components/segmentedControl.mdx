@@ -41,6 +41,56 @@ Use this component for toggle-style selection between discrete options. It suppo
   ]}
 />
 
+## Sliding background
+
+The selected background slides from one option to the next, even when the options have different widths. Visitors who ask for reduced motion see it move without the slide. Pass `sliding={false}` for the old jump; `compact` controls never slide.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="center">
+      <SegmentedControl
+        fillWidth={false}
+        buttons={[
+          { value: "all", label: "All" },
+          { value: "unread", label: "Unread" },
+          { value: "mentions", label: "Mentions and replies" },
+          { value: "archive", label: "Archive" },
+        ]}
+      />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<SegmentedControl
+    fillWidth={false}
+    buttons={[
+      { value: "all", label: "All" },
+      { value: "unread", label: "Unread" },
+      { value: "mentions", label: "Mentions and replies" },
+      { value: "archive", label: "Archive" },
+    ]}
+/>`,
+      language: "tsx",
+      label: "Sliding"
+    },
+    {
+      code:
+`<SegmentedControl
+    sliding={false}
+    buttons={[
+      { value: "all", label: "All" },
+      { value: "unread", label: "Unread" },
+    ]}
+/>`,
+      language: "tsx",
+      label: "Without the slide"
+    }
+  ]}
+/>
+
 ## External state
 
 Use `selected` to manage the selected state from the parent.

@@ -15,7 +15,8 @@
   "disabled": "boolean = false",
   "reverse": "boolean = false",
   "aria-label": "string",
-  "style": "ViewStyle"
+  "style": "ViewStyle",
+  "testID": "string"
  },
  "resolvedMixins": {
   "ControlChromeProps": {

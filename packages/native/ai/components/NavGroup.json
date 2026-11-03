@@ -16,7 +16,8 @@
   "open": "boolean",
   "defaultOpen": "boolean = false",
   "onOpenChange": "(open: boolean) => void",
-  "selected": "boolean = false"
+  "selected": "boolean = false",
+  "testID": "string"
  },
  "resolvedMixins": {
   "FlexProps": {

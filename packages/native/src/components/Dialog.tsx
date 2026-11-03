@@ -37,6 +37,8 @@ export interface DialogProps {
   /** Edge to edge, without the sheet's padding, as core's `flush`. */
   flush?: boolean;
   style?: ViewStyle;
+  /** Finds the sheet in end-to-end tests while it is open. */
+  testID?: string;
 }
 
 /**
@@ -60,6 +62,7 @@ export function Dialog({
   closeOnClickaway = true,
   flush = false,
   style,
+  testID,
 }: DialogProps) {
   const theme = useTheme();
   const pad = flush ? 0 : theme.space("24");
@@ -109,6 +112,7 @@ export function Dialog({
           }}
           aria-modal
           role="dialog"
+          testID={testID}
           style={[
             {
               maxHeight: "90%",

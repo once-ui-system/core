@@ -127,6 +127,8 @@ An image, or initials on a neutral circle.
 - empty?: boolean — Shows the icon (`person` by default) instead of an image or initials.
 - icon?: IconName — The icon of an empty avatar, as in core.
 - statusIndicator?: { scheme: "green" | "yellow" | "red" | "gray" } — A status dot; `scheme` is its palette hue, as in core 3.0 (2.x called it `color`).
+- ring?: boolean | ColorScheme — A coloured ring around the avatar, with a gap of page background between, as for a story or a live state.
+- testID?: string — For tests and tools such as Maestro, on the avatar's outer view.
 - style?: ViewStyle
 
 ### IconButton
@@ -167,6 +169,7 @@ Also takes React Native's PressableProps.
 - horizontal?: "start" | "center" | "end" | "between" = "center"
 - onClick?: () => void — Core's name for `onPress`, so the same JSX works on both; `onPress` wins.
 - href?: string — Opens this URL with `Linking`, as core's `href` makes the button a link.
+- wrap?: boolean = false — Lets a long label wrap onto more lines instead of being cut off with an ellipsis; the button grows taller to fit.
 - style?: ViewStyle
 
 ### Card
@@ -198,6 +201,7 @@ A label, an announcement pill, or a toggle with an optional remove button.
 - textVariant?: TextVariant
 - children?: ReactNode
 - style?: ViewStyle
+- testID?: string — Finds the tag in end-to-end tests.
 
 ### Icon
 One of the built-in icons, or one registered with `IconProvider`.
@@ -208,6 +212,7 @@ One of the built-in icons, or one registered with `IconProvider`.
 - decorative?: boolean = true — Hidden from screen readers unless `false`, as in core.
 - aria-label?: string — The name of a non-decorative icon; its `name` by default, as in core.
 - style?: ViewStyle
+- testID?: string — Finds the icon in end-to-end tests.
 
 ### ProgressBar
 A rounded track that fills to `value`, with the value as a label.
@@ -218,6 +223,7 @@ A rounded track that fills to `value`, with the value as a label.
 - labelPosition?: "top" | "bottom" | "left" | "right" = "bottom"
 - barBackground?: Colors = "brand-strong" — The bar's solid colour, as core's `solid` prop: `"brand-strong"` by default.
 - style?: ViewStyle
+- testID?: string — Finds the bar, the element with the `progressbar` role, in end-to-end tests.
 
 ### Dialog
 Core's `Dialog`, shown as a bottom sheet by default: the shape phones use for a modal task (`variant="center"` for a card in the middle).
@@ -232,6 +238,7 @@ Core's `Dialog`, shown as a bottom sheet by default: the shape phones use for a 
 - closeOnClickaway?: boolean = true — A tap on the backdrop closes the dialog.
 - flush?: boolean = false — Edge to edge, without the sheet's padding, as core's `flush`.
 - style?: ViewStyle
+- testID?: string — Finds the sheet in end-to-end tests while it is open.
 
 ### Skeleton
 A pulsing placeholder while content loads.
@@ -246,6 +253,7 @@ A 1px divider in `neutral-alpha-medium`.
 - vert?: boolean — Vertical, filling the parent's height.
 - background?: Colors = "neutral-alpha-medium"
 - style?: ViewStyle
+- testID?: string — Finds the line in end-to-end tests.
 
 ## Hooks
 

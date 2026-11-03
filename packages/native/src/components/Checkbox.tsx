@@ -19,6 +19,8 @@ export interface CheckboxProps extends ControlChromeProps {
   /** The name when there is no text `label`, as core's `aria-label`. */
   "aria-label"?: string;
   style?: ViewStyle;
+  /** Finds the checkbox, the pressable a test taps, in end-to-end tests. */
+  testID?: string;
 }
 
 // SharedInteractiveStyles.module.scss: the box per size, in static spacing steps.
@@ -38,6 +40,7 @@ export function Checkbox({
   error,
   errorMessage,
   style,
+  testID,
 }: CheckboxProps) {
   const theme = useTheme();
   const chrome = controlChrome({ size: size ?? theme.controlSize, error, errorMessage });
@@ -49,6 +52,7 @@ export function Checkbox({
   return (
     <Pressable
       accessibilityRole="checkbox"
+      testID={testID}
       accessibilityLabel={typeof label === "string" ? label : ariaLabel}
       aria-checked={indeterminate ? "mixed" : on}
       aria-disabled={disabled}

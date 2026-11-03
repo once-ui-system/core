@@ -19,7 +19,8 @@
   "labels": "DatePickerLabels",
   "open": "boolean",
   "defaultOpen": "boolean = false",
-  "onOpenChange": "(open: boolean) => void"
+  "onOpenChange": "(open: boolean) => void",
+  "testID": "string"
  },
  "resolvedMixins": {
   "InputProps": {

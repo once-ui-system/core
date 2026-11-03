@@ -46,6 +46,8 @@ export interface ReactionProps extends ReactionOption {
   /** Draws the reaction instead of the emoji or `src`, such as a Lottie view. */
   children?: ReactNode;
   style?: StyleProp<ViewStyle>;
+  /** Finds the reaction in end-to-end tests. */
+  testID?: string;
 }
 
 /** The emoji or image, at `size` points. */
@@ -115,6 +117,7 @@ export const Reaction: RefComponent<ReactionProps, ViewRef> = forwardRef<ViewRef
       decorative = false,
       children,
       style,
+      testID,
     },
     ref,
   ) {
@@ -192,13 +195,13 @@ export const Reaction: RefComponent<ReactionProps, ViewRef> = forwardRef<ViewRef
 
     if (trigger === "hover") {
       return (
-        <Pressable ref={ref} onPressIn={play} style={style} {...a11y}>
+        <Pressable ref={ref} onPressIn={play} style={style} testID={testID} {...a11y}>
           {body}
         </Pressable>
       );
     }
     return (
-      <View ref={ref} style={style} {...a11y}>
+      <View ref={ref} style={style} testID={testID} {...a11y}>
         {body}
       </View>
     );
@@ -243,6 +246,12 @@ export interface ReactionsProps extends Omit<FlexProps, "children"> {
   addLabel?: string;
   /** The group's name. */
   "aria-label"?: string;
+  /**
+   * Finds the row in end-to-end tests. Each chip gets `${testID}-${value}`, the
+   * add button `${testID}-add`, and in the open picker each option
+   * `${testID}-picker-${value}`.
+   */
+  testID?: string;
 }
 
 // Social.module.scss: chip height and side padding per size, in rem.
@@ -450,6 +459,7 @@ export const Reactions: RefComponent<ReactionsProps, ViewRef> = forwardRef<ViewR
       renderGlyph,
       addLabel = "Add reaction",
       "aria-label": ariaLabel = "Reactions",
+      testID,
       ...flex
     },
     ref,
@@ -515,7 +525,16 @@ export const Reactions: RefComponent<ReactionsProps, ViewRef> = forwardRef<ViewR
     const glyph = GLYPH_REM[size] * theme.rem;
 
     return (
-      <Row ref={ref} gap="4" wrap vertical="center" role="group" aria-label={ariaLabel} {...flex}>
+      <Row
+        ref={ref}
+        gap="4"
+        wrap
+        vertical="center"
+        role="group"
+        aria-label={ariaLabel}
+        testID={testID}
+        {...flex}
+      >
         {chips.map((option) => {
           const on = selected.includes(option.value);
           const count = countOf(option.value);
@@ -529,6 +548,7 @@ export const Reactions: RefComponent<ReactionsProps, ViewRef> = forwardRef<ViewR
               key={option.value}
               accessibilityRole="button"
               accessibilityLabel={counts ? `${label}, ${count}` : label}
+              testID={testID && `${testID}-${option.value}`}
               accessibilityState={{ selected: on, disabled }}
               aria-pressed={on}
               disabled={disabled}
@@ -598,6 +618,7 @@ export const Reactions: RefComponent<ReactionsProps, ViewRef> = forwardRef<ViewR
                 variant="secondary"
                 aria-label={addLabel}
                 disabled={disabled}
+                testID={testID && `${testID}-add`}
               />
             }
             dropdown={
@@ -609,6 +630,7 @@ export const Reactions: RefComponent<ReactionsProps, ViewRef> = forwardRef<ViewR
                       key={option.value}
                       accessibilityRole="button"
                       accessibilityLabel={reactionLabel(option)}
+                      testID={testID && `${testID}-picker-${option.value}`}
                       accessibilityState={{ selected: on }}
                       aria-pressed={on}
                       onPress={() => {

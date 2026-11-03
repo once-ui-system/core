@@ -23,6 +23,7 @@
   "isCollapsible": "boolean = false",
   "hideCode": "boolean = false",
   "onInstanceChange": "(index: number) => void",
+  "testID": "string",
   "highlight": "string"
  },
  "resolvedMixins": {

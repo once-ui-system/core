@@ -18,7 +18,8 @@
   "maxWidth": "number | Length",
   "minHeight": "number",
   "disableTriggerClick": "boolean = false",
-  "style": "StyleProp<ViewStyle>"
+  "style": "StyleProp<ViewStyle>",
+  "testID": "string"
  },
  "resolvedMixins": {},
  "types": {

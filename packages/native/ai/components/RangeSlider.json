@@ -16,7 +16,8 @@
   "formatValue": "(value: number) => string = String",
   "thumbLabels": "[string, string] = [\"Minimum\", \"Maximum\"]",
   "disabled": "boolean = false",
-  "style": "ViewStyle"
+  "style": "ViewStyle",
+  "testID": "string"
  },
  "resolvedMixins": {},
  "types": {}

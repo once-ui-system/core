@@ -11,7 +11,8 @@
   "color": "string",
   "decorative": "boolean = true",
   "aria-label": "string",
-  "style": "ViewStyle"
+  "style": "ViewStyle",
+  "testID": "string"
  },
  "resolvedMixins": {},
  "types": {
