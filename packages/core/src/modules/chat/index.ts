@@ -6,6 +6,6 @@ export type { ChatMessageListProps } from "./ChatMessageList.js";
 export { ChatMessageList } from "./ChatMessageList.js";
 export type { ConversationItemProps } from "./ConversationItem.js";
 export { ConversationItem } from "./ConversationItem.js";
-export type { ChatTime } from "./chatTime.js";
+export type { ChatTime, ChatTimeFormat } from "./chatTime.js";
 export type { TypingIndicatorProps } from "./TypingIndicator.js";
 export { TypingIndicator } from "./TypingIndicator.js";

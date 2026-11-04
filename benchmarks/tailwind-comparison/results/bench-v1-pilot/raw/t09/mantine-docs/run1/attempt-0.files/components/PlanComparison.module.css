@@ -1,0 +1,26 @@
+.table {
+  background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-6));
+}
+
+.planHead[data-highlight] {
+  color: var(--mantine-color-anchor);
+}
+
+.rowHead {
+  font-weight: 500;
+  text-align: left;
+}
+
+.cell[data-highlight] {
+  background-color: color-mix(in srgb, var(--mantine-primary-color-filled) 8%, transparent);
+}
+
+.yes {
+  display: block;
+  color: var(--mantine-color-anchor);
+}
+
+.no {
+  display: block;
+  color: var(--mantine-color-dimmed);
+}

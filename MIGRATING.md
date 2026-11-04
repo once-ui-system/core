@@ -794,6 +794,27 @@ resolved to (`borderColor: "var(--brand-alpha-medium)"`, `borderRadius:
 step on its own. The AI validator reports the same props (`layout.leafProps`)
 and names the wrapper.
 
+### 14. Spacing, offset and grid-column classes are spelled out
+
+Props are unchanged. The utility classes they write are renamed, because
+Tailwind CSS owns the short names with another scale (Tailwind's `p-4` is
+1rem, Once UI's was 4px) and an app using both would see Tailwind's rule land
+on Once UI's elements:
+
+| 2.x | 3.0 |
+| --- | --- |
+| `p-16`, `px-16`, `py-16`, `pt-16`, `pr-16`, `pb-16`, `pl-16` | `padding-16`, `padding-x-16`, `padding-y-16`, `padding-top-16`, `padding-right-16`, `padding-bottom-16`, `padding-left-16` |
+| `m-16`, `mx-auto`, `mt-16`, … | `margin-16`, `margin-x-auto`, `margin-top-16`, … |
+| `top-16`, `right-16`, `bottom-16`, `left-16` | `offset-top-16`, `offset-right-16`, `offset-bottom-16`, `offset-left-16` |
+| `columns-3`, `columns-auto-fit` | `grid-columns-3`, `grid-columns-auto-fit` |
+
+Every breakpoint form follows (`s-p-16` → `s-padding-16`). Gap stays `g-16`.
+Only a class you wrote by hand needs this: the codemod rewrites them in
+`className="…"` and in the strings of `className={…}`. In a project with
+Tailwind CSS in its package.json it reports them instead, since there `p-4`
+already meant Tailwind's. `node scripts/codemod-3.0-class-names.mjs <dir>`
+runs this step on its own.
+
 ---
 
 ## 1.8.x → 2.0

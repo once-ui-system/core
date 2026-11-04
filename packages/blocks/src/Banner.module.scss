@@ -1,0 +1,86 @@
+// The mesh variant: soft colour fields from the theme's own scales, blurred
+// into one wash, under a scrim that keeps the line readable in either theme.
+.mesh {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: var(--page-background);
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -60% -10%;
+    z-index: -2;
+    background:
+      radial-gradient(40% 120% at 12% 50%, var(--banner-mesh-1), transparent 70%),
+      radial-gradient(35% 140% at 45% 30%, var(--banner-mesh-2), transparent 70%),
+      radial-gradient(40% 120% at 78% 60%, var(--banner-mesh-3), transparent 70%),
+      radial-gradient(30% 140% at 100% 40%, var(--banner-mesh-1), transparent 70%);
+    filter: blur(24px) saturate(1.2);
+    opacity: 0.7;
+    animation: drift 24s ease-in-out infinite alternate;
+  }
+
+  // Scrim: darkens the wash in dark mode, lifts it in light mode, so the
+  // text keeps its contrast whatever the brand colours are.
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--page-background);
+    opacity: 0.35;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::before {
+      animation: none;
+    }
+  }
+}
+
+:global([data-theme="light"]) .mesh::before {
+  opacity: 0.45;
+}
+
+:global([data-theme="light"]) .mesh::after {
+  opacity: 0.25;
+}
+
+@keyframes drift {
+  from {
+    transform: translateX(-4%) scale(1);
+  }
+  to {
+    transform: translateX(4%) scale(1.1);
+  }
+}
+
+.content {
+  min-width: 0;
+  text-wrap: balance;
+}
+
+// Nested so an app's global link colour does not win over it.
+.content .link {
+  color: inherit;
+  font-weight: var(--font-weight-strong, 500);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  white-space: nowrap;
+  transition: text-decoration-color var(--transition-micro-medium, 0.2s);
+
+  @media (hover: hover) {
+    &:hover {
+      text-decoration-thickness: 2px;
+    }
+  }
+}
+
+.close {
+  position: absolute;
+  top: 50%;
+  right: var(--static-space-8);
+  transform: translateY(-50%);
+}

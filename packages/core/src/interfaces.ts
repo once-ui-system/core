@@ -60,7 +60,7 @@ export interface GridProps {
    * number is on the token scale, a string is a spacing token or a CSS length
    * (`"16rem"`, `"40%"`, `calc(…)`).
    *
-   * Renders on the server: a `.columns-auto-fit` class plus the
+   * Renders on the server: a `.grid-columns-auto-fit` class plus the
    * `--grid-min-column-width` custom property on the same element. It takes
    * precedence over `columns`; a breakpoint `columns` still overrides it at
    * that width, e.g. `minColumnWidth={256} s={{ columns: 1 }}`.
@@ -279,6 +279,18 @@ export interface StyleProps {
   bottomRightRadius?: RadiusSize;
   radius?: RadiusSize | `${RadiusSize}-${RadiusNest}`;
   shadow?: ShadowSize;
+  /**
+   * Draws attention to the element. Each value names a look: `"edge"` is a
+   * brand-to-accent edge travelling round the border, `"glow"` (or `true`)
+   * adds a soft halo for bars and inputs, `"aura"` a wide one for panels and
+   * hero cards. It draws on `::before` and `::after` under the content, so an
+   * `overflow` that clips also clips the halo. Recolour or slow it with
+   * `--emphasis-from`, `--emphasis-to`, `--emphasis-width` and
+   * `--emphasis-duration`. Still under `prefers-reduced-motion`.
+   *
+   * @example <Row emphasis radius="full" background="surface" padding="8">…</Row>
+   */
+  emphasis?: boolean | "edge" | "glow" | "aura";
   /**
    * A CSS cursor keyword; `"interactive"` for anything clickable; a preset
    * (`"soft"`, `"rounded"`, `"dot"`, or `"system"` to turn one off) that

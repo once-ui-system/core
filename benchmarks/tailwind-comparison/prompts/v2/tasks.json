@@ -157,6 +157,185 @@
       ],
       "output": "multi",
       "prompt": "Lumen's onboarding at `/`: a four-step wizard (1 Account: name and work email; 2 Workspace: workspace name and team size; 3 Invite: up to three teammate emails, skippable; 4 Preferences: theme and weekly digest). A step indicator shows where the user is. Back and Next move between steps; Next validates the current step and shows inline errors instead of moving on. A summary card beside the form (below it on phones) shows what has been entered so far. Finishing goes to `/welcome`, a done screen with a short checklist of next steps.\n\nUse this data for the content (define it in the code; you may put it in `lib/data.ts`):\n\n```json\n{\n  \"product\": \"Lumen, a product-analytics and issue-tracking app for small software teams\",\n  \"user\": {\n    \"name\": \"Maya Okafor\",\n    \"email\": \"maya@acmelabs.io\",\n    \"role\": \"Owner\"\n  }\n}\n```"
+    },
+    {
+      "id": 9,
+      "slug": "rebrand",
+      "title": "Rebrand: marketing site in a new identity",
+      "set": "lite",
+      "routes": [
+        "/",
+        "/pricing"
+      ],
+      "editable": {
+        "once": [
+          "app/layout.tsx",
+          "app/providers.tsx",
+          "app/fonts.css"
+        ],
+        "shadcn": [
+          "app/globals.css",
+          "app/layout.tsx"
+        ],
+        "tailwind": [
+          "app/globals.css",
+          "app/layout.tsx"
+        ],
+        "mui": [
+          "app/theme.ts",
+          "app/layout.tsx"
+        ],
+        "chakra": [
+          "app/layout.tsx",
+          "components/ui/provider.tsx",
+          "components/ui/color-mode.tsx"
+        ],
+        "mantine": [
+          "app/theme.ts",
+          "app/layout.tsx"
+        ]
+      },
+      "checklist": [
+        "Brand colour on primary buttons and links",
+        "Warm grey neutrals; 4px radius on buttons, inputs, cards",
+        "Serif headings, sans body text",
+        "Dark by default; header toggle switches the whole site to light",
+        "Home: hero with two calls to action, logo row, three feature sections, footer",
+        "Pricing: monthly/yearly switch, three plans with Team highlighted, comparison table, FAQ accordion"
+      ],
+      "output": "multi",
+      "prompt": "Lumen has a new visual identity, and its marketing site must carry it through the design system's own theming, not one-off styles on each element. Apply the brand from the data: the brand colour for primary buttons, links and focus rings; a warm stone-grey neutral palette; a 4px corner radius on buttons, inputs, cards and menus; the serif heading font and the sans body font given (both are system fonts, so load nothing); and a dark theme by default with a light/dark toggle in the header that switches the whole site. Build the home page at `/` (a header with the logo text, navigation and the theme toggle; a hero with the tagline and two calls to action; a row of customer logos as text; three feature sections; a footer) and a pricing page at `/pricing` (a monthly/yearly switch that shows yearly prices at two months free, three plan cards with the Team plan highlighted, a feature comparison table, and the FAQ as an accordion), sharing the header and footer.\n\nUse this data for the content (define it in the code; you may put it in `lib/data.ts`):\n\n```json\n{\n  \"product\": \"Lumen, a product-analytics and issue-tracking app for small software teams\",\n  \"brand\": {\n    \"name\": \"Lumen\",\n    \"tagline\": \"Product analytics and issue tracking that small teams actually read\",\n    \"brand_color\": \"#E8590C\",\n    \"neutral\": \"warm stone grey\",\n    \"radius\": \"4px on buttons, inputs, cards and menus\",\n    \"heading_font\": \"Georgia, \\\"Times New Roman\\\", serif\",\n    \"body_font\": \"ui-sans-serif, system-ui, sans-serif\",\n    \"default_theme\": \"dark\",\n    \"plans\": [\n      {\n        \"name\": \"Free\",\n        \"price_month\": 0,\n        \"seats\": \"1\",\n        \"features\": [\n          \"1 project\",\n          \"7-day history\",\n          \"Community support\"\n        ]\n      },\n      {\n        \"name\": \"Team\",\n        \"price_month\": 12,\n        \"seats\": \"per seat\",\n        \"features\": [\n          \"Unlimited projects\",\n          \"1-year history\",\n          \"Issue tracker\",\n          \"Email support\"\n        ],\n        \"highlight\": true\n      },\n      {\n        \"name\": \"Business\",\n        \"price_month\": 29,\n        \"seats\": \"per seat\",\n        \"features\": [\n          \"Everything in Team\",\n          \"SSO and audit log\",\n          \"Unlimited history\",\n          \"Priority support\"\n        ]\n      }\n    ],\n    \"faq\": [\n      {\n        \"q\": \"Can I switch plans later?\",\n        \"a\": \"Yes. Upgrades apply at once; downgrades at the end of the billing period.\"\n      },\n      {\n        \"q\": \"Do you offer a discount for non-profits?\",\n        \"a\": \"Yes, 50% off Team and Business for registered non-profits.\"\n      },\n      {\n        \"q\": \"Where is my data stored?\",\n        \"a\": \"In the EU, encrypted at rest.\"\n      }\n    ],\n    \"logos\": [\n      \"Acme Labs\",\n      \"Northwind Studio\",\n      \"Hooli\",\n      \"Globex\",\n      \"Initech\"\n    ]\n  }\n}\n```",
+      "brand_check": {
+        "name": "Lumen",
+        "tagline": "Product analytics and issue tracking that small teams actually read",
+        "brand_color": "#E8590C",
+        "neutral": "warm stone grey",
+        "radius": "4px on buttons, inputs, cards and menus",
+        "heading_font": "Georgia, \"Times New Roman\", serif",
+        "body_font": "ui-sans-serif, system-ui, sans-serif",
+        "default_theme": "dark",
+        "plans": [
+          {
+            "name": "Free",
+            "price_month": 0,
+            "seats": "1",
+            "features": [
+              "1 project",
+              "7-day history",
+              "Community support"
+            ]
+          },
+          {
+            "name": "Team",
+            "price_month": 12,
+            "seats": "per seat",
+            "features": [
+              "Unlimited projects",
+              "1-year history",
+              "Issue tracker",
+              "Email support"
+            ],
+            "highlight": true
+          },
+          {
+            "name": "Business",
+            "price_month": 29,
+            "seats": "per seat",
+            "features": [
+              "Everything in Team",
+              "SSO and audit log",
+              "Unlimited history",
+              "Priority support"
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "q": "Can I switch plans later?",
+            "a": "Yes. Upgrades apply at once; downgrades at the end of the billing period."
+          },
+          {
+            "q": "Do you offer a discount for non-profits?",
+            "a": "Yes, 50% off Team and Business for registered non-profits."
+          },
+          {
+            "q": "Where is my data stored?",
+            "a": "In the EU, encrypted at rest."
+          }
+        ],
+        "logos": [
+          "Acme Labs",
+          "Northwind Studio",
+          "Hooli",
+          "Globex",
+          "Initech"
+        ]
+      }
+    },
+    {
+      "id": 10,
+      "slug": "listings-map",
+      "title": "Property listings with a map",
+      "set": "pro",
+      "max_tokens": 64000,
+      "routes": [
+        "/",
+        "/homes/h-104"
+      ],
+      "checklist": [
+        "Filter bar with type, price range, beds and sort; results count",
+        "Result cards with price, facts, new badge and save toggle",
+        "Interactive MapLibre map with price markers for every home",
+        "Card and marker hover highlight each other; marker click opens a popup",
+        "Filters update list, count and markers together; list/map toggle on phone",
+        "Detail route with gallery, facts, features, energy rating, mini map and validated agent contact form"
+      ],
+      "output": "multi",
+      "prompt": "Haven, a home search site for Lisbon. At `/`, a search page: a filter bar (type, price range, minimum bedrooms, and a sort by newest, price or size), a results count, and the results as cards (photo placeholder drawn with CSS, price, title, beds, baths, area, district, a badge for homes listed in the last 7 days, and a save toggle) beside an interactive map. The map uses `maplibre-gl` (installed, as is `react-map-gl`) with the free map style URL in the data, centred on the given point: this style URL and its tiles are the only network resources the app may load. Every home shows on the map as a price marker; hovering a card highlights its marker and hovering a marker highlights its card; clicking a marker opens a small popup card. Filters update the list, the count and the markers together. On phones, the list and the map are two views with a toggle. At `/homes/h-104` (and every home's own `/homes/[id]`), a detail page: a gallery strip of CSS placeholders, price and key facts, the features, an energy rating, a small map with the home's location, and a contact form for the agent (name, email, message, all required, with inline errors) beside the facts on desktop.\n\nUse this data for the content (define it in the code; you may put it in `lib/data.ts`):\n\n```json\n{\n  \"listings\": {\n    \"site\": \"Haven, a home search site for one city\",\n    \"city\": \"Lisbon\",\n    \"map_style_url\": \"https://basemaps.cartocdn.com/gl/positron-gl-style/style.json\",\n    \"map_center\": [\n      -9.1393,\n      38.7223\n    ],\n    \"currency\": \"EUR\",\n    \"agent\": {\n      \"name\": \"Inês Carvalho\",\n      \"agency\": \"Haven Homes\",\n      \"phone\": \"+351 210 000 123\",\n      \"email\": \"ines@havenhomes.example\"\n    },\n    \"homes\": [\n      {\n        \"id\": \"h-101\",\n        \"title\": \"Sunlit flat with river view\",\n        \"type\": \"Apartment\",\n        \"price\": 485000,\n        \"beds\": 2,\n        \"baths\": 1,\n        \"area_m2\": 84,\n        \"district\": \"Alfama\",\n        \"lat\": 38.7114,\n        \"lng\": -9.1305,\n        \"year\": 1962,\n        \"energy\": \"C\",\n        \"features\": [\n          \"Balcony\",\n          \"River view\",\n          \"Renovated kitchen\"\n        ],\n        \"listed\": \"2026-10-21\"\n      },\n      {\n        \"id\": \"h-102\",\n        \"title\": \"Family house with garden\",\n        \"type\": \"House\",\n        \"price\": 895000,\n        \"beds\": 4,\n        \"baths\": 3,\n        \"area_m2\": 210,\n        \"district\": \"Restelo\",\n        \"lat\": 38.7037,\n        \"lng\": -9.2129,\n        \"year\": 1988,\n        \"energy\": \"B\",\n        \"features\": [\n          \"Garden\",\n          \"Garage\",\n          \"Fireplace\"\n        ],\n        \"listed\": \"2026-10-18\"\n      },\n      {\n        \"id\": \"h-103\",\n        \"title\": \"Compact studio near the metro\",\n        \"type\": \"Studio\",\n        \"price\": 219000,\n        \"beds\": 0,\n        \"baths\": 1,\n        \"area_m2\": 31,\n        \"district\": \"Arroios\",\n        \"lat\": 38.7316,\n        \"lng\": -9.1358,\n        \"year\": 1975,\n        \"energy\": \"D\",\n        \"features\": [\n          \"Metro 2 min\",\n          \"Furnished\"\n        ],\n        \"listed\": \"2026-10-29\"\n      },\n      {\n        \"id\": \"h-104\",\n        \"title\": \"Loft in a converted warehouse\",\n        \"type\": \"Apartment\",\n        \"price\": 640000,\n        \"beds\": 2,\n        \"baths\": 2,\n        \"area_m2\": 120,\n        \"district\": \"Marvila\",\n        \"lat\": 38.7486,\n        \"lng\": -9.1031,\n        \"year\": 2019,\n        \"energy\": \"A\",\n        \"features\": [\n          \"High ceilings\",\n          \"Terrace\",\n          \"Parking\"\n        ],\n        \"listed\": \"2026-10-11\"\n      },\n      {\n        \"id\": \"h-105\",\n        \"title\": \"Classic flat with tiled facade\",\n        \"type\": \"Apartment\",\n        \"price\": 529000,\n        \"beds\": 3,\n        \"baths\": 2,\n        \"area_m2\": 112,\n        \"district\": \"Campo de Ourique\",\n        \"lat\": 38.7181,\n        \"lng\": -9.1662,\n        \"year\": 1940,\n        \"energy\": \"C\",\n        \"features\": [\n          \"Original tiles\",\n          \"Lift\",\n          \"Storage room\"\n        ],\n        \"listed\": \"2026-10-25\"\n      },\n      {\n        \"id\": \"h-106\",\n        \"title\": \"Penthouse with rooftop pool\",\n        \"type\": \"Apartment\",\n        \"price\": 1450000,\n        \"beds\": 3,\n        \"baths\": 3,\n        \"area_m2\": 168,\n        \"district\": \"Avenidas Novas\",\n        \"lat\": 38.7392,\n        \"lng\": -9.1467,\n        \"year\": 2021,\n        \"energy\": \"A\",\n        \"features\": [\n          \"Rooftop pool\",\n          \"Concierge\",\n          \"2 parking spaces\"\n        ],\n        \"listed\": \"2026-10-02\"\n      },\n      {\n        \"id\": \"h-107\",\n        \"title\": \"Townhouse on a quiet lane\",\n        \"type\": \"House\",\n        \"price\": 735000,\n        \"beds\": 3,\n        \"baths\": 2,\n        \"area_m2\": 156,\n        \"district\": \"Graça\",\n        \"lat\": 38.7176,\n        \"lng\": -9.1295,\n        \"year\": 1910,\n        \"energy\": \"D\",\n        \"features\": [\n          \"Patio\",\n          \"Restored beams\"\n        ],\n        \"listed\": \"2026-10-27\"\n      },\n      {\n        \"id\": \"h-108\",\n        \"title\": \"Two-bed flat by the park\",\n        \"type\": \"Apartment\",\n        \"price\": 412000,\n        \"beds\": 2,\n        \"baths\": 1,\n        \"area_m2\": 78,\n        \"district\": \"Alvalade\",\n        \"lat\": 38.753,\n        \"lng\": -9.1445,\n        \"year\": 1958,\n        \"energy\": \"C\",\n        \"features\": [\n          \"Park view\",\n          \"Lift\"\n        ],\n        \"listed\": \"2026-10-30\"\n      },\n      {\n        \"id\": \"h-109\",\n        \"title\": \"Riverside new build\",\n        \"type\": \"Apartment\",\n        \"price\": 780000,\n        \"beds\": 3,\n        \"baths\": 2,\n        \"area_m2\": 131,\n        \"district\": \"Parque das Nações\",\n        \"lat\": 38.7681,\n        \"lng\": -9.0947,\n        \"year\": 2024,\n        \"energy\": \"A+\",\n        \"features\": [\n          \"Gym\",\n          \"Pool\",\n          \"Concierge\"\n        ],\n        \"listed\": \"2026-10-15\"\n      },\n      {\n        \"id\": \"h-110\",\n        \"title\": \"Bright studio with mezzanine\",\n        \"type\": \"Studio\",\n        \"price\": 265000,\n        \"beds\": 1,\n        \"baths\": 1,\n        \"area_m2\": 42,\n        \"district\": \"Bairro Alto\",\n        \"lat\": 38.7127,\n        \"lng\": -9.145,\n        \"year\": 1900,\n        \"energy\": \"E\",\n        \"features\": [\n          \"Mezzanine\",\n          \"Central\"\n        ],\n        \"listed\": \"2026-10-22\"\n      },\n      {\n        \"id\": \"h-111\",\n        \"title\": \"Villa with sea glimpse\",\n        \"type\": \"House\",\n        \"price\": 1290000,\n        \"beds\": 5,\n        \"baths\": 4,\n        \"area_m2\": 290,\n        \"district\": \"Belém\",\n        \"lat\": 38.6979,\n        \"lng\": -9.2063,\n        \"year\": 2001,\n        \"energy\": \"B\",\n        \"features\": [\n          \"Pool\",\n          \"Garden\",\n          \"Sea glimpse\"\n        ],\n        \"listed\": \"2026-09-30\"\n      },\n      {\n        \"id\": \"h-112\",\n        \"title\": \"Renovated flat near the market\",\n        \"type\": \"Apartment\",\n        \"price\": 455000,\n        \"beds\": 2,\n        \"baths\": 2,\n        \"area_m2\": 89,\n        \"district\": \"Cais do Sodré\",\n        \"lat\": 38.7066,\n        \"lng\": -9.1442,\n        \"year\": 1930,\n        \"energy\": \"C\",\n        \"features\": [\n          \"Renovated\",\n          \"Air conditioning\"\n        ],\n        \"listed\": \"2026-10-28\"\n      }\n    ]\n  }\n}\n```"
+    },
+    {
+      "id": 11,
+      "slug": "video-editor",
+      "title": "Video editor with a timeline",
+      "set": "pro",
+      "max_tokens": 64000,
+      "routes": [
+        "/"
+      ],
+      "checklist": [
+        "Top bar with project name, undo/redo and Export",
+        "Media bin with type icons and durations",
+        "Preview with timecode, play/pause and frame stepping",
+        "Timeline with ruler, four labelled tracks with mute/lock, clips at the right positions, draggable playhead",
+        "Zoom control rescales the timeline",
+        "Selecting a clip opens an editable inspector matching the clip kind",
+        "Export dialog with presets, size estimate and progress",
+        "Narrow screens: bin and inspector collapse into tabs or drawers"
+      ],
+      "output": "multi",
+      "prompt": "Cutline, a browser video editor, editing the project in the data. At `/`, a full-window editor: a top bar with the project name, undo and redo, and an Export button; a media bin listing the media with type icons and durations; a preview area showing the frame at the playhead (draw it as the clip's colour with its title text and a timecode overlay; there is no real video) with play/pause, previous/next frame and a timecode readout; a multi-track timeline below with a time ruler, the four tracks (video, titles, music, voice-over) as labelled rows with mute and lock buttons, clips drawn at their start and length, a draggable playhead, and a zoom control that rescales the ruler and clips. Clicking a clip selects it and shows an inspector panel with its name, start, length, and either opacity and scale (video), text and font size (titles) or volume (audio), all editable and reflected in the timeline. Playing advances the playhead in real time. Export opens a dialog with the presets, an estimated size, and a progress bar once started. On narrow screens the media bin and inspector collapse into tabs or drawers so the preview and timeline stay usable.\n\nUse this data for the content (define it in the code; you may put it in `lib/data.ts`):\n\n```json\n{\n  \"video\": {\n    \"app\": \"Cutline, a browser video editor\",\n    \"project\": {\n      \"name\": \"Spring launch teaser\",\n      \"fps\": 30,\n      \"duration_s\": 42,\n      \"resolution\": \"1920x1080\"\n    },\n    \"media\": [\n      {\n        \"id\": \"md-1\",\n        \"name\": \"Intro drone shot.mp4\",\n        \"kind\": \"video\",\n        \"duration_s\": 8,\n        \"color\": \"#3B82F6\"\n      },\n      {\n        \"id\": \"md-2\",\n        \"name\": \"Product close-up.mp4\",\n        \"kind\": \"video\",\n        \"duration_s\": 12,\n        \"color\": \"#8B5CF6\"\n      },\n      {\n        \"id\": \"md-3\",\n        \"name\": \"Team at work.mp4\",\n        \"kind\": \"video\",\n        \"duration_s\": 10,\n        \"color\": \"#10B981\"\n      },\n      {\n        \"id\": \"md-4\",\n        \"name\": \"Logo reveal.mov\",\n        \"kind\": \"video\",\n        \"duration_s\": 5,\n        \"color\": \"#F59E0B\"\n      },\n      {\n        \"id\": \"md-5\",\n        \"name\": \"Upbeat theme.wav\",\n        \"kind\": \"audio\",\n        \"duration_s\": 42\n      },\n      {\n        \"id\": \"md-6\",\n        \"name\": \"Voice-over take 3.wav\",\n        \"kind\": \"audio\",\n        \"duration_s\": 30\n      }\n    ],\n    \"tracks\": [\n      {\n        \"id\": \"v1\",\n        \"name\": \"Video 1\",\n        \"kind\": \"video\",\n        \"clips\": [\n          {\n            \"id\": \"c-1\",\n            \"media\": \"md-1\",\n            \"start_s\": 0,\n            \"in_s\": 0,\n            \"length_s\": 8\n          },\n          {\n            \"id\": \"c-2\",\n            \"media\": \"md-2\",\n            \"start_s\": 8,\n            \"in_s\": 1,\n            \"length_s\": 11\n          },\n          {\n            \"id\": \"c-3\",\n            \"media\": \"md-3\",\n            \"start_s\": 19,\n            \"in_s\": 0,\n            \"length_s\": 10\n          },\n          {\n            \"id\": \"c-4\",\n            \"media\": \"md-2\",\n            \"start_s\": 29,\n            \"in_s\": 4,\n            \"length_s\": 8\n          },\n          {\n            \"id\": \"c-5\",\n            \"media\": \"md-4\",\n            \"start_s\": 37,\n            \"in_s\": 0,\n            \"length_s\": 5\n          }\n        ]\n      },\n      {\n        \"id\": \"t1\",\n        \"name\": \"Titles\",\n        \"kind\": \"title\",\n        \"clips\": [\n          {\n            \"id\": \"c-6\",\n            \"text\": \"Spring is here\",\n            \"start_s\": 1,\n            \"length_s\": 4\n          },\n          {\n            \"id\": \"c-7\",\n            \"text\": \"Built by a team of 12\",\n            \"start_s\": 20,\n            \"length_s\": 5\n          },\n          {\n            \"id\": \"c-8\",\n            \"text\": \"Available May 1\",\n            \"start_s\": 37,\n            \"length_s\": 5\n          }\n        ]\n      },\n      {\n        \"id\": \"a1\",\n        \"name\": \"Music\",\n        \"kind\": \"audio\",\n        \"clips\": [\n          {\n            \"id\": \"c-9\",\n            \"media\": \"md-5\",\n            \"start_s\": 0,\n            \"in_s\": 0,\n            \"length_s\": 42,\n            \"volume_db\": -6\n          }\n        ]\n      },\n      {\n        \"id\": \"a2\",\n        \"name\": \"Voice-over\",\n        \"kind\": \"audio\",\n        \"clips\": [\n          {\n            \"id\": \"c-10\",\n            \"media\": \"md-6\",\n            \"start_s\": 6,\n            \"in_s\": 0,\n            \"length_s\": 28,\n            \"volume_db\": 0\n          }\n        ]\n      }\n    ],\n    \"export_presets\": [\n      {\n        \"name\": \"1080p MP4 (H.264)\",\n        \"size_mb_est\": 64\n      },\n      {\n        \"name\": \"4K MP4 (H.265)\",\n        \"size_mb_est\": 180\n      },\n      {\n        \"name\": \"Vertical 1080x1920 for social\",\n        \"size_mb_est\": 58\n      },\n      {\n        \"name\": \"GIF preview, 480p\",\n        \"size_mb_est\": 22\n      }\n    ]\n  }\n}\n```"
+    },
+    {
+      "id": 12,
+      "slug": "assistant-workspace",
+      "title": "AI assistant workspace",
+      "set": "pro",
+      "max_tokens": 64000,
+      "routes": [
+        "/",
+        "/c/th-3",
+        "/settings"
+      ],
+      "checklist": [
+        "Sidebar with New chat, thread search, grouped threads and user menu; drawer on phone",
+        "New-chat screen with greeting and suggestion chips",
+        "Conversation with code block (copy button), result table and per-message actions",
+        "Composer: growing text area, attachments as removable chips, model picker, send disabled when empty",
+        "Sending shows a simulated streamed reply with a stop button",
+        "Settings: default model, custom instructions, theme, export and delete-all with confirmation"
+      ],
+      "output": "multi",
+      "prompt": "Orbit, an AI assistant workspace for a product team. A shared layout has a sidebar with a New chat button, a thread search, the threads grouped by when they were updated, and the user menu at the bottom; on phones it becomes a drawer. At `/`, a new-chat screen: a greeting, the suggestion chips, and the composer. At `/c/th-3`, the conversation from the data: user and assistant messages, the assistant's SQL rendered as a code block with a copy button, its result as a table, and actions under each assistant message (copy, retry, good/bad). The composer, at the bottom of both screens, is a growing text area with an attach button that adds file chips (removable), a model picker with the three models, and a send button that is disabled while empty; sending appends the user's message and a simulated streamed assistant reply with a stop button. At `/settings`, a settings page with the default model, a custom instructions text area, a theme choice, and data controls (export chats, delete all chats behind a confirmation dialog).\n\nUse this data for the content (define it in the code; you may put it in `lib/data.ts`):\n\n```json\n{\n  \"assistant\": {\n    \"app\": \"Orbit, an AI assistant workspace for a product team\",\n    \"user\": {\n      \"name\": \"Maya Okafor\",\n      \"email\": \"maya@acmelabs.io\"\n    },\n    \"models\": [\n      \"Orbit Fast\",\n      \"Orbit Pro\",\n      \"Orbit Reasoning\"\n    ],\n    \"threads\": [\n      {\n        \"id\": \"th-1\",\n        \"title\": \"Q3 churn analysis\",\n        \"updated\": \"Today\"\n      },\n      {\n        \"id\": \"th-2\",\n        \"title\": \"Draft release notes for 4.2\",\n        \"updated\": \"Today\"\n      },\n      {\n        \"id\": \"th-3\",\n        \"title\": \"SQL for weekly active teams\",\n        \"updated\": \"Yesterday\"\n      },\n      {\n        \"id\": \"th-4\",\n        \"title\": \"Interview questions, design lead\",\n        \"updated\": \"Yesterday\"\n      },\n      {\n        \"id\": \"th-5\",\n        \"title\": \"Summarise the pricing survey\",\n        \"updated\": \"Oct 28\"\n      },\n      {\n        \"id\": \"th-6\",\n        \"title\": \"Rewrite onboarding emails\",\n        \"updated\": \"Oct 24\"\n      }\n    ],\n    \"conversation\": {\n      \"thread\": \"th-3\",\n      \"messages\": [\n        {\n          \"role\": \"user\",\n          \"text\": \"Write a Postgres query for weekly active teams over the last 8 weeks. A team is active if any member created an event that week.\"\n        },\n        {\n          \"role\": \"assistant\",\n          \"text\": \"Here is a query that buckets events by ISO week and counts distinct teams:\",\n          \"code\": {\n            \"lang\": \"sql\",\n            \"source\": \"SELECT date_trunc('week', e.created_at) AS week,\\n       count(DISTINCT m.team_id)        AS active_teams\\nFROM events e\\nJOIN members m ON m.user_id = e.user_id\\nWHERE e.created_at >= now() - interval '8 weeks'\\nGROUP BY 1\\nORDER BY 1;\"\n          },\n          \"after\": \"On last week's data it returns:\",\n          \"table\": {\n            \"columns\": [\n              \"week\",\n              \"active_teams\"\n            ],\n            \"rows\": [\n              [\n                \"2026-09-07\",\n                \"412\"\n              ],\n              [\n                \"2026-09-14\",\n                \"431\"\n              ],\n              [\n                \"2026-09-21\",\n                \"428\"\n              ],\n              [\n                \"2026-09-28\",\n                \"455\"\n              ],\n              [\n                \"2026-10-05\",\n                \"470\"\n              ],\n              [\n                \"2026-10-12\",\n                \"466\"\n              ],\n              [\n                \"2026-10-19\",\n                \"489\"\n              ],\n              [\n                \"2026-10-26\",\n                \"501\"\n              ]\n            ]\n          }\n        },\n        {\n          \"role\": \"user\",\n          \"text\": \"Can you add the week-over-week change as a percentage?\"\n        },\n        {\n          \"role\": \"assistant\",\n          \"text\": \"Yes: use the lag window function over the weekly counts. Weekly active teams grew 21.6% over the 8 weeks, with one small dip in the week of 12 October.\"\n        }\n      ]\n    },\n    \"suggestions\": [\n      \"Explain this query\",\n      \"Turn the table into a chart\",\n      \"Write a Slack update\"\n    ]\n  }\n}\n```"
     }
   ],
   "interactions": {
@@ -321,6 +500,185 @@
         }
       ],
       "describe": "Presses Next on step 1 with every field empty."
+    },
+    "9": {
+      "steps": [
+        {
+          "action": "click",
+          "target": {
+            "role": "button",
+            "name": "theme|dark|light|mode"
+          },
+          "fallback": {
+            "role": "switch",
+            "name": "theme|dark|light|mode"
+          }
+        }
+      ],
+      "describe": "Clicks the header's theme toggle."
+    },
+    "10": {
+      "steps": [
+        {
+          "action": "hover",
+          "target": {
+            "selector": "[data-home-id='h-104'], a[href='/homes/h-104']"
+          },
+          "fallback": {
+            "selector": "text=Loft in a converted warehouse"
+          }
+        }
+      ],
+      "describe": "Hovers the card of the warehouse loft (h-104)."
+    },
+    "11": {
+      "steps": [
+        {
+          "action": "click",
+          "target": {
+            "selector": "text=Product close-up"
+          },
+          "fallback": {
+            "selector": "[data-clip-id='c-2']"
+          }
+        }
+      ],
+      "describe": "Clicks the 'Product close-up' clip on the timeline."
+    },
+    "12": {
+      "route": "/c/th-3",
+      "steps": [
+        {
+          "action": "type",
+          "target": {
+            "role": "textbox",
+            "name": "message|ask|prompt"
+          },
+          "text": "Now plot it as a line chart"
+        },
+        {
+          "action": "press",
+          "key": "Enter",
+          "wait_ms": 1500
+        }
+      ],
+      "describe": "Types a follow-up in the conversation and presses Enter."
     }
+  },
+  "views": {
+    "9": [
+      {
+        "name": "pricing-yearly",
+        "route": "/pricing",
+        "steps": [
+          {
+            "action": "click",
+            "target": {
+              "role": "switch",
+              "name": "year|annual"
+            },
+            "fallback": {
+              "selector": "text=/year|annual/i"
+            }
+          }
+        ]
+      }
+    ],
+    "10": [
+      {
+        "name": "filters",
+        "route": "/",
+        "steps": [
+          {
+            "action": "click",
+            "target": {
+              "role": "combobox",
+              "name": "type"
+            },
+            "fallback": {
+              "role": "button",
+              "name": "type|filter"
+            }
+          }
+        ]
+      },
+      {
+        "name": "contact-errors",
+        "route": "/homes/h-104",
+        "steps": [
+          {
+            "action": "click",
+            "target": {
+              "role": "button",
+              "name": "send|contact|message"
+            }
+          }
+        ]
+      }
+    ],
+    "11": [
+      {
+        "name": "export-dialog",
+        "route": "/",
+        "steps": [
+          {
+            "action": "click",
+            "target": {
+              "role": "button",
+              "name": "^\\s*export"
+            }
+          }
+        ]
+      },
+      {
+        "name": "zoomed",
+        "route": "/",
+        "steps": [
+          {
+            "action": "click",
+            "target": {
+              "role": "button",
+              "name": "zoom in|\\+"
+            },
+            "fallback": {
+              "role": "slider",
+              "name": "zoom"
+            }
+          }
+        ]
+      }
+    ],
+    "12": [
+      {
+        "name": "model-picker",
+        "route": "/",
+        "steps": [
+          {
+            "action": "click",
+            "target": {
+              "role": "combobox",
+              "name": "model"
+            },
+            "fallback": {
+              "role": "button",
+              "name": "orbit fast|model"
+            }
+          }
+        ]
+      },
+      {
+        "name": "delete-confirm",
+        "route": "/settings",
+        "steps": [
+          {
+            "action": "click",
+            "target": {
+              "role": "button",
+              "name": "delete all"
+            }
+          }
+        ]
+      }
+    ]
   }
 }

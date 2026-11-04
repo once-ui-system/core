@@ -55,13 +55,15 @@ const NavGroup = ({
   selected = false,
   ...row
 }: NavGroupProps) => {
-  const { variant, rail, sizes } = useNavStyle();
+  const { variant, rail, sizes, collapsed } = useNavStyle();
   const emphasis = variant !== "solid";
-  const [isOpen, setOpen] = useControllableState({
+  const [openState, setOpen] = useControllableState({
     value: open,
     defaultValue: defaultOpen,
     onChange: onOpenChange,
   });
+  // A collapsed nav shows the header's icon alone; the group reopens with the labels.
+  const isOpen = openState && !collapsed;
 
   const rootRef = useRef<HTMLDivElement>(null);
   useImperativeHandle(ref, () => rootRef.current as HTMLDivElement);
@@ -103,11 +105,14 @@ const NavGroup = ({
             onBackground={emphasis ? (selected ? "neutral-strong" : "neutral-weak") : undefined}
           >
             {icon && <Icon name={icon} onBackground="neutral-weak" size="xs" />}
-            {label}
+            <Row opacity={collapsed ? 0 : 100} transition="micro-medium">
+              {label}
+            </Row>
           </Row>
         }
       >
-        <Row fillWidth gap="8" paddingX="12">
+        {/* The rail runs down the centre of the header's icon. */}
+        <Row fillWidth gap="8" paddingLeft={sizes.group.rail} paddingRight="12">
           {/* Without the rail the children keep the indent, so switching it
               off never shifts a label. */}
           {rail ? (

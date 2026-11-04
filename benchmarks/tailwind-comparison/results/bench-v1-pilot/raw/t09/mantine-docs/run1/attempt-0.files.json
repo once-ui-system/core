@@ -1,0 +1,31 @@
+{
+  "files": [
+    "app/theme.ts",
+    "app/layout.tsx",
+    "lib/data.ts",
+    "components/SiteShell.tsx",
+    "components/SiteShell.module.css",
+    "components/ThemeToggle.tsx",
+    "components/ThemeToggle.module.css",
+    "components/SiteHeader.tsx",
+    "components/SiteHeader.module.css",
+    "components/SiteFooter.tsx",
+    "components/SiteFooter.module.css",
+    "components/Hero.tsx",
+    "components/Hero.module.css",
+    "components/CustomerLogos.tsx",
+    "components/CustomerLogos.module.css",
+    "components/FeatureSection.tsx",
+    "components/FeatureSection.module.css",
+    "components/Features.tsx",
+    "app/page.tsx",
+    "app/pricing/page.tsx",
+    "app/pricing/pricing.module.css",
+    "components/PricingPlans.tsx",
+    "components/PricingPlans.module.css",
+    "components/PlanComparison.tsx",
+    "components/PlanComparison.module.css",
+    "components/FaqAccordion.tsx"
+  ],
+  "rejected": []
+}

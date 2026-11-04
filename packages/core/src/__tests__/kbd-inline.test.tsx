@@ -30,7 +30,7 @@ describe("Kbd", () => {
 
   it("takes the leaf props, not the layout ones (3.0)", () => {
     const { container } = render(<Kbd marginLeft="8">Esc</Kbd>, { wrapper: wrap });
-    expect((container.querySelector("kbd") as HTMLElement).className).toContain("ml-8");
+    expect((container.querySelector("kbd") as HTMLElement).className).toContain("margin-left-8");
     // @ts-expect-error — `inline` is a layout prop; a Kbd is always inline.
     expect(<Kbd inline={false}>Esc</Kbd>).toBeDefined();
   });

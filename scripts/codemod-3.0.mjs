@@ -43,6 +43,7 @@ import { dependencyReports, nearestPackage } from "./codemod-3.0-deps.mjs";
 import { ONE_X_MESSAGE, detectOneX } from "./codemod-3.0-detect.mjs";
 import { transformJsonStrings } from "./codemod-3.0-json.mjs";
 import { transformPartNames } from "./codemod-3.0-part-names.mjs";
+import { transformClassNames, usesTailwind } from "./codemod-3.0-class-names.mjs";
 
 /** component → { oldProp: newProp } */
 const TRANSFORMS = {
@@ -2267,7 +2268,7 @@ function applyEdits(src, edits, hits) {
  * that moved to a package (RevealFx → fx, StylePanel → blocks) is imported
  * from it by name, since the namespace no longer holds it.
  */
-export function transform(src, { file = null, devLogger = null, strings = true } = {}) {
+export function transform(src, { file = null, devLogger = null, strings = true, tailwind = false } = {}) {
   const namespaces = [
     ...src.matchAll(/(?<![\w$.])import\s+\*\s+as\s+([\w$]+)\s+from\s*(["'])@once-ui-system\/core\2/g),
   ].map((m) => m[1]);
@@ -2280,14 +2281,14 @@ export function transform(src, { file = null, devLogger = null, strings = true }
       return `${open}${ns}__${name}`;
     });
   }
-  if (!used.size) return transformFile(src, { file, devLogger, strings });
+  if (!used.size) return transformFile(src, { file, devLogger, strings, tailwind });
   // After the last import, so a pass that adds a name to "the" core import finds the file's own first.
   const imports = [...text.matchAll(/^import[^;]*?from\s*["'][^"']+["'];?[ \t]*$/gm)];
   const last = imports.at(-1);
   const at = last ? last.index + last[0].length : 0;
   const synthetic = `\nimport { ${[...used].map(([local, { name }]) => `${name} as ${local}`).join(", ")} } from "@once-ui-system/core";`;
   text = text.slice(0, at) + synthetic + text.slice(at);
-  const result = transformFile(text, { file, devLogger, strings });
+  const result = transformFile(text, { file, devLogger, strings, tailwind });
   let out = result.out;
   const bound = new Set([...importBindings(out).keys()]);
   const extra = [];
@@ -2331,7 +2332,7 @@ export function transform(src, { file = null, devLogger = null, strings = true }
   return { out, hits, warnings };
 }
 
-function transformFile(src, { file = null, devLogger = null, strings = true } = {}) {
+function transformFile(src, { file = null, devLogger = null, strings = true, tailwind = false } = {}) {
   const hits = [];
   // Reports as { text, line }: a line is in the text the pass read, and is
   // carried on through each later pass's rewrite to the file written.
@@ -2372,6 +2373,9 @@ function transformFile(src, { file = null, devLogger = null, strings = true } = 
   // B2, F9: import sources (./codemod-3.0-imports.mjs). Last, so a name the
   // merges produced (EmojiPickerDropdown → EmojiPicker) moves to its subpath.
   run(transformImports(out), out);
+  // G6: spacing, offset and grid-column classes written by hand
+  // (./codemod-3.0-class-names.mjs); reported instead in a Tailwind project.
+  run(transformClassNames(out, { tailwind }), out);
   // Strings that generate Once UI source: reported, never rewritten.
   if (strings && !/\.mdx$/.test(file ?? "")) run(reportCodeStrings(out), out);
   const warnings = reports.map((r) => (r.line === null ? r.text : `${r.text} (line ${r.line})`));
@@ -2572,6 +2576,7 @@ if (invokedDirectly) {
     return !/@once-ui-system\/core/.test(text) && /\bexport\s+const\s+dev\s*[:=]|\bexport\s*\{[^}]*\bdev\b[^}]*\}(?!\s*from)/.test(text);
   });
   const devLogger = loggers.length === 1 ? loggers[0] : null;
+  const tailwind = usesTailwind(dir);
 
   let total = 0;
   let touched = 0;
@@ -2600,7 +2605,7 @@ if (invokedDirectly) {
   };
   for (const f of files) {
     const src = fs.readFileSync(f, "utf8");
-    const { out, hits, warnings } = transform(src, { file: f, devLogger });
+    const { out, hits, warnings } = transform(src, { file: f, devLogger, tailwind });
     for (const name of packagesAdded(src, out)) install.set(name, [...(install.get(name) ?? []), f]);
     if (out !== src) rewritten.push({ src, out });
     if (!hits.length && !warnings.length) continue;

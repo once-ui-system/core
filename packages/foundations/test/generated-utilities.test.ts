@@ -1,28 +1,28 @@
 import { execFileSync } from "node:child_process";
-import { readFileSync, readdirSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
+  ALIGN_ALIGNMENTS,
   BREAKPOINTS,
   BREAKPOINTS_CASCADE,
-  ALIGN_ALIGNMENTS,
+  FLEX_DIRECTIONS,
   FONT_TYPES,
   GRID_COLUMNS,
   GRID_ROWS,
+  JUSTIFY_ALIGNMENTS,
+  MARGIN_AUTO_PREFIXES,
+  OFFSET_SIDES,
+  OFFSET_TOKENS,
+  offsetValue,
+  POSITION_VALUES,
   RADIUS_CORNERS,
   RADIUS_SIZES,
   SCHEMES,
-  WEIGHTS,
-  JUSTIFY_ALIGNMENTS,
-  MARGIN_AUTO_PREFIXES,
-  FLEX_DIRECTIONS,
-  OFFSET_SIDES,
-  OFFSET_TOKENS,
-  POSITION_VALUES,
   SPACING_FAMILIES,
   SPACING_TOKENS,
-  offsetValue,
   spacingVar,
+  WEIGHTS,
 } from "../scripts/utilities.spec.mjs";
 
 const ROOT = join(__dirname, "..");
@@ -67,11 +67,19 @@ describe("generated utilities", () => {
       expect(css).toContain(`.${prefix}-auto {`);
       for (const { key } of BREAKPOINTS_CASCADE) expect(css).toContain(`.${key}-${prefix}-auto {`);
     }
-    expect(MARGIN_AUTO_PREFIXES.map((f) => f.prefix)).toEqual(["m", "mx", "my", "mt", "mr", "mb", "ml"]);
-    expect(css).toMatch(/\.ml-auto \{\n {2}margin-left: auto;\n\}/);
-    expect(css).not.toMatch(/\.(p[xytrbl]?|g)-auto \{/);
+    expect(MARGIN_AUTO_PREFIXES.map((f) => f.prefix)).toEqual([
+      "margin",
+      "margin-x",
+      "margin-y",
+      "margin-top",
+      "margin-right",
+      "margin-bottom",
+      "margin-left",
+    ]);
+    expect(css).toMatch(/\.margin-left-auto \{\n {2}margin-left: auto;\n\}/);
+    expect(css).not.toMatch(/\.(padding(-[xytrbl]\w*)?|g)-auto \{/);
     // A side still follows the shorthand, so `margin="16" marginLeft="auto"` keeps the auto.
-    expect(css.indexOf(".m-auto {")).toBeLessThan(css.indexOf(".ml-16 {"));
+    expect(css.indexOf(".margin-auto {")).toBeLessThan(css.indexOf(".margin-left-16 {"));
   });
 
   it("carries every token the layout layer defines", () => {
@@ -168,7 +176,7 @@ describe("generated utilities", () => {
     const css = readFileSync(join(ROOT, "scss/styles/position.generated.scss"), "utf8");
     const expected = POSITION_VALUES.length + OFFSET_SIDES.length * OFFSET_TOKENS.length;
     for (const { key } of BREAKPOINTS) {
-      const found = (css.match(new RegExp(`\\.${key}-(position|top|left|bottom|right)-`, "g")) || []).length;
+      const found = (css.match(new RegExp(`\\.${key}-(position|offset)-`, "g")) || []).length;
       expect(found, `breakpoint ${key}`).toBe(expected);
     }
   });
@@ -229,15 +237,16 @@ describe("generated utilities", () => {
   it("emits align-items: baseline at the base and at every breakpoint", () => {
     const css = readFileSync(join(ROOT, "scss/styles/flex.generated.scss"), "utf8");
     expect(css).toMatch(/\.align-baseline \{\s*align-items: baseline;/);
-    for (const key of ["xl", "l", "m", "s", "xs"]) expect(css).toContain(`.${key}-align-baseline {`);
+    for (const key of ["xl", "l", "m", "s", "xs"])
+      expect(css).toContain(`.${key}-align-baseline {`);
   });
 
   it("emits auto margins, and no auto padding or gap", () => {
     const css = readFileSync(join(ROOT, "scss/styles/spacing.generated.scss"), "utf8");
-    expect(css).toMatch(/\.ml-auto \{\s*margin-left: auto;/);
-    expect(css).toMatch(/\.mx-auto \{\s*margin-left: auto;\s*margin-right: auto;/);
-    expect(css).toContain(".s-mt-auto {");
-    expect(css).not.toMatch(/\.(\w+-)?(p|px|py|pt|pr|pb|pl|g)-auto \{/);
+    expect(css).toMatch(/\.margin-left-auto \{\s*margin-left: auto;/);
+    expect(css).toMatch(/\.margin-x-auto \{\s*margin-left: auto;\s*margin-right: auto;/);
+    expect(css).toContain(".s-margin-top-auto {");
+    expect(css).not.toMatch(/\.(\w+-)?(padding|padding-[a-z]+|g)-auto \{/);
   });
 
   it("resets lists and buttons at zero specificity", () => {
@@ -264,7 +273,8 @@ describe("generated utilities", () => {
     for (const scheme of SCHEMES) {
       for (const weight of WEIGHTS) {
         if (!css.includes(`.${scheme}-border-${weight} {`)) missing.push(`${scheme}-${weight}`);
-        if (!css.includes(`.${scheme}-border-alpha-${weight} {`)) missing.push(`${scheme}-alpha-${weight}`);
+        if (!css.includes(`.${scheme}-border-alpha-${weight} {`))
+          missing.push(`${scheme}-alpha-${weight}`);
       }
     }
     expect(missing).toEqual([]);

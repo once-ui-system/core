@@ -9,6 +9,7 @@
   "icon": "LogoSource",
   "wordmark": "LogoSource",
   "text": "string",
+  "monogram": "boolean | string",
   "href": "string",
   "showIn": "\"dark\" | \"light\"",
   "brand": "{ copy?: boolean; url?: string }"

@@ -1,15 +1,22 @@
 import { Accordion, Column, Heading, Icon, Line, Row, SmartLink, Text } from "@once-ui-system/core";
 import React, { type ReactNode } from "react";
-import { schema } from "@/resources";
 
 interface Faq2Props
   extends Omit<React.ComponentProps<typeof Column>, "title" | "description" | "content"> {
   title?: ReactNode;
   description?: ReactNode;
   content: Array<{ title: ReactNode; content: ReactNode }>;
+  /** Where the "still have questions" line points. */
+  email?: string;
 }
 
-export const Faq2: React.FC<Faq2Props> = ({ title, description, content, ...flex }) => {
+export const Faq2: React.FC<Faq2Props> = ({
+  title,
+  description,
+  content,
+  email = "support@once-ui.com",
+  ...flex
+}) => {
   return (
     <Column fillWidth borderTop="neutral-medium" borderBottom="neutral-medium" {...flex}>
       <Row
@@ -74,7 +81,7 @@ export const Faq2: React.FC<Faq2Props> = ({ title, description, content, ...flex
               onBackground="neutral-medium"
             >
               Got more questions? Email us at{" "}
-              <SmartLink href={`mailto:${schema.email}`}>{schema.email}</SmartLink>
+              <SmartLink href={`mailto:${email}`}>{email}</SmartLink>
             </Text>
           </Row>
         </Column>

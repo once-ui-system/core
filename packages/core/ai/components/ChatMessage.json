@@ -15,11 +15,13 @@
   "name": "ReactNode",
   "avatarProps": "AvatarProps",
   "time": "ChatTime",
+  "timeFormat": "ChatTimeFormat = clock",
   "status": "ChatMessageStatus",
   "statusLabels": "Partial<Record<ChatMessageStatus, string>>",
   "onRetry": "() => void",
   "retryLabel": "string = Retry",
   "grouped": "boolean = false",
+  "stack": "\"start\" | \"middle\" | \"end\"",
   "variant": "\"bubble\" | \"plain\" = bubble",
   "attachments": "ReactNode",
   "footer": "ReactNode",
@@ -139,11 +141,12 @@
    "bottomLeftRadius": "RadiusSize",
    "bottomRightRadius": "RadiusSize",
    "shadow": "ShadowSize",
+   "emphasis": "boolean | \"edge\" | \"glow\" | \"aura\"",
    "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | CursorPresetValue | ReactNode",
    "blendMode": "BlendMode",
    "blur": "BlurSize | number | CSSUnit",
    "backdropBlur": "BlurSize | number | CSSUnit",
-   "theme": "\"light\" | \"dark\"",
+   "theme": "\"light\" | \"dark\" | \"invert\"",
    "themeBorder": "BorderStyle",
    "themeSolid": "SolidType",
    "themeSurface": "SurfaceStyle",
@@ -184,6 +187,10 @@
    "ReactPortal",
    "Promise<AwaitedReactNode>",
    "Date"
+  ],
+  "ChatTimeFormat": [
+   "relative",
+   "clock"
   ]
  }
 }
