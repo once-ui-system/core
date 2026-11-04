@@ -1,0 +1,14 @@
+/* Lumen typography and shape, set once at the token level.
+   System font stacks only: nothing is fetched from the network. */
+:root {
+  --font-heading: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  --font-body: ui-sans-serif, system-ui, sans-serif;
+  --font-label: ui-sans-serif, system-ui, sans-serif;
+  --font-code: ui-monospace, monospace;
+
+  /* 16px corners on buttons, inputs, cards and menus. */
+  --radius-s: 0.75rem;
+  --radius-m: 1rem;
+  --radius-l: 1rem;
+  --radius-xl: 1.25rem;
+}

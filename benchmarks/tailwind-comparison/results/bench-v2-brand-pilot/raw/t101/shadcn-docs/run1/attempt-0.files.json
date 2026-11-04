@@ -1,0 +1,16 @@
+{
+  "files": [
+    "components/app-shell.tsx",
+    "components/page-header.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/projects/layout.tsx",
+    "app/projects/page.tsx",
+    "app/settings/layout.tsx",
+    "components/settings-form.tsx",
+    "app/settings/page.tsx",
+    "app/reports/layout.tsx",
+    "app/reports/page.tsx"
+  ],
+  "rejected": []
+}
