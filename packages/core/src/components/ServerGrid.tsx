@@ -31,7 +31,7 @@ export type ServerGridProps = GridLayoutProps &
  *
  * `Grid` used to send any breakpoint prop to the client component, which needs
  * a `LayoutProvider` and lays the grid out only after an effect. The classes
- * were already there — `.m-columns-2` and its siblings are generated for every
+ * were already there — `.m-grid-columns-2` and its siblings are generated for every
  * breakpoint, and `ClientGrid` relied on them itself — so a breakpoint object
  * whose values all have one renders here now, under the same rule `Flex` uses.
  * This writes the same families `ServerFlex` does for its breakpoints, `xl`
@@ -49,7 +49,7 @@ function breakpointClasses(
     props.hide === true && `${breakpoint}-grid-hide`,
     // A show class only undoes a wider hide, so it is emitted only under one.
     props.hide === false && hiddenAbove && `${breakpoint}-grid-show`,
-    props.columns && `${breakpoint}-columns-${props.columns}`,
+    props.columns && `${breakpoint}-grid-columns-${props.columns}`,
     props.rows && `${breakpoint}-rows-${props.rows}`,
     props.overflow && `${breakpoint}-overflow-${props.overflow}`,
     props.overflowX && `${breakpoint}-overflow-x-${props.overflowX}`,
@@ -221,7 +221,7 @@ const ServerGrid = ({
     height === BELOW_HEADER && "height-below-header",
     minHeight === BELOW_HEADER && "min-height-below-header",
     maxHeight === BELOW_HEADER && "max-height-below-header",
-    minColumnWidthValue ? "columns-auto-fit" : columns && `columns-${columns}`,
+    minColumnWidthValue ? "grid-columns-auto-fit" : columns && `grid-columns-${columns}`,
     // Taken out of the props here, so it never reaches the DOM as a `rows`
     // attribute, which is where it used to end up.
     rows && `rows-${rows}`,
@@ -230,25 +230,25 @@ const ServerGrid = ({
     overflowY && `overflow-y-${overflowY}`,
     (scrollsOn(overflow) || scrollsOn(overflowX) || scrollsOn(overflowY)) &&
       `scrollbar-${scrollbar}`,
-    spacingClass("p", padding),
-    spacingClass("pl", paddingLeft),
-    spacingClass("pr", paddingRight),
-    spacingClass("pt", paddingTop),
-    spacingClass("pb", paddingBottom),
-    spacingClass("px", paddingX),
-    spacingClass("py", paddingY),
-    spacingClass("m", margin),
-    spacingClass("ml", marginLeft),
-    spacingClass("mr", marginRight),
-    spacingClass("mt", marginTop),
-    spacingClass("mb", marginBottom),
-    spacingClass("mx", marginX),
-    spacingClass("my", marginY),
+    spacingClass("padding", padding),
+    spacingClass("padding-left", paddingLeft),
+    spacingClass("padding-right", paddingRight),
+    spacingClass("padding-top", paddingTop),
+    spacingClass("padding-bottom", paddingBottom),
+    spacingClass("padding-x", paddingX),
+    spacingClass("padding-y", paddingY),
+    spacingClass("margin", margin),
+    spacingClass("margin-left", marginLeft),
+    spacingClass("margin-right", marginRight),
+    spacingClass("margin-top", marginTop),
+    spacingClass("margin-bottom", marginBottom),
+    spacingClass("margin-x", marginX),
+    spacingClass("margin-y", marginY),
     spacingClass("g", gap),
-    typeof top === "string" && !isCSSUnit(top) && top && `top-${top}`,
-    typeof right === "string" && !isCSSUnit(right) && right && `right-${right}`,
-    typeof bottom === "string" && !isCSSUnit(bottom) && bottom && `bottom-${bottom}`,
-    typeof left === "string" && !isCSSUnit(left) && left && `left-${left}`,
+    typeof top === "string" && !isCSSUnit(top) && top && `offset-top-${top}`,
+    typeof right === "string" && !isCSSUnit(right) && right && `offset-right-${right}`,
+    typeof bottom === "string" && !isCSSUnit(bottom) && bottom && `offset-bottom-${bottom}`,
+    typeof left === "string" && !isCSSUnit(left) && left && `offset-left-${left}`,
     generateDynamicClass("background", background),
     generateDynamicClass("solid", solid),
     // Handle border color: boolean uses default-border, string uses dynamic class

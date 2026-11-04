@@ -419,6 +419,7 @@
     },
     "./css/styles.css": "./dist/css/styles.css",
     "./css/tokens.css": "./dist/css/tokens.css",
+    "./tailwind.css": "./dist/css/tailwind.css",
     "./tokens.json": "./dist/tokens.json",
     "./config": {
       "types": "./dist/config.d.ts",
@@ -487,7 +488,7 @@
     "format": "biome format --write .",
     "format:check": "biome format .",
     "test": "vitest run",
-    "check:package": "publint && attw --pack . --profile esm-only --exclude-entrypoints ./css/styles.css ./css/tokens.css ./AGENTS.md ./ai/rules.compact.md ./ai/rules.md ./ai/recipes.md ./ai/layouts.md",
+    "check:package": "publint && attw --pack . --profile esm-only --exclude-entrypoints ./css/styles.css ./css/tokens.css ./tailwind.css ./AGENTS.md ./ai/rules.compact.md ./ai/rules.md ./ai/recipes.md ./ai/layouts.md",
     "test:watch": "vitest",
     "check:size": "node scripts/bundle-size.mjs",
     "typecheck": "tsc --noEmit",

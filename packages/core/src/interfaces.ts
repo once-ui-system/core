@@ -60,7 +60,7 @@ export interface GridProps {
    * number is on the token scale, a string is a spacing token or a CSS length
    * (`"16rem"`, `"40%"`, `calc(…)`).
    *
-   * Renders on the server: a `.columns-auto-fit` class plus the
+   * Renders on the server: a `.grid-columns-auto-fit` class plus the
    * `--grid-min-column-width` custom property on the same element. It takes
    * precedence over `columns`; a breakpoint `columns` still overrides it at
    * that width, e.g. `minColumnWidth={256} s={{ columns: 1 }}`.

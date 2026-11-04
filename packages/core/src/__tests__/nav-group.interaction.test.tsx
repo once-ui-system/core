@@ -111,8 +111,8 @@ describe("NavGroup", () => {
   // The rail runs down the centre of the header's 16px icon: header inset + 8,
   // less the Accordion's content padding (16 for "m", 12 for "s").
   it.each([
-    ["normal", "pl-16"],
-    ["compact", "pl-8"],
+    ["normal", "padding-left-16"],
+    ["compact", "padding-left-8"],
   ] as const)("centres the rail under the header icon in a %s nav", (density, inset) => {
     render(
       <Nav density={density} aria-label="Main">
@@ -121,6 +121,6 @@ describe("NavGroup", () => {
       { wrapper },
     );
     const rows = panel()?.querySelector(".g-8");
-    expect(rows).toHaveClass(inset, "pr-12");
+    expect(rows).toHaveClass(inset, "padding-right-12");
   });
 });

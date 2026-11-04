@@ -36,23 +36,23 @@ describe("responsive Grid on the server", () => {
       </Grid>,
     );
     const classes = classesOf(html);
-    expect(classes).toContain("columns-3");
-    expect(classes).toContain("m-columns-2");
-    expect(classes).toContain("s-columns-1");
+    expect(classes).toContain("grid-columns-3");
+    expect(classes).toContain("m-grid-columns-2");
+    expect(classes).toContain("s-grid-columns-1");
     // The cascade: `s` also covers `xs` unless `xs` says otherwise.
-    expect(classes).toContain("xs-columns-1");
+    expect(classes).toContain("xs-grid-columns-1");
   });
 
   it("takes a numeric column count, which is a class too", () => {
     const classes = classesOf(renderToStaticMarkup(<Grid columns={4} s={{ columns: 2 }} />));
-    expect(classes).toContain("columns-4");
-    expect(classes).toContain("s-columns-2");
+    expect(classes).toContain("grid-columns-4");
+    expect(classes).toContain("s-grid-columns-2");
   });
 
   it("writes xl, and cascades it down to every narrower step", () => {
     const classes = classesOf(renderToStaticMarkup(<Grid xl={{ columns: 4, gap: "24" }} />));
     for (const bp of ["xl", "l", "m", "s", "xs"]) {
-      expect(classes, bp).toContain(`${bp}-columns-4`);
+      expect(classes, bp).toContain(`${bp}-grid-columns-4`);
       expect(classes, bp).toContain(`${bp}-g-24`);
     }
   });
@@ -64,8 +64,8 @@ describe("responsive Grid on the server", () => {
       renderToStaticMarkup(<Grid gap="24" s={{ gap: "8", padding: "16", marginTop: "4" }} />),
     );
     expect(classes).toContain("s-g-8");
-    expect(classes).toContain("s-p-16");
-    expect(classes).toContain("s-mt-4");
+    expect(classes).toContain("s-padding-16");
+    expect(classes).toContain("s-margin-top-4");
   });
 
   it("writes the display, position and effect families Flex writes", () => {
@@ -90,7 +90,7 @@ describe("responsive Grid on the server", () => {
       "m-grid-hide",
       "s-grid-show",
       "m-position-sticky",
-      "m-top-0",
+      "m-offset-top-0",
       "m-overflow-hidden",
       "m-opacity-50",
       "m-z-index-1",
@@ -119,7 +119,7 @@ describe("responsive Grid on the server", () => {
   });
 
   it("writes no class for an offset a class cannot hold", () => {
-    // `top: 2` is 2rem; `.m-top-2` is the 0.125rem token. Writing it would be
+    // `top: 2` is 2rem; `.m-offset-top-2` is the 0.125rem token. Writing it would be
     // wrong rather than merely missing.
     const classes = classesOf(
       renderToStaticMarkup(<ServerGrid m={{ top: 2 as never, left: "50%" as never }} />),

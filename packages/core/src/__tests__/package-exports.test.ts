@@ -89,6 +89,7 @@ describe("the 3.0 exports map", () => {
       ".",
       "./css/styles.css",
       "./css/tokens.css",
+      "./tailwind.css",
       "./tokens.json",
       "./config",
       "./server",

@@ -171,9 +171,11 @@ describe("G3: values agents reach for", () => {
         x
       </Row>,
     );
-    expect(classesOf(html)).toEqual(expect.arrayContaining(["ml-auto", "mx-auto", "m-mt-auto"]));
+    expect(classesOf(html)).toEqual(
+      expect.arrayContaining(["margin-left-auto", "margin-x-auto", "m-margin-top-auto"]),
+    );
     expect(html).not.toContain("margin-left:auto");
-    expect(classesOf(renderToStaticMarkup(<Grid margin="auto">x</Grid>))).toContain("m-auto");
+    expect(classesOf(renderToStaticMarkup(<Grid margin="auto">x</Grid>))).toContain("margin-auto");
     // @ts-expect-error padding has no auto
     expect(<Row padding="auto">x</Row>).toBeTruthy();
   });

@@ -1,0 +1,81 @@
+---
+title: "Tailwind CSS"
+docs: "once-ui/tailwind.mdx"
+github: "packages/foundations/tailwind/tailwind.css"
+navLabel: "Tailwind CSS"
+updatedAt: "2026-11-02"
+summary: "Add Once UI to a Tailwind CSS v4 app, or Tailwind to a Once UI app. One import turns Once UI's tokens into Tailwind classes, and neither system restyles the other."
+navIcon: "code"
+---
+
+## Setup
+
+Once UI works next to Tailwind CSS v4 with one import. Put it in the stylesheet where you import Tailwind, **before** Tailwind:
+
+<CodeBlock marginBottom="32" marginTop="8"
+codes={[
+  {
+    code:
+`@import "@once-ui-system/core/tailwind.css";
+@import "tailwindcss";`,
+    language: "css",
+    label: "globals.css",
+  },
+  {
+    code:
+`import "@once-ui-system/core/css/styles.css";
+import "@once-ui-system/core/css/tokens.css";
+import "./globals.css";`,
+    language: "tsx",
+    label: "layout.tsx",
+  },
+]} />
+
+Keep Once UI's own stylesheets and providers as the [installation](/once-ui/quick-start) sets them up. The order of the two imports matters: a cascade layer keeps the place where its name first appears, and the adapter names Once UI's layer between Tailwind's.
+
+## What it does
+
+- **Layers.** Tailwind's preflight sits under Once UI, so the reset never flattens a component. Tailwind's utilities sit over it, so `<Button className="ml-auto">` works. Your own unlayered CSS still beats both.
+- **Tokens as classes.** Once UI's tokens become Tailwind classes, and they follow your theme, brand and accent colours, light and dark included.
+- **`dark:` and `light:`** follow Once UI's `data-theme`, so they agree with the theme switcher instead of the operating system.
+- **No shared class names.** Once UI's spacing classes are spelled out (`padding-16`, `margin-top-8`), so Tailwind's `p-4` and `mt-8` keep Tailwind's meaning and never land on a Once UI element. The few names that mean the same in both (`flex-row`, `cursor-pointer`, `overflow-hidden`) are left to Once UI, so its breakpoint props keep working.
+
+## Token classes
+
+<CodeBlock marginBottom="32" marginTop="8"
+codes={[
+  {
+    code:
+`<div className="rounded-l border border-neutral-medium bg-surface p-6 shadow-m">
+  <p className="font-heading text-heading-s text-neutral-strong">Plan</p>
+  <p className="mt-2 text-body-s text-neutral-weak">Billed monthly</p>
+  <span className="rounded-m bg-brand-solid-strong px-3 py-1 text-label-s text-brand-on-solid-strong">
+    Pro
+  </span>
+</div>`,
+    language: "tsx",
+    label: "Card.tsx",
+  },
+]} />
+
+| Utility | Classes |
+| --- | --- |
+| Background | `bg-page`, `bg-surface`, `bg-{color}-{strength}`, `bg-{color}-solid-{strength}`, `bg-{color}-alpha-{strength}` |
+| Text | `text-{color}-{strength}`, `text-{color}-on-solid-{strength}` |
+| Border | `border-surface`, `border-{color}-{strength}` |
+| Ring, outline, fill, stroke, gradients | `ring-{color}-{strength}` and the rest: the solid colour |
+| Radius | `rounded-xs`, `rounded-s`, `rounded-m`, `rounded-l`, `rounded-xl` |
+| Shadow | `shadow-xs`, `shadow-s`, `shadow-m`, `shadow-l`, `shadow-xl` |
+| Font | `font-heading`, `font-body`, `font-label`, `font-code` |
+| Type scale | `text-display-{size}`, `text-heading-{size}`, `text-body-{size}`, `text-label-{size}` |
+
+`{color}` is `brand`, `accent`, `neutral`, `success`, `warning`, `danger` or `info`; `{strength}` is `strong`, `medium` or `weak`; `{size}` runs `xs` to `xl`.
+
+Tailwind's own scales (spacing, `red-500`, `rounded-lg`, the `sm:` breakpoints) stay as they are. Once UI defines `--radius-xs`, `--radius-xl`, `--shadow-xs` and `--shadow-xl` itself, so those four Tailwind classes take Once UI's values.
+
+## Good to know
+
+- **Use props on Once UI components.** `<Column padding="16">` is still the way to space a Once UI component; Tailwind classes are for your own elements, and for a quick override on a component's `className`.
+- **Breakpoints differ.** Once UI's `s`, `m` and `l` props are max-width steps (768, 1024 and 1440px); Tailwind's `sm:`, `md:` and `lg:` are min-width. Both work on the same page.
+- **Three names mean Once UI's.** `align-baseline` aligns flex items, as in Once UI; `blur-xl` and `shadow-xl` take Once UI's sizes.
+- **Tailwind 4.1 or later.** The adapter uses `@source not inline`, which arrived in 4.1.
