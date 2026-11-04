@@ -503,6 +503,10 @@ entry below that had landed by then:
 
 ### Fixed
 
+- **`FormErrorSummary` and `Field` line up.** The summary's entries start under its
+  title instead of 20px further in, and sit 12px below it rather than 24px (the gap
+  under any `Feedback` title before its children). A `Field`'s error and hint start
+  under its label, at the same 4px inset, instead of 16px in.
 - **`MegaMenu` panels stay inside the window.** A wide panel under a trigger near the
   right edge used to open past the side of the screen; it now moves left until it fits,
   16px from the edge, and a panel wider than the window keeps its left edge in view.

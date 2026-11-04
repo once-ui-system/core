@@ -150,13 +150,14 @@ const Field = ({
         </Row>
       )}
       <FieldControlContext.Provider value={context}>{control}</FieldControlContext.Provider>
+      {/* Error and hint share the label's inset, so all three line up. */}
       {invalid && (
-        <Row paddingX="16" id={errorId} textVariant="body-default-s" onBackground="danger-weak">
+        <Row paddingX="4" id={errorId} textVariant="body-default-s" onBackground="danger-weak">
           {error}
         </Row>
       )}
       {hasHint && (
-        <Row paddingX="16" id={hintId} textVariant="body-default-s" onBackground="neutral-weak">
+        <Row paddingX="4" id={hintId} textVariant="body-default-s" onBackground="neutral-weak">
           {hint}
         </Row>
       )}
