@@ -1,0 +1,23 @@
+{
+  "arm": "K",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/contact-form.tsx(62,7): error TS2322: Type '(e: React.FormEvent<HTMLFormElement>) => void' is not assignable to type 'SubmitEventHandler<HTMLDivElement>'.\n  Types of parameters 'e' and 'event' are incompatible.\n    Type 'SubmitEvent<HTMLDivElement>' is not assignable to type 'FormEvent<HTMLFormElement>'.\n      Types of property 'currentTarget' are incompatible.\n        Type 'EventTarget & HTMLDivElement' is not assignable to type 'EventTarget & HTMLFormElement'.\n          Type 'EventTarget & HTMLDivElement' is missing the following properties from type 'HTMLFormElement': acceptCharset, action, autocomplete, elements, and 15 more.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 11110
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/placeholder-photo.tsx",
+    "components/home-map.tsx",
+    "components/home-map-lazy.tsx",
+    "components/home-card.tsx",
+    "components/search-page.tsx",
+    "app/page.tsx",
+    "components/contact-form.tsx",
+    "app/homes/[id]/page.tsx"
+  ]
+}

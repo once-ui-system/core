@@ -1,0 +1,27 @@
+{
+  "arm": "K",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/app-shell.tsx(16,11): error TS2322: Type '{ children: string; as: \"a\"; href: string; position: \"absolute\"; left: \"-9999px\"; _focus: { left: \"3\"; top: \"3\"; zIndex: \"popover\"; bg: \"bg\"; px: \"3\"; py: \"2\"; rounded: \"md\"; shadow: \"md\"; }; }' is not assignable to type 'IntrinsicAttributes & Omit<PatchHtmlProps<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, \"ref\">>, \"css\" | ... 836 more ... | keyof PolymorphicProps> & Omit<...> & PolymorphicProps & { ...; }'.\n  Property 'href' does not exist on type 'IntrinsicAttributes & Omit<PatchHtmlProps<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, \"ref\">>, \"css\" | ... 836 more ... | keyof PolymorphicProps> & Omit<...> & PolymorphicProps & { ...; }'. Did you mean 'ref'?",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 11731
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/app-shell-provider.tsx",
+    "components/command-palette.tsx",
+    "components/invite-member-dialog.tsx",
+    "components/app-header.tsx",
+    "components/app-shell.tsx",
+    "components/dashboard-view.tsx",
+    "components/projects-view.tsx",
+    "components/members-view.tsx",
+    "app/(app)/layout.tsx",
+    "app/(app)/projects/page.tsx",
+    "app/(app)/members/page.tsx",
+    "app/page.tsx"
+  ]
+}

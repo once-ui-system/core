@@ -1,0 +1,10 @@
+{
+  "files": [
+    "lib/data.ts",
+    "components/Onboarding.tsx",
+    "app/page.tsx",
+    "app/welcome/page.tsx",
+    "components/Welcome.tsx"
+  ],
+  "rejected": []
+}

@@ -1,0 +1,24 @@
+{
+  "files": [
+    "app/theme.ts",
+    "app/layout.tsx",
+    "lib/data.ts",
+    "components/ThemeToggle.tsx",
+    "components/SiteShell.module.css",
+    "components/SiteShell.tsx",
+    "components/SiteHeader.module.css",
+    "components/SiteHeader.tsx",
+    "components/SiteFooter.module.css",
+    "components/SiteFooter.tsx",
+    "components/home/Home.module.css",
+    "components/home/FeaturePanel.tsx",
+    "components/home/FeatureSection.tsx",
+    "app/page.tsx",
+    "components/pricing/Pricing.module.css",
+    "components/pricing/PricingPlans.tsx",
+    "components/pricing/ComparisonTable.tsx",
+    "components/pricing/FaqAccordion.tsx",
+    "app/pricing/page.tsx"
+  ],
+  "rejected": []
+}
