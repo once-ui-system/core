@@ -1,0 +1,535 @@
+{
+  "exact": true,
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 11,
+      "input_tokens": 320009,
+      "output_tokens": 16761
+    },
+    {
+      "attempt": 1,
+      "calls": 2,
+      "input_tokens": 121408,
+      "output_tokens": 13974
+    }
+  ],
+  "calls": [
+    {
+      "attempt": 0,
+      "id": "msg_011Cgihp3rN1zpph6PCDxoTY",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 1925,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 113,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgihpCrM8yAxyEaNJqGef",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 2573,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 104,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgihpKaQv5GoTD2V9Kicu",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 10989,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 194,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgihpUVCRxCUUyMHqZtxc",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 11326,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 265,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cgihpe6QHoHAjyfrsZbsL",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 23876,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 553,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgihpumUmcgcVkh1H88CX",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 33430,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 490,
+        "output_tokens_details": {
+          "thinking_tokens": 144
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgihqDkhtAWSDrJRLzhPJ",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 42061,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 244,
+        "output_tokens_details": {
+          "thinking_tokens": 79
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgihqRRgY4KhQetfYY97z",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 44152,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 631,
+        "output_tokens_details": {
+          "thinking_tokens": 576
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgihqvvxQQyWVPBdnysRf",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 44864,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 6754,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgihtdWXqbckj1Sxpk9aL",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 52058,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 214,
+        "output_tokens_details": {
+          "thinking_tokens": 108
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgihtpLfHgjXA4qc684p2",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "end_turn",
+      "usage": {
+        "input_tokens": 52755,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 7199,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 1,
+      "id": "msg_011CgihxZ3X8C2bQ1grYq7Fm",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 60555,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 189,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 1,
+      "id": "msg_011Cgihxp6PZ1aSxQvRE27TB",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "end_turn",
+      "usage": {
+        "input_tokens": 60853,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 13785,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": ".",
+      "chars": 14
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/README.md",
+      "chars": 1186
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project",
+      "chars": 106
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/components/sidebar.mdx",
+      "chars": 18451
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/app",
+      "chars": 31
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/components",
+      "chars": 3
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/lib",
+      "chars": 8
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/hooks",
+      "chars": 13
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/globals.css",
+      "chars": 4219
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/layout.tsx",
+      "chars": 431
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/page.tsx",
+      "chars": 124
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components.json",
+      "chars": 426
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/sidebar.tsx",
+      "chars": 21641
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/button.tsx",
+      "chars": 2391
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/card.tsx",
+      "chars": 1986
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/table.tsx",
+      "chars": 2477
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/breadcrumb.tsx",
+      "chars": 2349
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/input.tsx",
+      "chars": 961
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/badge.tsx",
+      "chars": 1775
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/switch.tsx",
+      "chars": 1407
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/select.tsx",
+      "chars": 6352
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/hooks/use-mobile.ts",
+      "chars": 565
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/label.tsx",
+      "chars": 605
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/dropdown-menu.tsx",
+      "chars": 8417
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/collapsible.tsx",
+      "chars": 795
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/avatar.tsx",
+      "chars": 2915
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/sheet.tsx",
+      "chars": 4187
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/separator.tsx",
+      "chars": 693
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/package.json",
+      "chars": 1103
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/textarea.tsx",
+      "chars": 758
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/tooltip.tsx",
+      "chars": 1829
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/lib/utils.ts",
+      "chars": 166
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/sonner.tsx",
+      "chars": 1034
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/next.config.mjs",
+      "chars": 197
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/tsconfig.json",
+      "chars": 720
+    },
+    {
+      "attempt": 1,
+      "name": "list_dir",
+      "path": "project/lib",
+      "chars": 8
+    },
+    {
+      "attempt": 1,
+      "name": "list_dir",
+      "path": "project/components",
+      "chars": 3
+    },
+    {
+      "attempt": 1,
+      "name": "list_dir",
+      "path": "project/app",
+      "chars": 31
+    }
+  ]
+}
