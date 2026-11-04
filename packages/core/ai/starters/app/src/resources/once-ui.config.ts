@@ -8,7 +8,7 @@ export const style: OnceUIStyleConfig = {
   neutral: "gray", // sand | gray | slate | rose | mint | dusk
   brand: "blue", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
   accent: "indigo", // same names as brand
-  solid: "contrast", // color | contrast | inverse
+  solid: "contrast", // primary buttons: color = brand colour, contrast = black/white whatever the brand, inverse
   solidStyle: "flat", // flat | plastic
   border: "playful", // rounded | playful | conservative
   surface: "filled", // filled | translucent

@@ -18,9 +18,25 @@ import {
 } from "@once-ui-system/core";
 import { CountFx } from "@once-ui-system/fx";
 import { EmojiPicker } from "@once-ui-system/core/emoji";
+import { formatDistance } from "date-fns";
 import type React from "react";
 import { useState } from "react";
-import { formatShortRelativeTime } from "@/utils/date-formatter";
+
+/** A short relative time: "1d", "3mo", "2y". */
+function formatShortRelativeTime(date: Date | number): string {
+  const distance = formatDistance(date, new Date(), { includeSeconds: true });
+  const number = distance.match(/(\d+)/)?.[0] ?? "";
+  const units: [string, string][] = [
+    ["second", "s"],
+    ["minute", "m"],
+    ["hour", "h"],
+    ["day", "d"],
+    ["month", "mo"],
+    ["year", "y"],
+  ];
+  const unit = units.find(([word]) => distance.includes(word))?.[1] ?? "";
+  return number + unit;
+}
 
 interface CommentProps {
   comment: {

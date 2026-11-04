@@ -280,6 +280,18 @@ export interface StyleProps {
   radius?: RadiusSize | `${RadiusSize}-${RadiusNest}`;
   shadow?: ShadowSize;
   /**
+   * Draws attention to the element. Each value names a look: `"edge"` is a
+   * brand-to-accent edge travelling round the border, `"glow"` (or `true`)
+   * adds a soft halo for bars and inputs, `"aura"` a wide one for panels and
+   * hero cards. It draws on `::before` and `::after` under the content, so an
+   * `overflow` that clips also clips the halo. Recolour or slow it with
+   * `--emphasis-from`, `--emphasis-to`, `--emphasis-width` and
+   * `--emphasis-duration`. Still under `prefers-reduced-motion`.
+   *
+   * @example <Row emphasis radius="full" background="surface" padding="8">…</Row>
+   */
+  emphasis?: boolean | "edge" | "glow" | "aura";
+  /**
    * A CSS cursor keyword; `"interactive"` for anything clickable; a preset
    * (`"soft"`, `"rounded"`, `"dot"`, or `"system"` to turn one off) that
    * restyles every cursor inside; or a node that follows the pointer over

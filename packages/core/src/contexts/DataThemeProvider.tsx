@@ -130,7 +130,10 @@ export function DataThemeProvider({
       document.documentElement.setAttribute("data-viz-style", mode);
 
       if (saveToLocalStorage) {
-        localStorage.setItem("data-viz-style", mode);
+        // Storage is blocked in sandboxed iframes; the choice then lasts the visit.
+        try {
+          localStorage.setItem("data-viz-style", mode);
+        } catch {}
       }
     }
   };

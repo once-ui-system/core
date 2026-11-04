@@ -1,0 +1,112 @@
+{
+ "name": "ChartSummary",
+ "group": "data",
+ "importFrom": "@once-ui-system/core/data",
+ "props": {
+  "data": "!readonly DataPoint[]",
+  "series": "SeriesConfig | SeriesConfig[]",
+  "xKey": "string",
+  "kind": "\"cartesian\" | \"pie\"",
+  "valueFormat": "ValueFormat",
+  "locale": "string",
+  "date": "DateConfig",
+  "title": "string",
+  "caption": "ReactNode",
+  "id": "string"
+ },
+ "tags": [
+  "data",
+  "chart",
+  "accessibility"
+ ],
+ "pairsWith": [
+  "LineChart",
+  "BarChart",
+  "Sparkline"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "ColorValue": [
+   "string & {}",
+   "neutral-strong",
+   "neutral-medium",
+   "neutral-weak",
+   "brand-strong",
+   "brand-medium",
+   "brand-weak",
+   "accent-strong",
+   "accent-medium",
+   "accent-weak",
+   "info-strong",
+   "info-medium",
+   "info-weak",
+   "danger-strong",
+   "danger-medium",
+   "danger-weak",
+   "warning-strong",
+   "warning-medium",
+   "warning-weak",
+   "success-strong",
+   "success-medium",
+   "success-weak",
+   "neutral-alpha-strong",
+   "neutral-alpha-medium",
+   "neutral-alpha-weak",
+   "brand-alpha-strong",
+   "brand-alpha-medium",
+   "brand-alpha-weak",
+   "accent-alpha-strong",
+   "accent-alpha-medium",
+   "accent-alpha-weak",
+   "info-alpha-strong",
+   "info-alpha-medium",
+   "info-alpha-weak",
+   "danger-alpha-strong",
+   "danger-alpha-medium",
+   "danger-alpha-weak",
+   "warning-alpha-strong",
+   "warning-alpha-medium",
+   "warning-alpha-weak",
+   "success-alpha-strong",
+   "success-alpha-medium",
+   "success-alpha-weak"
+  ],
+  "DataPoint": {
+   "[key: string]": "string | number | Date | undefined",
+   "label": "string"
+  },
+  "DateConfig": {
+   "start": "Date",
+   "end": "Date",
+   "max": "Date",
+   "min": "Date",
+   "dual": "boolean",
+   "format": "string",
+   "presets": "PresetsConfig",
+   "selector": "boolean",
+   "onRangeChange": "(range: DateRange) => void"
+  },
+  "DateRange": {
+   "startDate": "Date",
+   "endDate": "Date"
+  },
+  "PresetsConfig": {
+   "display": "!boolean",
+   "granularity": "!\"year\" | \"month\" | \"week\""
+  },
+  "SeriesConfig": {
+   "key": "!SeriesKey<DataPoint>",
+   "label": "string",
+   "color": "ColorValue",
+   "format": "ValueFormat"
+  },
+  "SeriesKey": "Extract<keyof T, string>",
+  "ValueFormat": [
+   "number",
+   "compact",
+   "percent",
+   "NumberFormatOptions",
+   "(value: number) => string"
+  ]
+ }
+}

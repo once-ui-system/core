@@ -10,7 +10,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { ROOT, WORK, armById, config, interactions, isMulti, listFiles, rng, routeSlug, routesOf, taskById } from "./lib.mjs";
+import { ROOT, WORK, armById, config, interactions, isMulti, listFiles, rng, routeSlug, routesOf, taskById, views } from "./lib.mjs";
 
 const arg = (k, d) => {
   const i = process.argv.indexOf(`--${k}`);
@@ -72,6 +72,14 @@ order.forEach((d, i) => {
       images.push({ name: `${vp}-interaction`, label: `${vp}-interaction` });
       shots.push(vp);
     }
+  }
+  // Named views (Pro set, rebrand): the desktop shot of each, so the rater can
+  // judge the states the checklist names (a dialog, a selected clip, a popup).
+  for (const v of views[String(task)] ?? []) {
+    const f = path.join(src, `view-${v.name}-desktop.jpg`);
+    if (!fs.existsSync(f)) continue;
+    fs.copyFileSync(f, path.join(blindDir, id, `view-${v.name}.jpg`));
+    images.push({ name: `view-${v.name}`, label: `${v.route ?? "/"} after: ${v.name.replace(/-/g, " ")} (desktop)` });
   }
   let interaction = "";
   if (spec && spec.action !== "none") {

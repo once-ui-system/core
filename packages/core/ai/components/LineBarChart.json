@@ -13,7 +13,7 @@
  ],
  "props": {
   "barWidth": "BarWidth = l",
-  "curve": "curveType = natural",
+  "curve": "CurveType = natural",
   "reverseY": "boolean = false",
   "reverseX": "boolean = false",
   "data-viz-style": "DataStyle | (string & {})",
@@ -50,6 +50,11 @@
    "description": "React.ReactNode",
    "series": "!SeriesConfig<DataPoint> | SeriesConfig<DataPoint>[]",
    "data": "!readonly DataPoint[]",
+   "xKey": "SeriesKey<DataPoint>",
+   "valueFormat": "ValueFormat",
+   "locale": "string",
+   "summary": "string",
+   "aria-label": "string",
    "legend": "LegendConfig",
    "date": "DateConfig",
    "emptyState": "React.ReactNode",
@@ -157,11 +162,12 @@
    "bottomLeftRadius": "RadiusSize",
    "bottomRightRadius": "RadiusSize",
    "shadow": "ShadowSize",
+   "emphasis": "boolean | \"edge\" | \"glow\" | \"aura\"",
    "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | CursorPresetValue | ReactNode",
    "blendMode": "BlendMode",
    "blur": "BlurSize | number | CSSUnit",
    "backdropBlur": "BlurSize | number | CSSUnit",
-   "theme": "\"light\" | \"dark\"",
+   "theme": "\"light\" | \"dark\" | \"invert\"",
    "themeBorder": "BorderStyle",
    "themeSolid": "SolidType",
    "themeSurface": "SurfaceStyle",
@@ -222,17 +228,7 @@
    "success-alpha-medium",
    "success-alpha-weak"
   ],
-  "DataStyle": [
-   "categorical",
-   "divergent",
-   "sequential"
-  ],
-  "LegendConfig": {
-   "display": "boolean",
-   "direction": "\"row\" | \"column\"",
-   "position": "\"top-left\" | \"top-right\" | \"bottom-left\" | \"bottom-right\" | \"top-center\" | \"bottom-center\""
-  },
-  "curveType": [
+  "CurveType": [
    "step",
    "linear",
    "basis",
@@ -248,6 +244,16 @@
    "monotone",
    "stepBefore",
    "stepAfter"
-  ]
+  ],
+  "DataStyle": [
+   "categorical",
+   "divergent",
+   "sequential"
+  ],
+  "LegendConfig": {
+   "display": "boolean",
+   "direction": "\"row\" | \"column\"",
+   "position": "\"top-left\" | \"top-right\" | \"bottom-left\" | \"bottom-right\" | \"top-center\" | \"bottom-center\""
+  }
  }
 }

@@ -108,7 +108,7 @@ export function FeedbackButtons({
           borderBottom="neutral-alpha-weak"
         >
           <Row flex={1}>
-            <Text variant="heading-strong-s">{title}</Text>
+            <Text textVariant="heading-strong-s">{title}</Text>
           </Row>
           <IconButton
             icon="arrowUpRight"

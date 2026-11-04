@@ -23,6 +23,15 @@ const taskIds = arg("tasks", "all") === "all" ? tasks.map((t) => t.id) : String(
 const arms = String(arg("arms", "A,B,C,D")).split(",");
 const runs = Number(arg("runs", config.runs_per_task));
 const dryRun = process.argv.includes("--dry-run");
+// Hard spend stop at list prices, uncached (the pessimistic price): before each
+// API call the process checks what it has spent; at the stop it makes no new
+// call and exits. Runs are resumable, so a stopped run picks up where it was.
+const budgetUsd = Number(arg("budget-usd", Infinity));
+let spentUsd = 0;
+const P = config.pricing_usd_per_mtok;
+const callCost = (u) =>
+  ((u.input_tokens + (u.cache_creation_input_tokens ?? 0) + (u.cache_read_input_tokens ?? 0)) * P.input + u.output_tokens * P.output) / 1e6;
+class BudgetStop extends Error {}
 
 const TOOLS = [
   {
@@ -75,94 +84,106 @@ async function runOne(client, letter, task, run) {
   let status = "failed";
   let accepted = null;
 
-  for (let attempt = 0; attempt <= config.repair_rounds; attempt++) {
-    let toolCalls = 0;
-    let reply = "";
-    for (;;) {
-      const req = {
-        model: config.model,
-        system,
-        messages,
-        tools: TOOLS,
-        max_tokens: config.generation.max_tokens,
-        thinking: config.generation.thinking,
-        output_config: { effort: config.generation.effort },
-      };
-      let res;
-      for (let i = 0; ; i++) {
-        try {
-          res = await client.messages.create(req);
+  // Usage and transcript are saved however the run ends, a budget stop included,
+  // so every paid call is counted; a stopped run has no final run.json and resumes.
+  let byAttempt = [];
+  const saveUsage = () => {
+    byAttempt = [];
+    for (const c of calls.filter((c) => c.usage)) {
+      const a = (byAttempt[c.attempt] ??= { attempt: c.attempt, calls: 0, input_tokens: 0, output_tokens: 0 });
+      a.calls++;
+      a.input_tokens += c.usage.input_tokens + (c.usage.cache_creation_input_tokens ?? 0) + (c.usage.cache_read_input_tokens ?? 0);
+      a.output_tokens += c.usage.output_tokens;
+    }
+    fs.writeFileSync(path.join(dir, "usage.json"), JSON.stringify({ exact: true, attempts: byAttempt, calls, tool_calls: toolLog }, null, 2));
+    fs.writeFileSync(path.join(dir, "transcript.json"), JSON.stringify({ system, messages }, null, 2));
+  };
+  try {
+    for (let attempt = 0; attempt <= config.repair_rounds; attempt++) {
+      let toolCalls = 0;
+      let reply = "";
+      for (;;) {
+        const req = {
+          model: config.model,
+          system,
+          messages,
+          tools: TOOLS,
+          // A task may need a longer reply than its set (the Pro apps).
+          max_tokens: taskById(task)?.max_tokens ?? config.generation.max_tokens,
+          thinking: config.generation.thinking,
+          output_config: { effort: config.generation.effort },
+        };
+        if (spentUsd >= budgetUsd) throw new BudgetStop(`budget stop: $${spentUsd.toFixed(2)} spent of $${budgetUsd}`);
+        let res;
+        for (let i = 0; ; i++) {
+          try {
+            res = await client.messages.create(req);
+            break;
+          } catch (e) {
+            // Infrastructure failure: retry the call (logged); model output is never voided.
+            if (i >= 4) throw e;
+            calls.push({ attempt, infra_error: String(e?.message ?? e) });
+            await new Promise((r) => setTimeout(r, 2000 * 2 ** i));
+          }
+        }
+        spentUsd += callCost(res.usage);
+        calls.push({ attempt, id: res.id, model: res.model, stop_reason: res.stop_reason, usage: res.usage });
+        messages.push({ role: "assistant", content: res.content });
+        const uses = res.content.filter((b) => b.type === "tool_use");
+        if (!uses.length || toolCalls >= config.generation.max_tool_calls_per_attempt) {
+          reply = res.content.filter((b) => b.type === "text").map((b) => b.text).join("\n");
+          if (uses.length) {
+            // Cap reached: answer the pending calls with an error and ask for the file.
+            messages.push({
+              role: "user",
+              content: [
+                ...uses.map((u) => ({ type: "tool_result", tool_use_id: u.id, is_error: true, content: "tool-call limit reached" })),
+                { type: "text", text: "Tool-call limit reached. Reply now with the complete file." },
+              ],
+            });
+            continue;
+          }
           break;
-        } catch (e) {
-          // Infrastructure failure: retry the call (logged); model output is never voided.
-          if (i >= 4) throw e;
-          calls.push({ attempt, infra_error: String(e?.message ?? e) });
-          await new Promise((r) => setTimeout(r, 2000 * 2 ** i));
         }
+        const results = uses.map((u) => {
+          toolCalls++;
+          const r = toolResult(sandbox, u.name, u.input);
+          toolLog.push({ attempt, name: u.name, path: u.input?.path, chars: r.text?.length ?? 0, error: r.error });
+          return { type: "tool_result", tool_use_id: u.id, content: r.text ?? r.error, is_error: Boolean(r.error) };
+        });
+        messages.push({ role: "user", content: results });
       }
-      calls.push({ attempt, id: res.id, model: res.model, stop_reason: res.stop_reason, usage: res.usage });
-      messages.push({ role: "assistant", content: res.content });
-      const uses = res.content.filter((b) => b.type === "tool_use");
-      if (!uses.length || toolCalls >= config.generation.max_tool_calls_per_attempt) {
-        reply = res.content.filter((b) => b.type === "text").map((b) => b.text).join("\n");
-        if (uses.length) {
-          // Cap reached: answer the pending calls with an error and ask for the file.
-          messages.push({
-            role: "user",
-            content: [
-              ...uses.map((u) => ({ type: "tool_result", tool_use_id: u.id, is_error: true, content: "tool-call limit reached" })),
-              { type: "text", text: "Tool-call limit reached. Reply now with the complete file." },
-            ],
-          });
-          continue;
+      fs.writeFileSync(path.join(dir, `attempt-${attempt}.reply.md`), reply);
+      let code;
+      if (multi) {
+        // attempt-N.files/ mirrors the paths the model wrote; attempt-N.files.json lists them.
+        const { files, rejected } = extractFiles(reply);
+        code = files;
+        if (files) {
+          for (const [f, src] of Object.entries(files)) {
+            const p = path.join(dir, `attempt-${attempt}.files`, f);
+            fs.mkdirSync(path.dirname(p), { recursive: true });
+            fs.writeFileSync(p, src);
+          }
         }
+        fs.writeFileSync(path.join(dir, `attempt-${attempt}.files.json`), JSON.stringify({ files: Object.keys(files ?? {}), rejected }, null, 2));
+      } else {
+        code = extractCode(reply);
+        if (code) fs.writeFileSync(path.join(dir, `attempt-${attempt}.tsx`), code);
+      }
+      const g = await runGates(letter, code, path.join(dir, `attempt-${attempt}`), task);
+      fs.renameSync(path.join(dir, `attempt-${attempt}`, "gates.json"), path.join(dir, `attempt-${attempt}.gates.json`));
+      if (g.passed) {
+        status = "accepted";
+        accepted = attempt;
         break;
       }
-      const results = uses.map((u) => {
-        toolCalls++;
-        const r = toolResult(sandbox, u.name, u.input);
-        toolLog.push({ attempt, name: u.name, path: u.input?.path, chars: r.text?.length ?? 0, error: r.error });
-        return { type: "tool_result", tool_use_id: u.id, content: r.text ?? r.error, is_error: Boolean(r.error) };
-      });
-      messages.push({ role: "user", content: results });
+      if (attempt < config.repair_rounds) messages.push({ role: "user", content: buildRepairPrompt(g.failed_gate, g.failure_output, multi) });
     }
-    fs.writeFileSync(path.join(dir, `attempt-${attempt}.reply.md`), reply);
-    let code;
-    if (multi) {
-      // attempt-N.files/ mirrors the paths the model wrote; attempt-N.files.json lists them.
-      const { files, rejected } = extractFiles(reply);
-      code = files;
-      if (files) {
-        for (const [f, src] of Object.entries(files)) {
-          const p = path.join(dir, `attempt-${attempt}.files`, f);
-          fs.mkdirSync(path.dirname(p), { recursive: true });
-          fs.writeFileSync(p, src);
-        }
-      }
-      fs.writeFileSync(path.join(dir, `attempt-${attempt}.files.json`), JSON.stringify({ files: Object.keys(files ?? {}), rejected }, null, 2));
-    } else {
-      code = extractCode(reply);
-      if (code) fs.writeFileSync(path.join(dir, `attempt-${attempt}.tsx`), code);
-    }
-    const g = await runGates(letter, code, path.join(dir, `attempt-${attempt}`), task);
-    fs.renameSync(path.join(dir, `attempt-${attempt}`, "gates.json"), path.join(dir, `attempt-${attempt}.gates.json`));
-    if (g.passed) {
-      status = "accepted";
-      accepted = attempt;
-      break;
-    }
-    if (attempt < config.repair_rounds) messages.push({ role: "user", content: buildRepairPrompt(g.failed_gate, g.failure_output, multi) });
-  }
 
-  const byAttempt = [];
-  for (const c of calls.filter((c) => c.usage)) {
-    const a = (byAttempt[c.attempt] ??= { attempt: c.attempt, calls: 0, input_tokens: 0, output_tokens: 0 });
-    a.calls++;
-    a.input_tokens += c.usage.input_tokens + (c.usage.cache_creation_input_tokens ?? 0) + (c.usage.cache_read_input_tokens ?? 0);
-    a.output_tokens += c.usage.output_tokens;
+  } finally {
+    saveUsage();
   }
-  fs.writeFileSync(path.join(dir, "usage.json"), JSON.stringify({ exact: true, attempts: byAttempt, calls, tool_calls: toolLog }, null, 2));
-  fs.writeFileSync(path.join(dir, "transcript.json"), JSON.stringify({ system, messages }, null, 2));
   fs.writeFileSync(statePath, JSON.stringify({ status, accepted_attempt: accepted, repair_rounds: accepted, attempts: byAttempt.length }, null, 2));
   console.log(`t${task} ${arm.id} run${run}: ${status}${accepted != null ? ` (repairs ${accepted})` : ""}`);
 }
@@ -211,8 +232,16 @@ const client = new Anthropic({
   ...(process.env.ANTHROPIC_WORKSPACE_ID ? { defaultHeaders: { "anthropic-workspace-id": process.env.ANTHROPIC_WORKSPACE_ID } } : {}),
 });
 // Arms run in parallel (one gate working copy each); runs within an arm are sequential.
-await Promise.all(
+// allSettled: an arm that hits the stop must not abandon the others mid-run;
+// each stops at its own next call.
+const settled = await Promise.allSettled(
   arms.map(async (letter) => {
     for (const task of taskIds) for (let run = 1; run <= runs; run++) await runOne(client, letter, task, run);
   }),
 );
+for (const r of settled.filter((r) => r.status === "rejected")) {
+  if (!(r.reason instanceof BudgetStop)) throw r.reason;
+  console.error(r.reason.message);
+  process.exitCode = 3;
+}
+console.log(`spent this process: $${spentUsd.toFixed(2)} (list price, uncached)`);

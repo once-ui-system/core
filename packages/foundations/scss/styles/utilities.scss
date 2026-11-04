@@ -21,3 +21,88 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+// Emphasis (`emphasis` on Flex and Grid): draws attention to an element.
+// Every look starts from a colour edge that travels round the border (a conic
+// gradient shown only on a thin ring, ::before); `glow` and `aura` add a halo
+// on its own layer (::after), so it lights what is around the element and
+// never its own face. Both sit under the content, inside the element's
+// stacking context. Brand and accent come from the theme's function colours,
+// so the edge stays coloured where the theme's solids are contrast.
+//
+// Tune it with custom properties on the element or an ancestor:
+// --emphasis-from / --emphasis-to (colours), --emphasis-width (ring),
+// --emphasis-duration (one turn).
+
+@property --emphasis-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.fx-emphasis {
+  isolation: isolate;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  // The edge. A whole-pixel ring: a fractional one rounds differently on
+  // opposite sides and reads thicker on top.
+  &::before {
+    padding: var(--emphasis-width, 1px);
+    background: conic-gradient(
+      from var(--emphasis-angle),
+      var(--emphasis-from, var(--function-brand-600)),
+      var(--emphasis-to, var(--function-accent-600)) 25%,
+      var(--brand-alpha-weak) 45%,
+      var(--brand-alpha-weak) 55%,
+      var(--emphasis-to, var(--function-accent-600)) 75%,
+      var(--emphasis-from, var(--function-brand-600))
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    animation: emphasis-turn var(--emphasis-duration, 8s) linear infinite;
+  }
+
+  // With a border, the edge lies over it rather than just inside it.
+  &.border-1::before { inset: -1px; }
+  &.border-2::before { inset: -2px; }
+  &.border-4::before { inset: -4px; }
+  &.border-8::before { inset: -8px; }
+
+  // The halo. `edge` has none.
+  &.fx-emphasis-glow::after {
+    box-shadow: 0 0 40px -12px var(--emphasis-from, var(--function-brand-600));
+  }
+
+  &.fx-emphasis-aura::after {
+    box-shadow:
+      0 0 96px -24px var(--emphasis-from, var(--function-brand-600)),
+      0 48px 140px -48px var(--emphasis-to, var(--function-accent-600));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::before {
+      animation: none;
+      --emphasis-angle: 45deg;
+    }
+  }
+}
+
+@keyframes emphasis-turn {
+  to {
+    --emphasis-angle: 360deg;
+  }
+}

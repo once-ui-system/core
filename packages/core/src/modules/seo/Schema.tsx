@@ -1,4 +1,5 @@
 import React from "react";
+import { buildOgRouteUrl, DEFAULT_OG_ROUTES } from "../../utils/ogRoutes.js";
 import { safeScriptJson } from "../../utils/safe-html.js";
 
 export interface SchemaProps {
@@ -57,7 +58,8 @@ export function Schema({
     ? /^https?:\/\//.test(image)
       ? image
       : `${normalizedBaseURL}${image.startsWith("/") ? image : `/${image}`}`
-    : `${normalizedBaseURL}/og?title=${encodeURIComponent(title)}`;
+    : // The same default route Meta.generate uses; `/og` was never served.
+      `${normalizedBaseURL}${buildOgRouteUrl(DEFAULT_OG_ROUTES.generate, { title })}`;
 
   const url = `${normalizedBaseURL}${normalizedPath}`;
 

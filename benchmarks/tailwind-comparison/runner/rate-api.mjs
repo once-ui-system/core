@@ -55,6 +55,6 @@ for (const id of fs.readdirSync(blindDir).sort()) {
   done.push({ ...json, id, usage: res.usage });
   fs.writeFileSync(outPath, JSON.stringify(done, null, 2));
   console.log(
-    `${id} polish=${json.polish} completeness=${json.completeness} responsiveness=${json.responsiveness} restraint=${json.restraint}${json.coherence != null ? ` coherence=${json.coherence}` : ""}`,
+    `${id} polish=${json.polish} completeness=${json.completeness} responsiveness=${json.responsiveness} restraint=${json.restraint}${json.coherence != null ? ` coherence=${json.coherence}` : ""}${json.intentionality != null ? ` intentionality=${json.intentionality}` : ""}`,
   );
 }

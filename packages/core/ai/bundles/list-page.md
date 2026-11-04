@@ -96,7 +96,7 @@ comes from when it is not the root:
 
 | Import | From |
 |--------|------|
-| charts, gauges, chart chrome | `@once-ui-system/core/data` (needs `recharts`) |
+| charts, gauges, chart chrome | `@once-ui-system/core/data` |
 | `CodeBlock` | `@once-ui-system/core/code` (needs `prismjs`) |
 | `MediaUpload` | `@once-ui-system/core/media` (needs `compressorjs`) |
 | `Map`, `MapMarker(s)`, `MapPin`, `MapPopup`, `MapCircle` | `@once-ui-system/core/map` (needs `maplibre-gl`) |
@@ -179,7 +179,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - value, defaultValue, className?: string
 - onValueChange?: (value: string, event?: React.MouseEvent<HTMLButtonElement>) => void
 - disabled, compact?: boolean = false
-- fillWidth, scroll?: boolean = true
+- fillWidth, sliding, scroll?: boolean = true
 - semantics?: "tabs" | "radio" = tabs
 - style?: React.CSSProperties
 
@@ -327,6 +327,8 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - boundsPadding, boundsMaxZoom, minZoom, maxZoom?: number
 - mapStyle?: MapStyle
 - tint, controls, interactive, cooperativeGestures?: boolean
+- projection?: MapProjection
+- buildings?: MapBuildings
 - onMapClick?: (position: LngLat) => void
 - onMapLoad?: (map: MapLibreMap) => void
 - workerUrl?: string
@@ -422,6 +424,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - base, stack?: boolean
 - flush?: boolean = false
 - showClose, closeOnClickaway?: boolean = true
+- closeLabel?: string = Close
 - onHeightChange?: (height: number) => void
 - minHeight?: number
 
@@ -489,10 +492,11 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - borderWidth?: 1 | 2 | 4 | 8 | "1" | "2" | "4" | "8"
 - topRadius, rightRadius, bottomRadius, leftRadius, topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius?: RadiusSize
 - shadow?: ShadowSize
+- emphasis?: boolean | "edge" | "glow" | "aura"
 - cursor?: CSSProperties["cursor"] | "interactive" | CursorPresetValue | ReactNode
 - blendMode?: BlendMode
 - blur, backdropBlur?: BlurSize | number | CSSUnit
-- theme?: "light" | "dark"
+- theme?: "light" | "dark" | "invert"
 - themeBorder?: BorderStyle
 - themeSolid?: SolidType
 - themeSurface?: SurfaceStyle
@@ -549,9 +553,11 @@ type IconButtonProps = IconButton props
 // symbol code link menu search time video filter image security opacity info danger warning adjustments arrowDown arrowLeft arrowRight arrowUp arrowUpRight ball banknotes barChart bell bolt book bookmark calendar cart chat check checkbox chevronDoubleLeft chevronDoubleRight chevronDown chevronLeft chevronRight chevronUp chevronsLeftRight clipboard close computer copy cube dark dislike document download edit enter eye eyeDropper eyeOff file flag folder food forward gift globe grid grip heart help home inbox light like linearGauge lock logout mail mapPin maximize minimize minus moreHorizontal newspaper organization pause paw payment people person personRemove phone play plus radialGauge refresh return screen send settings smiley sparkle star starFill store tag trash trend trendDown trendUp upload volume volumeOff wordmark world
 type LegacyToast = { variant?: Tone; tone?: Tone; children?: ReactNode; message?: ReactNode; action?: ReactNode; duration?: number }
 type LngLat = { [key: number]?: number }
+type MapBuildings = "flat" | "3d"
 type MapClusterOptions = { radius?: number; maxZoom?: number; minPoints?: number }
 // type MapColor is one of these strings: neutral brand accent info danger warning success
 type MapLabels = { map: string; zoomIn: string; zoomOut: string; unavailable: string }
+type MapProjection = "globe" | "mercator"
 type MapStyle = "string" | "StyleSpecification" | { light: MapStyleSource; dark: MapStyleSource; }
 type MapStyleSource = "string" | "StyleSpecification"
 type MapViewport = { center: LngLat; zoom: number; bearing?: number; pitch?: number }
