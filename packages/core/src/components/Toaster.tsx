@@ -59,13 +59,20 @@ const Toaster = ({
 
   useEffect(() => {
     setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
+  // The region above is in the page from the start, so screen readers hear the
+  // first toast; the component that draws it is fetched when that toast arrives.
+  const hasToasts = toasts.length > 0;
+  useEffect(() => {
+    if (!hasToasts || Toast) return;
     let live = true;
-    if (!LoadedToast) loadToast().then((loaded) => live && setToast(() => loaded));
+    loadToast().then((loaded) => live && setToast(() => loaded));
     return () => {
       live = false;
-      setMounted(false);
     };
-  }, []);
+  }, [hasToasts, Toast]);
 
   if (!mounted) return null;
 
