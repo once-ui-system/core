@@ -293,6 +293,9 @@ entry below that had landed by then:
   outline, shadow, margin and min/max height, so an app's `input:focus` ring no
   longer draws inside it. MIGRATING § 12 says where to declare `@layer` order
   in a Vite app.
+- **Toast loads with the first toast** (3.0.0-beta.2). `ToastProvider` keeps its
+  polite live region in the page from the start, so screen readers still announce
+  the first toast, and fetches the `Toast` component only when one is shown.
 - **Real ESM** (B3): `"type": "module"`, and every relative import in `dist` names its
   file (`./Button.js`, `../data/emoji-data.json` with `{ type: "json" }`), built with
   `module`/`moduleResolution: NodeNext` as `packages/cli` is. Plain Node resolves the

@@ -7,7 +7,7 @@ import { useLayout } from "../contexts/LayoutProvider.js";
 import { ToastPosition, Tone } from "../types.js";
 import { Column } from "./Column.js";
 import { Row } from "./Row.js";
-import { Toast } from "./Toast.js";
+import type { Toast as ToastComponent } from "./Toast.js";
 import styles from "./Toaster.module.scss";
 
 interface ToasterProps {
@@ -26,6 +26,22 @@ interface ToasterProps {
   xs?: ToastPosition;
 }
 
+/**
+ * Toast (with its IconButton, Tooltip and floating-ui) loads after the page,
+ * not with it: the region below is all a page needs until a toast shows, and
+ * it must be there before the first one so it is announced. The module starts
+ * loading as the Toaster mounts, so it is in by the time anything adds a toast.
+ */
+let LoadedToast: typeof ToastComponent | null = null;
+let loading: Promise<typeof ToastComponent> | null = null;
+export const loadToast = (): Promise<typeof ToastComponent> => {
+  loading ??= import("./Toast.js").then((m) => {
+    LoadedToast = m.Toast;
+    return m.Toast;
+  });
+  return loading;
+};
+
 const Toaster = ({
   ref,
   toasts,
@@ -39,9 +55,16 @@ const Toaster = ({
   const [mounted, setMounted] = useState(false);
   const { currentBreakpoint } = useLayout();
 
+  const [Toast, setToast] = useState<typeof ToastComponent | null>(() => LoadedToast);
+
   useEffect(() => {
     setMounted(true);
-    return () => setMounted(false);
+    let live = true;
+    if (!LoadedToast) loadToast().then((loaded) => live && setToast(() => loaded));
+    return () => {
+      live = false;
+      setMounted(false);
+    };
   }, []);
 
   if (!mounted) return null;
@@ -87,36 +110,37 @@ const Toaster = ({
       // (Undo, Try again) must work while one is open. See useOverlay.
       data-overlay-exempt=""
     >
-      {toasts.map((toast, index, array) => {
-        const reverseIndex = array.length - 1 - index;
-        const yDirection = isTop ? -1 : 1;
+      {Toast &&
+        toasts.map((toast, index, array) => {
+          const reverseIndex = array.length - 1 - index;
+          const yDirection = isTop ? -1 : 1;
 
-        return (
-          <Row
-            padding="4"
-            fillWidth
-            position="absolute"
-            key={toast.id}
-            className={classNames(styles.toastWrapper, styles[actualPosition])}
-            style={{
-              transformOrigin: isTop ? "top center" : "bottom center",
-              transform: `scale(${1 - reverseIndex * 0.05}) translateY(${yDirection * (1 - reverseIndex * 10)}%)`,
-              opacity: reverseIndex === 0 ? 1 : 0.9,
-            }}
-          >
-            <Toast
-              className={classNames(styles.toastAnimation, styles[`animation-${actualPosition}`])}
-              tone={toast.tone}
-              onClose={() => removeToast(toast.id)}
-              action={toast.action}
-              duration={toast.duration}
-              announce={toast.tone === "danger"}
+          return (
+            <Row
+              padding="4"
+              fillWidth
+              position="absolute"
+              key={toast.id}
+              className={classNames(styles.toastWrapper, styles[actualPosition])}
+              style={{
+                transformOrigin: isTop ? "top center" : "bottom center",
+                transform: `scale(${1 - reverseIndex * 0.05}) translateY(${yDirection * (1 - reverseIndex * 10)}%)`,
+                opacity: reverseIndex === 0 ? 1 : 0.9,
+              }}
             >
-              {toast.message}
-            </Toast>
-          </Row>
-        );
-      })}
+              <Toast
+                className={classNames(styles.toastAnimation, styles[`animation-${actualPosition}`])}
+                tone={toast.tone}
+                onClose={() => removeToast(toast.id)}
+                action={toast.action}
+                duration={toast.duration}
+                announce={toast.tone === "danger"}
+              >
+                {toast.message}
+              </Toast>
+            </Row>
+          );
+        })}
     </Column>,
     document.body,
   );
