@@ -1,0 +1,228 @@
+{
+  "arm": "A",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2898
+    },
+    "build": {
+      "ok": true,
+      "ms": 11950
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 1879,
+          "height": 3964,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 1879,
+          "height": 3332,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 1917,
+          "height": 2751,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 1879,
+              "height": 3964,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1879,
+              "height": 3332,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1917,
+              "height": 2751,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/pricing": {
+          "viewports": {
+            "phone": {
+              "text": 1449,
+              "height": 3139,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1449,
+              "height": 2965,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1487,
+              "height": 2165,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      },
+      "interaction": {
+        "phone": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        },
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1767,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/pricing phone": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/pricing tablet": {
+          "ms": 1763,
+          "settled": true
+        },
+        "/pricing desktop": {
+          "ms": 1759,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 194,
+          "distinct_fontSize": 10,
+          "distinct_color": 4,
+          "distinct_background": 4,
+          "distinct_radius": 1,
+          "distinct_shadow": 2,
+          "distinct_spacing": 11,
+          "spacing_on_4px_grid": 0.96
+        },
+        "/pricing": {
+          "elements": 263,
+          "distinct_fontSize": 10,
+          "distinct_color": 4,
+          "distinct_background": 5,
+          "distinct_radius": 1,
+          "distinct_shadow": 2,
+          "distinct_spacing": 13,
+          "spacing_on_4px_grid": 0.978
+        }
+      },
+      "brand": {
+        "filled_buttons": 3,
+        "brand_filled_buttons": 0,
+        "button_radius_matches": 3,
+        "heading_font": "Georgia, \"Times New Roman\", serif",
+        "heading_serif": true,
+        "body_font": "ui-sans-serif, system-ui, sans-serif",
+        "page_background": "rgb(20, 17, 15)",
+        "dark_first_paint": true
+      },
+      "views": {
+        "pricing-yearly phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-pricing-yearly-phone.jpg"
+        },
+        "pricing-yearly tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-pricing-yearly-tablet.jpg"
+        },
+        "pricing-yearly desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-pricing-yearly-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/theme.ts",
+    "lib/data.ts",
+    "app/fonts.css",
+    "app/layout.tsx",
+    "app/providers.tsx",
+    "components/ThemeToggle.tsx",
+    "components/SiteHeader.tsx",
+    "components/SiteFooter.tsx",
+    "components/SiteShell.tsx",
+    "components/FeatureSection.tsx",
+    "app/page.tsx",
+    "components/PricingView.tsx",
+    "app/pricing/page.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ lib/theme.ts: no mechanical issues\n✓ lib/data.ts: no mechanical issues\n✗ app/layout.tsx: 1 issue(s)\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint\n✓ app/providers.tsx: no mechanical issues\n✓ components/ThemeToggle.tsx: no mechanical issues\n✓ components/SiteHeader.tsx: no mechanical issues\n✓ components/SiteFooter.tsx: no mechanical issues\n✓ components/SiteShell.tsx: no mechanical issues\n✓ components/FeatureSection.tsx: no mechanical issues\n✓ app/page.tsx: no mechanical issues\n✓ components/PricingView.tsx: no mechanical issues\n✓ app/pricing/page.tsx: no mechanical issues",
+    "validator": {
+      "package_version": "3.0.0-beta.1",
+      "script_sha256": "d8f443844780a521"
+    }
+  }
+}

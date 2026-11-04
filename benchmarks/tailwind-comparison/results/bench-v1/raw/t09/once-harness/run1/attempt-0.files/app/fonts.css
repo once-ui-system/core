@@ -1,0 +1,26 @@
+/*
+ * Lumen typography and shape, expressed as design-system tokens (not per-element styles).
+ * Both families are system fonts: nothing is loaded from the network.
+ */
+:root {
+  --font-heading: Georgia, "Times New Roman", serif;
+  --font-body: ui-sans-serif, system-ui, sans-serif;
+  --font-label: ui-sans-serif, system-ui, sans-serif;
+  --font-code: ui-monospace, monospace;
+}
+
+/*
+ * 4px corner radius on buttons, inputs, cards and menus: every Once UI
+ * component reads its corners from the radius scale, so we set the scale.
+ * Applied on :root and on every theme attribute so the system's own
+ * data-border rules cannot win over it.
+ */
+:root,
+:root[data-border],
+[data-border] {
+  --radius-xs: 2px;
+  --radius-s: 4px;
+  --radius-m: 4px;
+  --radius-l: 4px;
+  --radius-xl: 4px;
+}

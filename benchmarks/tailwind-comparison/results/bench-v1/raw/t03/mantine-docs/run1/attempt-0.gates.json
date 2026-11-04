@@ -1,0 +1,25 @@
+{
+  "arm": "T",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/members/layout.tsx(2,26): error TS2307: Cannot find module '@/components/AppFrame' or its corresponding type declarations.\napp/page.tsx(1,26): error TS2307: Cannot find module '@/components/AppFrame' or its corresponding type declarations.\napp/projects/layout.tsx(2,26): error TS2307: Cannot find module '@/components/AppFrame' or its corresponding type declarations.\ncomponents/CommandPalette.tsx(17,33): error TS2307: Cannot find module './AppFrame' or its corresponding type declarations.\ncomponents/CommandPalette.tsx(18,32): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\ncomponents/CommandPalette.tsx(113,36): error TS7006: Parameter 'project' implicitly has an 'any' type.\ncomponents/DashboardScreen.tsx(14,82): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\ncomponents/DashboardScreen.tsx(17,39): error TS7006: Parameter 'sum' implicitly has an 'any' type.\ncomponents/DashboardScreen.tsx(17,44): error TS7006: Parameter 'p' implicitly has an 'any' type.\ncomponents/DashboardScreen.tsx(18,43): error TS7006: Parameter 'p' implicitly has an 'any' type.\ncomponents/DashboardScreen.tsx(19,41): error TS7006: Parameter 'm' implicitly has an 'any' type.\ncomponents/DashboardScreen.tsx(20,42): error TS7006: Parameter 'm' implicitly has an 'any' type.\ncomponents/DashboardScreen.tsx(66,34): error TS7006: Parameter 'project' implicitly has an 'any' type.\ncomponents/MembersScreen.tsx(2,50): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\ncomponents/MembersScreen.tsx(37,29): error TS7006: Parameter 'member' implicitly has an 'any' type.\ncomponents/MembersScreen.tsx(69,23): error TS7006: Parameter 'member' implicitly has an 'any' type.\ncomponents/ProjectsScreen.tsx(2,51): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\ncomponents/ProjectsScreen.tsx(33,30): error TS7006: Parameter 'project' implicitly has an 'any' type.\ncomponents/ProjectsScreen.tsx(57,24): error TS7006: Parameter 'project' implicitly has an 'any' type.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 3496
+    }
+  },
+  "files": [
+    "components/CommandPalette.tsx",
+    "components/InviteMemberModal.tsx",
+    "components/CreateProjectModal.tsx",
+    "components/DashboardScreen.tsx",
+    "components/ProjectsScreen.tsx",
+    "components/MembersScreen.tsx",
+    "app/page.tsx",
+    "app/projects/layout.tsx",
+    "app/projects/page.tsx",
+    "app/members/layout.tsx",
+    "app/members/page.tsx"
+  ]
+}

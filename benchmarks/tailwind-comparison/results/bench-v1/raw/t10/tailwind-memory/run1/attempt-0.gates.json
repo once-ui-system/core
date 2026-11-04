@@ -1,0 +1,43 @@
+{
+  "arm": "D",
+  "passed": false,
+  "failed_gate": "render",
+  "failure_output": "server did not start:\n",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 8655
+    },
+    "build": {
+      "ok": true,
+      "ms": 35057
+    },
+    "render": {
+      "ok": false,
+      "viewports": {},
+      "routes": {},
+      "errors": [
+        "server did not start:\n"
+      ],
+      "axe": null,
+      "interaction": {},
+      "settle": {}
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/Placeholder.tsx",
+    "components/Header.tsx",
+    "components/HomeMap.tsx",
+    "components/HomeCard.tsx",
+    "components/FilterBar.tsx",
+    "components/SearchView.tsx",
+    "app/page.tsx",
+    "components/DetailMap.tsx",
+    "components/DetailMapLoader.tsx",
+    "components/ContactForm.tsx",
+    "components/EnergyRating.tsx",
+    "app/homes/[id]/page.tsx",
+    "app/homes/[id]/not-found.tsx"
+  ]
+}
