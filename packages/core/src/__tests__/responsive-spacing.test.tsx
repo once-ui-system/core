@@ -24,9 +24,9 @@ describe("breakpoint spacing", () => {
       <ServerFlex s={{ gap: "4", padding: "8", marginTop: "16", paddingX: "24" }}>x</ServerFlex>,
     );
     expect(classes).toContain("s-g-4");
-    expect(classes).toContain("s-p-8");
-    expect(classes).toContain("s-mt-16");
-    expect(classes).toContain("s-px-24");
+    expect(classes).toContain("s-padding-8");
+    expect(classes).toContain("s-margin-top-16");
+    expect(classes).toContain("s-padding-x-24");
   });
 
   it("cascades a breakpoint down to the narrower ones", () => {

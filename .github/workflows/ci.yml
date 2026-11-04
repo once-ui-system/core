@@ -118,6 +118,13 @@ jobs:
           pnpm --filter @once-ui-system/core build
           pnpm --filter @once-ui-system/fx --filter @once-ui-system/blocks build
 
+      # Once UI components next to Tailwind CSS 4 with the adapter, in Chrome:
+      # they must compute the same styles as without Tailwind, whichever
+      # stylesheet loads first, and the adapter's classes must use Once UI's
+      # tokens. Tailwind's compiler, not a Next build, so a few seconds.
+      - name: Tailwind adapter in a browser
+        run: pnpm --filter @once-ui-system/docs check:tailwind
+
       # Every example on the site and in the agent harness is typechecked
       # against the built package, and every props table against the spec,
       # so a renamed prop or a wrong default fails here instead of on a page.

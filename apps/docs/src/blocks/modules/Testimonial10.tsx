@@ -234,7 +234,7 @@ function CaseStudySlideShow({
                           spacing={5}
                         />
                       </Mask>
-                      <Button className="mt-12" size="s" arrowIcon>
+                      <Button marginTop="12" size="s" arrowIcon>
                         Read story
                       </Button>
                     </Testimonial2>
