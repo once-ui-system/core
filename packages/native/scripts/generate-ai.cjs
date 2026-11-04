@@ -505,6 +505,7 @@ function main() {
         components: "ai/components/{Name}.json",
         bundle: "ai/bundles/{id}.md",
         examples: "ai/examples/",
+        starter: "ai/starters/app/src/",
       },
       tasks: [
         ...tasks.map((t) => ({ id: t.id, title: t.title, bundle: `ai/bundles/${t.id}.md` })),

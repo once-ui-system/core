@@ -9,7 +9,8 @@
   "gotchas": "ai/gotchas.json",
   "components": "ai/components/{Name}.json",
   "bundle": "ai/bundles/{id}.md",
-  "examples": "ai/examples/"
+  "examples": "ai/examples/",
+  "starter": "ai/starters/app/src/"
  },
  "tasks": [
   {

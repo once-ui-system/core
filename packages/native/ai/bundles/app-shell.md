@@ -93,6 +93,8 @@ export default function RootLayout() {
 ### ThemeProvider
 Root provider: core's style options with core's defaults (theme, brand, neutral, solid, border, scaling…), plus fonts and the screen's safe-area insets
 - theme?: Theme = "system" — `"system"` follows the device's appearance.
+- defaultTheme?: Theme = "dark" — The theme `"system"` falls back to when the device reports no appearance.
+- transition?: "all" | "micro" | "macro" — Web only: taken so a web app's `once-ui.config` style spreads in unchanged, and otherwise ignored.
 - brand?: Schemes | "custom" — `"custom"` reads `brandSeed` or `brandScale`, as `data-brand="custom"` does on the web.
 - accent?: Schemes | "custom"
 - neutral?: NeutralColor | "custom"
