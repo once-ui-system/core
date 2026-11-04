@@ -290,7 +290,10 @@ entry below that had landed by then:
   (it was `onSelectionChange`, as on 2.x's DataTable). CodeBlock `isCollapsible`
   is `collapsible`. MediaUpload `initialPreviewImage` is `defaultPreviewImage`.
   The codemod renames all three. Chart `Legend` takes `hidden` / `defaultHidden` /
-  `onHiddenChange(hidden)` in place of beta.1's `onToggle(index)`. DatePicker's
+  `onHiddenChange(hidden)` in place of beta.1's `onToggle(index)`. From 2.x's
+  latest additions: LogoLoader takes `tone` and `aria-label` (not `color` and
+  `ariaLabel`), MapPin and MapCircle take `tone` (the type is `MapTone`), and the
+  Map parts take `ref` as a prop like every other component. DatePicker's
   `currentMonth`, `currentYear` and `onMonthChange(increment)` leave its public
   props: they were the range picker's wiring, not a value contract, and the
   codemod reports each use. The codemod also reports, from the nearest

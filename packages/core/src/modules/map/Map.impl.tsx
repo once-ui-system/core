@@ -176,7 +176,7 @@ function tintStyle(map: MapLibreMap) {
   }
 }
 
-const MapImpl: React.FC<MapProps> = ({
+const MapImpl = ({
   viewport,
   defaultViewport,
   onViewportChange,
@@ -200,7 +200,7 @@ const MapImpl: React.FC<MapProps> = ({
   children,
   className,
   ...flex
-}) => {
+}: MapProps) => {
   const labels = { ...DEFAULT_LABELS, ...labelsProp };
   const container = useRef<HTMLDivElement>(null);
   const { resolvedTheme } = useTheme();

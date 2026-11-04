@@ -896,6 +896,9 @@ const PRE_3_PROPS = {
   Table: { onSelectionChange: "onSelectedChange" },
   CodeBlock: { isCollapsible: "collapsible" },
   MediaUpload: { initialPreviewImage: "defaultPreviewImage" },
+  LogoLoader: { ariaLabel: "aria-label", color: "tone" },
+  MapPin: { color: "tone" },
+  MapCircle: { color: "tone" },
   // D5: a `speed` that was a length of time.
   ShineFx: { speed: "duration", variant: "textVariant" },
   CountFx: { speed: "duration", variant: "textVariant" },

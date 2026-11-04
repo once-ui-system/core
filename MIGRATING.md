@@ -141,6 +141,8 @@ which every change goes through, so `{...register("x")}` works on them too.
 | DataTable (Table in 3.0) `onSelectionChange(ids)` | `onSelectedChange(ids)`, beside `selected` / `defaultSelected` | renames, on DataTable and on a beta's Table |
 | CodeBlock `isCollapsible` | `collapsible`, an adjective like `searchable` and `closable` | renames |
 | MediaUpload `initialPreviewImage` | `defaultPreviewImage` | renames |
+| LogoLoader `color`, `ariaLabel` | `tone`, `aria-label`, as on LogoSpinner | renames |
+| MapPin, MapCircle `color`; the `MapColor` type | `tone`; `MapTone` | renames |
 | DatePicker `currentMonth`, `currentYear`, `onMonthChange(increment)` | removed: they were how DateRangePicker drove each calendar; start on a month with `defaultValue` | reports every use |
 
 Behaviour to check: a RadioButton outside a RadioGroup no longer unticks when

@@ -55,6 +55,7 @@ const TRANSFORMS = {
   StatusIndicator: { ariaLabel: "aria-label" },
   // 2.4's loaders and ai/social modules.
   LogoSpinner: { ariaLabel: "aria-label" },
+  LogoLoader: { ariaLabel: "aria-label" },
   WorkingIndicator: { ariaLabel: "aria-label" },
   VoiceVisualizer: { ariaLabel: "aria-label" },
   Mascot: { ariaLabel: "aria-label" },
@@ -402,7 +403,7 @@ const REWRITES = { Dialog: rewriteDialog, CodeBlock: rewriteCodeBlock, Accordion
  * every reference to it in the file is renamed (a file that imports
  * `generateMetadata` cannot also declare its own, so none of them is Next's).
  */
-const RENAMED_EXPORTS = { Particle: "ParticleFx", generateMetadata: "createMetadata" };
+const RENAMED_EXPORTS = { Particle: "ParticleFx", generateMetadata: "createMetadata", MapColor: "MapTone" };
 
 /** Exports 3.0 removed with no drop-in replacement: name → what to do. A3, A6. */
 const REMOVED_EXPORTS = {
@@ -1463,7 +1464,11 @@ const TONE_RENAMES = {
   StatusIndicator: { color: "scheme" },
   // 2.4: `color` was a theme role (brand, accent, neutral, inherit).
   LogoSpinner: { color: "tone" },
+  LogoLoader: { color: "tone" },
   VoiceVisualizer: { color: "tone" },
+  // Map (2.x after 2.6): the palette is `tone`, as on every 3.0 component.
+  MapPin: { color: "tone" },
+  MapCircle: { color: "tone" },
 };
 
 /** E2: Button and IconButton `variant` values that were a tone or a twin. */

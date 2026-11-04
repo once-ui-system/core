@@ -204,3 +204,25 @@ describe("DatePicker month wiring", () => {
     }
   });
 });
+
+describe("LogoLoader (2.x after 2.6) takes 3.0's names", () => {
+  it("renames color to tone and ariaLabel to aria-label", () => {
+    const { out } = transform(
+      `${core("LogoLoader")}<LogoLoader svg={s} color="brand" ariaLabel="Opening" />`,
+    );
+    assert.match(out, /<LogoLoader svg=\{s\} tone="brand" aria-label="Opening" \/>/);
+  });
+});
+
+describe("Map parts take tone", () => {
+  it("renames MapPin and MapCircle color, and the MapColor type", () => {
+    const { out, warnings } = transform(
+      `import { MapPin, MapCircle, type MapColor } from "@once-ui-system/core/map";\nconst c: MapColor = "accent";\n<MapPin color="accent" />;\n<MapCircle position={p} radius={4} color={c} />;`,
+    );
+    assert.match(out, /<MapPin tone="accent" \/>/);
+    assert.match(out, /<MapCircle position=\{p\} radius=\{4\} tone=\{c\} \/>/);
+    assert.match(out, /type MapTone as MapColor/);
+    // `/map` is a 3.0 subpath, so the import stays quiet.
+    assert.deepEqual(warnings, []);
+  });
+});

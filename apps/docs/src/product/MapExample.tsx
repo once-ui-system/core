@@ -194,7 +194,7 @@ export function MapControlledExample() {
       <Map height={384} viewport={viewport} onViewportChange={setViewport}>
         {places.map((place) => (
           <MapMarker key={place.label} position={place.position}>
-            <MapPin color="accent" aria-label={place.label} />
+            <MapPin tone="accent" aria-label={place.label} />
           </MapMarker>
         ))}
       </Map>
