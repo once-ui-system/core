@@ -1,8 +1,8 @@
 import type { ThemeProviderProps } from "@once-ui-system/native";
 
 // The same options, names and values as a web app's src/resources/once-ui.config.ts.
-// When the app also has a web build, import that file's `style` here instead, so a
-// brand change in one place reaches both.
+// When the app also has a web build, both take `style` from one shared package
+// (see this package's AGENTS.md), so a brand change in one place reaches both.
 export const style: Omit<ThemeProviderProps, "children" | "insets" | "fonts"> = {
   theme: "system", // follows the phone's light or dark setting
   defaultTheme: "dark", // used when the phone reports neither

@@ -35,11 +35,11 @@ export function TabBar() {
             >
               <Icon
                 name={entry.icon ?? "home"}
-                onBackground={selected ? "brand-strong" : "neutral-weak"}
+                onBackground={selected ? "brand-medium" : "neutral-weak"}
               />
               <Text
                 textVariant="label-default-xs"
-                onBackground={selected ? "brand-strong" : "neutral-weak"}
+                onBackground={selected ? "brand-medium" : "neutral-weak"}
               >
                 {entry.label}
               </Text>

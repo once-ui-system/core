@@ -3,7 +3,7 @@ import { Pressable, View, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 import type { TextVariant, Tone, TShirtSizes } from "../types";
 import { pressHandler } from "./Button";
-import { Row } from "./Flex";
+import { Row, useOwnWidth } from "./Flex";
 import { type IconSlot, renderIcon } from "./Icon";
 import { IconButton, type IconButtonProps } from "./IconButton";
 import { Text } from "./Text";
@@ -124,6 +124,7 @@ export function Tag({
   testID,
 }: TagProps) {
   const theme = useTheme();
+  const ownWidth = useOwnWidth();
   // Left out, the theme's density picks it.
   const size = sizeProp ?? theme.controlSize;
   const handler = pressHandler(onPress, onClick, href);
@@ -177,7 +178,7 @@ export function Tag({
         </Row>
       );
     };
-    const box = [{ alignSelf: "flex-start" as const }, style];
+    const box = [ownWidth, style];
     if (!toggles)
       return (
         <View testID={testID} style={box}>
@@ -242,7 +243,7 @@ export function Tag({
     </Row>
   );
 
-  const box = [{ alignSelf: "flex-start" as const }, style];
+  const box = [ownWidth, style];
   if (!handler)
     return (
       <View testID={testID} style={box}>

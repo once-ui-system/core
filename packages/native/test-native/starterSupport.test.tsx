@@ -2,6 +2,8 @@ import { describe, expect, it } from "@jest/globals";
 import { act, render, screen } from "@testing-library/react-native";
 import { useEffect } from "react";
 import { Text } from "react-native";
+import { Button } from "../src/components/Button";
+import { Column } from "../src/components/Flex";
 import { ToastProvider, useToast } from "../src/components/Toast";
 import { ThemeProvider, useTheme } from "../src/theme";
 
@@ -54,5 +56,37 @@ describe("ToastProvider setBottomOffset", () => {
       host = host.parent;
     }
     expect(bottom).toBeGreaterThan(90);
+  });
+});
+
+describe("Button in a column", () => {
+  const alignSelf = () =>
+    [screen.getByTestId("b").props.style]
+      .flat(Number.POSITIVE_INFINITY)
+      .reduce(
+        (v, s) => (s && typeof s === "object" && "alignSelf" in s ? s.alignSelf : v),
+        undefined,
+      );
+
+  it('follows horizontal="center"', async () => {
+    await render(
+      <ThemeProvider theme="dark">
+        <Column horizontal="center">
+          <Button testID="b" label="Browse the menu" />
+        </Column>
+      </ThemeProvider>,
+    );
+    expect(alignSelf()).toBeUndefined();
+  });
+
+  it("keeps its own width in a column that stretches", async () => {
+    await render(
+      <ThemeProvider theme="dark">
+        <Column>
+          <Button testID="b" label="Browse the menu" />
+        </Column>
+      </ThemeProvider>,
+    );
+    expect(alignSelf()).toBe("flex-start");
   });
 });

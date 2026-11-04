@@ -2,7 +2,7 @@
 
 The providers at the root, safe areas, a screen header and a bottom tab bar, for a new app or its navigation
 
-This file is complete for this task: the rules (all of `rules.md`), the props of every component below, their mixins and types, the hooks, every gotcha for this task, the quality bar and a gold example. Write the screen from it; reading the rules, catalog, gotchas or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.
+This file is complete for this task: the rules (all of `rules.md`), the props of every component below, their mixins and types, the hooks and every gotcha for this task, the quality bar and a gold example. Write the screen from it; reading the rules, catalog, gotchas or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.
 
 ## Rules
 
@@ -62,12 +62,12 @@ export default function RootLayout() {
 10. `gap`, `padding` and `margin` take spacing tokens: "0", "1", "2", "4", "8", "12", "16", "20", "24", "32", "40", "48", "56", "64", "72", "80", "104", "128", "160", or `xs`–`xl`. A screen's side padding is "20" (or "16"); gaps inside a section "8"–"16", between sections "24"–"32".
 11. A number on a size or offset prop is in points (`maxWidth={320}`, `height={48}`); tokens (`width="40"`) and `"50%"` work too. CSS lengths (`vh`, `calc()`) do not exist here.
 12. Breakpoint props (`xl`, `l`, `m`, `s`, `xs`) work on `Flex`, `Row`, `Column` and `Card` as on the web, by window width: use them for tablets (`m={{ direction: "column" }}`), not to tell phones apart.
-13. React Native has no single-side borders: `borderTop`, `borderBottom`, `borderX` are type errors. A divider is `<Line />` between the views. `position` is `relative`, `absolute` or `static`; there is no `fixed` or `sticky`, so a bar that stays put sits outside the `ScrollView`.
+13. Single-side borders work as on the web: `borderTop="neutral-alpha-weak"` on a tab bar, `borderBottom` on a header, `borderX`/`borderY` for two sides. A divider between rows of a list is `<Line />`. `position` is `relative`, `absolute` or `static`; there is no `fixed` or `sticky`, so a bar that stays put sits outside the `ScrollView`.
 14. `radius` does not clip children: add `overflow="hidden"` when an image or a filled child must follow the corners.
 
 ## Surfaces and color
 
-15. A static panel is `<Column background="surface" border="neutral-alpha-weak" radius="l" padding="16">`. `Card` is for something pressable (`onPress`); `selected` marks the picked one.
+15. A static panel is `<Column background="surface" border radius="l" padding="16">` (`border` alone is `neutral-alpha-weak`, as on the web). `Card` is for something pressable (`onPress`); `selected` marks the picked one.
 16. Colors are semantic tokens (`{scheme}-{weight}`, `-alpha-` for tints): `background="brand-alpha-weak"`, `onBackground="neutral-weak"`. Never hex or rgb. A React Native primitive you style yourself reads them with `useTheme()`: `theme.color("brand-solid-strong")`, `theme.space("16")`, `theme.radius("l")`.
 
 ## Text
@@ -344,7 +344,7 @@ adjustments, arrowDown, arrowLeft, arrowRight, arrowUp, arrowUpRight, ball, bank
 - There is no Nav or NavItem: a bottom tab bar is a Row safeArea={["bottom"]} under a Line on background="surface", outside the ScrollView, of one Card per tab (flex={1} center, border and background "transparent", accessibilityRole="tab") holding an Icon over a label-default-xs Text, brand-strong when selected and neutral-weak otherwise. With Expo Router it is the tabBar of its Tabs layout.
 - There is no Scroller: a screen scrolls in React Native's ScrollView (contentContainerStyle={{ flexGrow: 1 }}), a long list in FlatList; a row of chips that scrolls sideways is a horizontal ScrollView with showsHorizontalScrollIndicator={false}.
 - href opens a URL outside the app. Moving between screens is the router: onPress={() => router.push("/rewards")}. There is no SmartLink; a link in a sentence is a Button variant="link" or a pressable Text from React Native.
-- borderTop, borderBottom and the other single-side borders do not exist: put a <Line /> above or below the view instead.
+- One side of a border is borderTop, borderRight, borderBottom, borderLeft, borderX or borderY on Row, Column or Card, as on the web; a divider between list rows is a <Line />.
 - Press handlers are onPress; onClick also works so web code moves over. Never wrap a Button or Card in a Pressable or TouchableOpacity to make it pressable, and never pad a small control to make it tappable: it already takes taps from 44pt around it.
 - Icon names come from the Icons list in this file. Never guess a name or cast one with as IconName; an app adds others with IconProvider.
 - Colors are semantic tokens ({scheme}-{weight}, -alpha- for a tint), never hex or rgb. On your own React Native view use theme.color("brand-solid-strong") from useTheme().
@@ -442,7 +442,7 @@ function TabBar({ value, onValueChange }: { value: TabId; onValueChange: (tab: T
 
 function Placeholder({ text }: { text: string }) {
   return (
-    <Column background="surface" border="neutral-alpha-weak" radius="l" padding="16" gap="4">
+    <Column background="surface" border radius="l" padding="16" gap="4">
       <Text textVariant="label-strong-m">{text}</Text>
       <Text textVariant="body-default-s" onBackground="neutral-weak">
         The screen's own content goes here.

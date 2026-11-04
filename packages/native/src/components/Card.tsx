@@ -2,7 +2,14 @@ import { forwardRef, type ReactNode } from "react";
 import { Pressable, View } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 import { pressHandler } from "./Button";
-import { axisOf, FlexDirectionContext, type FlexProps, flexStyle, wrapText } from "./Flex";
+import {
+  axisOf,
+  FlexAlignContext,
+  FlexDirectionContext,
+  type FlexProps,
+  flexStyle,
+  wrapText,
+} from "./Flex";
 import type { RefComponent, ViewRef } from "./refs";
 
 export interface CardProps extends FlexProps {
@@ -35,7 +42,9 @@ export const Card: RefComponent<CardProps, ViewRef> = forwardRef<ViewRef, CardPr
     return (
       <View ref={ref} {...rest} style={[style, userStyle]}>
         <FlexDirectionContext.Provider value={axisOf(style)}>
-          {wrapText(children)}
+          <FlexAlignContext.Provider value={style.alignItems}>
+            {wrapText(children)}
+          </FlexAlignContext.Provider>
         </FlexDirectionContext.Provider>
       </View>
     );
@@ -50,7 +59,9 @@ export const Card: RefComponent<CardProps, ViewRef> = forwardRef<ViewRef, CardPr
       style={({ pressed }) => [style, pressed && { opacity: 0.8 }, userStyle]}
     >
       <FlexDirectionContext.Provider value={axisOf(style)}>
-        {wrapText(children)}
+        <FlexAlignContext.Provider value={style.alignItems}>
+          {wrapText(children)}
+        </FlexAlignContext.Provider>
       </FlexDirectionContext.Provider>
     </Pressable>
   );

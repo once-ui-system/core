@@ -11,7 +11,7 @@ export default function SettingsScreen() {
   const items = group && "items" in group ? group.items : [];
   return (
     <Screen title="Settings">
-      <Column background="surface" border="neutral-alpha-weak" radius="l" overflow="hidden">
+      <Column background="surface" border radius="l" overflow="hidden">
         {items.map((link, index) => (
           <Fragment key={link.href}>
             {index > 0 && <Line />}
