@@ -272,7 +272,7 @@
    "importFrom": "@once-ui-system/core/config",
    "kind": "function",
    "signature": "<T extends OnceUIConfig>(config: T & CheckedConfig<T>) => T",
-   "doc": "Type an app's `once-ui.config`."
+   "doc": "Type an app's `once-ui.config`, whose `style` keys are ThemeProvider's props (an exact brand colour is `brand: \"custom\", brandSeed: \"#0F766E\"`)."
   },
   "useStylePanel": {
    "group": "blocks",
@@ -532,6 +532,7 @@
    "image",
    "security",
    "opacity",
+   "download",
    "info",
    "danger",
    "warning",
@@ -568,7 +569,6 @@
    "dark",
    "dislike",
    "document",
-   "download",
    "edit",
    "enter",
    "eye",

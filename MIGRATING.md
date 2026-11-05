@@ -692,6 +692,21 @@ CSS, so look for these:
 - If your own CSS uses `@layer`, it sits below unlayered CSS too, and its order
   against Once UI's is the order the layers first appear. To put yours above,
   declare the order once before anything loads: `@layer once-ui, app;`.
+  "Before anything loads" means before the first stylesheet, not first in your
+  entry file: a bundler (Vite, webpack) emits component CSS in import order,
+  and every Once UI stylesheet opens with its own layer-order statement, so a
+  `@layer` line in your app CSS can arrive after Once UI's and lose. Put it in
+  the document itself: `<style>@layer legacy, once-ui;</style>` first in
+  `index.html`'s `<head>`, or in the root layout's `<head>` in Next.js. A
+  layer you declare later than Once UI's lands above `once-ui`; one you list
+  before it lands below.
+- A native `<button>` with no `type` submits its form. A `<Button>` with
+  neither `onClick`, `href` nor `type` renders a div (decoration inside
+  another control), so a form's save button needs `type="submit"`. In
+  development a typeless Button inside a `<form>` warns.
+- Your element styles (`input:focus { box-shadow }`, a `min-height` on every
+  `input`) no longer reach inside fields: the field's own `<input>` and
+  `<textarea>` state their outline, shadow, margin and min/max height.
 
 ### 13. Leaf components take a small prop set
 

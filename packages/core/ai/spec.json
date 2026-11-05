@@ -516,13 +516,13 @@
    "left": "SpacingToken | number | CSSUnit",
    "fillWidth": "boolean",
    "position": "CSSProperties[\"position\"]",
-   "size": "TShirtSizes",
    "disabled": "boolean",
+   "href": "string",
+   "size": "TShirtSizes",
    "corners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
    "variant": "\"ghost\" | \"outline\" | \"subtle\"",
    "weight": "\"default\" | \"strong\"",
    "truncate": "boolean",
-   "href": "string",
    "rounded": "boolean",
    "prefixIcon": "IconName",
    "suffixIcon": "IconName"
@@ -1132,6 +1132,7 @@
    "image",
    "security",
    "opacity",
+   "download",
    "info",
    "danger",
    "warning",
@@ -1168,7 +1169,6 @@
    "dark",
    "dislike",
    "document",
-   "download",
    "edit",
    "enter",
    "eye",
@@ -2750,7 +2750,8 @@
     "children": "ReactNode",
     "href": "string",
     "id": "string",
-    "arrowIcon": "boolean = false"
+    "arrowIcon": "boolean = false",
+    "onClick": "React.MouseEventHandler<HTMLElement>"
    }
   },
   "Card": {
@@ -2810,8 +2811,8 @@
     "errorMessage": "ReactNode",
     "label": "React.ReactNode",
     "id": "string",
-    "description": "React.ReactNode",
     "disabled": "boolean",
+    "description": "React.ReactNode",
     "iconButtonProps": "IconButtonProps",
     "auto": "boolean",
     "checked": "boolean",
@@ -2897,8 +2898,8 @@
     "defaultValue": "Date | DateRange",
     "autoFocus": "boolean",
     "className": "string",
-    "size": "CondensedTShirtSizes",
     "value": "Date | DateRange",
+    "size": "CondensedTShirtSizes",
     "onValueChange": "((date: Date) => void) | ((range: DateRange) => void)",
     "minDate": "Date",
     "maxDate": "Date",
@@ -3248,7 +3249,8 @@
     "loading": "boolean = false",
     "disabled": "boolean = false",
     "href": "string",
-    "children": "ReactNode"
+    "children": "ReactNode",
+    "onClick": "React.MouseEventHandler<HTMLElement>"
    }
   },
   "InfiniteScroll": {
@@ -6801,7 +6803,7 @@
    "importFrom": "@once-ui-system/core/config",
    "kind": "function",
    "signature": "<T extends OnceUIConfig>(config: T & CheckedConfig<T>) => T",
-   "doc": "Type an app's `once-ui.config`."
+   "doc": "Type an app's `once-ui.config`, whose `style` keys are ThemeProvider's props (an exact brand colour is `brand: \"custom\", brandSeed: \"#0F766E\"`)."
   },
   "useStylePanel": {
    "group": "blocks",
