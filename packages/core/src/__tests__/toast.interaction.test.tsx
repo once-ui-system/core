@@ -1,13 +1,18 @@
 import { act, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type React from "react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { Toast } from "../components/Toast";
-import { Toaster } from "../components/Toaster";
+import { loadToast, Toaster } from "../components/Toaster";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { ToastProvider, useToast } from "../contexts/ToastProvider";
 import { expectNoAxeViolations } from "../test/axe";
 import { failOnConsoleError } from "../test/failOnConsoleError";
+
+// Toast loads after the page (see Toaster); these tests add toasts synchronously.
+beforeAll(async () => {
+  await loadToast();
+});
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>

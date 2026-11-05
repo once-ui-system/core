@@ -285,6 +285,17 @@ entry below that had landed by then:
   `date` object. Chart tooltips and axes write numbers through `valueFormat` in
   `locale` when either is set; without them they draw as 2.x did. With no
   `series`, the x column is no longer drawn as a series, and `label` never is.
+- **Fixes from the first real-app migration** (3.0.0-beta.2). Button and
+  IconButton type `onClick`'s event as `MouseEvent<HTMLElement>`, so an inline
+  handler compiles under strict. `type="reset"` and a `form` attribute render a
+  real `<button>`, and a typeless Button inside a `<form>` warns in development
+  that it will not submit. A field's own `<input>` and `<textarea>` state their
+  outline, shadow, margin and min/max height, so an app's `input:focus` ring no
+  longer draws inside it. MIGRATING § 12 says where to declare `@layer` order
+  in a Vite app.
+- **Toast loads with the first toast** (3.0.0-beta.2). `ToastProvider` keeps its
+  polite live region in the page from the start, so screen readers still announce
+  the first toast, and fetches the `Toast` component only when one is shown.
 - **Real ESM** (B3): `"type": "module"`, and every relative import in `dist` names its
   file (`./Button.js`, `../data/emoji-data.json` with `{ type: "json" }`), built with
   `module`/`moduleResolution: NodeNext` as `packages/cli` is. Plain Node resolves the
