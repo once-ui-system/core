@@ -50,7 +50,10 @@ width: run your formatter on the files it lists afterwards (`biome check
 import `@once-ui-system/fx` or `@once-ui-system/blocks`, the closing note
 lists each package with the files that import it: add the package to your
 dependencies, and if your app generates other apps, to the dependency list
-of every template that ships one of those files.
+of every template that ships one of those files. It also reads the nearest
+`package.json` and reports what 3.0 asks of it: `react` and `react-dom` below
+19 (§ 2), and a `recharts` dependency your app no longer needs for Once UI's
+charts (§ 12).
 
 Source kept as text is checked too. JSX in a template literal (a code
 sample) is migrated by name, like MDX. A JSON string that is a byte-exact
@@ -135,6 +138,12 @@ which every change goes through, so `{...register("x")}` works on them too.
 | RevealFx, Carousel `revealedByDefault` | `defaultRevealed` | renames |
 | Kbar, KbarContent `inputSize` | `size` | renames |
 | LineChart, BarChart, LineBarChart, PieChart `date={{ onChange }}` | `date={{ onRangeChange }}` | renames in an inline `date`; reports one built elsewhere |
+| DataTable (Table in 3.0) `onSelectionChange(ids)` | `onSelectedChange(ids)`, beside `selected` / `defaultSelected` | renames, on DataTable and on a beta's Table |
+| CodeBlock `isCollapsible` | `collapsible`, an adjective like `searchable` and `closable` | renames |
+| MediaUpload `initialPreviewImage` | `defaultPreviewImage` | renames |
+| LogoLoader `color`, `ariaLabel` | `tone`, `aria-label`, as on LogoSpinner | renames |
+| MapPin, MapCircle `color`; the `MapColor` type | `tone`; `MapTone` | renames |
+| DatePicker `currentMonth`, `currentYear`, `onMonthChange(increment)` | removed: they were how DateRangePicker drove each calendar; start on a month with `defaultValue` | reports every use |
 
 Behaviour to check: a RadioButton outside a RadioGroup no longer unticks when
 it is clicked again, as a native radio; SegmentedControl no longer moves its
@@ -692,6 +701,21 @@ CSS, so look for these:
 - If your own CSS uses `@layer`, it sits below unlayered CSS too, and its order
   against Once UI's is the order the layers first appear. To put yours above,
   declare the order once before anything loads: `@layer once-ui, app;`.
+  "Before anything loads" means before the first stylesheet, not first in your
+  entry file: a bundler (Vite, webpack) emits component CSS in import order,
+  and every Once UI stylesheet opens with its own layer-order statement, so a
+  `@layer` line in your app CSS can arrive after Once UI's and lose. Put it in
+  the document itself: `<style>@layer legacy, once-ui;</style>` first in
+  `index.html`'s `<head>`, or in the root layout's `<head>` in Next.js. A
+  layer you declare later than Once UI's lands above `once-ui`; one you list
+  before it lands below.
+- A native `<button>` with no `type` submits its form. A `<Button>` with
+  neither `onClick`, `href` nor `type` renders a div (decoration inside
+  another control), so a form's save button needs `type="submit"`. In
+  development a typeless Button inside a `<form>` warns.
+- Your element styles (`input:focus { box-shadow }`, a `min-height` on every
+  `input`) no longer reach inside fields: the field's own `<input>` and
+  `<textarea>` state their outline, shadow, margin and min/max height.
 
 ### 13. Leaf components take a small prop set
 
@@ -786,6 +810,27 @@ resolved to (`borderColor: "var(--brand-alpha-medium)"`, `borderRadius:
 "var(--radius-m)"`), since 3.0's Avatar sets its own. `node scripts/codemod-3.0-leaf.mjs <dir>` runs this
 step on its own. The AI validator reports the same props (`layout.leafProps`)
 and names the wrapper.
+
+### 14. Spacing, offset and grid-column classes are spelled out
+
+Props are unchanged. The utility classes they write are renamed, because
+Tailwind CSS owns the short names with another scale (Tailwind's `p-4` is
+1rem, Once UI's was 4px) and an app using both would see Tailwind's rule land
+on Once UI's elements:
+
+| 2.x | 3.0 |
+| --- | --- |
+| `p-16`, `px-16`, `py-16`, `pt-16`, `pr-16`, `pb-16`, `pl-16` | `padding-16`, `padding-x-16`, `padding-y-16`, `padding-top-16`, `padding-right-16`, `padding-bottom-16`, `padding-left-16` |
+| `m-16`, `mx-auto`, `mt-16`, … | `margin-16`, `margin-x-auto`, `margin-top-16`, … |
+| `top-16`, `right-16`, `bottom-16`, `left-16` | `offset-top-16`, `offset-right-16`, `offset-bottom-16`, `offset-left-16` |
+| `columns-3`, `columns-auto-fit` | `grid-columns-3`, `grid-columns-auto-fit` |
+
+Every breakpoint form follows (`s-p-16` → `s-padding-16`). Gap stays `g-16`.
+Only a class you wrote by hand needs this: the codemod rewrites them in
+`className="…"` and in the strings of `className={…}`. In a project with
+Tailwind CSS in its package.json it reports them instead, since there `p-4`
+already meant Tailwind's. `node scripts/codemod-3.0-class-names.mjs <dir>`
+runs this step on its own.
 
 ---
 

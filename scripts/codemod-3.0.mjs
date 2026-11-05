@@ -39,9 +39,11 @@ import { LEAVES, elementsOf, transformLeaf } from "./codemod-3.0-leaf.mjs";
 import { consumesProp, forwardsProp, isAliasSource, readSource, resolveOwn } from "./codemod-3.0-own.mjs";
 import { transformMerges } from "./codemod-3.0-merges.mjs";
 import { transformTypes } from "./codemod-3.0-types.mjs";
+import { dependencyReports, nearestPackage } from "./codemod-3.0-deps.mjs";
 import { ONE_X_MESSAGE, detectOneX } from "./codemod-3.0-detect.mjs";
 import { transformJsonStrings } from "./codemod-3.0-json.mjs";
 import { transformPartNames } from "./codemod-3.0-part-names.mjs";
+import { transformClassNames, usesTailwind } from "./codemod-3.0-class-names.mjs";
 
 /** component → { oldProp: newProp } */
 const TRANSFORMS = {
@@ -53,6 +55,7 @@ const TRANSFORMS = {
   StatusIndicator: { ariaLabel: "aria-label" },
   // 2.4's loaders and ai/social modules.
   LogoSpinner: { ariaLabel: "aria-label" },
+  LogoLoader: { ariaLabel: "aria-label" },
   WorkingIndicator: { ariaLabel: "aria-label" },
   VoiceVisualizer: { ariaLabel: "aria-label" },
   Mascot: { ariaLabel: "aria-label" },
@@ -114,6 +117,15 @@ const VALUE_CONTRACT_CONTROLS = {
   // A field's height is `size` everywhere else.
   Kbar: { inputSize: "size" },
   KbarContent: { inputSize: "size" },
+  // Freeze sweep: the selection is `selected` / `defaultSelected`, so its
+  // handler is `onSelectedChange`. DataTable before the merge pass renames it
+  // to Table; Table for code written against 3.0.0-beta.0 and beta.1.
+  DataTable: { onSelectionChange: "onSelectedChange" },
+  Table: { onSelectionChange: "onSelectedChange" },
+  // Booleans read as adjectives (`closable`, `searchable`), never `isX`.
+  CodeBlock: { isCollapsible: "collapsible" },
+  // The `default*` spelling of a starting state the component then owns.
+  MediaUpload: { initialPreviewImage: "defaultPreviewImage" },
 };
 
 for (const table of [VALUE_CONTRACT_FIELDS, VALUE_CONTRACT_CONTROLS]) {
@@ -130,6 +142,12 @@ const FLAGGED = {
     open:
       "was an autofocus hint, not visibility: it re-focuses the grid each time it turns true. " +
       "Keep it only alongside autoFocus for a picker you open yourself; otherwise remove it",
+    currentMonth:
+      "removed from the public props (it was the range picker's wiring): start the picker on a month with defaultValue, or use DatePicker range",
+    currentYear:
+      "removed from the public props (it was the range picker's wiring): start the picker on a month with defaultValue, or use DatePicker range",
+    onMonthChange:
+      "removed from the public props (it was the range picker's wiring, called with +1 or -1): the picker moves its own month",
   },
   // C4: renamed too, but the handler now receives the next state, and
   // `open` controls the accordion whether or not a handler is passed.
@@ -385,7 +403,7 @@ const REWRITES = { Dialog: rewriteDialog, CodeBlock: rewriteCodeBlock, Accordion
  * every reference to it in the file is renamed (a file that imports
  * `generateMetadata` cannot also declare its own, so none of them is Next's).
  */
-const RENAMED_EXPORTS = { Particle: "ParticleFx", generateMetadata: "createMetadata" };
+const RENAMED_EXPORTS = { Particle: "ParticleFx", generateMetadata: "createMetadata", MapColor: "MapTone" };
 
 /** Exports 3.0 removed with no drop-in replacement: name → what to do. A3, A6. */
 const REMOVED_EXPORTS = {
@@ -1446,7 +1464,11 @@ const TONE_RENAMES = {
   StatusIndicator: { color: "scheme" },
   // 2.4: `color` was a theme role (brand, accent, neutral, inherit).
   LogoSpinner: { color: "tone" },
+  LogoLoader: { color: "tone" },
   VoiceVisualizer: { color: "tone" },
+  // Map (2.x after 2.6): the palette is `tone`, as on every 3.0 component.
+  MapPin: { color: "tone" },
+  MapCircle: { color: "tone" },
 };
 
 /** E2: Button and IconButton `variant` values that were a tone or a twin. */
@@ -2251,7 +2273,7 @@ function applyEdits(src, edits, hits) {
  * that moved to a package (RevealFx → fx, StylePanel → blocks) is imported
  * from it by name, since the namespace no longer holds it.
  */
-export function transform(src, { file = null, devLogger = null, strings = true } = {}) {
+export function transform(src, { file = null, devLogger = null, strings = true, tailwind = false } = {}) {
   const namespaces = [
     ...src.matchAll(/(?<![\w$.])import\s+\*\s+as\s+([\w$]+)\s+from\s*(["'])@once-ui-system\/core\2/g),
   ].map((m) => m[1]);
@@ -2264,14 +2286,14 @@ export function transform(src, { file = null, devLogger = null, strings = true }
       return `${open}${ns}__${name}`;
     });
   }
-  if (!used.size) return transformFile(src, { file, devLogger, strings });
+  if (!used.size) return transformFile(src, { file, devLogger, strings, tailwind });
   // After the last import, so a pass that adds a name to "the" core import finds the file's own first.
   const imports = [...text.matchAll(/^import[^;]*?from\s*["'][^"']+["'];?[ \t]*$/gm)];
   const last = imports.at(-1);
   const at = last ? last.index + last[0].length : 0;
   const synthetic = `\nimport { ${[...used].map(([local, { name }]) => `${name} as ${local}`).join(", ")} } from "@once-ui-system/core";`;
   text = text.slice(0, at) + synthetic + text.slice(at);
-  const result = transformFile(text, { file, devLogger, strings });
+  const result = transformFile(text, { file, devLogger, strings, tailwind });
   let out = result.out;
   const bound = new Set([...importBindings(out).keys()]);
   const extra = [];
@@ -2315,7 +2337,7 @@ export function transform(src, { file = null, devLogger = null, strings = true }
   return { out, hits, warnings };
 }
 
-function transformFile(src, { file = null, devLogger = null, strings = true } = {}) {
+function transformFile(src, { file = null, devLogger = null, strings = true, tailwind = false } = {}) {
   const hits = [];
   // Reports as { text, line }: a line is in the text the pass read, and is
   // carried on through each later pass's rewrite to the file written.
@@ -2356,6 +2378,9 @@ function transformFile(src, { file = null, devLogger = null, strings = true } = 
   // B2, F9: import sources (./codemod-3.0-imports.mjs). Last, so a name the
   // merges produced (EmojiPickerDropdown → EmojiPicker) moves to its subpath.
   run(transformImports(out), out);
+  // G6: spacing, offset and grid-column classes written by hand
+  // (./codemod-3.0-class-names.mjs); reported instead in a Tailwind project.
+  run(transformClassNames(out, { tailwind }), out);
   // Strings that generate Once UI source: reported, never rewritten.
   if (strings && !/\.mdx$/.test(file ?? "")) run(reportCodeStrings(out), out);
   const warnings = reports.map((r) => (r.line === null ? r.text : `${r.text} (line ${r.line})`));
@@ -2556,6 +2581,7 @@ if (invokedDirectly) {
     return !/@once-ui-system\/core/.test(text) && /\bexport\s+const\s+dev\s*[:=]|\bexport\s*\{[^}]*\bdev\b[^}]*\}(?!\s*from)/.test(text);
   });
   const devLogger = loggers.length === 1 ? loggers[0] : null;
+  const tailwind = usesTailwind(dir);
 
   let total = 0;
   let touched = 0;
@@ -2584,7 +2610,7 @@ if (invokedDirectly) {
   };
   for (const f of files) {
     const src = fs.readFileSync(f, "utf8");
-    const { out, hits, warnings } = transform(src, { file: f, devLogger });
+    const { out, hits, warnings } = transform(src, { file: f, devLogger, tailwind });
     for (const name of packagesAdded(src, out)) install.set(name, [...(install.get(name) ?? []), f]);
     if (out !== src) rewritten.push({ src, out });
     if (!hits.length && !warnings.length) continue;
@@ -2605,6 +2631,11 @@ if (invokedDirectly) {
   );
   // F8, F10: the effects and the blocks are packages of their own now.
   if (install.size) console.log(dependencyNote(install, dir));
+  // B1 and the charts: the dependency changes 3.0 asks for, reported.
+  const pkg = nearestPackage(dir);
+  const deps = pkg ? dependencyReports(pkg.pkg) : [];
+  if (deps.length)
+    console.log(`\n${path.relative(process.cwd(), pkg.file) || "package.json"}:\n${deps.map((d) => `   ! ${d}  (fix by hand)`).join("\n")}`);
   // Each rewrite keeps the line it was on: a formatter re-wraps what grew.
   if (touched && !dry) console.log(formatNote(changedFiles, dir));
 }

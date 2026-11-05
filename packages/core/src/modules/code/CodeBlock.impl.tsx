@@ -492,7 +492,7 @@ export interface CodeBlockProps extends React.ComponentProps<typeof Flex> {
   onInstanceChange?: (index: number) => void;
   lineNumbers?: boolean;
   maxLines?: number;
-  isCollapsible?: boolean;
+  collapsible?: boolean;
   hideCode?: boolean;
 }
 
@@ -508,7 +508,7 @@ const CodeBlock = ({
   fullscreenButton = false,
   lineNumbers = false,
   maxLines = 5,
-  isCollapsible = false,
+  collapsible = false,
   compact = false,
   hideCode = false,
   className,
@@ -874,7 +874,7 @@ const CodeBlock = ({
           }
         >
           {((lines) => {
-            const isCollapsed = isCollapsible && maxLines > 0 && lines > maxLines && !isExpanded;
+            const isCollapsed = collapsible && maxLines > 0 && lines > maxLines && !isExpanded;
             const collapsedMaxHeight = `calc(1.75em * ${maxLines} + 1rem)`;
 
             return (

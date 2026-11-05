@@ -4,7 +4,7 @@ import { mixColors } from "../theme/colorScheme";
 import { useTheme } from "../theme/ThemeProvider";
 import { type FlexProps, Row } from "./Flex";
 import { LogoSpinner } from "./LogoSpinner";
-import { useFrameTime, useReduceMotion } from "./motion";
+import { nativeDriver, useFrameTime, useReduceMotion } from "./motion";
 import { Text } from "./Text";
 import { workingVerbs } from "./workingVerbs";
 
@@ -91,7 +91,11 @@ function Enter({ children, still }: { children: ReactNode; still: boolean }) {
   const progress = useRef(new Animated.Value(still ? 1 : 0)).current;
   useEffect(() => {
     if (still) return;
-    const run = Animated.timing(progress, { toValue: 1, duration: 320, useNativeDriver: true });
+    const run = Animated.timing(progress, {
+      toValue: 1,
+      duration: 320,
+      useNativeDriver: nativeDriver,
+    });
     run.start();
     return () => run.stop();
   }, [progress, still]);

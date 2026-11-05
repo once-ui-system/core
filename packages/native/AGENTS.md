@@ -22,13 +22,48 @@ Every file you read is sent again on every later turn, so read what you need in 
 
 Check the code with the app's TypeScript compiler (`npx tsc --noEmit`): every prop and token in the bundles is typed, so a wrong one is an error there.
 
+## A new app
+
+A new app with a bottom tab bar starts from `ai/starters/app/`: a working Expo Router setup with the providers in `src/app/_layout.tsx`, the tab bar mounted once in `src/app/(app)/_layout.tsx`, and the screens of core's web starter (`Home`, and `Settings` with `Profile`) at the same routes. Create the Expo app, then copy the starter over its `src/` (the `node -p` finds the package wherever npm put it, also at a workspace root):
+
+```bash
+npx create-expo-app@latest phone --template default
+cd phone
+npx expo install @once-ui-system/native react-native-svg
+rm -rf src && mkdir src
+cp -r "$(node -p "require('path').dirname(require.resolve('@once-ui-system/native/package.json'))")/ai/starters/app/src/." src/
+```
+
+Then edit, rather than rewrite:
+
+- `src/resources/once-ui.config.ts`: the look (`brand`, `neutral`, `solid`, …), with the names and values of the web app's config.
+- `src/resources/app.ts`: the name, the user and `nav`. Each top-level entry is a tab; a group is a tab whose screen lists its links.
+- A new screen is a file under `src/app/(app)/` that returns `<Screen title="…">` with its content. Expo Router shows only the screens a layout declares: a new tab goes in `nav`, which declares it, and a page inside a group needs a `<Stack.Screen name="…" />` in that group's `_layout.tsx`.
+
 ## The same app on the web
 
-When the request is for a web app and a phone app, build the web one with `@once-ui-system/core` (its harness is `node_modules/@once-ui-system/core/AGENTS.md`) and this one side by side:
+When the request is for a web app and a phone app, make one folder with both, and a `shared` package for what they have in common. The two starters have the same shape (`resources/once-ui.config.ts`, `resources/app.ts`) and the same routes, so the web pages and the phone screens line up one to one.
 
-- Keep content and data (copy, lists, prices, types) in one module both apps import; only the screens differ.
-- Give `ThemeProvider` the style options of the web app's `once-ui.config` (`brand`, `neutral`, `solid`, `border`, …), so a brand change in one place reaches both.
-- Write the same component tree where the platforms agree. Where they differ, follow these rules: a web `Table` is a `FlatList` of rows, a `Setting` a `Switch` with `reverse`, a `Dialog` opens as a bottom sheet, the sidebar `Nav` a bottom tab bar.
+```bash
+mkdir acme && cd acme && git init
+npx create-next-app@latest web --ts --app --src-dir --no-tailwind --use-npm --skip-install --yes
+npx create-expo-app@latest phone --template default --no-install
+```
+
+- `package.json` at the root: `{ "private": true, "workspaces": ["web", "phone", "shared"] }`. One `npm install` there installs both apps.
+- `shared/package.json`: `{ "name": "shared", "private": true, "main": "index.ts" }`, and `shared/index.ts` exports `style` (the web config's style options, `as const`), `app`, `user` and `nav` (`as const`; icon names are the same on both platforms). Add `"shared": "*"` to both apps' dependencies. Give `style` `defaultTheme: "system"`, so the web follows the device's appearance as the phone does; with `"dark"`, a first web visit is dark whatever the device says.
+- The web app's root layout, a server component, imports `shared/index.ts`. Keep it to plain data and pure functions; hooks and state (a cart, a store) go in another file of `shared` that starts with `"use client"`.
+- Add a root `.gitignore` with `node_modules`, `.next`, `.expo`, `dist*`.
+- The web app: `@once-ui-system/core` and core's starter (`node_modules/@once-ui-system/core/AGENTS.md`), with `transpilePackages: ["shared"]` in `next.config.ts`.
+- The phone app: after the root `npm install`, run `npx expo install @once-ui-system/native react-native-svg` in `phone` (Expo picks the native module versions), then copy the starter as above; the `node -p` path finds the package at the root.
+- A group of links (Settings) is a tab with its own list screen on the phone and a sidebar group on the web, which has no page at `/settings`. Its links have the same routes on both.
+- In each app, `resources/once-ui.config.ts` takes `style` from `shared`, and `resources/app.ts` re-exports `app` and `user` and builds its typed `nav` from shared's. `ThemeProvider` here takes the web config as it is (`defaultTheme` and `transition` included), so a brand change in `shared` reaches both.
+
+Then, for each feature:
+
+- Keep content and data (copy, lists, prices, types) in `shared`; only the screens differ.
+- Write the same component tree where the platforms agree. Where they differ, follow these rules: a web `Table` is a `FlatList` of rows, a `Setting` a `Switch` with `reverse`, a `Dialog` opens as a bottom sheet, the sidebar `Nav` the bottom tab bar.
+- Check both: `npx tsc --noEmit` in `web` and in `phone`.
 
 ## Setup
 

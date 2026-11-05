@@ -12,7 +12,10 @@
  "props": {
   "density": "NavDensity",
   "variant": "NavVariant = solid",
-  "rail": "boolean = true"
+  "rail": "boolean = true",
+  "collapsed": "boolean = false",
+  "expandOnHover": "boolean = false",
+  "expandedWidth": "number | SpacingToken = 256"
  },
  "tags": [
   "navigation",
@@ -129,11 +132,12 @@
    "bottomLeftRadius": "RadiusSize",
    "bottomRightRadius": "RadiusSize",
    "shadow": "ShadowSize",
+   "emphasis": "boolean | \"edge\" | \"glow\" | \"aura\"",
    "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | CursorPresetValue | ReactNode",
    "blendMode": "BlendMode",
    "blur": "BlurSize | number | CSSUnit",
    "backdropBlur": "BlurSize | number | CSSUnit",
-   "theme": "\"light\" | \"dark\"",
+   "theme": "\"light\" | \"dark\" | \"invert\"",
    "themeBorder": "BorderStyle",
    "themeSolid": "SolidType",
    "themeSurface": "SurfaceStyle",
@@ -150,6 +154,32 @@
    "solid",
    "subtle",
    "minimal"
+  ],
+  "SpacingToken": [
+   "s",
+   "xl",
+   "l",
+   "m",
+   "xs",
+   "0",
+   "32",
+   "1",
+   "2",
+   "4",
+   "64",
+   "160",
+   "12",
+   "8",
+   "16",
+   "20",
+   "24",
+   "40",
+   "48",
+   "56",
+   "72",
+   "80",
+   "104",
+   "128"
   ]
  }
 }

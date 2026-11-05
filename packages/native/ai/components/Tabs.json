@@ -16,6 +16,7 @@
   "onValueChange": "(value: string) => void",
   "orientation": "\"horizontal\" | \"vertical\" = \"horizontal\"",
   "activation": "\"automatic\" | \"manual\"",
+  "testID": "string",
   "children": "ReactNode"
  },
  "resolvedMixins": {

@@ -10,7 +10,7 @@ const path = require("path");
 //         compiles them (they are not shipped; 3.0 ships the compiled CSS only).
 //   css:  copies foundations' compiled tokens.css/styles.css into dist/css/
 //         so the deprecated `@once-ui-system/core/css/*.css` entries keep
-//         working for one major, and the token export (tokens.json, the
+//         working for one major, the Tailwind adapter (tailwind.css), and the token export (tokens.json, the
 //         same tokens as JSON for platforms without CSS) into dist/.
 
 const foundationsRoot = path.dirname(require.resolve("@once-ui-system/foundations/package.json"));
@@ -39,11 +39,19 @@ if (mode === "scss") {
       path.join(__dirname, "..", "dist", "css", file),
     );
   }
+  // The Tailwind CSS v4 adapter, `@once-ui-system/core/tailwind.css`. It is
+  // read by Tailwind, not the browser, so it ships as written.
+  copy(
+    path.join(foundationsRoot, "tailwind", "tailwind.css"),
+    path.join(__dirname, "..", "dist", "css", "tailwind.css"),
+  );
   copy(
     path.join(foundationsRoot, "tokens", "once-ui.tokens.json"),
     path.join(__dirname, "..", "dist", "tokens.json"),
   );
-  console.log("Copied foundations CSS into dist/css (deprecated compat entries) and tokens.json");
+  console.log(
+    "Copied foundations CSS into dist/css (deprecated compat entries), tailwind.css and tokens.json",
+  );
 } else {
   console.error("Usage: node scripts/sync-foundations.cjs <scss|css>");
   process.exit(1);

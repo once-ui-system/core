@@ -66,14 +66,14 @@ describe("DataTable interaction", () => {
 
   it("reports numeric ids as strings and tabs through the checkboxes", async () => {
     const user = userEvent.setup();
-    const onSelectionChange = vi.fn();
+    const onSelectedChange = vi.fn();
     render(
       <Table
         columns={columns}
         rows={rows}
         selectable
         getRowLabel={(row) => `Select ${row.name}`}
-        onSelectionChange={onSelectionChange}
+        onSelectedChange={onSelectedChange}
       />,
       { wrapper },
     );
@@ -85,7 +85,7 @@ describe("DataTable interaction", () => {
     await user.tab();
     expect(screen.getByRole("checkbox", { name: "Select Bea" })).toHaveFocus();
     await user.keyboard(" ");
-    expect(onSelectionChange).toHaveBeenLastCalledWith(["1"]);
+    expect(onSelectedChange).toHaveBeenLastCalledWith(["1"]);
     expect(bodyRows()[0]).toHaveAttribute("data-selected", "true");
   });
 

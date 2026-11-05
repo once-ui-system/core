@@ -20,7 +20,8 @@
   "removeButtonProps": "Partial<IconButtonProps>",
   "textVariant": "TextVariant",
   "children": "ReactNode",
-  "style": "ViewStyle"
+  "style": "ViewStyle",
+  "testID": "string"
  },
  "resolvedMixins": {},
  "types": {

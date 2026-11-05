@@ -19,6 +19,7 @@ const RadioGroupContext = createContext<{
   select: (value: string) => void;
   size: ReturnType<typeof controlChrome>["size"];
   invalid: boolean;
+  testID?: string;
 } | null>(null);
 
 export interface RadioButtonProps extends ControlChromeProps {
@@ -40,6 +41,11 @@ export interface RadioButtonProps extends ControlChromeProps {
   /** The name when there is no text `label`, as core's `aria-label`. */
   "aria-label"?: string;
   style?: ViewStyle;
+  /**
+   * Finds the radio, the pressable a test taps, in end-to-end tests. In a
+   * `RadioGroup` with a `testID`, it defaults to `${groupTestID}-${value}`.
+   */
+  testID?: string;
 }
 
 // SharedInteractiveStyles.module.scss: the circle per size, in static spacing steps.
@@ -59,6 +65,7 @@ export function RadioButton({
   error,
   errorMessage,
   style,
+  testID,
 }: RadioButtonProps) {
   const theme = useTheme();
   // A RadioGroup around this button owns its checked state; outside one, or
@@ -83,6 +90,7 @@ export function RadioButton({
   return (
     <Pressable
       accessibilityRole="radio"
+      testID={testID ?? (inGroup && group.testID ? `${group.testID}-${value}` : undefined)}
       accessibilityLabel={typeof label === "string" ? label : ariaLabel}
       aria-checked={on}
       aria-disabled={disabled}
@@ -171,6 +179,8 @@ export interface RadioGroupProps extends ControlChromeProps {
    */
   children?: ReactNode;
   style?: ViewStyle;
+  /** Finds the group in end-to-end tests; each radio in it gets `${testID}-${value}`. */
+  testID?: string;
 }
 
 /** Core's `RadioGroup`: one choice out of `options`, with an optional group label. */
@@ -189,6 +199,7 @@ export function RadioGroup({
   errorMessage,
   children,
   style,
+  testID,
 }: RadioGroupProps) {
   const theme = useTheme();
   const chrome = controlChrome({ size: size ?? theme.controlSize, error, errorMessage });
@@ -207,6 +218,7 @@ export function RadioGroup({
         },
         size: chrome.size,
         invalid: chrome.invalid,
+        testID,
       }}
     >
       <Column
@@ -214,6 +226,7 @@ export function RadioGroup({
         accessibilityRole="radiogroup"
         accessibilityLabel={typeof label === "string" ? label : ariaLabel}
         style={style}
+        testID={testID}
       >
         {(label || description) && (
           <Column gap="4">

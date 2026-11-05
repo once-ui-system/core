@@ -164,11 +164,11 @@ describe("leaf props render on the leaf's own root", () => {
       { wrapper: wrap },
     );
     const el = getByRole("button");
-    expect(el.className).toContain("mt-8");
+    expect(el.className).toContain("margin-top-8");
     expect(el.className).toContain("flex-1");
     // Inline, so Button's own `position: relative` cannot win.
     expect(el.style.position).toBe("absolute");
-    expect(el.className).toContain("top-4");
+    expect(el.className).toContain("offset-top-4");
     // A step of the scale, which jsdom can compute (see Dialog.test).
     expect(el.style.marginLeft).toBe(t(4));
     expect(el.getAttribute("margintop")).toBeNull();
@@ -192,9 +192,9 @@ describe("leaf props render on the leaf's own root", () => {
       { wrapper: wrap },
     );
     const icon = getByLabelText("Close");
-    expect(icon.className).toContain("ml-auto");
+    expect(icon.className).toContain("margin-left-auto");
     expect(icon.className).toContain("fill-width");
-    expect(getByText("Toggle").closest("button")?.className).toContain("mx-4");
+    expect(getByText("Toggle").closest("button")?.className).toContain("margin-x-4");
   });
 
   it("Input puts them on the field's root, not the <input>", () => {
@@ -203,9 +203,9 @@ describe("leaf props render on the leaf's own root", () => {
     });
     const input = container.querySelector("input") as HTMLInputElement;
     const root = container.firstElementChild as HTMLElement;
-    expect(root.className).toContain("mt-8");
+    expect(root.className).toContain("margin-top-8");
     expect(root.className).toContain("flex-1");
-    expect(input.className).not.toContain("mt-8");
+    expect(input.className).not.toContain("margin-top-8");
     expect(input.getAttribute("flex")).toBeNull();
   });
 
@@ -219,9 +219,9 @@ describe("leaf props render on the leaf's own root", () => {
       { wrapper: wrap },
     );
     const roots = [...container.children] as HTMLElement[];
-    expect(roots[0].className).toContain("ml-auto");
-    expect(roots[1].className).toContain("mt-8");
-    expect(roots[2].className).toContain("mb-8");
+    expect(roots[0].className).toContain("margin-left-auto");
+    expect(roots[1].className).toContain("margin-top-8");
+    expect(roots[2].className).toContain("margin-bottom-8");
     for (const input of container.querySelectorAll("input")) {
       expect(input.className).not.toMatch(/\bm[tbl]-/);
     }
@@ -237,10 +237,10 @@ describe("leaf props render on the leaf's own root", () => {
       { wrapper: wrap },
     );
     const icon = container.querySelector('[data-testid="icon"]') as HTMLElement;
-    expect(icon.className).toContain("mr-8");
+    expect(icon.className).toContain("margin-right-8");
     expect(container.innerHTML).toContain("position-absolute");
-    expect(container.innerHTML).toContain("bottom-0");
-    expect((container.querySelector("kbd") as HTMLElement).className).toContain("ml-4");
+    expect(container.innerHTML).toContain("offset-bottom-0");
+    expect((container.querySelector("kbd") as HTMLElement).className).toContain("margin-left-4");
   });
 
   it("Logo and SmartLink take them, and a margin replaces the link's own side margin", () => {
@@ -254,18 +254,20 @@ describe("leaf props render on the leaf's own root", () => {
       </>,
       { wrapper: wrap },
     );
-    expect(container.innerHTML).toContain("mr-8");
+    expect(container.innerHTML).toContain("margin-right-8");
     const [first, second] = [...container.querySelectorAll("a")].slice(-2);
-    expect(first.className).toContain("mx-16");
-    expect(first.className).not.toContain("mx-2");
-    expect(second.className).toContain("mx-2");
+    expect(first.className).toContain("margin-x-16");
+    expect(first.className).not.toContain("margin-x-2");
+    expect(second.className).toContain("margin-x-2");
   });
 
   it("Slider puts them on its root, not the range input", () => {
     const { container } = render(<Slider marginTop="16" aria-label="Volume" />, {
       wrapper: wrap,
     });
-    expect((container.firstElementChild as HTMLElement).className).toContain("mt-16");
-    expect((container.querySelector("input") as HTMLElement).className).not.toContain("mt-16");
+    expect((container.firstElementChild as HTMLElement).className).toContain("margin-top-16");
+    expect((container.querySelector("input") as HTMLElement).className).not.toContain(
+      "margin-top-16",
+    );
   });
 });

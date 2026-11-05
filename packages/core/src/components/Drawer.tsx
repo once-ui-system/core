@@ -48,6 +48,8 @@ interface DrawerProps extends Omit<React.ComponentProps<typeof Column>, "title">
   footer?: ReactNode;
   /** Show the close button in the corner. */
   showClose?: boolean;
+  /** The close button's tooltip and accessible name. Default "Close"; set it for a non-English UI. */
+  closeLabel?: string;
   /** Close when the overlay outside the drawer is clicked. */
   closeOnClickaway?: boolean;
   /**
@@ -82,6 +84,7 @@ const Drawer = ({
   description,
   footer,
   showClose = true,
+  closeLabel = "Close",
   closeOnClickaway = true,
   flush = false,
   initialFocusRef,
@@ -132,7 +135,7 @@ const Drawer = ({
     );
 
   const closeButton = showClose && (
-    <IconButton icon="close" size="m" variant="tertiary" tooltip="Close" onClick={onClose} />
+    <IconButton icon="close" size="m" variant="tertiary" tooltip={closeLabel} onClick={onClose} />
   );
 
   const showHeader = !flush && (title !== undefined || description !== undefined || showClose);

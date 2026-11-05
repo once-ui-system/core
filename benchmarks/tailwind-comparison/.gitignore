@@ -4,3 +4,4 @@ next-env.d.ts
 *.tsbuildinfo
 work/
 arms/once/vendor/*.tgz
+arms/stack/

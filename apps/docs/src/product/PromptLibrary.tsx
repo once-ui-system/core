@@ -45,7 +45,7 @@ export function PromptLibrary() {
                 <CodeBlock
                   compact
                   copyButton
-                  isCollapsible
+                  collapsible
                   maxLines={6}
                   codes={[{ code: prompt.prompt, language: "markdown", label: prompt.title }]}
                 />

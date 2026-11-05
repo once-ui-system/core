@@ -2,7 +2,7 @@
 
 KPI stat cards, charts area, recent-activity list
 
-This file is complete for this task: the rules (all of `rules.compact.md`), the props of every component below, their mixins and types, every gotcha for these components, the quality bar and a gold example. Write the page from it; reading the rules, catalog, gotchas, manifest or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.
+This file is complete for this task: the rules (all of `rules.compact.md`), the props, mixins and types of every component below, every gotcha for these components, the quality bar and a gold example. Write the page from it; reading the rules, catalog, gotchas, manifest or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.
 
 ## Rules
 
@@ -25,7 +25,7 @@ This file is complete for this task: the rules (all of `rules.compact.md`), the 
 - Control size for a whole app: `density: "compact" | "normal" | "spacious"` in the config `style` (`data-density`), not `size="s"` on every Button; it also picks scaling 95/100/105 unless `scaling` is set. Give `size` only where one control differs
 - `Flex` only when direction changes at breakpoints: `<Row s={{ direction: "column" }}>`
 - Subtree theme: `theme`, `themeBorder`, `themeSolid`, `themeSurface` on Flex/Row/Column/Grid and components built on them (`Background`, `Tag`, effects) — not raw `data-theme`/`data-border`/`data-solid`. `Button`/`IconButton` have no typed prop: keep `data-border="rounded"`
-- App theme in `once-ui.config` `style`: `defaultTheme: "light"` = starts light, visitor can switch (`theme: "light"` forces it and `setTheme` does nothing). Exact brand colours: `brandScale`/`neutralScale` `{ 100: "#…", …, 1200: "#…" }` (with or without a seed; per theme `{ light: {…}, dark: {…} }`), page/card colour: `pageBackground`/`surfaceBackground` (token or colour, or `{ light, dark }`), not overrides of semantic CSS variables
+- App theme in `once-ui.config` `style`: `defaultTheme: "light"` = starts light, visitor can switch (`theme: "light"` forces it and `setTheme` does nothing). Exact brand colour: `brand: "custom", brandSeed: "#hex"` (the hex is step 500, every brand solid in both themes). Only a full brand book needs `brandScale` `{ 100: "#…", …, 1200: "#…" }`, numbered dark to light (100 darkest, the reverse of Tailwind; per theme `{ light: {…}, dark: {…} }`), page/card colour: `pageBackground`/`surfaceBackground` (token or colour, or `{ light, dark }`), not overrides of semantic CSS variables
 - Page skeleton: `Column as="main" fillWidth horizontal="center"` → content `Column maxWidth="l"` → sections
 - Section gaps: `"104"` between sections, `"24"`–`"40"` inside. Never `"48"` between major sections.
 - Responsive: breakpoint props `xl l m s xs` — never media queries for layout
@@ -96,7 +96,7 @@ comes from when it is not the root:
 
 | Import | From |
 |--------|------|
-| charts, gauges, chart chrome | `@once-ui-system/core/data` (needs `recharts`) |
+| charts, gauges, chart chrome | `@once-ui-system/core/data` |
 | `CodeBlock` | `@once-ui-system/core/code` (needs `prismjs`) |
 | `MediaUpload` | `@once-ui-system/core/media` (needs `compressorjs`) |
 | `Map`, `MapMarker(s)`, `MapPin`, `MapPopup`, `MapCircle` | `@once-ui-system/core/map` (needs `maplibre-gl`) |
@@ -222,7 +222,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - defaultSort?: TableSort | null = null
 - onSortChange?: (sort: TableSort | null) => void
 - selected, defaultSelected?: string[]
-- onSelectionChange?: (selected: string[]) => void
+- onSelectedChange?: (selected: string[]) => void
 - getRowLabel?: (row: T) => string
 - page, perPage, count, total?: number
 - defaultPage?: number = 1
@@ -240,7 +240,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - value, defaultValue, className?: string
 - onValueChange?: (value: string, event?: React.MouseEvent<HTMLButtonElement>) => void
 - disabled, compact?: boolean = false
-- fillWidth, scroll?: boolean = true
+- fillWidth, sliding, scroll?: boolean = true
 - semantics?: "tabs" | "radio" = tabs
 - style?: React.CSSProperties
 
@@ -288,7 +288,8 @@ Mixins: LeafProps.
 
 ### LineChart (from `@once-ui-system/core/data`)
 Mixins: ChartProps, CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-- curve?: curveType = natural
+- curve?: CurveType = natural
+- stack?: boolean | "percent" = false
 - reverseY, reverseX, error, loading?: boolean = false
 - animation, tooltip?: boolean = true
 - animationBegin, animationDuration?: number
@@ -304,6 +305,8 @@ Mixins: ChartProps, CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProp
 Mixins: ChartProps, CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 - barWidth?: BarWidth = l
 - hover, reverseY, reverseX, error, loading?: boolean = false
+- orientation?: "vertical" | "horizontal" = vertical
+- stack?: boolean | "percent" = false
 - data-viz-style?: DataStyle | (string & {})
 - legend?: LegendConfig = {}
 - tooltip?: boolean = true
@@ -343,6 +346,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - size?: "s" | "m" | "l" | "full" = m
 - title, description, footer, children?: ReactNode
 - showClose, closeOnClickaway?: boolean = true
+- closeLabel?: string = Close
 - flush?: boolean = false
 - initialFocusRef, returnFocusRef?: RefObject<HTMLElement | null>
 
@@ -381,6 +385,7 @@ Mixins: LeafProps.
 - loading, disabled, arrowIcon?: boolean = false
 - horizontal?: "start" | "center" | "end" | "between" = center
 - children?: ReactNode
+- onClick?: React.MouseEventHandler<HTMLElement>
 
 ### IconButton
 Mixins: LeafProps.
@@ -393,6 +398,7 @@ Mixins: LeafProps.
 - tooltipPosition?: "top" | "bottom" | "left" | "right" = top
 - variant?: ButtonVariant = primary
 - tone?: Tone
+- onClick?: React.MouseEventHandler<HTMLElement>
 
 ### Input
 Mixins: LeafProps.
@@ -446,6 +452,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - base, stack?: boolean
 - flush?: boolean = false
 - showClose, closeOnClickaway?: boolean = true
+- closeLabel?: string = Close
 - onHeightChange?: (height: number) => void
 - minHeight?: number
 
@@ -523,10 +530,11 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - borderWidth?: 1 | 2 | 4 | 8 | "1" | "2" | "4" | "8"
 - topRadius, rightRadius, bottomRadius, leftRadius, topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius?: RadiusSize
 - shadow?: ShadowSize
+- emphasis?: boolean | "edge" | "glow" | "aura"
 - cursor?: CSSProperties["cursor"] | "interactive" | CursorPresetValue | ReactNode
 - blendMode?: BlendMode
 - blur, backdropBlur?: BlurSize | number | CSSUnit
-- theme?: "light" | "dark"
+- theme?: "light" | "dark" | "invert"
 - themeBorder?: BorderStyle
 - themeSolid?: SolidType
 - themeSurface?: SurfaceStyle
@@ -559,6 +567,9 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - title, description, emptyState, errorState?: React.ReactNode
 - series: SeriesConfig<DataPoint> | SeriesConfig<DataPoint>[]
 - data: readonly DataPoint[]
+- xKey?: SeriesKey<DataPoint>
+- valueFormat?: ValueFormat
+- locale, summary, aria-label?: string
 - legend?: LegendConfig
 - date?: DateConfig
 - error, tooltip, loading?: boolean
@@ -574,7 +585,7 @@ type BlendMode = "color" | "screen" | "normal" | "multiply" | "overlay" | "darke
 type BlurSize = "s" | "xl" | "l" | "m" | "xs"
 type BorderStyle = "rounded" | "playful" | "conservative" | "sharp"
 type BreakpointKey = "s" | "xl" | "l" | "m" | "xs"
-type ButtonOption = LeafProps & { value: string; description?: ReactNode; label?: ReactNode; children?: ReactNode; horizontal?: "start" | "center" | "end" | "between"; radius?: RadiusSize; size?: TShirtSizes; disabled?: boolean; corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"; variant?: "ghost" | "outline" | "subtle"; weight?: "default" | "strong"; truncate?: boolean; href?: string; rounded?: boolean; prefixIcon?: IconName; suffixIcon?: IconName }
+type ButtonOption = LeafProps & { value: string; description?: ReactNode; label?: ReactNode; children?: ReactNode; horizontal?: "start" | "center" | "end" | "between"; radius?: RadiusSize; disabled?: boolean; href?: string; size?: TShirtSizes; corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"; variant?: "ghost" | "outline" | "subtle"; weight?: "default" | "strong"; truncate?: boolean; rounded?: boolean; prefixIcon?: IconName; suffixIcon?: IconName }
 // type ButtonVariant is one of these strings: link ghost subtle primary secondary tertiary
 type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}ch` | `${number}%` | `${number}vh` | `${number}vw` | `${number}dvh` | `${number}dvw` | `${number}svh` | `${number}svw` | `${number}lvh` | `${number}lvw` | `${number}vmin` | `${number}vmax` | `${number}cqw` | `${number}cqh` | `calc(${string})` | `min(${string})` | `max(${string})` | `clamp(${string})` | `var(${string})`
 type ChartVariant = "flat" | "outline" | "gradient"
@@ -584,9 +595,10 @@ type ColorWeight = "strong" | "medium" | "weak"
 type Colors = Exclude<ColorValue, string & {}>
 type ColumnHide = Partial<Record<BreakpointKey, boolean>>
 type CursorPresetValue = "rounded" | "soft" | "dot" | "system"
+// type CurveType is one of these strings: step linear basis basisClosed basisOpen bumpX bumpY bump linearClosed natural monotoneX monotoneY monotone stepBefore stepAfter
 type DataPoint = { [key: string]?: string | number | Date | undefined; label?: string }
 type DataStyle = "categorical" | "divergent" | "sequential"
-type DateConfig = { start?: Date; end?: Date; max?: Date; min?: Date; dual?: boolean; format?: string; presets?: PresetsConfig; selector?: boolean; onChange?: (range: DateRange) => void }
+type DateConfig = { start?: Date; end?: Date; max?: Date; min?: Date; dual?: boolean; format?: string; presets?: PresetsConfig; selector?: boolean; onRangeChange?: (range: DateRange) => void }
 type DateRange = { startDate?: Date; endDate?: Date }
 type DotsProps = { display?: boolean; opacity?: DisplayProps["opacity"]; color?: ColorValue; size?: SpacingToken }
 // type FieldSize is one of these strings: s xl l m xs xxs
@@ -599,7 +611,7 @@ type GradientProps = { display?: boolean; opacity?: DisplayProps["opacity"]; x?:
 // type GridSize is one of these strings: 1 10 2 3 4 9 12 5 8 6 7 11
 type IconButtonProps = IconButton props
 // type IconName is one of these names, and only these:
-// symbol code link menu search time video filter image security opacity info danger warning adjustments arrowDown arrowLeft arrowRight arrowUp arrowUpRight ball banknotes barChart bell bolt book bookmark calendar cart chat check checkbox chevronDoubleLeft chevronDoubleRight chevronDown chevronLeft chevronRight chevronUp chevronsLeftRight clipboard close computer copy cube dark dislike document download edit enter eye eyeDropper eyeOff file flag folder food forward gift globe grid grip heart help home inbox light like linearGauge lock logout mail mapPin maximize minimize minus moreHorizontal newspaper organization pause paw payment people person personRemove phone play plus radialGauge refresh return screen send settings smiley sparkle star starFill store tag trash trend trendDown trendUp upload volume volumeOff wordmark world
+// symbol code link menu search time video filter image security opacity download info danger warning adjustments arrowDown arrowLeft arrowRight arrowUp arrowUpRight ball banknotes barChart bell bolt book bookmark calendar cart chat check checkbox chevronDoubleLeft chevronDoubleRight chevronDown chevronLeft chevronRight chevronUp chevronsLeftRight clipboard close computer copy cube dark dislike document edit enter eye eyeDropper eyeOff file flag folder food forward gift globe grid grip heart help home inbox light like linearGauge lock logout mail mapPin maximize minimize minus moreHorizontal newspaper organization pause paw payment people person personRemove phone play plus radialGauge refresh return screen send settings smiley sparkle star starFill store tag trash trend trendDown trendUp upload volume volumeOff wordmark world
 type LegacyToast = { variant?: Tone; tone?: Tone; children?: ReactNode; message?: ReactNode; action?: ReactNode; duration?: number }
 type LegendConfig = { display?: boolean; direction?: "row" | "column"; position?: "top-left" | "top-right" | "bottom-left" | "bottom-right" | "top-center" | "bottom-center" }
 type LinesProps = { display?: boolean; opacity?: DisplayProps["opacity"]; size?: SpacingToken; thickness?: number; angle?: number; color?: ColorValue }
@@ -611,7 +623,7 @@ type RadiusNest = "4" | "8"
 type ScrollTrackControlPlacement = `${"top" | "bottom"}-${"end" | "start" | "center" | "between"}`
 type ScrollerAuto = { speed?: Speed; hover?: "slow" | "pause" | "none"; reverse?: boolean; gap?: number | string }
 type ScrollerLabels = { previous?: string; next?: string }
-type SeriesConfig = { key: SeriesKey<DataPoint>; color?: ColorValue }
+type SeriesConfig = { key: SeriesKey<DataPoint>; label?: string; color?: ColorValue; format?: ValueFormat }
 type SeriesKey = Extract<keyof T, string>
 type ShadowSize = "s" | "xl" | "l" | "m" | "xs"
 type SolidType = "color" | "contrast" | "inverse"
@@ -636,7 +648,7 @@ type TextWeight = "strong" | "default" | "normal" | "medium"
 type ToastContextProps = { toasts: Toast[]; addToast: (toast: Omit<Toast, "id"> | LegacyToast) => string; removeToast: (id: string) => void }
 // type Tone is one of these strings: neutral brand accent info danger warning success
 type UserSelect = "text" | "auto" | "none" | "all"
-// type curveType is one of these strings: step linear basis basisClosed basisOpen bumpX bumpY bump linearClosed natural monotoneX monotoneY monotone stepBefore stepAfter
+type ValueFormat = "number" | "compact" | "percent" | "NumberFormatOptions" | (value: number) => string
 ```
 
 ## Gotchas
@@ -648,10 +660,11 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - Field heights run a step above Button's: Input size xs is 40px, s 48px, m 56px (the default). A field beside a size="s" Button (32px), as in a toolbar or filter row, takes size="xxs", which is 32px too; Form size="xxs" sets it for every field inside. An xxs field has no floating label: label shows as the placeholder, so keep label for the accessible name.
 - Fixed in 2.1: a Button or IconButton that is a Dropdown trigger renders a real <button type="button"> with aria-haspopup and aria-expanded, so it is reachable by keyboard. Pass it as trigger as is; do not add type="button" or a no-op onClick, or wrap it in a focusable Row, to make it one.
 - Pass a Tag's text once, as label or as children — with both, the children are dropped. Badge and Chip are Tag in 3.0.
-- Write 2.x prop names, not 1.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onValueChange/defaultValue (not selected/onToggle/defaultSelected), Tag tone (not scheme or variant), Button tone="danger" (not variant="danger"), Text/Heading textVariant (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius). The validator names the 2.x prop.
+- Write 3.0 prop names, not 1.x or 2.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onValueChange/defaultValue (not selected/onToggle/defaultSelected), Tag tone (not scheme or variant), Button tone="danger" (not variant="danger"), Text/Heading textVariant (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius), Table onSelectedChange (not onSelectionChange), CodeBlock collapsible (not isCollapsible). The validator names the 3.0 prop.
 - Tag is a div by default; inside a sentence (<Text as="p">, <p>) give it as="span".
 - overflow="hidden" on full-bleed sections clips glows into hard bands — only use when parent has radius.
 - Leaf components (Button, IconButton, ToggleButton, the fields, Switch, Checkbox, RadioButton, Text, Heading, Icon, Avatar, Spinner, StatusIndicator, Kbd, InlineCode, ProgressBar, Logo, SmartLink, NavIcon) take only margins, flex, fillWidth, position, top/right/bottom/left, className and style besides their own props. Padding, background, border, radius, sizes, hide and breakpoints go on a Row around it (a Column around Text or Heading; <Row fit> for an Icon's box).
+- A Button in a form that should submit it needs type="submit": with neither onClick, href nor type it renders a div, unlike a native <button>.
 
 ## Quality bar
 
@@ -905,7 +918,7 @@ export function DashboardExample() {
             <Column flex={1} center background="neutral-alpha-weak" radius="m" padding="48">
               <Icon name="linearGauge" size="l" onBackground="neutral-weak" />
               <Text textVariant="label-default-s" onBackground="neutral-weak">
-                Chart area — use recharts or your data viz module
+                Chart area — a LineChart from @once-ui-system/core/data
               </Text>
             </Column>
           </Column>

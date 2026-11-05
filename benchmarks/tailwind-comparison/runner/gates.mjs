@@ -13,10 +13,20 @@ import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { chromium } from "playwright-core";
-import { ROOT, WORK, armByLetter, config, interactions, routesOf, shotName, taskById } from "./lib.mjs";
+import { brandCheck, pageWeight, styleDiscipline } from "./design-metrics.mjs";
+import { ROOT, WORK, armByLetter, config, editableFiles, interactions, replacesAnything, routesOf, shotName, taskById, views } from "./lib.mjs";
 
-const CHROMIUM = process.env.CHROMIUM_PATH ?? "/opt/pw-browsers/chromium-1194/chrome-linux/chrome";
-const PORTS = { A: 3101, B: 3102, C: 3103, D: 3104 };
+// The pre-installed Chromium's folder carries its build number; take whichever is there.
+const CHROMIUM =
+  process.env.CHROMIUM_PATH ??
+  (fs.existsSync("/opt/pw-browsers")
+    ? fs
+        .readdirSync("/opt/pw-browsers")
+        .filter((d) => /^chromium-\d+$/.test(d))
+        .flatMap((d) => ["chrome-linux64", "chrome-linux"].map((s) => `/opt/pw-browsers/${d}/${s}/chrome`))
+        .find((p) => fs.existsSync(p))
+    : undefined);
+const PORTS = { A: 3101, B: 3102, C: 3103, D: 3104, M: 3105, K: 3106, T: 3107, S: 3108 };
 const AXE = fs.readFileSync(path.join(ROOT, "node_modules/axe-core/axe.min.js"), "utf8");
 const INTERACTION_VIEWPORTS = ["phone", "desktop"];
 
@@ -26,7 +36,7 @@ const INTERACTION_VIEWPORTS = ["phone", "desktop"];
 // the page), `type` text (into a target, or whatever has focus). `route` and
 // `viewports` say where it runs (default "/" at phone and desktop).
 export const interactionViewports = (spec) => spec?.viewports ?? INTERACTION_VIEWPORTS;
-async function interact(page, spec, outDir, vp, ignored) {
+async function interact(page, spec, outDir, vp, ignored, shot = `screenshot-${vp.name}-interaction.jpg`) {
   if (!spec || spec.action === "none") return { action: "none" };
   const steps = spec.steps ?? [{ action: spec.action, target: spec.target, fallback: spec.fallback }];
   const locate = (t) =>
@@ -64,7 +74,7 @@ async function interact(page, spec, outDir, vp, ignored) {
     if (out.found) {
       await page.waitForTimeout(400);
       await page.screenshot({
-        path: path.join(outDir, `screenshot-${vp.name}-interaction.jpg`),
+        path: path.join(outDir, shot),
         type: config.screenshot.type,
         quality: config.screenshot.quality,
       });
@@ -124,29 +134,45 @@ function workdir(letter) {
 }
 
 // Put the generated files into the arm's working copy. Files an earlier attempt
-// wrote are removed first and app/page.tsx goes back to the scaffold's, so each
-// attempt builds on the scaffold alone. A file that already exists in the
-// scaffold (other than app/page.tsx) is never overwritten.
-function writeFiles(letter, dir, files) {
+// wrote are removed first (or, where the attempt replaced a scaffold file, put
+// back), and app/page.tsx goes back to the scaffold's, so each attempt builds on
+// the scaffold alone. A scaffold file may be replaced only where the arm and
+// task allow it (lib.mjs editableFiles / replacesAnything); any other is refused.
+function writeFiles(letter, dir, files, task) {
   const scaffold = path.join(ROOT, "arms", armByLetter(letter).scaffold);
   const ledger = path.join(dir, ".bench-generated.json");
   for (const f of fs.existsSync(ledger) ? JSON.parse(fs.readFileSync(ledger, "utf8")) : []) {
+    if (fs.existsSync(path.join(scaffold, f))) {
+      fs.copyFileSync(path.join(scaffold, f), path.join(dir, f));
+      continue;
+    }
     fs.rmSync(path.join(dir, f), { force: true });
     // Folders the attempt created go too, so an empty route folder can't linger.
     for (let d = path.dirname(path.join(dir, f)); d !== dir && fs.existsSync(d) && !fs.readdirSync(d).length; d = path.dirname(d)) {
       fs.rmdirSync(d);
     }
   }
-  fs.copyFileSync(path.join(scaffold, "app/page.tsx"), path.join(dir, "app/page.tsx"));
-  const clash = Object.keys(files).filter((f) => f !== "app/page.tsx" && fs.existsSync(path.join(scaffold, f)));
+  const page = ["app/page.tsx", "src/app/page.tsx"].find((f) => fs.existsSync(path.join(scaffold, f)));
+  if (page) fs.copyFileSync(path.join(scaffold, page), path.join(dir, page));
+  const allowed = new Set(["app/page.tsx", ...editableFiles(letter, task)]);
+  const clash = replacesAnything(letter)
+    ? []
+    : Object.keys(files).filter((f) => !allowed.has(f) && fs.existsSync(path.join(scaffold, f)));
   if (clash.length) return { error: `These files already exist in the project and must not be changed: ${clash.join(", ")}` };
+  // A project keeps its code either under src/ (Stack) or at the root (the
+  // other arms); Next.js ignores src/app when app/ exists, so the wrong side is refused.
+  const srcProject = fs.existsSync(path.join(scaffold, "src/app"));
+  const misplaced = Object.keys(files).filter((f) => f.startsWith("src/") !== srcProject);
+  if (misplaced.length) {
+    return { error: `This project keeps its code ${srcProject ? "under src/" : "at the project root (app/, components/, lib/), not under src/"}: ${misplaced.join(", ")}` };
+  }
   const added = [];
   for (const [f, src] of Object.entries(files)) {
     const target = path.join(dir, f);
     if (!target.startsWith(`${dir}${path.sep}`)) return { error: `Path outside the project: ${f}` };
     fs.mkdirSync(path.dirname(target), { recursive: true });
     fs.writeFileSync(target, src);
-    if (f !== "app/page.tsx") added.push(f);
+    if (f !== page) added.push(f);
   }
   fs.writeFileSync(ledger, JSON.stringify(added));
   return {};
@@ -186,7 +212,7 @@ async function waitForServer(url, ms = 30_000) {
 // One route at one viewport: load, settle, check, screenshot; axe on desktop,
 // the task's scripted interaction on "/" at phone and desktop.
 async function renderOne(browser, origin, route, vp, outDir, task) {
-  const out = { viewport: null, errors: [], axe: null, interaction: null, settle: null };
+  const out = { viewport: null, errors: [], axe: null, interaction: null, settle: null, style: null, brand: null };
   const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height } });
   try {
     const page = await ctx.newPage();
@@ -241,6 +267,11 @@ async function renderOne(browser, origin, route, vp, outDir, task) {
       clip: { x: 0, y: 0, width: vp.width, height: capH },
     });
     if (vp.name === "desktop") {
+      // Before axe is injected, so its own nodes aren't counted.
+      out.style = await styleDiscipline(page).catch((e) => ({ error: e.message }));
+      out.weight = await pageWeight(page).catch((e) => ({ error: e.message }));
+      const brand = taskById(task)?.brand_check;
+      if (brand && route === "/") out.brand = await brandCheck(page, brand).catch((e) => ({ error: e.message }));
       await page.addScriptTag({ content: AXE });
       out.axe = await page.evaluate(async () => {
         // biome-ignore lint: axe is injected at runtime
@@ -266,6 +297,22 @@ async function renderOne(browser, origin, route, vp, outDir, task) {
   }
 }
 
+async function renderView(browser, origin, view, vp, outDir) {
+  const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height } });
+  try {
+    const page = await ctx.newPage();
+    await page.goto(`${origin}${view.route ?? "/"}`, { waitUntil: "load", timeout: 30_000 });
+    await settle(page);
+    const file = `view-${view.name}-${vp.name}.jpg`;
+    const r = await interact(page, { steps: view.steps }, outDir, vp, new Set(), file);
+    return { found: r.found, steps: r.steps, errors: r.errors, file: r.found ? file : null };
+  } catch (e) {
+    return { found: false, errors: [e.message.split("\n")[0]] };
+  } finally {
+    await ctx.close();
+  }
+}
+
 async function renderGate(letter, dir, outDir, task) {
   const routes = routesOf(taskById(task));
   const port = PORTS[letter];
@@ -285,7 +332,15 @@ async function renderGate(letter, dir, outDir, task) {
       result.errors.push(`server did not start:\n${stripAnsi(serverLog).slice(-2000)}`);
       return result;
     }
-    const browser = await chromium.launch({ executablePath: CHROMIUM });
+    // Through the environment's proxy when there is one, so the Pro listing
+    // task's map tiles load; the local server stays direct (loopback bypass).
+    const proxy = process.env.HTTPS_PROXY ?? process.env.https_proxy;
+    // Chromium flags, not Playwright's proxy option: that one adds <-loopback>
+    // and would send the local server through the proxy too.
+    const browser = await chromium.launch({
+      executablePath: CHROMIUM,
+      args: proxy ? [`--proxy-server=${proxy}`, "--proxy-bypass-list=127.0.0.1;localhost"] : [],
+    });
     try {
       for (const route of routes) {
         for (const vp of config.viewports) {
@@ -300,8 +355,19 @@ async function renderGate(letter, dir, outDir, task) {
             if (r.axe) result.routes[route].axe = r.axe;
           }
           if (r.settle) result.settle[`${route} ${vp.name}`] = r.settle;
+          if (r.style) (result.style ??= {})[route] = r.style;
+          if (r.weight) (result.weight ??= {})[route] = r.weight;
+          if (r.brand) result.brand = r.brand;
           const where = routes.length > 1 ? `${route} ` : "";
           result.errors.push(...r.errors.map((e) => `[${where}${vp.width}px] ${e}`));
+        }
+      }
+      // The task's named views (Pro set, rebrand): each at every viewport, for
+      // the side-by-side gallery. After the gate's checks; never gated.
+      for (const v of views[String(task)] ?? []) {
+        for (const vp of config.viewports) {
+          result.views ??= {};
+          result.views[`${v.name} ${vp.name}`] = await renderView(browser, origin, v, vp, outDir);
         }
       }
     } finally {
@@ -330,7 +396,7 @@ export async function runGates(letter, code, outDir, task = null) {
     return finish();
   }
   const files = typeof code === "string" ? { "app/page.tsx": code } : code;
-  const written = writeFiles(letter, dir, files);
+  const written = writeFiles(letter, dir, files, taskById(task));
   if (written.error) {
     Object.assign(res, { failed_gate: "extract", failure_output: written.error });
     return finish();
@@ -338,7 +404,7 @@ export async function runGates(letter, code, outDir, task = null) {
   res.files = Object.keys(files);
   fs.rmSync(path.join(dir, ".next"), { recursive: true, force: true });
 
-  if (["A", "B"].includes(letter)) {
+  if (["A", "B", "S"].includes(letter)) {
     const sources = Object.keys(files).filter((f) => /\.tsx?$/.test(f));
     // 3.0 renamed the CommonJS bin to .cjs (the package is "type": "module").
     const validator = ["cjs", "js"]

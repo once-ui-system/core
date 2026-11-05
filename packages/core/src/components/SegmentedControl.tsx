@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "clsx";
-import { type ReactNode, useEffect, useRef } from "react";
+import { type ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { revealInStrip } from "../internal/revealInStrip.js";
 import { useControllableState } from "../internal/useControllableState.js";
 import { Flex } from "./Flex.js";
@@ -9,6 +9,8 @@ import { Scroller } from "./Scroller.js";
 import styles from "./SegmentedControl.module.scss";
 import { Text } from "./Text.js";
 import { ToggleButton, ToggleButtonProps } from "./ToggleButton.js";
+
+const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 interface ButtonOption extends Omit<ToggleButtonProps, "selected"> {
   value: string;
@@ -40,6 +42,13 @@ interface SegmentedControlProps
    */
   semantics?: "tabs" | "radio";
   /**
+   * The selected background slides from one option to the next instead of
+   * jumping. Not in `compact`, whose joined segments carry their own
+   * corners. Visitors who ask for reduced motion see it move without the
+   * slide. Defaults to `true`.
+   */
+  sliding?: boolean;
+  /**
    * `false` lays the options out in a plain row that shares the width (equally
    * with `fillWidth`) and truncates a label that does not fit, instead of a
    * strip that scrolls. For a narrow sidebar, where two or three options
@@ -61,6 +70,7 @@ const SegmentedControl = ({
   compact = false,
   semantics = "tabs",
   scroll = true,
+  sliding = true,
   className,
   style,
   // The tablist's name and description go to the tablist, below.
@@ -158,6 +168,56 @@ const SegmentedControl = ({
     );
   }, [selectedIndex]);
 
+  // One pill behind the options, measured onto the selected one. Until the
+  // first measure (and on the server) the selected button keeps its own
+  // background, so the first paint is right before any script runs.
+  const slides = sliding && !compact;
+  const tablistRef = useRef<HTMLDivElement | null>(null);
+  const pillRef = useRef<HTMLSpanElement | null>(null);
+  const [pillReady, setPillReady] = useState(false);
+
+  useIsomorphicLayoutEffect(() => {
+    if (!slides) {
+      setPillReady(false);
+      return;
+    }
+    const pill = pillRef.current;
+    const selected = buttonRefs.current[selectedIndex];
+    if (!pill) return;
+    if (!selected) {
+      pill.style.opacity = "0";
+      return;
+    }
+    const boxOf = () =>
+      `${selected.offsetLeft},${selected.offsetTop},${selected.offsetWidth},${selected.offsetHeight}`;
+    let placed = boxOf();
+    const place = () => {
+      pill.style.width = `${selected.offsetWidth}px`;
+      pill.style.height = `${selected.offsetHeight}px`;
+      pill.style.transform = `translate(${selected.offsetLeft}px, ${selected.offsetTop}px)`;
+      pill.style.borderRadius = getComputedStyle(selected).borderRadius;
+      pill.style.opacity = "1";
+    };
+    place();
+    setPillReady(true);
+    // Fonts loading, labels changing or the row resizing move the option
+    // under the pill: follow it there without the slide. The observer also
+    // reports as it starts, with nothing moved, and then leaves the slide be.
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(() => {
+      const box = boxOf();
+      if (box === placed) return;
+      placed = box;
+      pill.style.transition = "none";
+      place();
+      void pill.offsetWidth;
+      pill.style.removeProperty("transition");
+    });
+    observer.observe(selected);
+    if (tablistRef.current) observer.observe(tablistRef.current);
+    return () => observer.disconnect();
+  }, [slides, selectedIndex]);
+
   const tablist = (
     <Flex
       role={radio ? "radiogroup" : "tablist"}
@@ -165,7 +225,10 @@ const SegmentedControl = ({
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledBy}
       aria-describedby={ariaDescribedBy}
+      ref={tablistRef}
       fillWidth={fillWidth}
+      position={slides ? "relative" : undefined}
+      className={slides ? styles.track : undefined}
       // Scrolling, never narrower than its options: when they overflow, the
       // border goes round all of them and scrolls with them, instead of
       // ending at the edge of the strip with the last options outside it.
@@ -238,6 +301,7 @@ const SegmentedControl = ({
               [styles.shrink]: !scroll,
               [styles.share]: !scroll && fillWidth,
               [styles.twoLine]: description !== undefined,
+              [styles.onPill]: slides && pillReady && index === selectedIndex,
             })}
             style={{ opacity: index !== selectedIndex && !compact ? 0.6 : 1, ...style }}
             aria-selected={radio ? undefined : index === selectedIndex}
@@ -253,6 +317,15 @@ const SegmentedControl = ({
           />
         );
       })}
+      {/* After the options, so each keeps its place among its siblings. */}
+      {slides && (
+        <span
+          ref={pillRef}
+          aria-hidden="true"
+          className={styles.pill}
+          data-ready={pillReady || undefined}
+        />
+      )}
     </Flex>
   );
 

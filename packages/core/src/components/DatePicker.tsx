@@ -317,53 +317,37 @@ const Calendar = ({
     }
   }, [propCurrentMonth, propCurrentYear]);
 
-  // Track if calendar is synced to selected value
-  const [isCalendarSynced, setIsCalendarSynced] = useState(false);
-
   /**
-   * Whether focus was in the picker when a change of `value` unmounted the
-   * grid to re-sync it. A pick from the keyboard in a controlled picker
-   * (and a range's start pick) changes `value`, and the remounted grid
-   * found focus on the page and left it there.
+   * Whether focus was in the picker when `value` changed. A new `value`
+   * gives the grid a new key (the selected day is part of it), so it mounts
+   * again, and a pick from the keyboard in a controlled picker (and a
+   * range's start pick) left focus on the page as the focused day went.
+   * The remounted grid puts it back on the picked day (see
+   * `initialFocusedIndex`), then this is cleared.
+   *
+   * The grid used to be taken out of the page while it re-synced and put
+   * back on a timer: the picker's height collapsed for a frame or two on
+   * every pick, a visible jump. It now stays mounted throughout.
    */
   const refocusAfterSync = useRef(false);
 
-  // Sync currentMonth/currentYear to value on mount and when value changes
+  // Move to the month of a new value.
   useEffect(() => {
     if (rootRef.current?.contains(document.activeElement)) refocusAfterSync.current = true;
-    // Reset calendar sync to ensure proper re-sync
-    setIsCalendarSynced(false);
-
-    if (value) {
-      if (!monthIsControlled) {
-        setCurrentMonth(value.getMonth());
-        setCurrentYear(value.getFullYear());
-      }
-      // Small delay to ensure state updates are processed
-      const timer = setTimeout(() => {
-        setIsCalendarSynced(true);
-      }, 0);
-      return () => clearTimeout(timer);
-    } else {
-      setIsCalendarSynced(true);
+    if (value && !monthIsControlled) {
+      setCurrentMonth(value.getMonth());
+      setCurrentYear(value.getFullYear());
     }
   }, [value, monthIsControlled]);
 
-  // The grid has remounted and taken focus back (see `initialFocusedIndex`).
-  useEffect(() => {
-    if (isCalendarSynced) refocusAfterSync.current = false;
-  }, [isCalendarSynced]);
+  /** The grid mounts again for each month and each picked day. */
+  const gridKey = `calendar-${currentYear}-${currentMonth}-${selectedDate?.getTime() || 0}`;
 
-  // Additional sync effect that runs when the component becomes ready
+  // The grid has remounted and taken focus back (see `initialFocusedIndex`).
+  // biome-ignore lint/correctness/useExhaustiveDependencies: runs on each remount of the grid
   useEffect(() => {
-    if (isReady && value && !isCalendarSynced) {
-      if (!monthIsControlled) {
-        setCurrentMonth(value.getMonth());
-        setCurrentYear(value.getFullYear());
-      }
-      setIsCalendarSynced(true);
-    }
-  }, [isReady, value, isCalendarSynced, monthIsControlled]);
+    refocusAfterSync.current = false;
+  }, [gridKey]);
 
   useEffect(() => {
     if (value === undefined && !hadValueRef.current) return;
@@ -1196,46 +1180,44 @@ const Calendar = ({
             {renderCalendarGrid()}
           </Column>
         ) : (
-          isCalendarSynced && (
-            <ArrowNavigation
-              layout="grid"
-              columns={7}
-              // The pickable days, not every day of the month: the keys
-              // count enabled buttons, and End and the wrap ran past them.
-              itemCount={pickableDays.length}
-              // Read once, at mount, and a day only while the user is in
-              // the picker. The grid mounts again for each month and each
-              // pick, and ArrowNavigation focuses its starting day when
-              // focus has fallen to the page, as it does when a pick from
-              // the keyboard removes the focused day: that puts focus back
-              // on the picked day. Anywhere else, the page loading or a
-              // value set from outside, it took focus from the page. Where
-              // the keys start is the day that has focus (FollowFocusedDay).
-              initialFocusedIndex={
-                (focusIsInside() || refocusAfterSync.current) && startDay !== undefined
-                  ? pickableDays.indexOf(startDay)
-                  : -1
-              }
-              wrap
-              itemSelector={DAY_SELECTOR}
-              role="grid"
-              aria-label={gridLabel}
-              key={`calendar-${currentYear}-${currentMonth}-${selectedDate?.getTime() || 0}`}
-              disableHighlighting={true}
-              // `autoFocus` is the effect above, once per opening: here it
-              // focused a day each time the grid mounted, every month.
-              autoFocus={false}
-              onSelect={(index) => {
-                // This grid's own button for that day: looked up in the
-                // whole document, a dual picker's second calendar picked
-                // the first one's day.
-                gridRef.current?.querySelectorAll<HTMLButtonElement>(DAY_SELECTOR)[index]?.click();
-              }}
-            >
-              {renderCalendarGrid()}
-              <FollowFocusedDay gridRef={gridRef} />
-            </ArrowNavigation>
-          )
+          <ArrowNavigation
+            layout="grid"
+            columns={7}
+            // The pickable days, not every day of the month: the keys
+            // count enabled buttons, and End and the wrap ran past them.
+            itemCount={pickableDays.length}
+            // Read once, at mount, and a day only while the user is in
+            // the picker. The grid mounts again for each month and each
+            // pick, and ArrowNavigation focuses its starting day when
+            // focus has fallen to the page, as it does when a pick from
+            // the keyboard removes the focused day: that puts focus back
+            // on the picked day. Anywhere else, the page loading or a
+            // value set from outside, it took focus from the page. Where
+            // the keys start is the day that has focus (FollowFocusedDay).
+            initialFocusedIndex={
+              (focusIsInside() || refocusAfterSync.current) && startDay !== undefined
+                ? pickableDays.indexOf(startDay)
+                : -1
+            }
+            wrap
+            itemSelector={DAY_SELECTOR}
+            role="grid"
+            aria-label={gridLabel}
+            key={gridKey}
+            disableHighlighting={true}
+            // `autoFocus` is the effect above, once per opening: here it
+            // focused a day each time the grid mounted, every month.
+            autoFocus={false}
+            onSelect={(index) => {
+              // This grid's own button for that day: looked up in the
+              // whole document, a dual picker's second calendar picked
+              // the first one's day.
+              gridRef.current?.querySelectorAll<HTMLButtonElement>(DAY_SELECTOR)[index]?.click();
+            }}
+          >
+            {renderCalendarGrid()}
+            <FollowFocusedDay gridRef={gridRef} />
+          </ArrowNavigation>
         )}
       </Reveal>
     </Column>
@@ -1245,7 +1227,13 @@ const Calendar = ({
 Calendar.displayName = "Calendar";
 
 /** One date, on one month's calendar (with `timePicker`, a date and time). */
-interface SingleDatePickerProps extends Omit<CalendarProps, "highlight"> {
+/**
+ * `currentMonth`, `currentYear` and `onMonthChange(increment)` are how a range
+ * picker drives each of its calendars; they are not the 3.0 value contract,
+ * so they stay off the public props.
+ */
+interface SingleDatePickerProps
+  extends Omit<CalendarProps, "highlight" | "currentMonth" | "currentYear" | "onMonthChange"> {
   /** Pick a `{ startDate, endDate }` range instead of one date. */
   range?: false;
 }

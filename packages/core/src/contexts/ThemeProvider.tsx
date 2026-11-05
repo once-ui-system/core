@@ -63,10 +63,27 @@ export type StylePersistenceAdapter = {
 
 export type StylePersistence = "local" | "none" | StylePersistenceAdapter;
 
+// Reading `window.localStorage` throws a SecurityError where storage is
+// blocked: a sandboxed or third-party iframe, or cookies turned off. The theme
+// then simply is not remembered, instead of the provider failing to render.
 const localAdapter: StylePersistenceAdapter = {
-  get: (key) => localStorage.getItem(key),
-  set: (key, value) => localStorage.setItem(key, value),
-  remove: (key) => localStorage.removeItem(key),
+  get: (key) => {
+    try {
+      return localStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  },
+  set: (key, value) => {
+    try {
+      localStorage.setItem(key, value);
+    } catch {}
+  },
+  remove: (key) => {
+    try {
+      localStorage.removeItem(key);
+    } catch {}
+  },
 };
 
 function resolvePersistence(persistence: StylePersistence = "local") {
@@ -140,8 +157,11 @@ export interface OnceUIStyleConfig {
    */
   cursor?: CursorPresetValue;
   /**
-   * A colour to generate the brand scheme from — hex, `rgb()` or `oklch()` —
-   * for `brand: "custom"`, which it implies when `brand` is not set.
+   * An exact brand colour — hex, `rgb()` or `oklch()` — for `brand: "custom"`,
+   * which it implies when `brand` is not set. The colour itself is step 500,
+   * what filled buttons and other solids use in both themes (with
+   * `solid: "color"`); the other steps are generated around it. This is all
+   * an exact brand colour needs: `brandSeed: "#0F766E"`.
    * `ThemeInit` renders the scheme on the server, so it is there before the
    * first paint.
    */
@@ -151,9 +171,14 @@ export interface OnceUIStyleConfig {
   /** As {@link OnceUIStyleConfig.brandSeed}, for `neutral: "custom"`. */
   neutralSeed?: string;
   /**
-   * The brand scheme step by step, `{ 100: "#…", …, 1200: "#…" }`, for exact
-   * brand colours. Implies `brand: "custom"`. Steps it leaves out come from
-   * `brandSeed`; without a seed it needs at least step 600.
+   * The brand scheme step by step, `{ 100: "#…", …, 1200: "#…" }`, for a
+   * brand book that fixes every shade. Implies `brand: "custom"`. Steps it
+   * leaves out come from `brandSeed`; without a seed it needs at least step
+   * 600. For one exact colour, `brandSeed` alone is simpler.
+   *
+   * Steps run dark to light in both themes: 100 is the darkest and 1200 the
+   * lightest (the reverse of Tailwind's numbering). Solids use 500, brand text
+   * on a light page 400, on a dark page 900 and 700.
    *
    * One scale serves both themes. For a ramp per theme, write
    * `{ light: { … }, dark: { … } }`; a theme left out uses the other's.

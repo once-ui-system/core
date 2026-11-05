@@ -7,7 +7,8 @@
   "size": "TShirtSizes = \"m\"",
   "color": "string",
   "aria-label": "string",
-  "style": "ViewStyle"
+  "style": "ViewStyle",
+  "testID": "string"
  },
  "resolvedMixins": {},
  "types": {

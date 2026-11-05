@@ -20,6 +20,8 @@ export interface FeedbackProps {
   onClose?: () => void;
   children?: ReactNode;
   style?: ViewStyle;
+  /** Finds the alert in end-to-end tests. */
+  testID?: string;
 }
 
 const TONE_ICONS: Partial<Record<Tone, IconName>> = {
@@ -40,6 +42,7 @@ export function Feedback({
   onClose,
   children,
   style,
+  testID,
 }: FeedbackProps) {
   const theme = useTheme();
   return (
@@ -52,6 +55,7 @@ export function Feedback({
       accessibilityRole="alert"
       accessibilityLiveRegion="assertive"
       style={style}
+      testID={testID}
     >
       {showIcon && (
         <Row paddingY="16" paddingLeft="16">

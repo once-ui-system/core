@@ -6,7 +6,8 @@
  "props": {
   "vert": "boolean",
   "background": "Colors = \"neutral-alpha-medium\"",
-  "style": "ViewStyle"
+  "style": "ViewStyle",
+  "testID": "string"
  },
  "resolvedMixins": {},
  "types": {

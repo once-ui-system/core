@@ -3,7 +3,7 @@ import { Pressable, View, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 import type { TextVariant, Tone, TShirtSizes } from "../types";
 import { pressHandler } from "./Button";
-import { Row } from "./Flex";
+import { Row, useOwnWidth } from "./Flex";
 import { type IconSlot, renderIcon } from "./Icon";
 import { IconButton, type IconButtonProps } from "./IconButton";
 import { Text } from "./Text";
@@ -57,6 +57,8 @@ export interface TagProps {
   textVariant?: TextVariant;
   children?: ReactNode;
   style?: ViewStyle;
+  /** Finds the tag in end-to-end tests. */
+  testID?: string;
 }
 
 /** Padding, text and icon per size and look. s, m and l are 2.x's Tag; announce m is 2.x's Badge. */
@@ -119,8 +121,10 @@ export function Tag({
   textVariant,
   children,
   style,
+  testID,
 }: TagProps) {
   const theme = useTheme();
+  const ownWidth = useOwnWidth();
   // Left out, the theme's density picks it.
   const size = sizeProp ?? theme.controlSize;
   const handler = pressHandler(onPress, onClick, href);
@@ -174,14 +178,20 @@ export function Tag({
         </Row>
       );
     };
-    const box = [{ alignSelf: "flex-start" as const }, style];
-    if (!toggles) return <View style={box}>{body(false)}</View>;
+    const box = [ownWidth, style];
+    if (!toggles)
+      return (
+        <View testID={testID} style={box}>
+          {body(false)}
+        </View>
+      );
     return (
       <Pressable
         accessibilityRole="button"
         aria-selected={on}
         onPress={handler}
         hitSlop={touchSlop(theme, theme.space("32"), Number.POSITIVE_INFINITY)}
+        testID={testID}
         style={box}
       >
         {({ pressed }) => body(pressed)}
@@ -233,13 +243,19 @@ export function Tag({
     </Row>
   );
 
-  const box = [{ alignSelf: "flex-start" as const }, style];
-  if (!handler) return <View style={box}>{pill(false)}</View>;
+  const box = [ownWidth, style];
+  if (!handler)
+    return (
+      <View testID={testID} style={box}>
+        {pill(false)}
+      </View>
+    );
   return (
     <Pressable
       accessibilityRole={href && !onPress && !onClick ? "link" : "button"}
       onPress={handler}
       hitSlop={touchSlop(theme, theme.space("32"), Number.POSITIVE_INFINITY)}
+      testID={testID}
       style={box}
     >
       {({ pressed }) => pill(pressed)}

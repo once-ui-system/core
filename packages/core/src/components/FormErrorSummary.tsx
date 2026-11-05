@@ -87,7 +87,8 @@ const FormErrorSummary = ({
 
   return (
     <Feedback ref={innerRef} tone="danger" title={title ?? DEFAULT_TITLE} tabIndex={-1} {...rest}>
-      <Column as="ul" gap="4" margin="0" paddingLeft="20">
+      {/* No bullets and no indent: the entries line up with the title. */}
+      <Column as="ul" gap="4" margin="0" padding="0">
         {items.map((item, index) => (
           <Text
             as="li"

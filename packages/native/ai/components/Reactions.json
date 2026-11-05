@@ -26,7 +26,8 @@
   "disabled": "boolean = false",
   "renderGlyph": "(option: ReactionOption) => ReactNode",
   "addLabel": "string = \"Add reaction\"",
-  "aria-label": "string"
+  "aria-label": "string",
+  "testID": "string"
  },
  "resolvedMixins": {
   "FlexProps": {

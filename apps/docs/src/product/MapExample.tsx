@@ -129,6 +129,47 @@ export function MapAreaExample() {
   );
 }
 
+const CITIES: { label: string; viewport: MapViewport }[] = [
+  {
+    label: "Budapest",
+    viewport: { center: [19.0457, 47.507], zoom: 15.5, pitch: 60, bearing: -20 },
+  },
+  { label: "Lisbon", viewport: { center: [-9.1393, 38.7223], zoom: 15.5, pitch: 60, bearing: 30 } },
+  {
+    label: "Tokyo",
+    viewport: { center: [139.7671, 35.6812], zoom: 15.5, pitch: 60, bearing: -40 },
+  },
+  { label: "World", viewport: { center: [19, 30], zoom: 1 } },
+];
+
+export function MapGlobeExample() {
+  const [viewport, setViewport] = useState<MapViewport>(CITIES[0].viewport);
+  return (
+    <Column fillWidth gap="12">
+      <Row gap="8" wrap>
+        {CITIES.map((city) => (
+          <Button
+            key={city.label}
+            size="s"
+            variant="secondary"
+            onClick={() => setViewport(city.viewport)}
+          >
+            {city.label}
+          </Button>
+        ))}
+      </Row>
+      <Map
+        height={512}
+        projection="globe"
+        buildings="3d"
+        viewport={viewport}
+        onViewportChange={setViewport}
+        labels={{ map: "Globe with 3D buildings" }}
+      />
+    </Column>
+  );
+}
+
 export function MapControlledExample() {
   const [viewport, setViewport] = useState<MapViewport>({ center: BUDAPEST, zoom: 11 });
   const places: { label: string; position: LngLat }[] = [
@@ -153,7 +194,7 @@ export function MapControlledExample() {
       <Map height={384} viewport={viewport} onViewportChange={setViewport}>
         {places.map((place) => (
           <MapMarker key={place.label} position={place.position}>
-            <MapPin color="accent" aria-label={place.label} />
+            <MapPin tone="accent" aria-label={place.label} />
           </MapMarker>
         ))}
       </Map>

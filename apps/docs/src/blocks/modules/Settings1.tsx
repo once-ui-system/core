@@ -70,7 +70,7 @@ export const Settings1 = () => {
                 radius="full"
                 aspectRatio="1 / 1"
                 marginBottom="16"
-                initialPreviewImage="/images/creators/lorant.jpg"
+                defaultPreviewImage="/images/creators/lorant.jpg"
               />
               <Column fillWidth paddingTop="12" paddingLeft="16" gap="4" marginBottom="16">
                 <Text textVariant="heading-strong-s">Cover</Text>
@@ -81,7 +81,7 @@ export const Settings1 = () => {
               <MediaUpload
                 maxWidth="16rem"
                 aspectRatio="16 / 9"
-                initialPreviewImage="/images/blocks/vibe-coding-dark.jpg"
+                defaultPreviewImage="/images/blocks/vibe-coding-dark.jpg"
               />
             </>
           )}

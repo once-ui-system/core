@@ -2,7 +2,7 @@
 
 A title, a search field and a filter over a FlatList of records with status tags, pull to refresh, a details sheet and an empty state
 
-This file is complete for this task: the rules (all of `rules.md`), the props of every component below, their mixins and types, the hooks, every gotcha for this task, the quality bar and a gold example. Write the screen from it; reading the rules, catalog, gotchas or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.
+This file is complete for this task: the rules (all of `rules.md`), the props of every component below, their mixins and types, the hooks and every gotcha for this task, the quality bar and a gold example. Write the screen from it; reading the rules, catalog, gotchas or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.
 
 ## Rules
 
@@ -62,12 +62,12 @@ export default function RootLayout() {
 10. `gap`, `padding` and `margin` take spacing tokens: "0", "1", "2", "4", "8", "12", "16", "20", "24", "32", "40", "48", "56", "64", "72", "80", "104", "128", "160", or `xs`–`xl`. A screen's side padding is "20" (or "16"); gaps inside a section "8"–"16", between sections "24"–"32".
 11. A number on a size or offset prop is in points (`maxWidth={320}`, `height={48}`); tokens (`width="40"`) and `"50%"` work too. CSS lengths (`vh`, `calc()`) do not exist here.
 12. Breakpoint props (`xl`, `l`, `m`, `s`, `xs`) work on `Flex`, `Row`, `Column` and `Card` as on the web, by window width: use them for tablets (`m={{ direction: "column" }}`), not to tell phones apart.
-13. React Native has no single-side borders: `borderTop`, `borderBottom`, `borderX` are type errors. A divider is `<Line />` between the views. `position` is `relative`, `absolute` or `static`; there is no `fixed` or `sticky`, so a bar that stays put sits outside the `ScrollView`.
+13. Single-side borders work as on the web: `borderTop="neutral-alpha-weak"` on a tab bar, `borderBottom` on a header, `borderX`/`borderY` for two sides. A divider between rows of a list is `<Line />`. `position` is `relative`, `absolute` or `static`; there is no `fixed` or `sticky`, so a bar that stays put sits outside the `ScrollView`.
 14. `radius` does not clip children: add `overflow="hidden"` when an image or a filled child must follow the corners.
 
 ## Surfaces and color
 
-15. A static panel is `<Column background="surface" border="neutral-alpha-weak" radius="l" padding="16">`. `Card` is for something pressable (`onPress`); `selected` marks the picked one.
+15. A static panel is `<Column background="surface" border radius="l" padding="16">` (`border` alone is `neutral-alpha-weak`, as on the web). `Card` is for something pressable (`onPress`); `selected` marks the picked one.
 16. Colors are semantic tokens (`{scheme}-{weight}`, `-alpha-` for tints): `background="brand-alpha-weak"`, `onBackground="neutral-weak"`. Never hex or rgb. A React Native primitive you style yourself reads them with `useTheme()`: `theme.color("brand-solid-strong")`, `theme.space("16")`, `theme.radius("l")`.
 
 ## Text
@@ -147,6 +147,7 @@ A row of toggle buttons where one is selected.
 - fillWidth?: boolean = true
 - compact?: boolean = false — Outlined buttons without the frame around them, as in core.
 - style?: ViewStyle
+- testID?: string — Finds the row in end-to-end tests; each button gets `${testID}-${value}`.
 
 ### Avatar
 An image, or initials on a neutral circle.
@@ -156,7 +157,9 @@ An image, or initials on a neutral circle.
 - loading?: boolean
 - empty?: boolean — Shows the icon (`person` by default) instead of an image or initials.
 - icon?: IconName — The icon of an empty avatar, as in core.
-- statusIndicator?: { scheme: "green" | "yellow" | "red" | "gray" } — A status dot; `scheme` is its palette hue, as in core 3.0 (2.x called it `color`).
+- statusIndicator?: { scheme: Schemes | "gray"; tone?: undefined } | { tone: Tone; scheme?: undefined } — A dot in the corner, as core 3.0: `scheme` takes any hue StatusIndicator takes, `tone` a colour that follows the theme (`"success"`).
+- ring?: boolean | ColorScheme — A coloured ring around the avatar, with a gap of page background between, as for a story or a live state.
+- testID?: string — For tests and tools such as Maestro, on the avatar's outer view.
 - style?: ViewStyle
 
 ### Tag
@@ -178,6 +181,7 @@ A label, an announcement pill, or a toggle with an optional remove button.
 - textVariant?: TextVariant
 - children?: ReactNode
 - style?: ViewStyle
+- testID?: string — Finds the tag in end-to-end tests.
 
 ### Card
 Pressable surface (onPress), with every Flex prop; a static panel is a Column with background, border and radius instead
@@ -194,6 +198,7 @@ A 1px divider in `neutral-alpha-medium`.
 - vert?: boolean — Vertical, filling the parent's height.
 - background?: Colors = "neutral-alpha-medium"
 - style?: ViewStyle
+- testID?: string — Finds the line in end-to-end tests.
 
 ### Icon
 One of the built-in icons, or one registered with `IconProvider`.
@@ -204,6 +209,7 @@ One of the built-in icons, or one registered with `IconProvider`.
 - decorative?: boolean = true — Hidden from screen readers unless `false`, as in core.
 - aria-label?: string — The name of a non-decorative icon; its `name` by default, as in core.
 - style?: ViewStyle
+- testID?: string — Finds the icon in end-to-end tests.
 
 ### Button
 Action button with variants, sizes, prefix/suffix icons and a loading state; onPress runs it
@@ -224,6 +230,7 @@ Also takes React Native's PressableProps.
 - horizontal?: "start" | "center" | "end" | "between" = "center"
 - onClick?: () => void — Core's name for `onPress`, so the same JSX works on both; `onPress` wins.
 - href?: string — Opens this URL with `Linking`, as core's `href` makes the button a link.
+- wrap?: boolean = false — Lets a long label wrap onto more lines instead of being cut off with an ellipsis; the button grows taller to fit.
 - style?: ViewStyle
 
 ### Dialog
@@ -239,6 +246,7 @@ Core's `Dialog`, shown as a bottom sheet by default: the shape phones use for a 
 - closeOnClickaway?: boolean = true — A tap on the backdrop closes the dialog.
 - flush?: boolean = false — Edge to edge, without the sheet's padding, as core's `flush`.
 - style?: ViewStyle
+- testID?: string — Finds the sheet in end-to-end tests while it is open.
 
 ### IconButton
 A square button holding one icon.
@@ -346,6 +354,7 @@ type Opacity = 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 100
 type RadiusSize = TShirtSizes | "full" | "none"
 type ResponsiveSpacingToken = TShirtSizes
 type SafeAreaEdge = "top" | "right" | "bottom" | "left"
+type Schemes = "blue" | "indigo" | "violet" | "magenta" | "pink" | "red" | "orange" | "yellow" | "moss" | "green" | "emerald" | "aqua" | "cyan"
 type SegmentedControlButton = { value: string; label?: ReactNode; prefixIcon?: IconSlot; suffixIcon?: IconSlot; disabled?: boolean }
 type ShadowSize = TShirtSizes
 type Size = number | SpacingToken | Length | `${number}%`

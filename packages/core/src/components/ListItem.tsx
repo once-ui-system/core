@@ -17,7 +17,7 @@ const ListItem = ({ ref, className, children, style, ...props }: ListItemProps) 
     <Text
       as="li"
       ref={ref}
-      className={classNames("py-0 pr-0 pl-8", listItemClass)}
+      className={classNames("padding-y-0 padding-right-0 padding-left-8", listItemClass)}
       style={style}
       {...props}
     >

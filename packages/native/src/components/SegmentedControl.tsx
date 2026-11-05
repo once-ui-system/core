@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Pressable, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
-import { Row } from "./Flex";
+import { Row, useOwnWidth } from "./Flex";
 import { type IconSlot, renderIcon } from "./Icon";
 import { Text } from "./Text";
 import { touchSlop } from "./touch";
@@ -35,6 +35,8 @@ export interface SegmentedControlProps {
   /** Outlined buttons without the frame around them, as in core. */
   compact?: boolean;
   style?: ViewStyle;
+  /** Finds the row in end-to-end tests; each button gets `${testID}-${value}`. */
+  testID?: string;
 }
 
 /** Core's `SegmentedControl`: a row of toggle buttons where one is selected. */
@@ -47,8 +49,10 @@ export function SegmentedControl({
   fillWidth = true,
   compact = false,
   style,
+  testID,
 }: SegmentedControlProps) {
   const theme = useTheme();
+  const ownWidth = useOwnWidth();
   const [selected, select] = useControlledValue<string>(
     value,
     defaultValue ?? buttons[0]?.value ?? "",
@@ -63,7 +67,8 @@ export function SegmentedControl({
       padding={compact ? undefined : "2"}
       radius="l"
       border={compact ? undefined : "neutral-alpha-weak"}
-      style={[fillWidth ? { alignSelf: "stretch" } : { alignSelf: "flex-start" }, style ?? {}]}
+      style={[fillWidth ? { alignSelf: "stretch" } : ownWidth, style ?? {}]}
+      testID={testID}
     >
       {buttons.map((b) => {
         const on = b.value === selected;
@@ -75,6 +80,7 @@ export function SegmentedControl({
           <Pressable
             key={b.value}
             accessibilityRole="tab"
+            testID={testID && `${testID}-${b.value}`}
             aria-selected={on}
             aria-disabled={off}
             disabled={off}
@@ -101,7 +107,7 @@ export function SegmentedControl({
           >
             {renderIcon(b.prefixIcon, "s", color)}
             {b.label !== undefined && (
-              <Text textVariant="label-strong-s" style={{ color }} numberOfLines={1}>
+              <Text textVariant="label-default-s" style={{ color }} numberOfLines={1}>
                 {b.label}
               </Text>
             )}

@@ -254,3 +254,55 @@ describe("SegmentedControl without scrolling", () => {
     await expectNoAxeViolations(container);
   });
 });
+
+describe("SegmentedControl's sliding background", () => {
+  const pillOf = (container: HTMLElement) =>
+    container.querySelector(`.${styles.pill}`) as HTMLElement | null;
+
+  beforeEach(() => {
+    // jsdom lays nothing out: each option 100px wide, placed by its index.
+    vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(100);
+    vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(32);
+    vi.spyOn(HTMLElement.prototype, "offsetLeft", "get").mockImplementation(function (
+      this: HTMLElement,
+    ) {
+      return this.parentElement ? Array.from(this.parentElement.children).indexOf(this) * 100 : 0;
+    });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("puts one pill under the selected option and hands it the background", () => {
+    const { container } = render(<SegmentedControl buttons={buttons} defaultValue="yearly" />, {
+      wrapper: wrap,
+    });
+    const pill = pillOf(container);
+    expect(pill).toHaveAttribute("aria-hidden", "true");
+    expect(pill).toHaveAttribute("data-ready");
+    expect(pill?.style.transform).toBe("translate(100px, 0px)");
+    expect(pill?.style.width).toBe("100px");
+    expect(screen.getByRole("tab", { name: "Yearly" })).toHaveClass(styles.onPill);
+    expect(screen.getByRole("tab", { name: "Monthly" })).not.toHaveClass(styles.onPill);
+  });
+
+  it("follows the selection", async () => {
+    const { container } = render(<SegmentedControl buttons={buttons} />, { wrapper: wrap });
+    expect(pillOf(container)?.style.transform).toBe("translate(0px, 0px)");
+    await userEvent.click(screen.getByRole("tab", { name: "Yearly" }));
+    expect(pillOf(container)?.style.transform).toBe("translate(100px, 0px)");
+    expect(screen.getByRole("tab", { name: "Yearly" })).toHaveClass(styles.onPill);
+  });
+
+  it("stays out of compact and sliding={false}, where the option keeps its own background", () => {
+    for (const props of [{ compact: true }, { sliding: false }]) {
+      const { container, unmount } = render(<SegmentedControl buttons={buttons} {...props} />, {
+        wrapper: wrap,
+      });
+      expect(pillOf(container)).toBeNull();
+      expect(screen.getByRole("tab", { name: "Monthly" })).not.toHaveClass(styles.onPill);
+      unmount();
+    }
+  });
+});

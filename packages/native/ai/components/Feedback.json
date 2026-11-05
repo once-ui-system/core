@@ -12,7 +12,8 @@
   "showCloseButton": "boolean = false",
   "onClose": "() => void",
   "children": "ReactNode",
-  "style": "ViewStyle"
+  "style": "ViewStyle",
+  "testID": "string"
  },
  "resolvedMixins": {},
  "types": {

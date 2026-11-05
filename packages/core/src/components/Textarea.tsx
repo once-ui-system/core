@@ -14,7 +14,7 @@ import type { LeafProps } from "../interfaces.js";
 import type { FieldSize } from "../types.js";
 import { takeLeafProps } from "../utils/leafLayout.js";
 import { Column } from "./Column.js";
-import { useFieldInvalid, useFieldSize } from "./FormContext.js";
+import { useFieldInvalid, useFieldSize, useWarnFieldOwnedProps } from "./FormContext.js";
 import styles from "./Input.module.scss";
 import { Row } from "./Row.js";
 import { Text } from "./Text.js";
@@ -119,6 +119,7 @@ const Textarea = ({
   // `error` used to be accepted and ignored here. It now marks the field
   // invalid the way it does on `Input`, and so does an enclosing `Field`.
   const fieldInvalid = useFieldInvalid(id);
+  useWarnFieldOwnedProps("Textarea", id, { label, errorMessage, description });
   const invalid = error || fieldInvalid;
   const [isFocused, setIsFocused] = useState(false);
   // Seeded from `defaultValue` too: an uncontrolled field — how a settings

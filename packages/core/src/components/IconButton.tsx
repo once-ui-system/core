@@ -52,10 +52,17 @@ interface IconButtonCommonProps extends LeafProps {
   disabled?: boolean;
   href?: string;
   children?: ReactNode;
+  /**
+   * Called on a press. Typed on the element both renders (a button, or a link
+   * with `href`), so an inline `(event) => …` handler is typed under strict.
+   */
+  onClick?: React.MouseEventHandler<HTMLElement>;
 }
 
-export type IconButtonProps = IconButtonCommonProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
-type AnchorProps = IconButtonCommonProps & React.AnchorHTMLAttributes<HTMLAnchorElement>;
+export type IconButtonProps = IconButtonCommonProps &
+  Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onClick">;
+type AnchorProps = IconButtonCommonProps &
+  Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "onClick">;
 
 const IconButton = ({
   ref,

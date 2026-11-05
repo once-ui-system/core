@@ -1,0 +1,86 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--mantine-color-body);
+  border-bottom: 1px solid var(--mantine-color-default-border);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mantine-spacing-md);
+  height: 3.75rem;
+}
+
+.logo {
+  font-family: var(--mantine-font-family-headings);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--mantine-color-text);
+  border-radius: var(--mantine-radius-default);
+
+  &::before {
+    content: "";
+    display: inline-block;
+    width: 0.6rem;
+    height: 0.6rem;
+    margin-right: 0.5rem;
+    background-color: var(--mantine-primary-color-filled);
+    border-radius: 50%;
+  }
+}
+
+.desktopNav {
+  display: none;
+  flex: 1;
+  margin-left: var(--mantine-spacing-xl);
+
+  @mixin larger-than $mantine-breakpoint-sm {
+    display: block;
+  }
+}
+
+.link {
+  padding: 0.4rem 0.75rem;
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 500;
+  color: var(--mantine-color-dimmed);
+  border-radius: var(--mantine-radius-default);
+
+  @mixin hover {
+    color: var(--mantine-color-text);
+    background-color: var(--mantine-color-default-hover);
+  }
+
+  &[data-active] {
+    color: var(--mantine-color-text);
+  }
+}
+
+.mobileLink {
+  padding: 0.6rem 0.5rem;
+  font-size: var(--mantine-font-size-lg);
+  color: var(--mantine-color-text);
+  border-radius: var(--mantine-radius-default);
+
+  @mixin hover {
+    background-color: var(--mantine-color-default-hover);
+  }
+}
+
+.cta {
+  display: none;
+
+  @mixin larger-than $mantine-breakpoint-xs {
+    display: inline-flex;
+  }
+}
+
+.burger {
+  @mixin larger-than $mantine-breakpoint-sm {
+    display: none;
+  }
+}

@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
+import { Nav } from "../components/Nav";
 import { NavGroup } from "../components/NavGroup";
 import { NavItem } from "../components/NavItem";
 import { LayoutProvider } from "../contexts/LayoutProvider";
@@ -105,5 +106,21 @@ describe("NavGroup", () => {
     const ref = { current: null as HTMLDivElement | null };
     render(<Settings ref={ref} />, { wrapper });
     expect(ref.current).toContainElement(header());
+  });
+
+  // The rail runs down the centre of the header's 16px icon: header inset + 8,
+  // less the Accordion's content padding (16 for "m", 12 for "s").
+  it.each([
+    ["normal", "padding-left-16"],
+    ["compact", "padding-left-8"],
+  ] as const)("centres the rail under the header icon in a %s nav", (density, inset) => {
+    render(
+      <Nav density={density} aria-label="Main">
+        <Settings defaultOpen />
+      </Nav>,
+      { wrapper },
+    );
+    const rows = panel()?.querySelector(".g-8");
+    expect(rows).toHaveClass(inset, "padding-right-12");
   });
 });
