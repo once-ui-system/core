@@ -212,7 +212,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - buttons: ButtonOption[]
 - onChange?: (value: string, event?: React.MouseEvent<HTMLButtonElement>) => void
 - defaultValue, value, className?: string
-- fillWidth, scroll?: boolean = true
+- fillWidth, sliding, scroll?: boolean = true
 - compact?: boolean = false
 - semantics?: "tabs" | "radio" = tabs
 - style?: React.CSSProperties
