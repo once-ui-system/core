@@ -12,9 +12,9 @@ export { DEFAULT_MAP_STYLE } from "./mapStyles.js";
 export type {
   LngLat,
   MapBuildings,
-  MapColor,
   MapProjection,
   MapStyle,
   MapStyleSource,
+  MapTone,
   MapViewport,
 } from "./types.js";

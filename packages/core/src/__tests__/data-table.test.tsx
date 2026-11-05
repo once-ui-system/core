@@ -191,7 +191,7 @@ describe("Table", () => {
   describe("selection", () => {
     it("selects rows, and selects all of them from the header", async () => {
       const user = userEvent.setup();
-      const onSelectionChange = vi.fn();
+      const onSelectedChange = vi.fn();
       const { container } = render(
         <Table
           aria-label="People"
@@ -199,7 +199,7 @@ describe("Table", () => {
           rows={people}
           selectable
           getRowLabel={(row) => `Select ${row.name}`}
-          onSelectionChange={onSelectionChange}
+          onSelectedChange={onSelectedChange}
         />,
         { wrapper: wrap },
       );
@@ -208,7 +208,7 @@ describe("Table", () => {
       expect(all).toHaveAttribute("aria-checked", "false");
 
       await user.click(screen.getByRole("checkbox", { name: "Select Ada" }));
-      expect(onSelectionChange).toHaveBeenLastCalledWith(["p2"]);
+      expect(onSelectedChange).toHaveBeenLastCalledWith(["p2"]);
       expect(screen.getByRole("checkbox", { name: "Select Ada" })).toHaveAttribute(
         "aria-checked",
         "true",
@@ -218,11 +218,11 @@ describe("Table", () => {
       await expectNoAxeViolations(container);
 
       await user.click(all);
-      expect(onSelectionChange).toHaveBeenLastCalledWith(["p2", "p1", "p3"]);
+      expect(onSelectedChange).toHaveBeenLastCalledWith(["p2", "p1", "p3"]);
       expect(all).toHaveAttribute("aria-checked", "true");
 
       await user.click(all);
-      expect(onSelectionChange).toHaveBeenLastCalledWith([]);
+      expect(onSelectedChange).toHaveBeenLastCalledWith([]);
       expect(all).toHaveAttribute("aria-checked", "false");
     });
 
@@ -238,14 +238,14 @@ describe("Table", () => {
 
     it("follows the host's selection when controlled", async () => {
       const user = userEvent.setup();
-      const onSelectionChange = vi.fn();
+      const onSelectedChange = vi.fn();
       render(
         <Table
           columns={columns}
           rows={people}
           selectable
           selected={["p3"]}
-          onSelectionChange={onSelectionChange}
+          onSelectedChange={onSelectedChange}
         />,
         { wrapper: wrap },
       );
@@ -257,13 +257,13 @@ describe("Table", () => {
         "true",
       ]);
       await user.click(boxes[0]);
-      expect(onSelectionChange).toHaveBeenCalledWith(["p3", "p1"]);
+      expect(onSelectedChange).toHaveBeenCalledWith(["p3", "p1"]);
       expect(boxes[0]).toHaveAttribute("aria-checked", "false");
     });
 
     it("gives rows without an id their own selection, not a shared one", async () => {
       const user = userEvent.setup();
-      const onSelectionChange = vi.fn();
+      const onSelectedChange = vi.fn();
       const anonymous = people.map(({ id: _id, ...rest }) => rest);
       render(
         <Table
@@ -272,14 +272,14 @@ describe("Table", () => {
           // Returns undefined at runtime: every row would share the id "undefined".
           getRowId={(row) => (row as { uuid?: string }).uuid as string}
           selectable
-          onSelectionChange={onSelectionChange}
+          onSelectedChange={onSelectedChange}
         />,
         { wrapper: wrap },
       );
 
       const boxes = screen.getAllByRole("checkbox", { name: "Select row" });
       await user.click(boxes[1]);
-      expect(onSelectionChange).toHaveBeenLastCalledWith(["1"]);
+      expect(onSelectedChange).toHaveBeenLastCalledWith(["1"]);
       expect(boxes.map((box) => box.getAttribute("aria-checked"))).toEqual([
         "false",
         "true",
@@ -362,7 +362,7 @@ describe("Table", () => {
 
     it("selects all on the current page only, and keeps the selection across pages", async () => {
       const user = userEvent.setup();
-      const onSelectionChange = vi.fn();
+      const onSelectedChange = vi.fn();
       render(
         <Table
           columns={manyColumns}
@@ -370,19 +370,19 @@ describe("Table", () => {
           paginated
           defaultPerPage={5}
           selectable
-          onSelectionChange={onSelectionChange}
+          onSelectedChange={onSelectedChange}
         />,
         { wrapper: wrap },
       );
 
       const all = screen.getByRole("checkbox", { name: "Select all rows on this page" });
       await user.click(all);
-      expect(onSelectionChange).toHaveBeenLastCalledWith(["r1", "r2", "r3", "r4", "r5"]);
+      expect(onSelectedChange).toHaveBeenLastCalledWith(["r1", "r2", "r3", "r4", "r5"]);
 
       await user.click(within(pagination()).getByRole("button", { name: "Next page" }));
       expect(all).toHaveAttribute("aria-checked", "false");
       await user.click(screen.getAllByRole("checkbox", { name: "Select row" })[0]);
-      expect(onSelectionChange).toHaveBeenLastCalledWith(["r1", "r2", "r3", "r4", "r5", "r6"]);
+      expect(onSelectedChange).toHaveBeenLastCalledWith(["r1", "r2", "r3", "r4", "r5", "r6"]);
 
       await user.click(within(pagination()).getByRole("button", { name: "Previous page" }));
       expect(all).toHaveAttribute("aria-checked", "true");

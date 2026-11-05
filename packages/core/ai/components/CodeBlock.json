@@ -27,7 +27,7 @@
   "onInstanceChange": "(index: number) => void",
   "lineNumbers": "boolean = false",
   "maxLines": "number = 5",
-  "isCollapsible": "boolean = false",
+  "collapsible": "boolean = false",
   "hideCode": "boolean = false"
  },
  "tags": [

@@ -88,7 +88,7 @@ export function DataTableSelectionExample() {
         getRowLabel={(invoice) => `Select ${invoice.id}`}
         selectable
         selected={selected}
-        onSelectionChange={setSelected}
+        onSelectedChange={setSelected}
         paginated
         defaultPerPage={5}
         perPageOptions={[5, 10, 25]}

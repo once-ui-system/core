@@ -24,14 +24,14 @@ export interface MapPopupProps
  * A card above a point, drawn with core surfaces. Render it while it is open,
  * as you would a Dialog; Escape and the close button call `onClose`.
  */
-const MapPopup: React.FC<MapPopupProps> = ({
+const MapPopup = ({
   position,
   children,
   onClose,
   gap = 40,
   closeLabel = "Close",
   ...flex
-}) => {
+}: MapPopupProps) => {
   const { map, reducedMotion } = useMap();
   const card = useRef<HTMLDivElement>(null);
   const [lng, lat] = position;

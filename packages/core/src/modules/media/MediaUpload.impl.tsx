@@ -31,7 +31,7 @@ export interface MediaUploadProps extends Omit<React.ComponentProps<typeof Flex>
   aspectRatio?: string;
   className?: string;
   style?: React.CSSProperties;
-  initialPreviewImage?: string | null;
+  defaultPreviewImage?: string | null;
   emptyState?: React.ReactNode;
   quality?: number;
   /** Passed to `Media`: a `sizes` string, or a number as shorthand for a max width in px. */
@@ -68,12 +68,12 @@ const MediaUpload = ({
   loading = false,
   sizes,
   children,
-  initialPreviewImage = null,
+  defaultPreviewImage = null,
   accept = "image/*",
   ...rest
 }: MediaUploadProps) => {
   const [dragActive, setDragActive] = useState(false);
-  const [previewImage, setPreviewImage] = useState<string | null>(initialPreviewImage); // Use prop as initial state
+  const [previewImage, setPreviewImage] = useState<string | null>(defaultPreviewImage); // Use prop as initial state
   const [uploading, setUploading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   // The object URL this component made for the current preview. Each one
@@ -81,11 +81,11 @@ const MediaUpload = ({
   const objectUrlRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (initialPreviewImage) {
+    if (defaultPreviewImage) {
       revokeObjectUrl(objectUrlRef);
-      setPreviewImage(initialPreviewImage);
+      setPreviewImage(defaultPreviewImage);
     }
-  }, [initialPreviewImage]);
+  }, [defaultPreviewImage]);
 
   useEffect(() => () => revokeObjectUrl(objectUrlRef), []);
 

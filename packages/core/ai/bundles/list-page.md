@@ -271,7 +271,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - defaultSort?: TableSort | null = null
 - onSortChange?: (sort: TableSort | null) => void
 - selected, defaultSelected?: string[]
-- onSelectionChange?: (selected: string[]) => void
+- onSelectedChange?: (selected: string[]) => void
 - getRowLabel?: (row: T) => string
 - page, perPage, count, total?: number
 - defaultPage?: number = 1
@@ -349,7 +349,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - children, prefix?: React.ReactNode
 - variant?: "pill" | "dot"
 - active?: boolean = false
-- color?: MapColor = brand
+- tone?: MapTone = brand
 - href?: string
 - onClick?: (event: React.MouseEvent<HTMLElement>) => void
 
@@ -557,11 +557,11 @@ type LegacyToast = { variant?: Tone; tone?: Tone; children?: ReactNode; message?
 type LngLat = { [key: number]?: number }
 type MapBuildings = "flat" | "3d"
 type MapClusterOptions = { radius?: number; maxZoom?: number; minPoints?: number }
-// type MapColor is one of these strings: neutral brand accent info danger warning success
 type MapLabels = { map: string; zoomIn: string; zoomOut: string; unavailable: string }
 type MapProjection = "globe" | "mercator"
 type MapStyle = "string" | "StyleSpecification" | { light: MapStyleSource; dark: MapStyleSource; }
 type MapStyleSource = "string" | "StyleSpecification"
+// type MapTone is one of these strings: neutral brand accent info danger warning success
 type MapViewport = { center: LngLat; zoom: number; bearing?: number; pitch?: number }
 type NavigationLayout = "grid" | "row" | "column"
 // type Opacity is one of these strings: 0 10 20 30 40 50 60 70 80 90 100
@@ -608,7 +608,7 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - Fixed in 2.1: a Button or IconButton that is a Dropdown trigger renders a real <button type="button"> with aria-haspopup and aria-expanded, so it is reachable by keyboard. Pass it as trigger as is; do not add type="button" or a no-op onClick, or wrap it in a focusable Row, to make it one.
 - Fixed in 2.1: a context menu is <Dropdown openOn="contextmenu" trigger={region}>{options}</Dropdown> (2.x ContextMenu): a real menu (menu and menuitem roles, arrow keys, Home/End, Escape returns focus) that opens at the pointer and stays on screen. The trigger region gets a box; set contents to render none (display: contents), so an absolutely positioned or grid/flex child keeps its own layout. Use it instead of a hand-made right-click menu.
 - Pass a Tag's text once, as label or as children — with both, the children are dropped. Badge and Chip are Tag in 3.0.
-- Write 2.x prop names, not 1.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onValueChange/defaultValue (not selected/onToggle/defaultSelected), Tag tone (not scheme or variant), Button tone="danger" (not variant="danger"), Text/Heading textVariant (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius). The validator names the 2.x prop.
+- Write 3.0 prop names, not 1.x or 2.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onValueChange/defaultValue (not selected/onToggle/defaultSelected), Tag tone (not scheme or variant), Button tone="danger" (not variant="danger"), Text/Heading textVariant (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius), Table onSelectedChange (not onSelectionChange), CodeBlock collapsible (not isCollapsible). The validator names the 3.0 prop.
 - Tag is a div by default; inside a sentence (<Text as="p">, <p>) give it as="span".
 - overflow="hidden" on full-bleed sections clips glows into hard bands — only use when parent has radius.
 - Leaf components (Button, IconButton, ToggleButton, the fields, Switch, Checkbox, RadioButton, Text, Heading, Icon, Avatar, Spinner, StatusIndicator, Kbd, InlineCode, ProgressBar, Logo, SmartLink, NavIcon) take only margins, flex, fillWidth, position, top/right/bottom/left, className and style besides their own props. Padding, background, border, radius, sizes, hide and breakpoints go on a Row around it (a Column around Text or Heading; <Row fit> for an Icon's box).

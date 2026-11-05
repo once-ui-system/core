@@ -29,7 +29,7 @@ export interface MapMarkerProps {
  * real DOM: a button in it is reachable by Tab, and focusing one off screen
  * pans it into view.
  */
-const MapMarker: React.FC<MapMarkerProps> = ({
+const MapMarker = ({
   position,
   children,
   anchor = "bottom",
@@ -37,7 +37,7 @@ const MapMarker: React.FC<MapMarkerProps> = ({
   active = false,
   draggable = false,
   onDragEnd,
-}) => {
+}: MapMarkerProps) => {
   const { map, lib, reducedMotion } = useMap();
   const [element] = useState(() => {
     const div = document.createElement("div");

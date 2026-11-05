@@ -202,9 +202,9 @@ export function PiePlot({
             labels="none"
             colors={rows.map((row, i) => cssColor(colorKey(row, i), "data-"))}
             hidden={rows.map((_, i) => hidden.includes(i))}
-            onToggle={
+            onHiddenChange={
               rows.length > 1
-                ? (i) => setHidden((h) => (h.includes(i) ? h.filter((k) => k !== i) : [...h, i]))
+                ? (next) => setHidden(rows.map((_, i) => i).filter((i) => next[i]))
                 : undefined
             }
           />

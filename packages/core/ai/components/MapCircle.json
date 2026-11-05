@@ -5,7 +5,7 @@
  "props": {
   "position": "!LngLat",
   "radius": "!number",
-  "color": "MapColor = brand",
+  "tone": "MapTone = brand",
   "opacity": "number = 0.2"
  },
  "tags": [
@@ -21,7 +21,7 @@
   "LngLat": {
    "[key: number]": "number"
   },
-  "MapColor": [
+  "MapTone": [
    "neutral",
    "brand",
    "accent",

@@ -12,7 +12,8 @@
   "variant": "ChartVariant",
   "axisWidth": "number = 64",
   "hidden": "readonly boolean[]",
-  "onToggle": "(index: number) => void"
+  "defaultHidden": "readonly boolean[] = []",
+  "onHiddenChange": "(hidden: boolean[]) => void"
  },
  "tags": [
   "data",
