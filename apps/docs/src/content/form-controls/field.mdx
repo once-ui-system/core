@@ -50,6 +50,21 @@ navTagVariant: "success"
 
 The hint stays visible while the error shows, so the instruction is still there when the user goes back to fix the value.
 
+## Field or Input alone
+
+`Input` and `Textarea` work on their own: a floating `label` inside the box, and `description` and `errorMessage` under it at the same 16px inset as the text. That suits a single field, like a search box or a settings row.
+
+In a form, wrap each control in a `Field`. The label sits above the box, the hint and error start under the label, and every control in the form, `Select` or a custom picker included, looks the same. `FormErrorSummary` links to the ids a `Field` wires.
+
+Inside a `Field`, give the label, hint and error to the `Field` and leave the control's own `label`, `description` and `errorMessage` unset. Set both and you get two labels, and messages at two different insets; in development the control warns in the console.
+
+```tsx
+// One label, messages under it
+<Field label="Email" hint="We never share it" error={errors.email}>
+  <Input id="email" />
+</Field>
+```
+
 ## Any control
 
 Native elements and third-party controls get the same props. For a control that needs them somewhere other than its root, pass a function: it receives the props to spread.

@@ -14,7 +14,7 @@ import type { LeafProps } from "../interfaces.js";
 import type { FieldSize } from "../types.js";
 import { takeLeafProps } from "../utils/leafLayout.js";
 import { Column } from "./Column.js";
-import { useFieldInvalid, useFieldSize } from "./FormContext.js";
+import { useFieldInvalid, useFieldSize, useWarnFieldOwnedProps } from "./FormContext.js";
 import { IconButton } from "./IconButton.js";
 import styles from "./Input.module.scss";
 import { Row } from "./Row.js";
@@ -126,6 +126,7 @@ const Input = ({
   // A `Field` around this input marks it invalid while its error shows, the
   // same as passing `error`; the message itself renders in the Field.
   const fieldInvalid = useFieldInvalid(id);
+  useWarnFieldOwnedProps("Input", id, { label, errorMessage, description });
   const invalid = error || fieldInvalid;
   const [revealed, setRevealed] = useState(false);
   const revealable = props.type === "password" && reveal;

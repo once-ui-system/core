@@ -546,7 +546,6 @@ entry below that had landed by then:
   workspace hoists the package, and says to add `optimizePackageImports` to the project's own
   `next.config` rather than replace it. The `page` bundle no longer promises a quality bar
   and gold example it doesn't have.
-
 - **`MegaMenu` panels stay inside the window.** A wide panel under a trigger near the
   right edge used to open past the side of the screen; it now moves left until it fits,
   16px from the edge, and a panel wider than the window keeps its left edge in view.
@@ -586,6 +585,13 @@ entry below that had landed by then:
 - **Feedback draws no empty icon box** when its icon does not resolve.
 - **CodeBlock and HeadingNav render under jsdom**: their `calc()` lengths moved
   into custom properties, so `getComputedStyle` no longer throws in tests.
+- **`FormErrorSummary` and `Field` line up.** The summary's entries start under its
+  title instead of 20px further in, and sit 12px below it rather than 24px (the gap
+  under any `Feedback` title before its children). A `Field`'s error and hint start
+  under its label, at the same 4px inset, instead of 16px in.
+  In development, an `Input` or `Textarea` inside a `Field` that sets its own `label`,
+  `description` or `errorMessage` warns once: the Field owns those, so there is one label
+  and every message lines up under it.
 
 ## [Unreleased]
 

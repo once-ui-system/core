@@ -77,7 +77,9 @@ const Feedback = ({
           </Row>
         </Flex>
       )}
-      <Column fillWidth padding="16" gap="24" vertical="center">
+      {/* Children (a list, an action) belong to the heading above them: a
+          small gap keeps them read as one alert rather than two blocks. */}
+      <Column fillWidth padding="16" gap="12" vertical="center">
         {(title || description) && (
           <Column fillWidth gap="2">
             {title && (
