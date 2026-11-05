@@ -268,6 +268,7 @@ Avoid: Wrapping content — it is an absolute edge overlay, not a container
 - pattern?: { display?: boolean; size?: SpacingToken; } = { display: false, size: "4", }
 - style?: React.CSSProperties
 - children?: ReactNode
+- position?: CSSProperties["position"] = relative
 
 ### Kbd
 Mixins: LeafProps.
