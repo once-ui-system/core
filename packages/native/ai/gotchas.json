@@ -24,7 +24,7 @@
     "components": ["Button", "Card", "Tag"]
   },
   "border.side": {
-    "rule": "borderTop, borderBottom and the other single-side borders do not exist: put a <Line /> above or below the view instead.",
+    "rule": "One side of a border is borderTop, borderRight, borderBottom, borderLeft, borderX or borderY on Row, Column or Card, as on the web; a divider between list rows is a <Line />.",
     "components": ["Row", "Column", "Line"]
   },
   "Card.interactive": {

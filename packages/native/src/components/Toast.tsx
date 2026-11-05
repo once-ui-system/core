@@ -107,6 +107,13 @@ interface ToastContextValue {
   toasts: (ToastOptions & { id: string })[];
   addToast: (toast: ToastOptions) => void;
   removeToast: (id: string) => void;
+  /**
+   * Native only: the height of a bar fixed to the bottom of the screen (a tab
+   * bar), safe area included, so toasts stack above it instead of over it. A
+   * tab bar sets it from its `onLayout`; 0 puts toasts back above the home
+   * indicator.
+   */
+  setBottomOffset: (points: number) => void;
 }
 
 const ToastContext = createContext<ToastContextValue | null>(null);
@@ -130,7 +137,11 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const removeToast = useCallback((id: string) => {
     setToasts((list) => list.filter((t) => t.id !== id));
   }, []);
-  const value = useMemo(() => ({ toasts, addToast, removeToast }), [toasts, addToast, removeToast]);
+  const [bottomOffset, setBottomOffset] = useState(0);
+  const value = useMemo(
+    () => ({ toasts, addToast, removeToast, setBottomOffset }),
+    [toasts, addToast, removeToast],
+  );
   const theme = useTheme();
 
   return (
@@ -142,8 +153,12 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           position: "absolute",
           left: theme.space("16"),
           right: theme.space("16"),
-          // Above the home indicator, as core's `calc(space + --safe-area-bottom)`.
-          bottom: theme.space("32") + theme.insets.bottom,
+          // Above the home indicator, as core's `calc(space + --safe-area-bottom)`,
+          // or above a bottom bar that already covers it.
+          bottom:
+            bottomOffset > 0
+              ? bottomOffset + theme.space("16")
+              : theme.space("32") + theme.insets.bottom,
           gap: theme.space("8"),
         }}
       >

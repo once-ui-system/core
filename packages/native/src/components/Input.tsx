@@ -21,6 +21,7 @@ import type { TShirtSizes } from "../types";
 import { Column, Row } from "./Flex";
 import { FormCellContext, useFormFieldDefaults } from "./FormContext";
 import { IconButton } from "./IconButton";
+import { nativeDriver } from "./motion";
 import type { RefComponent, TextInputRef } from "./refs";
 import { Spinner } from "./Spinner";
 import { Text } from "./Text";
@@ -178,7 +179,7 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
       Animated.timing(lift, {
         toValue: floating ? 1 : 0,
         duration: 150,
-        useNativeDriver: true,
+        useNativeDriver: nativeDriver,
       }).start();
     }, [floating, reduceMotion, lift]);
     const [boxHeight, setBoxHeight] = useState(0);
