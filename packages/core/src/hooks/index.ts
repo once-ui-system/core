@@ -1,5 +1,6 @@
 export * from "./useArrowNavigation.js";
 export * from "./useDebounce.js";
+export * from "./useElementTheme.js";
 export * from "./useFetchOg.js";
 export * from "./useHeadingLinks.js";
 export * from "./useHotkeys.js";
