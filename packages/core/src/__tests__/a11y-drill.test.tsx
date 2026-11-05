@@ -438,6 +438,14 @@ describe("accessibility drill", () => {
     await new Promise((resolve) => setTimeout(resolve, 20));
     expect(screen.queryByText("Design engineer")).toBeNull();
     fireEvent.blur(trigger);
+    // Focus a component moves on its own, after a click elsewhere (a dialog
+    // focusing its close button as it opens), is not keyboard focus either.
+    fireEvent.pointerDown(document.body);
+    fireEvent.focus(trigger);
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    expect(screen.queryByText("Design engineer")).toBeNull();
+    fireEvent.blur(trigger);
+    fireEvent.keyDown(document.body, { key: "Tab" });
     fireEvent.focus(trigger);
     expect(await screen.findByText("Design engineer")).toBeInTheDocument();
     // Text only: it describes the trigger while open, and expands nothing.

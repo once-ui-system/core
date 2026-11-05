@@ -179,6 +179,9 @@ const ThemeSwitcher = ({
         <IconButton
           icon={icon}
           variant={active ? "primary" : "tertiary"}
+          // Neutral: a theme picker sits in a top bar, where a brand-solid
+          // circle (with `solid: "color"`) shouts louder than the page.
+          tone="neutral"
           onClick={() => choose(option)}
           aria-label={names[option]}
           {...state}

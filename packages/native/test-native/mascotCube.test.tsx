@@ -15,8 +15,11 @@ import { cubeSides, hexToRGB, rgbToHex } from "../src/components/mascot/cube/vie
 const wrap = (node: ReactNode) => render(<ThemeProvider theme="dark">{node}</ThemeProvider>);
 
 // The cube steps with the frame clock; fake timers run it only when a test advances them.
+// Its scramble draws on Math.random, so a rendered cube is seeded too: an unseeded
+// scramble now and then turns every top sticker out of view (about 1 run in 40).
 beforeEach(() => {
   jest.useFakeTimers();
+  jest.spyOn(Math, "random").mockImplementation(seeded());
 });
 afterEach(() => {
   jest.useRealTimers();

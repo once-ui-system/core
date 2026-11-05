@@ -1451,6 +1451,10 @@ const COMMON_COMPONENTS = [
 
 const COMMON_HOOKS = ["useToast"];
 
+/** "a, b and c", for a sentence that lists what a file holds. */
+const joinList = (items) =>
+  items.length < 2 ? items.join("") : `${items.slice(0, -1).join(", ")} and ${items.at(-1)}`;
+
 const BASE_BUNDLE = {
   id: "page",
   title: "Any other page",
@@ -1657,7 +1661,15 @@ function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody, functions = 
     "",
     task.description,
     "",
-    "This file is complete for this task: the rules (all of `rules.compact.md`), the props of every component below, their mixins and types, every gotcha for these components, the quality bar and a gold example. Write the page from it; reading the rules, catalog, gotchas, manifest or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.",
+    // Name only what the file holds: the base page bundle has no quality bar
+    // or gold example, and promising them sent agents looking for both.
+    `This file is complete for this task: ${joinList([
+      "the rules (all of `rules.compact.md`)",
+      "the props, mixins and types of every component below",
+      "every gotcha for these components",
+      ...(task.quality && Object.keys(task.quality).length ? ["the quality bar"] : []),
+      ...(example ? ["a gold example"] : []),
+    ])}. Write the page from it; reading the rules, catalog, gotchas, manifest or examples again only adds cost. Open \`components/<Name>.json\` only for a component not listed here, and then every one you need in a single step.`,
     "",
     "## Rules",
     "",
