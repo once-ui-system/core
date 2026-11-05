@@ -202,8 +202,6 @@ describe("Mascot working=cube, drawn with react-native-svg", () => {
   });
 
   it("resolves the side presets into the faces' colors", async () => {
-    // The mascot scrambles with Math.random; seeded, so the top is always in view at the check.
-    jest.spyOn(Math, "random").mockImplementation(seeded());
     const fills = () => new Set(faces().map((p) => JSON.stringify(p.fill)));
     // `flat` is unlit, so every face is exactly its side's color.
     await wrap(
