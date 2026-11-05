@@ -13,6 +13,12 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Fixed
+
+- **`Banner` dismiss button sits at the right edge again.** In production bundles the
+  button's own `position: relative` could load after the banner's rule and win, which put
+  the close button inline after the text instead of at the strip's right edge.
+
 ## [2.7.0] — 2026-11-05
 
 Minor: everything here adds new props, components or variants, changes the look of
