@@ -7,17 +7,19 @@ This package ships an agent-first codegen harness under `ai/`, next to this file
 A new signed-in app (sidebar, top bar, content panel) starts from `ai/starters/app/`: a working Next.js App Router setup with Once UI's CSS, fonts, providers and theme in `src/app/layout.tsx`, the shell mounted once in `src/app/(app)/layout.tsx`, and two pages. Copy it over the create-next-app files, then edit it rather than rewriting it:
 
 ```bash
-cp -r node_modules/@once-ui-system/core/ai/starters/app/src/. src/ && rm -f src/app/page.module.css src/app/globals.css
+cp -r "$(node -p "require('path').dirname(require.resolve('@once-ui-system/core/package.json'))")/ai/starters/app/src/." src/ && rm -f src/app/page.module.css src/app/globals.css
 ```
+
+The `node -p` part finds the installed package wherever it is, so the copy also works in an npm or pnpm workspace that hoists it out of the app's own `node_modules`.
 
 No `src/` folder? Copy into the project root instead.
 
 Can't run shell commands (you can only read files and reply with code)? Then nothing was copied, and an import of `AppShell` or `resources/app` breaks the build. Write the starter files your code imports (`components/AppShell.tsx`, `resources/app.ts`) in your reply, taking their content from `ai/starters/app/src/`, keep the project's own `app/layout.tsx`, and import only files you write or have opened in the project.
 
-The copy takes `src/` only: also set `experimental.optimizePackageImports: ["@once-ui-system/core"]` in `next.config`, as `ai/starters/app/next.config.ts` does, or every route that imports the package root from a server component ships about 110 kB of extra JavaScript. That setting only works with webpack. Under Turbopack (the default for `next build` in Next 16), a server component should import client components from their own path, `@once-ui-system/core/components/Button`, so that it does not ship every component.
+The copy takes `src/` only. Keep the project's own `next.config` (with whatever create-next-app put there, such as `cacheComponents`) and add one entry to it, `experimental.optimizePackageImports: ["@once-ui-system/core"]`, as `ai/starters/app/next.config.ts` does; do not replace the file with the starter's. Without it, every route that imports the package root from a server component ships about 110 kB of extra JavaScript under webpack. That setting does nothing under Turbopack (the default for `next build` in Next 16), so a server component imports each component from its own path, `@once-ui-system/core/components/Button`, as the starter's layout and pages do; client components (`"use client"`) can import the package root.
 
 - `src/resources/app.ts`: product name, user and nav. The sidebar, breadcrumb and ⌘K palette all read it. Each nav href needs a page under `src/app/(app)/`; copy `home/page.tsx`.
-- `src/resources/once-ui.config.ts`: brand, accent, neutral and `defaultTheme` (`theme` itself stays `"system"`, or the theme switch stops working). Primary buttons take the brand colour only with `solid: "color"`; the starter's `"contrast"` draws them black or white whatever the brand.
+- `src/resources/once-ui.config.ts`: brand, accent, neutral and `defaultTheme`, which is what a first visit sees: the starter's `"system"` follows the device, `"dark"` or `"light"` opens in that theme whatever the device says. `theme` itself stays `"system"`, or the theme switch stops working. Primary buttons take the brand colour only with `solid: "color"`; the starter's `"contrast"` draws them black or white whatever the brand.
 - `src/components/AppShell.tsx`: the frame. Change it only to change the frame; it already covers the app-shell bundle's quality bar.
 
 Then build each page from the bundle below that fits it.
