@@ -359,8 +359,11 @@ export class CubeMotion {
     const sway = Math.sin(this.time * 0.5) * 0.12 * still;
     // lookY is positive downward; tipping the top toward the viewer looks down
     // The d20 tumbles on its own, so the view only leans in a little; it lands face on.
-    const tx = this.mode !== "idle" ? (d20 ? 0.18 : 0.5) : logo ? 0.04 : 0.12 + input.lookY * 0.3;
-    const ty = this.mode !== "idle" ? (d20 ? sway : -0.68 + sway) : logo ? 0 : input.lookX * 0.5;
+    // The d20 works and lands turned a little toward the light, so its side facets show.
+    const dieTx = this.mode !== "idle" || logo ? 0.3 : 0.12 + input.lookY * 0.3;
+    const dieTy = this.mode !== "idle" ? -0.3 + sway : logo ? -0.3 : input.lookX * 0.5;
+    const tx = d20 ? dieTx : this.mode !== "idle" ? 0.5 : logo ? 0.04 : 0.12 + input.lookY * 0.3;
+    const ty = d20 ? dieTy : this.mode !== "idle" ? -0.68 + sway : logo ? 0 : input.lookX * 0.5;
     const tz = logo && !d20 ? Math.PI / 4 : 0;
     const k = 1 - Math.exp(-dt * 4 * speed);
     this.rot.x += (tx - this.rot.x) * k;

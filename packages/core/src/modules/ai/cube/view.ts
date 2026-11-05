@@ -63,8 +63,10 @@ const GAP = 0.006;
 const BLOB_R = 1.12;
 /** The d20's circumradius, so it stands about as large as the cube. */
 const DIE_R = 1.4;
-/** How far each of the d20's faces draws in at rest, which leaves a dark seam on every edge. */
-const DIE_SEAM = 0.035;
+/** How far each of the d20's faces draws in once it is firm, which leaves a dark seam on every edge. */
+const DIE_SEAM = 0.018;
+/** How wide the d20's rounded edges are, in barycentric units of a face. */
+const DIE_BEVEL = 0.08;
 const DARK: RGB = [0.067, 0.071, 0.086];
 const WHITE: RGB = [1, 1, 1];
 /** Points round the mouth's outline, from its left corner; the tube closes the loop. */
@@ -176,8 +178,11 @@ export class CubeView {
     blob: Float32Array;
     flat: Float32Array;
     face: Uint8Array;
+    edge: Float32Array;
     normals: Float32Array;
     centers: Float32Array;
+    /** Each face's shade at rest: lighter facing up, darker facing down, neighbors apart. */
+    shades: number[];
     /** The die without seams, a hair smaller, in the dark body color, behind the faces. */
     core: GpuMesh;
   } | null = null;
@@ -305,7 +310,7 @@ export class CubeView {
   /** The d20's meshes, built the first time it is needed. */
   private dieMeshes() {
     if (this.die) return this.die;
-    const data = icosaGrid(10);
+    const data = icosaGrid(18);
     const flat = data.positions.map((v) => v * DIE_R);
     const core = icosaGrid(1);
     for (let i = 0; i < core.positions.length; i++) core.positions[i] *= DIE_R * 0.985;
@@ -315,7 +320,12 @@ export class CubeView {
       blob: new Float32Array(data.positions.length * 2),
       flat,
       face: data.face,
+      edge: data.edge,
       normals: data.faceNormals,
+      shades: Array.from({ length: 20 }, (_, f) => {
+        const n = data.faceNormals;
+        return 0.16 * n[f * 3 + 1] - 0.08 * n[f * 3] + (f % 3) * 0.035 - 0.035;
+      }),
       centers: data.faceCenters.map((v) => v * DIE_R),
       core: this.renderer.mesh(core),
     };
@@ -350,11 +360,18 @@ export class CubeView {
     for (let v = 0; v < P.length / 3; v++) {
       const f = die.face[v] * 3;
       const b = v * 6;
+      // Near an edge the face rounds over: it sinks a little and its normal turns outward, so
+      // every edge catches the light the way the cube's bevels do.
+      const round = (1 - smooth(0, DIE_BEVEL, die.edge[v])) ** 2;
+      const sink = 1 - 0.012 * round;
+      const F = die.flat;
+      const r = Math.hypot(F[v * 3], F[v * 3 + 1], F[v * 3 + 2]) || 1;
       for (let n = 0; n < 3; n++) {
         const c = die.centers[f + n];
-        const flatAt = c + (die.flat[v * 3 + n] - c) * seam;
+        const flatAt = (c + (F[v * 3 + n] - c) * seam) * sink;
+        const normal = mix(die.normals[f + n], F[v * 3 + n] / r, round * 0.75);
         P[v * 3 + n] = mix(die.blob[b + n], flatAt, morph);
-        N[v * 3 + n] = mix(die.blob[b + 3 + n], die.normals[f + n], morph);
+        N[v * 3 + n] = mix(die.blob[b + 3 + n], normal, morph);
       }
       const l = Math.hypot(N[v * 3], N[v * 3 + 1], N[v * 3 + 2]) || 1;
       N[v * 3] /= l;
@@ -457,7 +474,11 @@ export class CubeView {
           lit(body),
         );
       }
-      r.draw(die.mesh, model, lit(look.color));
+      // Each face its own shade of the color, so the facets read as cut, not painted on.
+      die.shades.forEach((shade, g) => {
+        const tint = mixRGB(look.color, shade > 0 ? WHITE : DARK, Math.abs(shade) * k);
+        r.draw(die.mesh, model, lit(tint), die.mesh.groups?.[g]);
+      });
     } else {
       if (m > 0.6) {
         const s = clamp((m - 0.6) / 0.4, 0.01, 1);

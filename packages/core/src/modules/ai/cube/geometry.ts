@@ -371,6 +371,8 @@ function icosahedron() {
  */
 export function icosaGrid(segments: number): MeshData & {
   face: Uint8Array;
+  /** How far each vertex is from its face's nearest edge: 0 on the edge, 1/3 at the center. */
+  edge: Float32Array;
   faceNormals: Float32Array;
   faceCenters: Float32Array;
 } {
@@ -396,6 +398,7 @@ export function icosaGrid(segments: number): MeshData & {
   const positions = new Float32Array(count * 3);
   const normals = new Float32Array(count * 3);
   const face = new Uint8Array(count);
+  const edge = new Float32Array(count);
   const faceNormals = new Float32Array(60);
   const faceCenters = new Float32Array(60);
   const indices = new Uint16Array(segments * segments * 3 * 20);
@@ -423,6 +426,8 @@ export function icosaGrid(segments: number): MeshData & {
           normals[v * 3 + n] = center[n] / cl;
         }
         face[v] = f;
+        // Barycentric weights of a, b and c; the smallest is the distance to an edge.
+        edge[v] = Math.min(1 - s, s * (1 - t), s * t);
         v++;
       }
     }
@@ -441,5 +446,5 @@ export function icosaGrid(segments: number): MeshData & {
     }
     groups.push({ start, count: k - start });
   });
-  return { positions, normals, indices, groups, face, faceNormals, faceCenters };
+  return { positions, normals, indices, groups, face, edge, faceNormals, faceCenters };
 }
