@@ -22,6 +22,8 @@
   "boundsMaxZoom": "number",
   "mapStyle": "MapStyle",
   "tint": "boolean",
+  "projection": "MapProjection",
+  "buildings": "MapBuildings",
   "controls": "boolean",
   "interactive": "boolean",
   "cooperativeGestures": "boolean",
@@ -147,6 +149,7 @@
    "bottomLeftRadius": "RadiusSize",
    "bottomRightRadius": "RadiusSize",
    "shadow": "ShadowSize",
+   "emphasis": "boolean | \"edge\" | \"glow\" | \"aura\"",
    "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | CursorPresetValue | ReactNode",
    "blendMode": "BlendMode",
    "blur": "BlurSize | number",
@@ -162,12 +165,20 @@
   "LngLat": {
    "[key: number]": "number"
   },
+  "MapBuildings": [
+   "flat",
+   "3d"
+  ],
   "MapLabels": {
    "map": "!string",
    "zoomIn": "!string",
    "zoomOut": "!string",
    "unavailable": "!string"
   },
+  "MapProjection": [
+   "globe",
+   "mercator"
+  ],
   "MapStyle": [
    "string",
    "StyleSpecification",

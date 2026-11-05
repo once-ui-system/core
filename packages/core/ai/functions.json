@@ -9,7 +9,7 @@
   "useNavStyle": {
    "group": "components",
    "kind": "hook",
-   "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: NavDensity; variant: ...",
+   "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly rail: \"8\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: N...",
    "doc": "The look the nearest Nav set, or the defaults outside one."
   },
   "arrayMove": {
@@ -545,11 +545,6 @@
    "isLowEnd": "!boolean",
    "shouldAnimate": "!boolean"
   },
-  "NavDensity": [
-   "normal",
-   "compact",
-   "spacious"
-  ],
   "NavigationLayout": [
    "grid",
    "row",

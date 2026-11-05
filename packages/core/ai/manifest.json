@@ -1,6 +1,6 @@
 {
- "version": "2.6.0",
- "generated": "2026-11-01",
+ "version": "2.7.0",
+ "generated": "2026-11-04",
  "imports": {
   "@once-ui-system/core": {
    "use": "Components, hooks, providers, defineConfig and types: everything not listed below"
@@ -83,6 +83,7 @@
    "types": [
     "ClusterGroup",
     "LngLat",
+    "MapBuildings",
     "MapCircleProps",
     "MapClusterOptions",
     "MapColor",
@@ -93,6 +94,7 @@
     "MapMarkersProps",
     "MapPinProps",
     "MapPopupProps",
+    "MapProjection",
     "MapProps",
     "MapStyle",
     "MapStyleSource",

@@ -283,6 +283,8 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - boundsPadding, boundsMaxZoom, minZoom, maxZoom?: number
 - mapStyle?: MapStyle
 - tint, controls, interactive, cooperativeGestures?: boolean
+- projection?: MapProjection
+- buildings?: MapBuildings
 - onMapClick?: (position: LngLat) => void
 - onMapLoad?: (map: MapLibreMap) => void
 - workerUrl?: string
@@ -458,6 +460,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - borderWidth?: 1 | 2 | 4 | 8 | "1" | "2" | "4" | "8"
 - topRadius, rightRadius, bottomRadius, leftRadius, topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius?: RadiusSize
 - shadow?: ShadowSize
+- emphasis?: boolean | "edge" | "glow" | "aura"
 - cursor?: CSSProperties["cursor"] | "interactive" | CursorPresetValue | ReactNode
 - blendMode?: BlendMode
 - blur, backdropBlur?: BlurSize | number
@@ -506,9 +509,11 @@ type CursorPresetValue = "soft" | "rounded" | "dot" | "system"
 // type IconName is one of these names, and only these:
 // symbol security opacity dark light copy help filter info danger warning code link menu search time video image enter send checkbox document grid adjustments arrowDown arrowLeft arrowRight arrowUp arrowUpRight ball banknotes barChart bell bolt book bookmark calendar cart chat check chevronDoubleLeft chevronDoubleRight chevronDown chevronLeft chevronRight chevronUp chevronsLeftRight clipboard close computer cube dislike download edit eye eyeDropper eyeOff file flag folder food forward gift globe grip heart home inbox like linearGauge lock logout mail maximize minimize minus moreHorizontal newspaper organization pause paw payment people person personRemove play plus radialGauge refresh return screen settings smiley sparkle star starFill store tag trash trend trendDown trendUp upload volume volumeOff wordmark world
 type LngLat = { [key: number]?: number }
+type MapBuildings = "flat" | "3d"
 type MapClusterOptions = { radius?: number; maxZoom?: number; minPoints?: number }
 // type MapColor is one of these strings: neutral brand accent info danger warning success
 type MapLabels = { map: string; zoomIn: string; zoomOut: string; unavailable: string }
+type MapProjection = "globe" | "mercator"
 type MapStyle = "string" | "StyleSpecification" | { light: MapStyleSource; dark: MapStyleSource; }
 type MapStyleSource = "string" | "StyleSpecification"
 type MapViewport = { center: LngLat; zoom: number; bearing?: number; pitch?: number }
