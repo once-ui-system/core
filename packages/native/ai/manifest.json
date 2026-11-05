@@ -1,5 +1,5 @@
 {
- "version": "0.1.0-preview.2",
+ "version": "0.2.0-beta.0",
  "package": "@once-ui-system/native",
  "web": "@once-ui-system/core: the same component names and props for the web app; its harness is node_modules/@once-ui-system/core/AGENTS.md",
  "files": {
@@ -9,7 +9,8 @@
   "gotchas": "ai/gotchas.json",
   "components": "ai/components/{Name}.json",
   "bundle": "ai/bundles/{id}.md",
-  "examples": "ai/examples/"
+  "examples": "ai/examples/",
+  "starter": "ai/starters/app/src/"
  },
  "tasks": [
   {

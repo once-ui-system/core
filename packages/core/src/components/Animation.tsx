@@ -13,6 +13,7 @@ import React, {
 } from "react";
 import { createPortal } from "react-dom";
 import { getFocusableElements } from "../internal/focusable.js";
+import { lastInputWasKeyboard, trackInputModality } from "../internal/inputModality.js";
 import { cannotHover } from "../internal/pointer.js";
 import type { CSSUnit, Placement, SpacingToken } from "../types.js";
 import { tokenLength } from "../utils/layoutClasses.js";
@@ -122,6 +123,8 @@ const Animation = ({
   const handlePress = () => {
     pressedRef.current = true;
   };
+  // Knows whether a later focus came from the keyboard (see handleFocus).
+  useEffect(trackInputModality, []);
   // Whether the card has held something to act on, so the trigger keeps
   // saying it is collapsed once it closes.
   const interactiveRef = useRef(false);
@@ -226,9 +229,11 @@ const Animation = ({
     // compatibility mouse events, on touch) is what opens it then.
     // Tracked here rather than read from `:focus-visible`, which not every
     // engine answers the same way.
+    // Focus a component moves on its own (a dialog focusing its close
+    // button as it opens after a click) is not keyboard focus either.
     const pressed = pressedRef.current;
     pressedRef.current = false;
-    if (triggerType === "hover" && !pressed) {
+    if (triggerType === "hover" && !pressed && lastInputWasKeyboard()) {
       handleMouseEnter();
     }
   }, [triggerType, handleMouseEnter]);

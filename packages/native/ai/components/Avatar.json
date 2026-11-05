@@ -10,7 +10,7 @@
   "loading": "boolean",
   "empty": "boolean",
   "icon": "IconName",
-  "statusIndicator": "{ scheme: \"green\" | \"yellow\" | \"red\" | \"gray\" }",
+  "statusIndicator": "{ scheme: Schemes | \"gray\"; tone?: undefined } | { tone: Tone; scheme?: undefined }",
   "ring": "boolean | ColorScheme",
   "testID": "string",
   "style": "ViewStyle"
@@ -23,6 +23,8 @@
   "IconLibraryOverrides": "{} (an app augments it to register its own icon names)",
   "IconName": "BuiltInIconName | Extract<keyof IconLibraryOverrides, string>",
   "Length": "`${number}px` | `${number}rem`",
+  "Schemes": "\"blue\" | \"indigo\" | \"violet\" | \"magenta\" | \"pink\" | \"red\" | \"orange\" | \"yellow\" | \"moss\" | \"green\" | \"emerald\" | \"aqua\" | \"cyan\"",
+  "Tone": "ColorScheme",
   "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\""
  }
 }

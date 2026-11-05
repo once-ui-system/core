@@ -35,14 +35,7 @@ const REWARDS: { id: string; title: string; detail: string; icon: IconName }[] =
 function StampCard({ stamps, onShowCode }: { stamps: number; onShowCode: () => void }) {
   const left = STAMPS_PER_REWARD - stamps;
   return (
-    <Column
-      background="surface"
-      border="neutral-alpha-weak"
-      radius="l"
-      padding="20"
-      gap="16"
-      shadow="s"
-    >
+    <Column background="surface" border radius="l" padding="20" gap="16" shadow="s">
       <Row horizontal="between" vertical="center">
         <Text textVariant="label-strong-m">Loyalty card</Text>
         <Tag tone="brand" size="s" label={`${stamps}/${STAMPS_PER_REWARD}`} />
@@ -71,14 +64,7 @@ function StampCard({ stamps, onShowCode }: { stamps: number; onShowCode: () => v
 
 function StatTile({ label, value }: { label: string; value: string }) {
   return (
-    <Column
-      flex={1}
-      background="surface"
-      border="neutral-alpha-weak"
-      radius="l"
-      padding="16"
-      gap="4"
-    >
+    <Column flex={1} background="surface" border radius="l" padding="16" gap="4">
       <Text textVariant="label-default-s" onBackground="neutral-weak">
         {label}
       </Text>

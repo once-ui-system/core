@@ -1,6 +1,14 @@
 import { useEffect, useRef, useState } from "react";
+import { Platform } from "react-native";
 
 export { useReduceMotion } from "./useReduceMotion";
+
+/**
+ * `useNativeDriver` for `Animated`: the native thread on phones. The web has
+ * no native module, so react-native-web would warn on every animation and run
+ * it in JavaScript anyway.
+ */
+export const nativeDriver = Platform.OS !== "web";
 
 /**
  * Seconds since the component started animating, updated every frame while

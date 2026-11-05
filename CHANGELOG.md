@@ -514,6 +514,19 @@ entry below that had landed by then:
 
 ### Fixed
 
+- **A `Card` with `onClick` no longer submits a form around it** (it is `type="button"`),
+  and a card given `width` or `fit` hugs that width instead of stretching (`maxWidth` still
+  fills the row up to its cap).
+- **Tooltips and hover cards open on keyboard focus only.** A dialog that focuses its close
+  button as it opens after a click no longer shows the "Close" tooltip over its corner.
+- **`ThemeSwitcher` marks the active theme in neutral**, not a brand-solid circle under
+  `solid: "color"`.
+- **The app starter**: `defaultTheme: "system"` so a first visit follows the device; server
+  components import component subpaths for Turbopack; AGENTS.md's copy command works when a
+  workspace hoists the package, and says to add `optimizePackageImports` to the project's own
+  `next.config` rather than replace it. The `page` bundle no longer promises a quality bar
+  and gold example it doesn't have.
+
 - **`MegaMenu` panels stay inside the window.** A wide panel under a trigger near the
   right edge used to open past the side of the screen; it now moves left until it fits,
   16px from the edge, and a panel wider than the window keeps its left edge in view.

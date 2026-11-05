@@ -379,8 +379,9 @@ function bundleMarkdown(task, spec, catalog, gotchas, rules, icons) {
   const types = typesFor(texts, spec);
   const out = [];
   out.push(`# ${task.title} (${PACKAGE})`, "", task.description, "");
+  const extras = task.example ? ", the quality bar and a gold example" : "";
   out.push(
-    "This file is complete for this task: the rules (all of `rules.md`), the props of every component below, their mixins and types, the hooks, every gotcha for this task, the quality bar and a gold example. Write the screen from it; reading the rules, catalog, gotchas or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.",
+    `This file is complete for this task: the rules (all of \`rules.md\`), the props of every component below, their mixins and types, the hooks and every gotcha for this task${extras}. Write the screen from it; reading the rules, catalog, gotchas or examples again only adds cost. Open \`components/<Name>.json\` only for a component not listed here, and then every one you need in a single step.`,
     "",
   );
   out.push("## Rules", "", rules.trim(), "");
@@ -505,6 +506,7 @@ function main() {
         components: "ai/components/{Name}.json",
         bundle: "ai/bundles/{id}.md",
         examples: "ai/examples/",
+        starter: "ai/starters/app/src/",
       },
       tasks: [
         ...tasks.map((t) => ({ id: t.id, title: t.title, bundle: `ai/bundles/${t.id}.md` })),

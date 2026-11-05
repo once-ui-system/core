@@ -1,6 +1,6 @@
 import { Image, View, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
-import type { ColorScheme, TShirtSizes } from "../types";
+import type { ColorScheme, Schemes, Tone, TShirtSizes } from "../types";
 import { Icon, type IconName } from "./Icon";
 import { Skeleton } from "./Skeleton";
 import type { Length } from "./spacing";
@@ -21,7 +21,13 @@ export interface AvatarProps {
   /** The icon of an empty avatar, as in core. */
   icon?: IconName;
   /** A status dot; `scheme` is its palette hue, as in core 3.0 (2.x called it `color`). */
-  statusIndicator?: { scheme: "green" | "yellow" | "red" | "gray" };
+  /**
+   * A dot in the corner, as core 3.0: `scheme` takes any hue StatusIndicator
+   * takes, `tone` a colour that follows the theme (`"success"`).
+   */
+  statusIndicator?:
+    | { scheme: Schemes | "gray"; tone?: undefined }
+    | { tone: Tone; scheme?: undefined };
   /**
    * A coloured ring around the avatar, with a gap of page background between,
    * as for a story or a live state. `true` is the brand colour; a scheme
@@ -37,12 +43,16 @@ export interface AvatarProps {
 const SIZES: Record<TShirtSizes, number> = { xs: 20, s: 24, m: 32, l: 48, xl: 160 };
 const TEXT = { xs: "s", s: "s", m: "m", l: "m", xl: "l" } as const;
 const ICON = { xs: "xs", s: "xs", m: "s", l: "m", xl: "xl" } as const;
-const STATUS = {
+const STATUS: Record<string, string> = {
   green: "success-solid-medium",
   yellow: "warning-solid-medium",
   red: "danger-solid-medium",
   gray: "neutral-solid-medium",
-} as const;
+};
+
+/** The 2.x hues keep their solid colours; any other hue is its scheme's 700, as StatusIndicator. */
+const statusColor = (s: { scheme?: Schemes | "gray"; tone?: Tone }) =>
+  s.tone ? `function-${s.tone}-700` : (STATUS[s.scheme ?? "gray"] ?? `scheme-${s.scheme}-700`);
 
 /** Core's `Avatar`: an image, or initials on a neutral circle. */
 export function Avatar({
@@ -123,7 +133,7 @@ export function Avatar({
       </View>
       {statusIndicator && (
         <View
-          accessibilityLabel={`Status: ${statusIndicator.scheme}`}
+          accessibilityLabel={`Status: ${statusIndicator.tone ?? statusIndicator.scheme}`}
           style={{
             position: "absolute",
             right: 0,
@@ -133,7 +143,7 @@ export function Avatar({
             borderRadius: 9999,
             borderWidth: 2,
             borderColor: theme.color("page-background"),
-            backgroundColor: theme.color(STATUS[statusIndicator.scheme]),
+            backgroundColor: theme.color(statusColor(statusIndicator)),
           }}
         />
       )}
