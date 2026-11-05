@@ -41,6 +41,9 @@ importers:
       '@once-ui-system/fx':
         specifier: workspace:*
         version: link:../../packages/fx
+      '@once-ui-system/site-editor':
+        specifier: workspace:*
+        version: link:../../packages/site-editor
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -476,6 +479,61 @@ importers:
       vitest:
         specifier: ^4.1.10
         version: 4.1.10(@types/node@26.1.2)(@vitest/ui@4.1.10)(jsdom@30.0.0)(vite@7.3.7(@types/node@26.1.2)(sass@1.102.0)(terser@5.49.0)(yaml@2.9.0))
+
+  packages/site-editor:
+    dependencies:
+      react:
+        specifier: '>=19'
+        version: 19.2.8
+      react-dom:
+        specifier: '>=19'
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@arethetypeswrong/cli':
+        specifier: ^0.18.5
+        version: 0.18.5
+      '@biomejs/biome':
+        specifier: 2.5.6
+        version: 2.5.6
+      '@once-ui-system/blocks':
+        specifier: workspace:*
+        version: link:../blocks
+      '@once-ui-system/core':
+        specifier: workspace:*
+        version: link:../core
+      '@testing-library/jest-dom':
+        specifier: ^7.0.0
+        version: 7.0.0(@testing-library/dom@10.4.1)
+      '@testing-library/react':
+        specifier: ^16.3.2
+        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@testing-library/user-event':
+        specifier: ^14.6.1
+        version: 14.6.1(@testing-library/dom@10.4.1)
+      '@types/node':
+        specifier: 26.1.2
+        version: 26.1.2
+      '@types/react':
+        specifier: 19.2.17
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.17)
+      jsdom:
+        specifier: ^30.0.0
+        version: 30.0.0
+      publint:
+        specifier: ^0.3.23
+        version: 0.3.23
+      rimraf:
+        specifier: ^6.1.3
+        version: 6.1.3
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.10
+        version: 4.1.12(@types/node@26.1.2)(@vitest/ui@4.1.12)(jsdom@30.0.0)(vite@7.3.7(@types/node@26.1.2)(sass@1.102.0)(terser@5.49.0)(yaml@2.9.0))
 
 packages:
 

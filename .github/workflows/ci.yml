@@ -48,6 +48,10 @@ jobs:
       - name: Lint gate (fx, blocks)
         run: pnpm --filter @once-ui-system/fx --filter @once-ui-system/blocks lint:gate
 
+      # The site editor kit started clean, so it holds the plain check.
+      - name: Lint (site-editor)
+        run: pnpm --filter @once-ui-system/site-editor lint
+
   test:
     name: Build, typecheck and test
     runs-on: ubuntu-latest
@@ -72,12 +76,13 @@ jobs:
         run: |
           pnpm --filter @once-ui-system/core build
           pnpm --filter @once-ui-system/fx --filter @once-ui-system/blocks build
+          pnpm --filter @once-ui-system/site-editor build
 
       - name: Typecheck
-        run: pnpm --filter @once-ui-system/core --filter @once-ui-system/fx --filter @once-ui-system/blocks typecheck
+        run: pnpm --filter @once-ui-system/core --filter @once-ui-system/fx --filter @once-ui-system/blocks --filter @once-ui-system/site-editor typecheck
 
       - name: Test
-        run: pnpm --filter @once-ui-system/core --filter @once-ui-system/fx --filter @once-ui-system/blocks test
+        run: pnpm --filter @once-ui-system/core --filter @once-ui-system/fx --filter @once-ui-system/blocks --filter @once-ui-system/site-editor test
 
       # Gzipped size of every export entry, against packages/core/bundle-size.json
       # (scripts/bundle-size.mjs). Fails when one grows more than 5% and 512 B;
@@ -90,7 +95,7 @@ jobs:
       # fails the run. Read its log for new failures.
       - name: Package checks (advisory, does not fail CI)
         continue-on-error: true
-        run: pnpm --filter @once-ui-system/core --filter @once-ui-system/fx --filter @once-ui-system/blocks check:package
+        run: pnpm --filter @once-ui-system/core --filter @once-ui-system/fx --filter @once-ui-system/blocks --filter @once-ui-system/site-editor check:package
 
   docs:
     name: Docs build
