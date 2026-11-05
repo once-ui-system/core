@@ -49,7 +49,16 @@ const ElementType = ({
 }: ElementTypeProps & { ref?: React.Ref<HTMLElement> }) => {
   const { Link } = useAdapters();
   const safeHref = sanitizeHref(href);
-  const isControl = Boolean(safeHref || onClick || type === "submit" || type === "button");
+  // Any button `type` (submit, reset, button) or a `form` it belongs to
+  // makes it a real <button>; 2.x and beta.1 left `type="reset"` a dead div.
+  const isControl = Boolean(
+    safeHref ||
+      onClick ||
+      type === "submit" ||
+      type === "button" ||
+      type === "reset" ||
+      "form" in props,
+  );
 
   const decoration = useRef<HTMLElement | null>(null);
   const decorationRef = useCallback(
@@ -64,8 +73,12 @@ const ElementType = ({
     if (!decorationOf || isControl || process.env.NODE_ENV !== "development") return;
     const control = decoration.current?.parentElement?.closest(INTERACTIVE);
     if (decoration.current && !control) {
+      // A native <button> with no type submits its form; this one is a div.
+      const inForm = decoration.current.closest("form") !== null;
       dev.warn(
-        `${decorationOf} renders a div: it has no onClick, href or type, and no clickable element is around it, so nothing can focus or press it. Pass onClick, href or type="submit".`,
+        inForm
+          ? `${decorationOf} inside a <form> renders a div: unlike a native <button>, it does not submit the form without type="submit". Pass type="submit" (or type="button" with an onClick).`
+          : `${decorationOf} renders a div: it has no onClick, href or type, and no clickable element is around it, so nothing can focus or press it. Pass onClick, href or type="submit".`,
         decoration.current,
       );
     }

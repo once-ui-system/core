@@ -298,6 +298,17 @@ entry below that had landed by then:
   props: they were the range picker's wiring, not a value contract, and the
   codemod reports each use. The codemod also reports, from the nearest
   `package.json`, React below 19 and a `recharts` dependency left from 2.x.
+- **Fixes from the first real-app migration** (3.0.0-beta.2). Button and
+  IconButton type `onClick`'s event as `MouseEvent<HTMLElement>`, so an inline
+  handler compiles under strict. `type="reset"` and a `form` attribute render a
+  real `<button>`, and a typeless Button inside a `<form>` warns in development
+  that it will not submit. A field's own `<input>` and `<textarea>` state their
+  outline, shadow, margin and min/max height, so an app's `input:focus` ring no
+  longer draws inside it. MIGRATING § 12 says where to declare `@layer` order
+  in a Vite app.
+- **Toast loads with the first toast** (3.0.0-beta.2). `ToastProvider` keeps its
+  polite live region in the page from the start, so screen readers still announce
+  the first toast, and fetches the `Toast` component only when one is shown.
 - **Real ESM** (B3): `"type": "module"`, and every relative import in `dist` names its
   file (`./Button.js`, `../data/emoji-data.json` with `{ type: "json" }`), built with
   `module`/`moduleResolution: NodeNext` as `packages/cli` is. Plain Node resolves the
@@ -516,6 +527,13 @@ entry below that had landed by then:
 
 ### Fixed
 
+- **`brandSeed` is the exact brand colour.** The seed's hex is now step 500, which every
+  brand solid uses in both themes; before, only its hue was kept, so `brandSeed: "#0F766E"`
+  never appeared on a button. The other steps keep the built-in contrast ladder and draw in
+  around a seed that is darker or lighter than usual, so brand text on a light page stays at
+  7:1 or better on white. `accentSeed` and `neutralSeed` work the same way. A `brandScale`
+  numbered light to dark, the Tailwind way, now gets a warning in development: Once UI steps
+  run dark to light, 100 darkest. AGENTS.md and the rules say how to set an exact colour.
 - **A `Card` with `onClick` no longer submits a form around it** (it is `type="button"`),
   and a card given `width` or `fit` hugs that width instead of stretching (`maxWidth` still
   fills the row up to its cap).
