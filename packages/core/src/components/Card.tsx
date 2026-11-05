@@ -40,11 +40,8 @@ const Card = ({
   const interactive = Boolean(onClick || href);
   // A width on the card belongs to the whole card: the outer element hugs the
   // surface instead of stretching, so the click area matches what you see.
-  const sized =
-    flex.width !== undefined ||
-    flex.maxWidth !== undefined ||
-    flex.fitWidth === true ||
-    flex.fit === true;
+  // maxWidth alone is not one: such a card still fills its row up to the cap.
+  const sized = flex.width !== undefined || flex.fitWidth === true || flex.fit === true;
   return (
     <ElementType
       tabIndex={interactive ? 0 : undefined}

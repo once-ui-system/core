@@ -43,4 +43,14 @@ describe("Card", () => {
     const { container } = render(<Card onClick={() => {}}>Wide</Card>, { wrapper: wrap });
     expect(container.querySelector("button")).toHaveClass("fill-width");
   });
+
+  it("fills its row up to a maxWidth, which caps the card rather than sizing it", () => {
+    const { container } = render(
+      <Card onClick={() => {}} maxWidth="xs">
+        Capped
+      </Card>,
+      { wrapper: wrap },
+    );
+    expect(container.querySelector("button")).toHaveClass("fill-width");
+  });
 });

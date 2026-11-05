@@ -504,7 +504,8 @@ entry below that had landed by then:
 ### Fixed
 
 - **A `Card` with `onClick` no longer submits a form around it** (it is `type="button"`),
-  and a card given `width`, `maxWidth` or `fit` hugs that width instead of stretching.
+  and a card given `width` or `fit` hugs that width instead of stretching (`maxWidth` still
+  fills the row up to its cap).
 - **Tooltips and hover cards open on keyboard focus only.** A dialog that focuses its close
   button as it opens after a click no longer shows the "Close" tooltip over its corner.
 - **`ThemeSwitcher` marks the active theme in neutral**, not a brand-solid circle under
