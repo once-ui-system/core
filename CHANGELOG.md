@@ -527,6 +527,18 @@ entry below that had landed by then:
 
 ### Fixed
 
+- **`Fade` no longer fades its own children.** The gradient, blur and pattern are
+  painted on a layer behind them, so a button or label inside a Fade stays
+  solid and sharp (a `Scroller`'s scroll buttons, and so `SegmentedControl`'s,
+  came out half transparent). An in-flow Fade is now `position: relative` for
+  that layer. `blur={0}` drops the backdrop filter instead of running a
+  zero-radius one.
+- **`Scroller` and `SegmentedControl` edges read on any background.** With the
+  default `fadeColor` the strip's own edges fade with a mask under its scroll buttons, which reads on any
+  background, instead of a blur-only band that smeared the tab under it into
+  a grey box. A `fadeColor` keeps the colour fade, now rounded like the strip
+  when `radius` is set. The buttons also come and go when the strip is resized,
+  not only when it is scrolled.
 - **`brandSeed` is the exact brand colour.** The seed's hex is now step 500, which every
   brand solid uses in both themes; before, only its hue was kept, so `brandSeed: "#0F766E"`
   never appeared on a button. The other steps keep the built-in contrast ladder and draw in
