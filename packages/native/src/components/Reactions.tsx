@@ -13,7 +13,7 @@ import { useTheme } from "../theme/ThemeProvider";
 import { DropdownWrapper } from "./DropdownWrapper";
 import { type FlexProps, Row } from "./Flex";
 import { IconButton } from "./IconButton";
-import { useReduceMotion } from "./motion";
+import { nativeDriver, useReduceMotion } from "./motion";
 import {
   BURST_ANGLES,
   gestureTrack,
@@ -137,7 +137,7 @@ export const Reaction: RefComponent<ReactionProps, ViewRef> = forwardRef<ViewRef
         toValue: 1,
         duration: REACTION_GESTURES[kind].duration,
         easing: Easing.bezier(0.3, 0.7, 0.4, 1),
-        useNativeDriver: true,
+        useNativeDriver: nativeDriver,
       });
       running.current.start();
     };
@@ -162,10 +162,10 @@ export const Reaction: RefComponent<ReactionProps, ViewRef> = forwardRef<ViewRef
             toValue: 1,
             duration: gesture.duration,
             easing: Easing.bezier(0.3, 0.7, 0.4, 1),
-            useNativeDriver: true,
+            useNativeDriver: nativeDriver,
           }),
           Animated.delay(2600 - gesture.duration),
-          Animated.timing(progress, { toValue: 0, duration: 0, useNativeDriver: true }),
+          Animated.timing(progress, { toValue: 0, duration: 0, useNativeDriver: nativeDriver }),
         ]),
       );
       loop.start();
@@ -299,7 +299,7 @@ function RollingCount({
       toValue: 1,
       duration: 260,
       easing: Easing.out(Easing.cubic),
-      useNativeDriver: true,
+      useNativeDriver: nativeDriver,
     }).start();
   }, [value, reduce, enter]);
   return (
@@ -340,7 +340,7 @@ function Effect({
       toValue: 1,
       duration: EFFECT_MS[kind] - 50,
       easing: Easing.bezier(0.15, 0.8, 0.3, 1),
-      useNativeDriver: true,
+      useNativeDriver: nativeDriver,
     });
     run.start(({ finished }) => finished && onDone());
     return () => run.stop();

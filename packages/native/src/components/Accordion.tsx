@@ -11,6 +11,7 @@ import { useTheme } from "../theme/ThemeProvider";
 import type { CondensedTShirtSizes } from "../types";
 import { Column, type FlexProps, Row } from "./Flex";
 import { Icon, type IconName } from "./Icon";
+import { nativeDriver } from "./motion";
 import type { RefComponent } from "./refs";
 import { Text } from "./Text";
 
@@ -94,7 +95,7 @@ export const Accordion: RefComponent<AccordionProps, AccordionHandle> = forwardR
     Animated.timing(turn, {
       toValue: isOpen ? 1 : 0,
       duration: 200,
-      useNativeDriver: true,
+      useNativeDriver: nativeDriver,
     }).start();
   }, [isOpen, turn]);
 

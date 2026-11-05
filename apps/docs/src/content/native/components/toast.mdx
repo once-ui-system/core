@@ -129,6 +129,7 @@ export function OfflineNotice() {
 | `addToast` | `(toast: ToastOptions) => void` | Shows a toast. |
 | `removeToast` | `(id: string) => void` | Hides a toast by its id. |
 | `toasts` | `(ToastOptions & { id: string })[]` | The toasts on screen. |
+| `setBottomOffset` | `(points: number) => void` | Native only. The height of a bar fixed to the bottom of the screen, safe area included, so toasts stack above it. A tab bar sets it from its `onLayout`; `0` puts toasts back above the home indicator. |
 
 ### ToastOptions
 

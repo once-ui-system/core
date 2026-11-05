@@ -29,7 +29,7 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
       <Text textVariant="label-default-s" onBackground="neutral-weak">
         {title}
       </Text>
-      <Column background="surface" border="neutral-alpha-weak" radius="l" paddingX="16">
+      <Column background="surface" border radius="l" paddingX="16">
         {children}
       </Column>
     </Column>

@@ -60,6 +60,8 @@ Every prop is optional. Without any, you get the web defaults below, following t
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `theme` | `"light" \| "dark" \| "system"` | `"system"` | `"system"` follows the device's appearance and updates when it changes. |
+| `defaultTheme` | `"light" \| "dark" \| "system"` | `"dark"` | The theme `"system"` uses when the device reports no appearance, and for the first render of a web build rendered on the server. Taken so the web app's `style` config spreads in unchanged. |
+| `transition` | `"all" \| "micro" \| "macro"` | - | Web only: taken so the web app's `style` config spreads in unchanged, and otherwise ignored. |
 | `brand` | `Schemes \| "custom"` | `"blue"` | The brand colour scheme: `blue`, `indigo`, `violet`, `magenta`, `pink`, `red`, `orange`, `yellow`, `moss`, `green`, `emerald`, `aqua` or `cyan`, or `"custom"` for your own (see [custom schemes](#custom-schemes)). |
 | `accent` | `Schemes \| "custom"` | `"indigo"` | The accent colour scheme. Same values as `brand`. |
 | `neutral` | `"sand" \| "gray" \| "slate" \| "rose" \| "mint" \| "dusk" \| "custom"` | `"gray"` | The neutral scheme for text, borders and surfaces. |

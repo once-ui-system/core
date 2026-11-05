@@ -1,4 +1,6 @@
-import { Column, Heading, Text } from "@once-ui-system/core";
+import { Column } from "@once-ui-system/core/components/Column";
+import { Heading } from "@once-ui-system/core/components/Heading";
+import { Text } from "@once-ui-system/core/components/Text";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Home" };

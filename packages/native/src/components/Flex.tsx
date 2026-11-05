@@ -1,4 +1,4 @@
-import { Children, createContext, forwardRef, type ReactNode } from "react";
+import { Children, createContext, forwardRef, type ReactNode, useContext } from "react";
 import {
   type DimensionValue,
   type StyleProp,
@@ -416,6 +416,25 @@ export function wrapText(children: ReactNode): ReactNode {
  */
 export const FlexDirectionContext = createContext<"row" | "column" | null>(null);
 
+/**
+ * The nearest Flex or Card's `alignItems`, so a `Button` in a column with
+ * `horizontal="center"` follows it instead of keeping to the start.
+ */
+export const FlexAlignContext = createContext<ViewStyle["alignItems"]>(undefined);
+
+/**
+ * How a control that keeps its own width (a Button, a Tag) sits in its parent:
+ * at the start of a column that would stretch it, and where the parent puts
+ * it otherwise (a row's `vertical`, a column's `horizontal="center"`).
+ */
+export function useOwnWidth(): ViewStyle {
+  const axis = useContext(FlexDirectionContext);
+  const align = useContext(FlexAlignContext);
+  if (axis === "row") return {};
+  if (align !== undefined && align !== "stretch") return {};
+  return { alignSelf: "flex-start" };
+}
+
 export const axisOf = (style: ViewStyle) =>
   String(style.flexDirection ?? "column").startsWith("row") ? "row" : "column";
 
@@ -428,7 +447,9 @@ export const Flex: RefComponent<FlexProps, ViewRef> = forwardRef<ViewRef, FlexPr
     return (
       <View ref={ref} {...rest} style={[style, userStyle]}>
         <FlexDirectionContext.Provider value={axisOf(style)}>
-          {wrapText(props.children)}
+          <FlexAlignContext.Provider value={style.alignItems}>
+            {wrapText(props.children)}
+          </FlexAlignContext.Provider>
         </FlexDirectionContext.Provider>
       </View>
     );
