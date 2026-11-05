@@ -4501,7 +4501,7 @@
     "LeafProps"
    ],
    "props": {
-    "working": "\"cube\"",
+    "working": "\"cube\" | \"d20\"",
     "effects": "boolean | MascotEffect[]",
     "poke": "boolean",
     "state": "MascotState = idle",

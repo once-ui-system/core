@@ -9,6 +9,7 @@ import {
   quatAxisAngle,
   quatIdentity,
   quatMultiply,
+  quatNormalize,
   rotate,
   smooth,
   snapQuarterTurns,
@@ -42,6 +43,8 @@ export interface CubeInput {
   hideEyes?: boolean;
   /** A wide open laughing grin. */
   laugh?: boolean;
+  /** What it firms into while it works: the 2 × 2 cube, or a d20 that tumbles and lands. */
+  shape?: "cube" | "d20";
 }
 
 /** A quarter turn of one layer: `axis` x, y or z, the layer on the `side` (+1 or -1), and the direction. */
@@ -201,6 +204,8 @@ export class CubeMotion {
   blink = 0;
   breathe = 0;
   history: Move[] = [];
+  /** The d20's own turn while it tumbles; identity is the rest pose, one face toward the viewer. */
+  die: Quat = quatIdentity();
   active: {
     move: Move;
     turning: Cubie[];
@@ -219,6 +224,10 @@ export class CubeMotion {
   private nextBlink = 2;
   private blinkT = 1;
   private pokesSeen = 0;
+  /** How fast the d20 turns now, and when it next changes pace. */
+  private roll = 0;
+  private rollPace = 0;
+  private rollNext = 0;
 
   constructor(private random: () => number = Math.random) {
     for (const x of [-1, 1]) {
@@ -281,11 +290,13 @@ export class CubeMotion {
     const speed = SPEED[input.personality];
     const working = input.state === "thinking";
 
+    const d20 = input.shape === "d20";
     if (working && this.mode !== "thinking") {
       this.mode = "thinking";
       this.pause = 0.35;
     } else if (!working && this.mode === "thinking") {
-      this.mode = this.solved ? "idle" : "solving";
+      // The d20 always has to land; the cube only solves when it is scrambled.
+      this.mode = d20 || !this.solved ? "solving" : "idle";
       if (this.mode === "idle") this.hold = input.reduced ? 0.3 : 1.3;
     }
 
@@ -310,8 +321,10 @@ export class CubeMotion {
     }
     const canTurn = this.morph >= 0.999;
 
+    if (d20) this.tumble(dt, input, speed, canTurn);
+
     // With reduced motion the cube holds still instead of turning.
-    if (this.mode === "thinking" && canTurn && !this.active && !input.reduced) {
+    if (!d20 && this.mode === "thinking" && canTurn && !this.active && !input.reduced) {
       this.pause -= dt;
       if (this.pause <= 0) {
         if (this.history.length >= 14 || (this.history.length >= 8 && this.random() < 0.35)) {
@@ -326,7 +339,7 @@ export class CubeMotion {
         this.pause = (this.random() < 0.18 ? 0.45 : 0.06) / speed;
       }
     }
-    if (this.mode === "solving" && !this.active) {
+    if (!d20 && this.mode === "solving" && !this.active) {
       if (this.history.length && canTurn) {
         const last = this.history.pop() as Move;
         this.startMove({ ...last, dir: -last.dir as 1 | -1 }, true, speed);
@@ -345,9 +358,10 @@ export class CubeMotion {
     const still = input.reduced ? 0 : 1;
     const sway = Math.sin(this.time * 0.5) * 0.12 * still;
     // lookY is positive downward; tipping the top toward the viewer looks down
-    const tx = this.mode !== "idle" ? 0.5 : logo ? 0.04 : 0.12 + input.lookY * 0.3;
-    const ty = this.mode !== "idle" ? -0.68 + sway : logo ? 0 : input.lookX * 0.5;
-    const tz = logo ? Math.PI / 4 : 0;
+    // The d20 tumbles on its own, so the view only leans in a little; it lands face on.
+    const tx = this.mode !== "idle" ? (d20 ? 0.18 : 0.5) : logo ? 0.04 : 0.12 + input.lookY * 0.3;
+    const ty = this.mode !== "idle" ? (d20 ? sway : -0.68 + sway) : logo ? 0 : input.lookX * 0.5;
+    const tz = logo && !d20 ? Math.PI / 4 : 0;
     const k = 1 - Math.exp(-dt * 4 * speed);
     this.rot.x += (tx - this.rot.x) * k;
     this.rot.y += (ty - this.rot.y) * k;
@@ -388,6 +402,49 @@ export class CubeMotion {
     const ease = input.reduced ? 1 : 1 - Math.exp(-dt * 11);
     for (const key of Object.keys(this.pose) as (keyof Pose)[]) {
       this.pose[key] += (target[key] - this.pose[key]) * ease;
+    }
+  }
+
+  /**
+   * The d20 at work: it rolls about an axis that wanders, now slow, now in a quick spin, the way a
+   * die tumbles. When work stops it turns the shortest way to its rest face and lands.
+   */
+  private tumble(dt: number, input: CubeInput, speed: number, canTurn: boolean) {
+    if (this.mode === "thinking" && canTurn && !input.reduced) {
+      this.rollNext -= dt;
+      if (this.rollNext <= 0) {
+        const fast = this.random() < 0.3;
+        this.rollPace = (fast ? 9 : 2.2 + this.random() * 1.6) * speed;
+        this.rollNext = (fast ? 0.45 : 0.8 + this.random() * 0.9) / speed;
+      }
+      this.roll += (this.rollPace - this.roll) * (1 - Math.exp(-dt * 6));
+      const a = this.time * 0.9;
+      const axis: Vec3 = [Math.sin(a) * 0.8 + 0.4, Math.cos(a * 0.7), Math.sin(a * 0.5) * 0.5];
+      const l = Math.hypot(...axis);
+      const half = (this.roll * dt) / 2;
+      const s = Math.sin(half) / l;
+      this.die = quatNormalize(
+        quatMultiply([axis[0] * s, axis[1] * s, axis[2] * s, Math.cos(half)], this.die),
+      );
+      return;
+    }
+    this.roll = 0;
+    this.rollNext = 0;
+    if (this.mode !== "solving") return;
+    // Ease to rest, the shortest way round.
+    const q = this.die;
+    const sign = q[3] < 0 ? -1 : 1;
+    const k = input.reduced ? 1 : 1 - Math.exp(-dt * 7 * speed);
+    this.die = quatNormalize([
+      q[0] * (1 - k),
+      q[1] * (1 - k),
+      q[2] * (1 - k),
+      q[3] + (sign - q[3]) * k,
+    ]);
+    if (Math.abs(this.die[3]) > 0.99995) {
+      this.die = quatIdentity();
+      this.mode = "idle";
+      this.hold = input.reduced ? 0.3 : 1.3;
     }
   }
 

@@ -328,3 +328,118 @@ export function tube(
   }
   return mesh;
 }
+
+/** The twenty faces of a regular icosahedron with circumradius 1, wound outward, as corner indices. */
+function icosahedron() {
+  const phi = (1 + Math.sqrt(5)) / 2;
+  const raw: [number, number, number][] = [];
+  for (const a of [-1, 1]) {
+    for (const b of [-phi, phi]) raw.push([0, a, b], [a, b, 0], [b, 0, a]);
+  }
+  const vertices = raw.map((v) => {
+    const l = Math.hypot(...v);
+    return v.map((c) => c / l) as [number, number, number];
+  });
+  // The edge of an icosahedron with circumradius 1.
+  const edge = 4 / Math.sqrt(10 + 2 * Math.sqrt(5));
+  const near = (i: number, j: number) =>
+    Math.abs(Math.hypot(...vertices[i].map((c, k) => c - vertices[j][k])) - edge) < 0.01;
+  const faces: [number, number, number][] = [];
+  for (let i = 0; i < 12; i++) {
+    for (let j = i + 1; j < 12; j++) {
+      for (let k = j + 1; k < 12; k++) {
+        if (!near(i, j) || !near(j, k) || !near(i, k)) continue;
+        const [a, b, c] = [vertices[i], vertices[j], vertices[k]];
+        const u = b.map((v, n) => v - a[n]);
+        const w = c.map((v, n) => v - a[n]);
+        const cross = [
+          u[1] * w[2] - u[2] * w[1],
+          u[2] * w[0] - u[0] * w[2],
+          u[0] * w[1] - u[1] * w[0],
+        ];
+        faces.push(cross[0] * a[0] + cross[1] * a[1] + cross[2] * a[2] > 0 ? [i, j, k] : [i, k, j]);
+      }
+    }
+  }
+  return { vertices, faces };
+}
+
+/**
+ * A d20 with circumradius 1, each face split into a triangle grid with its own vertices, so the
+ * edges stay crisp once it is flat. It rests with one face toward +z and the point of that face up,
+ * like the die on once-ui.com. `face` gives each vertex's face, `normals` start as the face normals.
+ */
+export function icosaGrid(segments: number): MeshData & {
+  face: Uint8Array;
+  faceNormals: Float32Array;
+  faceCenters: Float32Array;
+} {
+  const { vertices, faces } = icosahedron();
+  // Turn the rest pose: the first face's normal to +z, then its first corner straight up.
+  const [f0a, f0b, f0c] = faces[0].map((i) => vertices[i]);
+  const n0 = [0, 1, 2].map((k) => (f0a[k] + f0b[k] + f0c[k]) / 3);
+  const nl = Math.hypot(...n0);
+  const z = n0.map((c) => c / nl);
+  const up = f0a.map((c, k) => c - z[k] * (f0a[0] * z[0] + f0a[1] * z[1] + f0a[2] * z[2]));
+  const ul = Math.hypot(...up);
+  const y = up.map((c) => c / ul);
+  const x = [y[1] * z[2] - y[2] * z[1], y[2] * z[0] - y[0] * z[2], y[0] * z[1] - y[1] * z[0]];
+  const turn = (v: number[]): [number, number, number] => [
+    v[0] * x[0] + v[1] * x[1] + v[2] * x[2],
+    v[0] * y[0] + v[1] * y[1] + v[2] * y[2],
+    v[0] * z[0] + v[1] * z[1] + v[2] * z[2],
+  ];
+  const corners = vertices.map(turn);
+
+  const perFace = ((segments + 1) * (segments + 2)) / 2;
+  const count = perFace * 20;
+  const positions = new Float32Array(count * 3);
+  const normals = new Float32Array(count * 3);
+  const face = new Uint8Array(count);
+  const faceNormals = new Float32Array(60);
+  const faceCenters = new Float32Array(60);
+  const indices = new Uint16Array(segments * segments * 3 * 20);
+  const groups: { start: number; count: number }[] = [];
+  let v = 0;
+  let k = 0;
+  faces.forEach(([ia, ib, ic], f) => {
+    const [a, b, c] = [corners[ia], corners[ib], corners[ic]];
+    const center = [0, 1, 2].map((n) => (a[n] + b[n] + c[n]) / 3);
+    const cl = Math.hypot(...center);
+    faceCenters.set(center, f * 3);
+    faceNormals.set(
+      center.map((n) => n / cl),
+      f * 3,
+    );
+    const base = v;
+    const row = (i: number) => base + (i * (i + 1)) / 2;
+    for (let i = 0; i <= segments; i++) {
+      for (let j = 0; j <= i; j++) {
+        // From corner a down the rows toward b and c.
+        const s = i / segments;
+        const t = i === 0 ? 0 : j / i;
+        for (let n = 0; n < 3; n++) {
+          positions[v * 3 + n] = a[n] + s * (b[n] - a[n]) + s * t * (c[n] - b[n]);
+          normals[v * 3 + n] = center[n] / cl;
+        }
+        face[v] = f;
+        v++;
+      }
+    }
+    const start = k;
+    for (let i = 0; i < segments; i++) {
+      for (let j = 0; j <= i; j++) {
+        const p = row(i) + j;
+        const q = row(i + 1) + j;
+        indices.set([p, q, q + 1], k);
+        k += 3;
+        if (j < i) {
+          indices.set([p, q + 1, p + 1], k);
+          k += 3;
+        }
+      }
+    }
+    groups.push({ start, count: k - start });
+  });
+  return { positions, normals, indices, groups, face, faceNormals, faceCenters };
+}
