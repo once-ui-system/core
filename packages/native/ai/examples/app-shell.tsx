@@ -81,7 +81,7 @@ function TabBar({ value, onValueChange }: { value: TabId; onValueChange: (tab: T
 
 function Placeholder({ text }: { text: string }) {
   return (
-    <Column background="surface" border="neutral-alpha-weak" radius="l" padding="16" gap="4">
+    <Column background="surface" border radius="l" padding="16" gap="4">
       <Text textVariant="label-strong-m">{text}</Text>
       <Text textVariant="body-default-s" onBackground="neutral-weak">
         The screen's own content goes here.

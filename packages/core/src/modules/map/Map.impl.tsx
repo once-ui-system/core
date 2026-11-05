@@ -9,6 +9,7 @@ import { Icon } from "../../components/Icon.js";
 import { IconButton } from "../../components/IconButton.js";
 import { Text } from "../../components/Text.js";
 import { useTheme } from "../../contexts/ThemeProvider.js";
+import { elementTheme, useElementTheme } from "../../hooks/useElementTheme.js";
 import { useReducedMotion } from "../../hooks/useReducedMotion.js";
 import styles from "./Map.module.scss";
 import { MapContext, type MapContextValue } from "./MapContext.js";
@@ -203,7 +204,10 @@ const MapImpl = ({
 }: MapProps) => {
   const labels = { ...DEFAULT_LABELS, ...labelsProp };
   const container = useRef<HTMLDivElement>(null);
-  const { resolvedTheme } = useTheme();
+  // The theme the map is drawn in: a nested or inverted `data-theme` around
+  // it wins over the page's.
+  const { resolvedTheme: pageTheme } = useTheme();
+  const resolvedTheme = useElementTheme(container);
   const { shouldAnimate } = useReducedMotion();
   const reducedMotion = !shouldAnimate;
   const [map, setMap] = useState<MapLibreMap | null>(null);
@@ -237,7 +241,7 @@ const MapImpl = ({
   // biome-ignore lint/correctness/useExhaustiveDependencies: created once; later prop changes go through the effects below
   useEffect(() => {
     if (!container.current) return;
-    const style = pickStyle(mapStyle, resolvedTheme);
+    const style = pickStyle(mapStyle, elementTheme(container.current, pageTheme));
     const start = viewport ?? defaultViewport;
     let instance: MapLibreMap;
     try {

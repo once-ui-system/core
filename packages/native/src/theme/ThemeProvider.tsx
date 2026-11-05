@@ -1,5 +1,5 @@
-import { createContext, type ReactNode, useContext, useMemo } from "react";
-import { useColorScheme, useWindowDimensions } from "react-native";
+import { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from "react";
+import { Platform, useColorScheme, useWindowDimensions } from "react-native";
 import type {
   BodyLineHeight,
   BodySize,
@@ -21,6 +21,17 @@ import { createTheme, type FontFamilies, type Insets, NO_INSETS, type OnceTheme 
 export interface ThemeProviderProps {
   /** `"system"` follows the device's appearance. */
   theme?: Theme;
+  /**
+   * The theme `"system"` falls back to when the device reports no appearance.
+   * Taken so a web app's `once-ui.config` style spreads in unchanged; on the
+   * web it is the theme a first visit sees.
+   */
+  defaultTheme?: Theme;
+  /**
+   * Web only: taken so a web app's `once-ui.config` style spreads in
+   * unchanged, and otherwise ignored.
+   */
+  transition?: "all" | "micro" | "macro";
   /** `"custom"` reads `brandSeed` or `brandScale`, as `data-brand="custom"` does on the web. */
   brand?: Schemes | "custom";
   accent?: Schemes | "custom";
@@ -82,6 +93,8 @@ const ThemeContext = createContext<OnceTheme | null>(null);
  */
 export function ThemeProvider({
   theme = "system",
+  defaultTheme = "dark",
+  transition: _transition,
   fonts,
   insets = NO_INSETS,
   brandSeed,
@@ -93,9 +106,18 @@ export function ThemeProvider({
   children,
   ...options
 }: ThemeProviderProps) {
-  const scheme = useColorScheme();
+  const deviceScheme = useColorScheme();
+  // A web build rendered on the server (Expo Router's static or server output)
+  // can't know the visitor's appearance, and React keeps the server's styles
+  // when it hydrates. So the first render on the web uses `defaultTheme`, as the
+  // server did, and the device's appearance takes over right after.
+  const [mounted, setMounted] = useState(Platform.OS !== "web");
+  useEffect(() => setMounted(true), []);
+  const scheme = mounted ? deviceScheme : null;
   const { width } = useWindowDimensions();
-  const resolvedTheme = theme === "system" ? (scheme === "light" ? "light" : "dark") : theme;
+  const fallback = defaultTheme === "light" ? "light" : "dark";
+  const resolvedTheme =
+    theme === "system" ? (scheme === "light" || scheme === "dark" ? scheme : fallback) : theme;
   // Insets by value too: `useSafeAreaInsets()` returns a new object on every render.
   const seeds = { brand: brandSeed, accent: accentSeed, neutral: neutralSeed };
   const scales = { brand: brandScale, accent: accentScale, neutral: neutralScale };

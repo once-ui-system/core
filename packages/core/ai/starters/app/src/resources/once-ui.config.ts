@@ -4,7 +4,8 @@ export const style: OnceUIStyleConfig = {
   // "dark" or "light" here locks the theme and the top-bar switch stops working.
   // Keep "system" and pick what a first visit sees with defaultTheme.
   theme: "system",
-  defaultTheme: "dark", // dark | light | system
+  // "system": a first visit follows the device's light or dark setting.
+  defaultTheme: "system", // system | dark | light
   neutral: "gray", // sand | gray | slate | rose | mint | dusk
   brand: "blue", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
   accent: "indigo", // same names as brand
