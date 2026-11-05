@@ -13,8 +13,19 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [2.7.0] — 2026-11-05
+
+Minor: everything here adds new props, components or variants, changes the look of
+existing components without changing their props (`Badge`, `Option`), or fixes bugs. No
+consumer has to change code.
+
 ### Added
 
+- **`Logo monogram`.** `<Logo text="Acme" monogram />` draws a plain mark for apps that
+  have no logo yet: one of five shapes picked from the name (the same name always gets
+  the same mark), in black on light and white on dark. Pass a string to draw those
+  characters instead. `icon` still wins. The `Logo.text` gotcha now tells agents to use
+  `monogram` instead of drawing placeholder SVGs, and the app starter's header uses it.
 - **`emphasis` on `Flex` and `Grid`.** Draws attention to an element with an animated
   brand-to-accent edge that travels round the border. Each value names a look: `edge` is
   the edge alone, `glow` (or `true`) adds a soft halo for bars and inputs, `aura` a wide
@@ -56,6 +67,10 @@ item (see `ROADMAP.md`, Week 4).
   shine that swept across it every few seconds is replaced by a short brand-to-accent beam
   that travels round the border, faster on hover and still under reduced motion. Padding,
   colour and text props still override the defaults.
+- **Danger and selected `Option`s.** A danger item in a menu now hovers and takes focus
+  as a soft danger tint with danger text, instead of a solid red block. At rest, its
+  label and icon are danger-coloured too. A selected option gets a weak neutral fill
+  with no border, so it no longer looks like a pressed button.
 
 ### Fixed
 
