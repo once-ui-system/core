@@ -1227,7 +1227,13 @@ const Calendar = ({
 Calendar.displayName = "Calendar";
 
 /** One date, on one month's calendar (with `timePicker`, a date and time). */
-interface SingleDatePickerProps extends Omit<CalendarProps, "highlight"> {
+/**
+ * `currentMonth`, `currentYear` and `onMonthChange(increment)` are how a range
+ * picker drives each of its calendars; they are not the 3.0 value contract,
+ * so they stay off the public props.
+ */
+interface SingleDatePickerProps
+  extends Omit<CalendarProps, "highlight" | "currentMonth" | "currentYear" | "onMonthChange"> {
   /** Pick a `{ startDate, endDate }` range instead of one date. */
   range?: false;
 }

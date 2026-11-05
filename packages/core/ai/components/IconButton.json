@@ -17,7 +17,8 @@
   "loading": "boolean = false",
   "disabled": "boolean = false",
   "href": "string",
-  "children": "ReactNode"
+  "children": "ReactNode",
+  "onClick": "React.MouseEventHandler<HTMLElement>"
  },
  "tags": [
   "action",
@@ -72,6 +73,7 @@
    "image",
    "security",
    "opacity",
+   "download",
    "info",
    "danger",
    "warning",
@@ -108,7 +110,6 @@
    "dark",
    "dislike",
    "document",
-   "download",
    "edit",
    "enter",
    "eye",

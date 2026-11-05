@@ -156,7 +156,10 @@ export const SUBPATHS_3_0 = [
 	"code",
 	"emoji",
 	"media",
+	"map",
 	"mdx",
+	"tailwind.css",
+	"tokens.json",
 	"package.json",
 	"AGENTS.md",
 ];

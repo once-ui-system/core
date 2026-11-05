@@ -516,13 +516,13 @@
    "left": "SpacingToken | number | CSSUnit",
    "fillWidth": "boolean",
    "position": "CSSProperties[\"position\"]",
-   "size": "TShirtSizes",
    "disabled": "boolean",
+   "href": "string",
+   "size": "TShirtSizes",
    "corners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
    "variant": "\"ghost\" | \"outline\" | \"subtle\"",
    "weight": "\"default\" | \"strong\"",
    "truncate": "boolean",
-   "href": "string",
    "rounded": "boolean",
    "prefixIcon": "IconName",
    "suffixIcon": "IconName"
@@ -1132,6 +1132,7 @@
    "image",
    "security",
    "opacity",
+   "download",
    "info",
    "danger",
    "warning",
@@ -1168,7 +1169,6 @@
    "dark",
    "dislike",
    "document",
-   "download",
    "edit",
    "enter",
    "eye",
@@ -1287,7 +1287,7 @@
   "LngLat": {
    "[key: number]": "number"
   },
-  "LogoLoaderColor": [
+  "LogoLoaderTone": [
    "neutral",
    "brand",
    "accent",
@@ -1313,15 +1313,6 @@
    "maxZoom": "number",
    "minPoints": "number"
   },
-  "MapColor": [
-   "neutral",
-   "brand",
-   "accent",
-   "info",
-   "danger",
-   "warning",
-   "success"
-  ],
   "MapContextValue": {
    "map": "!MapLibreMap",
    "lib": "!MapLibre",
@@ -1349,6 +1340,15 @@
   "MapStyleSource": [
    "string",
    "StyleSpecification"
+  ],
+  "MapTone": [
+   "neutral",
+   "brand",
+   "accent",
+   "info",
+   "danger",
+   "warning",
+   "success"
   ],
   "MapViewport": {
    "center": "!LngLat",
@@ -2750,7 +2750,8 @@
     "children": "ReactNode",
     "href": "string",
     "id": "string",
-    "arrowIcon": "boolean = false"
+    "arrowIcon": "boolean = false",
+    "onClick": "React.MouseEventHandler<HTMLElement>"
    }
   },
   "Card": {
@@ -2810,8 +2811,8 @@
     "errorMessage": "ReactNode",
     "label": "React.ReactNode",
     "id": "string",
-    "description": "React.ReactNode",
     "disabled": "boolean",
+    "description": "React.ReactNode",
     "iconButtonProps": "IconButtonProps",
     "auto": "boolean",
     "checked": "boolean",
@@ -2897,8 +2898,8 @@
     "defaultValue": "Date | DateRange",
     "autoFocus": "boolean",
     "className": "string",
-    "size": "CondensedTShirtSizes",
     "value": "Date | DateRange",
+    "size": "CondensedTShirtSizes",
     "onValueChange": "((date: Date) => void) | ((range: DateRange) => void)",
     "minDate": "Date",
     "maxDate": "Date",
@@ -2908,9 +2909,6 @@
     "onApply": "(date: Date) => void",
     "defaultTime": "{ hours: number; minutes: number; }",
     "nested": "boolean",
-    "currentMonth": "number",
-    "currentYear": "number",
-    "onMonthChange": "(increment: number) => void",
     "onHover": "(date: Date | null) => void",
     "open": "boolean",
     "locale": "string",
@@ -3248,7 +3246,8 @@
     "loading": "boolean = false",
     "disabled": "boolean = false",
     "href": "string",
-    "children": "ReactNode"
+    "children": "ReactNode",
+    "onClick": "React.MouseEventHandler<HTMLElement>"
    }
   },
   "InfiniteScroll": {
@@ -3390,11 +3389,10 @@
     "svg": "string",
     "src": "string",
     "height": "number | string = 120",
-    "color": "LogoLoaderColor = neutral",
+    "tone": "LogoLoaderTone = neutral",
     "settled": "boolean = false",
     "order": "\"reading\" | \"document\" = reading",
-    "onComplete": "() => void",
-    "ariaLabel": "string = Loading"
+    "onComplete": "() => void"
    }
   },
   "LogoSpinner": {
@@ -4110,7 +4108,7 @@
     "selectable": "boolean = false",
     "selected": "string[]",
     "defaultSelected": "string[]",
-    "onSelectionChange": "(selected: string[]) => void",
+    "onSelectedChange": "(selected: string[]) => void",
     "getRowLabel": "(row: T) => string",
     "paginated": "boolean = false",
     "page": "number",
@@ -4902,7 +4900,8 @@
     "variant": "ChartVariant",
     "axisWidth": "number = 64",
     "hidden": "readonly boolean[]",
-    "onToggle": "(index: number) => void"
+    "defaultHidden": "readonly boolean[] = []",
+    "onHiddenChange": "(hidden: boolean[]) => void"
    }
   },
   "LinearGauge": {
@@ -5075,7 +5074,7 @@
     "onInstanceChange": "(index: number) => void",
     "lineNumbers": "boolean = false",
     "maxLines": "number = 5",
-    "isCollapsible": "boolean = false",
+    "collapsible": "boolean = false",
     "hideCode": "boolean = false"
    }
   },
@@ -5172,7 +5171,7 @@
     "aspectRatio": "string = 16 / 9",
     "className": "string",
     "style": "React.CSSProperties",
-    "initialPreviewImage": "string | null = null",
+    "defaultPreviewImage": "string | null = null",
     "emptyState": "React.ReactNode = Drag and drop or click to browse",
     "quality": "number = 0.8",
     "sizes": "string | number",
@@ -5254,7 +5253,7 @@
    "props": {
     "position": "!LngLat",
     "radius": "!number",
-    "color": "MapColor = brand",
+    "tone": "MapTone = brand",
     "opacity": "number = 0.2"
    }
   },
@@ -5291,7 +5290,7 @@
     "prefix": "React.ReactNode",
     "variant": "\"pill\" | \"dot\"",
     "active": "boolean = false",
-    "color": "MapColor = brand",
+    "tone": "MapTone = brand",
     "href": "string",
     "onClick": "(event: React.MouseEvent<HTMLElement>) => void"
    }

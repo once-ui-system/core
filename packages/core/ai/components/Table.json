@@ -39,7 +39,7 @@
   "selectable": "boolean = false",
   "selected": "string[]",
   "defaultSelected": "string[]",
-  "onSelectionChange": "(selected: string[]) => void",
+  "onSelectedChange": "(selected: string[]) => void",
   "getRowLabel": "(row: T) => string",
   "paginated": "boolean = false",
   "page": "number",

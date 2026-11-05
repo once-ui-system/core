@@ -303,7 +303,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - defaultSort?: TableSort | null = null
 - onSortChange?: (sort: TableSort | null) => void
 - selected, defaultSelected?: string[]
-- onSelectionChange?: (selected: string[]) => void
+- onSelectedChange?: (selected: string[]) => void
 - getRowLabel?: (row: T) => string
 - page, perPage, count, total?: number
 - defaultPage?: number = 1
@@ -360,6 +360,7 @@ Mixins: LeafProps.
 - loading, disabled, arrowIcon?: boolean = false
 - horizontal?: "start" | "center" | "end" | "between" = center
 - children?: ReactNode
+- onClick?: React.MouseEventHandler<HTMLElement>
 
 ### IconButton
 Mixins: LeafProps.
@@ -372,6 +373,7 @@ Mixins: LeafProps.
 - tooltipPosition?: "top" | "bottom" | "left" | "right" = top
 - variant?: ButtonVariant = primary
 - tone?: Tone
+- onClick?: React.MouseEventHandler<HTMLElement>
 
 ### Input
 Mixins: LeafProps.
@@ -564,7 +566,7 @@ type DropdownProps = Dropdown props
 // type GridSize is one of these strings: 1 10 2 3 4 9 12 5 8 6 7 11
 type IconButtonProps = IconButton props
 // type IconName is one of these names, and only these:
-// symbol code link menu search time video filter image security opacity info danger warning adjustments arrowDown arrowLeft arrowRight arrowUp arrowUpRight ball banknotes barChart bell bolt book bookmark calendar cart chat check checkbox chevronDoubleLeft chevronDoubleRight chevronDown chevronLeft chevronRight chevronUp chevronsLeftRight clipboard close computer copy cube dark dislike document download edit enter eye eyeDropper eyeOff file flag folder food forward gift globe grid grip heart help home inbox light like linearGauge lock logout mail mapPin maximize minimize minus moreHorizontal newspaper organization pause paw payment people person personRemove phone play plus radialGauge refresh return screen send settings smiley sparkle star starFill store tag trash trend trendDown trendUp upload volume volumeOff wordmark world
+// symbol code link menu search time video filter image security opacity download info danger warning adjustments arrowDown arrowLeft arrowRight arrowUp arrowUpRight ball banknotes barChart bell bolt book bookmark calendar cart chat check checkbox chevronDoubleLeft chevronDoubleRight chevronDown chevronLeft chevronRight chevronUp chevronsLeftRight clipboard close computer copy cube dark dislike document edit enter eye eyeDropper eyeOff file flag folder food forward gift globe grid grip heart help home inbox light like linearGauge lock logout mail mapPin maximize minimize minus moreHorizontal newspaper organization pause paw payment people person personRemove phone play plus radialGauge refresh return screen send settings smiley sparkle star starFill store tag trash trend trendDown trendUp upload volume volumeOff wordmark world
 type KbarFilter = (items: KbarItem[], query: string) => KbarItem[]
 type KbarItem = { id: string; name: string; section: string; shortcut?: string[]; keywords?: string; href?: string; perform?: () => void; icon?: IconName; description?: ReactNode; placeholder?: string }
 type KbarLabels = { dialog?: string; results?: string; noResults?: string; navigate?: string; goTo?: string }
@@ -610,10 +612,11 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - Fixed in 2.1: a Button or IconButton that is a Dropdown trigger renders a real <button type="button"> with aria-haspopup and aria-expanded, so it is reachable by keyboard. Pass it as trigger as is; do not add type="button" or a no-op onClick, or wrap it in a focusable Row, to make it one.
 - Fixed in 2.1: a context menu is <Dropdown openOn="contextmenu" trigger={region}>{options}</Dropdown> (2.x ContextMenu): a real menu (menu and menuitem roles, arrow keys, Home/End, Escape returns focus) that opens at the pointer and stays on screen. The trigger region gets a box; set contents to render none (display: contents), so an absolutely positioned or grid/flex child keeps its own layout. Use it instead of a hand-made right-click menu.
 - Pass a Tag's text once, as label or as children — with both, the children are dropped. Badge and Chip are Tag in 3.0.
-- Write 2.x prop names, not 1.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onValueChange/defaultValue (not selected/onToggle/defaultSelected), Tag tone (not scheme or variant), Button tone="danger" (not variant="danger"), Text/Heading textVariant (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius). The validator names the 2.x prop.
+- Write 3.0 prop names, not 1.x or 2.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onValueChange/defaultValue (not selected/onToggle/defaultSelected), Tag tone (not scheme or variant), Button tone="danger" (not variant="danger"), Text/Heading textVariant (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius), Table onSelectedChange (not onSelectionChange), CodeBlock collapsible (not isCollapsible). The validator names the 3.0 prop.
 - Tag is a div by default; inside a sentence (<Text as="p">, <p>) give it as="span".
 - overflow="hidden" on full-bleed sections clips glows into hard bands — only use when parent has radius.
 - Leaf components (Button, IconButton, ToggleButton, the fields, Switch, Checkbox, RadioButton, Text, Heading, Icon, Avatar, Spinner, StatusIndicator, Kbd, InlineCode, ProgressBar, Logo, SmartLink, NavIcon) take only margins, flex, fillWidth, position, top/right/bottom/left, className and style besides their own props. Padding, background, border, radius, sizes, hide and breakpoints go on a Row around it (a Column around Text or Heading; <Row fit> for an Icon's box).
+- A Button in a form that should submit it needs type="submit": with neither onClick, href nor type it renders a div, unlike a native <button>.
 
 ## Quality bar
 

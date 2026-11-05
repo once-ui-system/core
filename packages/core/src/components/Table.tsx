@@ -250,7 +250,7 @@ interface TableProps<T>
   /** The ids selected to start with when Table owns the selection. */
   defaultSelected?: string[];
   /** Called with every selected id after each change. */
-  onSelectionChange?: (selected: string[]) => void;
+  onSelectedChange?: (selected: string[]) => void;
   /** The accessible name of a row's checkbox, such as `row => \`Select ${row.name}\``. */
   getRowLabel?: (row: T) => string;
 
@@ -463,7 +463,7 @@ function Table<T>({
   selectable = false,
   selected,
   defaultSelected,
-  onSelectionChange,
+  onSelectedChange,
   getRowLabel,
   paginated = false,
   page,
@@ -732,7 +732,7 @@ function Table<T>({
 
   const commitSelection = (next: string[]) => {
     if (!selectionControlled) setUncontrolledSelected(next);
-    onSelectionChange?.(next);
+    onSelectedChange?.(next);
   };
 
   const toggleRow = (id: string) =>

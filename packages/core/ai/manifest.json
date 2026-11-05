@@ -110,7 +110,6 @@
     "MapBuildings",
     "MapCircleProps",
     "MapClusterOptions",
-    "MapColor",
     "MapContextValue",
     "MapLabels",
     "MapMarkerItem",
@@ -122,6 +121,7 @@
     "MapProps",
     "MapStyle",
     "MapStyleSource",
+    "MapTone",
     "MapViewport"
    ]
   },

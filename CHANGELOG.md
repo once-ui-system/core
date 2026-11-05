@@ -285,6 +285,19 @@ entry below that had landed by then:
   `date` object. Chart tooltips and axes write numbers through `valueFormat` in
   `locale` when either is set; without them they draw as 2.x did. With no
   `series`, the x column is no longer drawn as a series, and `label` never is.
+- **Three more props follow the 3.0 naming rules** (3.0.0-beta.2). Table's
+  selection handler is `onSelectedChange`, beside `selected` and `defaultSelected`
+  (it was `onSelectionChange`, as on 2.x's DataTable). CodeBlock `isCollapsible`
+  is `collapsible`. MediaUpload `initialPreviewImage` is `defaultPreviewImage`.
+  The codemod renames all three. Chart `Legend` takes `hidden` / `defaultHidden` /
+  `onHiddenChange(hidden)` in place of beta.1's `onToggle(index)`. From 2.x's
+  latest additions: LogoLoader takes `tone` and `aria-label` (not `color` and
+  `ariaLabel`), MapPin and MapCircle take `tone` (the type is `MapTone`), and the
+  Map parts take `ref` as a prop like every other component. DatePicker's
+  `currentMonth`, `currentYear` and `onMonthChange(increment)` leave its public
+  props: they were the range picker's wiring, not a value contract, and the
+  codemod reports each use. The codemod also reports, from the nearest
+  `package.json`, React below 19 and a `recharts` dependency left from 2.x.
 - **Fixes from the first real-app migration** (3.0.0-beta.2). Button and
   IconButton type `onClick`'s event as `MouseEvent<HTMLElement>`, so an inline
   handler compiles under strict. `type="reset"` and a `form` attribute render a

@@ -39,6 +39,7 @@ import { LEAVES, elementsOf, transformLeaf } from "./codemod-3.0-leaf.mjs";
 import { consumesProp, forwardsProp, isAliasSource, readSource, resolveOwn } from "./codemod-3.0-own.mjs";
 import { transformMerges } from "./codemod-3.0-merges.mjs";
 import { transformTypes } from "./codemod-3.0-types.mjs";
+import { dependencyReports, nearestPackage } from "./codemod-3.0-deps.mjs";
 import { ONE_X_MESSAGE, detectOneX } from "./codemod-3.0-detect.mjs";
 import { transformJsonStrings } from "./codemod-3.0-json.mjs";
 import { transformPartNames } from "./codemod-3.0-part-names.mjs";
@@ -54,6 +55,7 @@ const TRANSFORMS = {
   StatusIndicator: { ariaLabel: "aria-label" },
   // 2.4's loaders and ai/social modules.
   LogoSpinner: { ariaLabel: "aria-label" },
+  LogoLoader: { ariaLabel: "aria-label" },
   WorkingIndicator: { ariaLabel: "aria-label" },
   VoiceVisualizer: { ariaLabel: "aria-label" },
   Mascot: { ariaLabel: "aria-label" },
@@ -115,6 +117,15 @@ const VALUE_CONTRACT_CONTROLS = {
   // A field's height is `size` everywhere else.
   Kbar: { inputSize: "size" },
   KbarContent: { inputSize: "size" },
+  // Freeze sweep: the selection is `selected` / `defaultSelected`, so its
+  // handler is `onSelectedChange`. DataTable before the merge pass renames it
+  // to Table; Table for code written against 3.0.0-beta.0 and beta.1.
+  DataTable: { onSelectionChange: "onSelectedChange" },
+  Table: { onSelectionChange: "onSelectedChange" },
+  // Booleans read as adjectives (`closable`, `searchable`), never `isX`.
+  CodeBlock: { isCollapsible: "collapsible" },
+  // The `default*` spelling of a starting state the component then owns.
+  MediaUpload: { initialPreviewImage: "defaultPreviewImage" },
 };
 
 for (const table of [VALUE_CONTRACT_FIELDS, VALUE_CONTRACT_CONTROLS]) {
@@ -131,6 +142,12 @@ const FLAGGED = {
     open:
       "was an autofocus hint, not visibility: it re-focuses the grid each time it turns true. " +
       "Keep it only alongside autoFocus for a picker you open yourself; otherwise remove it",
+    currentMonth:
+      "removed from the public props (it was the range picker's wiring): start the picker on a month with defaultValue, or use DatePicker range",
+    currentYear:
+      "removed from the public props (it was the range picker's wiring): start the picker on a month with defaultValue, or use DatePicker range",
+    onMonthChange:
+      "removed from the public props (it was the range picker's wiring, called with +1 or -1): the picker moves its own month",
   },
   // C4: renamed too, but the handler now receives the next state, and
   // `open` controls the accordion whether or not a handler is passed.
@@ -386,7 +403,7 @@ const REWRITES = { Dialog: rewriteDialog, CodeBlock: rewriteCodeBlock, Accordion
  * every reference to it in the file is renamed (a file that imports
  * `generateMetadata` cannot also declare its own, so none of them is Next's).
  */
-const RENAMED_EXPORTS = { Particle: "ParticleFx", generateMetadata: "createMetadata" };
+const RENAMED_EXPORTS = { Particle: "ParticleFx", generateMetadata: "createMetadata", MapColor: "MapTone" };
 
 /** Exports 3.0 removed with no drop-in replacement: name → what to do. A3, A6. */
 const REMOVED_EXPORTS = {
@@ -1447,7 +1464,11 @@ const TONE_RENAMES = {
   StatusIndicator: { color: "scheme" },
   // 2.4: `color` was a theme role (brand, accent, neutral, inherit).
   LogoSpinner: { color: "tone" },
+  LogoLoader: { color: "tone" },
   VoiceVisualizer: { color: "tone" },
+  // Map (2.x after 2.6): the palette is `tone`, as on every 3.0 component.
+  MapPin: { color: "tone" },
+  MapCircle: { color: "tone" },
 };
 
 /** E2: Button and IconButton `variant` values that were a tone or a twin. */
@@ -2610,6 +2631,11 @@ if (invokedDirectly) {
   );
   // F8, F10: the effects and the blocks are packages of their own now.
   if (install.size) console.log(dependencyNote(install, dir));
+  // B1 and the charts: the dependency changes 3.0 asks for, reported.
+  const pkg = nearestPackage(dir);
+  const deps = pkg ? dependencyReports(pkg.pkg) : [];
+  if (deps.length)
+    console.log(`\n${path.relative(process.cwd(), pkg.file) || "package.json"}:\n${deps.map((d) => `   ! ${d}  (fix by hand)`).join("\n")}`);
   // Each rewrite keeps the line it was on: a formatter re-wraps what grew.
   if (touched && !dry) console.log(formatNote(changedFiles, dir));
 }

@@ -108,7 +108,7 @@ below; `perPageOptions` adds a page-size select.
   getRowLabel={(invoice) => \`Select \${invoice.id}\`}
   selectable
   selected={selected}
-  onSelectionChange={setSelected}
+  onSelectedChange={setSelected}
   paginated
   defaultPerPage={5}
   perPageOptions={[5, 10, 25]}
@@ -450,7 +450,7 @@ the look.
     selectable: "Add a checkbox column with select-all.",
     selected: "The selected rows' ids when the host owns them.",
     defaultSelected: "The ids selected to start with.",
-    onSelectionChange: "Called with every selected id after each change.",
+    onSelectedChange: "Called with every selected id after each change.",
     getRowLabel: "The accessible name of a row's checkbox.",
     paginated: "Show the rows a page at a time.",
     page: "The current page, from 1, when the host owns it.",

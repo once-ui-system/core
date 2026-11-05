@@ -64,10 +64,10 @@ describe("LogoLoader", () => {
     expect(fetchMock).toHaveBeenCalledWith("/logo.svg", expect.anything());
   });
 
-  it("takes a color, or the text color with inherit", () => {
-    const { rerender } = render(<LogoLoader svg={LOGO} color="brand" />);
+  it("takes a tone, or the text color with inherit", () => {
+    const { rerender } = render(<LogoLoader svg={LOGO} tone="brand" />);
     expect(screen.getByRole("status").style.color).toBe("var(--brand-color-strong)");
-    rerender(<LogoLoader svg={LOGO} color="inherit" />);
+    rerender(<LogoLoader svg={LOGO} tone="inherit" />);
     expect(screen.getByRole("status").style.color).toBe("");
   });
 

@@ -20,7 +20,8 @@
   "children": "ReactNode",
   "href": "string",
   "id": "string",
-  "arrowIcon": "boolean = false"
+  "arrowIcon": "boolean = false",
+  "onClick": "React.MouseEventHandler<HTMLElement>"
  },
  "tags": [
   "action",
@@ -76,6 +77,7 @@
    "image",
    "security",
    "opacity",
+   "download",
    "info",
    "danger",
    "warning",
@@ -112,7 +114,6 @@
    "dark",
    "dislike",
    "document",
-   "download",
    "edit",
    "enter",
    "eye",

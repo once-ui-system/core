@@ -7,7 +7,7 @@
   "prefix": "React.ReactNode",
   "variant": "\"pill\" | \"dot\"",
   "active": "boolean = false",
-  "color": "MapColor = brand",
+  "tone": "MapTone = brand",
   "href": "string",
   "onClick": "(event: React.MouseEvent<HTMLElement>) => void"
  },
@@ -21,7 +21,7 @@
  ],
  "mixinsRef": [],
  "types": {
-  "MapColor": [
+  "MapTone": [
    "neutral",
    "brand",
    "accent",
