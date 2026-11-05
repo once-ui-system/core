@@ -373,10 +373,14 @@ it picks `scaling` 95/100/105 unless `scaling` is set. A `size` on a control sti
 30d. The theme a visitor starts on is `defaultTheme` in `style`; `ThemeInit`
 paints it and `ThemeProvider` lets the visitor change it. `theme: "light"` or
 `"dark"` *forces* the theme on `ThemeProvider` — `setTheme` then does nothing —
-so leave `theme` out (or `"system"`) for a switchable site. Exact brand colours
-go in `brandScale`, `accentScale` or `neutralScale`, one colour per step
-(`{ 100: "#…", …, 1200: "#…" }`); a seed fills the steps a scale leaves out.
-A ramp per theme is `{ light: { … }, dark: { … } }`. The page and filled-surface
+so leave `theme` out (or `"system"`) for a switchable site. An exact brand
+colour is `brand: "custom", brandSeed: "#0F766E"`: the hex is step 500, which
+every brand solid uses in both themes, and the other steps are generated
+around it (`accentSeed`, `neutralSeed` likewise). Only a brand book that fixes
+every shade needs `brandScale`, `accentScale` or `neutralScale`, one colour per
+step (`{ 100: "#…", …, 1200: "#…" }`), numbered dark to light in both themes:
+100 is the darkest, 1200 the lightest (the reverse of Tailwind). A seed fills
+the steps a scale leaves out; a ramp per theme is `{ light: { … }, dark: { … } }`. The page and filled-surface
 colours are `pageBackground` and `surfaceBackground` (a token or CSS colour, or
 `{ light, dark }`). All render on the server through `ThemeInit`. Do not
 override the semantic variables (`--page-background`, `--brand-solid-strong`…)

@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "3.0.0-beta.1",
- "generated": "2026-11-04",
+ "generated": "2026-11-05",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root; '@once-ui-system/fx' and '@once-ui-system/blocks' are packages of their own, installed beside core.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -1702,6 +1702,10 @@
    "null",
    "string",
    "string[]"
+  ],
+  "ResolvedTheme": [
+   "dark",
+   "light"
   ],
   "ScalingSize": [
    "100",
@@ -6616,6 +6620,18 @@
    "kind": "hook",
    "signature": "<T>(value: T, delay: number) => T"
   },
+  "elementTheme": {
+   "group": "hooks",
+   "kind": "function",
+   "signature": "(element: Element | null, fallback: ResolvedTheme) => ResolvedTheme",
+   "doc": "The theme `element` is drawn in: its nearest `data-theme=\"light\"` or `\"dark\"`, flipped once for every `data-theme=\"invert\"` between them."
+  },
+  "useElementTheme": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "(ref: RefObject<Element | null>) => ResolvedTheme",
+   "doc": "`useTheme().resolvedTheme`, but for the subtree `ref` sits in: a map in a `theme=\"dark\"` section of a light page, or under `theme=\"invert\"`, gets `\"dark\"`."
+  },
   "useOgData": {
    "group": "hooks",
    "kind": "hook",
@@ -6785,7 +6801,7 @@
    "importFrom": "@once-ui-system/core/config",
    "kind": "function",
    "signature": "<T extends OnceUIConfig>(config: T & CheckedConfig<T>) => T",
-   "doc": "Type an app's `once-ui.config`."
+   "doc": "Type an app's `once-ui.config`, whose `style` keys are ThemeProvider's props (an exact brand colour is `brand: \"custom\", brandSeed: \"#0F766E\"`)."
   },
   "useStylePanel": {
    "group": "blocks",

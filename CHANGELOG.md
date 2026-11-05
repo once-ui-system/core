@@ -503,6 +503,13 @@ entry below that had landed by then:
 
 ### Fixed
 
+- **`brandSeed` is the exact brand colour.** The seed's hex is now step 500, which every
+  brand solid uses in both themes; before, only its hue was kept, so `brandSeed: "#0F766E"`
+  never appeared on a button. The other steps keep the built-in contrast ladder and draw in
+  around a seed that is darker or lighter than usual, so brand text on a light page stays at
+  7:1 or better on white. `accentSeed` and `neutralSeed` work the same way. A `brandScale`
+  numbered light to dark, the Tailwind way, now gets a warning in development: Once UI steps
+  run dark to light, 100 darkest. AGENTS.md and the rules say how to set an exact colour.
 - **A `Card` with `onClick` no longer submits a form around it** (it is `type="button"`),
   and a card given `width` or `fit` hugs that width instead of stretching (`maxWidth` still
   fills the row up to its cap).
