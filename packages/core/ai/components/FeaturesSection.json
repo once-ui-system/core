@@ -1,0 +1,22 @@
+{
+ "name": "FeaturesSection",
+ "group": "blocks",
+ "importFrom": "@once-ui-system/blocks",
+ "props": {
+  "layout": "string",
+  "width": "string",
+  "eyebrow": "string",
+  "title": "string",
+  "description": "string",
+  "resolveHref": "(href: string) => string",
+  "columns": "string",
+  "items": "{ icon?: string; title?: string; description?: string }[]"
+ },
+ "tags": [
+  "marketing"
+ ],
+ "pairsWith": [
+  "Sections"
+ ],
+ "mixinsRef": []
+}

@@ -23,8 +23,8 @@
  "mixinsRef": [],
  "types": {
   "ReactionMotion": [
-   "none",
    "pop",
+   "none",
    "beat",
    "nod",
    "shake",

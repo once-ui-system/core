@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { CelebrationFx, Button, Column } from "@once-ui-system/core";
+import { Button, Column } from "@once-ui-system/core";
+import { CelebrationFx } from "@once-ui-system/fx";
 
 export function CelebrationFxExample() {
   const [active, setActive] = useState(false);
@@ -9,7 +10,7 @@ export function CelebrationFxExample() {
   return (
     <Column gap="16" fillWidth horizontal="center" padding="24">
       <CelebrationFx
-        height={16}
+        height="16rem"
         type="fireworks"
         trigger="manual"
         active={active}

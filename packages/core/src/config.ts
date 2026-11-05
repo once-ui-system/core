@@ -1,5 +1,5 @@
-import type { OnceUIDataStyleConfig } from "./contexts/DataThemeProvider";
-import type { OnceUIStyleConfig } from "./contexts/ThemeProvider";
+import type { OnceUIDataStyleConfig } from "./contexts/DataThemeProvider.js";
+import type { OnceUIStyleConfig } from "./contexts/ThemeProvider.js";
 
 /**
  * A font the root layout applies by class name: what `next/font` returns.

@@ -11,10 +11,10 @@ export const Features13 = (flex: React.ComponentProps<typeof Row>) => {
         border
       />
       <Column fillWidth padding="xl" gap="16" horizontal="start">
-        <Heading as="h2" variant="display-strong-m">
+        <Heading as="h2" textVariant="display-strong-m">
           From template to client delivery — in a few steps
         </Heading>
-        <Text onBackground="neutral-weak" variant="heading-default-xl" wrap="balance">
+        <Text onBackground="neutral-weak" textVariant="heading-default-xl" wrap="balance">
           No custom builds. No endless design cycles. Just adapt, deploy, repeat.
         </Text>
         <Column fillWidth paddingTop="24">
@@ -37,7 +37,7 @@ export const Features13 = (flex: React.ComponentProps<typeof Row>) => {
               description: "Same system. New client. Scalable revenue.",
             },
           ].map((step, index) => (
-            <Row maxWidth={28} key={index} gap="32">
+            <Row maxWidth="28rem" key={index} gap="32">
               <Column flex={1} minWidth="48" horizontal="center">
                 <Row flex={1} horizontal="center">
                   {index === 0 && (
@@ -70,10 +70,10 @@ export const Features13 = (flex: React.ComponentProps<typeof Row>) => {
                 </Row>
               </Column>
               <Column fillWidth gap="4" paddingY="16">
-                <Text variant="heading-default-s" wrap="balance">
+                <Text textVariant="heading-default-s" wrap="balance">
                   {step.title}
                 </Text>
-                <Text onBackground="neutral-weak" variant="body-default-xs" wrap="balance">
+                <Text onBackground="neutral-weak" textVariant="body-default-xs" wrap="balance">
                   {step.description}
                 </Text>
               </Column>

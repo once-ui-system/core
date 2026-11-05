@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import styles from "./Cursor.module.scss";
 
@@ -20,7 +20,11 @@ interface CursorProps {
  * It moves by writing `transform` once per frame, without a React render,
  * so it keeps up with the pointer however heavy the subtree is.
  */
-export const Cursor = forwardRef<HTMLDivElement, CursorProps>(({ cursor, elementRef }, ref) => {
+export const Cursor = ({
+  ref,
+  cursor,
+  elementRef,
+}: CursorProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const followerRef = useRef<HTMLDivElement | null>(null);
   const [mounted, setMounted] = useState(false);
 
@@ -116,7 +120,7 @@ export const Cursor = forwardRef<HTMLDivElement, CursorProps>(({ cursor, element
     </div>,
     document.body,
   );
-});
+};
 
 Cursor.displayName = "Cursor";
 export default Cursor;

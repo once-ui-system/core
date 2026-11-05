@@ -6,8 +6,8 @@ import { describe, expect, it } from "vitest";
  * Guards the framework-coupling boundary described in
  * rfcs/2026-08-once-ui-2-architecture.md (§4).
  *
- * The 2.0 split moves every `next/*` import into @once-ui-system/nextjs and
- * every `recharts` import into @once-ui-system/data. Until then, this test
+ * The 2.0 split moves every `next/*` import into @once-ui-system/nextjs (the
+ * charts left recharts for their own renderer in 3.0). Until then, this test
  * pins the coupling surface to the exact files below so it cannot silently
  * grow. If you add a file here, you are widening the framework boundary —
  * make sure that's a deliberate decision (and update the RFC inventory).
@@ -30,8 +30,6 @@ const NEXT_IMPORT_ALLOWLIST = [
   // Adding a file back here means Next is a hard requirement again.
   "next/adapters.tsx",
 ];
-
-const RECHARTS_ALLOWED_DIR = "modules/data";
 
 const SKIPPED_DIRS = new Set(["__tests__", "test", "node_modules"]);
 
@@ -79,10 +77,7 @@ describe("framework coupling boundary", () => {
     expect(offenders).toEqual(["modules/map/Map.impl.tsx"]);
   });
 
-  it("imports recharts only from modules/data", () => {
-    const offenders = filesImporting("recharts").filter(
-      (file) => !file.startsWith(`${RECHARTS_ALLOWED_DIR}/`),
-    );
-    expect(offenders).toEqual([]);
+  it("imports recharts nowhere: the charts draw their own SVG since 3.0", () => {
+    expect(filesImporting("recharts")).toEqual([]);
   });
 });

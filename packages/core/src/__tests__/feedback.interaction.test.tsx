@@ -34,7 +34,7 @@ describe("Feedback", () => {
     "renders the %s variant with its title as a level-2 heading, cleanly",
     async (variant) => {
       const { container } = render(
-        <Feedback variant={variant} title="Heads up" description="Details here." />,
+        <Feedback tone={variant} title="Heads up" description="Details here." />,
         { wrapper: wrap },
       );
       expect(screen.getByRole("heading", { level: 2, name: "Heads up" })).toBeInTheDocument();

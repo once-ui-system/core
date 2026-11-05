@@ -12,7 +12,6 @@ import {
   Input,
   Line,
   Media,
-  PasswordInput,
   Row,
   SmartLink,
   Text,
@@ -30,7 +29,7 @@ export function AuthExample() {
         background="surface"
         s={{ columns: 1 }}
       >
-        <Column minHeight={40} s={{ hide: true }}>
+        <Column minHeight="40rem" s={{ hide: true }}>
           <Media
             stretch
             fillHeight
@@ -48,7 +47,7 @@ export function AuthExample() {
             gap="8"
             background="overlay"
           >
-            <Heading as="h2" variant="display-strong-xs" onBackground="neutral-strong">
+            <Heading as="h2" textVariant="display-strong-xs" onBackground="neutral-strong">
               Explore new dimensions. Code with curiosity.
             </Heading>
           </Column>
@@ -56,10 +55,10 @@ export function AuthExample() {
 
         <Column padding="48" gap="32" center>
           <Column fillWidth gap="8" horizontal="center">
-            <Heading as="h1" variant="display-strong-xs" align="center">
+            <Heading as="h1" textVariant="display-strong-xs" align="center">
               Create your account
             </Heading>
-            <Text variant="body-default-s" onBackground="neutral-weak" align="center">
+            <Text textVariant="body-default-s" onBackground="neutral-weak" align="center">
               Already have an account? <SmartLink href="/login">Sign in</SmartLink>
             </Text>
           </Column>
@@ -73,7 +72,7 @@ export function AuthExample() {
 
           <Row fillWidth vertical="center" gap="16">
             <Line fill />
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               or
             </Text>
             <Line fill />
@@ -81,7 +80,7 @@ export function AuthExample() {
 
           <Column fillWidth gap="16">
             <Input id="email" label="Email" placeholder="you@company.com" />
-            <PasswordInput id="password" label="Password" placeholder="••••••••" />
+            <Input id="password" label="Password" placeholder="••••••••" type="password" />
             <Row fillWidth horizontal="end">
               <SmartLink href="/forgot">Forgot password?</SmartLink>
             </Row>

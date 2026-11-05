@@ -3,11 +3,11 @@ import { Animated } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 import type { TShirtSizes } from "../types";
 import { type FlexProps, flexStyle } from "./Flex";
-import { useReduceMotion } from "./motion";
+import { useReduceMotion } from "./useReduceMotion";
 
 /**
  * As core, Skeleton takes the Flex props, so `width`, `height`, `fillWidth`
- * and the rest work as on any Flex: numbers are rem, or a spacing token or
+ * and the rest work as on any Flex: numbers are points, or a spacing token or
  * a percentage.
  */
 export interface SkeletonProps extends Omit<FlexProps, "children"> {

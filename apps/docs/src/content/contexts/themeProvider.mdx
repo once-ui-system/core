@@ -34,6 +34,7 @@ Wrap your app with `ThemeProvider` and pass the style configuration as props.
     surface="translucent" // filled | translucent
     transition="all" // all | micro | macro
     scaling="100" // 90 | 95 | 100 | 105 | 110
+    density="normal" // compact | normal | spacious
 >
     {children}
 </ThemeProvider>`,
@@ -94,6 +95,7 @@ export const { style, dataStyle } = defineConfig({
     surface: "translucent", // filled | translucent
     transition: "all", // all | micro | macro | none
     scaling: "100", // 90 | 95 | 100 | 105 | 110
+    density: "normal", // compact | normal | spacious
   },
   dataStyle: {
     variant: "gradient", // flat | gradient | outline
@@ -176,7 +178,7 @@ To hand-pick every step instead, set the scheme to `custom` and supply the `--sc
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  codeHeight={24}  isCollapsible={false}
+  codeHeight="24rem"  isCollapsible={false}
 
 lineNumbers
 codes={[
@@ -334,6 +336,35 @@ On `Flex`, `Row`, `Column` and `Grid`, the four you reach for most are typed pro
 </Column>
 ```
 
+## Density and scaling
+
+`scaling` multiplies everything sized on the spacing scale: the tokens (`"16"` is
+`calc(1rem * 1.1)` at `"110"`), a number on a size, spacing or offset prop (`16` is
+the same step), and the controls built on them. It is written as `data-scaling`,
+and as the `--scaling` factor (1 by default) that numbers read.
+
+`density` sets how roomy the controls are, as `data-density` on `<html>`. Every
+Button, IconButton, ToggleButton, SegmentedControl, Tag, Switch, Checkbox,
+RadioButton, RadioGroup and Slider that is given no `size` takes the density's:
+
+| density | control size | scaling, unless `scaling` is set |
+| --- | --- | --- |
+| `"compact"` | `s` | `"95"` |
+| `"normal"` (default) | `m` | `"100"` |
+| `"spacious"` | `l` | `"105"` |
+
+```tsx
+<ThemeProvider density="compact">
+```
+
+It works in CSS: a control with no `size` renders its m look plus a class that
+`[data-density]` restyles, so server components and pages before any JS follow it
+too. A `size` on the control, or on its `Form`, always wins. A `scaling` you set
+wins over the density's; a density chosen in the StylePanel brings its scaling
+along until a scaling is chosen there. The attribute is read on `<html>` only,
+so unlike the overrides below it is one setting for the whole page. Input and
+the fields built on it follow it once their `s` size lands.
+
 ## Root font size and cursor
 
 `desktopSize`, `tabletSize` and `mobileSize` set the root font size, in px, for each width range, which is what every `rem` in the system resolves to. `cursorInteractive` sets the cursor over buttons, links and other interactive elements. They have no defaults of their own: left unset, nothing is written to `<html>` and the stylesheet's values apply (16px, 16px, 15px and `pointer`).
@@ -391,7 +422,8 @@ and `remove` may return a promise; nothing waits on them.
     ["border", ["rounded", "playful", "conservative", "sharp"], "playful"],
     ["surface", ["filled", "translucent"], "filled"],
     ["transition", ["all", "micro", "macro", "none"], "all"],
-    ["scaling", ["90", "95", "100", "105", "110"], "100"],
+    ["scaling", ["90", "95", "100", "105", "110"], "100", "Left out, density picks it: 95, 100 or 105."],
+    ["density", ["compact", "normal", "spacious"], "normal", "The size of every control given none: s, m or l."],
     ["bodySize", ["90", "95", "100", "105", "110"], "100"],
     ["bodyLineHeight", ["90", "100", "110", "120"], "100"],
     ["desktopSize", ["13", "14", "15", "16", "17", "18"], "-", "Root font size in px above 1024px. Unset, the stylesheet's 16px applies."],
@@ -439,6 +471,7 @@ Returns all style options plus `setStyle`.
     ["surface", "SurfaceStyle"],
     ["transition", "TransitionStyle"],
     ["scaling", "ScalingSize"],
+    ["density", "Density"],
     ["bodySize", "BodySize"],
     ["bodyLineHeight", "BodyLineHeight"],
     ["desktopSize", "DeviceFontSize | undefined"],
@@ -461,8 +494,8 @@ Returns all style options plus `setStyle`.
       border="neutral-medium"
       radius="xl-8"
       padding="8"
-      maxWidth={32}
-      maxHeight={44}
+      maxWidth="32rem"
+      maxHeight="44rem"
     >
       <Flex
         fillWidth
@@ -475,7 +508,7 @@ Returns all style options plus `setStyle`.
         padding="8"
       >
         <Row
-          maxWidth={20}
+          maxWidth="20rem"
           horizontal="between"
           padding="8"
           vertical="center"
@@ -574,17 +607,17 @@ Returns all style options plus `setStyle`.
               <Flex fillWidth gap="24" s={{ direction: "column" }}>
                 <Column gap="12">
                   <Text
-                    variant="heading-strong-l"
+                    textVariant="heading-strong-l"
                     onBackground="neutral-strong"
                   >
                     {article.title}
                   </Text>
-                  <Text variant="body-default-m" onBackground="neutral-weak">
+                  <Text textVariant="body-default-m" onBackground="neutral-weak">
                     {article.subtitle}
                   </Text>
                 </Column>
                 <Flex
-                  minWidth={8}
+                  minWidth="8rem"
                   overflow="hidden"
                   radius="m"
                   border="neutral-medium"
@@ -600,7 +633,7 @@ Returns all style options plus `setStyle`.
               </Flex>
               <Flex gap="8" paddingTop="8" vertical="center">
                 <Icon size="xs" name="document" />
-                <Text variant="body-default-xs" onBackground="neutral-medium">
+                <Text textVariant="body-default-xs" onBackground="neutral-medium">
                   Because you follow{" "}
                   <SmartLink
                     className="brand-on-background-weak"

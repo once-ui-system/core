@@ -60,39 +60,39 @@ const ordersData: Order[] = [
 const orderColumns: TableColumn<Order>[] = [
   {
     key: "order",
-    title: <Text variant="label-default-s">Order</Text>,
+    title: <Text textVariant="label-default-s">Order</Text>,
     render: (item) => (
       <Row gap="12" vertical="center">
-        <Text variant="label-default-s">{item.id}</Text>
+        <Text textVariant="label-default-s">{item.id}</Text>
       </Row>
     ),
   },
   {
     key: "customer",
-    title: <Text variant="label-default-s">Customer</Text>,
+    title: <Text textVariant="label-default-s">Customer</Text>,
     render: (item) => (
       <Row gap="12" vertical="center">
         <Avatar size="xs" src={item.customer?.avatar} />
-        <Text variant="label-default-s">{item.customer?.name}</Text>
+        <Text textVariant="label-default-s">{item.customer?.name}</Text>
       </Row>
     ),
   },
   {
     key: "date",
-    title: <Text variant="label-default-s">Date</Text>,
+    title: <Text textVariant="label-default-s">Date</Text>,
     render: (item) => (
-      <Text variant="label-default-s" onBackground="neutral-weak">
+      <Text textVariant="label-default-s" onBackground="neutral-weak">
         {item.date}
       </Text>
     ),
   },
   {
     key: "shipping",
-    title: <Text variant="label-default-s">Shipping</Text>,
+    title: <Text textVariant="label-default-s">Shipping</Text>,
     render: (item) => (
       <Row gap="8" vertical="center">
-        <Text variant="label-default-s">{item.shipping}</Text>
-        <Text variant="body-default-xs" onBackground="neutral-weak">
+        <Text textVariant="label-default-s">{item.shipping}</Text>
+        <Text textVariant="body-default-xs" onBackground="neutral-weak">
           {item.method}
         </Text>
       </Row>
@@ -100,9 +100,9 @@ const orderColumns: TableColumn<Order>[] = [
   },
   {
     key: "total",
-    title: <Text variant="label-default-s">Total</Text>,
+    title: <Text textVariant="label-default-s">Total</Text>,
     align: "end",
-    render: (item) => <Text variant="label-default-s">{item.total}</Text>,
+    render: (item) => <Text textVariant="label-default-s">{item.total}</Text>,
   },
 ];
 
@@ -141,7 +141,7 @@ const examples: BlockExampleDef[] = [
       <Row fillWidth fitHeight>
         <Table1
           background="surface"
-          heading={<Text variant="label-default-m">Orders & Shipping</Text>}
+          heading={<Text textVariant="label-default-m">Orders & Shipping</Text>}
           data={ordersData}
           columns={orderColumns}
           selectable

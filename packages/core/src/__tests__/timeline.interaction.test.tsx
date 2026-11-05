@@ -11,9 +11,9 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 const items: TimelineItem[] = [
-  { label: "Ordered", description: "Mon", state: "success", marker: "1" },
-  { label: "Shipped", description: "Tue", state: "active", marker: "2" },
-  { label: "Delivered", state: "default", marker: "3" },
+  { label: "Ordered", description: "Mon", tone: "success", marker: "1" },
+  { label: "Shipped", description: "Tue", tone: "brand", marker: "2" },
+  { label: "Delivered", marker: "3" },
 ];
 
 /**

@@ -1,6 +1,7 @@
 "use client";
 
-import { CountFx, Row } from "@once-ui-system/core";
+import { Row } from "@once-ui-system/core";
+import { CountFx } from "@once-ui-system/fx";
 import { useState } from "react";
 
 export default function Counter() {
@@ -8,7 +9,7 @@ export default function Counter() {
 
   return (
     <Row fill center>
-      <CountFx variant="display-default-xl" value={count} speed={10000} separator=","/>
+      <CountFx textVariant="display-default-xl" value={count} duration={10000} separator=","/>
     </Row>
   );
 }

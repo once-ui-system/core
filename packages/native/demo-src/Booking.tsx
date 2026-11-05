@@ -25,7 +25,7 @@ export function Calendar() {
   return (
     <ScrollView style={{ backgroundColor: theme.color("page-background") }}>
       <Column padding="20" gap="20" safeArea={["top"]}>
-        <Heading variant="heading-strong-l">Pick a date</Heading>
+        <Heading textVariant="heading-strong-l">Pick a date</Heading>
         <Card padding="16" radius="xl">
           <DatePicker
             defaultDate={new Date(2026, 9, 24)}
@@ -56,8 +56,8 @@ export function Booking({ errors: showErrors = false }: { errors?: boolean }) {
     <ScrollView style={{ backgroundColor: theme.color("page-background") }}>
       <Column padding="20" gap="24" safeArea={["top"]}>
         <Column gap="4">
-          <Heading variant="heading-strong-l">Book a table</Heading>
-          <Text variant="body-default-s" onBackground="neutral-weak">
+          <Heading textVariant="heading-strong-l">Book a table</Heading>
+          <Text textVariant="body-default-s" onBackground="neutral-weak">
             Morning Coffee, Kazinczy utca 14
           </Text>
         </Column>
@@ -82,7 +82,7 @@ export function Booking({ errors: showErrors = false }: { errors?: boolean }) {
             <Select
               label="Party"
               value={party}
-              onSelect={(v) => setParty(String(v))}
+              onValueChange={(v) => setParty(String(v))}
               options={["1", "2", "3", "4", "5", "6"].map((n) => ({ value: n, label: n }))}
             />
             <Input label="Time" defaultValue="19:30" />

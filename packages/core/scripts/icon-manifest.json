@@ -255,6 +255,10 @@
     "family": "hi2",
     "symbol": "HiOutlineEnvelope"
   },
+  "mapPin": {
+    "family": "hi2",
+    "symbol": "HiOutlineMapPin"
+  },
   "maximize": {
     "family": "hi2",
     "symbol": "HiOutlineArrowsPointingOut"
@@ -310,6 +314,10 @@
   "personRemove": {
     "family": "hi2",
     "symbol": "HiOutlineUserMinus"
+  },
+  "phone": {
+    "family": "hi2",
+    "symbol": "HiOutlinePhone"
   },
   "play": {
     "family": "hi2",

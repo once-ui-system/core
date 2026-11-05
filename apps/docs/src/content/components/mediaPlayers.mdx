@@ -22,8 +22,9 @@ component, as in an audio player that has no visual counterpart at all.
 
 ## Importing
 
-Both live on the `./components/*` subpath rather than the root barrel, so they
-are not pulled into every bundle that imports something from Once UI.
+Both live on the `@once-ui-system/core/media` subpath rather than the root
+barrel, so they are not pulled into every bundle that imports something from
+Once UI. They need no optional peer (only `MediaUpload` there uses `compressorjs`).
 
 <CodeBlock
   marginTop="16"
@@ -31,8 +32,7 @@ are not pulled into every bundle that imports something from Once UI.
   codes={[
     {
       code:
-`import { MediaAudioPlayer } from "@once-ui-system/core/components/MediaAudioPlayer";
-import { MediaVideoPlayer } from "@once-ui-system/core/components/MediaVideoPlayer";`,
+`import { MediaAudioPlayer, MediaVideoPlayer } from "@once-ui-system/core/media";`,
       language: "tsx",
       label: "Import"
     }

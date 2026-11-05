@@ -598,6 +598,42 @@
     }
 }
 
+/* showIn follows the nearest theme. On its own, [data-theme="light"]
+   .dark-flex hides a dark-only element inside a dark section of a light page
+   too; each ancestor theme deeper outweighs the one above, to three levels
+   (a light section on a dark page, then dark or invert inside it). */
+[data-theme="light"] [data-theme="dark"],
+[data-theme="dark"] [data-theme="light"] [data-theme="dark"] {
+    .dark-flex {
+        display: flex;
+    }
+
+    .dark-grid {
+        display: grid;
+    }
+
+    .light-flex,
+    .light-grid {
+        display: none;
+    }
+}
+
+[data-theme="dark"] [data-theme="light"],
+[data-theme="light"] [data-theme="dark"] [data-theme="light"] {
+    .light-flex {
+        display: flex;
+    }
+
+    .light-grid {
+        display: grid;
+    }
+
+    .dark-flex,
+    .dark-grid {
+        display: none;
+    }
+}
+
 [data-solid-style="plastic"] {
     --solid-inset-distance: -1rem;
     --solid-inset-size:      1rem;
@@ -700,7 +736,9 @@
     --brand-solid-weak:           var(--function-brand-600);
 
     --brand-on-solid-strong:      var(--static-black);      
-    --brand-on-solid-medium:      var(--function-brand-1100);
+    /* The darkest brand step, as on-solid-weak's 200: 1100 is near-white
+       and read 1.9:1 on step 700. */
+    --brand-on-solid-medium:      var(--function-brand-100);
     --brand-on-solid-weak:        var(--function-brand-200);
 }
 

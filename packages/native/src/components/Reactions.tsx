@@ -245,7 +245,7 @@ export interface ReactionsProps extends Omit<FlexProps, "children"> {
   /** The add button's name. */
   addLabel?: string;
   /** The group's name. */
-  ariaLabel?: string;
+  "aria-label"?: string;
   /**
    * Finds the row in end-to-end tests. Each chip gets `${testID}-${value}`, the
    * add button `${testID}-add`, and in the open picker each option
@@ -309,7 +309,10 @@ function RollingCount({
         transform: [{ translateY: enter.interpolate({ inputRange: [0, 1], outputRange: [8, 0] }) }],
       }}
     >
-      <Text variant={variant as "label-default-s"} style={{ color, fontVariant: ["tabular-nums"] }}>
+      <Text
+        textVariant={variant as "label-default-s"}
+        style={{ color, fontVariant: ["tabular-nums"] }}
+      >
         {value}
       </Text>
     </Animated.View>
@@ -455,7 +458,7 @@ export const Reactions: RefComponent<ReactionsProps, ViewRef> = forwardRef<ViewR
       disabled = false,
       renderGlyph,
       addLabel = "Add reaction",
-      ariaLabel = "Reactions",
+      "aria-label": ariaLabel = "Reactions",
       testID,
       ...flex
     },
@@ -613,7 +616,7 @@ export const Reactions: RefComponent<ReactionsProps, ViewRef> = forwardRef<ViewR
                 size={size}
                 rounded
                 variant="secondary"
-                ariaLabel={addLabel}
+                aria-label={addLabel}
                 disabled={disabled}
                 testID={testID && `${testID}-add`}
               />

@@ -33,26 +33,28 @@ const tracks = [
 
 describe("Scrubber", () => {
   it("is a plain seek bar with no tracks", () => {
-    render(<Scrubber duration={10000} value={2500} onChange={() => {}} />, { wrapper: wrap });
+    render(<Scrubber duration={10000} value={2500} onValueChange={() => {}} />, { wrapper: wrap });
     const slider = screen.getByRole("slider");
     expect(slider).toHaveAttribute("aria-valuemax", "10000");
     expect(slider).toHaveAttribute("aria-valuenow", "2500");
   });
 
   it("formats the elapsed and total time", () => {
-    render(<Scrubber duration={125000} value={65000} onChange={() => {}} />, { wrapper: wrap });
+    render(<Scrubber duration={125000} value={65000} onValueChange={() => {}} />, {
+      wrapper: wrap,
+    });
     expect(screen.getByText("1:05")).toBeInTheDocument();
     expect(screen.getByText("2:05")).toBeInTheDocument();
   });
 
   it("grows an hours field only when it needs one", () => {
-    render(<Scrubber duration={3725000} value={0} onChange={() => {}} />, { wrapper: wrap });
+    render(<Scrubber duration={3725000} value={0} onValueChange={() => {}} />, { wrapper: wrap });
     expect(screen.getByText("1:02:05")).toBeInTheDocument();
   });
 
   it("seeks with the keyboard", () => {
     const onChange = vi.fn();
-    render(<Scrubber duration={10000} value={5000} onChange={onChange} />, { wrapper: wrap });
+    render(<Scrubber duration={10000} value={5000} onValueChange={onChange} />, { wrapper: wrap });
     const slider = screen.getByRole("slider");
     fireEvent.keyDown(slider, { key: "ArrowRight" });
     expect(onChange).toHaveBeenLastCalledWith(5100);
@@ -66,13 +68,13 @@ describe("Scrubber", () => {
 
   it("clamps keyboard seeking to the timeline", () => {
     const onChange = vi.fn();
-    render(<Scrubber duration={10000} value={0} onChange={onChange} />, { wrapper: wrap });
+    render(<Scrubber duration={10000} value={0} onValueChange={onChange} />, { wrapper: wrap });
     fireEvent.keyDown(screen.getByRole("slider"), { key: "ArrowLeft" });
     expect(onChange).toHaveBeenLastCalledWith(0);
   });
 
   it("positions a block by time, not by layout", () => {
-    render(<Scrubber duration={10000} value={0} onChange={() => {}} tracks={tracks} />, {
+    render(<Scrubber duration={10000} value={0} onValueChange={() => {}} tracks={tracks} />, {
       wrapper: wrap,
     });
     const block = screen.getByText("Zoom").parentElement as HTMLElement;
@@ -86,10 +88,10 @@ describe("Scrubber", () => {
       <Scrubber
         duration={10000}
         value={0}
-        onChange={() => {}}
+        onValueChange={() => {}}
         tracks={tracks}
         selected={null}
-        onSelect={onSelect}
+        onSelectedChange={onSelect}
       />,
       { wrapper: wrap },
     );
@@ -104,7 +106,7 @@ describe("Scrubber", () => {
       <Scrubber
         duration={10000}
         value={0}
-        onChange={() => {}}
+        onValueChange={() => {}}
         tracks={tracks}
         onBlockChange={onBlockChange}
         onGestureStart={onGestureStart}
@@ -129,7 +131,7 @@ describe("Scrubber", () => {
       <Scrubber
         duration={10000}
         value={0}
-        onChange={() => {}}
+        onValueChange={() => {}}
         tracks={tracks}
         onBlockChange={onBlockChange}
       />,
@@ -150,7 +152,7 @@ describe("Scrubber", () => {
       <Scrubber
         duration={10000}
         value={0}
-        onChange={() => {}}
+        onValueChange={() => {}}
         onBlockChange={onBlockChange}
         tracks={[
           {
@@ -177,7 +179,7 @@ describe("Scrubber", () => {
       <Scrubber
         duration={10000}
         value={0}
-        onChange={() => {}}
+        onValueChange={() => {}}
         tracks={[{ id: "zooms", blocks: [], onAdd }]}
       />,
       { wrapper: wrap },
@@ -194,7 +196,7 @@ describe("Scrubber", () => {
       <Scrubber
         duration={10000}
         value={0}
-        onChange={() => {}}
+        onValueChange={() => {}}
         tracks={tracks}
         onBlockContextMenu={onBlockContextMenu}
       />,

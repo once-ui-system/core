@@ -31,7 +31,7 @@ export function Post() {
       <Column padding="20" gap="8">
         <Row vertical="center" horizontal="between">
           <User name="Kisbéka Bistro" subline="2 hours ago" avatarProps={{ value: "KB" }} />
-          <Text variant="label-default-s" onBackground="neutral-weak">
+          <Text textVariant="label-default-s" onBackground="neutral-weak">
             Pinned
           </Text>
         </Row>

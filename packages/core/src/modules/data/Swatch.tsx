@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import { Row } from "../../components/Row";
-import { useDataTheme } from "../../contexts/DataThemeProvider";
-import { RadiusSize, SpacingToken } from "../../types";
-import { ChartVariant } from "./interfaces";
+import { Row } from "../../components/Row.js";
+import { useDataTheme } from "../../contexts/DataThemeProvider.js";
+import { RadiusSize, SpacingToken } from "../../types.js";
+import { ChartVariant } from "./interfaces.js";
 
 export interface SwatchProps {
   color: string;
@@ -12,7 +12,7 @@ export interface SwatchProps {
   variant?: ChartVariant;
 }
 
-export const Swatch: React.FC<SwatchProps> = ({ color, size = "m", variant: variantProp }) => {
+export const Swatch = ({ color, size = "m", variant: variantProp }: SwatchProps) => {
   // Read the theme on every render: as a default parameter the hook ran only
   // when `variant` was omitted.
   const theme = useDataTheme();

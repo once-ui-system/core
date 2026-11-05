@@ -5,7 +5,6 @@ import type React from "react";
 import {
   createContext,
   type FocusEvent,
-  forwardRef,
   type KeyboardEvent,
   type PointerEvent,
   type ReactNode,
@@ -15,12 +14,16 @@ import {
   useRef,
   useState,
 } from "react";
-import type { SpacingToken } from "../types";
-import { Column } from "./Column";
+import { useStyle } from "../contexts/ThemeProvider.js";
+import type { SpacingToken } from "../types.js";
+import type { Density } from "../utils/density.js";
+import { tokenLength } from "../utils/layoutClasses.js";
+import { Column } from "./Column.js";
 import styles from "./Nav.module.scss";
-import { Row } from "./Row";
+import { Row } from "./Row.js";
 
-type NavDensity = "compact" | "normal" | "spacious";
+/** The theme-wide density (`style.density`), which a Nav follows unless it sets its own. */
+type NavDensity = Density;
 type NavVariant = "solid" | "subtle" | "minimal";
 
 interface NavStyle {
@@ -110,7 +113,9 @@ const useNavStyle = () => {
 interface NavProps extends React.ComponentProps<typeof Column> {
   /**
    * How tight the rows sit: 32, 40 or 48px tall. Compact is the dashboard
-   * size; it also drops the text to the small label.
+   * size; it also drops the text to the small label. Left out, the theme's
+   * `density` (ThemeProvider, `style.density` in the config); set, it wins
+   * for this Nav.
    */
   density?: NavDensity;
   /**
@@ -134,7 +139,7 @@ interface NavProps extends React.ComponentProps<typeof Column> {
    * moves. Touch never opens it.
    */
   expandOnHover?: boolean;
-  /** How wide `expandOnHover` opens: a number of rem or a spacing token. */
+  /** How wide `expandOnHover` opens: a number on the px/token scale (default 256) or a spacing token. */
   expandedWidth?: number | SpacingToken;
 }
 
@@ -143,60 +148,59 @@ interface NavProps extends React.ComponentProps<typeof Column> {
  * NavItem, NavGroup and NavSection inside it. The rows still work without it,
  * at the defaults.
  */
-const Nav = forwardRef<HTMLDivElement, NavProps>(
-  (
-    {
-      density = "normal",
-      variant = "solid",
-      rail = true,
-      collapsed = false,
-      expandOnHover = false,
-      expandedWidth = 16,
-      className,
-      style,
-      children,
-      ...column
-    },
-    ref,
-  ) => {
-    const { expanded, handlers } = useHoverExpand(collapsed && expandOnHover, column);
-    const iconsOnly = collapsed && !expanded;
-    return (
-      <NavContext.Provider value={{ density, variant, rail, collapsed: iconsOnly }}>
-        <Column
-          ref={ref}
-          as="nav"
-          fillWidth={!collapsed}
-          gap={DENSITY[density].gap}
-          data-density={density}
-          data-variant={variant}
-          data-collapsed={collapsed ? (expanded ? "expanded" : "collapsed") : undefined}
-          className={classNames(
-            collapsed && styles.collapsed,
-            collapsed && expandOnHover && styles.expandable,
-            expanded && styles.expanded,
-            className,
-          )}
-          style={
-            collapsed && expandOnHover
-              ? ({
-                  "--nav-expanded-width":
-                    typeof expandedWidth === "number"
-                      ? `${expandedWidth}rem`
-                      : `var(--static-space-${expandedWidth})`,
-                  ...style,
-                } as React.CSSProperties)
-              : style
-          }
-          {...column}
-          {...handlers}
-        >
-          {children}
-        </Column>
-      </NavContext.Provider>
-    );
-  },
-);
+const Nav = ({
+  ref,
+  density: own,
+  variant = "solid",
+  rail = true,
+  collapsed = false,
+  expandOnHover = false,
+  expandedWidth = 256,
+  className,
+  style,
+  children,
+  ...column
+}: NavProps) => {
+  const theme = useStyle().density;
+  // One scale for the theme and the Nav: an unknown value falls back to normal.
+  const density: NavDensity = own ?? (theme in DENSITY ? theme : "normal");
+  const { expanded, handlers } = useHoverExpand(collapsed && expandOnHover, column);
+  const iconsOnly = collapsed && !expanded;
+  return (
+    <NavContext.Provider value={{ density, variant, rail, collapsed: iconsOnly }}>
+      <Column
+        ref={ref}
+        as="nav"
+        fillWidth={!collapsed}
+        gap={DENSITY[density].gap}
+        data-density={density}
+        data-variant={variant}
+        data-collapsed={collapsed ? (expanded ? "expanded" : "collapsed") : undefined}
+        className={classNames(
+          collapsed && styles.collapsed,
+          collapsed && expandOnHover && styles.expandable,
+          expanded && styles.expanded,
+          className,
+        )}
+        style={
+          collapsed && expandOnHover
+            ? ({
+                "--nav-expanded-width":
+                  typeof expandedWidth === "number"
+                    ? tokenLength(expandedWidth)
+                    : `var(--static-space-${expandedWidth})`,
+                ...style,
+              } as React.CSSProperties)
+            : style
+        }
+        {...column}
+        {...handlers}
+      >
+        {children}
+      </Column>
+    </NavContext.Provider>
+  );
+};
 
 type HoverHandlers = Pick<
   React.ComponentProps<typeof Column>,
@@ -284,35 +288,33 @@ interface NavSectionProps extends Omit<React.ComponentProps<typeof Column>, "tit
  * A titled block of rows: "Projects", "Pinned", "Resources". The heading is
  * small and dim at every variant so the rows stay the thing you read.
  */
-const NavSection = forwardRef<HTMLDivElement, NavSectionProps>(
-  ({ label, action, children, ...column }, ref) => {
-    const { sizes, collapsed } = useNavStyle();
-    return (
-      <Column ref={ref} fillWidth gap={sizes.gap} {...column}>
-        {(label || action) && (
-          <Row
-            fillWidth
-            vertical="center"
-            horizontal="between"
-            gap="8"
-            minHeight="24"
-            paddingLeft={sizes.toggle === "m" ? "12" : "16"}
-            paddingRight="4"
-            paddingTop="8"
-            textVariant={`label-default-${sizes.section}`}
-            onBackground="neutral-weak"
-            opacity={collapsed ? 0 : 100}
-            transition="micro-medium"
-          >
-            {label}
-            {action}
-          </Row>
-        )}
-        {children}
-      </Column>
-    );
-  },
-);
+const NavSection = ({ ref, label, action, children, ...column }: NavSectionProps) => {
+  const { sizes, collapsed } = useNavStyle();
+  return (
+    <Column ref={ref} fillWidth gap={sizes.gap} {...column}>
+      {(label || action) && (
+        <Row
+          fillWidth
+          vertical="center"
+          horizontal="between"
+          gap="8"
+          minHeight="24"
+          paddingLeft={sizes.toggle === "m" ? "12" : "16"}
+          paddingRight="4"
+          paddingTop="8"
+          textVariant={`label-default-${sizes.section}`}
+          onBackground="neutral-weak"
+          opacity={collapsed ? 0 : 100}
+          transition="micro-medium"
+        >
+          {label}
+          {action}
+        </Row>
+      )}
+      {children}
+    </Column>
+  );
+};
 
 NavSection.displayName = "NavSection";
 

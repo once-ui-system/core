@@ -1,6 +1,6 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { Badge, Chip, ProgressBar, RadioGroup, SegmentedControl, ThemeProvider } from "../src";
+import { ProgressBar, RadioGroup, SegmentedControl, Tag, ThemeProvider } from "../src";
 
 afterEach(cleanup);
 
@@ -8,12 +8,12 @@ const wrap = (node: React.ReactNode) => render(<ThemeProvider theme="light">{nod
 
 describe("controls", () => {
   it("picks one radio and turns the others off", () => {
-    const onChange = vi.fn();
+    const onValueChange = vi.fn();
     wrap(
       <RadioGroup
         label="Size"
         defaultValue="s"
-        onChange={onChange}
+        onValueChange={onValueChange}
         options={[
           { value: "s", label: "Small" },
           { value: "l", label: "Large" },
@@ -21,16 +21,16 @@ describe("controls", () => {
       />,
     );
     fireEvent.click(screen.getByRole("radio", { name: "Large" }));
-    expect(onChange).toHaveBeenCalledWith("l");
+    expect(onValueChange).toHaveBeenCalledWith("l");
     expect(screen.getByRole("radio", { name: "Large" }).getAttribute("aria-checked")).toBe("true");
     expect(screen.getByRole("radio", { name: "Small" }).getAttribute("aria-checked")).toBe("false");
   });
 
   it("selects a segment", () => {
-    const onChange = vi.fn();
+    const onValueChange = vi.fn();
     wrap(
       <SegmentedControl
-        onChange={onChange}
+        onValueChange={onValueChange}
         buttons={[
           { value: "day", label: "Day" },
           { value: "week", label: "Week" },
@@ -39,16 +39,16 @@ describe("controls", () => {
     );
     const week = screen.getAllByRole("tab")[1];
     fireEvent.click(week);
-    expect(onChange).toHaveBeenCalledWith("week");
+    expect(onValueChange).toHaveBeenCalledWith("week");
     expect(week.getAttribute("aria-selected")).toBe("true");
   });
 
-  it("removes a chip and shows a badge title", () => {
+  it("removes a toggle Tag (2.x Chip) and shows an announce Tag (2.x Badge)", () => {
     const onRemove = vi.fn();
     wrap(
       <>
-        <Chip label="Oat milk" onRemove={onRemove} />
-        <Badge title="New: loyalty cards" arrow />
+        <Tag selected label="Oat milk" onRemove={onRemove} />
+        <Tag variant="announce" label="New: loyalty cards" arrow />
       </>,
     );
     fireEvent.click(screen.getByRole("button", { name: "Remove Oat milk" }));

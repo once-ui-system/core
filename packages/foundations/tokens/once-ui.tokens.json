@@ -37,7 +37,7 @@
         "scheme-sand-200": "#171611",
         "scheme-sand-300": "#414039",
         "scheme-sand-400": "#5d5b54",
-        "scheme-sand-500": "#797770",
+        "scheme-sand-500": "#78766f",
         "scheme-sand-600": "#97958e",
         "scheme-sand-700": "#b6b4ad",
         "scheme-sand-800": "#d6d4cc",
@@ -52,7 +52,7 @@
         "scheme-slate-200": "#15151f",
         "scheme-slate-300": "#3e3f4a",
         "scheme-slate-400": "#595a66",
-        "scheme-slate-500": "#757683",
+        "scheme-slate-500": "#747582",
         "scheme-slate-600": "#9697a5",
         "scheme-slate-700": "#b2b3c1",
         "scheme-slate-800": "#d2d3e2",
@@ -1143,6 +1143,7 @@
     {
       "when": {},
       "tokens": {
+        "scaling": 1,
         "static-space-0": 0,
         "static-space-1": "1px",
         "static-space-2": "0.125rem",
@@ -1252,6 +1253,7 @@
         "scaling": "110"
       },
       "tokens": {
+        "scaling": 1.1,
         "static-space-1": "0.0688rem",
         "static-space-2": "0.1375rem",
         "static-space-4": "0.275rem",
@@ -1296,6 +1298,7 @@
         "scaling": "105"
       },
       "tokens": {
+        "scaling": 1.05,
         "static-space-1": "0.0656rem",
         "static-space-2": "0.1313rem",
         "static-space-4": "0.2625rem",
@@ -1340,6 +1343,7 @@
         "scaling": "95"
       },
       "tokens": {
+        "scaling": 0.95,
         "static-space-1": "0.0594rem",
         "static-space-2": "0.1187rem",
         "static-space-4": "0.2375rem",
@@ -1384,6 +1388,7 @@
         "scaling": "90"
       },
       "tokens": {
+        "scaling": 0.9,
         "static-space-1": "0.0563rem",
         "static-space-2": "0.1125rem",
         "static-space-4": "0.225rem",
@@ -2514,7 +2519,7 @@
         "brand-solid-medium": "{function-brand-700}",
         "brand-solid-weak": "{function-brand-600}",
         "brand-on-solid-strong": "{static-black}",
-        "brand-on-solid-medium": "{function-brand-1100}",
+        "brand-on-solid-medium": "{function-brand-100}",
         "brand-on-solid-weak": "{function-brand-200}"
       }
     },
@@ -2528,7 +2533,7 @@
         "brand-solid-medium": "{function-brand-700}",
         "brand-solid-weak": "{function-brand-600}",
         "brand-on-solid-strong": "{static-black}",
-        "brand-on-solid-medium": "{function-brand-1100}",
+        "brand-on-solid-medium": "{function-brand-100}",
         "brand-on-solid-weak": "{function-brand-200}"
       }
     },

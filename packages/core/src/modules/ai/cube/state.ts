@@ -13,7 +13,7 @@ import {
   smooth,
   snapQuarterTurns,
   type Vec3,
-} from "./math";
+} from "./math.js";
 
 export type CubeState = "idle" | "listening" | "thinking" | "speaking" | "sleeping";
 export type CubeMood =

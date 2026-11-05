@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Row, CountFx } from "@once-ui-system/core";
+import { Row } from "@once-ui-system/core";
+import { CountFx } from "@once-ui-system/fx";
 
 export const CountFxDecimalExample = () => {
   const [value1, setValue1] = useState<number>(0);
@@ -20,20 +21,20 @@ export const CountFxDecimalExample = () => {
     <Row fillWidth m={{direction:"column"}} gap="32">
       <Row fillWidth>
         <CountFx 
-          variant="display-strong-m" 
+          textVariant="display-strong-m" 
           value={value1} 
           decimals={2}
-          speed={2000} 
+          duration={2000} 
           effect="simple" 
           easing="ease-out" 
         />
       </Row>
       <Row fillWidth>
         <CountFx 
-          variant="display-strong-m" 
+          textVariant="display-strong-m" 
           value={value2} 
           decimals={2}
-          speed={2000} 
+          duration={2000} 
           separator="," 
           effect="simple" 
           easing="ease-out"

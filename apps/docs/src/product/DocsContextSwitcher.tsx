@@ -1,6 +1,6 @@
 "use client";
 
-import { Column, DropdownWrapper, Icon, Line, Option, Row, Tag, Text } from "@once-ui-system/core";
+import { Column, Dropdown, Icon, Line, Option, Row, Tag, Text } from "@once-ui-system/core";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { counterpartSlug, PLATFORMS, platformOfPath } from "@/resources/platforms";
@@ -19,13 +19,13 @@ export function flattenSlugs(items: SlugTree[]): string[] {
 function VersionTag({ status }: { status: string }) {
   if (status === "stable")
     return (
-      <Tag size="s" scheme="brand">
+      <Tag size="s" tone="brand">
         Latest
       </Tag>
     );
   if (status === "beta")
     return (
-      <Tag size="s" scheme="warning">
+      <Tag size="s" tone="warning">
         Beta
       </Tag>
     );
@@ -51,7 +51,7 @@ export function DocsContextSwitcher({ slugs }: { slugs: string[] }) {
   if (PLATFORMS.length < 2 && VERSIONS.length < 2) return null;
 
   return (
-    <DropdownWrapper
+    <Dropdown
       fillWidth
       open={open}
       onOpenChange={setOpen}
@@ -84,82 +84,81 @@ export function DocsContextSwitcher({ slugs }: { slugs: string[] }) {
             <Icon name={platform.icon} size="s" onBackground="neutral-strong" />
           </Row>
           <Column fillWidth gap="2">
-            <Text variant="label-strong-s" onBackground="neutral-strong">
+            <Text textVariant="label-strong-s" onBackground="neutral-strong">
               {platform.label}
             </Text>
-            <Text variant="label-default-xs" onBackground="neutral-weak">
+            <Text textVariant="label-default-xs" onBackground="neutral-weak">
               Version {currentVersion.label}
             </Text>
           </Column>
           <Icon name="chevronUpDown" size="xs" onBackground="neutral-weak" />
         </Row>
       }
-      dropdown={
-        <Column fillWidth padding="4" gap="2">
-          {PLATFORMS.length > 1 && (
-            <>
-              <Row paddingX="12" paddingTop="8" paddingBottom="4">
-                <Text variant="label-default-xs" onBackground="neutral-weak">
-                  Platform
-                </Text>
-              </Row>
-              {PLATFORMS.map((p) => (
+    >
+      <Column fillWidth padding="4" gap="2">
+        {PLATFORMS.length > 1 && (
+          <>
+            <Row paddingX="12" paddingTop="8" paddingBottom="4">
+              <Text textVariant="label-default-xs" onBackground="neutral-weak">
+                Platform
+              </Text>
+            </Row>
+            {PLATFORMS.map((p) => (
+              <Option
+                key={p.id}
+                value={`platform-${p.id}`}
+                selected={p.id === platform.id}
+                label={p.label}
+                prefix={<Icon name={p.icon} size="xs" onBackground="neutral-weak" />}
+                onClick={() => {
+                  setOpen(false);
+                  if (p.id !== platform.id)
+                    router.push(`/${counterpartSlug(pathname, p, slugs)}`);
+                }}
+              />
+            ))}
+          </>
+        )}
+        {PLATFORMS.length > 1 && VERSIONS.length > 1 && <Line marginY="4" />}
+        {VERSIONS.length > 1 && (
+          <>
+            <Row paddingX="12" paddingTop="8" paddingBottom="4">
+              <Text textVariant="label-default-xs" onBackground="neutral-weak">
+                Version
+              </Text>
+            </Row>
+            {VERSIONS.map((version) => {
+              const isCurrent = version.id === currentVersion.id;
+              const unavailable = !version.published && !isCurrent;
+              return (
                 <Option
-                  key={p.id}
-                  value={`platform-${p.id}`}
-                  selected={p.id === platform.id}
-                  label={p.label}
-                  prefix={<Icon name={p.icon} size="xs" onBackground="neutral-weak" />}
+                  key={version.id}
+                  value={`version-${version.id}`}
+                  selected={isCurrent}
+                  disabled={unavailable}
+                  // Each version is its own build, so this is a full page
+                  // load in the same tab; a link to another origin would
+                  // open a new one.
                   onClick={() => {
                     setOpen(false);
-                    if (p.id !== platform.id)
-                      router.push(`/${counterpartSlug(pathname, p, slugs)}`);
+                    if (!isCurrent && !unavailable)
+                      window.location.assign(versionHref(version, pathname));
                   }}
+                  label={version.label}
+                  description={
+                    unavailable
+                      ? "Site not live yet"
+                      : version.npmTag
+                        ? `Installs from npm @${version.npmTag}`
+                        : "Previous major version"
+                  }
+                  suffix={<VersionTag status={version.status} />}
                 />
-              ))}
-            </>
-          )}
-          {PLATFORMS.length > 1 && VERSIONS.length > 1 && <Line marginY="4" />}
-          {VERSIONS.length > 1 && (
-            <>
-              <Row paddingX="12" paddingTop="8" paddingBottom="4">
-                <Text variant="label-default-xs" onBackground="neutral-weak">
-                  Version
-                </Text>
-              </Row>
-              {VERSIONS.map((version) => {
-                const isCurrent = version.id === currentVersion.id;
-                const unavailable = !version.published && !isCurrent;
-                return (
-                  <Option
-                    key={version.id}
-                    value={`version-${version.id}`}
-                    selected={isCurrent}
-                    disabled={unavailable}
-                    // Each version is its own build, so this is a full page
-                    // load in the same tab; a link to another origin would
-                    // open a new one.
-                    onClick={() => {
-                      setOpen(false);
-                      if (!isCurrent && !unavailable)
-                        window.location.assign(versionHref(version, pathname));
-                    }}
-                    label={version.label}
-                    description={
-                      unavailable
-                        ? "Site not live yet"
-                        : version.npmTag
-                          ? `Installs from npm @${version.npmTag}`
-                          : "Previous major version"
-                    }
-                    suffix={<VersionTag status={version.status} />}
-                  />
-                );
-              })}
-            </>
-          )}
-        </Column>
-      }
-    />
+              );
+            })}
+          </>
+        )}
+      </Column>
+    </Dropdown>
   );
 }

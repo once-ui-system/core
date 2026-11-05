@@ -37,14 +37,16 @@ describe("RadioButton: interaction", () => {
   it("is picked by Space, Enter and a click, reporting true each time it becomes picked", async () => {
     const user = userEvent.setup();
     const onToggle = vi.fn();
-    const { unmount } = render(<RadioButton label="A" onToggle={onToggle} />, { wrapper: wrap });
+    const { unmount } = render(<RadioButton label="A" onCheckedChange={onToggle} />, {
+      wrapper: wrap,
+    });
     await user.tab();
     await user.keyboard(" ");
     expect(radio("A")).toBeChecked();
     expect(onToggle).toHaveBeenLastCalledWith(true);
     unmount();
 
-    render(<RadioButton label="B" onToggle={onToggle} />, { wrapper: wrap });
+    render(<RadioButton label="B" onCheckedChange={onToggle} />, { wrapper: wrap });
     await user.tab();
     await user.keyboard("{Enter}");
     expect(radio("B")).toBeChecked();
@@ -62,16 +64,16 @@ describe("RadioButton: interaction", () => {
     expect(onChange.mock.results[0].value).toBe(true);
   });
 
-  // Current behaviour, unlike a native radio: outside a RadioGroup a second
-  // press un-picks it ("un-choosing stays direct" in RadioButton.tsx).
-  it("un-picks on a second press when it stands alone, reporting false", async () => {
+  // 3.0: every change goes through the native input, so, as a native radio,
+  // a second press leaves it picked (2.x un-picked a lone RadioButton).
+  it("stays picked on a second press when it stands alone, as a native radio", async () => {
     const user = userEvent.setup();
-    const onToggle = vi.fn();
-    render(<RadioButton label="Twice" onToggle={onToggle} />, { wrapper: wrap });
+    const onCheckedChange = vi.fn();
+    render(<RadioButton label="Twice" onCheckedChange={onCheckedChange} />, { wrapper: wrap });
     await user.click(radio("Twice"));
     await user.click(radio("Twice"));
-    expect(onToggle.mock.calls).toEqual([[true], [false]]);
-    expect(radio("Twice")).not.toBeChecked();
+    expect(onCheckedChange.mock.calls).toEqual([[true]]);
+    expect(radio("Twice")).toBeChecked();
   });
 
   it("selects from a click on the label", async () => {
@@ -97,13 +99,16 @@ describe("RadioButton: interaction", () => {
   it("is controlled by `checked`", async () => {
     const user = userEvent.setup();
     const onToggle = vi.fn();
-    const { rerender } = render(<RadioButton label="C" checked={false} onToggle={onToggle} />, {
-      wrapper: wrap,
-    });
+    const { rerender } = render(
+      <RadioButton label="C" checked={false} onCheckedChange={onToggle} />,
+      {
+        wrapper: wrap,
+      },
+    );
     await user.click(radio("C"));
     expect(onToggle).toHaveBeenCalledWith(true);
     expect(radio("C")).not.toBeChecked();
-    rerender(<RadioButton label="C" checked onToggle={onToggle} />);
+    rerender(<RadioButton label="C" checked onCheckedChange={onToggle} />);
     expect(radio("C")).toBeChecked();
   });
 
@@ -113,8 +118,12 @@ describe("RadioButton: interaction", () => {
       const [value, setValue] = useState("a");
       return (
         <>
-          <RadioButton label="Apple" checked={value === "a"} onToggle={() => setValue("a")} />
-          <RadioButton label="Pear" checked={value === "p"} onToggle={() => setValue("p")} />
+          <RadioButton
+            label="Apple"
+            checked={value === "a"}
+            onCheckedChange={() => setValue("a")}
+          />
+          <RadioButton label="Pear" checked={value === "p"} onCheckedChange={() => setValue("p")} />
         </>
       );
     };
@@ -148,7 +157,7 @@ describe("RadioButton: interaction", () => {
     const onToggle = vi.fn();
     const { container } = render(
       <>
-        <RadioButton label="Off" disabled onToggle={onToggle} />
+        <RadioButton label="Off" disabled onCheckedChange={onToggle} />
         <button type="button">After</button>
       </>,
       { wrapper: wrap },

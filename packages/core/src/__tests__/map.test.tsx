@@ -2,8 +2,8 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { renderToString } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { LayoutProvider, ThemeProvider } from "../contexts";
-import { clusterPoints } from "../modules/map/cluster";
+import { LayoutProvider, ThemeProvider } from "../contexts/index.js";
+import { clusterPoints } from "../modules/map/cluster.js";
 
 /**
  * MapLibre needs WebGL, which jsdom lacks, so a stand-in records what the
@@ -139,7 +139,13 @@ vi.mock("maplibre-gl", () => {
   };
 });
 
-const { Map: MapView, MapMarker, MapMarkers, MapPin, MapPopup } = await import("../modules/map");
+const {
+  Map: MapView,
+  MapMarker,
+  MapMarkers,
+  MapPin,
+  MapPopup,
+} = await import("../modules/map/index.js");
 
 // The map loads its implementation lazily: wait until it has started.
 const settle = async () => {

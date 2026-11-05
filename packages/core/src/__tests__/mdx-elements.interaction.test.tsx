@@ -4,7 +4,6 @@ import { createElement, type ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { ToastProvider } from "../contexts/ToastProvider";
-import { mdxComponents } from "../modules/mdx/index";
 import {
   MdxHeading,
   MdxImage,
@@ -13,6 +12,7 @@ import {
   MdxParagraph,
   MdxTable,
 } from "../modules/mdx/MdxElements";
+import { mdxComponents } from "../modules/mdx/mdxComponents";
 import { expectNoAxeViolations } from "../test/axe";
 
 const Providers = ({ children }: { children: ReactNode }) => (

@@ -1,4 +1,4 @@
-import { schemes } from "../../../types";
+import { schemes } from "../../../types.js";
 
 /**
  * Returns a color from the schemes array with even distribution

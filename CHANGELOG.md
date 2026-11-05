@@ -11,6 +11,538 @@ Entries before 1.7.13 are reconstructed from GitHub releases and git history and
 incomplete; reconciling them against actual npm release history is a scheduled roadmap
 item (see `ROADMAP.md`, Week 4).
 
+## [3.0.0] - Unreleased
+
+Breaking. Built on the `feat/3-0-breaking-cleanup` branch; [MIGRATING.md](MIGRATING.md#2x--30)
+lists what to do and `scripts/codemod-3.0.mjs` does most of it.
+
+Pre-releases on npm `next` (`npm i @once-ui-system/core@next`), each with every
+entry below that had landed by then:
+
+- **3.0.0-beta.1** (2026-11-02), with `@once-ui-system/foundations`, `fx` and
+  `blocks` at 3.0.0-beta.1 too. New since beta.0: charts draw their own SVG,
+  so recharts is no longer a dependency (uninstall it); all shipped CSS in one
+  `@layer once-ui`, so an app's own CSS wins; `data-theme="invert"`; one import
+  path per component for Turbopack; the `once-ui-mcp` server; `Meta.generate`
+  canonical URLs; chart props (`xKey`, series labels, `valueFormat`, stacks,
+  horizontal bars), chart summaries and `Sparkline`; Map on 3.0; the cube
+  Mascot; page sections in blocks; fixes to Dialog, DatePicker, Select, Kbar,
+  Drawer, Dropdown, Media and OgCard.
+- **3.0.0-beta.0** (2026-10-21): the first 3.0 preview.
+
+### Added
+
+- **Tailwind CSS v4 adapter, `@once-ui-system/core/tailwind.css`.** Import it
+  before Tailwind (`@import "@once-ui-system/core/tailwind.css"; @import
+  "tailwindcss";`) and Once UI's tokens become Tailwind classes that follow the
+  theme: `bg-surface`, `bg-brand-strong`, `text-neutral-weak`,
+  `border-neutral-medium`, `rounded-m`, `shadow-l`, `font-heading`,
+  `text-body-m`. `dark:` follows Once UI's `data-theme`. Tailwind's preflight
+  sits under Once UI and its utilities over it, so a `className="ml-auto"` on a
+  Once UI component still wins and no component changes a pixel. Also at
+  `@once-ui-system/foundations/tailwind.css`.
+- **Globe and 3D buildings on `Map`.** `projection="globe"` curves the world when zoomed
+  out, and `buildings="3d"` raises buildings to their height from zoom 13, coloured from
+  the neutral surface up to the brand colour and repainted when the theme changes. A
+  controlled `viewport` that jumps to another city now flies there instead of gliding
+  (instant with reduced motion).
+- **`closeLabel` on `Drawer` and `Dialog`.** The close button's tooltip and accessible
+  name, for a UI that isn't in English. Defaults to "Close".
+- **An MCP server, `once-ui-mcp`.** It ships in the package and runs locally over
+  stdio (`npx -y -p @once-ui-system/core once-ui-mcp`), answering from the
+  installed version's `ai/` files. Its tools search components, return a
+  component's import, props and gotchas, resolve types, serve task bundles and
+  rules, and run the `once-ui-validate-ai-code` checks.
+- **One import path per public component: `@once-ui-system/core/components/<Name>`.**
+  Listed one by one for the modules the root re-exports, so unlike 2.x's
+  `./components/*` wildcard no internal module is public. The codemod keeps these
+  imports instead of moving them to the root.
+  Next 16 builds with Turbopack, which ignores `optimizePackageImports`. As a result, a
+  server component that imports `Button` from the package root shipped every client
+  component. In a Next 16.2 static export of a page with a Button and four layout
+  components, that was about 150 kB gzip of Once UI; with the subpath imports it was about
+  26 kB. Root imports are unchanged.
+- **`Mascot` turns into a cube while it works** (3.0.0-beta.1). `working="cube"` draws
+  the mascot in 3D, and while `state` is `thinking` it becomes the 2 × 2 Once UI cube,
+  scrambles and solves it with no face showing, shows the logo and softens back. `sides`
+  colors the faces (`classic`, `"tints"` of `color`, `mono`, or a color per side), `face="flat"`
+  paints the face on without light, and the gaps between pieces are hairline thin. Without
+  WebGL or with reduced motion the flat mascot stays. It survives React strict mode's
+  double effect, so it no longer falls back to the flat mascot in development.
+- **Poke the `Mascot`** (3.0.0-beta.1, as in 2.6.0). A click or tap squashes it with a
+  surprised face, flat or cube; `poke={false}` turns it off.
+- **Kawaii moods for `Mascot`** (3.0.0-beta.1, as in 2.6.0). `love`, `excited`, `laughing`,
+  `embarrassed`, `crying`, `angry` and `confused` draw an everyday mood plus effects: heart,
+  star or laughing eyes, blush, sweat, tears, an anger mark, and hearts, sparkles or a
+  question mark floating up. `effects` adds any of them to any mood (`effects={["blush"]}`)
+  or turns them off (`effects={false}`). Flat and cube draw the same glyphs.
+- **`@once-ui-system/foundations` is published** (3.0.0-beta.0 on `next`):
+  the design tokens, utility CSS, SCSS sources and `tokens.json` for stacks
+  without React. Core still inlines them, so a core app installs nothing new.
+- **`vertical="baseline"`** on Flex, Row and Column, and **`"auto"` margins**
+  (`marginLeft="auto"`, `marginX="auto"`, also in breakpoint objects), as classes.
+- **`error`, `errorMessage` and `size`** on Checkbox, Switch, RadioButton and
+  RadioGroup, as on Input: `aria-invalid`, a linked message, and a `Form size` that
+  reaches them (C6).
+- **`error`, `errorMessage` and `size`** on Slider, in both modes (C6): the fill and
+  thumb turn danger, the thumb is `aria-invalid` and described by the message, and
+  `size` (`xs` to `xl`, or the `Form`'s) sets the thumb and track.
+- **Charts** (LineChart, BarChart, LineBarChart, PieChart): `xKey`; series `label`
+  and `format`; `valueFormat` (`"compact"`, `"percent"`, `Intl.NumberFormatOptions`
+  or a function) and `locale` for the numbers on the axis and in the tooltip;
+  `stack` (`true` or `"percent"`) on LineChart and BarChart; BarChart
+  `orientation="horizontal"`; the `CurveType` and `ValueFormat` types.
+- **Chart summaries for screen readers**: each chart's plot is a `role="figure"`
+  (its legend buttons and keyboard focus stay inside it), named
+  by its title and a plain-language summary of its data in its `valueFormat` and
+  `locale` ("Revenue and Cost, Jan to Dec. Revenue: highest 12,400 in Aug, lowest
+  3,100 in Feb."; a pie: "Share by browser: Chrome 62%, Safari 21%."), with the data
+  as a visually hidden table inside the card. `summary` replaces the generated text
+  and `aria-label` the whole name. `ChartSummary` renders the table on its own.
+- **`Sparkline`**: a tiny trend line, area or bar strip for stat tiles and table
+  cells, in pure SVG (no recharts; it renders on the server and is on the root
+  barrel as well as `/data`). `data` as numbers or rows with `valueKey`, `variant`,
+  `color`, `width`/`height` (a number is px), `curve`, `showLast`, `min`/`max`, and a
+  generated `aria-label` ("Trend from 120 to 340, high 360") in `valueFormat` and
+  `locale`.
+- **Input `reveal`** (default `true`): `type="password"` shows a show/hide toggle in the
+  suffix, as PasswordInput did.
+- **Table** has DataTable's API, plus `searchable` (with `searchPlaceholder`), row
+  `actions`, `onRowClick`, `rowClassName`, `cellClassName`, a custom `loadingState`,
+  `showFirstLast`, and rows given as arrays, read by column position.
+- **Mode props on survivors** (F6): DatePicker and DateInput `range` (DatePicker
+  `months`), Slider `range`, Kbd `keys`, Grid `masonry`, StatusIndicator `pulse` (with
+  `tone`, `pulseSize`), TypeFx `mode="fade"` (with `state`), Setting `control`/`open`
+  and `axes`, MegaMenu `collapseBelow` (with `onClose`).
+- **`FlexLayoutProps`, `GridLayoutProps`, `FlexElementProps`, `FlexPropsOf<E>`,
+  `PolymorphicProps<T, Own>`** for components built on the layout primitives.
+- **`@once-ui-system/fx` and `@once-ui-system/blocks`** (F8, F10), packages of their
+  own with core as a peer: the sixteen effects, and Banner, Book, LogoCloud,
+  ScrollToTop, StylePanel and StyleOverlay. See Changed.
+- **Page sections in `@once-ui-system/blocks`**: `HeroSection`, `FeaturesSection`,
+  `AboutSection`, `StatsSection`, `TestimonialsSection`, `TeamSection`, `PricingSection`,
+  `FaqSection`, `LogosSection`, `CtaSection` and `ContactSection`, each with two to four
+  `layout`s and a content `width`, reading their props defensively (stored content from
+  an editor or a model never throws, and never shows sample copy). `Sections` renders a
+  stored list (`items={[{ type, props }]}`), passing unknown types to `renderCustom`;
+  `resolveHref` rewrites every link for a base path or language prefix.
+  `sectionSchemas` describes each one as plain JSON (fields, layouts, a sample) for an
+  editor panel or an agent. Ported from Aveiro's sections, which Tavilio and the housing
+  marketplace duplicate.
+- **`phone` and `mapPin` icons** in the built-in set.
+- **CodeBlock `actions`**: controls of your own in the header, before copy.
+- **`density`** in the theme (`once-ui.config` `style`, ThemeProvider, ThemeInit),
+  written as `data-density` on `<html>`: `"compact"`, `"normal"` (the default) or
+  `"spacious"`. Every Button, IconButton, ToggleButton, SegmentedControl, Tag,
+  Switch, Checkbox, RadioButton, RadioGroup and Slider given no `size` (and, for a
+  field, no `Form` size) takes s, m or l through CSS, so it works in server
+  components and before any JS runs; a `size` always wins. Unless `scaling` is set,
+  the density also picks it: 95, 100 or 105. StylePanel has a Density row beside
+  Scaling, and the React Native preview takes `density` too. Input and the fields
+  built on it join once their s size lands.
+- **`--scaling`**, the theme's scaling as a factor (1, or 0.9 to 1.1 under
+  `[data-scaling]`), which a number on a size, spacing or offset prop multiplies.
+- **`Arrow` stays public**, with a docs page and an AI spec entry: the arrow that
+  slides in while its `trigger` element is hovered, for a whole-card link or a hover
+  card. It takes Flex's layout props (a number is on the token scale), `scale` and
+  `color="onBackground" | "onSolid"`, and is hidden from assistive technology.
+- **`TextProps` and `HeadingProps` carry `children` and the element's HTML attributes**,
+  so a wrapper typed with them compiles (`(props: TextProps) => <Text {...props} />`,
+  the Next MDX-components pattern). They keep 3.0's leaf set (no padding) and Text's
+  `as`, typed by the element. `HeadingProps` is exported.
+- **`PhotoViewer`.** A full-screen viewer for a set of photos: a photo grows out of the
+  tile it opened from and closes back into it, swipe moves between photos (with resistance
+  at the ends), swipe down closes, pinch, double-tap or double-click zooms and drag pans.
+  Arrows and Escape work from the keyboard, focus returns to the tile, and reduced motion
+  turns every animation into a short fade. `items` (`{ src, alt, title?, caption? }`),
+  `index` / `defaultIndex` / `onIndexChange`, `onClose`, and an opt-in `deepLink` that keeps
+  the photo in the URL so it can be shared and Back closes it. Images go through the Image
+  adapter, and `Media` does not import it. 3.0 only.
+
+### Removed
+
+- **The `recharts` peer dependency** (and its `peerDependenciesMeta` entry). The
+  charts no longer use it; uninstall it unless your own code does.
+- **`Particle`**, the 2.0 alias of `ParticleFx`.
+- **Dialog `hideClose`.** Use `showClose={false}`, the name `Drawer` uses.
+- **CodeBlock's root `highlight`.** Set it on each entry of `codes`.
+- **`ariaLabel`** on `IconButton`, `Spinner`, `Switch`, `Scrubber` and `StatusIndicator`.
+  The native `aria-label` names the same element, with the same defaults.
+- **`BaseBreakpointProps`**, unused since 2.0.
+- **Dotted parts** (F11): `Sortable.Item` and `Sortable.Handle` are `SortableItem` and
+  `SortableHandle`, and StylePanel's sections are `StylePanelRoot`, `StylePanelBrand`
+  and so on, plain named exports. A dotted part fails from a server component; the
+  codemod renames every use.
+- **Internal exports** that reached the root barrel: `resetScrollLockState`,
+  `resetAdapterWarning`, `warnIfFrameworkUnadapted`.
+- **Exports that were parts of other components** (F7): `ServerFlex`, `ClientFlex`,
+  `ServerGrid`, `ClientGrid`, `Cursor`, `ElementType`, `InteractiveDetails`, `Toaster`,
+  `ArrowNavigation` (use the `useArrowNavigation` hook), with
+  `useArrowNavigationContext` and `withArrowNavigation`. The modules stay inside the
+  package; the codemod reports each import with what to use instead.
+- **`DialogProvider`.** Stacked dialogs never read its state; a `stack` Dialog makes
+  the one beneath it inert by itself. The codemod unwraps it.
+- **CodeBlock `styleButton`** (F10): it rendered `StyleOverlay`, now in
+  `@once-ui-system/blocks`, which core cannot import. Pass
+  `actions={<StyleOverlay>…</StyleOverlay>}`; the codemod reports each one.
+- **Internal helpers from the root barrel**: `dev`, `getLastOpenedDropdown`,
+  `setLastOpenedDropdown`, `clearLastOpenedDropdown`, `MissingDependency`,
+  `escapeHtml`, `safeScriptJson`, `sanitizeHref`.
+- **Components that merged** (F1, F2, F4, F5, F6). The codemod rewrites each one; see
+  [MIGRATING.md § 10](MIGRATING.md#10-components-that-merged).
+  - `Modal` → `Dialog variant="sheet"`, with a `backdrop` slot on both variants.
+  - `Swiper` → `Carousel mode="snap"`.
+  - `ScrollContainer` → `Scroller` track mode (`draggable`, `infinite`, `markers`,
+    `proximity`, `active`, `tile`); `AutoScroll` → `Scroller auto={{ speed, hover, reverse }}`.
+  - `InfoTip` → `Tooltip content`; a Tooltip with no children renders the info icon.
+  - `Hover` → `HoverCard placement="cover"`; `CursorCard` → `HoverCard placement="cursor"`
+    (`cursorPlacement`, `delay`, `hideDelay`).
+  - `DropdownWrapper` → `Dropdown`, whose menu is now the children; the 2.x bare
+    `Dropdown` panel is internal. `ContextMenu` → `Dropdown openOn="contextmenu"`.
+  - `EmojiPickerDropdown` → `EmojiPicker trigger`; `UserMenu` → `User dropdown`.
+  - `DataTable` → `Table`, and 2.x `Table data={{ headers, rows }}` → `Table columns rows`
+    (F6). Sorting cycles on the header and the "Sorted by" line is gone; paging is
+    Pagination's with its per-page select; default loading is skeleton rows.
+  - `DateRangePicker` → `DatePicker range` (`dual` → `months={2}`); `DateRangeInput`
+    → `DateInput range`; `RangeSlider` → `Slider range`.
+  - `PasswordInput` → `Input type="password"`, toggle kept. Every password Input now
+    has the toggle; `reveal={false}` restores the plain field.
+  - `KeyTip` → `Kbd keys label`; `MasonryGrid` → `Grid masonry`; `Pulse` →
+    `StatusIndicator pulse`; `FadingLettersFx` → `TypeFx mode="fade"` (`text` →
+    `words`, `animationState` → `state`, `messageIdx` → `delay`).
+  - `SettingGroup` → `Setting control open`; `SettingAxes` → `Setting axes`.
+  - `MobileMegaMenu` → `MegaMenu collapseBelow="always"`; `collapseBelow="m"` renders
+    the bar and the accordion and switches with CSS.
+- **`Badge` and `Chip`** (F3): both are `Tag` now. Badge is `<Tag variant="announce">`
+  (`title` → `label`, `icon` → `prefixIcon`), Chip is a Tag with `selected`, `onClick` or
+  `onRemove` (`iconButtonProps` → `removeButtonProps`). The codemod rewrites both; see
+  [MIGRATING.md § 9](MIGRATING.md#9-badge-and-chip-are-tag).
+- **Button and IconButton `variant="quaternary"`, `"danger"`, `"success"` and `"warning"`**
+  and their icon-only `color`. `quaternary` is `ghost`; the rest are a `tone`.
+- **The subset subpaths and deep imports** (B2): `@once-ui-system/core/components`,
+  `/components/*`, `/contexts`, `/hooks`, `/icons`, `/types`, `/interfaces`, `/utils` and
+  `/modules`. They re-exported parts of the root (two module identities for one
+  context in a bundle that used both), and `/components/*` made internals such as
+  `FormContext` and `StylePanelSections` public. Import from the root, `/media` or
+  `/emoji`; the codemod's import pass (`scripts/codemod-3.0-imports.mjs`) moves them.
+  See [MIGRATING.md § 12](MIGRATING.md#12-packaging-and-imports).
+- **`main` and every `require` condition** (B2). They pointed at ESM files, so
+  `require()` of them always threw. Each entry is now `{ types, default }`.
+- **The `sass` peer, and the `.module.scss` sources in the tarball** (B5). The build
+  has shipped compiled `.module.css` since 2.1 and no shipped file imports Sass; the
+  sources and `dist/styles/breakpoints.scss` only served the workspace's watch build,
+  which now runs the CSS compile itself (`pnpm dev`). `sideEffects` is `["*.css"]`.
+
+### Changed
+
+- **2.x through 2.6 and main's unreleased fixes are in 3.0** (merged before the freeze):
+  `Nav` icon rail, `Logo` monogram, `Mask` feather, `emphasis` on Flex and Grid,
+  `LogoLoader`, stacked chat messages and image thumbnails, mesh, link and dismiss on
+  blocks' `Banner`, tinted danger `Option`s, and the leading-field focus fix on `Dropdown`.
+- **`Tag variant="announce"` is a compact pill with a beam.** 2.x's Badge redesign: 28px
+  tall at m, `label-default-s` on the surface colour with a hairline neutral border, the
+  icon in brand, and `effect` is a short brand-to-accent beam round the edge (faster on
+  hover, still under reduced motion) instead of the sweeping shine.
+
+- **Spacing, offset and grid-column classes are spelled out** (MIGRATING.md §
+  14). `p-16` is `padding-16`, `mt-8` `margin-top-8`, `top-16`
+  `offset-top-16`, `columns-2` `grid-columns-2`, at every breakpoint. Props are
+  unchanged. Tailwind CSS uses the short names with another scale, and its
+  rule would land on Once UI's elements in an app that has both. The codemod
+  rewrites hand-written classes.
+- **Every stylesheet names the layer order `properties, theme, base, once-ui,
+  components, utilities`.** A cascade layer keeps the place where its name
+  first appears, so whichever file loads first, Tailwind's preflight stays
+  under Once UI and Tailwind's utilities over it. Without Tailwind the other
+  layers are empty.
+- **Charts draw their own SVG; recharts is gone.** LineChart, BarChart,
+  LineBarChart and PieChart render with Once UI's own renderer (scales, stacks,
+  d3's curves, ticks and bar slots as recharts placed them), so the chart is in
+  the server HTML: no lazy chunk, no wait for `document.fonts.ready`, no
+  `MissingDependency` fallback. The plot sizes itself to its container with a
+  ResizeObserver, drawing at 640 × 320 until it is measured. The props are
+  unchanged. New in the browser: the arrow keys (and Home, End, Escape) move
+  the tooltip through the points, a legend entry is a button that hides or
+  shows its series (or slice), and the entry animations follow
+  `prefers-reduced-motion`. The four charts' own code is 13.1 KB gzipped
+  (minified, React external), where recharts alone was 126 KB. A PieChart's
+  legend now lists slices in data order in their own colours (it sorted them
+  by name and coloured them by position), LineBarChart's legend names the line
+  first, and a top-left legend is offset past the y axis with `left` instead
+  of a `calc()` jsdom cannot compute.
+- **`Meta.generate` names every page's canonical URL**, `baseURL` plus `path`,
+  where 2.x wrote one only alongside language alternates. `canonical: false` leaves it
+  out. Call it in pages, not layouts: Next passes a layout's canonical down to every
+  page without metadata of its own. `once-ui-validate-ai-code` flags `Meta.generate`
+  in a layout (rule `Meta.layout`). A `baseURL` without a scheme now gives an absolute
+  `og:url` (`https://site.com/`, was `site.com/`).
+- **Once UI's CSS is in a cascade layer, `once-ui`**, in core, fx, blocks and
+  foundations. An app's unlayered CSS and Tailwind utilities now override Once UI
+  without `!important`; Once UI's own rules still meet by specificity and order inside
+  the layer. See MIGRATING.md for the two cases that behave differently.
+- **Chart `date.onChange` is `date.onRangeChange`** (C8), on the 3.0 rule that
+  `onChange` only names the native DOM event. The codemod renames it in an inline
+  `date` object. Chart tooltips and axes write numbers through `valueFormat` in
+  `locale` when either is set; without them they draw as 2.x did. With no
+  `series`, the x column is no longer drawn as a series, and `label` never is.
+- **Real ESM** (B3): `"type": "module"`, and every relative import in `dist` names its
+  file (`./Button.js`, `../data/emoji-data.json` with `{ type: "json" }`), built with
+  `module`/`moduleResolution: NodeNext` as `packages/cli` is. Plain Node resolves the
+  package, and publint and arethetypeswrong (`esm-only`) pass; the component entries
+  still import their CSS modules, which takes a bundler or a CSS loader, while
+  `/config`, `/server` and `/next` (with `next` installed) load in plain Node, also
+  through `require()` on Node 22.12+.
+  The CLIs are `scripts/init-agent.cjs` and `scripts/validate-ai-code.cjs` (the bin
+  names are unchanged), and the build scripts are `.cjs` too.
+- **The effects are `@once-ui-system/fx`** (F8): `BlobFx`, `CelebrationFx`,
+  `CountdownFx`, `CountFx`, `Effect`, `FlipFx`, `GlitchFx`, `HoloFx`, `LetterFx`,
+  `MatrixFx`, `ParticleFx`, `RevealFx`, `ShineFx`, `TiltFx`, `TypeFx` and `WeatherFx`,
+  with their props types. **`Banner`, `Book`, `LogoCloud`, `ScrollToTop`, `StylePanel`
+  (with `useStylePanel` and its types) and `StyleOverlay` are `@once-ui-system/blocks`**
+  (F10). Core's root no longer exports them, with no alias; install the packages and
+  import from them (the codemod's import pass moves the imports and names the packages
+  to add). Core imports none of them: ProgressBar, RadialGauge, DataTooltip, Carousel,
+  DatePicker and Table use internal parts, and CodeBlock's `styleButton` is gone (see
+  Removed). The harness documents both packages, each component with its package as
+  `importFrom` and a manifest `imports` row that says `install`. Book links through
+  `SmartLink` (`unstyled`), so a linked cover gets SmartLink's focus ring. The docs
+  blocks (`apps/docs/src/blocks`) stay in the docs app for now.
+- **`EmojiPicker` is on `@once-ui-system/core/emoji`** (F9), so its emoji data (272 KB
+  of JSON) is out of the root graph. **`MediaAudioPlayer`, `MediaVideoPlayer`,
+  `Scrubber` and `CompareImage` are on `@once-ui-system/core/media`**, beside
+  `MediaUpload`, instead of the root or `/components/<Name>`. The harness's
+  `importFrom`, manifest `imports` and rules say so.
+- **A smaller tarball** (B6): no second copy of `ai/`, `agent/` and the CLI scripts in
+  `dist/`, no `dist/test` helpers, no source or declaration maps (they pointed at the
+  `src/` the package does not ship), and no `ai/catalog.seed.json` or
+  `ai/eval-tasks.md` (generator input). `npm pack`: 1604 files, 1.05 MB packed and
+  6.46 MB unpacked before; 817 files, 0.71 MB and 3.75 MB after.
+- **`as` is typed by the element** on Flex, Row, Column, Grid and VisuallyHidden (G1):
+  `<Row as="a" href>`, `<Column as="form" onSubmit>` and `<Column as="ul" ref>` type
+  their attributes and ref. Other components no longer accept an untyped `as`
+  inherited from `DisplayProps`; wrap them. `React.ComponentProps<typeof Text>` (and
+  Heading) is no longer `any`.
+- **Lists and buttons reset** (G4): `as="ul"`/`"ol"` renders without bullets or
+  indent, `as="button"` without browser chrome and with `type="button"` by default.
+  `List` keeps its markers.
+- **Charts are generic over the row type** (G3): `data: T[]`, `series.key: keyof T`.
+  `DateRange`'s fields are optional.
+- **Prop aliases collapsed** (G5): `dark`/`light` are `showIn`; `textSize`,
+  `textWeight` and `textType` are `textVariant`; Text/Heading `size` is `textVariant`,
+  and `weight` now swaps a `textVariant`'s weight instead of being ignored beside it.
+- **Leaf components take a small prop set** (G2): Button, IconButton, ToggleButton, the
+  fields, Switch, Checkbox, RadioButton, Text, Heading, Icon, Avatar, Spinner,
+  StatusIndicator, Kbd, InlineCode, ProgressBar, Logo, SmartLink and NavIcon take
+  `LeafProps` (margins, `flex`, `fillWidth`, `position` and offsets, `className`,
+  `style`) and their own props. Padding, background, border, radius, sizes, `hide` and
+  breakpoints are type errors on them; put them on a Row or Column around the leaf. The
+  codemod wraps where that renders the same and reports the rest. `TextBreakpointProps`,
+  `ButtonBreakpointProps` and `InputBreakpointProps` are removed.
+
+- **`tone` is the semantic palette and `variant` is appearance only** (E1, E2):
+  `brand | accent | neutral | info | success | warning | danger`. It replaces Button and
+  IconButton's tone variants, Feedback and Toast `variant` (and `addToast({ variant })`),
+  Tag and Pulse `scheme`, Timeline items' `state`, Scrubber tracks' `scheme`, Table
+  actions' `variant="danger"`, and the gauges' named `hue` (a hue pair is `hueRange`).
+  StatusIndicator and Avatar `statusIndicator` take the palette hue as `scheme` (was
+  `color`). See [MIGRATING.md § 8](MIGRATING.md#8-tone-and-variant).
+- **Text, Heading and everything built on them take `textVariant`** (E2) for the type
+  style: Text, Heading, ListItem, CountFx, ShineFx, TypeFx and FadingLettersFx `variant`.
+- **One colour resolver** (E3): Background, ParticleFx, the charts and the gauges read a
+  colour the same way: a token (`brand-weak`), a data hue, a `--custom-property` or any
+  raw CSS colour. `#fff` and `brand-weak` used to be dropped in some of them.
+- **Sizes run `xs` to `xl`** (E4) on Tag, StatusIndicator, Pulse, Accordion and Pagination.
+- **Tag `selected` defaults to false** (core#198). 2.x's Chip defaulted to true, so a
+  Chip with no `selected` was drawn and announced as pressed.
+- **Dialog and Drawer share one overlay core.** Escape closes only the innermost open
+  overlay, focus returns as an overlay starts closing (Dialog waited for its 300ms
+  exit), the panel's Tab containment is FocusTrap's, and the dialog is described by
+  its `description` (`aria-describedby`). The sheet variant takes `description` and
+  `footer` like the centred one.
+- **An uncontrolled `EmojiPicker trigger` closes on a pick**; 2.x's
+  `EmojiPickerDropdown` closed only when controlled.
+- **React 19 is the floor** for `react` and `react-dom`.
+- **`ref` is an ordinary prop** (B7): no component uses `forwardRef` or `React.FC` any
+  more. Each takes `ref` beside its other props, typed by the element it reaches, so
+  `ref`, `ComponentProps<typeof X>["ref"]` and `ComponentRef<typeof X>` are what they
+  were in 2.x. The components are plain functions now, not `forwardRef` objects.
+- **Fields and pickers report their value through `onValueChange`.** NumberInput,
+  ColorInput, TagInput, DateInput, DateRangeInput, DatePicker and DateRangePicker
+  `onChange(value)` and Select `onSelect(value)` become `onValueChange(value)`, same
+  signature (the codemod renames them). `onChange` is now the native event, forwarded
+  to the real input on NumberInput, ColorInput, TagInput's text field and DateInput.
+- **Input, Textarea and PasswordInput take `onValueChange(value: string)`**, and
+  `validate` and the character count work on an uncontrolled field.
+- **`defaultValue` on every field and picker**: NumberInput, ColorInput, DateInput,
+  DateRangeInput, Select, DatePicker, DateRangePicker and OTPInput. DatePicker's
+  `defaultDate`, which was never read, is renamed `defaultValue` and works.
+- **`open` / `defaultOpen` / `onOpenChange`** on Select, DateInput and DateRangeInput.
+- **OTPInput takes `value` / `defaultValue` / `onValueChange(code)`**, and its div
+  props and `className` go on the root instead of every digit field.
+- **A cleared `value` clears DateInput**; it used to keep showing the last date.
+- **Checkbox, RadioButton and Switch report through `onCheckedChange(checked)`**
+  (was `onToggle`, same signature), and their native input props (`onChange`,
+  `onBlur`, `name`, `required`, …) now land on the real `<input>`, which every
+  change goes through, so form libraries' `register()` works. They used to be
+  spread onto the label and dropped.
+- **Controls report their value through `onValueChange`.** RadioGroup,
+  SegmentedControl, Tabs, Slider, RangeSlider, ThemeSwitcher and StylePanel
+  `onChange`, and Scrubber `onChange`, become `onValueChange`; Scrubber `onSelect`
+  becomes `onSelectedChange`; Pagination `onChange` becomes `onPageChange`. Same
+  signatures (the codemod renames them). Slider's `onChange` is now the range
+  input's native event, and it adds `onValueCommit`. StylePanel is controlled by
+  `value` alone.
+- **Accordion and NavGroup take `open` / `defaultOpen` / `onOpenChange(open)`**
+  (was `onToggle()`, no argument). An Accordion is controlled whenever `open` is
+  set, which fixes AccordionGroup `autoCollapse={false}` items that could never
+  open; AccordionGroup items take `defaultOpen`. The codemod renames and reports
+  each use.
+- **Kbar takes `open` / `defaultOpen` / `onOpenChange`**, and `inputSize` is `size`
+  on Kbar and KbarContent.
+- **RevealFx and Carousel `revealedByDefault` is `defaultRevealed`.**
+- **SegmentedControl** takes a group `disabled`, its handler is optional, and a
+  controlled one stays on `value` until the parent changes it.
+- **`generateMetadata` is `createMetadata`** (G6): the old name is Next's route-segment
+  convention, so re-exporting it from a page made Next call it. `Meta.generate` is
+  unchanged; the codemod renames the import and every call.
+- **ProgressBar, RadialGauge, DataTooltip, Carousel, DatePicker and Table no longer use
+  `CountFx`, `RevealFx` or `ShineFx`** (F8 prerequisite): internal count-up, reveal and
+  shine parts look and time the same, so the effects can move to `@once-ui-system/fx`.
+- **A number is on the token scale on every size, spacing and offset prop** (D2):
+  `width`, `height` and their min/max, `minColumnWidth`, `padding*`, `margin*`, `gap`,
+  `top`/`right`/`bottom`/`left`, `translateX`/`Y`, `blur` and `backdropBlur` on Flex,
+  Grid, Text, Heading and everything built on them, in breakpoint objects too. `n`
+  renders as the token `"n"` does: 16 = `"16"` = 1rem, scaled by `data-scaling`
+  (a step of the scale is written as its `var(--static-space-n)`; any other number
+  as `var(--ou-n-<n>)`, which the same element declares as
+  `calc(n/16 rem * var(--scaling, 1))`, so the length itself is never math holding a
+  `var()`: jsdom's `getComputedStyle` throws on that, and with it every role query in
+  an app's jsdom tests). At the default root size and scaling a
+  number is that many px. They were 16× that in 2.x, so `maxWidth={40}` was 640px
+  and is 2.5rem now; the codemod writes `maxWidth="40rem"`, which renders exactly as
+  before. Tokens stay strings (`"16"` is the spacing step); write `"40px"` for a
+  length that must not scale. A breakpoint's `padding`/`margin` is written as the
+  four sides. Border widths stay px.
+- **Any CSS length string works**: `CSSUnit` and the size parsers accept px, rem, em,
+  ch, %, vh/vw/dvh/svh/lvh and their widths, vmin/vmax, cqw/cqh, and `calc()`, `min()`,
+  `max()`, `clamp()` and `var()`. `width="320px"` and `maxWidth="40rem"` were type
+  errors that rendered no width at all; spacing (`padding="1.5rem"`) takes them too.
+- **One unit per kind on the outliers** (D3): Avatar `size`, Media `height`, Carousel
+  `thumbnail.height`, Animation `slideUp`/`Down`/`Left`/`Right`, DropdownWrapper and
+  ContextMenu `minWidth`/`maxWidth`, Setting `controlWidth`, SettingAxes `axisWidth`,
+  CodeBlock `codeHeight` and Fade `blur` read a number on the token scale (was rem)
+  and also take a CSS length; so do Dialog `minHeight`, Animation `blur`, AutoScroll
+  `scrollGap`, StatusIndicator `pulseSize`, DataThemeProvider `height` and RevealFx
+  `translateY`. Mask `x`/`y` (was a percentage) and `radius` (was vh) and Background
+  `gradient.x`/`y` (a percentage) and `gradient.width`/`height` (a quarter-percent of
+  the gradient layer) read a number on the token scale; percentages are strings, of
+  the element (`x="50%"`, `width: "100%"`, the default). Device pixels stay px:
+  `borderWidth`, Background `lines.thickness`, Media and Carousel `sizes`,
+  InfiniteScroll `threshold`, MatrixFx `size`/`spacing`, and LinearGauge and
+  RadialGauge `width`/`height` (the drawing's own units).
+- **Durations, delays and intervals are milliseconds everywhere** (D4): CelebrationFx
+  and WeatherFx `duration`, MatrixFx `bulge.duration` and FlipFx `autoFlipInterval`
+  were seconds. The codemod multiplies literals by 1000.
+- **`speed` is only a multiplier** (D5), `1` being the designed pace, with
+  `"slow"`/`"medium"`/`"fast"` = 0.5/1/2 on every effect that takes it (MatrixFx,
+  WeatherFx, CelebrationFx, ParticleFx, Effect, AutoScroll, GlitchFx, LetterFx). Where
+  it was a length of time it is renamed: RevealFx `speed` (ms, or `"fast"` 1000,
+  `"medium"` 2000, `"slow"` 3000), ShineFx and CountFx `speed` become `duration` (ms),
+  and TypeFx `speed` (ms per character) becomes `charDuration`. ParticleFx's default
+  is now `1` for the same drift as 2.x's `0.3`. AutoScroll, GlitchFx and LetterFx take
+  a number too; GlitchFx `speed` now takes effect (its classes never reached the
+  animated layers), and the shared scale moves GlitchFx `"slow"` to a 5s cycle (was
+  3.5s) and `"fast"` to 1.25s (was 1.5s), and LetterFx `"fast"` to 15ms steps (was 10ms).
+
+- **`@once-ui-system/fx` and `@once-ui-system/blocks` peer on core `^3.0.0-0`**
+  (was `workspace:*`, which npm cannot read from a packed tarball), so a 3.0
+  prerelease of core satisfies them and a 2.x core does not.
+- **Codemod**, from a trial migration of two 2.x apps: Spinner's layout props move to
+  the `<Row center>` its root was; an Icon's `solid` joins its box, and a box outside
+  a layout parent is `<Row as="span" inline fit>`; Card, Mask and Fade count as layout
+  parents; padding on Text and Heading in running text, and on ListItem, CountFx,
+  ShineFx and TypeFx, becomes the token's inline style; leaf `zIndex`/`opacity`
+  literals and InlineCode `textVariant` become classes, and Kbd `fit` goes; ParticleFx
+  `speed` literals are divided by 0.3; Accordion `open` without a handler becomes
+  `defaultOpen`; `<core.X>` through a namespace gets the same renames, merges and
+  package moves as `<X>`; ScrollContainer's `{...TILE}` const spread becomes `tile`;
+  `const dataStyle` and Mask `radius="50"` are converted; Text `size` becomes the
+  class 2.x wrote. It now reports numbers on components imported through `@/` or `~/`,
+  same-file number consts used as sizes, a core namespace used as a component
+  registry, and merged names left as component-map keys; no longer reports comments
+  and JSX text as uses of an old name; and keeps multi-line imports and a closing tag
+  on its own line as written.
+
+- **Codemod, round 5**, from the satellite upgrades: 2.x JSX inside JSON strings
+  (generator anchors, templates) is rewritten when it is a byte-exact copy of source
+  the run migrated, and reported otherwise; `ElementType` becomes a `<button
+  type="button">`, an `<a target="_blank">` or a `Flex` where its props say which,
+  and is reported with the snippet otherwise; a project's own `dev` logger takes
+  over core's removed `dev` import; a hide-only leaf in a fragment is wrapped in
+  `<Row hide>`; an fx/blocks/media/emoji spread of a core namespace gets its four
+  namespaces; ParticleFx `speed={expr}` is divided by 0.3; table columns and
+  CodeBlock highlights keep one entry per line. It now reports Text `size` passed
+  through an app's own wrapper, a bare Feedback `icon`, Accordion `open={expr}`,
+  `{ startDate: Date; endDate: Date }` handler annotations, generated prop strings,
+  and Kbd padding strings 2.x dropped as a dead class; it names each file that
+  imports a package it asks you to add, and ends with a formatter note. Names an
+  app declares itself (an own `Badge`) and literal-typed values that need nothing
+  are no longer reported.
+- **Skeleton's lengths are lengths**: `width`, `height`, `minHeight` and
+  `maxHeight` take a number, a static spacing token or a CSS length; `width="m"`
+  is a type error (in 2.x it was a percentage step). `minWidth` and `maxWidth`
+  take Flex's values, container sizes included: `<Skeleton maxWidth="l">` type-checks
+  and renders `.max-width-l` as on Flex. `<Skeleton width={12} height={2.5}>` reads as
+  `"12"` and `"2.5"` on the token scale; the codemod writes the 2.x numbers as rem.
+- **Nav follows the theme's `density`** when given none; its own `density` wins.
+- **The light theme's weak text reaches 4.5:1 on sand and slate**: step 500 of each
+  is a hair darker (sand `#78766f`, slate `#747582`).
+- **AI harness**: `ai/components` holds a slice for each spec component and no
+  other (29 slices for removed 2.x components are gone, and the generator prunes
+  them); bundles list neighbouring props of one type on one line.
+
+### Fixed
+
+- **`MegaMenu` panels stay inside the window.** A wide panel under a trigger near the
+  right edge used to open past the side of the screen; it now moves left until it fits,
+  16px from the edge, and a panel wider than the window keeps its left edge in view.
+- **A DatePicker with no date hydrates in any month.** A page prerendered on 31 October
+  and opened on 1 November threw React #418, "October" against "November". The month and
+  year labels of a picker that opens on the clock's month now render on the client, as
+  its day grid already did.
+- **Two PieCharts on one page** no longer share gradient ids (one chart's colours
+  could paint the other's slices), and a chart's x-axis ticks no longer search the
+  whole data set each (slow on long series).
+- **A Button or IconButton nobody can press now says so in development.** With no
+  `onClick`, `href` or button `type` it renders a div, which is right as decoration inside
+  a clickable Card and a dead control anywhere else. Lighthouse found such dead controls on
+  Aveiro's pages. Development now warns when no interactive element is around one.
+- **Pages with a CodeBlock or chart no longer collapse after hydration.** ThemeProvider,
+  DataThemeProvider and LayoutProvider updated urgently as they mounted, so React threw
+  away the server HTML of every lazy CodeBlock, chart, Map and MediaUpload still loading
+  and showed the empty fallback until its chunk came. Docs component pages lost and
+  regained 4,700 px of code examples (Lighthouse CLS 0.28 on mobile). Mount-time updates
+  are transitions now, and the context values are memoized.
+- **Media `priority` fetches the image at high priority under Next.** The Next adapter
+  passed it on as next/image's `priority`, which Next 16 deprecated for `preload`: a
+  preload link, with the image itself at normal priority. It now renders
+  `loading="eager"` and `fetchPriority="high"`, as the DOM default already did.
+- **Icon no longer brings the popover machinery with it.** Its `tooltip` prop imported
+  HoverCard, so Animation and floating-ui shipped with every component that draws an
+  icon: Button alone dropped from about 33 to 22 kB gzipped. The hover card now loads
+  only for an icon that has a tooltip; server-rendered pages keep their HTML while it
+  loads.
+- **Several announcement tags on one page** no longer share `id="badge"`; each arrow
+  follows hover on its own tag (2.x Badge).
+- **RadioGroup `error` and `errorMessage` reach its radios**: each is `aria-invalid`
+  and draws the danger look, as a RadioButton's own `error` does.
+- **CodeBlock's header icons are grey again** (`neutral-weak`), as in 2.x; the tone
+  split had dropped IconButton `color`, which drew them white.
+- **CodeBlock's collapsed fade blurs 0.5rem again**, not `100rem`.
+- **Feedback draws no empty icon box** when its icon does not resolve.
+- **CodeBlock and HeadingNav render under jsdom**: their `calc()` lengths moved
+  into custom properties, so `getComputedStyle` no longer throws in tests.
+
 ## [Unreleased]
 
 ### Added

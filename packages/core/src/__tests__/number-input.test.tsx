@@ -60,7 +60,7 @@ describe("NumberInput follows its value", () => {
           id="n"
           label="Amount"
           value={value}
-          onChange={(next) => {
+          onValueChange={(next) => {
             onChange(next);
             setValue(next);
           }}
@@ -111,7 +111,7 @@ describe("NumberInput follows its value", () => {
           id="n"
           label="Percent"
           value={value}
-          onChange={(next) => setValue(Math.min(next, 100))}
+          onValueChange={(next) => setValue(Math.min(next, 100))}
         />
       );
     };
@@ -137,10 +137,10 @@ describe("NumberInput follows its value", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     const { rerender } = render(
-      <NumberInput id="n" label="Count" value={1} onChange={onChange} />,
+      <NumberInput id="n" label="Count" value={1} onValueChange={onChange} />,
       { wrapper: wrap },
     );
-    rerender(<NumberInput id="n" label="Count" value={9} onChange={onChange} />);
+    rerender(<NumberInput id="n" label="Count" value={9} onValueChange={onChange} />);
 
     await user.click(screen.getByRole("button", { name: "Increment value" }));
     expect(onChange).toHaveBeenLastCalledWith(10);

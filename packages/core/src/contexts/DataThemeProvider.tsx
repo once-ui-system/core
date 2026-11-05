@@ -1,12 +1,23 @@
 "use client";
 
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { ChartMode, ChartVariant } from "../modules/data/interfaces";
+import {
+  createContext,
+  ReactNode,
+  startTransition,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { ChartMode, ChartVariant } from "../modules/data/interfaces.js";
+import type { CSSUnit } from "../types.js";
 
 export interface ChartOptions {
   variant: ChartVariant;
   mode: ChartMode;
-  height: number;
+  /** The chart's height: a number is on the token scale (`384` is 24rem), or any CSS length (`"24rem"`). */
+  height: number | CSSUnit;
   axis: {
     stroke: string;
   };
@@ -35,7 +46,7 @@ export interface DataThemeProviderProps extends OnceUIDataStyleConfig {
 const defaultChartOptions: ChartOptions = {
   variant: "gradient",
   mode: "categorical",
-  height: 24,
+  height: "24rem",
   axis: {
     stroke: "var(--neutral-alpha-weak)",
   },
@@ -96,14 +107,18 @@ export function DataThemeProvider({
   useEffect(() => {
     const storedOptions = getStoredChartOptions();
 
-    if (Object.keys(storedOptions).length > 0) {
-      setChartOptionsState((prev) => ({
-        ...prev,
-        ...storedOptions,
-      }));
-    }
+    // A transition, so Suspense boundaries still hydrating keep their server
+    // HTML (see ThemeProvider).
+    startTransition(() => {
+      if (Object.keys(storedOptions).length > 0) {
+        setChartOptionsState((prev) => ({
+          ...prev,
+          ...storedOptions,
+        }));
+      }
 
-    setMounted(true);
+      setMounted(true);
+    });
   }, []);
 
   const applyDataVizAttribute = (mode: ChartMode, saveToLocalStorage = false) => {
@@ -129,25 +144,33 @@ export function DataThemeProvider({
     }
   }, [chartOptions.mode, mounted]);
 
-  const handleSetChartOptions = (newOptions: Partial<ChartOptions>) => {
-    setChartOptionsState((prevOptions) => {
-      const updatedOptions = {
-        ...prevOptions,
-        ...newOptions,
-      };
+  const handleSetChartOptions = useCallback(
+    (newOptions: Partial<ChartOptions>) => {
+      setChartOptionsState((prevOptions) => {
+        const updatedOptions = {
+          ...prevOptions,
+          ...newOptions,
+        };
 
-      if (newOptions.mode && mounted && typeof window !== "undefined") {
-        applyDataVizAttribute(newOptions.mode, true);
-      }
+        if (newOptions.mode && mounted && typeof window !== "undefined") {
+          applyDataVizAttribute(newOptions.mode, true);
+        }
 
-      return updatedOptions;
-    });
-  };
+        return updatedOptions;
+      });
+    },
+    [mounted],
+  );
 
-  const value: DataThemeState = {
-    ...chartOptions,
-    setChartOptions: handleSetChartOptions,
-  };
+  // Memoized so a render that changes nothing hands consumers the same object
+  // (see ThemeProvider).
+  const value: DataThemeState = useMemo(
+    () => ({
+      ...chartOptions,
+      setChartOptions: handleSetChartOptions,
+    }),
+    [chartOptions, handleSetChartOptions],
+  );
 
   return <DataThemeContext.Provider value={value}>{children}</DataThemeContext.Provider>;
 }

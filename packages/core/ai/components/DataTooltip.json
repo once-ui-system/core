@@ -10,7 +10,8 @@
   "DataTooltip": "React.ReactNode",
   "date": "DateConfig = { format: \"MMM d\" }",
   "showSwatches": "boolean = true",
-  "variant": "ChartVariant = gradient"
+  "variant": "ChartVariant = gradient",
+  "formatValue": "(value: number, dataKey?: string) => string"
  },
  "tags": [
   "data",
@@ -37,11 +38,11 @@
    "format": "string",
    "presets": "PresetsConfig",
    "selector": "boolean",
-   "onChange": "(range: DateRange) => void"
+   "onRangeChange": "(range: DateRange) => void"
   },
   "DateRange": {
-   "startDate": "!Date | undefined",
-   "endDate": "!Date | undefined"
+   "startDate": "Date",
+   "endDate": "Date"
   },
   "PresetsConfig": {
    "display": "!boolean",

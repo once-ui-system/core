@@ -94,14 +94,14 @@ export const MusicPlayer: React.FC<React.ComponentProps<typeof Column>> = ({ ...
         left="0"
         top="0"
         mask={{
-          x: 50,
-          y: -50,
-          radius: 100,
+          x: "50%",
+          y: "-50%",
+          radius: "100vh",
         }}
         gradient={{
           display: true,
           opacity: 50,
-          x: 50,
+          x: "50%",
           y: 0,
           colorStart: "brand-background-strong",
           colorEnd: "static-transparent",
@@ -112,7 +112,7 @@ export const MusicPlayer: React.FC<React.ComponentProps<typeof Column>> = ({ ...
           <Column padding="24" gap="24" fill horizontal="center" align="center">
             <Row fillWidth horizontal="between" vertical="center" gap="12">
               <IconButton tooltip="Like" tooltipPosition="bottom" variant="ghost" icon="heart" />
-              <Text truncate variant="label-default-s" onBackground="brand-medium">
+              <Text truncate textVariant="label-default-s" onBackground="brand-medium">
                 Design Engineers Club
               </Text>
               <Row minWidth="32" height="32" padding="8" vertical="end" horizontal="between">
@@ -132,14 +132,14 @@ export const MusicPlayer: React.FC<React.ComponentProps<typeof Column>> = ({ ...
                 priority
                 sizes="320px"
                 radius="l"
-                maxWidth={16}
+                maxWidth="16rem"
                 aspectRatio="1/1"
                 border
                 src="/images/docs/vibe-coding-dark.jpg"
                 alt="Music player album cover"
               />
               <Column fillWidth center gap="8">
-                <Text onBackground="brand-weak" variant="heading-strong-xl">
+                <Text onBackground="brand-weak" textVariant="heading-strong-xl">
                   Vibe Coding Theme
                 </Text>
                 <User avatarProps={{ src: "/images/creators/texz.jpg", size: "s" }} name="Texz" />
@@ -170,10 +170,10 @@ export const MusicPlayer: React.FC<React.ComponentProps<typeof Column>> = ({ ...
         <Column fill radius="l" background="surface" border overflow="hidden">
           <Row fillWidth center padding="16">
             <Column fillWidth gap="2">
-              <Text onBackground="neutral-weak" variant="body-default-xs">
+              <Text onBackground="neutral-weak" textVariant="body-default-xs">
                 Playing from:
               </Text>
-              <Text onBackground="neutral-strong" variant="heading-strong-xs">
+              <Text onBackground="neutral-strong" textVariant="heading-strong-xs">
                 Design Engineers Club
               </Text>
             </Column>
@@ -206,14 +206,14 @@ export const MusicPlayer: React.FC<React.ComponentProps<typeof Column>> = ({ ...
                     alt={`${track.title} album cover`}
                   />
                   <Column fillWidth>
-                    <Text truncate onBackground="neutral-strong" variant="label-strong-m">
+                    <Text truncate onBackground="neutral-strong" textVariant="label-strong-m">
                       {track.title}
                     </Text>
-                    <Text truncate onBackground="neutral-weak" variant="body-default-xs">
+                    <Text truncate onBackground="neutral-weak" textVariant="body-default-xs">
                       {track.artist}
                     </Text>
                   </Column>
-                  <Text onBackground="neutral-weak" variant="label-default-s">
+                  <Text onBackground="neutral-weak" textVariant="label-default-s">
                     {track.duration}
                   </Text>
                 </Card>

@@ -43,6 +43,7 @@ import {
   HiOutlineMagnifyingGlass,
   HiOutlineMap,
   HiOutlineMegaphone,
+  HiOutlineMoon,
   HiOutlinePaintBrush,
   HiOutlinePause,
   HiOutlinePencil,
@@ -133,6 +134,7 @@ export const iconLibrary = {
   bolt: HiOutlineBolt,
   linearGauge: HiOutlineChartBar,
   radialGauge: HiOutlineChartPie,
+  sparkline: HiOutlineArrowTrendingUp,
   basics: HiOutlineCube,
 
   // The names the blocks (src/blocks) and the MDX pages use. They compiled

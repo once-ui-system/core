@@ -16,22 +16,22 @@ A component for providing users with contextual information, alerts, and notific
   preview={
     <Column gap="16" fillWidth>
       <Feedback 
-        variant="info" 
+        tone="info" 
         title="Information" 
         description="This is an informational message for the user."
       />
       <Feedback 
-        variant="success" 
+        tone="success" 
         title="Success" 
         description="Your action has been completed successfully."
       />
       <Feedback 
-        variant="warning" 
+        tone="warning" 
         title="Warning" 
         description="Please be aware of this important notice."
       />
       <Feedback 
-        variant="danger" 
+        tone="danger" 
         title="Error" 
         description="Something went wrong. Please try again."
       />
@@ -45,17 +45,17 @@ A component for providing users with contextual information, alerts, and notific
     description="This is an informational message for the user."
 />
 <Feedback 
-    variant="success" 
+    tone="success" 
     title="Success" 
     description="Your action has been completed successfully."
 />
 <Feedback 
-    variant="warning" 
+    tone="warning" 
     title="Warning" 
     description="Please be aware of this important notice."
 />
 <Feedback 
-    variant="danger" 
+    tone="danger" 
     title="Error" 
     description="Something went wrong. Please try again."
 />`,
@@ -80,7 +80,7 @@ Feedback components can include an icon to enhance visual communication.
       />
       <Feedback 
         showIcon={false}
-        variant="warning"
+        tone="warning"
         title="Without Icon" 
         description="This feedback does not include an icon."
       />
@@ -95,7 +95,7 @@ Feedback components can include an icon to enhance visual communication.
 />
 <Feedback
     showIcon={false}
-    variant="warning"
+    tone="warning"
     title="Without Icon"
     description="This feedback does not include an icon."
 />`,
@@ -146,7 +146,7 @@ Add custom content to the feedback component.
   marginBottom="24"
   preview={
     <Feedback>
-      <Text variant="body-default-m" marginTop="4">This is custom content inside the Feedback component. You can add any components or elements here.</Text>
+      <Text textVariant="body-default-m" marginTop="4">This is custom content inside the Feedback component. You can add any components or elements here.</Text>
       <Button size="s">Action</Button>
     </Feedback>
   }
@@ -154,7 +154,7 @@ Add custom content to the feedback component.
     {
       code:
 `<Feedback>
-    <Text variant="body-default-m" marginTop="4">
+    <Text textVariant="body-default-m" marginTop="4">
       This is custom content inside the Feedback component. You can add any components or elements here.
     </Text>
     <Button size="s">
@@ -172,10 +172,10 @@ Add custom content to the feedback component.
 <PropsTable
   component="Feedback"
   describe={{
-    variant: "Severity, which sets the colour and the icon.",
+    tone: "Severity, which sets the colour and the icon. 2.x called it variant.",
     title: "Headline of the message.",
     description: "The message itself.",
-    showIcon: "Show the icon for the variant.",
+    showIcon: "Show the icon for the tone.",
     showCloseButton: "Let the reader dismiss it.",
     onClose: "Called when it is dismissed.",
     children: "Extra content under the description — an action, a list.",

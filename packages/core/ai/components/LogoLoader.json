@@ -22,10 +22,10 @@
  "mixinsRef": [],
  "types": {
   "LogoLoaderColor": [
-   "inherit",
    "neutral",
    "brand",
-   "accent"
+   "accent",
+   "inherit"
   ]
  }
 }

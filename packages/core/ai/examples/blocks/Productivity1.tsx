@@ -176,7 +176,7 @@ export const Productivity1 = () => {
                 tooltipPosition="bottom"
                 icon="bell"
               />
-              <Row position="absolute" top={0.15} right={0.15}>
+              <Row position="absolute" top="0.15rem" right="0.15rem">
                 <Row height="12" width="12" solid="brand-strong" radius="full" />
               </Row>
             </Row>
@@ -205,7 +205,7 @@ export const Productivity1 = () => {
           {issues.map((column, index) => (
             <Column
               key={index}
-              minWidth={20}
+              minWidth="20rem"
               border
               fillWidth
               paddingX="4"
@@ -247,23 +247,23 @@ export const Productivity1 = () => {
                   marginBottom="4"
                 >
                   <Row horizontal="between" vertical="center">
-                    <Text variant="label-default-s">{task.title}</Text>
+                    <Text textVariant="label-default-s">{task.title}</Text>
                     <AvatarGroup
                       avatars={task.assignee.avatars.map((src) => ({ src, size: "xs" }))}
                     />
                   </Row>
-                  <Text onBackground="neutral-weak" variant="label-default-s">
+                  <Text onBackground="neutral-weak" textVariant="label-default-s">
                     {task.description}
                   </Text>
                   <Row gap="4" paddingTop="8" vertical="center" horizontal="between">
                     <Row vertical="center" fillWidth gap="8">
                       <Icon name="code" size="xs" />
-                      <Text variant="body-default-xs" onBackground="neutral-weak">
+                      <Text textVariant="body-default-xs" onBackground="neutral-weak">
                         {task.project}
                       </Text>
                     </Row>
                     <Row vertical="center" gap="8" paddingRight="4">
-                      <Text variant="body-default-xs" onBackground="neutral-weak">
+                      <Text textVariant="body-default-xs" onBackground="neutral-weak">
                         {task.issuetype}
                       </Text>
                       <Row

@@ -1,3 +1,4 @@
+@use "../styles/density.scss" as density;
 @use "../styles/touch.scss" as touch;
 
 .button {
@@ -50,10 +51,14 @@
     padding: var(--static-space-2) var(--static-space-8);
 }
 
-.s {
+@mixin s {
     height: var(--static-space-24);
     min-height: var(--static-space-24);
     padding: var(--static-space-2) var(--static-space-8);
+}
+
+.s {
+    @include s;
 }
 
 .m {
@@ -62,16 +67,65 @@
     padding: var(--static-space-4) var(--static-space-8);
 }
 
-.l {
+@mixin l {
     height: var(--static-space-40);
     min-height: var(--static-space-40);
     padding: var(--static-space-8) var(--static-space-16);
+}
+
+.l {
+    @include l;
 }
 
 .xl {
     height: var(--static-space-48);
     min-height: var(--static-space-48);
     padding: var(--static-space-12) var(--static-space-20);
+}
+
+/* No `size`: m above, or the theme density's s or l (density.scss), with the
+   label padding, text, icons and corners ToggleButton.tsx picks per size. */
+.auto {
+    @include density.size(s) {
+        @include s;
+    }
+
+    @include density.parts(s) {
+        .label {
+            padding-left: var(--static-space-4);
+            padding-right: var(--static-space-4);
+        }
+    }
+
+    @include density.size(l) {
+        @include l;
+    }
+
+    @include density.parts(l) {
+        .label {
+            padding-left: var(--static-space-8);
+            padding-right: var(--static-space-8);
+            @include density.text(label, m);
+        }
+
+        .icon {
+            @include density.icon(s);
+        }
+    }
+}
+
+.autoRadius {
+    @include density.size(s) {
+        &:global(.radius-m) {
+            border-radius: var(--radius-s);
+        }
+    }
+
+    @include density.size(l) {
+        &:global(.radius-m) {
+            border-radius: var(--radius-l);
+        }
+    }
 }
 
 .ghost {

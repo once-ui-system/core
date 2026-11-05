@@ -101,14 +101,14 @@ export function PageList({
             />
           )}
           <Column fillWidth gap="4" vertical="center" paddingX="16" paddingY="12">
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               {formatSlug(page.slug)}
             </Text>
-            <Text variant="heading-strong-l" wrap="balance" onBackground="neutral-strong">
+            <Text textVariant="heading-strong-l" wrap="balance" onBackground="neutral-strong">
               {page.metadata.title}
             </Text>
             {description && page.metadata.summary && (
-              <Text variant="body-default-s" onBackground="neutral-medium" marginTop="12" wrap="balance">
+              <Text textVariant="body-default-s" onBackground="neutral-medium" marginTop="12" wrap="balance">
                 {page.metadata.summary}
               </Text>
             )}

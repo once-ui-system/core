@@ -13,6 +13,7 @@
   "surface": "SurfaceStyle",
   "transition": "TransitionStyle",
   "scaling": "ScalingSize",
+  "density": "Density",
   "bodySize": "BodySize",
   "bodyLineHeight": "BodyLineHeight",
   "desktopSize": "DeviceFontSize",
@@ -43,17 +44,17 @@
  "mixinsRef": [],
  "types": {
   "BodyLineHeight": [
-   "90",
    "100",
+   "90",
    "110",
    "120"
   ],
   "BodySize": [
-   "90",
-   "95",
    "100",
-   "105",
-   "110"
+   "90",
+   "110",
+   "95",
+   "105"
   ],
   "BorderStyle": [
    "rounded",
@@ -62,10 +63,15 @@
    "sharp"
   ],
   "CursorPresetValue": [
-   "soft",
    "rounded",
+   "soft",
    "dot",
    "system"
+  ],
+  "Density": [
+   "normal",
+   "compact",
+   "spacious"
   ],
   "DeviceFontSize": [
    "15",
@@ -88,11 +94,11 @@
    "dusk"
   ],
   "ScalingSize": [
-   "90",
-   "95",
    "100",
-   "105",
-   "110"
+   "90",
+   "110",
+   "95",
+   "105"
   ],
   "SchemeRampWeight": [
    "100",

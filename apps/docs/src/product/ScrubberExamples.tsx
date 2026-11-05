@@ -1,11 +1,12 @@
 "use client";
 
-import { Column, Row, Scrubber, Text, type ScrubberBlock } from "@once-ui-system/core";
+import { Column, Row, Text } from "@once-ui-system/core";
+import { Scrubber, type ScrubberBlock } from "@once-ui-system/core/media";
 import { useState } from "react";
 
 export function ScrubberSeekExample() {
   const [time, setTime] = useState(38000);
-  return <Scrubber duration={125000} value={time} onChange={setTime} />;
+  return <Scrubber duration={125000} value={time} onValueChange={setTime} />;
 }
 
 export function ScrubberTracksExample() {
@@ -16,8 +17,8 @@ export function ScrubberTracksExample() {
     { id: "z2", start: 20000, end: 26000, label: "Zoom" },
   ]);
   const scenes: ScrubberBlock[] = [
-    { id: "s1", start: 0, end: 15000, label: "Intro", scheme: "accent" },
-    { id: "s2", start: 15000, end: 40000, label: "Walkthrough", scheme: "accent" },
+    { id: "s1", start: 0, end: 15000, label: "Intro", tone: "accent" },
+    { id: "s2", start: 15000, end: 40000, label: "Walkthrough", tone: "accent" },
   ];
 
   return (
@@ -25,9 +26,9 @@ export function ScrubberTracksExample() {
       <Scrubber
         duration={40000}
         value={time}
-        onChange={setTime}
+        onValueChange={setTime}
         selected={selected}
-        onSelect={setSelected}
+        onSelectedChange={setSelected}
         onBlockChange={(_trackId, blockId, next) =>
           setZooms((current) =>
             current.map((block) =>
@@ -45,7 +46,7 @@ export function ScrubberTracksExample() {
         ]}
       />
       <Row fillWidth horizontal="center">
-        <Text variant="label-default-xs" onBackground="neutral-weak">
+        <Text textVariant="label-default-xs" onBackground="neutral-weak">
           {selected ? `Selected: ${selected}` : "Nothing selected"}
         </Text>
       </Row>

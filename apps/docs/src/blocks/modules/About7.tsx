@@ -41,10 +41,10 @@ export const About7 = () => {
               background="page"
             >
               <Icon name={benefit.icon} size="s" onBackground="neutral-weak" />
-              <Heading as="h3" marginTop="12" variant="body-default-m">
+              <Heading as="h3" marginTop="12" textVariant="body-default-m">
                 {benefit.title}
               </Heading>
-              <Text wrap="balance" onBackground="neutral-weak" variant="label-default-s">
+              <Text wrap="balance" onBackground="neutral-weak" textVariant="label-default-s">
                 {benefit.description}
               </Text>
             </Column>
@@ -52,11 +52,11 @@ export const About7 = () => {
         </Grid>
       </Column>
       <Column fill center paddingX="8" paddingY="24" gap="8" background="page" borderLeft>
-        <Heading align="center" as="h2" variant="display-strong-xs">
+        <Heading align="center" as="h2" textVariant="display-strong-xs">
           Frontier benefits
         </Heading>
         <Column onBackground="neutral-weak" horizontal="center" align="center" gap="20">
-          <Text variant="body-default-s" align="center" wrap="balance">
+          <Text textVariant="body-default-s" align="center" wrap="balance">
             Become a Frontier — reach out on Discord
           </Text>
           <Button size="s" rounded variant="secondary" href="#">

@@ -187,6 +187,37 @@
   }
 }
 
+// Sortable headers, selection and the selected row.
+
+// The sort button reaches across its whole header cell, padding included, so
+// the cell stays the pointer target.
+.sortableTh {
+  position: relative;
+}
+
+.sortButton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+// The selection column is as narrow as its checkbox.
+.selectCell {
+  width: 1px;
+}
+
+.selectedRow {
+  background: var(--brand-alpha-weak);
+}
+
+// `keepRowsWhileLoading`: the last rows stay in place, dimmed and inert,
+// until the next ones arrive.
+.dimmedBody {
+  opacity: 0.5;
+  pointer-events: none;
+  transition: var(--transition-micro-medium);
+}
+
 // A column's `hide`, per breakpoint: each one hides at and below its width
 // (xl: above l), and a show class undoes a wider breakpoint's hide. Widest
 // first, so where two apply the narrower one wins.

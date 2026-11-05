@@ -14,7 +14,7 @@
     "Avatar",
     "Text",
     "IconButton",
-    "EmojiPickerDropdown",
+    "EmojiPicker",
     "Fade",
     "Kbd",
     "User",
@@ -29,7 +29,7 @@
   },
   "gotchas": [
     "Fade.edge",
-    "Badge.duplicate",
+    "Tag.duplicate",
     "layout.shorthands",
     "layout.responsiveProps",
     "size.rem",

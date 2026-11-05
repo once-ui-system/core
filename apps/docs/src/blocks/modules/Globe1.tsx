@@ -1,6 +1,6 @@
 "use client";
 
-import { dev, Row } from "@once-ui-system/core";
+import { Row } from "@once-ui-system/core";
 import {
   forwardRef,
   type ReactNode,
@@ -12,6 +12,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import type { default as GlobeComponent, GlobeMethods } from "react-globe.gl";
+import { dev } from "@/utils/dev-logger";
 
 /** A GeoJSON feature, as far as this block reads one. */
 type Feature = { type: "Feature"; geometry: unknown; properties: Record<string, unknown> | null };

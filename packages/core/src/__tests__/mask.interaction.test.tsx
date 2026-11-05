@@ -42,11 +42,11 @@ describe("Mask", () => {
   });
 
   it("places a fixed window from x, y and radius", () => {
-    const { container } = render(<Mask x={25} y={75} radius={40} />, { wrapper });
+    const { container } = render(<Mask x="25%" y="75%" radius="40vh" />, { wrapper });
     const el = container.firstElementChild as HTMLElement;
     expect(el.style.getPropertyValue("--mask-position-x")).toBe("25%");
     expect(el.style.getPropertyValue("--mask-position-y")).toBe("75%");
-    expect(el.style.getPropertyValue("--mask-radius")).toBe("40svh");
+    expect(el.style.getPropertyValue("--mask-radius")).toBe("40vh");
   });
 
   it("fades over the whole radius by default, and over the feather when set", () => {
@@ -60,7 +60,7 @@ describe("Mask", () => {
   });
 
   it("sets no window without x and y or cursor", () => {
-    const { container } = render(<Mask x={25} />, { wrapper });
+    const { container } = render(<Mask x="25%" />, { wrapper });
     const el = container.firstElementChild as HTMLElement;
     expect(el.style.getPropertyValue("--mask-position-x")).toBe("");
   });

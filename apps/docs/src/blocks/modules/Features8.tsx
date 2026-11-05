@@ -23,7 +23,7 @@ export const Features8: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
   return (
     <Column fillWidth horizontal="center" gap="40" {...flex}>
       <Row maxWidth="l" paddingX="24">
-        <Heading as="h2" variant="display-strong-m">
+        <Heading as="h2" textVariant="display-strong-m">
           {section.title}
         </Heading>
       </Row>
@@ -39,10 +39,10 @@ export const Features8: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
               border
             />
             <Column fillWidth gap="8" paddingX="32" paddingY="20">
-              <Heading as="h3" variant="heading-strong-l">
+              <Heading as="h3" textVariant="heading-strong-l">
                 {tile.title}
               </Heading>
-              <Text variant="label-default-m" onBackground="neutral-weak" wrap="balance">
+              <Text textVariant="label-default-m" onBackground="neutral-weak" wrap="balance">
                 {tile.description}
               </Text>
             </Column>

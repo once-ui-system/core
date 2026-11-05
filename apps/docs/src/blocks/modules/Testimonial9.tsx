@@ -7,12 +7,12 @@ import {
   Column,
   Heading,
   Mask,
-  MatrixFx,
   Media,
   Row,
   Tag,
   Text,
 } from "@once-ui-system/core";
+import { MatrixFx } from "@once-ui-system/fx";
 import { useState } from "react";
 
 interface CaseStudy {
@@ -85,14 +85,14 @@ export const Testimonial9 = (flex: React.ComponentProps<typeof Column>) => {
 
   return (
     <Column fillWidth horizontal="center" gap="40" {...flex}>
-      <Column maxWidth={48} gap="12" paddingX="l">
-        <Tag size="s" scheme="brand" themeBorder="rounded">
+      <Column maxWidth="48rem" gap="12" paddingX="l">
+        <Tag size="s" tone="brand" themeBorder="rounded">
           Case studies
         </Tag>
-        <Heading as="h2" variant="display-strong-m">
+        <Heading as="h2" textVariant="display-strong-m">
           Builders shipping faster with a system that scales
         </Heading>
-        <Text variant="body-default-l" onBackground="neutral-weak" wrap="balance">
+        <Text textVariant="body-default-l" onBackground="neutral-weak" wrap="balance">
           Real stories from founders and teams who replaced fragmented UI work with Once UI.
         </Text>
       </Column>
@@ -104,7 +104,7 @@ export const Testimonial9 = (flex: React.ComponentProps<typeof Column>) => {
             size="l"
             data-brand={study.brand}
             themeSolid="color"
-            scheme={activeId === study.id ? "brand" : "neutral"}
+            tone={activeId === study.id ? "brand" : "neutral"}
             onClick={() => setActiveId(study.id)}
             style={{ cursor: "pointer" }}
           >
@@ -126,7 +126,7 @@ export const Testimonial9 = (flex: React.ComponentProps<typeof Column>) => {
           data-brand={active.brand}
           themeSolid="color"
           flex={1}
-          minHeight={24}
+          minHeight="24rem"
           overflow="hidden"
         >
           <Background
@@ -138,16 +138,16 @@ export const Testimonial9 = (flex: React.ComponentProps<typeof Column>) => {
               colorStart: "brand-solid-weak",
               x: 0,
               y: 0,
-              width: 125,
-              height: 125,
+              width: "125%",
+              height: "125%",
             }}
           />
           <Mask pointerEvents="none" position="absolute" fill left="0" bottom="0" x={0} y={0}>
             <MatrixFx flicker fps={24} colors={["brand-solid-strong"]} size={1.5} spacing={5} />
           </Mask>
           <Column fill vertical="end" padding="24" gap="8">
-            <Text variant="heading-strong-l">{active.company.replace("@", "")}</Text>
-            <Text variant="label-default-s" onBackground="neutral-weak" wrap="balance">
+            <Text textVariant="heading-strong-l">{active.company.replace("@", "")}</Text>
+            <Text textVariant="label-default-s" onBackground="neutral-weak" wrap="balance">
               {active.summary}
             </Text>
           </Column>
@@ -155,18 +155,18 @@ export const Testimonial9 = (flex: React.ComponentProps<typeof Column>) => {
 
         <Column flex={2} padding="24" gap="20" vertical="center">
           <Column gap="8">
-            <Heading as="h3" variant="display-default-xs">
+            <Heading as="h3" textVariant="display-default-xs">
               {active.title}
             </Heading>
-            <Text variant="heading-default-m" onBackground="neutral-weak" wrap="balance">
+            <Text textVariant="heading-default-m" onBackground="neutral-weak" wrap="balance">
               "{active.quote}"
             </Text>
           </Column>
           <Row gap="12" vertical="center">
             <Avatar src={active.avatar} size="s" />
             <Column gap="2">
-              <Text variant="label-default-s">{active.name}</Text>
-              <Text variant="label-default-s" onBackground="neutral-weak">
+              <Text textVariant="label-default-s">{active.name}</Text>
+              <Text textVariant="label-default-s" onBackground="neutral-weak">
                 {active.role} · {active.company}
               </Text>
             </Column>

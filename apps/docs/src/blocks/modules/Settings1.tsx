@@ -8,9 +8,9 @@ import {
   Input,
   Row,
   SegmentedControl,
-  StylePanel,
   Text,
 } from "@once-ui-system/core";
+import { StylePanel } from "@once-ui-system/blocks";
 import { MediaUpload } from "@once-ui-system/core/media";
 import { useState } from "react";
 
@@ -30,11 +30,11 @@ export const Settings1 = () => {
       >
         <Column maxWidth="s">
           <Column position="sticky" marginTop="16" top="0" zIndex={1} marginBottom="16">
-            <Fade fillWidth position="absolute" top="104" height={3} base="surface" />
+            <Fade fillWidth position="absolute" top="104" height="3rem" base="surface" />
             <Column fillWidth background="surface" paddingTop="16">
               <Column fillWidth paddingLeft="16">
-                <Heading variant="heading-strong-xl">Settings</Heading>
-                <Text onBackground="neutral-medium" variant="body-default-s" marginBottom="24">
+                <Heading textVariant="heading-strong-xl">Settings</Heading>
+                <Text onBackground="neutral-medium" textVariant="body-default-s" marginBottom="24">
                   Manage your preferences and data
                 </Text>
               </Column>
@@ -53,33 +53,33 @@ export const Settings1 = () => {
                     value: "security",
                   },
                 ]}
-                onChange={setSelectedOption}
+                onValueChange={setSelectedOption}
               />
             </Column>
           </Column>
           {selectedOption === "profile" && (
             <>
               <Column fillWidth paddingTop="12" paddingLeft="16" gap="4" marginBottom="16">
-                <Text variant="heading-strong-s">Avatar</Text>
-                <Text variant="body-default-s" onBackground="neutral-weak">
+                <Text textVariant="heading-strong-s">Avatar</Text>
+                <Text textVariant="body-default-s" onBackground="neutral-weak">
                   Your avatar is visible to everyone
                 </Text>
               </Column>
               <MediaUpload
-                maxWidth={8}
+                maxWidth="8rem"
                 radius="full"
                 aspectRatio="1 / 1"
                 marginBottom="16"
                 initialPreviewImage="/images/creators/lorant.jpg"
               />
               <Column fillWidth paddingTop="12" paddingLeft="16" gap="4" marginBottom="16">
-                <Text variant="heading-strong-s">Cover</Text>
-                <Text variant="body-default-s" onBackground="neutral-weak">
+                <Text textVariant="heading-strong-s">Cover</Text>
+                <Text textVariant="body-default-s" onBackground="neutral-weak">
                   Your cover is visible to everyone
                 </Text>
               </Column>
               <MediaUpload
-                maxWidth={16}
+                maxWidth="16rem"
                 aspectRatio="16 / 9"
                 initialPreviewImage="/images/blocks/vibe-coding-dark.jpg"
               />
@@ -89,8 +89,8 @@ export const Settings1 = () => {
           {selectedOption === "security" && (
             <>
               <Column fillWidth paddingTop="12" paddingLeft="16" gap="4" marginBottom="16">
-                <Text variant="heading-strong-s">Access</Text>
-                <Text variant="body-default-s" onBackground="neutral-weak">
+                <Text textVariant="heading-strong-s">Access</Text>
+                <Text textVariant="body-default-s" onBackground="neutral-weak">
                   Manage your credentials
                 </Text>
               </Column>
@@ -106,8 +106,8 @@ export const Settings1 = () => {
                         right="0"
                         top="0"
                         to="left"
-                        height={3}
-                        width={16}
+                        height="3rem"
+                        width="16rem"
                         base="surface"
                         rightRadius="l"
                       />
@@ -131,8 +131,8 @@ export const Settings1 = () => {
                         right="0"
                         top="0"
                         to="left"
-                        height={3}
-                        width={16}
+                        height="3rem"
+                        width="16rem"
                         base="surface"
                         rightRadius="l"
                       />

@@ -90,10 +90,10 @@ export function ListPageExample({
           s={{ direction: "column", horizontal: "start" }}
         >
           <Column gap="8">
-            <Heading as="h1" variant="display-strong-xs">
+            <Heading as="h1" textVariant="display-strong-xs">
               Members
             </Heading>
-            <Text variant="body-default-s" onBackground="neutral-weak">
+            <Text textVariant="body-default-s" onBackground="neutral-weak">
               Everyone with access to this workspace.
             </Text>
           </Column>
@@ -105,7 +105,7 @@ export function ListPageExample({
         <SegmentedControl
           fillWidth={false}
           value={filter}
-          onChange={(value) => setFilter(value as Filter)}
+          onValueChange={(value) => setFilter(value as Filter)}
           buttons={[
             { value: "all", label: "All" },
             { value: "active", label: "Active" },
@@ -118,44 +118,10 @@ export function ListPageExample({
           searchable
           searchPlaceholder="Search members"
           paginated
-          defaultPageSize={10}
-          data={{
-            headers: [
-              { content: "Name", key: "name", sortable: true },
-              { content: "Role", key: "role", sortable: true },
-              { content: "Status", key: "status", sortable: true },
-              { content: "Last active", key: "lastActive", sortable: true, align: "right" },
-            ],
-            rows: visible.map((member) => [
-              <Column key="name" gap="4">
-                <Text variant="label-default-s">{member.name}</Text>
-                <Text variant="body-default-xs" onBackground="neutral-weak">
-                  {member.email}
-                </Text>
-              </Column>,
-              member.role,
-              <Tag key="status" size="s" scheme={statusTag[member.status].scheme}>
-                {statusTag[member.status].label}
-              </Tag>,
-              member.lastActive,
-            ]),
-          }}
-          actions={[
-            {
-              icon: "edit",
-              tooltip: "Edit member",
-              onClick: (row) => onEdit?.(visible[row]),
-            },
-            {
-              icon: "trash",
-              tooltip: "Remove member",
-              variant: "danger",
-              onClick: (row) => onRemove?.(visible[row]),
-            },
-          ]}
+          defaultPerPage={10}
           emptyState={
             <Column center gap="12" padding="32">
-              <Text variant="body-default-s" onBackground="neutral-weak">
+              <Text textVariant="body-default-s" onBackground="neutral-weak">
                 No members match this filter.
               </Text>
               <Button size="s" variant="secondary" onClick={() => setFilter("all")}>
@@ -163,6 +129,41 @@ export function ListPageExample({
               </Button>
             </Column>
           }
+          columns={[
+            { header: "Name", key: "name", sortable: true },
+            { header: "Role", key: "role", sortable: true },
+            { header: "Status", key: "status", sortable: true },
+            { header: "Last active", key: "lastActive", sortable: true, align: "right" },
+          ]}
+          rows={visible.map((member) => [
+            <Column key="name" gap="4">
+              <Text textVariant="label-default-s">{member.name}</Text>
+              <Text textVariant="body-default-xs" onBackground="neutral-weak">
+                {member.email}
+              </Text>
+            </Column>,
+            member.role,
+            <Tag key="status" size="s" tone={statusTag[member.status].scheme}>
+              {statusTag[member.status].label}
+            </Tag>,
+            member.lastActive,
+          ])}
+          perPageOptions={[5, 10, 20, 50]}
+          showFirstLast
+          actions={[
+            {
+              icon: "edit",
+              tooltip: "Edit member",
+              onClick: (_row, index) => onEdit?.(visible[index]),
+            },
+            {
+              icon: "trash",
+              tooltip: "Remove member",
+              variant: "primary",
+              tone: "danger",
+              onClick: (_row, index) => onRemove?.(visible[index]),
+            },
+          ]}
         />
       </Column>
     </Column>

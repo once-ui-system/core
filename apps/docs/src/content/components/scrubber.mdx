@@ -13,6 +13,7 @@ navTagVariant: "cyan"
 `Scrubber` positions things by **time** rather than by layout. With no tracks it
 is a seek bar. Give it tracks and it is an editor timeline: stacked layers of
 blocks sharing one playhead, each block selectable, movable and trimmable.
+Import it from the media entry point: `import { Scrubber } from "@once-ui-system/core/media";`
 
 It is not [`Timeline`](/components/timeline), which lays out a sequence
 of steps or events down the page.
@@ -25,7 +26,7 @@ of steps or events down the page.
   codes={[
     {
       code:
-`<Scrubber duration={125000} value={time} onChange={setTime} />`,
+`<Scrubber duration={125000} value={time} onValueChange={setTime} />`,
       language: "tsx",
       label: "Seek bar"
     }
@@ -40,7 +41,7 @@ convention, which is what the default `m:ss` formatter assumes. Pass
 
 Each track is a row of blocks. `movable` lets the body be dragged along the
 track, `resizable` puts trim handles on the edges, and `onAdd` turns a click on
-empty track space into a new block. Blocks colour themselves from a `scheme`,
+empty track space into a new block. Blocks colour themselves from a `tone`,
 so layers stay distinguishable.
 
 <CodeBlock
@@ -54,9 +55,9 @@ so layers stay distinguishable.
 `<Scrubber
   duration={40000}
   value={time}
-  onChange={setTime}
+  onValueChange={setTime}
   selected={selected}
-  onSelect={setSelected}
+  onSelectedChange={setSelected}
   onBlockChange={(trackId, blockId, next) => moveBlock(blockId, next)}
   tracks={[
     { id: "zooms", height: "32", movable: true, resizable: true, blocks: zooms },
@@ -108,18 +109,20 @@ what belongs in it is entirely your application's business.
   describe={{
     duration: "Total length of the timeline, in seconds.",
     value: "Where the playhead is, in seconds.",
-    onChange: "Called as the playhead is dragged or the track is clicked.",
+    onValueChange: "Called as the playhead is dragged or the track is clicked.",
     tracks: "The lanes under the playhead, each with its own blocks.",
     selected: "Id of the currently selected block.",
-    onSelect: "Called when a block is selected, or with null when it is deselected.",
+    onSelectedChange: "Called when a block is selected, or with null when it is deselected.",
     onBlockChange: "Called when a block is moved or resized, with its new start and end.",
     onGestureStart: "Called once when a drag begins — the place to pause playback.",
     onBlockContextMenu: "Right-click on a block, with the event and what was hit.",
     showTime: "Show the current time next to the playhead.",
     formatTime: "Turn seconds into the label shown. Defaults to m:ss.",
     step: "Snap the playhead to this interval, in seconds.",
-    ariaLabel: "Label for the playhead handle.",
   }}
+  content={[
+    ["aria-label", "string", "-", "Label for the playhead handle."]
+  ]}
 />
 
 ### ScrubberTrack
@@ -129,7 +132,7 @@ what belongs in it is entirely your application's business.
     ["id", "string"],
     ["blocks", "ScrubberBlock[]"],
     ["height", "SpacingToken", "40"],
-    ["scheme", ["neutral", "brand", "accent", "info", "danger", "warning", "success"]],
+    ["tone", ["neutral", "brand", "accent", "info", "danger", "warning", "success"]],
     ["movable", "boolean", "false"],
     ["resizable", "boolean", "false"],
     ["onAdd", "(time: number) => void"]
@@ -144,7 +147,7 @@ what belongs in it is entirely your application's business.
     ["start", "number"],
     ["end", "number"],
     ["label", "ReactNode"],
-    ["scheme", ["neutral", "brand", "accent", "info", "danger", "warning", "success"]],
+    ["tone", ["neutral", "brand", "accent", "info", "danger", "warning", "success"]],
     ["locked", "boolean", "false"]
   ]}
 />

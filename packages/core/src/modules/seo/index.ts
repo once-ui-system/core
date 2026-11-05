@@ -1,4 +1,4 @@
-export type { Alternate, MetaProps } from "./Meta";
-export { generateMetadata, Meta } from "./Meta";
-export type { SchemaProps } from "./Schema";
-export { Schema } from "./Schema";
+export type { Alternate, MetaProps } from "./Meta.js";
+export { createMetadata, Meta } from "./Meta.js";
+export type { SchemaProps } from "./Schema.js";
+export { Schema } from "./Schema.js";

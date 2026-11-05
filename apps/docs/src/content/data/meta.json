@@ -8,6 +8,7 @@
     "groupedBarChart": 4,
     "lineBarChart": 5,
     "pieChart": 6,
-    "radialGauge": 7
+    "radialGauge": 7,
+    "sparkline": 8
   }
 }

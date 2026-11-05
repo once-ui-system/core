@@ -1,18 +1,6 @@
 "use client";
 
-import {
-  Badge,
-  Button,
-  IconButton,
-  Line,
-  Logo,
-  NavIcon,
-  Pulse,
-  Row,
-  SmartLink,
-  Text,
-  ToggleButton,
-} from "@once-ui-system/core";
+import { Tag, Button, IconButton, Line, Logo, NavIcon, StatusIndicator, Row, SmartLink, Text, ToggleButton } from "@once-ui-system/core";
 import { usePathname } from "next/navigation";
 
 const nav = [
@@ -41,18 +29,20 @@ export const Header6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
         borderBottom
         background="brand-alpha-weak"
       >
-        <Pulse size="s" />
-        <Text variant="label-default-s" onBackground="brand-medium">
+        <StatusIndicator pulse size="s" />
+        <Text textVariant="label-default-s" onBackground="brand-medium">
           Pro blocks now install via CLI
         </Text>
         <SmartLink href="#">
-          <Badge title="Learn more" arrow={false} effect={false} />
+          <Tag variant="announce" label="Learn more" arrow={false} effect={false} />
         </SmartLink>
       </Row>
 
       <Row fillWidth paddingX="16" minHeight="56" vertical="center" horizontal="between" gap="16">
         <Row gap="12" vertical="center">
-          <NavIcon hide s={{ hide: false }} />
+          <Row hide s={{ hide: false }}>
+            <NavIcon />
+          </Row>
           <Row hide s={{ hide: false }} gap="4" vertical="center">
             <Logo
               icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
@@ -67,7 +57,7 @@ export const Header6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
               href="#"
             />
             <Line vert height="20" background="neutral-alpha-weak" />
-            <Text variant="label-strong-s" wrap="nowrap">
+            <Text textVariant="label-strong-s" wrap="nowrap">
               Once UI
             </Text>
           </Row>

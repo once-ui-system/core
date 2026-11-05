@@ -6,13 +6,12 @@ import {
   IconButton,
   Logo,
   Mask,
-  ParticleFx,
   Row,
   SmartLink,
   Tag,
   Text,
-  TypeFx,
 } from "@once-ui-system/core";
+import { ParticleFx, TypeFx } from "@once-ui-system/fx";
 
 const social = [
   {
@@ -101,8 +100,8 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
             size: "4",
           }}
           borderRight="neutral-alpha-medium"
-          width={12}
-          minWidth={12}
+          width="12rem"
+          minWidth="12rem"
           m={{ hide: true }}
         />
         <Row fillWidth horizontal="center">
@@ -110,7 +109,7 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
             flex={1}
             border="neutral-alpha-medium"
             radius="full"
-            minWidth={4}
+            minWidth="4rem"
             l={{ hide: true }}
           />
           <Column
@@ -137,8 +136,8 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
             <Row
               overflow="hidden"
               position="absolute"
-              minWidth={80}
-              minHeight={28}
+              minWidth="80rem"
+              minHeight="28rem"
               radius="full"
               border="neutral-alpha-medium"
             >
@@ -150,10 +149,10 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                 themeSolid="color"
                 gradient={{
                   display: true,
-                  x: 50,
-                  y: 100,
-                  width: 100,
-                  height: 50,
+                  x: "50%",
+                  y: "100%",
+                  width: "100%",
+                  height: "50%",
                   colorStart: "brand-solid-strong",
                   colorEnd: "page-background",
                 }}
@@ -166,10 +165,10 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                 style={{ filter: "blur(1rem)", transform: "scale(1.1)" }}
                 gradient={{
                   display: true,
-                  x: 50,
-                  y: 100,
-                  width: 100,
-                  height: 30,
+                  x: "50%",
+                  y: "100%",
+                  width: "100%",
+                  height: "30%",
                   colorStart: "brand-on-background-strong",
                 }}
               />
@@ -177,28 +176,28 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
             <Row
               overflow="hidden"
               position="absolute"
-              minWidth={58}
-              minHeight={28}
+              minWidth="58rem"
+              minHeight="28rem"
               radius="full"
               border="neutral-alpha-medium"
             />
             <Row
               overflow="hidden"
               position="absolute"
-              minWidth={42}
-              minHeight={28}
+              minWidth="42rem"
+              minHeight="28rem"
               radius="full"
               border="neutral-alpha-medium"
             />
             <Row
               overflow="hidden"
               position="absolute"
-              minWidth={28}
-              minHeight={28}
+              minWidth="28rem"
+              minHeight="28rem"
               radius="full"
               border="neutral-alpha-medium"
             >
-              <Mask fill position="absolute" x={50} y={50} radius={25}>
+              <Mask fill position="absolute" x="50%" y="50%" radius="25vh">
                 <ParticleFx
                   style={{ transform: "scale(1.1)" }}
                   opacity={70}
@@ -207,16 +206,16 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                   left="0"
                   fill
                   interactive
-                  speed={1.5}
+                  speed={5}
                   mode="attract"
                 />
               </Mask>
             </Row>
             <Column horizontal="center" gap="20">
               <TypeFx
-                variant="display-strong-m"
+                textVariant="display-strong-m"
                 words={["Ship your product.", "Build a presence.", "Launch seamlessly."]}
-                speed={80}
+                charDuration={80}
               />
               <Button data-border="rounded" id="hero-cta-button" href="#" arrowIcon>
                 Start now
@@ -227,7 +226,7 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
             flex={1}
             border="neutral-alpha-medium"
             radius="full"
-            minWidth={4}
+            minWidth="4rem"
             l={{ hide: true }}
           />
         </Row>
@@ -239,8 +238,8 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
             size: "4",
           }}
           borderLeft="neutral-alpha-medium"
-          width={12}
-          minWidth={12}
+          width="12rem"
+          minWidth="12rem"
           m={{ hide: true }}
         />
       </Row>
@@ -252,8 +251,8 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
             border="neutral-alpha-medium"
             bottomRightRadius="full"
             topLeftRadius="full"
-            width={12}
-            minWidth={12}
+            width="12rem"
+            minWidth="12rem"
             m={{ hide: true }}
           />
           <Column
@@ -264,7 +263,7 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
             border="neutral-alpha-medium"
             l={{ hide: true }}
           >
-            <Row flex={1} minWidth={4} overflow="hidden">
+            <Row flex={1} minWidth="4rem" overflow="hidden">
               <Background
                 fill
                 position="absolute"
@@ -273,10 +272,10 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                 themeSolid="color"
                 gradient={{
                   display: true,
-                  x: 50,
-                  y: 100,
-                  width: 100,
-                  height: 50,
+                  x: "50%",
+                  y: "100%",
+                  width: "100%",
+                  height: "50%",
                   colorStart: "brand-solid-strong",
                   colorEnd: "page-background",
                 }}
@@ -289,10 +288,10 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                 style={{ filter: "blur(1rem)", transform: "scale(1.1)" }}
                 gradient={{
                   display: true,
-                  x: 50,
-                  y: 100,
-                  width: 100,
-                  height: 30,
+                  x: "50%",
+                  y: "100%",
+                  width: "100%",
+                  height: "30%",
                   colorStart: "brand-on-background-strong",
                 }}
               />
@@ -305,7 +304,7 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                 size: "4",
               }}
               flex={1}
-              minWidth={4}
+              minWidth="4rem"
             />
           </Column>
         </Row>
@@ -337,8 +336,8 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
           </Row>
           <Row paddingX="xl" paddingBottom="xl" fillWidth wrap gap="32" horizontal="between">
             {navigation.map((section) => (
-              <Column key={section.title} maxWidth={12} gap="32" paddingY="8">
-                <Text wrap="balance" variant="heading-strong-s">
+              <Column key={section.title} maxWidth="12rem" gap="32" paddingY="8">
+                <Text wrap="balance" textVariant="heading-strong-s">
                   {section.title}
                 </Text>
                 {[
@@ -356,7 +355,7 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                     <Column key={`${section.title}-${key}`} gap="8">
                       {label && (
                         <Text
-                          variant="label-default-s"
+                          textVariant="label-default-s"
                           onBackground="neutral-weak"
                           marginBottom="8"
                         >
@@ -367,13 +366,13 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                         <SmartLink key={`${item.label}-${item.href}`} href={item.href} unstyled>
                           <Text
                             wrap="balance"
-                            variant="body-default-s"
+                            textVariant="body-default-s"
                             onBackground="neutral-strong"
                           >
                             {item.label}
                           </Text>
                           {item.tag && (
-                            <Tag style={{ transform: "scale(0.9)" }} scheme="brand" size="s">
+                            <Tag style={{ transform: "scale(0.9)" }} tone="brand" size="s">
                               {item.tag}
                             </Tag>
                           )}
@@ -398,15 +397,15 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
             border="neutral-alpha-medium"
             bottomRadius="full"
             topLeftRadius="full"
-            minWidth={4}
+            minWidth="4rem"
             l={{ hide: true }}
           />
           <Background
             fillWidth
             border="neutral-alpha-medium"
             leftRadius="full"
-            width={12}
-            minWidth={12}
+            width="12rem"
+            minWidth="12rem"
             m={{ hide: true }}
           />
         </Row>
@@ -422,11 +421,11 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
               size: "4",
             }}
             borderRight="neutral-alpha-medium"
-            width={12}
-            minWidth={12}
+            width="12rem"
+            minWidth="12rem"
             m={{ hide: true }}
           />
-          <Row fillWidth overflow="hidden" minWidth={4} l={{ hide: true }} />
+          <Row fillWidth overflow="hidden" minWidth="4rem" l={{ hide: true }} />
         </Row>
         <Row
           gap="8"
@@ -444,7 +443,7 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
           </SmartLink>
         </Row>
         <Row flex={1}>
-          <Row fillWidth overflow="hidden" minWidth={4} l={{ hide: true }}>
+          <Row fillWidth overflow="hidden" minWidth="4rem" l={{ hide: true }}>
             <Background
               fill
               position="absolute"
@@ -454,9 +453,9 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
               gradient={{
                 display: true,
                 x: 0,
-                y: 50,
-                width: 100,
-                height: 200,
+                y: "50%",
+                width: "100%",
+                height: "200%",
                 colorStart: "brand-solid-strong",
                 colorEnd: "page-background",
               }}
@@ -470,9 +469,9 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
               gradient={{
                 display: true,
                 x: 0,
-                y: 50,
-                width: 50,
-                height: 200,
+                y: "50%",
+                width: "50%",
+                height: "200%",
                 colorStart: "brand-on-background-strong",
               }}
             />
@@ -487,8 +486,8 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
             bottomLeftRadius="full"
             borderLeft="neutral-alpha-medium"
             borderBottom="neutral-alpha-medium"
-            width={12}
-            minWidth={12}
+            width="12rem"
+            minWidth="12rem"
             m={{ hide: true }}
           />
         </Row>

@@ -1,0 +1,235 @@
+---
+title: "Sparkline"
+summary: "A tiny inline trend line, area or bar strip for stat tiles and table cells: pure SVG, no axes, legend or card, and it renders on the server."
+updatedAt: "2026-10-30"
+docs: "once-ui/data/sparkline.mdx"
+github: "modules/data/Sparkline.tsx"
+navLabel: "Sparkline"
+navIcon: "sparkline"
+---
+
+`Sparkline` draws the shape of a series in the space of a line of text. It has no axes, legend, tooltip or card, and no recharts behind it: it is one SVG, so it renders in a server component and costs no JavaScript. The drawing stretches to its box (`preserveAspectRatio="none"`) while the line keeps its width, so it fills a table cell or a tile at any size.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="l"
+  preview={
+    <Sparkline data={[120, 180, 160, 240, 210, 360, 340]} width={240} />
+  }
+  codes={[
+    {
+      code:
+`<Sparkline data={[120, 180, 160, 240, 210, 360, 340]} width={240} />`,
+      language: "tsx",
+      label: "Usage"
+    }
+  ]}
+/>
+
+It fills its container's width and is 32px tall unless `width` and `height` say otherwise. A number is px; any CSS length, such as `"100%"` or `"2rem"`, passes through. It also ships from the package root, as it pulls in nothing the root does not already have.
+
+## In a stat tile
+
+The usual home of a sparkline: a number, the change, and the shape behind them. `showLast` puts a dot on the latest value.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="l"
+  codeHeight="24rem"
+  preview={
+    <Row gap="16" fillWidth s={{ direction: "column" }}>
+      <Column flex={1} padding="20" gap="8" radius="l" border="neutral-alpha-weak" background="surface">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">Revenue</Text>
+        <Row vertical="end" gap="8">
+          <Text textVariant="heading-strong-l">$48.2K</Text>
+          <Text textVariant="label-default-s" onBackground="success-weak">+12%</Text>
+        </Row>
+        <Sparkline
+          data={[32, 35, 34, 38, 41, 39, 44, 48]}
+          variant="area"
+          color="emerald"
+          height={40}
+          showLast
+          valueFormat={{ style: "currency", currency: "USD", notation: "compact" }}
+        />
+      </Column>
+      <Column flex={1} padding="20" gap="8" radius="l" border="neutral-alpha-weak" background="surface">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">Churn</Text>
+        <Row vertical="end" gap="8">
+          <Text textVariant="heading-strong-l">2.1%</Text>
+          <Text textVariant="label-default-s" onBackground="danger-weak">+0.4pt</Text>
+        </Row>
+        <Sparkline
+          data={[0.016, 0.015, 0.017, 0.018, 0.017, 0.019, 0.02, 0.021]}
+          variant="area"
+          color="red"
+          height={40}
+          showLast
+          valueFormat="percent"
+        />
+      </Column>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Column padding="20" gap="8" radius="l" border="neutral-alpha-weak" background="surface">
+  <Text textVariant="label-default-s" onBackground="neutral-weak">Revenue</Text>
+  <Row vertical="end" gap="8">
+    <Text textVariant="heading-strong-l">$48.2K</Text>
+    <Text textVariant="label-default-s" onBackground="success-weak">+12%</Text>
+  </Row>
+  <Sparkline
+    data={[32, 35, 34, 38, 41, 39, 44, 48]}
+    variant="area"
+    color="emerald"
+    height={40}
+    showLast
+    valueFormat={{ style: "currency", currency: "USD", notation: "compact" }}
+  />
+</Column>`,
+      language: "tsx",
+      label: "Stat tile"
+    }
+  ]}
+/>
+
+## In a table cell
+
+Give the column a `cell` that draws the row's values. A fixed `width` keeps every row's line the same length.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="l"
+  codeHeight="24rem"
+  preview={<SparklineTableExample />}
+  codes={[
+    {
+      code:
+`const pages = [
+  { page: "/pricing", visits: "12,480", trend: [8, 9, 11, 10, 12, 13, 12] },
+  { page: "/docs", visits: "9,310", trend: [12, 11, 10, 10, 9, 9, 9] },
+  { page: "/blog", visits: "4,022", trend: [2, 3, 2, 5, 4, 6, 4] },
+];
+
+<Table
+  aria-label="Pages by visits"
+  getRowId={(row) => row.page}
+  columns={[
+    { key: "page", header: "Page" },
+    { key: "visits", header: "Visits", align: "right" },
+    {
+      key: "trend",
+      header: "Last 7 days",
+      cell: (row) => <Sparkline data={row.trend} width={96} height={20} showLast />,
+    },
+  ]}
+  rows={pages}
+/>`,
+      language: "tsx",
+      label: "Table cell"
+    }
+  ]}
+/>
+
+## Bars
+
+`variant="bar"` draws one bar per value, from zero, so negative values hang below the line. With `showLast` the latest bar is in full colour and the rest are dimmed.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="l"
+  preview={
+    <Column gap="24" fillWidth>
+      <Sparkline data={[4, 6, 3, 8, 7, 9, 5, 10, 12, 9, 11, 14]} variant="bar" color="violet" width={240} height={40} showLast />
+      <Sparkline data={[3, -1, 4, 2, -3, 5, 1, -2, 6]} variant="bar" color="orange" width={240} height={40} />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Sparkline
+  data={[4, 6, 3, 8, 7, 9, 5, 10, 12, 9, 11, 14]}
+  variant="bar"
+  color="violet"
+  width={240}
+  height={40}
+  showLast
+/>`,
+      language: "tsx",
+      label: "Bars"
+    }
+  ]}
+/>
+
+## Curves and range
+
+`curve` joins the points: `"monotone"` (the default, smooth and never past a point), `"natural"` (the charts' spline), `"linear"` or `"step"`. `min` and `max` fix the values at the bottom and top edges, so sparklines side by side share a scale instead of each filling its own height.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="l"
+  preview={
+    <Column gap="16" fillWidth>
+      <Sparkline data={[3, 7, 4, 9, 6, 8]} curve="monotone" width={240} />
+      <Sparkline data={[3, 7, 4, 9, 6, 8]} curve="natural" color="cyan" width={240} />
+      <Sparkline data={[3, 7, 4, 9, 6, 8]} curve="linear" color="magenta" width={240} />
+      <Sparkline data={[3, 7, 4, 9, 6, 8]} curve="step" color="orange" width={240} min={0} max={10} />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Sparkline data={values} curve="monotone" />
+<Sparkline data={values} curve="natural" color="cyan" />
+<Sparkline data={values} curve="linear" color="magenta" />
+<Sparkline data={values} curve="step" color="orange" min={0} max={10} />`,
+      language: "tsx",
+      label: "Curves"
+    }
+  ]}
+/>
+
+## Rows of data
+
+Pass your rows as they are and name the key to plot with `valueKey`. Without it, the first key holding a number is used.
+
+```tsx
+const week = [
+  { day: "Mon", signups: 31 },
+  { day: "Tue", signups: 44 },
+  { day: "Wed", signups: 38 },
+];
+
+<Sparkline data={week} valueKey="signups" />
+```
+
+## Accessibility
+
+A sparkline is one image to a screen reader (`role="img"`). Without an `aria-label` it is named by a summary of its values, written in `valueFormat` and `locale`: the first example above reads "Trend from 120 to 340, high 360". Pass `aria-label` when the tile around it does not already say what the line is, such as "Revenue, last 8 weeks".
+
+## API reference
+
+<PropsTable
+  component="Sparkline"
+  describe={{
+    data: "The values, oldest first: numbers, or rows read by valueKey.",
+    valueKey: "The row key to plot when data is objects. Defaults to the first key holding a number.",
+    variant: "A line, a line with a filled area under it, or one bar per value.",
+    color: "A chart colour (blue, emerald), a token or any CSS colour.",
+    width: "A number is px; any CSS length passes through.",
+    height: "A number is px; any CSS length passes through.",
+    curve: "How the line joins its points. Bars ignore it.",
+    showLast: "A dot on the last point; on bars, the last bar in full colour.",
+    min: "The value at the bottom edge. Defaults to the lowest value (0 or lower for bars).",
+    max: "The value at the top edge. Defaults to the highest value (0 or higher for bars).",
+    valueFormat: "How values are written in the summary a screen reader hears.",
+    locale: "The locale the summary's numbers are written in.",
+    "aria-label": "What a screen reader hears, in place of the generated summary.",
+  }}
+/>

@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { Animation, NavIcon, Dropdown, Option, ArrowNavigation } from "@once-ui-system/core";
+import { Animation, Column, NavIcon, Option, useArrowNavigation } from "@once-ui-system/core";
+import { useRef, useState } from "react";
 
 export function AnimationNavIconExample() {
   const [isActive, setIsActive] = useState(false);
+  const listRef = useRef<HTMLDivElement>(null);
+  const navigation = useArrowNavigation({ layout: "column", itemCount: 3, containerRef: listRef });
 
   const handleToggle = () => {
     setIsActive(!isActive);
@@ -16,42 +18,27 @@ export function AnimationNavIconExample() {
 
   return (
     <Animation
-      trigger={
-        <NavIcon onClick={handleToggle} active={isActive} />
-      }
-      slideDown={1}
+      trigger={<NavIcon onClick={handleToggle} active={isActive} />}
+      slideDown="1rem"
       triggerType="manual"
       duration={300}
       active={isActive}
     >
-      <Dropdown
+      <Column
+        border="neutral-medium"
+        background="surface"
         position="absolute"
         top="48"
         padding="4"
         gap="2"
         radius="l"
       >
-        <ArrowNavigation layout="column" itemCount={3}>
-        <Option
-          href="#"
-          value="option-1"
-          label="Option 1"
-          onClick={handleOptionClick}
-        />
-        <Option
-          href="#"
-          value="option-2"
-          label="Option 2"
-          onClick={handleOptionClick}
-        />
-        <Option
-          href="#"
-          value="option-3"
-          label="Option 3"
-          onClick={handleOptionClick}
-        />
-        </ArrowNavigation>
-      </Dropdown>
+        <Column ref={listRef} role="listbox" tabIndex={-1} onKeyDown={navigation.handleKeyDown}>
+          <Option href="#" value="option-1" label="Option 1" onClick={handleOptionClick} />
+          <Option href="#" value="option-2" label="Option 2" onClick={handleOptionClick} />
+          <Option href="#" value="option-3" label="Option 3" onClick={handleOptionClick} />
+        </Column>
+      </Column>
     </Animation>
   );
 }

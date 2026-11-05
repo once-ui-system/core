@@ -3,13 +3,15 @@ title: "Setup"
 export: false
 github: "packages/core/src/data/setup.mdx"
 summary: "Everything you need to know about the setup, shared props and common configuration for Once UI's data viz module."
-updatedAt: "2025-05-14"
+updatedAt: "2026-10-17"
 docs: "once-ui/data/setup.mdx"
 navLabel: "Setup"
 navIcon: "learn"
 ---
 
-The Once UI data-viz module is a collection of opinionated chart solutions built on top of [Recharts](https://recharts.org/) and [Date-fns](https://date-fns.org/). It was designed to help you create beautiful and interactive charts with minimal code.
+The Once UI data-viz module is a collection of opinionated charts, drawn as SVG by Once UI itself, with dates through [Date-fns](https://date-fns.org/). It was designed to help you create beautiful and interactive charts with minimal code.
+
+There is nothing to install beyond `@once-ui-system/core`: import the charts from `@once-ui-system/core/data`. They render on the server, so the first HTML already holds the chart, and size themselves to their container. In the browser, hover or move through the points with the arrow keys for the tooltip, and click a legend entry to hide or show its series. Animations are skipped for readers who prefer reduced motion.
 
 <LineChart
   marginTop="16"
@@ -93,6 +95,32 @@ All charts share the same props for common settings, so it's easy to swap betwee
 Every chart takes these. The sections below walk through the ones worth
 explaining; this is the whole list.
 
+Charts are generic over the row type, inferred from `data`: your own
+`interface` works as it is, with no cast to `DataPoint`, and a `series` key
+that is not a key of the row is a type error.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`interface RevenueRow {
+  month: string;
+  revenue: number;
+  cost: number;
+}
+
+<BarChart
+  data={rows}
+  series={[{ key: "revenue" }, { key: "cost" }]}
+/>`,
+      language: "tsx",
+      label: "Typed rows"
+    }
+  ]}
+/>
+
 <PropsTable
   mixin="ChartProps"
   describe={{
@@ -100,7 +128,10 @@ explaining; this is the whole list.
     data: "The rows. Each needs the keys named in `series`, plus whatever the x axis reads.",
     title: "Heading above the chart.",
     description: "Supporting line under the title.",
-    date: "Format and range for a time axis.",
+    xKey: "The row key on the x axis. Defaults to the first key that is not a series.",
+    valueFormat: "How values are written on the axis and in the tooltip: \"compact\", \"percent\", Intl.NumberFormatOptions or a function.",
+    locale: "The locale numbers are written in, such as \"hu-HU\". Defaults to \"en-US\".",
+    date: "Format and range for a time axis; `onRangeChange` reports the range picked in the header.",
     legend: "Legend position and visibility.",
     tooltip: "Show a tooltip on hover.",
     grid: "Which grid lines to draw. Chart types differ in what they default to.",
@@ -110,6 +141,8 @@ explaining; this is the whole list.
     error: "Render the error state instead of the chart.",
     emptyState: "What to show when `data` is empty.",
     errorState: "What to show when `error` is set.",
+    summary: "What a screen reader hears for the plot, after the title, in place of the generated summary.",
+    "aria-label": "The plot's whole accessible name, in place of the title and summary.",
   }}
 />
 
@@ -117,7 +150,7 @@ explaining; this is the whole list.
 
 Use the `series` and `data` props to define the chart data to render, and assign colors to override defaults.
 
-The `series` prop is an array of objects, where each object has a `key` property that defines the name of the series, and an optional `color` property that defines the color of the series. Match the `key` property with the property name in the `data` prop.
+The `series` prop is an array of objects, where each object has a `key` property that names the column it plots, and optional `label` (the name the legend and tooltip show), `color` and `format` (how its values are written) properties. Match the `key` property with the property name in the `data` prop. The x axis reads the column named by `xKey`, or the first one that is not a series.
 
 <CodeBlock
   marginTop="16"
@@ -171,7 +204,7 @@ The `series` prop is an array of objects, where each object has a `key` property
 
 <PropsTable
   content={[
-    ["series", "{[{key: string, color?: string}]}"],
+    ["series", "{[{key: string, label?: string, color?: string, format?: ValueFormat}]}"],
     ["data", "{[{date: string, [key: string]: number}]}"],
   ]}
 />
@@ -957,3 +990,34 @@ the page does not jump when the data lands.
 `grid` and `axis` are separate on purpose: a bar chart usually wants horizontal
 guides to compare heights against (`grid="y"`) while still labelling both axes,
 and a sparkline-style chart wants `axis="none"` with the grid left on.
+
+## Accessibility
+
+Each chart's plot is a figure to a screen reader (`role="figure"`, so its legend buttons stay reachable inside it), named by its title and a short summary written from the data, in the chart's `valueFormat` and `locale`:
+
+- a line or bar chart: "Revenue and Cost, Jan to Dec. Revenue: highest 12,400 in Aug, lowest 3,100 in Feb."
+- a pie: "Share by browser: Chrome 62%, Safari 21%, Firefox 9%."
+
+Inside the card, hidden from sight, the chart also renders its data as a table, with the x values as rows and a column per series, so a reader who wants the numbers can walk them cell by cell. While a chart loads, fails or has no data, the plot is no figure, and its status is read as it is.
+
+The summary states only what is in the data. When the point of a chart is something the numbers do not say on their own, write it with `summary`; `aria-label` replaces the whole name, title included.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<LineChart
+  title="Revenue"
+  summary="Revenue tripled over the summer and held through December."
+  data={rows}
+  series={{ key: "revenue", label: "Revenue" }}
+/>`,
+      language: "tsx",
+      label: "Summary"
+    }
+  ]}
+/>
+
+`ChartSummary` is the table on its own, from the same props, for a visual of your own built from chart data.

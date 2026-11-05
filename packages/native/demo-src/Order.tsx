@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { ScrollView } from "react-native";
 import {
-  Badge,
   Button,
   Card,
-  Chip,
   Column,
   Dialog,
   Heading,
@@ -13,6 +11,7 @@ import {
   Row,
   SegmentedControl,
   Select,
+  Tag,
   Text,
   useTheme,
   useToast,
@@ -31,13 +30,19 @@ export function Order({ sheet = false }: { sheet?: boolean }) {
   return (
     <ScrollView style={{ backgroundColor: theme.color("page-background") }}>
       <Column padding="20" gap="20">
-        <Badge title="New: pastries count as stamps" icon="sparkle" arrow onPress={() => {}} />
-        <Heading variant="heading-strong-l">Your order</Heading>
+        <Tag
+          variant="announce"
+          label="New: pastries count as stamps"
+          prefixIcon="sparkle"
+          arrow
+          onPress={() => {}}
+        />
+        <Heading textVariant="heading-strong-l">Your order</Heading>
 
         <Select
           label="Pick up at"
           value={venue}
-          onSelect={setVenue}
+          onValueChange={setVenue}
           options={[
             { value: "kazinczy", label: "Kazinczy utca 14", description: "Open until 18:00" },
             { value: "andrassy", label: "Andrássy út 2", description: "Open until 20:00" },
@@ -51,10 +56,10 @@ export function Order({ sheet = false }: { sheet?: boolean }) {
         />
 
         <Column gap="8">
-          <Text variant="label-default-m">Size</Text>
+          <Text textVariant="label-default-m">Size</Text>
           <SegmentedControl
             value={size}
-            onChange={setSize}
+            onValueChange={setSize}
             buttons={[
               { value: "s", label: "Small" },
               { value: "m", label: "Medium" },
@@ -66,7 +71,7 @@ export function Order({ sheet = false }: { sheet?: boolean }) {
         <RadioGroup
           label="Milk"
           value={milk}
-          onChange={setMilk}
+          onValueChange={setMilk}
           options={[
             { value: "whole", label: "Whole milk" },
             { value: "oat", label: "Oat", description: "+200 Ft" },
@@ -75,17 +80,18 @@ export function Order({ sheet = false }: { sheet?: boolean }) {
         />
 
         <Column gap="8">
-          <Text variant="label-default-m">Extras</Text>
+          <Text textVariant="label-default-m">Extras</Text>
           <Row gap="8" wrap>
             {extras.map((e) => (
-              <Chip
+              <Tag
                 key={e}
+                selected
                 label={e}
                 prefixIcon="plus"
                 onRemove={() => setExtras((list) => list.filter((x) => x !== e))}
               />
             ))}
-            <Chip
+            <Tag
               label="Vanilla"
               selected={false}
               onPress={() => setExtras((l) => [...l, "Vanilla"])}
@@ -95,8 +101,8 @@ export function Order({ sheet = false }: { sheet?: boolean }) {
 
         <Card padding="20" gap="12">
           <Row horizontal="between" vertical="center">
-            <Text variant="label-strong-m">Next reward</Text>
-            <Text variant="body-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-strong-m">Next reward</Text>
+            <Text textVariant="body-default-s" onBackground="neutral-weak">
               7 of 10 stamps
             </Text>
           </Row>
@@ -106,7 +112,7 @@ export function Order({ sheet = false }: { sheet?: boolean }) {
         <Row gap="8">
           <Button
             label="Place order"
-            onPress={() => addToast({ variant: "success", message: "Order placed. See you soon!" })}
+            onPress={() => addToast({ tone: "success", message: "Order placed. See you soon!" })}
           />
           <Button variant="secondary" label="Redeem" onPress={() => setRedeem(true)} />
         </Row>
@@ -125,8 +131,8 @@ export function Order({ sheet = false }: { sheet?: boolean }) {
         }
       >
         <Column gap="12" center paddingY="16" radius="l" background="neutral-alpha-weak">
-          <Heading variant="display-strong-s">MC-4821</Heading>
-          <Text variant="body-default-s" onBackground="neutral-weak">
+          <Heading textVariant="display-strong-s">MC-4821</Heading>
+          <Text textVariant="body-default-s" onBackground="neutral-weak">
             Valid until 31 October
           </Text>
         </Column>

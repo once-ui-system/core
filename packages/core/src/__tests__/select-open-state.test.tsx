@@ -26,7 +26,7 @@ const Single = ({ onSelect }: { onSelect?: (value: string) => void }) => {
         label="Pick"
         options={options}
         value={value}
-        onSelect={(next) => {
+        onValueChange={(next) => {
           setValue(next as string);
           onSelect?.(next as string);
         }}
@@ -173,7 +173,7 @@ describe("Select open state", () => {
           searchable
           options={options}
           value={value}
-          onSelect={(next) => {
+          onValueChange={(next) => {
             setValue(next as string);
             onSelect(next);
           }}
@@ -206,7 +206,7 @@ describe("Select open state", () => {
           multiple
           options={options}
           value={value}
-          onSelect={(next) => {
+          onValueChange={(next) => {
             setValue(next as string[]);
             onSelect(next);
           }}

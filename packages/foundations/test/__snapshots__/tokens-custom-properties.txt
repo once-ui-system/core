@@ -334,6 +334,7 @@
 --safe-area-left
 --safe-area-right
 --safe-area-top
+--scaling
 --scheme-aqua-100
 --scheme-aqua-1000
 --scheme-aqua-1100

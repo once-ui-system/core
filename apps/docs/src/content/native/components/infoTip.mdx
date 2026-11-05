@@ -24,7 +24,7 @@ codes={[
 export function RoundUp() {
   return (
     <Row gap="4" vertical="center">
-      <Text variant="label-default-m">Round up for charity</Text>
+      <Text textVariant="label-default-m">Round up for charity</Text>
       <InfoTip size="s">We round your total to the next euro and donate the difference.</InfoTip>
     </Row>
   );
@@ -36,7 +36,7 @@ export function RoundUp() {
 
 ## Naming the icon
 
-`ariaLabel` names the icon for screen readers. Change it to translate it.
+`aria-label` names the icon for screen readers. Change it to translate it.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -45,7 +45,7 @@ codes={[
 `import { InfoTip } from "@once-ui-system/native";
 
 export function Hinweis() {
-  return <InfoTip ariaLabel="Mehr Informationen">Wird auf deiner Quittung angezeigt.</InfoTip>;
+  return <InfoTip aria-label="Mehr Informationen">Wird auf deiner Quittung angezeigt.</InfoTip>;
 }`,
     language: "tsx",
     label: "Translated"
@@ -57,7 +57,6 @@ export function Hinweis() {
 - It opens on press, not on hover or focus. The tip shows in a transparent modal above the screen, so a parent's `overflow` cannot clip it, and the back button closes it.
 - The tip sits below the icon, or above it when the icon is low on the screen, and stays 16 points from the screen edges.
 - The explanation is the icon's accessibility hint when it is a string, in place of `aria-describedby`.
-- `ariaLabel` replaces `aria-label`.
 
 ## API reference
 
@@ -65,5 +64,5 @@ export function Hinweis() {
 | --- | --- | --- | --- |
 | `children` | `ReactNode` | | The explanation. A sentence or two. |
 | `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | `"xs"` | The icon's size. |
-| `ariaLabel` | `string` | `"More information"` | The icon's accessible name. |
+| `aria-label` | `string` | `"More information"` | The icon's accessible name. |
 | `...FlexProps` | `FlexProps` | | Props for the tip's surface, as on `Flex`. |

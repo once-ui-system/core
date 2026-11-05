@@ -4,10 +4,8 @@ import {
   Avatar,
   Button,
   Column,
-  CountFx,
   Dialog,
-  DropdownWrapper,
-  EmojiPickerDropdown,
+  Dropdown,
   Icon,
   IconButton,
   OgCard,
@@ -18,6 +16,8 @@ import {
   Textarea,
   useToast,
 } from "@once-ui-system/core";
+import { CountFx } from "@once-ui-system/fx";
+import { EmojiPicker } from "@once-ui-system/core/emoji";
 import { formatDistance } from "date-fns";
 import type React from "react";
 import { useState } from "react";
@@ -73,12 +73,12 @@ export function Comment({ comment, onReply, isReply = false }: CommentProps) {
     try {
       addToast({
         message: "Comment deleted successfully",
-        variant: "success",
+        tone: "success",
       });
     } catch (_error) {
       addToast({
         message: "Failed to delete comment",
-        variant: "danger",
+        tone: "danger",
       });
     } finally {
       setIsDeleting(false);
@@ -118,7 +118,7 @@ export function Comment({ comment, onReply, isReply = false }: CommentProps) {
       setShowReply(false);
     } catch (_err) {
       setSubmitError("Failed to post reply");
-      addToast({ message: "Failed to post reply", variant: "danger" });
+      addToast({ message: "Failed to post reply", tone: "danger" });
     } finally {
       setIsSubmitting(false);
     }
@@ -137,11 +137,11 @@ export function Comment({ comment, onReply, isReply = false }: CommentProps) {
       <Column gap="4" fillWidth>
         <Row gap="8" vertical="center" marginBottom="4">
           <SmartLink unstyled href="#">
-            <Text variant="body-default-s" onBackground="neutral-strong">
+            <Text textVariant="body-default-s" onBackground="neutral-strong">
               {comment.user.name}
             </Text>
           </SmartLink>
-          <Text variant="body-default-xs" onBackground="neutral-weak">
+          <Text textVariant="body-default-xs" onBackground="neutral-weak">
             {formatShortRelativeTime(new Date(comment.createdAt))}
           </Text>
         </Row>
@@ -149,19 +149,19 @@ export function Comment({ comment, onReply, isReply = false }: CommentProps) {
         {(() => {
           const hit = extractFirstUrl(comment.content);
           if (!hit) {
-            return <Text variant="body-default-s">{comment.content}</Text>;
+            return <Text textVariant="body-default-s">{comment.content}</Text>;
           }
           const [before, after] = comment.content.split(hit.match, 2);
           return (
             <>
-              <Text variant="body-default-s">
+              <Text textVariant="body-default-s">
                 {before}
                 <SmartLink href={hit.url} target="_blank" rel="noopener noreferrer">
                   {hit.match}
                 </SmartLink>
                 {after}
               </Text>
-              <Row maxWidth={24}>
+              <Row maxWidth="24rem">
                 <OgCard
                   size="s"
                   url={hit.url}
@@ -188,7 +188,7 @@ export function Comment({ comment, onReply, isReply = false }: CommentProps) {
                 effect="smooth"
                 value={reactionCount}
                 marginRight="4"
-                variant="body-default-s"
+                textVariant="body-default-s"
                 style={{ color: hasReacted ? "var(--danger-solid-strong)" : undefined }}
               />
               <Icon
@@ -210,19 +210,8 @@ export function Comment({ comment, onReply, isReply = false }: CommentProps) {
               Reply
             </Button>
           )}
-          <DropdownWrapper
+          <Dropdown
             placement="right-start"
-            dropdown={
-              <Column padding="4" gap="2" minWidth={8}>
-                <Option
-                  value="delete"
-                  prefix={<Icon name="trash" size="xs" />}
-                  onClick={() => setShowDeleteDialog(true)}
-                >
-                  Delete
-                </Option>
-              </Column>
-            }
             trigger={
               <IconButton
                 data-border="rounded"
@@ -230,8 +219,15 @@ export function Comment({ comment, onReply, isReply = false }: CommentProps) {
                 variant="tertiary"
                 aria-label="Comment options"
               />
-            }
-          />
+            }><Column padding="4" gap="2" minWidth="8rem">
+                <Option
+                  value="delete"
+                  prefix={<Icon name="trash" size="xs" />}
+                  onClick={() => setShowDeleteDialog(true)}
+                >
+                  Delete
+                </Option>
+              </Column></Dropdown>
 
           <Dialog
             open={showDeleteDialog}
@@ -247,7 +243,7 @@ export function Comment({ comment, onReply, isReply = false }: CommentProps) {
                 >
                   Cancel
                 </Button>
-                <Button variant="danger" onClick={handleDeleteComment} loading={isDeleting}>
+                <Button tone="danger" onClick={handleDeleteComment} loading={isDeleting}>
                   Delete
                 </Button>
               </Row>
@@ -266,7 +262,7 @@ export function Comment({ comment, onReply, isReply = false }: CommentProps) {
               errorMessage={submitError || undefined}
               suffix={
                 <Row fillWidth gap={reply.length > 0 ? "8" : "0"} transition="micro-medium">
-                  <EmojiPickerDropdown
+                  <EmojiPicker
                     onSelect={(emoji) => setReply((r) => r + emoji)}
                     trigger={
                       <Row fillWidth themeBorder="rounded">

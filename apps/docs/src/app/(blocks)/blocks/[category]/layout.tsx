@@ -16,7 +16,7 @@ export default function BlocksLayout({ children }: { children: React.ReactNode }
     <Row as="section" fillWidth>
       <Row
         fillHeight
-        maxWidth={17}
+        maxWidth="17rem"
         paddingY="8"
         paddingX="2"
         position="sticky"
@@ -30,7 +30,7 @@ export default function BlocksLayout({ children }: { children: React.ReactNode }
         {children}
         <Row
           fillHeight
-          maxWidth={17}
+          maxWidth="17rem"
           paddingY="8"
           paddingX="2"
           position="sticky"

@@ -12,11 +12,15 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "declaration": true,
-    "rootDir": ".",
+    // ".." rather than ".": `paths` below points ai/examples' imports of
+    // @once-ui-system/fx and /blocks at those packages' sources (3.0, F8, F10).
+    "rootDir": "..",
     "outDir": "./dist",
     "typeRoots": ["./types", "./node_modules/@types"],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@once-ui-system/fx": ["../fx/src/index.ts"],
+      "@once-ui-system/blocks": ["../blocks/src/index.ts"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx"],

@@ -23,12 +23,12 @@ export interface Task {
 
 const RoadmapTask = ({ task: taskItem }: { task: Task }) => (
   <Column gap="8" fillWidth>
-    <Text align="left" onBackground="neutral-strong" variant="body-strong-m">
+    <Text align="left" onBackground="neutral-strong" textVariant="body-strong-m">
       {taskItem.title}
     </Text>
 
     {taskItem.description && (
-      <Text align="left" variant="body-default-s" onBackground="neutral-weak">
+      <Text align="left" textVariant="body-default-s" onBackground="neutral-weak">
         {taskItem.description}
       </Text>
     )}
@@ -50,8 +50,8 @@ const RoadmapTask = ({ task: taskItem }: { task: Task }) => (
         )}
         {taskItem.type && (
           <Row vertical="center" gap="8">
-            <StatusIndicator color={task[taskItem.type].color as Schemes} />
-            <Text onBackground="neutral-weak" variant="label-default-s">
+            <StatusIndicator scheme={task[taskItem.type].color as Schemes} />
+            <Text onBackground="neutral-weak" textVariant="label-default-s">
               {task[taskItem.type].label}
             </Text>
           </Row>
@@ -65,11 +65,11 @@ export function Roadmap1() {
   return (
     <Column maxWidth="l" as="main">
       <Column fillWidth gap="12" paddingBottom="l" paddingX="8">
-        <Heading variant="display-strong-s">Roadmap</Heading>
+        <Heading textVariant="display-strong-s">Roadmap</Heading>
         <Text
           wrap="balance"
           onBackground="neutral-weak"
-          variant="body-default-xl"
+          textVariant="body-default-xl"
           marginBottom="20"
         >
           List of features planned for Q4 2025
@@ -90,7 +90,7 @@ export function Roadmap1() {
                   themeSolid="inverse"
                 />
               </Row>
-              <Heading as="h2" variant="display-default-xs">
+              <Heading as="h2" textVariant="display-default-xs">
                 {product.product}
               </Heading>
             </Row>
@@ -106,11 +106,11 @@ export function Roadmap1() {
                 border
                 background="overlay"
                 fillWidth
-                minWidth={20}
+                minWidth="20rem"
               >
                 <Row fillWidth vertical="center" gap="8" paddingY="8" paddingX="16">
-                  <Text variant="label-default-m">{column.title}</Text>
-                  <Text variant="label-default-s" onBackground="neutral-weak">
+                  <Text textVariant="label-default-m">{column.title}</Text>
+                  <Text textVariant="label-default-s" onBackground="neutral-weak">
                     {column.tasks.length}
                   </Text>
                 </Row>

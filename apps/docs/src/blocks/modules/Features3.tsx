@@ -1,4 +1,5 @@
-import { Column, Heading, Icon, MatrixFx, Media, Row, Text } from "@once-ui-system/core";
+import { Column, Heading, Icon, Media, Row, Text } from "@once-ui-system/core";
+import { MatrixFx } from "@once-ui-system/fx";
 
 const features = [
   {
@@ -38,7 +39,7 @@ export const Features3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
     <Column fillWidth horizontal="center" gap="xl" {...flex}>
       <Column fillWidth>
         <Row maxWidth="s">
-          <Heading variant="display-default-s">
+          <Heading textVariant="display-default-s">
             Empowering developers with cutting-edge tools and capabilities
           </Heading>
         </Row>
@@ -55,7 +56,7 @@ export const Features3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
           >
             <Row fillWidth>
               <Column
-                maxWidth={32}
+                maxWidth="32rem"
                 paddingX="48"
                 gap="12"
                 horizontal={index % 2 === 0 ? "start" : "end"}
@@ -79,10 +80,10 @@ export const Features3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
                   />
                   <Icon name={feature.icon} onBackground="brand-weak" size="s" />
                 </Row>
-                <Heading variant="label-strong-s" onBackground="brand-weak" marginTop="32">
+                <Heading textVariant="label-strong-s" onBackground="brand-weak" marginTop="32">
                   {feature.title}
                 </Heading>
-                <Text variant="heading-default-xl" wrap="balance">
+                <Text textVariant="heading-default-xl" wrap="balance">
                   {feature.description}
                 </Text>
               </Column>

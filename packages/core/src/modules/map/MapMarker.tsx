@@ -4,9 +4,9 @@ import type { Marker, PositionAnchor } from "maplibre-gl";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { useMap } from "./MapContext";
-import { MapPin } from "./MapPin";
-import type { LngLat } from "./types";
+import { useMap } from "./MapContext.js";
+import { MapPin } from "./MapPin.js";
+import type { LngLat } from "./types.js";
 
 export interface MapMarkerProps {
   position: LngLat;

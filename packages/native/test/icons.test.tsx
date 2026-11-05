@@ -48,12 +48,12 @@ describe("icons", () => {
     expect(container.querySelectorAll("svg")).toHaveLength(2);
   });
 
-  it("names an IconButton from ariaLabel and draws registered icons", () => {
+  it("names an IconButton from aria-label and draws registered icons", () => {
     const Rocket = ({ size }: { size: number }) => <span data-testid="rocket">{size}</span>;
     render(
       <ThemeProvider theme="light">
         <IconProvider icons={{ rocket: Rocket }}>
-          <IconButton icon={"rocket" as "refresh"} ariaLabel="Launch" />
+          <IconButton icon={"rocket" as "refresh"} aria-label="Launch" />
         </IconProvider>
       </ThemeProvider>,
     );

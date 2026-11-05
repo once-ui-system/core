@@ -45,7 +45,7 @@ navTagVariant: "success"
 
 - The label's `htmlFor` points at the control's `id`. The control keeps its own `id`; a control without one gets a generated id.
 - `aria-describedby` lists the control's own description first, then the error, then the hint.
-- While `error` is set the control is `aria-invalid`. `Input`, `Textarea` and the fields built on them, such as `Select`, `PasswordInput` and `NumberInput`, also draw their error styling, with no separate `error` prop.
+- While `error` is set the control is `aria-invalid`. `Input` (with any `type`, `"password"` included), `Textarea` and the fields built on them, such as `Select` and `NumberInput`, also draw their error styling, with no separate `error` prop.
 - `required` adds `aria-required` and an asterisk after the label. The asterisk is hidden from screen readers so it is not read out twice.
 
 The hint stays visible while the error shows, so the instruction is still there when the user goes back to fix the value.

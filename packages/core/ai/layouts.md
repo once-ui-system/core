@@ -30,7 +30,7 @@ const menuOpen = menuPath === pathname;
     {/* logo, search, account */}
   </Row>
   <Row fill paddingX="8">
-    <Column s={{ hide: true }} maxWidth={18} fitHeight position="sticky" top="56">
+    <Column s={{ hide: true }} maxWidth="18rem" fitHeight position="sticky" top="56">
       <SideNav nav={nav} pathname={pathname} />
     </Column>
     <Row fill horizontal="center" topRadius="l" overflow="hidden">
@@ -157,7 +157,7 @@ around it: toolbar, layer list, canvas and a working timeline.
   <Scrubber
     duration={duration}
     value={time}
-    onChange={setTime}
+    onValueChange={setTime}
     tracks={tracks}
     onGestureStart={pause}
   />

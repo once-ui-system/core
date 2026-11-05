@@ -14,6 +14,8 @@ import { describe, expect, it } from "vitest";
  */
 const TOKENS = join(__dirname, "../../../foundations/scss/tokens");
 const THEME_PROVIDER = join(__dirname, "../contexts/ThemeProvider.tsx");
+// `Density` is declared beside its table, which the server-side ThemeInit reads.
+const DENSITY = join(__dirname, "../utils/density.ts");
 
 const cssValues = (attribute: string): string[] => {
   const pattern = new RegExp(`\\[data-${attribute}="([^"]+)"\\]`, "g");
@@ -27,9 +29,9 @@ const cssValues = (attribute: string): string[] => {
 };
 
 const unionValues = (name: string): string[] => {
-  const source = readFileSync(THEME_PROVIDER, "utf8");
+  const source = readFileSync(name === "Density" ? DENSITY : THEME_PROVIDER, "utf8");
   const block = source.match(new RegExp(`export type ${name} =([^;]*);`));
-  if (!block) throw new Error(`${name} not found in ThemeProvider.tsx`);
+  if (!block) throw new Error(`${name} not found`);
   return [...block[1].matchAll(/"([^"]+)"/g)].map((m) => m[1]).sort();
 };
 
@@ -41,6 +43,9 @@ const cases: [type: string, attribute: string, unstyledDefaults: string[]][] = [
   ["SurfaceStyle", "surface", []],
   ["TransitionStyle", "transition", ["none"]],
   ["ScalingSize", "scaling", ["100"]],
+  // Only the scaling a density picks lives in tokens.css; the controls' sizes
+  // are in their modules (density.scss), and normal is the default m.
+  ["Density", "density", ["normal"]],
   ["BodySize", "body-size", []],
   ["BodyLineHeight", "body-line-height", []],
   ["DeviceFontSize", "desktop-size", []],

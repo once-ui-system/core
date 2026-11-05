@@ -1,4 +1,5 @@
-import { Background, HoloFx, ParticleFx, Row } from "@once-ui-system/core";
+import { Background, Row } from "@once-ui-system/core";
+import { HoloFx, ParticleFx } from "@once-ui-system/fx";
 
 export const Background3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (
@@ -10,7 +11,7 @@ export const Background3: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
         left="0"
         fill
         interactive
-        speed={1}
+        speed={3.33}
         color="brand-on-background-strong"
         size="1"
       />
@@ -21,7 +22,7 @@ export const Background3: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
         left="0"
         fill
         interactive
-        speed={0.5}
+        speed={1.67}
         color="brand-on-background-strong"
         density={40}
       />
@@ -32,10 +33,10 @@ export const Background3: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
         left="0"
         gradient={{
           display: true,
-          x: 50,
-          y: 55,
-          width: 80,
-          height: 40,
+          x: "50%",
+          y: "55%",
+          width: "80%",
+          height: "40%",
           opacity: 50,
           colorStart: "brand-solid-strong",
           colorEnd: "static-transparent",
@@ -44,14 +45,14 @@ export const Background3: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
       <HoloFx
         radius="full"
         overflow="hidden"
-        minWidth={40}
-        minHeight={40}
+        minWidth="40rem"
+        minHeight="40rem"
         texture={{
           opacity: 60,
           image: "url(/images/textures/foil.jpg)",
         }}
       >
-        <Row background="page" radius="full" minWidth={40} minHeight={40} fill overflow="hidden">
+        <Row background="page" radius="full" minWidth="40rem" minHeight="40rem" fill overflow="hidden">
           <Background
             fill
             position="absolute"
@@ -59,10 +60,10 @@ export const Background3: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
             left="0"
             gradient={{
               display: true,
-              x: 50,
-              y: -30,
-              width: 100,
-              height: 100,
+              x: "50%",
+              y: "-30%",
+              width: "100%",
+              height: "100%",
               opacity: 100,
               colorStart: "brand-solid-strong",
               colorEnd: "static-transparent",
@@ -74,16 +75,16 @@ export const Background3: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
             top="0"
             left="0"
             mask={{
-              x: 50,
-              y: 10,
-              radius: 20,
+              x: "50%",
+              y: "10%",
+              radius: "20vh",
             }}
             gradient={{
               display: true,
-              x: 50,
-              y: 20,
-              width: 30,
-              height: 30,
+              x: "50%",
+              y: "20%",
+              width: "30%",
+              height: "30%",
               opacity: 100,
               colorStart: "brand-solid-strong",
               colorEnd: "static-transparent",

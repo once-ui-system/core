@@ -9,7 +9,7 @@ export function SliderBasicExample() {
   return (
     <Slider
       value={value}
-      onChange={setValue}
+      onValueChange={setValue}
       min={0}
       max={100}
       aria-label="Value"
@@ -23,7 +23,7 @@ export function SliderLabelExample() {
   return (
     <Slider
       value={value}
-      onChange={setValue}
+      onValueChange={setValue}
       min={0}
       max={100}
       label="Volume"
@@ -37,7 +37,7 @@ export function SliderShowValueExample() {
   return (
     <Slider
       value={value}
-      onChange={setValue}
+      onValueChange={setValue}
       min={0}
       max={100}
       label="Brightness"
@@ -52,7 +52,7 @@ export function SliderStepExample() {
   return (
     <Slider
       value={value}
-      onChange={setValue}
+      onValueChange={setValue}
       min={0}
       max={100}
       step={10}
@@ -68,7 +68,7 @@ export function SliderMinMaxExample() {
   return (
     <Slider
       value={value}
-      onChange={setValue}
+      onValueChange={setValue}
       min={10}
       max={30}
       step={1}
@@ -82,7 +82,7 @@ export function SliderDisabledExample() {
   return (
     <Slider
       value={50}
-      onChange={() => {}}
+      onValueChange={() => {}}
       min={0}
       max={100}
       label="Locked Setting"

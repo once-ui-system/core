@@ -28,7 +28,7 @@ export function Legend({
   const items = payload.map((entry) => (
     <Row key={entry.value} vertical="center" gap="8">
       <Swatch color={entry.color} size="m" variant={variant} />
-      <Text variant="label-default-s" numberOfLines={1}>
+      <Text textVariant="label-default-s" numberOfLines={1}>
         {entry.value}
       </Text>
     </Row>

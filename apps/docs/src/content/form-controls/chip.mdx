@@ -1,44 +1,14 @@
 ---
 title: "Chip"
-summary: "The Chip component provides a compact, interactive element for displaying discrete information, selections, or filters."
-updatedAt: "2026-10-11"
+summary: "Chip is Tag in Once UI 3.0: a Tag with selected, onClick or onRemove is a toggle."
+updatedAt: "2026-10-17"
 docs: "once-ui/form-controls/chip.mdx"
-github: "components/Chip.tsx"
+github: "components/Tag.tsx"
 navLabel: "Chip"
 navIcon: "switch"
 ---
 
-Chips are compact elements that represent discrete information, selections, or filters. They help users make selections, filter content, or trigger actions in a space-efficient way.
-
-<Feedback
-  marginTop="16"
-  marginBottom="24"
-  title="Badge, Tag or Chip"
-  description={<><SmartLink style={{ textDecoration: "underline" }} href="/components/badge">Badge</SmartLink> announces something, usually as a link: the "New" line above a hero. <SmartLink style={{ textDecoration: "underline" }} href="/components/tag">Tag</SmartLink> is a static label for a status, category or piece of metadata. <SmartLink style={{ textDecoration: "underline" }} href="/form-controls/chip">Chip</SmartLink> is interactive: a choice that can be selected or removed, in filters and in <InlineCode>TagInput</InlineCode>. 3.0 plans to consolidate them.</>}
-/>
-
-<CodeBlock
-  marginTop="16"
-  marginBottom="24"
-  preview={
-    <BasicChipExample />
-  }
-  codes={[
-    {
-      code:
-`<Chip label="Default" selected />
-<Chip label="With icon" prefixIcon="calendar" />
-<Chip label="Removable" onRemove={() => {}} />
-<Chip label="Unselected" />`,
-      language: "tsx",
-      label: "Chip"
-    }
-  ]}
-/>
-
-## State
-
-Chips can be in a selected or unselected state to indicate active filters or selections. You can use the `onClick` prop to make the chip interactive.
+`Chip` folded into [Tag](/components/tag) in Once UI 3.0 and is no longer exported. A Tag given `selected`, `onClick` or `onRemove` is the same toggle, with `aria-pressed` and an optional remove button:
 
 <CodeBlock
   marginTop="16"
@@ -49,122 +19,15 @@ Chips can be in a selected or unselected state to indicate active filters or sel
   codes={[
     {
       code:
-`const [selected, setSelected] = useState<boolean>(true);
+`// 2.x
+<Tag label="Design" selected={on} onClick={toggle} removeButtonProps={{ tooltip: "Remove" }} onRemove={remove} />
 
-<Chip 
-    label="Clickable" 
-    selected={selected}
-    onClick={() => setSelected(!selected)} 
-/>`,
+// 3.0
+<Tag label="Design" selected={on} onClick={toggle} removeButtonProps={{ tooltip: "Remove" }} onRemove={remove} />`,
       language: "tsx",
-      label: "Interactive"
+      label: "Chip → Tag"
     }
   ]}
 />
 
-## Prefix & Suffix
-
-Enhance chips with prefix icons to improve visual communication. `suffixIcon` puts one after the label, such as a chevron on a chip that opens a menu.
-
-<CodeBlock
-  marginTop="16"
-  marginBottom="24"
-  preview={
-    <ChipWithIconsExample />
-  }
-  codes={[
-    {
-      code:
-`<Chip label="Tag" prefixIcon="tag" />
-<Chip label="User" prefixIcon="person" />
-<Chip label="Location" prefixIcon="globe" />
-<Chip label="Favorite" prefixIcon="heart" />
-<Chip label="Sort" suffixIcon="chevronDown" selected={false} />`,
-      language: "tsx",
-      label: "Prefix & Suffix"
-    }
-  ]}
-/>
-
-## Removable
-
-Chips can include a remove button to allow users to dismiss or remove the chip. Click the remove button to see toast notifications.
-
-<CodeBlock
-  marginTop="16"
-  marginBottom="24"
-  preview={
-    <RemovableChipsExample />
-  }
-  codes={[
-    {
-      code:
-`const { addToast } = useToast();
-const [chips, setChips] = useState<{ id: string; label: string; icon?: IconName }[]>([
-    { id: "1", label: "React", icon: "code" },
-    { id: "2", label: "TypeScript", icon: "code" },
-    { id: "3", label: "Next.js" }
-]);
-
-const handleRemove = (id) => {
-    const chipToRemove = chips.find(chip => chip.id === id);
-    setChips(chips.filter(chip => chip.id !== id));
-    
-    addToast({
-      variant: "danger",
-      message: "Removed " + chipToRemove.label + " chip"
-    });
-};
-
-<Row gap="8" wrap>
-    {chips.map(chip => (
-      <Chip
-        key={chip.id}
-        label={chip.label}
-        prefixIcon={chip.icon}
-        onRemove={() => handleRemove(chip.id)}
-      />
-    ))}
-</Row>`,
-      language: "tsx",
-      label: "Removable"
-    }
-  ]}
-/>
-
-When removing is the chip's only action, `interactive={false}` makes its label plain text, so it is not a second tab stop that does nothing. TagInput's tags work this way.
-
-<CodeBlock
-  marginTop="16"
-  marginBottom="24"
-  preview={<PlainLabelChipExample />}
-  codes={[
-    {
-      code: `<Chip label="Berlin" interactive={false} onRemove={() => removeCity("Berlin")} />`,
-      language: "tsx",
-      label: "Remove only"
-    }
-  ]}
-/>
-
-## API reference
-
-<PropsTable
-  component="Chip"
-  describe={{
-    label: "The text.",
-    selected: "Whether it reads as chosen.",
-    prefixIcon: "Icon before the label.",
-    suffixIcon: "Icon after the label.",
-    onClick: "Called when the chip body is clicked.",
-    onRemove: "Adds a remove control, called when it is used.",
-    interactive: "With onRemove, whether the label is a control of its own. False makes it plain text.",
-    children: "Extra content after the label.",
-    iconButtonProps: "Passed through to the remove control.",
-  }}
-  content={[
-    ["children", "", ""],
-    ["className", "", ""],
-    ["style", "", ""]
-  ]}
-/>
+`selected` now defaults to **false**: a 2.x `<Tag selected label="x" />` was drawn and announced as selected. The 3.0 codemod writes `selected` where it was left out, so migrated chips keep their look, and renames `iconButtonProps` to `removeButtonProps`. See [Tag: Toggle](/components/tag#toggle).

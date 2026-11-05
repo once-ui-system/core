@@ -1,22 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { AccessibilityInfo } from "react-native";
 
-/** The device's reduce-motion setting, kept up to date. */
-export function useReduceMotion() {
-  const [reduce, setReduce] = useState(false);
-  useEffect(() => {
-    let live = true;
-    AccessibilityInfo.isReduceMotionEnabled?.()
-      .then((on) => live && setReduce(on))
-      .catch(() => {});
-    const sub = AccessibilityInfo.addEventListener?.("reduceMotionChanged", setReduce);
-    return () => {
-      live = false;
-      sub?.remove();
-    };
-  }, []);
-  return reduce;
-}
+export { useReduceMotion } from "./useReduceMotion";
 
 /**
  * Seconds since the component started animating, updated every frame while

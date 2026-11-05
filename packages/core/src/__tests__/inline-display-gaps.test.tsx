@@ -3,7 +3,6 @@ import type React from "react";
 import { describe, expect, it } from "vitest";
 import { Accordion } from "../components/Accordion";
 import { AccordionGroup } from "../components/AccordionGroup";
-import { Badge } from "../components/Badge";
 import { Logo } from "../components/Logo";
 import { NavItem } from "../components/NavItem";
 import { StatusIndicator } from "../components/StatusIndicator";
@@ -19,16 +18,17 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 /**
- * Gaps hit rebuilding a real product: a Tag or Badge could not sit in a
- * sentence, StatusIndicator took only palette names, a NavItem badge only a
+ * Gaps hit rebuilding a real product: a Tag (or 2.x's Badge, now Tag
+ * variant="announce") could not sit in a sentence, StatusIndicator took only
+ * palette names, a NavItem badge only a
  * number, an Accordion title only the heading font, and Logo only images.
  */
-describe("Tag and Badge inside text", () => {
+describe("Tag inside text, the announcement look too", () => {
   it('render only spans with as="span", so they are valid inside a <p>', async () => {
     const { container } = render(
       <p>
         Status <Tag as="span" prefixIcon="check" label="Beta" /> and{" "}
-        <Badge as="span" title="New" arrow />
+        <Tag as="span" variant="announce" label="New" arrow />
       </p>,
       { wrapper },
     );
@@ -43,7 +43,7 @@ describe("Tag and Badge inside text", () => {
     const { container } = render(
       <>
         <Tag label="Beta" />
-        <Badge title="New" arrow />
+        <Tag variant="announce" label="New" arrow />
       </>,
       { wrapper },
     );
@@ -53,13 +53,14 @@ describe("Tag and Badge inside text", () => {
 });
 
 describe("StatusIndicator colours", () => {
-  it("takes a role or any palette name as well as the original names", async () => {
+  // 3.0: a theme role is `tone`, a palette name `scheme` (2.x's `color`).
+  it("takes a role as tone and any palette name as scheme", async () => {
     const { container } = render(
       <>
-        <StatusIndicator color="danger" />
-        <StatusIndicator color="brand" />
-        <StatusIndicator color="sand" />
-        <StatusIndicator color="green" />
+        <StatusIndicator tone="danger" />
+        <StatusIndicator tone="brand" />
+        <StatusIndicator scheme="sand" />
+        <StatusIndicator scheme="green" />
       </>,
       { wrapper },
     );

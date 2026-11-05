@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { describe, expect, it } from "vitest";
 import { HoverCard } from "../components/HoverCard";
-import { InfoTip } from "../components/InfoTip";
+import { Tooltip } from "../components/Tooltip";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
 
@@ -15,13 +15,13 @@ const tipText = "Shown on invoices and receipts.";
 
 /**
  * Hover content reachable and dismissible from the keyboard (ROADMAP W3,
- * WCAG 2.1.1 and 1.4.13): InfoTip's icon takes focus and opens its tip, and
+ * WCAG 2.1.1 and 1.4.13): the info icon of a childless Tooltip (2.x InfoTip) takes focus and opens its tip, and
  * Escape closes any HoverCard without moving the pointer or focus.
  */
-describe("InfoTip accessibility", () => {
+describe("Tooltip with content and no children (2.x InfoTip): accessibility", () => {
   it("is a named tab stop whose tip opens on focus and describes it", async () => {
     const user = userEvent.setup();
-    const { container } = render(<InfoTip>{tipText}</InfoTip>, { wrapper: wrap });
+    const { container } = render(<Tooltip content={tipText} />, { wrapper: wrap });
 
     await user.tab();
     const trigger = screen.getByRole("button", { name: "More information" });
@@ -35,7 +35,7 @@ describe("InfoTip accessibility", () => {
   });
 
   it("takes its name from aria-label", () => {
-    render(<InfoTip aria-label="About billing names">{tipText}</InfoTip>, { wrapper: wrap });
+    render(<Tooltip content={tipText} aria-label="About billing names" />, { wrapper: wrap });
     expect(screen.getByRole("button", { name: "About billing names" })).toBeInTheDocument();
   });
 
@@ -43,7 +43,7 @@ describe("InfoTip accessibility", () => {
     const user = userEvent.setup();
     render(
       <>
-        <InfoTip>{tipText}</InfoTip>
+        <Tooltip content={tipText} />
         <button type="button">Next</button>
       </>,
       { wrapper: wrap },

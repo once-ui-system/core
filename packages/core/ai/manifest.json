@@ -1,17 +1,18 @@
 {
- "version": "2.6.0",
- "generated": "2026-11-01",
+ "version": "3.0.0-beta.1",
+ "generated": "2026-11-04",
  "imports": {
   "@once-ui-system/core": {
    "use": "Components, hooks, providers, defineConfig and types: everything not listed below"
   },
   "@once-ui-system/core/data": {
    "use": "Charts, gauges and chart chrome",
-   "peer": "recharts",
    "exports": [
+    "Sparkline",
     "BarChart",
     "ChartHeader",
     "ChartStatus",
+    "ChartSummary",
     "DataTooltip",
     "LinearGradient",
     "RadialGradient",
@@ -30,7 +31,9 @@
     "ChartMode",
     "ChartProps",
     "ChartStatusProps",
+    "ChartSummaryProps",
     "ChartVariant",
+    "CurveType",
     "DataPoint",
     "DataTooltipProps",
     "DateConfig",
@@ -42,7 +45,11 @@
     "PresetsConfig",
     "RadialGaugeProps",
     "SeriesConfig",
+    "SeriesKey",
+    "SparklineCurve",
+    "SparklineProps",
     "SwatchProps",
+    "ValueFormat",
     "curveType"
    ]
   },
@@ -57,13 +64,30 @@
    ]
   },
   "@once-ui-system/core/media": {
-   "use": "MediaUpload",
+   "use": "Media components off the root: MediaAudioPlayer, MediaVideoPlayer, Scrubber, CompareImage, and MediaUpload (which needs compressorjs)",
    "peer": "compressorjs",
    "exports": [
+    "CompareImage",
+    "MediaAudioPlayer",
+    "MediaVideoPlayer",
+    "Scrubber",
     "MediaUpload"
    ],
    "types": [
-    "MediaUploadProps"
+    "MediaAudioPlayerProps",
+    "MediaUploadProps",
+    "ScrubberBlock",
+    "ScrubberProps",
+    "ScrubberTrack"
+   ]
+  },
+  "@once-ui-system/core/emoji": {
+   "use": "EmojiPicker, with its emoji dataset off the root",
+   "exports": [
+    "EmojiPicker"
+   ],
+   "types": [
+    "EmojiPickerProps"
    ]
   },
   "@once-ui-system/core/map": {
@@ -83,6 +107,7 @@
    "types": [
     "ClusterGroup",
     "LngLat",
+    "MapBuildings",
     "MapCircleProps",
     "MapClusterOptions",
     "MapColor",
@@ -93,6 +118,7 @@
     "MapMarkersProps",
     "MapPinProps",
     "MapPopupProps",
+    "MapProjection",
     "MapProps",
     "MapStyle",
     "MapStyleSource",
@@ -169,11 +195,137 @@
     "OnceUIFonts"
    ]
   },
-  "@once-ui-system/core/components/<Name>": {
-   "use": "Components kept off the root so every bundle does not carry them",
+  "@once-ui-system/fx": {
+   "use": "The effects (RevealFx, CountFx, TypeFx, MatrixFx, Effect and the other *Fx): a package of its own, built on core",
+   "install": "@once-ui-system/fx",
    "exports": [
-    "MediaAudioPlayer",
-    "MediaVideoPlayer"
+    "BlobFx",
+    "CelebrationFx",
+    "CountdownFx",
+    "CountFx",
+    "Effect",
+    "FlipFx",
+    "GlitchFx",
+    "HoloFx",
+    "LetterFx",
+    "MatrixFx",
+    "ParticleFx",
+    "RevealFx",
+    "ShineFx",
+    "TiltFx",
+    "TypeFx",
+    "WeatherFx"
+   ],
+   "types": [
+    "BlobFxProps",
+    "BulgeConfig",
+    "CountFxProps",
+    "CountdownFxProps",
+    "EffectProps",
+    "EffectType",
+    "FlipFxProps",
+    "ShineFxProps",
+    "TypeFxProps"
+   ]
+  },
+  "@once-ui-system/blocks": {
+   "use": "Compositions: Banner, Book, LogoCloud, ScrollToTop, StylePanel and StyleOverlay: a package of its own, built on core",
+   "install": "@once-ui-system/blocks",
+   "exports": [
+    "Banner",
+    "Book",
+    "LogoCloud",
+    "ScrollToTop",
+    "StyleOverlay",
+    "StylePanelAccent",
+    "StylePanelAdvanced",
+    "StylePanelBodyLineHeight",
+    "StylePanelBodySize",
+    "StylePanelBodyText",
+    "StylePanelBrand",
+    "StylePanelColor",
+    "StylePanelDataStyle",
+    "StylePanelDensity",
+    "StylePanelEffect",
+    "StylePanelGroup",
+    "StylePanelNeutral",
+    "StylePanelPage",
+    "StylePanelRoot",
+    "StylePanelRow",
+    "StylePanelScaling",
+    "StylePanelShape",
+    "StylePanelSolid",
+    "StylePanelSolidStyle",
+    "StylePanelSurface",
+    "StylePanelTheme",
+    "StylePanelTransition",
+    "StylePanel",
+    "AboutSection",
+    "ContactSection",
+    "CtaSection",
+    "FaqSection",
+    "FeaturesSection",
+    "HeroSection",
+    "LogosSection",
+    "PricingSection",
+    "Sections",
+    "StatsSection",
+    "TeamSection",
+    "TestimonialsSection",
+    "useStylePanel",
+    "aboutLayouts",
+    "contactLayouts",
+    "ctaLayouts",
+    "faqLayouts",
+    "featuresLayouts",
+    "heroLayouts",
+    "logosLayouts",
+    "pricingLayouts",
+    "statsLayouts",
+    "teamLayouts",
+    "testimonialsLayouts",
+    "sectionComponents",
+    "sectionSchemas",
+    "sectionTypes",
+    "isSectionType"
+   ],
+   "types": [
+    "AboutSectionProps",
+    "BannerProps",
+    "BookProps",
+    "ContactSectionProps",
+    "CtaSectionProps",
+    "FaqSectionProps",
+    "FeaturesSectionProps",
+    "HeroSectionProps",
+    "LogosSectionProps",
+    "PricingSectionProps",
+    "SectionBaseProps",
+    "SectionField",
+    "SectionFieldKind",
+    "SectionItem",
+    "SectionSchema",
+    "SectionType",
+    "SectionsProps",
+    "StatsSectionProps",
+    "StyleGroupProps",
+    "StylePanelCustomLabels",
+    "StylePanelGroupLabels",
+    "StylePanelHeading",
+    "StylePanelLabels",
+    "StylePanelNameLabels",
+    "StylePanelOptionLabels",
+    "StylePanelProps",
+    "StylePanelRootProps",
+    "StylePanelRowLabels",
+    "StylePanelSchemeRow",
+    "StylePanelSwatchLabels",
+    "StylePanelValue",
+    "StylePanelVisibility",
+    "StyleRowProps",
+    "StyleSchemeRowProps",
+    "TeamSectionProps",
+    "TestimonialsSectionProps"
    ]
   }
  },

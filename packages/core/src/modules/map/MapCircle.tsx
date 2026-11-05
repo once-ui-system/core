@@ -3,9 +3,9 @@
 import type { GeoJSONSource } from "maplibre-gl";
 import type React from "react";
 import { useEffect, useId, useMemo } from "react";
-import { useMap } from "./MapContext";
-import { tokenColor } from "./tokenColor";
-import type { LngLat, MapColor } from "./types";
+import { useMap } from "./MapContext.js";
+import { tokenColor } from "./tokenColor.js";
+import type { LngLat, MapColor } from "./types.js";
 
 export interface MapCircleProps {
   position: LngLat;

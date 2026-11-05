@@ -1,9 +1,11 @@
 import { render } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
-import { Pulse } from "../components/Pulse";
+import { describe, expect, expectTypeOf, it } from "vitest";
+import { Flex } from "../components/Flex";
 import { Skeleton } from "../components/Skeleton";
+import { StatusIndicator } from "../components/StatusIndicator";
 import { Tag } from "../components/Tag";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import type { SizeProps } from "../interfaces";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -27,6 +29,61 @@ describe("Skeleton", () => {
     expect(cls).toMatch(/size-s/);
   });
 
+  // 1.x's `width="m"` compiled through Flex's t-shirt widths and rendered a
+  // page-wide box. Skeleton's lengths are numbers, static tokens or CSS.
+  it("takes no t-shirt width or height", () => {
+    // @ts-expect-error — "m" is not a Skeleton length
+    const wide = <Skeleton width="m" />;
+    // @ts-expect-error — "l" is not a Skeleton length
+    const tall = <Skeleton height="l" />;
+    const fine = <Skeleton width={240} height="2.5rem" maxWidth="16" />;
+    expect([wide, tall, fine]).toHaveLength(3);
+  });
+
+  // minWidth/maxWidth keep Flex's container sizes: `<Skeleton maxWidth="l">`
+  // caps a placeholder at the content column, as 2.x apps write it.
+  it("takes Flex's container sizes on minWidth and maxWidth", () => {
+    const capped = <Skeleton maxWidth="l" />;
+    const floored = <Skeleton minWidth="xs" />;
+    // @ts-expect-error — width stays strict: "m" is not a Skeleton length
+    const wide = <Skeleton width="m" />;
+    expect([capped, floored, wide]).toHaveLength(3);
+    type SkeletonProps = React.ComponentProps<typeof Skeleton>;
+    expectTypeOf<SkeletonProps["maxWidth"]>().toEqualTypeOf<SizeProps["maxWidth"]>();
+    expectTypeOf<SkeletonProps["minWidth"]>().toEqualTypeOf<SizeProps["minWidth"]>();
+  });
+
+  it('renders maxWidth="l" as Flex does', () => {
+    const { container } = render(<Skeleton shape="line" maxWidth="l" />, { wrapper: wrap });
+    const { container: flex } = render(<Flex maxWidth="l" />, { wrapper: wrap });
+    const el = container.firstElementChild as HTMLElement;
+    const ref = flex.firstElementChild as HTMLElement;
+    expect(ref.classList.contains("max-width-l")).toBe(true);
+    expect(el.classList.contains("max-width-l")).toBe(true);
+    expect(el.style.maxWidth).toBe(ref.style.maxWidth);
+  });
+
+  it('renders minWidth="m" as Flex does', () => {
+    const { container } = render(<Skeleton shape="line" minWidth="m" />, { wrapper: wrap });
+    const { container: flex } = render(<Flex minWidth="m" />, { wrapper: wrap });
+    const el = container.firstElementChild as HTMLElement;
+    const ref = flex.firstElementChild as HTMLElement;
+    expect(ref.style.minWidth).toBe("var(--responsive-width-m)");
+    expect(el.style.minWidth).toBe(ref.style.minWidth);
+    const layout = (c: HTMLElement) =>
+      [...c.classList].filter((name) => /^min-width/.test(name)).sort();
+    expect(layout(el)).toEqual(layout(ref));
+  });
+
+  it("reads a number on the token scale, as everywhere", () => {
+    const { container } = render(<Skeleton shape="line" width={12} />, { wrapper: wrap });
+    const { container: token } = render(<Skeleton shape="line" width="12" />, { wrapper: wrap });
+    const el = container.firstElementChild as HTMLElement;
+    expect(el.getAttribute("style")).toBe(
+      (token.firstElementChild as HTMLElement).getAttribute("style"),
+    );
+  });
+
   it("takes delay in milliseconds", () => {
     const { container } = render(<Skeleton shape="line" delay={300} />, { wrapper: wrap });
     expect(container.firstElementChild).toHaveStyle({ animationDelay: "300ms" });
@@ -39,13 +96,13 @@ describe("Skeleton", () => {
 });
 
 describe("scheme replaces variant for colour-scheme props", () => {
-  it("Pulse colours from scheme", () => {
-    const { container } = render(<Pulse scheme="danger" />, { wrapper: wrap });
+  it("StatusIndicator pulse colours from tone", () => {
+    const { container } = render(<StatusIndicator pulse tone="danger" />, { wrapper: wrap });
     expect(container.innerHTML).toMatch(/danger/);
   });
 
   it("Tag colours from scheme", () => {
-    const { container } = render(<Tag scheme="success" label="Live" />, { wrapper: wrap });
+    const { container } = render(<Tag tone="success" label="Live" />, { wrapper: wrap });
     expect(container.innerHTML).toMatch(/success/);
   });
 
@@ -53,8 +110,8 @@ describe("scheme replaces variant for colour-scheme props", () => {
     // The gradient path takes a different branch: it applies the module's
     // gradient class instead of a scheme-derived background, so assert the
     // branch rather than a colour token that branch deliberately omits.
-    const { container } = render(<Tag scheme="gradient" label="New" />, { wrapper: wrap });
-    const plain = render(<Tag scheme="neutral" label="New" />, { wrapper: wrap });
+    const { container } = render(<Tag variant="gradient" label="New" />, { wrapper: wrap });
+    const plain = render(<Tag tone="neutral" label="New" />, { wrapper: wrap });
     expect(container.firstElementChild?.className).not.toEqual(
       plain.container.firstElementChild?.className,
     );

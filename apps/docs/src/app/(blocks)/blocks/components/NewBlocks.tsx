@@ -42,7 +42,7 @@ export function NewBlocks({ onNavigate }: NewBlocksProps = {}) {
   }, []);
 
   return (
-    <Column fillWidth border radius="l" minHeight={24} overflow="hidden">
+    <Column fillWidth border radius="l" minHeight="24rem" overflow="hidden">
       <Scroller fill direction="column" fadeColor="page">
         <Grid fillWidth columns={2}>
           {allExamples.map((example, index) => {
@@ -64,7 +64,7 @@ export function NewBlocks({ onNavigate }: NewBlocksProps = {}) {
               >
                 <Media
                   border
-                  light
+                  showIn="light"
                   src={example.image?.light ?? ""}
                   sizes="64px"
                   aspectRatio="1"
@@ -72,7 +72,7 @@ export function NewBlocks({ onNavigate }: NewBlocksProps = {}) {
                 />
                 <Media
                   border
-                  dark
+                  showIn="dark"
                   src={example.image?.dark ?? ""}
                   sizes="64px"
                   aspectRatio="1"
@@ -80,7 +80,7 @@ export function NewBlocks({ onNavigate }: NewBlocksProps = {}) {
                 />
                 <Column fillWidth gap="16" vertical="center" padding="24">
                   <Column gap="4">
-                    <Text variant="label-default-l" onBackground="neutral-strong">
+                    <Text textVariant="label-default-l" onBackground="neutral-strong">
                       {example.title}
                     </Text>
                     <Row
@@ -96,7 +96,7 @@ export function NewBlocks({ onNavigate }: NewBlocksProps = {}) {
                     </Row>
                   </Column>
                   {example.description && (
-                    <Text variant="label-default-xs" onBackground="neutral-weak">
+                    <Text textVariant="label-default-xs" onBackground="neutral-weak">
                       {example.description}
                     </Text>
                   )}

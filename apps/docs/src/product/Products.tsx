@@ -65,9 +65,9 @@ export function Products() {
             paddingX="4"
           >
             <Row paddingX="16" paddingY="12" gap="12" vertical="center">
-              <AvatarGroup dark reverse avatars={[{src: "/images/avatar.jpg"}, {src: "/trademarks/icon-dark.svg"}]} size="s" />
-              <AvatarGroup light reverse avatars={[{src: "/images/avatar.jpg"}, {src: "/trademarks/icon-light.svg"}]} size="s" />
-              <Text variant="label-default-s">Once UI</Text>
+              <AvatarGroup showIn="dark" reverse avatars={[{src: "/images/avatar.jpg"}, {src: "/trademarks/icon-dark.svg"}]} size="s" />
+              <AvatarGroup showIn="light" reverse avatars={[{src: "/images/avatar.jpg"}, {src: "/trademarks/icon-light.svg"}]} size="s" />
+              <Text textVariant="label-default-s">Once UI</Text>
             </Row>
             <Media
               border
@@ -78,13 +78,13 @@ export function Products() {
             />
             <Column fillWidth paddingX="16" paddingY="20" gap="4" horizontal="start">
               <Text 
-                variant="heading-default-xs" 
+                textVariant="heading-default-xs" 
                 onBackground="neutral-strong"
               >
                 {template.title}
               </Text>
               <Text 
-                variant="body-default-s" 
+                textVariant="body-default-s" 
                 onBackground="neutral-weak"
                 wrap="balance"
               >

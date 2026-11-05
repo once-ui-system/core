@@ -4,17 +4,18 @@ import type { Map as MapLibreMap, MapOptions } from "maplibre-gl";
 import * as maplibre from "maplibre-gl";
 import type React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Column } from "../../components/Column";
-import { Icon } from "../../components/Icon";
-import { IconButton } from "../../components/IconButton";
-import { Text } from "../../components/Text";
-import { useTheme } from "../../contexts/ThemeProvider";
-import { useReducedMotion } from "../../hooks/useReducedMotion";
+import { Column } from "../../components/Column.js";
+import { Icon } from "../../components/Icon.js";
+import { IconButton } from "../../components/IconButton.js";
+import { Text } from "../../components/Text.js";
+import { useTheme } from "../../contexts/ThemeProvider.js";
+import { elementTheme, useElementTheme } from "../../hooks/useElementTheme.js";
+import { useReducedMotion } from "../../hooks/useReducedMotion.js";
 import styles from "./Map.module.scss";
-import { MapContext, type MapContextValue } from "./MapContext";
-import { DEFAULT_MAP_STYLE } from "./mapStyles";
-import { applyScene } from "./scene";
-import { tokenColor } from "./tokenColor";
+import { MapContext, type MapContextValue } from "./MapContext.js";
+import { DEFAULT_MAP_STYLE } from "./mapStyles.js";
+import { applyScene } from "./scene.js";
+import { tokenColor } from "./tokenColor.js";
 import type {
   LngLat,
   MapBuildings,
@@ -22,7 +23,7 @@ import type {
   MapStyle,
   MapStyleSource,
   MapViewport,
-} from "./types";
+} from "./types.js";
 
 export interface MapLabels {
   /** The map's accessible name. Default "Map". */
@@ -203,7 +204,10 @@ const MapImpl: React.FC<MapProps> = ({
 }) => {
   const labels = { ...DEFAULT_LABELS, ...labelsProp };
   const container = useRef<HTMLDivElement>(null);
-  const { resolvedTheme } = useTheme();
+  // The theme the map is drawn in: a nested or inverted `data-theme` around
+  // it wins over the page's.
+  const { resolvedTheme: pageTheme } = useTheme();
+  const resolvedTheme = useElementTheme(container);
   const { shouldAnimate } = useReducedMotion();
   const reducedMotion = !shouldAnimate;
   const [map, setMap] = useState<MapLibreMap | null>(null);
@@ -237,7 +241,7 @@ const MapImpl: React.FC<MapProps> = ({
   // biome-ignore lint/correctness/useExhaustiveDependencies: created once; later prop changes go through the effects below
   useEffect(() => {
     if (!container.current) return;
-    const style = pickStyle(mapStyle, resolvedTheme);
+    const style = pickStyle(mapStyle, elementTheme(container.current, pageTheme));
     const start = viewport ?? defaultViewport;
     let instance: MapLibreMap;
     try {
@@ -385,7 +389,7 @@ const MapImpl: React.FC<MapProps> = ({
       {failed ? (
         <Column fill center gap="8" padding="24" className={styles.fallback}>
           <Icon name="world" onBackground="neutral-weak" />
-          <Text variant="body-default-s" onBackground="neutral-weak" align="center">
+          <Text textVariant="body-default-s" onBackground="neutral-weak" align="center">
             {labels.unavailable}
           </Text>
         </Column>

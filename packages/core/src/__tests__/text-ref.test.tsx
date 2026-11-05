@@ -4,9 +4,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, expectTypeOf, it } from "vitest";
 import { Heading } from "../components/Heading";
 import { ListItem } from "../components/ListItem";
-import { ShineFx } from "../components/ShineFx";
 import { Text } from "../components/Text";
-import { TypeFx } from "../components/TypeFx";
 
 /**
  * `Text` and `Heading` took no ref, so `ListItem`, which declares
@@ -58,12 +56,12 @@ describe("Text and Heading refs", () => {
   });
 
   it("keeps the props a wrapper extends", () => {
-    // ListItem, ShineFx, TypeFx, CountFx and FadingLettersFx extend
-    // `ComponentProps<typeof Text>`; it still carries every Text prop.
+    // ListItem (and, in @once-ui-system/fx, ShineFx, TypeFx and CountFx)
+    // extends `ComponentProps<typeof Text>`; it still carries every Text prop.
     type Props = ComponentProps<typeof Text>;
     expectTypeOf<Props>().toHaveProperty("as");
-    expectTypeOf<Props>().toHaveProperty("variant");
-    expectTypeOf<Props>().toHaveProperty("translateX");
+    expectTypeOf<Props>().toHaveProperty("textVariant");
+    expectTypeOf<Props>().toHaveProperty("marginTop");
     expectTypeOf<Props>().toHaveProperty("onBackground");
     expectTypeOf<ComponentProps<typeof ListItem>["ref"]>().toEqualTypeOf<
       Ref<HTMLLIElement> | undefined
@@ -131,18 +129,5 @@ describe("Text and Heading refs", () => {
     expect(Text.displayName).toBe("Text");
     expect(Heading.displayName).toBe("Heading");
     expect(ListItem.displayName).toBe("ListItem");
-  });
-
-  it("passes ShineFx's and TypeFx's refs through to their text", () => {
-    const shine = createRef<HTMLSpanElement>();
-    const type = createRef<HTMLSpanElement>();
-    render(
-      <>
-        <ShineFx ref={shine}>shine</ShineFx>
-        <TypeFx ref={type} words={["typed"]} />
-      </>,
-    );
-    expect(shine.current?.textContent).toBe("shine");
-    expect(type.current).toBeInstanceOf(HTMLElement);
   });
 });

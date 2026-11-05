@@ -1,6 +1,7 @@
 "use client";
 
-import { Background, Column, CountFx, Icon, Row, Text } from "@once-ui-system/core";
+import { Background, Column, Icon, Row, Text } from "@once-ui-system/core";
+import { CountFx } from "@once-ui-system/fx";
 import { LinearGauge } from "@once-ui-system/core/data";
 
 const MAX_FUNDING = 15000;
@@ -20,7 +21,7 @@ export const FundingGauge1 = (flex: React.ComponentProps<typeof Column>) => {
 
   return (
     <Column
-      maxWidth={48}
+      maxWidth="48rem"
       horizontal="center"
       padding="l"
       border="brand-alpha-strong"
@@ -61,9 +62,9 @@ export const FundingGauge1 = (flex: React.ComponentProps<typeof Column>) => {
         gradient={{
           display: true,
           colorStart: "page-background",
-          width: 200,
-          height: 150,
-          y: 100,
+          width: "200%",
+          height: "150%",
+          y: "100%",
         }}
       />
 
@@ -86,14 +87,14 @@ export const FundingGauge1 = (flex: React.ComponentProps<typeof Column>) => {
                   horizontal="center"
                 >
                   <Text
-                    variant="code-default-xs"
+                    textVariant="code-default-xs"
                     onBackground={milestone.achieved ? "brand-medium" : "neutral-weak"}
                     wrap="nowrap"
                   >
                     {milestone.label}
                   </Text>
                   {milestone.isVision && !milestone.achieved ? (
-                    <Text variant="code-default-xs" onBackground="neutral-weak" marginY="1">
+                    <Text textVariant="code-default-xs" onBackground="neutral-weak" marginY="1">
                       ?
                     </Text>
                   ) : milestone.achieved ? (
@@ -110,18 +111,18 @@ export const FundingGauge1 = (flex: React.ComponentProps<typeof Column>) => {
             fillWidth
             height={24}
             value={progress}
-            hue={[160, 360]}
+            hueRange={[160, 360]}
             line={{ count: 120, width: 1.5, length: 10 }}
           />
         </Column>
 
         <Row fillWidth horizontal="between" vertical="center" wrap gap="12" paddingX="4">
-          <Text variant="label-default-s" onBackground="brand-medium">
+          <Text textVariant="label-default-s" onBackground="brand-medium">
             $<CountFx value={monthlyTotal} separator="," />
             /mo ecosystem funding
           </Text>
           {nextMilestone && (
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               {progress}% to {nextMilestone.label}
             </Text>
           )}

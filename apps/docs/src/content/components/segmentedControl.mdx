@@ -33,10 +33,60 @@ Use this component for toggle-style selection between discrete options. It suppo
       { value: "week", label: "Week" },
       { value: "month", label: "Month" },
     ]}
-    onChange={(value) => console.log(value)}
+    onValueChange={(value) => console.log(value)}
 />`,
       language: "tsx",
       label: "Basic usage"
+    }
+  ]}
+/>
+
+## Sliding background
+
+The selected background slides from one option to the next, even when the options have different widths. Visitors who ask for reduced motion see it move without the slide. Pass `sliding={false}` for the old jump; `compact` controls never slide.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="center">
+      <SegmentedControl
+        fillWidth={false}
+        buttons={[
+          { value: "all", label: "All" },
+          { value: "unread", label: "Unread" },
+          { value: "mentions", label: "Mentions and replies" },
+          { value: "archive", label: "Archive" },
+        ]}
+      />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<SegmentedControl
+    fillWidth={false}
+    buttons={[
+      { value: "all", label: "All" },
+      { value: "unread", label: "Unread" },
+      { value: "mentions", label: "Mentions and replies" },
+      { value: "archive", label: "Archive" },
+    ]}
+/>`,
+      language: "tsx",
+      label: "Sliding"
+    },
+    {
+      code:
+`<SegmentedControl
+    sliding={false}
+    buttons={[
+      { value: "all", label: "All" },
+      { value: "unread", label: "Unread" },
+    ]}
+/>`,
+      language: "tsx",
+      label: "Without the slide"
     }
   ]}
 />
@@ -72,7 +122,7 @@ Use `selected` to manage the selected state from the parent.
       { value: "week", label: "Week" },
       { value: "month", label: "Month" },
     ]}
-    onChange={(value) => console.log(value)}
+    onValueChange={(value) => console.log(value)}
 />`,
       language: "tsx",
       label: "External state"
@@ -111,7 +161,7 @@ Use `defaultValue` to define an initial active button in uncontrolled mode. Don'
       { value: "week", label: "Week" },
       { value: "month", label: "Month" },
     ]}
-    onChange={(value) => console.log(value)}
+    onValueChange={(value) => console.log(value)}
 />`,
       language: "tsx",
       label: "Internal state"
@@ -190,7 +240,7 @@ Use `compact` to create a compact variant.
       { value: "week", label: "Week" },
       { value: "month", label: "Month" },
     ]}
-    onChange={(value) => console.log(value)}
+    onValueChange={(value) => console.log(value)}
 />`,
       language: "tsx",
       label: "Compact"
@@ -229,7 +279,7 @@ Control the selected value externally with the `value` prop.
     { value: "week", label: "Week" },
     { value: "month", label: "Month" },
   ]}
-  onChange={(value) => console.log(value)}
+  onValueChange={(value) => console.log(value)}
 />`,
       language: "tsx",
       label: "Controlled"
@@ -262,7 +312,7 @@ Distribute the button widths evenly across the container.
     { value: "b", label: "B" },
     { value: "c", label: "C" },
   ]}
-  onChange={(value) => console.log(value)}
+  onValueChange={(value) => console.log(value)}
 />`,
       language: "tsx",
       label: "Fill width"
@@ -278,7 +328,7 @@ Options that do not fit scroll behind a Next button. In a narrow sidebar that cl
   marginTop="16"
   marginBottom="24"
   preview={
-    <Column gap="16" maxWidth={16} fillWidth>
+    <Column gap="16" maxWidth={256} fillWidth>
       <SegmentedControl
         scroll={false}
         aria-label="Library view"
@@ -323,6 +373,10 @@ Options that do not fit scroll behind a Next button. In a narrow sidebar that cl
   component="SegmentedControl"
   describe={{
     compact: "Tighter padding, for dense toolbars.",
+    value: "The selected button's value, controlled. Leave it out and the control keeps its own state.",
+    defaultValue: "The button selected first when uncontrolled. Defaults to the first one.",
+    onValueChange: "Called with the picked value (and the click, when it was one) on every pick.",
+    disabled: "Disables every button.",
     semantics: "`tabs` (a tab strip) or `radio` (one choice from a set of settings, a radio group).",
     scroll: "`false` shares the width between the options and truncates labels, instead of scrolling them.",
   }}

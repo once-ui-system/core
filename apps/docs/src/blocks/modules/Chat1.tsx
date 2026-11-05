@@ -21,13 +21,13 @@ export const Chat1 = () => {
   const membersColumns = [
     {
       key: "member",
-      title: <Text variant="label-default-s">Member</Text>,
+      title: <Text textVariant="label-default-s">Member</Text>,
       render: (item: MemberRow) => (
         <Row fillWidth gap="12" vertical="center">
           <Avatar src={item.avatar || undefined} />
           <Column fillWidth>
-            <Text variant="label-default-s">{item.name}</Text>
-            <Text variant="body-default-xs" onBackground="neutral-weak" truncate>
+            <Text textVariant="label-default-s">{item.name}</Text>
+            <Text textVariant="body-default-xs" onBackground="neutral-weak" truncate>
               {item.status}
             </Text>
           </Column>
@@ -36,18 +36,18 @@ export const Chat1 = () => {
     },
     {
       key: "group",
-      title: <Text variant="label-default-s">Role</Text>,
+      title: <Text textVariant="label-default-s">Role</Text>,
       render: (item: MemberRow) => (
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           {item.group}
         </Text>
       ),
     },
     {
       key: "status",
-      title: <Text variant="label-default-s">Bio</Text>,
+      title: <Text textVariant="label-default-s">Bio</Text>,
       render: (item: MemberRow) => (
-        <Text variant="label-default-s" onBackground="neutral-weak" truncate>
+        <Text textVariant="label-default-s" onBackground="neutral-weak" truncate>
           {item.bio || "—"}
         </Text>
       ),
@@ -66,7 +66,7 @@ export const Chat1 = () => {
             columns={membersColumns}
             selectable
             getId={(i: MemberRow) => i.name}
-            heading={<Text variant="label-default-m">Members</Text>}
+            heading={<Text textVariant="label-default-m">Members</Text>}
             showSearch
             filterFn={(item: MemberRow, q: string) =>
               [item.name, item.status, item.bio, item.group]

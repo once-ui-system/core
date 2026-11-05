@@ -1,23 +1,7 @@
 "use client";
 
 import React, {useState, useEffect, useCallback} from "react";
-import {
-  Button,
-  Flex,
-  Text,
-  Heading,
-  Column,
-  Badge,
-  Input,
-  Card,
-  Spinner,
-  ProgressBar,
-  Avatar,
-  Chip,
-  IconButton,
-  Grid,
-  Row,
-} from "@once-ui-system/core";
+import { Button, Flex, Text, Heading, Column, Tag, Input, Card, Spinner, ProgressBar, Avatar, IconButton, Grid, Row } from "@once-ui-system/core";
 
 interface BenchmarkResult {
   testName: string;
@@ -82,8 +66,8 @@ export const UIBenchmark: React.FC = () => {
       components.push(
         <Flex key={`simple-${i}`} gap="8" padding="4">
           <Button variant="primary" size="s">Button {i}</Button>
-          <Badge arrow={false} onBackground="brand-medium" background="brand-medium" title={`Badge ${i}`}/>
-          <Text variant="body-default-s">Text {i}</Text>
+          <Tag variant="announce" arrow={false} onBackground="brand-medium" background="brand-medium" label={`Badge ${i}`}/>
+          <Text textVariant="body-default-s">Text {i}</Text>
         </Flex>
       );
     }
@@ -97,11 +81,11 @@ export const UIBenchmark: React.FC = () => {
       components.push(
         <Card key={`complex-${i}`} padding="16" style={{ margin: "8px" }}>
           <Flex direction="column" gap="8">
-            <Heading variant="heading-default-xs">Card {i}</Heading>
-            <Text variant="body-default-s">Description for card {i}</Text>
+            <Heading textVariant="heading-default-xs">Card {i}</Heading>
+            <Text textVariant="body-default-s">Description for card {i}</Text>
             <Flex gap="8">
               <Avatar size="s" src={`https://picsum.photos/32/32?random=${i}`} />
-              <Chip label={`Chip ${i}`}/>
+              <Tag selected label={`Chip ${i}`}/>
               <Button variant="secondary" size="s">Action</Button>
             </Flex>
             <ProgressBar value={(i % 10) * 10} />
@@ -119,7 +103,7 @@ export const UIBenchmark: React.FC = () => {
       components.push(
         <Row key={`grid-${i}`}>
           <Card padding="12">
-            <Text variant="body-default-s">Grid Item {i}</Text>
+            <Text textVariant="body-default-s">Grid Item {i}</Text>
           </Card>
         </Row>
       );
@@ -183,11 +167,11 @@ export const UIBenchmark: React.FC = () => {
 
   return (
     <Column gap="24">
-      <Heading variant="heading-default-m">UI Kit Performance Benchmark</Heading>
+      <Heading textVariant="heading-default-m">UI Kit Performance Benchmark</Heading>
 
       <Flex padding="20" background={'neutral-alpha-weak'} border={'neutral-alpha-medium'} radius={'m'}>
         <Flex direction="column" gap="16">
-          <Text variant="body-default-m">
+          <Text textVariant="body-default-m">
             This benchmark tests the performance of various UI kit components
           </Text>
 
@@ -212,7 +196,7 @@ export const UIBenchmark: React.FC = () => {
           {isRunning && (
             <Flex vertical="center" gap="8">
               <Spinner size="s" />
-              <Text variant="body-default-s">
+              <Text textVariant="body-default-s">
                 Running: {currentTest || "Preparing..."}
               </Text>
             </Flex>
@@ -221,7 +205,7 @@ export const UIBenchmark: React.FC = () => {
       </Flex>
 
         <Flex padding="20" direction={'column'}>
-            <Heading variant="heading-default-s" marginBottom="16">Test Results</Heading>
+            <Heading textVariant="heading-default-s" marginBottom="16">Test Results</Heading>
 
             <Flex direction={'row'} gap={'s'} s={{ direction: 'column' }}>
                 <Column gap="12">
@@ -229,26 +213,26 @@ export const UIBenchmark: React.FC = () => {
                         <Flex key={index} padding="16" background={'neutral-alpha-weak'} border={'neutral-alpha-medium'} radius={'m'} fillWidth>
                             <Row horizontal="between" vertical="center" fillWidth gap={'8'}>
                                 <Column gap="4">
-                                    <Text variant="body-strong-m">{result.testName}</Text>
-                                    <Text variant="body-default-s">
+                                    <Text textVariant="body-strong-m">{result.testName}</Text>
+                                    <Text textVariant="body-default-s">
                                         Components: {result.componentsCount}
                                     </Text>
                                 </Column>
 
                                 <Row gap="12" vertical="center">
                                     <Column gap="4" horizontal="center">
-                                        <Badge paddingX="12" paddingY="8" background={getPerformanceColor(result.renderTime)}>
+                                        <Tag variant="announce" paddingX="12" paddingY="8" background={getPerformanceColor(result.renderTime)}>
                                             {result.renderTime.toFixed(2)}ms
-                                        </Badge>
-                                        <Text variant="body-default-xs">Render Time</Text>
+                                        </Tag>
+                                        <Text textVariant="body-default-xs">Render Time</Text>
                                     </Column>
 
                                     {result.fps && (
                                         <Column gap="4" horizontal="center">
-                                            <Badge paddingX="12" paddingY="8" background={result.fps > 55 ? "success-strong" : result.fps > 30 ? "warning-strong" : "danger-strong"}>
+                                            <Tag variant="announce" paddingX="12" paddingY="8" background={result.fps > 55 ? "success-strong" : result.fps > 30 ? "warning-strong" : "danger-strong"}>
                                                 {result.fps}fps
-                                            </Badge>
-                                            <Text variant="body-default-xs">FPS</Text>
+                                            </Tag>
+                                            <Text textVariant="body-default-xs">FPS</Text>
                                         </Column>
                                     )}
                                 </Row>
@@ -258,12 +242,12 @@ export const UIBenchmark: React.FC = () => {
                 </Column>
 
                 <Flex padding="16" marginTop="16" background="page" direction={'column'} gap={'8'}>
-                    <Text variant="body-strong-s">Result Interpretation:</Text>
+                    <Text textVariant="body-strong-s">Result Interpretation:</Text>
                     <Flex gap={'4'} direction={'column'}>
-                        <Flex vertical={'center'} gap={'4'}><Badge paddingX="12" paddingY="8" background="success-strong">Green</Badge><Text variant={'body-default-s'}>- Excellent performance (&lt;5ms)</Text></Flex>
-                        <Flex vertical={'center'} gap={'4'}><Badge paddingX="12" paddingY="8" background="warning-strong">Yellow</Badge><Text variant={'body-default-s'}>- Good performance (5-15ms)</Text></Flex>
-                        <Flex vertical={'center'} gap={'4'}><Badge paddingX="12" paddingY="8" background="danger-strong">Red</Badge><Text variant={'body-default-s'}>- Needs optimization (&gt;15ms)</Text></Flex>
-                        <Text variant={'body-default-s'}>• FPS shows animation smoothness (60fps is ideal)</Text>
+                        <Flex vertical={'center'} gap={'4'}><Tag variant="announce" paddingX="12" paddingY="8" background="success-strong">Green</Tag><Text textVariant={'body-default-s'}>- Excellent performance (&lt;5ms)</Text></Flex>
+                        <Flex vertical={'center'} gap={'4'}><Tag variant="announce" paddingX="12" paddingY="8" background="warning-strong">Yellow</Tag><Text textVariant={'body-default-s'}>- Good performance (5-15ms)</Text></Flex>
+                        <Flex vertical={'center'} gap={'4'}><Tag variant="announce" paddingX="12" paddingY="8" background="danger-strong">Red</Tag><Text textVariant={'body-default-s'}>- Needs optimization (&gt;15ms)</Text></Flex>
+                        <Text textVariant={'body-default-s'}>• FPS shows animation smoothness (60fps is ideal)</Text>
                     </Flex>
                 </Flex>
             </Flex>

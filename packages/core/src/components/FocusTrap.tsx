@@ -2,7 +2,6 @@
 
 import type React from "react";
 import {
-  forwardRef,
   type KeyboardEvent,
   type ReactNode,
   type RefObject,
@@ -10,7 +9,7 @@ import {
   useImperativeHandle,
   useRef,
 } from "react";
-import { getFocusableElements, nextInTrap } from "../internal/focusable";
+import { getFocusableElements, nextInTrap } from "../internal/focusable.js";
 
 interface FocusTrapProps {
   children: ReactNode;
@@ -25,111 +24,107 @@ interface FocusTrapProps {
   autoFocus?: boolean;
 }
 
-const FocusTrap = forwardRef<HTMLDivElement, FocusTrapProps>(
-  (
-    {
-      children,
-      active,
-      onEscape,
-      containerRef: externalRef,
-      className,
-      style,
-      initialFocusRef,
-      returnFocusRef,
-      restoreFocus = true,
-      autoFocus = true,
-    },
-    ref,
-  ) => {
-    const internalRef = useRef<HTMLDivElement>(null);
-    const containerRef = externalRef || internalRef;
-    // The forwarded ref was accepted and never attached.
-    useImperativeHandle(ref, () => containerRef.current as HTMLDivElement);
-    const previouslyFocusedElement = useRef<Element | null>(null);
+const FocusTrap = ({
+  ref,
+  children,
+  active,
+  onEscape,
+  containerRef: externalRef,
+  className,
+  style,
+  initialFocusRef,
+  returnFocusRef,
+  restoreFocus = true,
+  autoFocus = true,
+}: FocusTrapProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const internalRef = useRef<HTMLDivElement>(null);
+  const containerRef = externalRef || internalRef;
+  // The ref was accepted and never attached.
+  useImperativeHandle(ref, () => containerRef.current as HTMLDivElement);
+  const previouslyFocusedElement = useRef<Element | null>(null);
 
-    // Store the previously focused element when the trap becomes active
-    useEffect(() => {
-      if (active) {
-        // Focus already inside means someone placed it there deliberately and
-        // more precisely than "the first focusable element" — DropdownWrapper
-        // opens a list on its selected option, not its first. This effect can
-        // run before or after that, depending on when the panel finishes
-        // positioning, so it defers instead of racing: a trap's job is to keep
-        // focus in, not to reset where it sits. The element outside is likewise
-        // only worth remembering when focus is actually coming from out there.
-        const alreadyInside = containerRef.current?.contains(document.activeElement) ?? false;
-        if (alreadyInside) return;
+  // Store the previously focused element when the trap becomes active
+  useEffect(() => {
+    if (active) {
+      // Focus already inside means someone placed it there deliberately and
+      // more precisely than "the first focusable element" — DropdownWrapper
+      // opens a list on its selected option, not its first. This effect can
+      // run before or after that, depending on when the panel finishes
+      // positioning, so it defers instead of racing: a trap's job is to keep
+      // focus in, not to reset where it sits. The element outside is likewise
+      // only worth remembering when focus is actually coming from out there.
+      const alreadyInside = containerRef.current?.contains(document.activeElement) ?? false;
+      if (alreadyInside) return;
 
-        previouslyFocusedElement.current = document.activeElement;
+      previouslyFocusedElement.current = document.activeElement;
 
-        if (autoFocus) {
-          // Focus the specified initial element or the first focusable element
-          if (initialFocusRef && initialFocusRef.current) {
-            initialFocusRef.current.focus({ preventScroll: true });
-          } else if (containerRef.current) {
-            const focusableElements = getFocusableElements(containerRef.current);
-            if (focusableElements.length > 0) {
-              focusableElements[0].focus({ preventScroll: true });
-            } else {
-              // If no focusable elements, focus the container itself
-              containerRef.current.focus({ preventScroll: true });
-            }
+      if (autoFocus) {
+        // Focus the specified initial element or the first focusable element
+        if (initialFocusRef && initialFocusRef.current) {
+          initialFocusRef.current.focus({ preventScroll: true });
+        } else if (containerRef.current) {
+          const focusableElements = getFocusableElements(containerRef.current);
+          if (focusableElements.length > 0) {
+            focusableElements[0].focus({ preventScroll: true });
+          } else {
+            // If no focusable elements, focus the container itself
+            containerRef.current.focus({ preventScroll: true });
           }
         }
-      } else if (!active && restoreFocus && previouslyFocusedElement.current) {
-        // When deactivated, return focus to the specified element or the previously focused element
-        const elementToFocus = returnFocusRef?.current || previouslyFocusedElement.current;
-        if (elementToFocus && typeof (elementToFocus as HTMLElement).focus === "function") {
-          (elementToFocus as HTMLElement).focus({ preventScroll: true });
-        }
       }
-    }, [active, autoFocus, initialFocusRef, returnFocusRef, restoreFocus, containerRef]);
-
-    // Handle keyboard events for focus trapping
-    const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-      if (!active) return;
-
-      // Handle escape key. One something inside already handled (a palette or
-      // a dropdown over this trap) is not this trap's to close on.
-      if (e.key === "Escape" && onEscape && !e.defaultPrevented) {
-        e.preventDefault();
-        onEscape();
-        return;
+    } else if (!active && restoreFocus && previouslyFocusedElement.current) {
+      // When deactivated, return focus to the specified element or the previously focused element
+      const elementToFocus = returnFocusRef?.current || previouslyFocusedElement.current;
+      if (elementToFocus && typeof (elementToFocus as HTMLElement).focus === "function") {
+        (elementToFocus as HTMLElement).focus({ preventScroll: true });
       }
+    }
+  }, [active, autoFocus, initialFocusRef, returnFocusRef, restoreFocus, containerRef]);
 
-      // Don't handle arrow keys - let ArrowNavigation handle them
-      if (
-        e.key === "ArrowUp" ||
-        e.key === "ArrowDown" ||
-        e.key === "ArrowLeft" ||
-        e.key === "ArrowRight"
-      ) {
-        return;
-      }
+  // Handle keyboard events for focus trapping
+  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (!active) return;
 
-      // Handle tab key for focus trapping: the trap decides every Tab, so it
-      // also wraps out of a roving grid whose focused cell Tab would skip.
-      if (e.key === "Tab" && containerRef.current && !e.defaultPrevented) {
-        const next = nextInTrap(containerRef.current, document.activeElement, e.shiftKey);
-        if (!next) return;
-        e.preventDefault();
-        next.focus({ preventScroll: true });
-      }
-    };
+    // Handle escape key. One something inside already handled (a palette or
+    // a dropdown over this trap) is not this trap's to close on.
+    if (e.key === "Escape" && onEscape && !e.defaultPrevented) {
+      e.preventDefault();
+      onEscape();
+      return;
+    }
 
-    return (
-      <div
-        ref={containerRef}
-        className={className}
-        style={style}
-        onKeyDown={handleKeyDown}
-        tabIndex={-1}
-      >
-        {children}
-      </div>
-    );
-  },
-);
+    // Don't handle arrow keys - let ArrowNavigation handle them
+    if (
+      e.key === "ArrowUp" ||
+      e.key === "ArrowDown" ||
+      e.key === "ArrowLeft" ||
+      e.key === "ArrowRight"
+    ) {
+      return;
+    }
+
+    // Handle tab key for focus trapping: the trap decides every Tab, so it
+    // also wraps out of a roving grid whose focused cell Tab would skip.
+    if (e.key === "Tab" && containerRef.current && !e.defaultPrevented) {
+      const next = nextInTrap(containerRef.current, document.activeElement, e.shiftKey);
+      if (!next) return;
+      e.preventDefault();
+      next.focus({ preventScroll: true });
+    }
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      className={className}
+      style={style}
+      onKeyDown={handleKeyDown}
+      tabIndex={-1}
+    >
+      {children}
+    </div>
+  );
+};
 
 FocusTrap.displayName = "FocusTrap";
 

@@ -1,16 +1,21 @@
-import React, { forwardRef } from "react";
-import { IconName } from "../icons";
-import { CondensedTShirtSizes, TShirtSizes } from "../types";
+import React from "react";
+import { IconName } from "../icons.js";
+import type { LeafPropsOf } from "../interfaces.js";
+import { CondensedTShirtSizes, CSSUnit, Tone, TShirtSizes } from "../types.js";
+import { isCSSUnit, tokenLength, withTokenLengths } from "../utils/layoutClasses.js";
 import styles from "./Avatar.module.scss";
-import { Flex } from "./Flex";
-import { Icon } from "./Icon";
-import { Media } from "./Media";
-import { Skeleton } from "./Skeleton";
-import { StatusIndicator, type StatusIndicatorColor } from "./StatusIndicator";
-import { Text } from "./Text";
+import { Flex } from "./Flex.js";
+import { Icon } from "./Icon.js";
+import { Media } from "./Media.js";
+import { Skeleton } from "./Skeleton.js";
+import { StatusIndicator, type StatusIndicatorScheme } from "./StatusIndicator.js";
+import { Text } from "./Text.js";
 
-interface AvatarProps extends React.ComponentProps<typeof Flex> {
-  size?: TShirtSizes | number;
+interface AvatarProps extends LeafPropsOf<"div"> {
+  /**
+   * A t-shirt size, a number on the token scale (`40` is 2.5rem), or a CSS length.
+   */
+  size?: TShirtSizes | number | CSSUnit;
   value?: string;
   src?: string;
   unoptimized?: boolean;
@@ -18,15 +23,14 @@ interface AvatarProps extends React.ComponentProps<typeof Flex> {
   empty?: boolean;
   icon?: IconName;
   /**
-   * A status dot on the avatar, in any colour StatusIndicator takes: it is a
-   * StatusIndicator. `color` named only four of them, so `"orange"` for "away"
-   * was a type error that rendered fine.
+   * A status dot on the avatar, as StatusIndicator draws it: `scheme` is a
+   * palette hue (2.x called it `color`), `tone` a theme role such as
+   * `"success"` that follows the theme. Every hue StatusIndicator takes works,
+   * so `"orange"` for "away" is no longer a type error.
    */
-  statusIndicator?: {
-    color: StatusIndicatorColor;
-  };
-  style?: React.CSSProperties;
-  className?: string;
+  statusIndicator?:
+    | { scheme: StatusIndicatorScheme; tone?: undefined }
+    | { tone: Tone; scheme?: undefined };
 }
 
 const sizeMapping: Record<TShirtSizes, number> = {
@@ -45,130 +49,154 @@ const statusIndicatorSizeMapping: Record<TShirtSizes, CondensedTShirtSizes> = {
   xl: "l",
 };
 
-const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
-  (
-    {
-      size = "m",
-      value,
-      src,
-      unoptimized,
-      loading,
-      empty,
-      icon,
-      statusIndicator,
-      className,
-      style = {},
-      ...rest
-    },
-    ref,
-  ) => {
-    const sizeInRem = typeof size === "number" ? `${size}rem` : undefined;
-    const sizeStyle = sizeInRem
-      ? {
-          width: sizeInRem,
-          height: sizeInRem,
-          minWidth: sizeInRem,
-          minHeight: sizeInRem,
-          ...style,
-        }
-      : style;
-    const isEmpty = empty || (!src && !value);
+/** A custom size in px at the default root size, as far as it can be read (`"10rem"` reads as 160). */
+function approxPx(size: unknown): number {
+  if (typeof size === "number") return size;
+  const match = typeof size === "string" ? /^(\d*\.?\d+)(px|rem|em)$/.exec(size) : null;
+  if (!match) return 0;
+  return Number(match[1]) * (match[2] === "px" ? 1 : 16);
+}
 
-    if (value && src) {
-      throw new Error("Avatar cannot have both 'value' and 'src' props.");
-    }
+const Avatar = ({
+  ref,
+  size = "m",
+  value,
+  src,
+  unoptimized,
+  loading,
+  empty,
+  icon,
+  statusIndicator,
+  className,
+  style = {},
+  ...rest
+}: AvatarProps) => {
+  // A t-shirt size is a class; a number is on the token scale and a CSS
+  // length is as written.
+  const customSize =
+    typeof size === "number" ? tokenLength(size) : isCSSUnit(size) ? (size as string) : undefined;
+  const sizeStyle = customSize
+    ? {
+        width: customSize,
+        height: customSize,
+        minWidth: customSize,
+        minHeight: customSize,
+        ...style,
+      }
+    : style;
+  const scale = customSize ? undefined : (size as TShirtSizes);
+  const isEmpty = empty || (!src && !value);
 
-    if (loading) {
+  if (value && src) {
+    throw new Error("Avatar cannot have both 'value' and 'src' props.");
+  }
+
+  if (loading) {
+    return (
+      <Skeleton
+        {...rest}
+        border="neutral-medium"
+        shape="circle"
+        {...(customSize
+          ? { width: customSize as CSSUnit, height: customSize as CSSUnit }
+          : { size: scale })}
+        className={`${styles.avatar} ${className || ""}`}
+        aria-busy="true"
+        aria-label="Loading avatar"
+      />
+    );
+  }
+
+  const renderContent = () => {
+    if (isEmpty) {
       return (
-        <Skeleton
-          {...rest}
-          border="neutral-medium"
-          shape="circle"
-          {...(typeof size === "number" ? { width: size, height: size } : { size })}
-          className={`${styles.avatar} ${className || ""}`}
-          aria-busy="true"
-          aria-label="Loading avatar"
+        <Icon
+          onBackground="neutral-medium"
+          name={icon || "person"}
+          size="m"
+          style={
+            customSize
+              ? // The third is taken in a custom property: jsdom throws on a
+                // `font-size` that is a `calc()` holding a `var()`.
+                withTokenLengths({
+                  "--avatar-icon-size": `calc(${customSize} / 3)`,
+                  fontSize: "var(--avatar-icon-size)",
+                } as React.CSSProperties)
+              : undefined
+          }
+          className={styles.icon}
         />
       );
     }
 
-    const renderContent = () => {
-      if (isEmpty) {
-        return (
-          <Icon
-            onBackground="neutral-medium"
-            name={icon || "person"}
-            size="m"
-            style={typeof size === "number" ? { fontSize: `${size / 3}rem` } : undefined}
-            className={styles.icon}
-          />
-        );
-      }
+    if (src) {
+      return (
+        <Media
+          radius="full"
+          src={src}
+          stretch
+          alt="Avatar"
+          aspectRatio="1"
+          // An image hint, in device pixels: a `var()` is no `sizes` value.
+          sizes={
+            scale ? `${sizeMapping[scale]}px` : typeof size === "number" ? `${size}px` : customSize
+          }
+          unoptimized={unoptimized}
+          className={styles.image}
+        />
+      );
+    }
 
-      if (src) {
-        return (
-          <Media
-            radius="full"
-            src={src}
-            stretch
-            alt="Avatar"
-            aspectRatio="1"
-            sizes={typeof size === "string" ? `${sizeMapping[size]}px` : `${size * 16}px`}
-            unoptimized={unoptimized}
-            className={styles.image}
-          />
-        );
-      }
+    if (value) {
+      return (
+        <Text
+          as="span"
+          onBackground="neutral-weak"
+          textVariant={`body-default-${scale ?? "m"}`}
+          className={styles.value}
+        >
+          {value}
+        </Text>
+      );
+    }
 
-      if (value) {
-        return (
-          <Text
-            as="span"
-            onBackground="neutral-weak"
-            variant={`body-default-${typeof size === "string" ? size : "m"}`}
-            className={styles.value}
-          >
-            {value}
-          </Text>
-        );
-      }
+    return null;
+  };
 
-      return null;
-    };
+  // role="img" makes everything inside presentational, so the name the
+  // children used to carry lives on the wrapper (axe: role-img-alt).
+  const baseLabel = value ? `Avatar with initials ${value}` : isEmpty ? "Empty avatar" : "Avatar";
+  const status = statusIndicator && (statusIndicator.tone ?? statusIndicator.scheme);
+  const label = status ? `${baseLabel}, status: ${status}` : baseLabel;
 
-    // role="img" makes everything inside presentational, so the name the
-    // children used to carry lives on the wrapper (axe: role-img-alt).
-    const baseLabel = value ? `Avatar with initials ${value}` : isEmpty ? "Empty avatar" : "Avatar";
-    const label = statusIndicator ? `${baseLabel}, status: ${statusIndicator.color}` : baseLabel;
-
-    return (
-      <Flex
-        ref={ref}
-        role="img"
-        aria-label={label}
-        horizontal="center"
-        vertical="center"
-        radius="full"
-        border="neutral-strong"
-        background="surface"
-        style={sizeStyle}
-        className={`${styles.avatar} ${typeof size === "string" ? styles[size] : ""} ${className || ""}`}
-        {...rest}
-      >
-        {renderContent()}
-        {statusIndicator && (
-          <StatusIndicator
-            position="absolute"
-            size={typeof size === "string" ? statusIndicatorSizeMapping[size] : "l"}
-            color={statusIndicator.color}
-            className={`${styles.className || ""} ${styles.indicator} ${size === "xl" || (typeof size === "number" && size >= 10) ? styles.position : ""}`}
-            aria-label={`Status: ${statusIndicator.color}`}
-          />
-        )}
-      </Flex>
-    );
-  },
-);
+  return (
+    <Flex
+      ref={ref}
+      role="img"
+      aria-label={label}
+      horizontal="center"
+      vertical="center"
+      radius="full"
+      border="neutral-strong"
+      background="surface"
+      style={sizeStyle}
+      className={`${styles.avatar} ${scale ? styles[scale] : ""} ${className || ""}`}
+      {...rest}
+    >
+      {renderContent()}
+      {statusIndicator && (
+        <StatusIndicator
+          position="absolute"
+          size={scale ? statusIndicatorSizeMapping[scale] : "l"}
+          scheme={statusIndicator.scheme}
+          tone={statusIndicator.tone}
+          className={`${styles.className || ""} ${styles.indicator} ${size === "xl" || approxPx(size) >= 160 ? styles.position : ""}`}
+          aria-label={`Status: ${status}`}
+        />
+      )}
+    </Flex>
+  );
+};
 
 Avatar.displayName = "Avatar";
 

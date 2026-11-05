@@ -97,7 +97,7 @@ describe("extra components on React Native", () => {
 
   it("fits as many Grid columns as minColumnWidth allows", async () => {
     await wrap(
-      <Grid minColumnWidth={10} gap="0">
+      <Grid minColumnWidth="10rem" gap="0">
         <Text>Cell</Text>
       </Grid>,
     );
@@ -111,7 +111,7 @@ describe("extra components on React Native", () => {
 
   it("drags a Slider by step and adjusts it from a screen reader", async () => {
     const onChange = jest.fn();
-    await wrap(<Slider label="Volume" step={10} showValue onChange={onChange} />);
+    await wrap(<Slider label="Volume" step={10} showValue onValueChange={onChange} />);
     const slider = screen.getByRole("adjustable", { name: "Volume" });
     await drag(slider as unknown as Host, 50, 104);
     // 50 of 200 is 25, snapped to 30; then 104 of 200 is 52, snapped to 50.
@@ -131,8 +131,8 @@ describe("extra components on React Native", () => {
     const onChange = jest.fn();
     await wrap(
       <>
-        <Slider ariaLabel="Fixed" value={20} onChange={onChange} />
-        <Slider ariaLabel="Off" disabled onChange={onChange} />
+        <Slider aria-label="Fixed" value={20} onValueChange={onChange} />
+        <Slider aria-label="Off" disabled onValueChange={onChange} />
       </>,
     );
     const fixed = screen.getByRole("adjustable", { name: "Fixed" });
@@ -154,7 +154,7 @@ describe("extra components on React Native", () => {
         minDistance={10}
         showValue
         formatValue={(v) => `$${v}`}
-        onChange={onChange}
+        onValueChange={onChange}
       />,
     );
     expect(screen.getByText("$20 – $80")).toBeTruthy();
@@ -176,14 +176,16 @@ describe("extra components on React Native", () => {
 
   it("splits two stacked RangeSlider thumbs by the first move", async () => {
     const onChange = jest.fn();
-    await wrap(<RangeSlider defaultValue={[50, 50]} onChange={onChange} />);
+    await wrap(<RangeSlider defaultValue={[50, 50]} onValueChange={onChange} />);
     await drag(screen.getByRole("adjustable", { name: "Minimum" }) as unknown as Host, 100, 60);
     expect(onChange).toHaveBeenLastCalledWith([30, 50]);
   });
 
   it("steps NumberInput with its buttons inside min and max", async () => {
     const onChange = jest.fn();
-    await wrap(<NumberInput label="Guests" defaultValue={1} min={1} max={2} onChange={onChange} />);
+    await wrap(
+      <NumberInput label="Guests" defaultValue={1} min={1} max={2} onValueChange={onChange} />,
+    );
     const decrement = screen.getByRole("button", { name: "Decrement value" });
     expect(decrement.props.accessibilityState?.disabled ?? decrement.props["aria-disabled"]).toBe(
       true,
@@ -309,7 +311,7 @@ describe("extra components on React Native", () => {
 
   it("pages through Pagination with ellipses and arrows", async () => {
     const onChange = jest.fn();
-    await wrap(<Pagination total={10} defaultPage={5} onChange={onChange} />);
+    await wrap(<Pagination total={10} defaultPage={5} onPageChange={onChange} />);
     expect(screen.getAllByText("…")).toHaveLength(2);
     expect(screen.getByRole("button", { name: "Page 5" }).props.accessibilityState).toMatchObject({
       selected: true,
@@ -331,7 +333,7 @@ describe("extra components on React Native", () => {
         count={100}
         defaultPage={3}
         perPageOptions={[10, 25]}
-        onChange={onChange}
+        onPageChange={onChange}
         onPerPageChange={onPerPageChange}
       />,
     );

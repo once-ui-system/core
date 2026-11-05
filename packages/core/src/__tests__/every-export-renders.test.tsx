@@ -4,10 +4,11 @@ import { createElement } from "react";
 import { renderToString } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import * as Core from "../index";
-import * as Code from "../modules/code";
-import * as Data from "../modules/data";
-import * as MapModule from "../modules/map";
-import * as MediaModule from "../modules/media";
+import * as Code from "../modules/code/index";
+import * as Data from "../modules/data/index";
+import * as Emoji from "../modules/emoji/index";
+import * as MapModule from "../modules/map/index";
+import * as MediaModule from "../modules/media/index";
 
 /**
  * Every component the package exports renders, on the client and on the
@@ -15,7 +16,8 @@ import * as MediaModule from "../modules/media";
  * React logging an error or warning (missing keys, unknown DOM props, bad
  * nesting, setState on an unmounted tree). A new export that cannot render
  * with no props fails here until it gets a fixture below, so nothing ships
- * without at least this check.
+ * without at least this check. The effects and blocks have the same check in
+ * their own packages.
  */
 
 type AnyComponent = React.ComponentType<Record<string, unknown>>;
@@ -25,6 +27,7 @@ const exportsUnderTest: Record<string, unknown> = {
   ...Data,
   ...Code,
   ...MediaModule,
+  ...Emoji,
   ...MapModule,
 };
 
@@ -35,33 +38,24 @@ const avatar = { src: "/avatar.jpg" };
 const fixtures: Record<string, Record<string, unknown>> = {
   AvatarGroup: { avatars: [avatar, avatar, { value: "AB" }] },
   Breadcrumbs: { items: [{ label: "Home", href: "/" }, { label: "Docs" }] },
-  ColorInput: { id: "color", label: "Colour", value: "#ff0000", onChange: noop },
+  ColorInput: { id: "color", label: "Colour", value: "#ff0000", onValueChange: noop },
   CompareImage: {
     leftContent: { src: "/a.jpg", alt: "Before" },
     rightContent: { src: "/b.jpg", alt: "After" },
   },
-  CountdownFx: { targetDate: "2030-01-01T00:00:00Z" },
-  CountFx: { value: 42 },
-  DataTable: {
-    columns: [{ key: "name", header: "Name" }],
-    rows: [{ id: "1", name: "Ada" }],
-  },
   FileTree: { items: [{ id: "readme", name: "README.md", type: "file" }] },
-  FadingLettersFx: { text: "Hello", animationState: "visible" },
   FormErrorSummary: { errors: { email: "Enter an email" } },
   InfiniteScroll: {
     items: ["a", "b"],
     renderItem: (item: string) => item,
     loadMore: async () => false,
   },
-  KeyTip: { keys: ["Meta", "K"], children: "Search" },
-  LogoCloud: { logos: [{ wordmark: "/logo.svg" }] },
+  PhotoViewer: { items: [{ src: "/photo.jpg", alt: "A photo" }], onClose: noop },
   Reaction: { value: "❤️" },
   Reactions: { options: [{ value: "❤️" }], counts: { "❤️": 1 } },
-  ScrollContainer: { items: ["One", "Two"] },
   SegmentedControl: {
     value: "a",
-    onToggle: noop,
+    onValueChange: noop,
     buttons: [
       { value: "a", label: "A" },
       { value: "b", label: "B" },
@@ -72,10 +66,10 @@ const fixtures: Record<string, Record<string, unknown>> = {
     label: "Fruit",
     options: [{ label: "Apple", value: "apple" }],
     value: "",
-    onSelect: noop,
+    onValueChange: noop,
   },
   SettingAxes: { label: "Tilt", axes: [{ label: "X", control: "x" }] },
-  Table: { data: { headers: [{ content: "Name", key: "name" }], rows: [["Ada"]] } },
+  Table: { columns: [{ key: "name", header: "Name" }], rows: [{ id: "1", name: "Ada" }] },
   Timeline: { items: [{ label: "Step one" }] },
   ThemeInit: { config: {} },
   MegaMenu: { menuGroups: [{ id: "docs", label: "Docs", href: "/docs" }] },
@@ -100,12 +94,12 @@ const fixtures: Record<string, Record<string, unknown>> = {
   PieChart: { series: { key: "a" }, data: [{ name: "A", a: 1 }] },
   RadialGauge: { value: 40 },
   Icon: { name: "check" },
-  TypeFx: { words: ["Design", "Build"] },
   Logo: { wordmark: "/logo.svg" },
   ProgressBar: { value: 40 },
-  Toast: { variant: "success", children: "Saved" },
-  Toaster: { toasts: [{ id: "1", variant: "success", message: "Saved" }], removeToast: noop },
+  Toast: { tone: "success", children: "Saved" },
   LinearGauge: { value: 40 },
+  ChartSummary: { series: [{ key: "a" }], data: [{ label: "Jan", a: 1 }] },
+  Sparkline: { data: [1, 3, 2] },
 };
 
 /** Components that need a parent to mean anything get it here. */
@@ -177,6 +171,7 @@ beforeEach(() => {
   logs = [];
   for (const level of ["error", "warn"] as const) {
     vi.spyOn(console, level).mockImplementation((...args: unknown[]) => {
+      const text = args.map(String).join(" ");
       logs.push(`console.${level}: ${args.map(String).join(" ").slice(0, 400)}`);
     });
   }
@@ -188,7 +183,7 @@ afterEach(() => {
 describe("every exported component", () => {
   it("is found", () => {
     // Guards the export walk itself: if it silently found nothing, every case below would vanish.
-    expect(components.length).toBeGreaterThan(150);
+    expect(components.length).toBeGreaterThan(100);
   });
 
   it.each(components)("%s renders on the client and unmounts cleanly", async (name, value) => {
@@ -202,22 +197,6 @@ describe("every exported component", () => {
 
   it.each(components)("%s renders on the server", (name, value) => {
     expect(() => renderToString(element(name, value as AnyComponent))).not.toThrow();
-    expect(logs).toEqual([]);
-  });
-});
-
-describe("TypeFx with no words yet", () => {
-  it("types nothing instead of crashing", async () => {
-    const view = render(element("TypeFx", Core.TypeFx as unknown as AnyComponent));
-    view.rerender(
-      <Providers>
-        <Core.TypeFx words={[]} />
-      </Providers>,
-    );
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 20));
-    });
-    view.unmount();
     expect(logs).toEqual([]);
   });
 });

@@ -68,7 +68,7 @@ export function Running({ startedAt }: { startedAt: number }) {
 
 ## Accessibility
 
-The row is one accessible element named by `ariaLabel`, "Working" by default, so a screen reader hears it once instead of every new verb. With reduce motion turned on, the verbs change without rising in and the sweep turns off.
+The row is one accessible element named by `aria-label`, "Working" by default, so a screen reader hears it once instead of every new verb. With reduce motion turned on, the verbs change without rising in and the sweep turns off.
 
 ## Differences from the web
 
@@ -89,5 +89,5 @@ The row is one accessible element named by `ariaLabel`, "Working" by default, so
 | `detail` | `ReactNode` | | Quiet text after the verb. |
 | `loader` | `ReactNode \| false` | `LogoSpinner` | The loader before the words. |
 | `size` | `"s" \| "m" \| "l"` | `"m"` | The text and loader size. |
-| `ariaLabel` | `string` | `"Working"` | What screen readers announce. |
+| `aria-label` | `string` | `"Working"` | What screen readers announce. |
 | `...FlexProps` | `FlexProps` | | Spacing, position and the other Flex props. |

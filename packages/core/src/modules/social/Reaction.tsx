@@ -2,18 +2,18 @@
 
 import classNames from "clsx";
 import type React from "react";
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   type ReactionMotion,
   type ReactionOption,
   reactionLabel,
   reactionMotion,
-} from "./reactionMotion";
+} from "./reactionMotion.js";
 import styles from "./Social.module.scss";
 
 // The ReactionOption fields are repeated here so the props table and the AI
 // spec list them; ReactionOption stays the shape `Reactions` takes.
-export interface ReactionProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
+export interface ReactionProps extends Omit<React.ComponentPropsWithRef<"span">, "children"> {
   /** What the reaction is stored as, such as "❤️" or "party-parrot". */
   value: string;
   /** Read out by screen readers. Defaults to the emoji. */
@@ -55,87 +55,83 @@ export const ReactionGlyph = ({ option }: { option: ReactionOption }) =>
  * The gesture never plays on its own at first render, and not at all under
  * reduced motion.
  */
-const Reaction = forwardRef<HTMLSpanElement, ReactionProps>(
-  (
-    {
-      value,
-      emoji,
-      src,
-      label,
-      motion,
-      size = "m",
-      trigger = "hover",
-      playKey,
-      decorative = false,
-      children,
-      className,
-      onPointerEnter,
-      ...rest
-    },
-    ref,
-  ) => {
-    const option = { value, emoji, src, label, motion };
-    const kind: ReactionMotion = reactionMotion(option);
-    // Each run remounts the moving span, which restarts its animation.
-    const [run, setRun] = useState(0);
-    const playing = useRef(false);
-    const mounted = useRef(false);
+const Reaction = ({
+  ref,
+  value,
+  emoji,
+  src,
+  label,
+  motion,
+  size = "m",
+  trigger = "hover",
+  playKey,
+  decorative = false,
+  children,
+  className,
+  onPointerEnter,
+  ...rest
+}: ReactionProps) => {
+  const option = { value, emoji, src, label, motion };
+  const kind: ReactionMotion = reactionMotion(option);
+  // Each run remounts the moving span, which restarts its animation.
+  const [run, setRun] = useState(0);
+  const playing = useRef(false);
+  const mounted = useRef(false);
 
-    const play = () => {
-      if (kind === "none" || playing.current) return;
-      playing.current = true;
-      setRun((current) => current + 1);
-    };
+  const play = () => {
+    if (kind === "none" || playing.current) return;
+    playing.current = true;
+    setRun((current) => current + 1);
+  };
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: replays on a new key only
-    useEffect(() => {
-      if (!mounted.current) {
-        mounted.current = true;
-        return;
-      }
-      if (playKey === undefined) return;
-      playing.current = false;
-      play();
-    }, [playKey]);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: replays on a new key only
+  useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+      return;
+    }
+    if (playKey === undefined) return;
+    playing.current = false;
+    play();
+  }, [playKey]);
 
-    const loop = trigger === "loop" && kind !== "none";
-    const active = loop || run > 0;
+  const loop = trigger === "loop" && kind !== "none";
+  const active = loop || run > 0;
 
-    // Named, or hidden when the control around it already names it.
-    const a11y = decorative
-      ? { "aria-hidden": true as const }
-      : { role: "img", "aria-label": reactionLabel(option) };
+  // Named, or hidden when the control around it already names it.
+  const a11y = decorative
+    ? { "aria-hidden": true as const }
+    : { role: "img", "aria-label": reactionLabel(option) };
 
-    return (
+  return (
+    <span
+      ref={ref}
+      {...a11y}
+      className={classNames(styles.glyph, styles[size], className)}
+      onPointerEnter={(event) => {
+        if (trigger === "hover") play();
+        onPointerEnter?.(event);
+      }}
+      {...rest}
+    >
       <span
-        ref={ref}
-        {...a11y}
-        className={classNames(styles.glyph, styles[size], className)}
-        onPointerEnter={(event) => {
-          if (trigger === "hover") play();
-          onPointerEnter?.(event);
+        key={run}
+        className={classNames(
+          styles.glyph,
+          styles.motion,
+          styles[size],
+          active && [styles.play, styles[kind]],
+          loop && styles.loop,
+        )}
+        onAnimationEnd={() => {
+          playing.current = false;
         }}
-        {...rest}
       >
-        <span
-          key={run}
-          className={classNames(
-            styles.glyph,
-            styles.motion,
-            styles[size],
-            active && [styles.play, styles[kind]],
-            loop && styles.loop,
-          )}
-          onAnimationEnd={() => {
-            playing.current = false;
-          }}
-        >
-          {children ?? <ReactionGlyph option={option} />}
-        </span>
+        {children ?? <ReactionGlyph option={option} />}
       </span>
-    );
-  },
-);
+    </span>
+  );
+};
 
 Reaction.displayName = "Reaction";
 

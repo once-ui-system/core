@@ -3,9 +3,9 @@
 import classNames from "clsx";
 import type React from "react";
 import { forwardRef } from "react";
-import { ElementType } from "../../components/ElementType";
+import { ElementType } from "../../components/ElementType.js";
 import styles from "./MapPin.module.scss";
-import type { MapColor } from "./types";
+import type { MapColor } from "./types.js";
 
 export interface MapPinProps
   extends Omit<React.HTMLAttributes<HTMLElement>, "color" | "prefix" | "onClick"> {

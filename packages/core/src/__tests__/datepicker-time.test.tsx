@@ -27,7 +27,12 @@ const wrap = ({ children }: { children: React.ReactNode }) => (
 describe("DateInput time picker", () => {
   const openToTime = async (user: ReturnType<typeof userEvent.setup>, onChange = vi.fn()) => {
     render(
-      <DateInput id="when" timePicker value={new Date(2026, 7, 15, 21, 31)} onChange={onChange} />,
+      <DateInput
+        id="when"
+        timePicker
+        value={new Date(2026, 7, 15, 21, 31)}
+        onValueChange={onChange}
+      />,
       { wrapper: wrap },
     );
     // The field is a combobox that opens the picker (it was a "textbox").
@@ -71,34 +76,44 @@ describe("DateInput time picker", () => {
 describe("DatePicker reveal and time header", () => {
   it("reveals the calendar in a fraction of a second", () => {
     const { container } = render(
-      <DatePicker timePicker value={new Date(2026, 3, 10, 13, 14)} onChange={() => {}} />,
+      <DatePicker timePicker value={new Date(2026, 3, 10, 13, 14)} onValueChange={() => {}} />,
       { wrapper: wrap },
     );
     const reveal = Array.from(container.querySelectorAll<HTMLElement>("[style]")).find(
       (el) => el.style.transitionDuration !== "",
     );
     expect(reveal).toBeDefined();
-    expect(Number.parseFloat(reveal?.style.transitionDuration ?? "0")).toBeLessThanOrEqual(1);
+    const duration = reveal?.style.transitionDuration ?? "0s";
+    const seconds = Number.parseFloat(duration) / (duration.endsWith("ms") ? 1000 : 1);
+    expect(seconds).toBeLessThanOrEqual(1);
   });
 
   it("shows the header time as 12-hour, not 24-hour with an AM/PM suffix", () => {
-    render(<DatePicker timePicker value={new Date(2026, 3, 10, 13, 14)} onChange={() => {}} />, {
-      wrapper: wrap,
-    });
+    render(
+      <DatePicker timePicker value={new Date(2026, 3, 10, 13, 14)} onValueChange={() => {}} />,
+      {
+        wrapper: wrap,
+      },
+    );
     expect(screen.getByText("01:14 PM")).toBeInTheDocument();
     expect(screen.queryByText("13:14 PM")).toBeNull();
   });
 
-  it("no core component asks RevealFx for a reveal slower than five seconds", () => {
+  it("no core component asks for a reveal slower than five seconds", () => {
+    // Core reveals with the internal Reveal since 3.0 (RevealFx moves to
+    // @once-ui-system/fx); both take `duration` in ms, RevealFx `speed` before.
     const dir = path.resolve(__dirname, "..", "components");
     const slow: string[] = [];
+    let found = 0;
     for (const file of fs.readdirSync(dir)) {
       if (!file.endsWith(".tsx")) continue;
       const src = fs.readFileSync(path.join(dir, file), "utf8");
-      for (const m of src.matchAll(/<RevealFx[\s\S]*?speed=\{(\d+)\}/g)) {
-        if (Number(m[1]) > 5000) slow.push(`${file}: speed={${m[1]}}`);
+      for (const m of src.matchAll(/<Reveal(?:Fx)?\b[^>]*?(?:speed|duration)=\{(\d+)\}/g)) {
+        found++;
+        if (Number(m[1]) > 5000) slow.push(`${file}: ${m[0]}`);
       }
     }
+    expect(found).toBeGreaterThanOrEqual(2);
     expect(slow).toEqual([]);
   });
 });

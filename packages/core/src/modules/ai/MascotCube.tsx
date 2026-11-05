@@ -3,20 +3,21 @@
 import classNames from "clsx";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
-import { Flex } from "../../components/Flex";
-import { createAudioMeter } from "./audioLevel";
-import { clamp } from "./cube/math";
-import type { RGB } from "./cube/renderer";
-import { type CubeInput, CubeMotion } from "./cube/state";
-import { type CubeEyes, type CubeLook, type CubeSide, CubeView, faceUnits } from "./cube/view";
-import { baseMood, EyeGlyph, effectsFor, eyeGlyph, KawaiiLayer } from "./kawaii";
+import { Flex } from "../../components/Flex.js";
+import { tokenLength } from "../../utils/layoutClasses.js";
+import { createAudioMeter } from "./audioLevel.js";
+import { clamp } from "./cube/math.js";
+import type { RGB } from "./cube/renderer.js";
+import { type CubeInput, CubeMotion } from "./cube/state.js";
+import { type CubeEyes, type CubeLook, type CubeSide, CubeView, faceUnits } from "./cube/view.js";
+import { baseMood, EyeGlyph, effectsFor, eyeGlyph, KawaiiLayer } from "./kawaii.js";
 import {
   type MascotLook,
   type MascotProps,
   type MascotState,
   mascotLook,
   useMascotPoke,
-} from "./Mascot";
+} from "./Mascot.js";
 import styles from "./Mascot.module.scss";
 
 const SIZE = { s: 32, m: 48, l: 96, xl: 160 } as const;
@@ -152,7 +153,7 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
     level,
     source,
     size = "l",
-    ariaLabel,
+    "aria-label": ariaLabel,
     poke = true,
     onPointerDown,
     effects,
@@ -189,9 +190,9 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
   const [failed, setFailed] = useState(false);
   const length =
     typeof size === "number"
-      ? `${size}px`
+      ? tokenLength(size)
       : size in SIZE
-        ? `${SIZE[size as keyof typeof SIZE]}px`
+        ? tokenLength(SIZE[size as keyof typeof SIZE])
         : size;
 
   // Everything the frame loop reads lives in refs, so a prop change never restarts it.

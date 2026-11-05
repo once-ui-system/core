@@ -15,7 +15,7 @@
  *
  * `Setting` is the row — label and description on the left, one control on
  * the right — and stacks into a panel on its own, so a list of them needs no
- * surface around it. `SettingGroup` keeps its sub-settings inside its box,
+ * surface around it. With `control` and `open` it is a group that keeps its sub-settings inside its box,
  * which is what keeps the relationship readable in a long panel.
  */
 import {
@@ -29,7 +29,6 @@ import {
   Row,
   Select,
   Setting,
-  SettingGroup,
   Switch,
   Tab,
   TabList,
@@ -52,16 +51,16 @@ export function SettingsExample() {
     <Column as="main" fillWidth horizontal="center" paddingY="48" paddingX="24">
       <Column maxWidth="l" gap="40">
         <Column gap="12">
-          <Text variant="label-default-s" onBackground="brand-medium">
+          <Text textVariant="label-default-s" onBackground="brand-medium">
             Settings
           </Text>
-          <Heading as="h1" variant="display-strong-s">
+          <Heading as="h1" textVariant="display-strong-s">
             Manage your workspace
           </Heading>
         </Column>
 
         <Tabs defaultValue="profile" orientation="vertical" gap="32" s={{ direction: "column" }}>
-          <TabList aria-label="Settings sections" minWidth={14} s={{ direction: "row" }}>
+          <TabList aria-label="Settings sections" minWidth="14rem" s={{ direction: "row" }}>
             <Tab value="profile" size="l" prefixIcon="person">
               Profile
             </Tab>
@@ -75,7 +74,7 @@ export function SettingsExample() {
 
           <TabPanel value="profile" keepMounted>
             <Column background="surface" border radius="l" padding="24" gap="24">
-              <Heading as="h2" variant="heading-strong-m">
+              <Heading as="h2" textVariant="heading-strong-m">
                 Profile
               </Heading>
               <Row gap="16" vertical="center">
@@ -84,7 +83,7 @@ export function SettingsExample() {
                   <Button size="s" variant="secondary">
                     Upload photo
                   </Button>
-                  <Text variant="label-default-s" onBackground="neutral-weak">
+                  <Text textVariant="label-default-s" onBackground="neutral-weak">
                     JPG or PNG, max 2 MB
                   </Text>
                 </Column>
@@ -100,7 +99,7 @@ export function SettingsExample() {
                   id="timezone"
                   label="Timezone"
                   value={timezone}
-                  onSelect={(value) => setTimezone(value as string)}
+                  onValueChange={(value) => setTimezone(value as string)}
                   options={[
                     { value: "utc", label: "UTC" },
                     { value: "cet", label: "Central European Time" },
@@ -109,7 +108,7 @@ export function SettingsExample() {
                 />
               </Form>
               <Row gap="12">
-                <Button onClick={() => addToast({ variant: "success", message: "Profile saved" })}>
+                <Button onClick={() => addToast({ tone: "success", message: "Profile saved" })}>
                   Save changes
                 </Button>
                 <Button variant="secondary">Cancel</Button>
@@ -118,24 +117,24 @@ export function SettingsExample() {
           </TabPanel>
 
           <TabPanel value="notifications" gap="8">
-            <Heading as="h2" variant="heading-strong-m" paddingBottom="8">
+            <Heading as="h2" textVariant="heading-strong-m" marginBottom="8">
               Notifications
             </Heading>
             <Setting label="Product updates" description="Release notes and changelog">
               <Switch
                 checked={updates}
-                onToggle={() => setUpdates(!updates)}
-                ariaLabel="Product updates"
+                onCheckedChange={() => setUpdates(!updates)}
+                aria-label="Product updates"
               />
             </Setting>
-            <SettingGroup
+            <Setting
               label="Weekly digest"
               info="A summary of the week's activity, sent once."
               control={
                 <Switch
                   checked={digest}
-                  onToggle={() => setDigest(!digest)}
-                  ariaLabel="Weekly digest"
+                  onCheckedChange={() => setDigest(!digest)}
+                  aria-label="Weekly digest"
                 />
               }
               open={digest}
@@ -146,10 +145,10 @@ export function SettingsExample() {
                   min={0}
                   max={23}
                   value={digestHour}
-                  onChange={setDigestHour}
+                  onValueChange={setDigestHour}
                 />
               </Setting>
-            </SettingGroup>
+            </Setting>
           </TabPanel>
 
           <TabPanel value="workspace">
@@ -160,14 +159,14 @@ export function SettingsExample() {
               padding="24"
               gap="16"
             >
-              <Heading as="h2" variant="heading-strong-m" onBackground="danger-medium">
+              <Heading as="h2" textVariant="heading-strong-m" onBackground="danger-medium">
                 Danger zone
               </Heading>
-              <Text variant="body-default-s" onBackground="neutral-weak">
+              <Text textVariant="body-default-s" onBackground="neutral-weak">
                 Permanently delete your workspace and all associated data.
               </Text>
               <Row>
-                <Button variant="danger" size="s">
+                <Button tone="danger" size="s">
                   Delete workspace
                 </Button>
               </Row>

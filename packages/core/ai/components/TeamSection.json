@@ -1,0 +1,22 @@
+{
+ "name": "TeamSection",
+ "group": "blocks",
+ "importFrom": "@once-ui-system/blocks",
+ "props": {
+  "layout": "string",
+  "width": "string",
+  "eyebrow": "string",
+  "title": "string",
+  "description": "string",
+  "resolveHref": "(href: string) => string",
+  "columns": "string",
+  "items": "{ name?: string; role?: string; bio?: string; photo?: string }[]"
+ },
+ "tags": [
+  "marketing"
+ ],
+ "pairsWith": [
+  "Sections"
+ ],
+ "mixinsRef": []
+}

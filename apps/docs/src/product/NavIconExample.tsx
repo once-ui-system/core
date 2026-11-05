@@ -81,12 +81,14 @@ export function CustomNavIcon() {
     <NavIcon
       active={isActive}
       onClick={handleClick}
-      width="48"
-      height="48"
-      border="neutral-alpha-medium"
-      background="neutral-strong"
-      padding="8"
-      radius="full"
+      style={{
+        width: 48,
+        height: 48,
+        padding: "var(--static-space-8)",
+        borderRadius: "var(--radius-full)",
+        background: "var(--neutral-background-strong)",
+        border: "1px solid var(--neutral-alpha-medium)",
+      }}
     />
   );
 }

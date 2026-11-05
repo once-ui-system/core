@@ -29,21 +29,10 @@ describe("IconButton accessible names", () => {
     await expectNoAxeViolations(container);
   });
 
-  it("takes ariaLabel too, with native aria-label winning when both are given", () => {
-    const { rerender } = render(<IconButton icon="close" ariaLabel="Dismiss" onClick={noop} />, {
+  it("prefers aria-label over the tooltip", () => {
+    render(<IconButton icon="close" aria-label="Close banner" tooltip="Close" onClick={noop} />, {
       wrapper: wrap,
     });
-    expect(screen.getByRole("button", { name: "Dismiss" })).toBeInTheDocument();
-
-    rerender(
-      <IconButton
-        icon="close"
-        aria-label="Close banner"
-        ariaLabel="Dismiss"
-        tooltip="Close"
-        onClick={noop}
-      />,
-    );
     expect(screen.getByRole("button", { name: "Close banner" })).toBeInTheDocument();
   });
 

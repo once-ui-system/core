@@ -47,7 +47,7 @@ export const Faq3: React.FC<Faq3Props> = ({
             <SegmentedControl
               buttons={categories.map((cat) => ({ label: cat.label, value: cat.value }))}
               value={activeCategory}
-              onChange={(value) => setActiveCategory(value)}
+              onValueChange={(value) => setActiveCategory(value)}
             />
           </Row>
         )}
@@ -59,7 +59,7 @@ export const Faq3: React.FC<Faq3Props> = ({
         <Text
           align="center"
           wrap="balance"
-          variant="body-default-s"
+          textVariant="body-default-s"
           onBackground="neutral-medium"
           marginTop="20"
         >
@@ -68,12 +68,12 @@ export const Faq3: React.FC<Faq3Props> = ({
       </Column>
       <Column fillWidth paddingTop="24" paddingLeft="24">
         {title && (
-          <Heading as="h2" variant="display-strong-m" marginBottom="20">
+          <Heading as="h2" textVariant="display-strong-m" marginBottom="20">
             {title}
           </Heading>
         )}
         {description && (
-          <Text onBackground="neutral-medium" variant="body-default-xl">
+          <Text onBackground="neutral-medium" textVariant="body-default-xl">
             {description}
           </Text>
         )}

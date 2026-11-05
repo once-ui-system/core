@@ -35,9 +35,12 @@ const panel = (id: "month-dropdown" | "year-dropdown") =>
 describe("DatePicker month/year selectors", () => {
   it("closes the year list when the month selector is clicked", async () => {
     const user = userEvent.setup();
-    const { getByText } = render(<DatePicker value={new Date(2026, 8, 21)} onChange={vi.fn()} />, {
-      wrapper: wrap,
-    });
+    const { getByText } = render(
+      <DatePicker value={new Date(2026, 8, 21)} onValueChange={vi.fn()} />,
+      {
+        wrapper: wrap,
+      },
+    );
 
     await user.click(getByText("2026"));
     expect(panel("year-dropdown")).not.toBeNull();

@@ -160,7 +160,7 @@ export function Orders({ data, loading, failed }: { data: { month: string; order
 
 ## Size
 
-The chart fills its parent's width, measured with `onLayout`, so the plot redraws when the screen rotates. The card is `24` rem tall by default. Set `height` (a number of rem, a spacing token or a percentage, as on Flex) to change it. The header and legend take their own height and the plot takes the rest. BarChart takes the other Flex props too, such as `marginTop` or `border`.
+The chart fills its parent's width, measured with `onLayout`, so the plot redraws when the screen rotates. The card is `"24rem"` tall by default. Set `height` (a number of points, a length such as `"20rem"`, a spacing token or a percentage, as on Flex) to change it. The header and legend take their own height and the plot takes the rest. BarChart takes the other Flex props too, such as `marginTop` or `border`.
 
 ## Differences from the web
 
@@ -194,5 +194,5 @@ The chart fills its parent's width, measured with `onLayout`, so the plot redraw
 | `emptyState` | `ReactNode` | `"No data available for the selected period"` | Shown when there are no rows. |
 | `errorState` | `ReactNode` | `"An error occurred while fetching data"` | Shown when `error` is set. |
 | `data-viz-style` | `"categorical" \| "divergent" \| "sequential"` | `"categorical"` | The color mode. `sequential` draws in brand shades. |
-| `height` | `number \| SpacingToken \| "50%"` | `24` | The card's height, in rem as on Flex. |
+| `height` | `number \| SpacingToken \| Length \| "50%"` | `"24rem"` | The card's height, as on Flex: a number is points. |
 | ...Flex props | `FlexProps` | | Margin, border, radius and the other Flex props. |

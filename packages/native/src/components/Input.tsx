@@ -20,6 +20,7 @@ import { useTheme } from "../theme/ThemeProvider";
 import type { TShirtSizes } from "../types";
 import { Column, Row } from "./Flex";
 import { FormCellContext, useFormFieldDefaults } from "./FormContext";
+import { IconButton } from "./IconButton";
 import type { RefComponent, TextInputRef } from "./refs";
 import { Spinner } from "./Spinner";
 import { Text } from "./Text";
@@ -56,9 +57,37 @@ export interface InputProps extends Omit<TextInputProps, "style" | "editable"> {
   span?: number;
   /** Shows how many characters are left; needs `maxLength`. */
   characterCount?: boolean;
+  /**
+   * Receives the field's text on every change, as core 3.0's `onValueChange`
+   * (React Native's own `onChangeText` still works). The field is controlled
+   * only when `value` is set.
+   */
+  onValueChange?: (value: string) => void;
+  /**
+   * Core's input `type`, mapped to the keyboard: `"password"` hides the text
+   * (with a show/hide button, see `reveal`), `"email"`, `"tel"`, `"url"`,
+   * `"number"` and `"search"` pick the matching keyboard.
+   */
+  type?: InputType;
+  /**
+   * With `type="password"`, an eye button after the field shows and hides
+   * the text (2.x's PasswordInput). On by default; `reveal={false}` leaves a
+   * plain password field, as in core 3.0.
+   */
+  reveal?: boolean;
   style?: ViewStyle;
   inputStyle?: TextStyle;
 }
+
+export type InputType = "text" | "password" | "email" | "tel" | "url" | "number" | "search";
+
+const INPUT_MODE = {
+  email: "email",
+  tel: "tel",
+  url: "url",
+  number: "decimal",
+  search: "search",
+} as const;
 
 const ALL = { tl: true, tr: true, bl: true, br: true };
 const CORNERS = {
@@ -93,6 +122,9 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
       corners,
       span: _span,
       characterCount,
+      onValueChange,
+      type = "text",
+      reveal = true,
       style,
       inputStyle,
       onFocus,
@@ -119,6 +151,14 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
       },
       [ref],
     );
+    const [shown, setShown] = useState(false);
+    const password = type === "password";
+    const keyboard =
+      type in INPUT_MODE ? { inputMode: INPUT_MODE[type as keyof typeof INPUT_MODE] } : {};
+    const plain =
+      password || type === "email" || type === "url"
+        ? { autoCapitalize: "none" as const, autoCorrect: false }
+        : {};
     // Tracked when uncontrolled too, so a typed value keeps the label floating after blur.
     const [typed, setTyped] = useState(rest.defaultValue ?? "");
     const value = rest.value ?? typed;
@@ -241,7 +281,7 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
                   }}
                 >
                   <Text
-                    variant="label-default-s"
+                    textVariant="label-default-s"
                     onBackground={error ? "danger-weak" : "neutral-medium"}
                     numberOfLines={1}
                   >
@@ -267,7 +307,11 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
                 onChangeText={(text) => {
                   setTyped(text);
                   onChangeText?.(text);
+                  onValueChange?.(text);
                 }}
+                {...keyboard}
+                {...plain}
+                secureTextEntry={password && !shown}
                 {...rest}
                 style={[
                   {
@@ -286,7 +330,7 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
             {characterCount && rest.maxLength !== undefined && (
               <Row paddingRight="12">
                 <Text
-                  variant="label-default-s"
+                  textVariant="label-default-s"
                   onBackground={
                     left <= 5 ? "danger-weak" : left <= 10 ? "warning-weak" : "neutral-weak"
                   }
@@ -301,12 +345,24 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
               </Row>
             )}
             {suffix && !loading && <Row paddingRight="12">{suffix}</Row>}
+            {password && reveal && (
+              <Row paddingRight="12">
+                <IconButton
+                  icon={shown ? "eyeOff" : "eye"}
+                  variant="ghost"
+                  size="s"
+                  aria-label={shown ? "Hide password" : "Show password"}
+                  disabled={disabled}
+                  onPress={() => setShown((v) => !v)}
+                />
+              </Row>
+            )}
           </Row>
         </Pressable>
         {error && errorMessage && (
           <Text
             paddingX="16"
-            variant="body-default-s"
+            textVariant="body-default-s"
             onBackground="danger-weak"
             accessibilityLiveRegion="polite"
           >
@@ -314,7 +370,7 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
           </Text>
         )}
         {description && (
-          <Text paddingX="16" variant="body-default-s" onBackground="neutral-weak">
+          <Text paddingX="16" textVariant="body-default-s" onBackground="neutral-weak">
             {description}
           </Text>
         )}
@@ -323,7 +379,7 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
   },
 );
 
-export interface TextareaProps extends InputProps {
+export interface TextareaProps extends Omit<InputProps, "type" | "reveal"> {
   /**
    * How tall the field is, as on the web. `"auto"` (the default) grows with
    * the content; a number fixes that many lines and scrolls past them.

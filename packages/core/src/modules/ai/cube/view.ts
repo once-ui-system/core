@@ -11,7 +11,7 @@ import {
   sphere,
   tileOutline,
   tube,
-} from "./geometry";
+} from "./geometry.js";
 import {
   clamp,
   compose,
@@ -27,9 +27,9 @@ import {
   quatIdentity,
   quatMultiply,
   type Vec3,
-} from "./math";
-import { type GpuMesh, type Material, Renderer, type RGB } from "./renderer";
-import type { CubeInput, CubeMotion } from "./state";
+} from "./math.js";
+import { type GpuMesh, type Material, Renderer, type RGB } from "./renderer.js";
+import type { CubeInput, CubeMotion } from "./state.js";
 
 export type CubeSide = "top" | "front" | "right" | "bottom" | "back" | "left";
 export type CubeEyes = "round" | "pill" | "tile" | "wide" | "dot";

@@ -12,7 +12,7 @@ const wrap = ({ children }: { children: React.ReactNode }) => (
 
 const Controlled = ({
   initial = "",
-  onChange,
+  onValueChange,
   ...props
 }: { initial?: string } & Partial<React.ComponentProps<typeof ColorInput>>) => {
   const [value, setValue] = useState(initial);
@@ -22,9 +22,9 @@ const Controlled = ({
         id="accent"
         label="Accent"
         value={value}
-        onChange={(next) => {
+        onValueChange={(next) => {
           setValue(next);
-          onChange?.(next);
+          onValueChange?.(next);
         }}
         {...props}
       />
@@ -70,7 +70,7 @@ describe("ColorInput: interaction", () => {
 
   it("keeps the alpha when a new colour is picked after it", () => {
     const onChange = vi.fn();
-    render(<Controlled initial="rgba(0, 0, 255, 0.3)" supportAlpha onChange={onChange} />, {
+    render(<Controlled initial="rgba(0, 0, 255, 0.3)" supportAlpha onValueChange={onChange} />, {
       wrapper: wrap,
     });
     fireEvent.change(field(), { target: { value: "#00ff00" } });
@@ -79,7 +79,7 @@ describe("ColorInput: interaction", () => {
 
   it("moves focus to the field when the colour is cleared", () => {
     const onChange = vi.fn();
-    render(<Controlled initial="#123456" onChange={onChange} />, { wrapper: wrap });
+    render(<Controlled initial="#123456" onValueChange={onChange} />, { wrapper: wrap });
     const remove = button("Remove") as HTMLElement;
     remove.focus();
     fireEvent.click(remove);
@@ -91,7 +91,7 @@ describe("ColorInput: interaction", () => {
 
   it("restarts at full opacity after a clear", () => {
     const onChange = vi.fn();
-    render(<Controlled initial="rgba(10, 20, 30, 0.5)" supportAlpha onChange={onChange} />, {
+    render(<Controlled initial="rgba(10, 20, 30, 0.5)" supportAlpha onValueChange={onChange} />, {
       wrapper: wrap,
     });
     fireEvent.click(button("Remove") as HTMLElement);

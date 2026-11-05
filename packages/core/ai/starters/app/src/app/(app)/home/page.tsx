@@ -8,10 +8,10 @@ export default function HomePage() {
   return (
     <Column fillWidth gap="24">
       <Column gap="8">
-        <Heading as="h1" variant="heading-strong-l">
+        <Heading as="h1" textVariant="heading-strong-l">
           Home
         </Heading>
-        <Text variant="body-default-m" onBackground="neutral-weak">
+        <Text textVariant="body-default-m" onBackground="neutral-weak">
           What this page is for, in one line.
         </Text>
       </Column>

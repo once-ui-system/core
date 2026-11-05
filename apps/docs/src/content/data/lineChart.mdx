@@ -63,9 +63,62 @@ This example uses the `useStreamingViewport` hook to smoothly pan the x-axis dom
     { date: "2025-01-01", "Area (km²)": 1.2, "Temp Anomaly (°C)": 1.4 }
   ]}
 />
+## Labels and numbers
+
+`xKey` names the column on the x axis; without it, the first key that is not a
+series is. A series' `label` is the name the legend and tooltip show, so the
+data can keep short keys. `valueFormat` writes the numbers on the axis and in
+the tooltip: `"compact"`, `"percent"`, any `Intl.NumberFormatOptions` (a
+currency, a unit), or a function. `locale` sets the language they are written
+in; it defaults to `en-US`, so the server and every browser agree.
+
+<LineChart
+  marginTop="16"
+  marginBottom="24"
+  title="Revenue in forints"
+  xKey="month"
+  locale="hu-HU"
+  valueFormat={{ style: "currency", currency: "HUF", maximumFractionDigits: 0 }}
+  series={[
+    { key: "web", label: "Web shop", color: "blue" },
+    { key: "store", label: "In store", color: "orange" }
+  ]}
+  data={[
+    { month: "Jan", web: 1240000, store: 880000 },
+    { month: "Feb", web: 1310000, store: 910000 },
+    { month: "Mar", web: 1580000, store: 860000 },
+    { month: "Apr", web: 1720000, store: 940000 },
+    { month: "May", web: 1950000, store: 990000 }
+  ]}
+/>
+
+## Stacked
+
+`stack` puts each series on top of the one before it, for parts that add up to
+a total. `stack="percent"` shows each as its share of the total instead.
+
+<LineChart
+  marginTop="16"
+  marginBottom="24"
+  title="Share of sessions by device"
+  stack="percent"
+  xKey="month"
+  series={[
+    { key: "desktop", label: "Desktop", color: "blue" },
+    { key: "mobile", label: "Mobile", color: "green" },
+    { key: "tablet", label: "Tablet", color: "violet" }
+  ]}
+  data={[
+    { month: "Jan", desktop: 520, mobile: 410, tablet: 70 },
+    { month: "Feb", desktop: 500, mobile: 450, tablet: 60 },
+    { month: "Mar", desktop: 480, mobile: 520, tablet: 65 },
+    { month: "Apr", desktop: 470, mobile: 580, tablet: 55 }
+  ]}
+/>
+
 ## Curve
 
-`curve` is Recharts' interpolation, and it is a claim about the data between
+`curve` is how the line runs between points (d3's curve names), and it is a claim about the data between
 your points. `natural` and `monotone` draw a smooth line, which implies the
 value moved continuously; `step` holds each value until the next reading, which
 is honest for something that changes in jumps — a price tier, a headcount, a
@@ -121,8 +174,9 @@ sample — see the live example above, which drives it from
 
 ## Animation
 
-Animation is on by default. The three `animation*` props are passed through to
-Recharts, so they take its values.
+Animation is on by default. The three `animation*` props set the entry
+animation's delay, length and CSS easing (`"ease-out"`, `"linear"` or any
+`cubic-bezier()`). It is skipped under `prefers-reduced-motion`.
 
 Turn animation **off** for a chart that updates faster than the animation runs:
 each new sample restarts the transition, so a streaming line spends its time
@@ -135,13 +189,14 @@ same chart with `animation={false}`.
   component="LineChart"
   exclude={["data-viz-style"]}
   describe={{
-    curve: "Recharts interpolation: natural, linear, step, stepBefore, stepAfter, monotone, basis, bump and their variants.",
+    stack: "Stack the series: true sums them, \"percent\" shows each as its share of the total.",
+    curve: "Interpolation between points: natural, linear, step, stepBefore, stepAfter, monotone, basis, bump and their variants (d3's curve names).",
     xAxisType: "Treat x values as numbers rather than equally spaced categories.",
     xDomain: "Visible x range. Requires xAxisType=\"number\".",
-    animation: "Animate the line on data change. Turn it off for a chart that updates faster than the animation runs.",
+    animation: "Draw the lines in from the left when the chart mounts. Readers who ask for reduced motion never see it.",
     animationBegin: "Delay before the animation starts, in milliseconds.",
     animationDuration: "Animation length, in milliseconds.",
-    animationEasing: "Recharts easing name.",
+    animationEasing: "A CSS easing: ease, ease-in-out, linear or a cubic-bezier().",
     reverseX: "Move the x axis to the top.",
     reverseY: "Move the y axis to the right.",
     grid: "Which grid lines to draw.",

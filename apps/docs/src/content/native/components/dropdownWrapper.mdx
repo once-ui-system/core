@@ -87,7 +87,7 @@ export function SortMenu() {
 
 ## Placement and width
 
-`placement` picks the side of the trigger and the edge the menu lines up with. It defaults to `"bottom-start"`. `fillWidth` stretches the trigger and gives the menu its width. `minWidth` and `maxWidth` are in rem, as on the web. With `closeAfterClick={false}` the menu stays open after a pick.
+`placement` picks the side of the trigger and the edge the menu lines up with. It defaults to `"bottom-start"`. `fillWidth` stretches the trigger and gives the menu its width. `minWidth` and `maxWidth` take points, or a length such as `"14rem"`. With `closeAfterClick={false}` the menu stays open after a pick.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -99,7 +99,7 @@ export function FilterMenu({ onToggle }: { onToggle: (value: string) => void }) 
   return (
     <DropdownWrapper
       placement="bottom-end"
-      minWidth={14}
+      minWidth="14rem"
       closeAfterClick={false}
       onSelect={onToggle}
       trigger={<Button variant="tertiary" label="Filter" prefixIcon="filter" />}
@@ -142,8 +142,8 @@ export function FilterMenu({ onToggle }: { onToggle: (value: string) => void }) 
 | `onSelect` | `(value: string) => void` | | Called with a pressed `Option`'s value. |
 | `selectedOption` | `string` | | Marks the `Option` with this value as selected. |
 | `fillWidth` | `boolean` | `false` | The trigger fills its container and the menu matches its width. |
-| `minWidth` | `number` | | The menu's minimum width, in rem. |
-| `maxWidth` | `number` | | The menu's maximum width, in rem. It never grows past the screen. |
+| `minWidth` | `number \| Length` | | The menu's minimum width: a number is points, `"14rem"` scales with the root size. |
+| `maxWidth` | `number \| Length` | | The menu's maximum width, as `minWidth`. It never grows past the screen. |
 | `minHeight` | `number` | | The menu's minimum height, in points. |
 | `disableTriggerClick` | `boolean` | `false` | Presses on the trigger do nothing. `open` still works. |
 | `style` | `StyleProp<ViewStyle>` | | Style for the view around the trigger. |

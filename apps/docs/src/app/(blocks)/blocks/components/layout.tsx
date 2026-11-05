@@ -1,11 +1,11 @@
-import { Column, Heading, Row, Text } from "@once-ui-system/core";
+import { type CSSUnit, Column, Heading, Row, Text } from "@once-ui-system/core";
 import type { ReactNode } from "react";
 import { Pagination } from "./Pagination";
 
 interface DocsLayoutProps {
   title?: string;
   description?: ReactNode;
-  maxWidth?: number | "xs" | "s" | "m" | "l" | "xl";
+  maxWidth?: number | CSSUnit | "xs" | "s" | "m" | "l" | "xl";
   children: ReactNode;
   pagination?: boolean;
   align?: "center";
@@ -14,7 +14,7 @@ interface DocsLayoutProps {
 const DocsLayout: React.FC<DocsLayoutProps> = ({
   title,
   description,
-  maxWidth = 96,
+  maxWidth = "96rem",
   children,
   pagination = true,
   align,
@@ -24,12 +24,12 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
       <Column as="main" id="main-content" gap="48" maxWidth={maxWidth} padding="l">
         {(title || description) && (
           <Column fillWidth gap="8" paddingX="s">
-            <Heading align={align} variant="display-strong-xs">
+            <Heading align={align} textVariant="display-strong-xs">
               {title}
             </Heading>
             <Text
               align={align}
-              variant="body-default-m"
+              textVariant="body-default-m"
               onBackground="neutral-medium"
               wrap="balance"
             >

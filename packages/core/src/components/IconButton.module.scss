@@ -1,3 +1,5 @@
+@use "../styles/density.scss" as density;
+
 .xs {
 	min-height: var(--static-space-20);
 	min-width: var(--static-space-20);
@@ -5,11 +7,15 @@
 	width: var(--static-space-20);
 }
 
-.s {
+@mixin s {
 	min-height: var(--static-space-24);
 	min-width: var(--static-space-24);
 	height: var(--static-space-24);
 	width: var(--static-space-24);
+}
+
+.s {
+	@include s;
 }
 
 .m {
@@ -19,11 +25,15 @@
 	width: var(--static-space-32);
 }
 
-.l {
+@mixin l {
 	min-height: var(--static-space-40);
 	min-width: var(--static-space-40);
 	height: var(--static-space-40);
 	width: var(--static-space-40);
+}
+
+.l {
+	@include l;
 }
 
 .xl {
@@ -31,4 +41,18 @@
 	min-width: var(--static-space-48);
 	height: var(--static-space-48);
 	width: var(--static-space-48);
+}
+/* No `size`: m above, or the theme density's s or l (density.scss). */
+.auto {
+	@include density.size(s) {
+		@include s;
+	}
+
+	@include density.size(l) {
+		@include l;
+
+		&:global(.radius-m) {
+			border-radius: var(--radius-l);
+		}
+	}
 }
