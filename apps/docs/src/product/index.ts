@@ -57,3 +57,4 @@ export * from "./ToastExample";
 export * from "./TypeFxCustomExample";
 export * from "./VoiceExamples";
 export * from "./WeatherFxExample";
+export * from "./MapExample";

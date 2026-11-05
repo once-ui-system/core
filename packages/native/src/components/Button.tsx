@@ -1,9 +1,9 @@
-import { forwardRef, type ReactNode, useContext } from "react";
+import { forwardRef, type ReactNode } from "react";
 import { Linking, Pressable, type PressableProps, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 import type { OnceTheme } from "../theme/theme";
 import type { Tone, TShirtSizes } from "../types";
-import { FlexDirectionContext } from "./Flex";
+import { useOwnWidth } from "./Flex";
 import { type IconSlot, renderIcon } from "./Icon";
 import type { RefComponent, ViewRef } from "./refs";
 import { Spinner } from "./Spinner";
@@ -56,6 +56,11 @@ export interface ButtonProps extends Omit<PressableProps, "children" | "style"> 
   onClick?: () => void;
   /** Opens this URL with `Linking`, as core's `href` makes the button a link. */
   href?: string;
+  /**
+   * Lets a long label wrap onto more lines instead of being cut off with an
+   * ellipsis; the button grows taller to fit. Off by default, as on the web.
+   */
+  wrap?: boolean;
   style?: ViewStyle;
 }
 
@@ -188,6 +193,7 @@ export const Button: RefComponent<ButtonProps, ViewRef> = forwardRef<ViewRef, Bu
       onPress,
       onClick,
       href,
+      wrap = false,
       style,
       ...rest
     },
@@ -196,7 +202,7 @@ export const Button: RefComponent<ButtonProps, ViewRef> = forwardRef<ViewRef, Bu
     const theme = useTheme();
     // Left out, the theme's density picks it.
     const size = sizeProp ?? theme.controlSize;
-    const row = useContext(FlexDirectionContext) === "row";
+    const ownWidth = useOwnWidth();
     const dims = SIZES[size];
     const radiusSize = size === "xs" ? "s" : size === "s" || size === "m" ? "m" : "l";
     const inactive = disabled || loading;
@@ -227,12 +233,8 @@ export const Button: RefComponent<ButtonProps, ViewRef> = forwardRef<ViewRef, Bu
               alignItems: "center",
               justifyContent: JUSTIFY[horizontal],
               // As core's `width: 100%`: full width in a column, an equal share in a row.
-              ...(fillWidth
-                ? { width: "100%", flexShrink: 1, alignSelf: "stretch" }
-                : row
-                  ? {}
-                  : { alignSelf: "flex-start" }),
-              height: theme.space(dims.height as "24"),
+              ...(fillWidth ? { width: "100%", flexShrink: 1, alignSelf: "stretch" } : ownWidth),
+              ...(wrap ? {} : { height: theme.space(dims.height as "24") }),
               minHeight: theme.space(dims.height as "24"),
               paddingHorizontal: theme.space(dims.x as "4"),
               paddingVertical: theme.space(dims.y as "2"),
@@ -263,8 +265,20 @@ export const Button: RefComponent<ButtonProps, ViewRef> = forwardRef<ViewRef, Bu
                   style={{
                     color,
                     ...(variant === "link" ? { textDecorationLine: "underline" } : {}),
+                    // Shrinks to the room left by the icons, so the label wraps inside the button.
+                    ...(wrap
+                      ? {
+                          flexShrink: 1,
+                          textAlign:
+                            horizontal === "start"
+                              ? "left"
+                              : horizontal === "end"
+                                ? "right"
+                                : "center",
+                        }
+                      : {}),
                   }}
-                  numberOfLines={1}
+                  numberOfLines={wrap ? undefined : 1}
                 >
                   {label || children}
                 </Text>

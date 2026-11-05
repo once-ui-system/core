@@ -4,6 +4,7 @@ import React from "react";
 import { Row } from "../../components/Row.js";
 import { Text } from "../../components/Text.js";
 import { useDataTheme } from "../../contexts/DataThemeProvider.js";
+import { useControllableState } from "../../internal/useControllableState.js";
 import styles from "./Chart.module.css";
 import { ChartVariant } from "./interfaces.js";
 import { Swatch } from "./Swatch.js";
@@ -24,10 +25,15 @@ interface LegendProps {
   variant?: ChartVariant;
   /** The y axis' width in px, so a top-left legend starts where the plot does. Defaults to 64. */
   axisWidth?: number;
-  /** Which entries the reader has hidden, by index; they show dimmed. */
+  /** Which entries are hidden, by index, when the host owns it; they show dimmed. */
   hidden?: readonly boolean[];
-  /** Makes each entry a button that shows or hides its series. */
-  onToggle?: (index: number) => void;
+  /** The entries hidden to start with when Legend owns the state. */
+  defaultHidden?: readonly boolean[];
+  /**
+   * Makes each entry a button that shows or hides its series, and is called
+   * with every entry's hidden state after each press.
+   */
+  onHiddenChange?: (hidden: boolean[]) => void;
 }
 
 const Legend = ({
@@ -39,9 +45,15 @@ const Legend = ({
   colors,
   variant,
   axisWidth = 64,
-  hidden,
-  onToggle,
+  hidden: hiddenProp,
+  defaultHidden = [],
+  onHiddenChange,
 }: LegendProps) => {
+  const [hidden, setHidden] = useControllableState<readonly boolean[]>({
+    value: hiddenProp,
+    defaultValue: defaultHidden,
+    onChange: onHiddenChange as ((next: readonly boolean[]) => void) | undefined,
+  });
   // Read the theme on every render: as a default parameter the hook ran only
   // when `variant` was omitted.
   const theme = useDataTheme();
@@ -138,13 +150,15 @@ const Legend = ({
           </>
         );
         // The legend lets the pointer through to the plot; only its buttons catch it.
-        return onToggle ? (
+        return onHiddenChange ? (
           <button
             key={index}
             type="button"
             className={styles.legendItem}
             aria-pressed={!hidden?.[index]}
-            onClick={() => onToggle(index)}
+            onClick={() =>
+              setHidden((prev) => payload.map((_, i) => (i === index ? !prev[i] : !!prev[i])))
+            }
           >
             {content}
           </button>

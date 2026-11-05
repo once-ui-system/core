@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "3.0.0-beta.1",
- "generated": "2026-10-28",
+ "generated": "2026-11-05",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root; '@once-ui-system/fx' and '@once-ui-system/blocks' are packages of their own, installed beside core.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -26,6 +26,11 @@
    "description": "React.ReactNode",
    "series": "!SeriesConfig<DataPoint> | SeriesConfig<DataPoint>[]",
    "data": "!readonly DataPoint[]",
+   "xKey": "SeriesKey<DataPoint>",
+   "valueFormat": "ValueFormat",
+   "locale": "string",
+   "summary": "string",
+   "aria-label": "string",
    "legend": "LegendConfig",
    "date": "DateConfig",
    "emptyState": "React.ReactNode",
@@ -161,11 +166,12 @@
    "bottomLeftRadius": "RadiusSize",
    "bottomRightRadius": "RadiusSize",
    "shadow": "ShadowSize",
+   "emphasis": "boolean | \"edge\" | \"glow\" | \"aura\"",
    "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | CursorPresetValue | ReactNode",
    "blendMode": "BlendMode",
    "blur": "BlurSize | number | CSSUnit",
    "backdropBlur": "BlurSize | number | CSSUnit",
-   "theme": "\"light\" | \"dark\"",
+   "theme": "\"light\" | \"dark\" | \"invert\"",
    "themeBorder": "BorderStyle",
    "themeSolid": "SolidType",
    "themeSurface": "SurfaceStyle",
@@ -510,13 +516,13 @@
    "left": "SpacingToken | number | CSSUnit",
    "fillWidth": "boolean",
    "position": "CSSProperties[\"position\"]",
-   "size": "TShirtSizes",
    "disabled": "boolean",
+   "href": "string",
+   "size": "TShirtSizes",
    "corners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
    "variant": "\"ghost\" | \"outline\" | \"subtle\"",
    "weight": "\"default\" | \"strong\"",
    "truncate": "boolean",
-   "href": "string",
    "rounded": "boolean",
    "prefixIcon": "IconName",
    "suffixIcon": "IconName"
@@ -578,6 +584,10 @@
    "ReactPortal",
    "Promise<AwaitedReactNode>",
    "Date"
+  ],
+  "ChatTimeFormat": [
+   "relative",
+   "clock"
   ],
   "ClusterGroup": [
    "{ type: \"item\"; item: T; position: LngLat; }",
@@ -753,7 +763,7 @@
    "dot",
    "system"
   ],
-  "curveType": [
+  "CurveType": [
    "step",
    "linear",
    "basis",
@@ -796,7 +806,7 @@
    "format": "string",
    "presets": "PresetsConfig",
    "selector": "boolean",
-   "onChange": "(range: DateRange) => void"
+   "onRangeChange": "(range: DateRange) => void"
   },
   "DatePickerLabels": {
    "previousMonth": "string",
@@ -1007,7 +1017,7 @@
    "twitter": "!{ card: \"summary_large_image\"; title: string; description: string; images: string[]; }",
    "authors": "{ name: string; url?: string }[]",
    "robots": "string",
-   "alternates": "{ canonical: string; languages: Record<string, string>; }"
+   "alternates": "{ canonical?: string; languages?: Record<string, string>; }"
   },
   "GradientProps": {
    "display": "boolean",
@@ -1122,6 +1132,7 @@
    "image",
    "security",
    "opacity",
+   "download",
    "info",
    "danger",
    "warning",
@@ -1158,7 +1169,6 @@
    "dark",
    "dislike",
    "document",
-   "download",
    "edit",
    "enter",
    "eye",
@@ -1277,6 +1287,12 @@
   "LngLat": {
    "[key: number]": "number"
   },
+  "LogoLoaderTone": [
+   "neutral",
+   "brand",
+   "accent",
+   "inherit"
+  ],
   "LogoProps": "Logo props",
   "LogoSource": [
    "string",
@@ -1288,20 +1304,15 @@
    "accent",
    "inherit"
   ],
+  "MapBuildings": [
+   "flat",
+   "3d"
+  ],
   "MapClusterOptions": {
    "radius": "number",
    "maxZoom": "number",
    "minPoints": "number"
   },
-  "MapColor": [
-   "neutral",
-   "brand",
-   "accent",
-   "info",
-   "danger",
-   "warning",
-   "success"
-  ],
   "MapContextValue": {
    "map": "!MapLibreMap",
    "lib": "!MapLibre",
@@ -1317,6 +1328,10 @@
    "unavailable": "!string"
   },
   "MapLibre": "typeof import(\"maplibre-gl\")",
+  "MapProjection": [
+   "globe",
+   "mercator"
+  ],
   "MapStyle": [
    "string",
    "StyleSpecification",
@@ -1325,6 +1340,15 @@
   "MapStyleSource": [
    "string",
    "StyleSpecification"
+  ],
+  "MapTone": [
+   "neutral",
+   "brand",
+   "accent",
+   "info",
+   "danger",
+   "warning",
+   "success"
   ],
   "MapViewport": {
    "center": "!LngLat",
@@ -1679,6 +1703,10 @@
    "string",
    "string[]"
   ],
+  "ResolvedTheme": [
+   "dark",
+   "light"
+  ],
   "ScalingSize": [
    "100",
    "90",
@@ -1820,7 +1848,9 @@
   "SelectOptionType": "Omit<OptionProps, \"selected\">",
   "SeriesConfig": {
    "key": "!SeriesKey<DataPoint>",
-   "color": "ColorValue"
+   "label": "string",
+   "color": "ColorValue",
+   "format": "ValueFormat"
   },
   "SeriesKey": "Extract<keyof T, string>",
   "ShadowSize": [
@@ -1895,6 +1925,12 @@
    "80",
    "104",
    "128"
+  ],
+  "SparklineCurve": [
+   "step",
+   "linear",
+   "natural",
+   "monotone"
   ],
   "Speed": [
    "number",
@@ -2129,11 +2165,12 @@
    "bottomRightRadius": "RadiusSize",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`",
    "shadow": "ShadowSize",
+   "emphasis": "boolean | \"edge\" | \"glow\" | \"aura\"",
    "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | CursorPresetValue | ReactNode",
    "blendMode": "BlendMode",
    "blur": "BlurSize | number | CSSUnit",
    "backdropBlur": "BlurSize | number | CSSUnit",
-   "theme": "\"light\" | \"dark\"",
+   "theme": "\"light\" | \"dark\" | \"invert\"",
    "themeBorder": "BorderStyle",
    "themeSolid": "SolidType",
    "themeSurface": "SurfaceStyle"
@@ -2175,7 +2212,7 @@
    "neutralScale": "ThemedSchemeScale",
    "pageBackground": "ThemeColor",
    "surfaceBackground": "ThemeColor",
-   "theme": "\"light\" | \"dark\" | \"system\""
+   "theme": "\"light\" | \"dark\" | \"invert\" | \"system\""
   },
   "StyleScopeFonts": "Partial<Record<\"heading\" | \"body\" | \"label\" | \"code\", string>>",
   "SurfaceStyle": [
@@ -2468,6 +2505,13 @@
    "none",
    "all"
   ],
+  "ValueFormat": [
+   "number",
+   "compact",
+   "percent",
+   "NumberFormatOptions",
+   "(value: number) => string"
+  ],
   "VoiceState": [
    "idle",
    "listening",
@@ -2706,7 +2750,8 @@
     "children": "ReactNode",
     "href": "string",
     "id": "string",
-    "arrowIcon": "boolean = false"
+    "arrowIcon": "boolean = false",
+    "onClick": "React.MouseEventHandler<HTMLElement>"
    }
   },
   "Card": {
@@ -2766,8 +2811,8 @@
     "errorMessage": "ReactNode",
     "label": "React.ReactNode",
     "id": "string",
-    "description": "React.ReactNode",
     "disabled": "boolean",
+    "description": "React.ReactNode",
     "iconButtonProps": "IconButtonProps",
     "auto": "boolean",
     "checked": "boolean",
@@ -2853,8 +2898,8 @@
     "defaultValue": "Date | DateRange",
     "autoFocus": "boolean",
     "className": "string",
-    "size": "CondensedTShirtSizes",
     "value": "Date | DateRange",
+    "size": "CondensedTShirtSizes",
     "onValueChange": "((date: Date) => void) | ((range: DateRange) => void)",
     "minDate": "Date",
     "maxDate": "Date",
@@ -2864,9 +2909,6 @@
     "onApply": "(date: Date) => void",
     "defaultTime": "{ hours: number; minutes: number; }",
     "nested": "boolean",
-    "currentMonth": "number",
-    "currentYear": "number",
-    "onMonthChange": "(increment: number) => void",
     "onHover": "(date: Date | null) => void",
     "open": "boolean",
     "locale": "string",
@@ -2897,6 +2939,7 @@
     "stack": "boolean",
     "flush": "boolean = false",
     "showClose": "boolean = true",
+    "closeLabel": "string = Close",
     "onHeightChange": "(height: number) => void",
     "minHeight": "number",
     "closeOnClickaway": "boolean = true"
@@ -2921,6 +2964,7 @@
     "description": "ReactNode",
     "footer": "ReactNode",
     "showClose": "boolean = true",
+    "closeLabel": "string = Close",
     "closeOnClickaway": "boolean = true",
     "flush": "boolean = false",
     "initialFocusRef": "RefObject<HTMLElement | null>",
@@ -3202,7 +3246,8 @@
     "loading": "boolean = false",
     "disabled": "boolean = false",
     "href": "string",
-    "children": "ReactNode"
+    "children": "ReactNode",
+    "onClick": "React.MouseEventHandler<HTMLElement>"
    }
   },
   "InfiniteScroll": {
@@ -3332,9 +3377,22 @@
     "icon": "LogoSource",
     "wordmark": "LogoSource",
     "text": "string",
+    "monogram": "boolean | string",
     "href": "string",
     "showIn": "\"dark\" | \"light\"",
     "brand": "{ copy?: boolean; url?: string }"
+   }
+  },
+  "LogoLoader": {
+   "group": "components",
+   "props": {
+    "svg": "string",
+    "src": "string",
+    "height": "number | string = 120",
+    "tone": "LogoLoaderTone = neutral",
+    "settled": "boolean = false",
+    "order": "\"reading\" | \"document\" = reading",
+    "onComplete": "() => void"
    }
   },
   "LogoSpinner": {
@@ -3365,6 +3423,7 @@
     "x": "number | CSSUnit",
     "y": "number | CSSUnit",
     "radius": "number | CSSUnit = 50svh",
+    "feather": "number = 100",
     "reducedMotion": "boolean | \"auto\" = auto",
     "className": "string",
     "style": "React.CSSProperties",
@@ -3416,7 +3475,10 @@
    "props": {
     "density": "NavDensity",
     "variant": "NavVariant = solid",
-    "rail": "boolean = true"
+    "rail": "boolean = true",
+    "collapsed": "boolean = false",
+    "expandOnHover": "boolean = false",
+    "expandedWidth": "number | SpacingToken = 256"
    }
   },
   "NavSection": {
@@ -3745,6 +3807,7 @@
     "fillWidth": "boolean = true",
     "compact": "boolean = false",
     "semantics": "\"tabs\" | \"radio\" = tabs",
+    "sliding": "boolean = true",
     "scroll": "boolean = true",
     "className": "string",
     "style": "React.CSSProperties"
@@ -4045,7 +4108,7 @@
     "selectable": "boolean = false",
     "selected": "string[]",
     "defaultSelected": "string[]",
-    "onSelectionChange": "(selected: string[]) => void",
+    "onSelectedChange": "(selected: string[]) => void",
     "getRowLabel": "(row: T) => string",
     "paginated": "boolean = false",
     "page": "number",
@@ -4349,6 +4412,25 @@
     "as": "ElementType = span"
    }
   },
+  "Sparkline": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "props": {
+    "data": "!readonly number[] | readonly T[]",
+    "valueKey": "SeriesKey<T>",
+    "variant": "\"line\" | \"area\" | \"bar\" = line",
+    "color": "ColorValue = blue",
+    "width": "number | string = 100%",
+    "height": "number | string = 32",
+    "curve": "SparklineCurve = monotone",
+    "showLast": "boolean = false",
+    "min": "number",
+    "max": "number",
+    "valueFormat": "ValueFormat",
+    "locale": "string",
+    "aria-label": "string"
+   }
+  },
   "HeadingLink": {
    "group": "modules",
    "mixins": [
@@ -4532,11 +4614,13 @@
     "name": "ReactNode",
     "avatarProps": "AvatarProps",
     "time": "ChatTime",
+    "timeFormat": "ChatTimeFormat = clock",
     "status": "ChatMessageStatus",
     "statusLabels": "Partial<Record<ChatMessageStatus, string>>",
     "onRetry": "() => void",
     "retryLabel": "string = Retry",
     "grouped": "boolean = false",
+    "stack": "\"start\" | \"middle\" | \"end\"",
     "variant": "\"bubble\" | \"plain\" = bubble",
     "attachments": "ReactNode",
     "footer": "ReactNode",
@@ -4556,7 +4640,9 @@
    "props": {
     "stickToBottom": "boolean = true",
     "onReachStart": "() => void",
-    "aria-label": "string"
+    "aria-label": "string",
+    "stack": "boolean = false",
+    "stackWithin": "number = 5"
    }
   },
   "ConversationItem": {
@@ -4612,7 +4698,7 @@
     "image": "string",
     "publishedTime": "string",
     "author": "{ name: string; url?: string; }",
-    "canonical": "string",
+    "canonical": "string | false",
     "robots": "string",
     "noindex": "boolean",
     "nofollow": "boolean",
@@ -4698,6 +4784,8 @@
     "hover": "boolean = false",
     "reverseY": "boolean = false",
     "reverseX": "boolean = false",
+    "orientation": "\"vertical\" | \"horizontal\" = vertical",
+    "stack": "boolean | \"percent\" = false",
     "data-viz-style": "DataStyle | (string & {})",
     "legend": "LegendConfig = {}",
     "error": "boolean = false",
@@ -4739,6 +4827,22 @@
     "errorState": "React.ReactNode = An error occurred while fetching data"
    }
   },
+  "ChartSummary": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "props": {
+    "data": "!readonly DataPoint[]",
+    "series": "SeriesConfig | SeriesConfig[]",
+    "xKey": "string",
+    "kind": "\"cartesian\" | \"pie\"",
+    "valueFormat": "ValueFormat",
+    "locale": "string",
+    "date": "DateConfig",
+    "title": "string",
+    "caption": "ReactNode",
+    "id": "string"
+   }
+  },
   "DataTooltip": {
    "group": "data",
    "importFrom": "@once-ui-system/core/data",
@@ -4750,7 +4854,8 @@
     "DataTooltip": "React.ReactNode",
     "date": "DateConfig = { format: \"MMM d\" }",
     "showSwatches": "boolean = true",
-    "variant": "ChartVariant = gradient"
+    "variant": "ChartVariant = gradient",
+    "formatValue": "(value: number, dataKey?: string) => string"
    }
   },
   "LinearGradient": {
@@ -4792,7 +4897,11 @@
     "reverseY": "boolean",
     "direction": "\"row\" | \"column\"",
     "position": "\"top-left\" | \"top-right\" | \"bottom-left\" | \"bottom-right\" | \"top-center\" | \"bottom-center\" = top-left",
-    "variant": "ChartVariant"
+    "variant": "ChartVariant",
+    "axisWidth": "number = 64",
+    "hidden": "readonly boolean[]",
+    "defaultHidden": "readonly boolean[] = []",
+    "onHiddenChange": "(hidden: boolean[]) => void"
    }
   },
   "LinearGauge": {
@@ -4831,7 +4940,7 @@
    ],
    "props": {
     "barWidth": "BarWidth = l",
-    "curve": "curveType = natural",
+    "curve": "CurveType = natural",
     "reverseY": "boolean = false",
     "reverseX": "boolean = false",
     "data-viz-style": "DataStyle | (string & {})",
@@ -4857,7 +4966,8 @@
     "StyleProps"
    ],
    "props": {
-    "curve": "curveType = natural",
+    "curve": "CurveType = natural",
+    "stack": "boolean | \"percent\" = false",
     "reverseY": "boolean = false",
     "reverseX": "boolean = false",
     "animation": "boolean = true",
@@ -4895,10 +5005,10 @@
     "nameKey": "SeriesKey<DataPoint> = name",
     "origo": "{ x: number; y: number } = { x: 50, y: 50 }",
     "legend": "LegendConfig = {}",
+    "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak",
     "error": "boolean = false",
-    "tooltip": "boolean = true",
     "loading": "boolean = false",
-    "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak"
+    "tooltip": "boolean = true"
    }
   },
   "RadialGauge": {
@@ -4964,7 +5074,7 @@
     "onInstanceChange": "(index: number) => void",
     "lineNumbers": "boolean = false",
     "maxLines": "number = 5",
-    "isCollapsible": "boolean = false",
+    "collapsible": "boolean = false",
     "hideCode": "boolean = false"
    }
   },
@@ -5061,7 +5171,7 @@
     "aspectRatio": "string = 16 / 9",
     "className": "string",
     "style": "React.CSSProperties",
-    "initialPreviewImage": "string | null = null",
+    "defaultPreviewImage": "string | null = null",
     "emptyState": "React.ReactNode = Drag and drop or click to browse",
     "quality": "number = 0.8",
     "sizes": "string | number",
@@ -5122,6 +5232,8 @@
     "boundsMaxZoom": "number",
     "mapStyle": "MapStyle",
     "tint": "boolean",
+    "projection": "MapProjection",
+    "buildings": "MapBuildings",
     "controls": "boolean",
     "interactive": "boolean",
     "cooperativeGestures": "boolean",
@@ -5141,7 +5253,7 @@
    "props": {
     "position": "!LngLat",
     "radius": "!number",
-    "color": "MapColor = brand",
+    "tone": "MapTone = brand",
     "opacity": "number = 0.2"
    }
   },
@@ -5178,7 +5290,7 @@
     "prefix": "React.ReactNode",
     "variant": "\"pill\" | \"dot\"",
     "active": "boolean = false",
-    "color": "MapColor = brand",
+    "tone": "MapTone = brand",
     "href": "string",
     "onClick": "(event: React.MouseEvent<HTMLElement>) => void"
    }
@@ -5789,7 +5901,15 @@
     "SizeProps",
     "SpacingProps",
     "StyleProps"
-   ]
+   ],
+   "props": {
+    "variant": "\"solid\" | \"mesh\" = solid",
+    "meshColors": "ColorScheme[]",
+    "link": "{ label: ReactNode; href: string }",
+    "dismissible": "boolean",
+    "dismissKey": "string",
+    "dismissLabel": "string"
+   }
   },
   "Book": {
    "group": "blocks",
@@ -6417,7 +6537,7 @@
   "useNavStyle": {
    "group": "components",
    "kind": "hook",
-   "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: Density; variant: Nav...",
+   "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly rail: \"8\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: D...",
    "doc": "The look the nearest Nav set, or the defaults outside one."
   },
   "photoViewerIndexFromUrl": {
@@ -6498,6 +6618,18 @@
    "group": "hooks",
    "kind": "hook",
    "signature": "<T>(value: T, delay: number) => T"
+  },
+  "elementTheme": {
+   "group": "hooks",
+   "kind": "function",
+   "signature": "(element: Element | null, fallback: ResolvedTheme) => ResolvedTheme",
+   "doc": "The theme `element` is drawn in: its nearest `data-theme=\"light\"` or `\"dark\"`, flipped once for every `data-theme=\"invert\"` between them."
+  },
+  "useElementTheme": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "(ref: RefObject<Element | null>) => ResolvedTheme",
+   "doc": "`useTheme().resolvedTheme`, but for the subtree `ref` sits in: a map in a `theme=\"dark\"` section of a light page, or under `theme=\"invert\"`, gets `\"dark\"`."
   },
   "useOgData": {
    "group": "hooks",
@@ -6668,7 +6800,7 @@
    "importFrom": "@once-ui-system/core/config",
    "kind": "function",
    "signature": "<T extends OnceUIConfig>(config: T & CheckedConfig<T>) => T",
-   "doc": "Type an app's `once-ui.config`."
+   "doc": "Type an app's `once-ui.config`, whose `style` keys are ThemeProvider's props (an exact brand colour is `brand: \"custom\", brandSeed: \"#0F766E\"`)."
   },
   "useStylePanel": {
    "group": "blocks",

@@ -14,5 +14,6 @@ Score each axis from 1 (poor) to 5 (excellent):
 - responsiveness: every route adapts sensibly across the three widths; nothing overflows the page, overlaps or becomes unusable.
 - restraint: effects and decoration support the content rather than dominate it.
 - coherence: the routes read as one app: the same shell, navigation, spacing and components, and navigation that shows where you are.
+- intentionality: 1 = the default look of a component library or a generated template (stock cards on a plain page, default colours, uniform spacing); 5 = a distinct, consistent visual identity with considered hierarchy, colour and detail, as a professional design team would ship.
 
-Reply with only a JSON object: {"id": "{{ID}}", "polish": n, "completeness": n, "responsiveness": n, "restraint": n, "coherence": n, "note": "one short sentence"}
+Reply with only a JSON object: {"id": "{{ID}}", "polish": n, "completeness": n, "responsiveness": n, "restraint": n, "coherence": n, "intentionality": n, "note": "one short sentence"}

@@ -45,7 +45,8 @@ so write from it; open \`ai/components/<Name>.json\` only for a component it doe
 nothing fits, start from \`node_modules/@once-ui-system/core/AGENTS.md\`. Never open \`ai/spec.json\`.
 
 New signed-in app (sidebar, top bar, content panel)? Start from the working starter instead of writing the root
-layout and shell: \`cp -r node_modules/@once-ui-system/core/ai/starters/app/src/. src/\`, then edit
+layout and shell: copy \`ai/starters/app/src/.\` into \`src/\` with the command in "Starting an app" (it finds the
+package even when a workspace hoists it), then edit
 \`src/resources/app.ts\` (name, user, nav) and \`src/resources/once-ui.config.ts\` (theme), and add pages under
 \`src/app/(app)/\`. Details: "Starting an app" in \`node_modules/@once-ui-system/core/AGENTS.md\`.
 

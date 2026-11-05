@@ -33,3 +33,43 @@
     padding-block: var(--static-space-8);
     line-height: 1.3;
 }
+
+// The sliding selected background. The track is its own stacking context so
+// the pill can sit under the options without lifting them.
+.track {
+    isolation: isolate;
+}
+
+.pill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    opacity: 0;
+    pointer-events: none;
+    box-sizing: border-box;
+    background-color: var(--neutral-alpha-medium);
+    border: 1px solid var(--neutral-alpha-weak);
+
+    &[data-ready] {
+        transition:
+            transform 0.32s cubic-bezier(0.32, 0.72, 0, 1),
+            width 0.32s cubic-bezier(0.32, 0.72, 0, 1),
+            height 0.32s cubic-bezier(0.32, 0.72, 0, 1),
+            border-radius 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+
+
+    @media (prefers-reduced-motion: reduce) {
+        &[data-ready] {
+            transition: none;
+        }
+    }
+}
+
+// The selected option shows the pill through it. Repeated to win over the
+// button's own selected, hover and focus backgrounds.
+.onPill.onPill.onPill.onPill {
+    background-color: transparent;
+    border-color: transparent;
+}

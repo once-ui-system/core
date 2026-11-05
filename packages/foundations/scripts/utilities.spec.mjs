@@ -17,9 +17,30 @@
 
 /** Static spacing steps, then the five viewport-responsive ones. */
 export const SPACING_TOKENS = [
-  "0", "1", "2", "4", "8", "12", "16", "20", "24", "32",
-  "40", "48", "56", "64", "72", "80", "104", "128", "160",
-  "xs", "s", "m", "l", "xl",
+  "0",
+  "1",
+  "2",
+  "4",
+  "8",
+  "12",
+  "16",
+  "20",
+  "24",
+  "32",
+  "40",
+  "48",
+  "56",
+  "64",
+  "72",
+  "80",
+  "104",
+  "128",
+  "160",
+  "xs",
+  "s",
+  "m",
+  "l",
+  "xl",
 ];
 
 /** A t-shirt size scales with the viewport; a numeric step never does. */
@@ -27,25 +48,29 @@ export const spacingVar = (token) =>
   /^\d+$/.test(token) ? `var(--static-space-${token})` : `var(--responsive-space-${token})`;
 
 /**
- * Prefix → the properties it sets. `x`/`y` expand to the two physical sides
+ * Prefix → the properties it sets. The prefixes spell the prop out
+ * (`padding-top-16`, not `pt-16`) since 3.0: Tailwind CSS owns `p-*`, `mt-*`
+ * and the rest with a different scale (its `p-4` is 1rem, Once UI's 4px), and
+ * an app that uses both would see Tailwind's rule land on Once UI's elements.
+ * `g-*` has no Tailwind namesake, so gap keeps its short prefix. `x`/`y` expand to the two physical sides
  * rather than to `inline`/`block` logical properties, matching what the
  * hand-written file shipped; changing that is a separate, visible decision.
  */
 export const SPACING_FAMILIES = [
-  { prefix: "m", props: ["margin"] },
-  { prefix: "mx", props: ["margin-left", "margin-right"] },
-  { prefix: "my", props: ["margin-top", "margin-bottom"] },
-  { prefix: "mt", props: ["margin-top"] },
-  { prefix: "mr", props: ["margin-right"] },
-  { prefix: "mb", props: ["margin-bottom"] },
-  { prefix: "ml", props: ["margin-left"] },
-  { prefix: "p", props: ["padding"] },
-  { prefix: "px", props: ["padding-left", "padding-right"] },
-  { prefix: "py", props: ["padding-top", "padding-bottom"] },
-  { prefix: "pt", props: ["padding-top"] },
-  { prefix: "pr", props: ["padding-right"] },
-  { prefix: "pb", props: ["padding-bottom"] },
-  { prefix: "pl", props: ["padding-left"] },
+  { prefix: "margin", props: ["margin"] },
+  { prefix: "margin-x", props: ["margin-left", "margin-right"] },
+  { prefix: "margin-y", props: ["margin-top", "margin-bottom"] },
+  { prefix: "margin-top", props: ["margin-top"] },
+  { prefix: "margin-right", props: ["margin-right"] },
+  { prefix: "margin-bottom", props: ["margin-bottom"] },
+  { prefix: "margin-left", props: ["margin-left"] },
+  { prefix: "padding", props: ["padding"] },
+  { prefix: "padding-x", props: ["padding-left", "padding-right"] },
+  { prefix: "padding-y", props: ["padding-top", "padding-bottom"] },
+  { prefix: "padding-top", props: ["padding-top"] },
+  { prefix: "padding-right", props: ["padding-right"] },
+  { prefix: "padding-bottom", props: ["padding-bottom"] },
+  { prefix: "padding-left", props: ["padding-left"] },
   { prefix: "g", props: ["gap"] },
 ];
 
@@ -55,7 +80,9 @@ export const SPACING_FAMILIES = [
  * and gap have no `auto`, so only the margin families get it, at the base and
  * at every breakpoint.
  */
-export const MARGIN_AUTO_PREFIXES = SPACING_FAMILIES.filter(({ prefix }) => prefix.startsWith("m"));
+export const MARGIN_AUTO_PREFIXES = SPACING_FAMILIES.filter(({ prefix }) =>
+  prefix.startsWith("margin"),
+);
 
 /**
  * Not part of the token matrix: a negative one-pixel gap that laps adjacent
@@ -109,6 +136,11 @@ export const POSITION_VALUES = ["relative", "fixed", "absolute", "sticky", "stat
 /** Offsets take the numeric steps only — no t-shirt sizes, unlike spacing. */
 export const OFFSET_TOKENS = SPACING_TOKENS.filter((t) => /^\d+$/.test(t));
 
+/**
+ * Offsets are classed `offset-top-16` (3.0): Tailwind CSS's `top-16` is 4rem,
+ * Once UI's 1rem, and the bare name would take Tailwind's rule in an app that
+ * uses both.
+ */
 export const OFFSET_SIDES = ["top", "left", "bottom", "right"];
 
 /**
@@ -333,8 +365,18 @@ export const POINTER_EVENTS = ["none", "auto", "all"];
  * keyword of the same name.
  */
 export const CURSORS = [
-  "interactive", "pointer", "default", "text", "move", "not-allowed",
-  "wait", "help", "grab", "grabbing", "zoom-in", "zoom-out",
+  "interactive",
+  "pointer",
+  "default",
+  "text",
+  "move",
+  "not-allowed",
+  "wait",
+  "help",
+  "grab",
+  "grabbing",
+  "zoom-in",
+  "zoom-out",
 ];
 
 /**
@@ -368,9 +410,23 @@ export const USER_SELECT = ["none", "text", "all", "auto"];
 
 /** Every `mix-blend-mode` keyword, plus `plus-lighter` for additive glows. */
 export const BLEND_MODES = [
-  "normal", "multiply", "screen", "overlay", "darken", "lighten",
-  "color-dodge", "color-burn", "hard-light", "soft-light", "difference",
-  "exclusion", "hue", "saturation", "color", "luminosity", "plus-lighter",
+  "normal",
+  "multiply",
+  "screen",
+  "overlay",
+  "darken",
+  "lighten",
+  "color-dodge",
+  "color-burn",
+  "hard-light",
+  "soft-light",
+  "difference",
+  "exclusion",
+  "hue",
+  "saturation",
+  "color",
+  "luminosity",
+  "plus-lighter",
 ];
 
 /**
@@ -416,7 +472,7 @@ export const GRID_ROWS = GRID_COLUMNS;
  * empty tracks at its end.
  */
 export const GRID_AUTO_FIT = {
-  selector: ".columns-auto-fit",
+  selector: ".grid-columns-auto-fit",
   property: "--grid-min-column-width",
   template: "repeat(auto-fit, minmax(min(var(--grid-min-column-width), 100%), 1fr))",
 };

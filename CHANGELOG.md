@@ -32,6 +32,22 @@ entry below that had landed by then:
 
 ### Added
 
+- **Tailwind CSS v4 adapter, `@once-ui-system/core/tailwind.css`.** Import it
+  before Tailwind (`@import "@once-ui-system/core/tailwind.css"; @import
+  "tailwindcss";`) and Once UI's tokens become Tailwind classes that follow the
+  theme: `bg-surface`, `bg-brand-strong`, `text-neutral-weak`,
+  `border-neutral-medium`, `rounded-m`, `shadow-l`, `font-heading`,
+  `text-body-m`. `dark:` follows Once UI's `data-theme`. Tailwind's preflight
+  sits under Once UI and its utilities over it, so a `className="ml-auto"` on a
+  Once UI component still wins and no component changes a pixel. Also at
+  `@once-ui-system/foundations/tailwind.css`.
+- **Globe and 3D buildings on `Map`.** `projection="globe"` curves the world when zoomed
+  out, and `buildings="3d"` raises buildings to their height from zoom 13, coloured from
+  the neutral surface up to the brand colour and repainted when the theme changes. A
+  controlled `viewport` that jumps to another city now flies there instead of gliding
+  (instant with reduced motion).
+- **`closeLabel` on `Drawer` and `Dialog`.** The close button's tooltip and accessible
+  name, for a UI that isn't in English. Defaults to "Close".
 - **An MCP server, `once-ui-mcp`.** It ships in the package and runs locally over
   stdio (`npx -y -p @once-ui-system/core once-ui-mcp`), answering from the
   installed version's `ai/` files. Its tools search components, return a
@@ -134,6 +150,14 @@ entry below that had landed by then:
   so a wrapper typed with them compiles (`(props: TextProps) => <Text {...props} />`,
   the Next MDX-components pattern). They keep 3.0's leaf set (no padding) and Text's
   `as`, typed by the element. `HeadingProps` is exported.
+- **`PhotoViewer`.** A full-screen viewer for a set of photos: a photo grows out of the
+  tile it opened from and closes back into it, swipe moves between photos (with resistance
+  at the ends), swipe down closes, pinch, double-tap or double-click zooms and drag pans.
+  Arrows and Escape work from the keyboard, focus returns to the tile, and reduced motion
+  turns every animation into a short fade. `items` (`{ src, alt, title?, caption? }`),
+  `index` / `defaultIndex` / `onIndexChange`, `onClose`, and an opt-in `deepLink` that keeps
+  the photo in the URL so it can be shared and Back closes it. Images go through the Image
+  adapter, and `Media` does not import it. 3.0 only.
 
 ### Removed
 
@@ -211,6 +235,26 @@ entry below that had landed by then:
 
 ### Changed
 
+- **2.x through 2.6 and main's unreleased fixes are in 3.0** (merged before the freeze):
+  `Nav` icon rail, `Logo` monogram, `Mask` feather, `emphasis` on Flex and Grid,
+  `LogoLoader`, stacked chat messages and image thumbnails, mesh, link and dismiss on
+  blocks' `Banner`, tinted danger `Option`s, and the leading-field focus fix on `Dropdown`.
+- **`Tag variant="announce"` is a compact pill with a beam.** 2.x's Badge redesign: 28px
+  tall at m, `label-default-s` on the surface colour with a hairline neutral border, the
+  icon in brand, and `effect` is a short brand-to-accent beam round the edge (faster on
+  hover, still under reduced motion) instead of the sweeping shine.
+
+- **Spacing, offset and grid-column classes are spelled out** (MIGRATING.md §
+  14). `p-16` is `padding-16`, `mt-8` `margin-top-8`, `top-16`
+  `offset-top-16`, `columns-2` `grid-columns-2`, at every breakpoint. Props are
+  unchanged. Tailwind CSS uses the short names with another scale, and its
+  rule would land on Once UI's elements in an app that has both. The codemod
+  rewrites hand-written classes.
+- **Every stylesheet names the layer order `properties, theme, base, once-ui,
+  components, utilities`.** A cascade layer keeps the place where its name
+  first appears, so whichever file loads first, Tailwind's preflight stays
+  under Once UI and Tailwind's utilities over it. Without Tailwind the other
+  layers are empty.
 - **Charts draw their own SVG; recharts is gone.** LineChart, BarChart,
   LineBarChart and PieChart render with Once UI's own renderer (scales, stacks,
   d3's curves, ticks and bar slots as recharts placed them), so the chart is in
@@ -241,6 +285,30 @@ entry below that had landed by then:
   `date` object. Chart tooltips and axes write numbers through `valueFormat` in
   `locale` when either is set; without them they draw as 2.x did. With no
   `series`, the x column is no longer drawn as a series, and `label` never is.
+- **Three more props follow the 3.0 naming rules** (3.0.0-beta.2). Table's
+  selection handler is `onSelectedChange`, beside `selected` and `defaultSelected`
+  (it was `onSelectionChange`, as on 2.x's DataTable). CodeBlock `isCollapsible`
+  is `collapsible`. MediaUpload `initialPreviewImage` is `defaultPreviewImage`.
+  The codemod renames all three. Chart `Legend` takes `hidden` / `defaultHidden` /
+  `onHiddenChange(hidden)` in place of beta.1's `onToggle(index)`. From 2.x's
+  latest additions: LogoLoader takes `tone` and `aria-label` (not `color` and
+  `ariaLabel`), MapPin and MapCircle take `tone` (the type is `MapTone`), and the
+  Map parts take `ref` as a prop like every other component. DatePicker's
+  `currentMonth`, `currentYear` and `onMonthChange(increment)` leave its public
+  props: they were the range picker's wiring, not a value contract, and the
+  codemod reports each use. The codemod also reports, from the nearest
+  `package.json`, React below 19 and a `recharts` dependency left from 2.x.
+- **Fixes from the first real-app migration** (3.0.0-beta.2). Button and
+  IconButton type `onClick`'s event as `MouseEvent<HTMLElement>`, so an inline
+  handler compiles under strict. `type="reset"` and a `form` attribute render a
+  real `<button>`, and a typeless Button inside a `<form>` warns in development
+  that it will not submit. A field's own `<input>` and `<textarea>` state their
+  outline, shadow, margin and min/max height, so an app's `input:focus` ring no
+  longer draws inside it. MIGRATING § 12 says where to declare `@layer` order
+  in a Vite app.
+- **Toast loads with the first toast** (3.0.0-beta.2). `ToastProvider` keeps its
+  polite live region in the page from the start, so screen readers still announce
+  the first toast, and fetches the `Toast` component only when one is shown.
 - **Real ESM** (B3): `"type": "module"`, and every relative import in `dist` names its
   file (`./Button.js`, `../data/emoji-data.json` with `{ type: "json" }`), built with
   `module`/`moduleResolution: NodeNext` as `packages/cli` is. Plain Node resolves the
@@ -471,6 +539,28 @@ entry below that had landed by then:
   a grey box. A `fadeColor` keeps the colour fade, now rounded like the strip
   when `radius` is set. The buttons also come and go when the strip is resized,
   not only when it is scrolled.
+- **`brandSeed` is the exact brand colour.** The seed's hex is now step 500, which every
+  brand solid uses in both themes; before, only its hue was kept, so `brandSeed: "#0F766E"`
+  never appeared on a button. The other steps keep the built-in contrast ladder and draw in
+  around a seed that is darker or lighter than usual, so brand text on a light page stays at
+  7:1 or better on white. `accentSeed` and `neutralSeed` work the same way. A `brandScale`
+  numbered light to dark, the Tailwind way, now gets a warning in development: Once UI steps
+  run dark to light, 100 darkest. AGENTS.md and the rules say how to set an exact colour.
+- **A `Card` with `onClick` no longer submits a form around it** (it is `type="button"`),
+  and a card given `width` or `fit` hugs that width instead of stretching (`maxWidth` still
+  fills the row up to its cap).
+- **Tooltips and hover cards open on keyboard focus only.** A dialog that focuses its close
+  button as it opens after a click no longer shows the "Close" tooltip over its corner.
+- **`ThemeSwitcher` marks the active theme in neutral**, not a brand-solid circle under
+  `solid: "color"`.
+- **The app starter**: `defaultTheme: "system"` so a first visit follows the device; server
+  components import component subpaths for Turbopack; AGENTS.md's copy command works when a
+  workspace hoists the package, and says to add `optimizePackageImports` to the project's own
+  `next.config` rather than replace it. The `page` bundle no longer promises a quality bar
+  and gold example it doesn't have.
+- **`MegaMenu` panels stay inside the window.** A wide panel under a trigger near the
+  right edge used to open past the side of the screen; it now moves left until it fits,
+  16px from the edge, and a panel wider than the window keeps its left edge in view.
 - **A DatePicker with no date hydrates in any month.** A page prerendered on 31 October
   and opened on 1 November threw React #418, "October" against "November". The month and
   year labels of a picker that opens on the clock's month now render on the client, as
@@ -507,10 +597,44 @@ entry below that had landed by then:
 - **Feedback draws no empty icon box** when its icon does not resolve.
 - **CodeBlock and HeadingNav render under jsdom**: their `calc()` lengths moved
   into custom properties, so `getComputedStyle` no longer throws in tests.
+- **`FormErrorSummary` and `Field` line up.** The summary's entries start under its
+  title instead of 20px further in, and sit 12px below it rather than 24px (the gap
+  under any `Feedback` title before its children). A `Field`'s error and hint start
+  under its label, at the same 4px inset, instead of 16px in.
+  In development, an `Input` or `Textarea` inside a `Field` that sets its own `label`,
+  `description` or `errorMessage` warns once: the Field owns those, so there is one label
+  and every message lines up under it.
 
 ## [Unreleased]
 
 ### Added
+
+- **`emphasis` on `Flex` and `Grid`.** Draws attention to an element with an animated
+  brand-to-accent edge that travels round the border. Each value names a look: `edge` is
+  the edge alone, `glow` (or `true`) adds a soft halo for bars and inputs, `aura` a wide
+  one for panels. It is a class, so the element stays a server component; it stands still
+  with reduced motion, lies over a `border` of any width, and takes `--emphasis-from`,
+  `--emphasis-to`, `--emphasis-width` and `--emphasis-duration`.
+- **Globe and 3D buildings on `Map`.** `projection="globe"` curves the world when zoomed
+  out, and `buildings="3d"` raises buildings to their height from zoom 13, coloured from
+  the neutral surface up to the brand colour and repainted when the theme changes. A
+  controlled `viewport` that jumps to another city now flies there instead of gliding
+  (instant with reduced motion).
+- **`closeLabel` on `Drawer`, `Dialog` and `Modal`.** The close button's tooltip and
+  accessible name, for a UI that isn't in English. Defaults to "Close", as before.
+- **`LogoLoader`.** A page or app splash drawn from a product's own SVG wordmark or
+  symbol (`svg` markup or a `src` URL): each letter and shape is traced, left to right by
+  default, then the logo fills in and holds. `onComplete` fires when the intro has played
+  and `settled` shows the filled logo without replaying it. Only the SVG's geometry is
+  read, so nothing else from the file reaches the page. With reduced motion the logo
+  fades in instead.
+- **Announcement banners.** `Banner variant="mesh"` draws a soft, slowly drifting
+  gradient wash from the theme's brand and accent scales (`meshColors` picks others) under
+  a scrim that keeps the text readable in dark and light. `link` adds an inline,
+  underlined call to action; `dismissible` adds a close button, and `dismissKey` remembers
+  the dismissal in the browser. `ThemeInit` reads remembered dismissals before the first
+  paint, so a dismissed banner never flashes in. Banner stays a server component, and a
+  caller's own `background` now replaces the default brand strip instead of clashing with it.
 
 - **`Kbar` takes your own matching and ranking.** `filter={(items, query) => …}` returns
   the items a query shows, in order, and the palette renders exactly that, sections in the
@@ -518,14 +642,85 @@ entry below that had landed by then:
   Without it the case-insensitive match on name, keywords and section is unchanged. Its
   words (`labels`: dialog name, results, no results, the footer hints) can be translated;
   English stays the default. `KbarFilter` and `KbarLabels` are exported types.
-- **`PhotoViewer`.** A full-screen viewer for a set of photos: a photo grows out of the
-  tile it opened from and closes back into it, swipe moves between photos (with resistance
-  at the ends), swipe down closes, pinch, double-tap or double-click zooms and drag pans.
-  Arrows and Escape work from the keyboard, focus returns to the tile, and reduced motion
-  turns every animation into a short fade. `items` (`{ src, alt, title?, caption? }`),
-  `index` / `defaultIndex` / `onIndexChange`, `onClose`, and an opt-in `deepLink` that keeps
-  the photo in the URL so it can be shared and Back closes it. Images go through the Image
-  adapter, and `Media` does not import it. 3.0 only.
+
+### Changed
+
+- **`Badge` redesign.** A compact pill (28px tall, `label-default-s`) on the surface
+  colour with a hairline neutral border and neutral text, the icon in brand. The skewed
+  shine that swept across it every few seconds is replaced by a short brand-to-accent beam
+  that travels round the border, faster on hover and still under reduced motion. Padding,
+  colour and text props still override the defaults.
+
+### Fixed
+
+- **Theme providers render where storage is blocked.** In a sandboxed or third-party
+  iframe, or with cookies off, reading `localStorage` throws a SecurityError, and
+  `ThemeProvider` took the whole page down with it (seen in Sentry on Aveiro's embeds).
+  `ThemeProvider` and `DataThemeProvider` now carry on without storage: themes still
+  switch, the choice just isn't remembered.
+- **`MegaMenu` panels stay inside the window.** A wide panel under a trigger near the
+  right edge used to open past the side of the screen; it now moves left until it fits,
+  16px from the edge, and a panel wider than the window keeps its left edge in view.
+- **`Schema` image fallback.** With no `image`, JSON-LD pointed at `/og?title=…`, a route
+  no template serves, so every such page carried a broken image. It now uses
+  `/api/og/generate`, the same default `Meta.generate` uses for the social image.
+- **An enlargeable `Media` shows a focus ring.** Its inline `outline: none` beat the
+  `focus-ring` class, so tabbing to the image left no visible focus. The box now leaves the
+  outline to `focus-ring`, which draws only for keyboard focus; a click still shows nothing.
+- **`HeadingNav`, `Scroller` and `Swiper` respect reduced motion.** Their buttons, links and
+  drag snap scrolled with `behavior: "smooth"` whatever the visitor's setting; under
+  `prefers-reduced-motion: reduce` they now jump straight there. Everyone else still gets
+  the smooth scroll.
+- **Copying a heading's link or a `CodeBlock` works on plain http.** Outside a secure
+  context (a dev server opened from a phone on the LAN) there is no `navigator.clipboard`,
+  so the heading anchor did nothing and CodeBlock's copy button did nothing. Both now fall
+  back to a hidden textarea and `document.execCommand("copy")`, and report the real
+  outcome: the toast says when the link could not be copied, and CodeBlock's check only
+  shows after a copy that worked. Where the Clipboard API works nothing changes.
+- **`HeadingLink` takes a `label`.** It always named its copy link ("Copy link to …") from
+  the text it could read in its children on the client, so a child that renders its own
+  text dropped out of the name and a caller could not set it. `label` sets the name, as
+  `MdxHeading` already does with a label built on the server; without it the name still
+  comes from the children.
+
+## [2.6.0] — 2026-10-24
+
+### Added
+
+- **`Mascot` turns into a cube while it works.** `working="cube"` swaps the mascot for a
+  WebGL cube that scrambles and solves while `state` is `thinking`, then turns into the
+  Once UI logo and morphs back. `sides` colors the faces (`"tints"` derives them from
+  `color`), the gaps between pieces are hairline thin, and without WebGL or with
+  reduced motion the flat mascot stays.
+- **Poke the `Mascot`.** A click or tap squashes it with a surprised face; `poke={false}`
+  turns it off.
+- **Kawaii moods for `Mascot`.** `love`, `excited`, `laughing`, `embarrassed`, `crying`,
+  `angry` and `confused` draw an everyday mood plus effects: heart, star or laughing
+  eyes, blush, sweat, tears, an anger mark, and hearts, sparkles or a question mark
+  floating up. `effects` adds any of them to any mood (`effects={["blush"]}`) or turns
+  them off (`effects={false}`). Flat and cube draw the same glyphs.
+- **Icon rail for `Nav`.** `collapsed` narrows a `Nav` to one icon column: labels,
+  badges and section headings fade out but stay each row's accessible name, and
+  `NavGroup`s close. `expandOnHover` opens it over the page, labels and all, while a
+  mouse rests on it (after a short hover-intent delay) or the keyboard is in it,
+  instead of a tooltip per icon; it keeps its collapsed width in the layout, so the
+  content beside it never moves. Touch never opens it, Escape closes it, reduced
+  motion drops the animation. `expandedWidth` sets how wide it opens (16rem by
+  default).
+- **`feather` on `Mask`.** How much of the radius the edge fades over, from `0`, a sharp
+  circle, to `100`, the soft fade from the centre the mask has always had and still
+  defaults to. With `cursor`, `feather={0}` reads as a lens or a torch carried over the
+  page rather than a glow.
+- **Map.** `@once-ui-system/core/map` draws an interactive map on MapLibre GL with free
+  OpenFreeMap tiles (OpenStreetMap data, no key, no view limit). The basemap follows the
+  theme and takes the page background token. Markers are React content (`MapMarker`, or
+  `MapPin` for price pills and dots), `MapMarkers` renders items from data with optional
+  clustering and an active item, `MapPopup` is a surface card above a point, and
+  `MapCircle` marks an area in metres. `bounds` frames positions; `viewport` /
+  `defaultViewport` / `onViewportChange` control the camera. Keyboard panning and zoom,
+  reduced motion and a fallback without WebGL are built in. `maplibre-gl` (5 or 6) is an
+  optional peer, loaded only when a map renders; `mapStyle` and `transformRequest` plug in
+  a keyed tile provider.
 - **`StyleScope`.** One site's or tenant's look inside another page: a site builder's
   preview, an agency's site on a marketplace, a venue's pages on a shared app. `config`
   takes the same keys as the config's `style` (brand, accent, neutral, solid, solidStyle,
@@ -534,6 +729,19 @@ entry below that had landed by then:
   rendered `<style>`, so two scopes with different brands sit side by side and the first
   paint is right. Recolouring a nested brand, accent, neutral or solid relies on the
   nested-token fix (#282).
+- **Stacked chat messages.** `stack` on `ChatMessageList` draws a quick run of messages
+  from one author as one block: the bubbles close up and round less where they meet, the
+  name and avatar show once, and the time and status show under the last one. Messages
+  stack when they are next to each other with the same `from`, `name` and `variant`, sent
+  within `stackWithin` minutes (5 by default). `ChatMessage` takes the position as `stack`.
+- **`formatRelativeTime` and relative chat times.** `formatRelativeTime(date, { style,
+  locale, now })` words a time as a distance from now in the reader's language through
+  `Intl`: `"narrow"` (the default) is "now", "2m", "1h", "3d", "2w", then the date;
+  `"short"` and `"long"` add "ago". `relativeTimeRefresh` says when the wording next
+  changes. `timeFormat="relative"` on `ChatMessage` uses it and keeps itself current,
+  with the full time on hover.
+- **Image thumbnails in `ChatComposer`.** A picked or pasted image shows as a thumbnail
+  with a remove button; other files keep their chip.
 - **Cursor presets.** `cursor="soft" | "rounded" | "dot"` on `Flex` and `Grid` restyles
   every cursor in the subtree: the arrow, the pointer over controls, the I-beam over text
   fields and the blocked sign over disabled controls. The browser draws them from the
@@ -547,24 +755,6 @@ entry below that had landed by then:
 
 ### Fixed
 
-- **An enlargeable `Media` shows a focus ring.** Its inline `outline: none` beat the
-  `focus-ring` class, so tabbing to the image left no visible focus. The box now leaves the
-  outline to `focus-ring`, which draws only for keyboard focus; a click still shows nothing.
-- **`HeadingNav`, `Scroller` and the snap `Carousel` respect reduced motion.** Their
-  buttons, links and drag snap scrolled with `behavior: "smooth"` whatever the visitor's
-  setting; under `prefers-reduced-motion: reduce` they now jump straight there. Everyone
-  else still gets the smooth scroll.
-- **Copying a heading's link or a `CodeBlock` works on plain http.** Outside a secure
-  context (a dev server opened from a phone on the LAN) there is no `navigator.clipboard`,
-  so the heading anchor did nothing and CodeBlock's copy button did nothing. Both now fall
-  back to a hidden textarea and `document.execCommand("copy")`, and report the real
-  outcome: the toast says when the link could not be copied, and CodeBlock's check only
-  shows after a copy that worked. Where the Clipboard API works nothing changes.
-- **`HeadingLink` takes a `label`.** It always named its copy link ("Copy link to …") from
-  the text it could read in its children on the client, so a child that renders its own
-  text dropped out of the name and a caller could not set it. `label` sets the name, as
-  `MdxHeading` already does with a label built on the server; without it the name still
-  comes from the children.
 - **The cube Mascot talks with one mouth.** While speaking (and laughing) the 3D and flat
   cube drew the mood's line and a small open ring on top of each other, so a happy smile
   showed a stray "o" in its middle. The mouth is now one outline that parts from the
@@ -572,6 +762,14 @@ entry below that had landed by then:
 - **The cube Mascot's open mouth is one unbroken line.** The outline used to start and end
   at its left corner, which left a visible nick there while it talked; the tube now closes
   on itself (`tube(..., closed)`).
+- **A `DropdownWrapper` that leads with a search field keeps the caret in it.** With arrow
+  navigation on, the field took focus as the panel opened and lost it a frame later to the
+  selected option, so a site switcher or command menu opened with nothing to type into.
+  The field now keeps focus (taken once it is actually visible: Input's transition keeps it
+  hidden for a frame after the panel is placed), and ArrowDown moves from it into the list.
+- **`DropdownWrapper` opens with a softer grow.** The panel scales from 0.96 rather than
+  0.9 as it fades in, still from the corner anchored to its trigger: a tall panel's far
+  edge travelled about 40px, which read as a pop rather than an opening.
 - **A node as `cursor` on `Flex` and `Grid` works with controls inside.** It stepped in front
   of buttons, links and inputs: the native pointer showed beside it, and an input lost its
   I-beam. It now steps aside wherever the native cursor is back, and over a nested element

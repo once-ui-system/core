@@ -342,11 +342,11 @@ const Form = ({
   // `Grid`'s own `xl`/`l`/`m`/`s`/`xs` props would do this, but they switch it
   // to `ClientGrid`, which reads `useLayout` and so requires a
   // `LayoutProvider` above it. Nothing here is dynamic — foundations already
-  // ships `.m-columns-2` and friends — so the classes go on directly and
+  // ships `.m-grid-columns-2` and friends — so the classes go on directly and
   // Form keeps working anywhere.
   const columnClasses = perBreakpoint
     ? BREAKPOINTS.filter((bp) => perBreakpoint[bp] !== undefined).map(
-        (bp) => `${bp}-columns-${perBreakpoint[bp]}`,
+        (bp) => `${bp}-grid-columns-${perBreakpoint[bp]}`,
       )
     : [];
 

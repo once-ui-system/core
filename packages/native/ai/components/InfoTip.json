@@ -12,7 +12,8 @@
  "props": {
   "children": "ReactNode",
   "size": "TShirtSizes = \"xs\"",
-  "aria-label": "string"
+  "aria-label": "string",
+  "testID": "string"
  },
  "resolvedMixins": {
   "FlexProps": {

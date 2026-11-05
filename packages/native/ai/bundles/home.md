@@ -2,7 +2,7 @@
 
 A greeting header, the hero panel the app is about (a card, a balance, today's plan), stat tiles, a list of next actions, a sheet and a loading skeleton
 
-This file is complete for this task: the rules (all of `rules.md`), the props of every component below, their mixins and types, the hooks, every gotcha for this task, the quality bar and a gold example. Write the screen from it; reading the rules, catalog, gotchas or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.
+This file is complete for this task: the rules (all of `rules.md`), the props of every component below, their mixins and types, the hooks and every gotcha for this task, the quality bar and a gold example. Write the screen from it; reading the rules, catalog, gotchas or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.
 
 ## Rules
 
@@ -62,12 +62,12 @@ export default function RootLayout() {
 10. `gap`, `padding` and `margin` take spacing tokens: "0", "1", "2", "4", "8", "12", "16", "20", "24", "32", "40", "48", "56", "64", "72", "80", "104", "128", "160", or `xs`–`xl`. A screen's side padding is "20" (or "16"); gaps inside a section "8"–"16", between sections "24"–"32".
 11. A number on a size or offset prop is in points (`maxWidth={320}`, `height={48}`); tokens (`width="40"`) and `"50%"` work too. CSS lengths (`vh`, `calc()`) do not exist here.
 12. Breakpoint props (`xl`, `l`, `m`, `s`, `xs`) work on `Flex`, `Row`, `Column` and `Card` as on the web, by window width: use them for tablets (`m={{ direction: "column" }}`), not to tell phones apart.
-13. React Native has no single-side borders: `borderTop`, `borderBottom`, `borderX` are type errors. A divider is `<Line />` between the views. `position` is `relative`, `absolute` or `static`; there is no `fixed` or `sticky`, so a bar that stays put sits outside the `ScrollView`.
+13. Single-side borders work as on the web: `borderTop="neutral-alpha-weak"` on a tab bar, `borderBottom` on a header, `borderX`/`borderY` for two sides. A divider between rows of a list is `<Line />`. `position` is `relative`, `absolute` or `static`; there is no `fixed` or `sticky`, so a bar that stays put sits outside the `ScrollView`.
 14. `radius` does not clip children: add `overflow="hidden"` when an image or a filled child must follow the corners.
 
 ## Surfaces and color
 
-15. A static panel is `<Column background="surface" border="neutral-alpha-weak" radius="l" padding="16">`. `Card` is for something pressable (`onPress`); `selected` marks the picked one.
+15. A static panel is `<Column background="surface" border radius="l" padding="16">` (`border` alone is `neutral-alpha-weak`, as on the web). `Card` is for something pressable (`onPress`); `selected` marks the picked one.
 16. Colors are semantic tokens (`{scheme}-{weight}`, `-alpha-` for tints): `background="brand-alpha-weak"`, `onBackground="neutral-weak"`. Never hex or rgb. A React Native primitive you style yourself reads them with `useTheme()`: `theme.color("brand-solid-strong")`, `theme.space("16")`, `theme.radius("l")`.
 
 ## Text
@@ -126,7 +126,9 @@ An image, or initials on a neutral circle.
 - loading?: boolean
 - empty?: boolean — Shows the icon (`person` by default) instead of an image or initials.
 - icon?: IconName — The icon of an empty avatar, as in core.
-- statusIndicator?: { scheme: "green" | "yellow" | "red" | "gray" } — A status dot; `scheme` is its palette hue, as in core 3.0 (2.x called it `color`).
+- statusIndicator?: { scheme: Schemes | "gray"; tone?: undefined } | { tone: Tone; scheme?: undefined } — A dot in the corner, as core 3.0: `scheme` takes any hue StatusIndicator takes, `tone` a colour that follows the theme (`"success"`).
+- ring?: boolean | ColorScheme — A coloured ring around the avatar, with a gap of page background between, as for a story or a live state.
+- testID?: string — For tests and tools such as Maestro, on the avatar's outer view.
 - style?: ViewStyle
 
 ### IconButton
@@ -167,6 +169,7 @@ Also takes React Native's PressableProps.
 - horizontal?: "start" | "center" | "end" | "between" = "center"
 - onClick?: () => void — Core's name for `onPress`, so the same JSX works on both; `onPress` wins.
 - href?: string — Opens this URL with `Linking`, as core's `href` makes the button a link.
+- wrap?: boolean = false — Lets a long label wrap onto more lines instead of being cut off with an ellipsis; the button grows taller to fit.
 - style?: ViewStyle
 
 ### Card
@@ -198,6 +201,7 @@ A label, an announcement pill, or a toggle with an optional remove button.
 - textVariant?: TextVariant
 - children?: ReactNode
 - style?: ViewStyle
+- testID?: string — Finds the tag in end-to-end tests.
 
 ### Icon
 One of the built-in icons, or one registered with `IconProvider`.
@@ -208,6 +212,7 @@ One of the built-in icons, or one registered with `IconProvider`.
 - decorative?: boolean = true — Hidden from screen readers unless `false`, as in core.
 - aria-label?: string — The name of a non-decorative icon; its `name` by default, as in core.
 - style?: ViewStyle
+- testID?: string — Finds the icon in end-to-end tests.
 
 ### ProgressBar
 A rounded track that fills to `value`, with the value as a label.
@@ -218,6 +223,7 @@ A rounded track that fills to `value`, with the value as a label.
 - labelPosition?: "top" | "bottom" | "left" | "right" = "bottom"
 - barBackground?: Colors = "brand-strong" — The bar's solid colour, as core's `solid` prop: `"brand-strong"` by default.
 - style?: ViewStyle
+- testID?: string — Finds the bar, the element with the `progressbar` role, in end-to-end tests.
 
 ### Dialog
 Core's `Dialog`, shown as a bottom sheet by default: the shape phones use for a modal task (`variant="center"` for a card in the middle).
@@ -232,6 +238,7 @@ Core's `Dialog`, shown as a bottom sheet by default: the shape phones use for a 
 - closeOnClickaway?: boolean = true — A tap on the backdrop closes the dialog.
 - flush?: boolean = false — Edge to edge, without the sheet's padding, as core's `flush`.
 - style?: ViewStyle
+- testID?: string — Finds the sheet in end-to-end tests while it is open.
 
 ### Skeleton
 A pulsing placeholder while content loads.
@@ -246,6 +253,7 @@ A 1px divider in `neutral-alpha-medium`.
 - vert?: boolean — Vertical, filling the parent's height.
 - background?: Colors = "neutral-alpha-medium"
 - style?: ViewStyle
+- testID?: string — Finds the line in end-to-end tests.
 
 ## Hooks
 
@@ -325,6 +333,7 @@ type Opacity = 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 100
 type RadiusSize = TShirtSizes | "full" | "none"
 type ResponsiveSpacingToken = TShirtSizes
 type SafeAreaEdge = "top" | "right" | "bottom" | "left"
+type Schemes = "blue" | "indigo" | "violet" | "magenta" | "pink" | "red" | "orange" | "yellow" | "moss" | "green" | "emerald" | "aqua" | "cyan"
 type ShadowSize = TShirtSizes
 type Size = number | SpacingToken | Length | `${number}%`
 type SpacingProps = the SpacingProps mixin above
@@ -404,14 +413,7 @@ const REWARDS: { id: string; title: string; detail: string; icon: IconName }[] =
 function StampCard({ stamps, onShowCode }: { stamps: number; onShowCode: () => void }) {
   const left = STAMPS_PER_REWARD - stamps;
   return (
-    <Column
-      background="surface"
-      border="neutral-alpha-weak"
-      radius="l"
-      padding="20"
-      gap="16"
-      shadow="s"
-    >
+    <Column background="surface" border radius="l" padding="20" gap="16" shadow="s">
       <Row horizontal="between" vertical="center">
         <Text textVariant="label-strong-m">Loyalty card</Text>
         <Tag tone="brand" size="s" label={`${stamps}/${STAMPS_PER_REWARD}`} />
@@ -440,14 +442,7 @@ function StampCard({ stamps, onShowCode }: { stamps: number; onShowCode: () => v
 
 function StatTile({ label, value }: { label: string; value: string }) {
   return (
-    <Column
-      flex={1}
-      background="surface"
-      border="neutral-alpha-weak"
-      radius="l"
-      padding="16"
-      gap="4"
-    >
+    <Column flex={1} background="surface" border radius="l" padding="16" gap="4">
       <Text textVariant="label-default-s" onBackground="neutral-weak">
         {label}
       </Text>

@@ -181,6 +181,9 @@ export const ThemeInit = ({ config, dataStyle }: ThemeInitProps) => {
                 const density = localStorage.getItem('data-density') || config.density;
                 if (densityScaling[density]) root.setAttribute('data-scaling', densityScaling[density]);
               }
+              // Banners dismissed with a dismissKey stay hidden from the first paint.
+              const dismissedBanners = localStorage.getItem('once-ui-banners-dismissed');
+              if (dismissedBanners) root.setAttribute('data-banner-dismissed', dismissedBanners);
 
             } catch (e) {
               console.error('Failed to initialize theme:', e);

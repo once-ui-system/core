@@ -180,6 +180,57 @@ export function generateColorScheme(
   return scheme;
 }
 
+/** Whether a seed carries an alpha channel, so it can't stand as a solid step as written. */
+const hasAlpha = (seed: string) => {
+  const value = seed.trim();
+  if (/^#([0-9a-f]{4}|[0-9a-f]{8})$/i.test(value)) return true;
+  if (/\//.test(value)) return true;
+  const rgb = value.match(/^rgba?\(([^)]+)\)$/i);
+  return Boolean(rgb && rgb[1].split(/[\s,]+/).filter(Boolean).length > 3);
+};
+
+/** The step every solid brand surface uses, in both themes (foundations' theme.scss). */
+const SEED_STEP = 500 as const;
+
+/**
+ * A scheme in which the seed itself is step 500, the step filled buttons and
+ * other solid surfaces use in both themes, so a brand colour given as
+ * `brandSeed: "#0F766E"` is that exact colour on screen.
+ *
+ * The other steps keep the built-in contrast ladder wherever the seed leaves
+ * room for it. Where a seed is darker or lighter than the built-in step 500
+ * would be, the steps on that side are drawn in towards it, so the ramp still
+ * runs dark to light. Steps 100 to 400 never get lighter than the built-in
+ * ones, so brand text on a light page (step 400) keeps at least 7:1 on white
+ * whatever the seed.
+ */
+export function generateSeededScheme(seed: string): SchemeRamp | null {
+  const base = parseSeed(seed);
+  if (!base) return null;
+  const at = (weight: SchemeRampWeight) =>
+    defaultContrastRatios.find(([w]) => w === weight)?.[1] as number;
+  const anchor = at(SEED_STEP);
+  const seedRatio = contrastAgainstBlack(fitChroma(base));
+  const first = at(100);
+  const last = at(1200);
+  const ratios = defaultContrastRatios.map(([weight, ratio]): [SchemeRampWeight, number] => {
+    if (weight === SEED_STEP) return [weight, seedRatio];
+    if (weight < SEED_STEP) {
+      // Log-scale the built-in span 100…500 onto 100…seed.
+      const t = Math.log(ratio / first) / Math.log(anchor / first);
+      const drawn = first * (seedRatio / first) ** t;
+      return [weight, Math.min(ratio, drawn)];
+    }
+    const t = Math.log(ratio / anchor) / Math.log(last / anchor);
+    const drawn = seedRatio * (last / seedRatio) ** t;
+    return [weight, Math.max(ratio, drawn)];
+  });
+  const scheme = generateColorScheme(seed, ratios);
+  if (!scheme) return null;
+  scheme[SEED_STEP] = hasAlpha(seed) ? format(fitChroma({ ...base })) : seed.trim();
+  return scheme;
+}
+
 /** The three translucent variants of step 600 that the token set expects. */
 export function schemeAlphaVariants(scheme: SchemeRamp): Record<string, string> {
   const base = parseSeed(scheme[600]);
@@ -189,6 +240,26 @@ export function schemeAlphaVariants(scheme: SchemeRamp): Record<string, string> 
     "600-30": format(base, 0.3),
     "600-50": format(base, 0.5),
   };
+}
+
+const warned = new Set<string>();
+
+/**
+ * Once UI steps run dark to light: 100 is the darkest and 1200 the lightest,
+ * whatever the theme. A scale written lightest first, the way Tailwind
+ * numbers its shades, puts a pale step where solids and text expect the
+ * brand colour, so say so once.
+ */
+function warnIfLightestFirst(name: string, scale: SchemeScale | undefined) {
+  const first = scale?.[100] ? parseSeed(scale[100]) : null;
+  const last = scale?.[1200] ? parseSeed(scale[1200]) : null;
+  if (!first || !last || luminance(first) <= luminance(last) || warned.has(name)) return;
+  warned.add(name);
+  console.warn(
+    `[once-ui] ${name}Scale runs light to dark, but Once UI steps run dark to light: ` +
+      "100 is the darkest, 1200 the lightest, and solids use step 500. " +
+      `Reverse the steps, or give ${name}Seed alone to have the exact colour at step 500.`,
+  );
 }
 
 /** The schemes tokens.css lets an app supply with `data-<scheme>="custom"`. */
@@ -212,7 +283,8 @@ export type CustomSchemeScales = Partial<Record<CustomScheme, SchemeScale | unde
 
 /**
  * The custom properties `data-<scheme>="custom"` reads — `--scheme-brand-100`
- * through `-1200` and the three `-600-*` alphas — generated from each seed.
+ * through `-1200` and the three `-600-*` alphas — generated from each seed,
+ * with the seed itself at step 500 ({@link generateSeededScheme}).
  *
  * Pure, with no DOM access, so the same values come out on the server (where
  * `ThemeInit` renders them into a `<style>`) and on the client (where
@@ -233,11 +305,12 @@ export function customSchemeProperties(
   const properties: Record<string, string> = {};
   for (const name of ["brand", "accent", "neutral"] as const) {
     const seed = seeds[name];
-    const generated = seed ? generateColorScheme(seed) : null;
+    const generated = seed ? generateSeededScheme(seed) : null;
     // A scale's steps win over the seed's, so a seed can fill the ramp while
     // the scale pins the steps the brand book fixes.
     const scale: SchemeScale = { ...generated, ...scales[name] };
     if (!scale[600]) continue;
+    if (process.env.NODE_ENV !== "production") warnIfLightestFirst(name, scales[name]);
     for (const [step, value] of Object.entries(scale)) {
       if (value) properties[`--scheme-${name}-${step}`] = value;
     }

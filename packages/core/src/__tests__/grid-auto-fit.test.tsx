@@ -27,7 +27,7 @@ const classesOf = (html: string) => {
 describe("Grid minColumnWidth", () => {
   it("is the auto-fit track list, sized by a custom property", () => {
     expect(GRID_CSS).toContain(
-      ".columns-auto-fit {\n  grid-template-columns: repeat(auto-fit, minmax(min(var(--grid-min-column-width), 100%), 1fr));",
+      ".grid-columns-auto-fit {\n  grid-template-columns: repeat(auto-fit, minmax(min(var(--grid-min-column-width), 100%), 1fr));",
     );
   });
 
@@ -38,7 +38,7 @@ describe("Grid minColumnWidth", () => {
         x
       </Grid>,
     );
-    expect(classesOf(html)).toContain("columns-auto-fit");
+    expect(classesOf(html)).toContain("grid-columns-auto-fit");
     expect(html).toContain(`--grid-min-column-width:${t(13)}`);
   });
 
@@ -56,23 +56,23 @@ describe("Grid minColumnWidth", () => {
 
   it("takes precedence over columns", () => {
     const classes = classesOf(renderToStaticMarkup(<Grid columns="3" minColumnWidth={16} />));
-    expect(classes).toContain("columns-auto-fit");
-    expect(classes).not.toContain("columns-3");
+    expect(classes).toContain("grid-columns-auto-fit");
+    expect(classes).not.toContain("grid-columns-3");
   });
 
   it("gives way to a breakpoint column count at that width", () => {
     const classes = classesOf(
       renderToStaticMarkup(<Grid minColumnWidth={16} s={{ columns: 1 }} />),
     );
-    expect(classes).toContain("columns-auto-fit");
-    expect(classes).toContain("s-columns-1");
+    expect(classes).toContain("grid-columns-auto-fit");
+    expect(classes).toContain("s-grid-columns-1");
     // The breakpoint rule wins because it comes later at equal specificity.
-    expect(GRID_CSS.indexOf(".columns-auto-fit {")).toBeLessThan(GRID_CSS.indexOf("@media"));
+    expect(GRID_CSS.indexOf(".grid-columns-auto-fit {")).toBeLessThan(GRID_CSS.indexOf("@media"));
   });
 
   it("writes nothing when it is not set", () => {
     const html = renderToStaticMarkup(<Grid columns="2" />);
-    expect(classesOf(html)).not.toContain("columns-auto-fit");
+    expect(classesOf(html)).not.toContain("grid-columns-auto-fit");
     expect(html).not.toContain("--grid-min-column-width");
   });
 
@@ -85,7 +85,7 @@ describe("Grid minColumnWidth", () => {
       { wrapper: LayoutProvider },
     );
     const el = container.firstElementChild as HTMLElement | null;
-    expect(el?.className).toContain("columns-auto-fit");
+    expect(el?.className).toContain("grid-columns-auto-fit");
     expect(el?.style.getPropertyValue("--grid-min-column-width")).toBe(t(10));
   });
 });

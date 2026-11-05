@@ -62,7 +62,7 @@ describe.each([
     const classes = classesOf(html);
     // `position` is inline, as on every leaf whose root is not a Flex.
     expect(styleOf(html)).toContain("position:absolute");
-    const expected = ["top-16", "left-0", "mt-8", "opacity-0"];
+    const expected = ["offset-top-16", "offset-left-0", "margin-top-8", "opacity-0"];
     for (const cls of expected) expect(classes).toContain(cls);
     expect(classes).toContain("flex-1");
     expect(classes).toContain("fill-width");

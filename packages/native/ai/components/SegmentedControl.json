@@ -11,7 +11,8 @@
   "disabled": "boolean = false",
   "fillWidth": "boolean = true",
   "compact": "boolean = false",
-  "style": "ViewStyle"
+  "style": "ViewStyle",
+  "testID": "string"
  },
  "resolvedMixins": {},
  "types": {

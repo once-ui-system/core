@@ -9,4 +9,12 @@ export * from "./MapMarkers.js";
 export * from "./MapPin.js";
 export * from "./MapPopup.js";
 export { DEFAULT_MAP_STYLE } from "./mapStyles.js";
-export type { LngLat, MapColor, MapStyle, MapStyleSource, MapViewport } from "./types.js";
+export type {
+  LngLat,
+  MapBuildings,
+  MapProjection,
+  MapStyle,
+  MapStyleSource,
+  MapTone,
+  MapViewport,
+} from "./types.js";

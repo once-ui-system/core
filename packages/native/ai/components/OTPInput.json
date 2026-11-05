@@ -10,7 +10,8 @@
   "errorMessage": "ReactNode",
   "disabled": "boolean = false",
   "autoFocus": "boolean = false",
-  "style": "ViewStyle"
+  "style": "ViewStyle",
+  "testID": "string"
  },
  "resolvedMixins": {},
  "types": {}

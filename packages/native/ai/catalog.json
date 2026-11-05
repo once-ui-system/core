@@ -1,5 +1,5 @@
 {
- "version": "0.1.0-preview.2",
+ "version": "0.2.0-beta.0",
  "importFrom": "@once-ui-system/native",
  "hooks": ["useFormPending","useIcons","useNavStyle","useToast","useTheme"],
  "iconNames": ["adjustments","arrowDown","arrowLeft","arrowRight","arrowUp","arrowUpRight","ball","banknotes","barChart","bell","bolt","book","bookmark","calendar","cart","chat","check","checkbox","chevronDoubleLeft","chevronDoubleRight","chevronDown","chevronLeft","chevronRight","chevronUp","chevronsLeftRight","clipboard","close","code","computer","copy","cube","danger","dark","dislike","document","download","edit","enter","eye","eyeDropper","eyeOff","file","filter","flag","folder","food","forward","gift","globe","grid","grip","heart","help","home","image","inbox","info","light","like","linearGauge","link","lock","logout","mail","mapPin","maximize","menu","minimize","minus","moreHorizontal","newspaper","opacity","organization","pause","paw","payment","people","person","personRemove","phone","play","plus","radialGauge","refresh","return","screen","search","security","send","settings","smiley","sparkle","star","starFill","store","symbol","tag","time","trash","trend","trendDown","trendUp","upload","video","volume","volumeOff","warning","wordmark","world"],
@@ -63,6 +63,7 @@
   "Reactions": {"purpose":"The row under a post, a comment or a message."},
   "Row": {"purpose":"Horizontal flex layout — default direction row"},
   "Scroller": {"purpose":"Flex props lay out the content (`gap`, `padding`, `safeArea` for the home indicator), size props size the view."},
+  "SearchInput": {"purpose":"A search field: an `Input` with a search icon, a clear button once there is text, and the keyboard's Search key."},
   "SegmentedControl": {"purpose":"A row of toggle buttons where one is selected."},
   "Select": {"purpose":"An `Input`-styled field that opens its options in a bottom sheet."},
   "Skeleton": {"purpose":"A pulsing placeholder while content loads."},

@@ -10,7 +10,8 @@
   "onClose": "() => void",
   "action": "ReactNode",
   "duration": "number = 6000",
-  "style": "ViewStyle"
+  "style": "ViewStyle",
+  "testID": "string"
  },
  "resolvedMixins": {},
  "types": {

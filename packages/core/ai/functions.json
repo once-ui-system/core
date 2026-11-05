@@ -9,7 +9,7 @@
   "useNavStyle": {
    "group": "components",
    "kind": "hook",
-   "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: Density; variant: Nav...",
+   "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly rail: \"8\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: D...",
    "doc": "The look the nearest Nav set, or the defaults outside one."
   },
   "photoViewerIndexFromUrl": {
@@ -90,6 +90,18 @@
    "group": "hooks",
    "kind": "hook",
    "signature": "<T>(value: T, delay: number) => T"
+  },
+  "elementTheme": {
+   "group": "hooks",
+   "kind": "function",
+   "signature": "(element: Element | null, fallback: ResolvedTheme) => ResolvedTheme",
+   "doc": "The theme `element` is drawn in: its nearest `data-theme=\"light\"` or `\"dark\"`, flipped once for every `data-theme=\"invert\"` between them."
+  },
+  "useElementTheme": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "(ref: RefObject<Element | null>) => ResolvedTheme",
+   "doc": "`useTheme().resolvedTheme`, but for the subtree `ref` sits in: a map in a `theme=\"dark\"` section of a light page, or under `theme=\"invert\"`, gets `\"dark\"`."
   },
   "useOgData": {
    "group": "hooks",
@@ -260,7 +272,7 @@
    "importFrom": "@once-ui-system/core/config",
    "kind": "function",
    "signature": "<T extends OnceUIConfig>(config: T & CheckedConfig<T>) => T",
-   "doc": "Type an app's `once-ui.config`."
+   "doc": "Type an app's `once-ui.config`, whose `style` keys are ThemeProvider's props (an exact brand colour is `brand: \"custom\", brandSeed: \"#0F766E\"`)."
   },
   "useStylePanel": {
    "group": "blocks",
@@ -520,6 +532,7 @@
    "image",
    "security",
    "opacity",
+   "download",
    "info",
    "danger",
    "warning",
@@ -556,7 +569,6 @@
    "dark",
    "dislike",
    "document",
-   "download",
    "edit",
    "enter",
    "eye",
@@ -827,6 +839,10 @@
    "src": "string",
    "motion": "ReactionMotion"
   },
+  "ResolvedTheme": [
+   "dark",
+   "light"
+  ],
   "ScalingSize": [
    "100",
    "90",

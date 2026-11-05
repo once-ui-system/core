@@ -49,21 +49,26 @@ describe("Flex breakpoint offsets", () => {
         </Flex>,
       ),
     );
-    for (const cls of ["m-top-16", "m-left-0", "s-top-72", "s-right-8"]) {
+    for (const cls of [
+      "m-offset-top-16",
+      "m-offset-left-0",
+      "s-offset-top-72",
+      "s-offset-right-8",
+    ]) {
       expect(classes).toContain(cls);
     }
     // The cascade: `m` covers `s` and `xs`, and `s` covers `xs`.
-    expect(classes).toContain("s-left-0");
-    expect(classes).toContain("xs-top-72");
-    expect(classes).toContain("xs-left-0");
-    expect(classes).toContain("xs-right-8");
-    expect(classes.some((cls) => /^(xl|l)-(top|right|bottom|left)-/.test(cls))).toBe(false);
+    expect(classes).toContain("s-offset-left-0");
+    expect(classes).toContain("xs-offset-top-72");
+    expect(classes).toContain("xs-offset-left-0");
+    expect(classes).toContain("xs-offset-right-8");
+    expect(classes.some((cls) => /^(xl|l)-offset-(top|right|bottom|left)-/.test(cls))).toBe(false);
   });
 
   it("writes xl, and cascades it to every narrower step", () => {
     const classes = classesOf(renderToStaticMarkup(<Flex xl={{ bottom: "24" }} />));
     for (const bp of ["xl", "l", "m", "s", "xs"]) {
-      expect(classes, bp).toContain(`${bp}-bottom-24`);
+      expect(classes, bp).toContain(`${bp}-offset-bottom-24`);
     }
   });
 
@@ -76,13 +81,13 @@ describe("Flex breakpoint offsets", () => {
           xs={{ top: "1" }}
         />,
       ),
-    ).filter((cls) => /^(xl|l|m|s|xs)-(top|right|bottom|left)-/.test(cls));
+    ).filter((cls) => /^(xl|l|m|s|xs)-offset-(top|right|bottom|left)-/.test(cls));
     expect(classes.length).toBeGreaterThan(10);
     expect(classes.filter((cls) => !POSITION.includes(`.${cls} {`))).toEqual([]);
   });
 
   it("writes no class for an offset a class cannot hold", () => {
-    // `top: 2` is 2rem; `.m-top-2` is the 0.125rem step. A t-shirt size has
+    // `top: 2` is 2rem; `.m-offset-top-2` is the 0.125rem step. A t-shirt size has
     // no offset class at all.
     const classes = classesOf(
       renderToStaticMarkup(
@@ -124,7 +129,7 @@ describe("Flex breakpoint offsets", () => {
     expect(flex.style.left).toBe("50%");
     // The token is a class, not a style.
     expect(flex.style.bottom).toBe("");
-    expect(flex.classList.contains("m-bottom-16")).toBe(true);
+    expect(flex.classList.contains("m-offset-bottom-16")).toBe(true);
     for (const attr of ["top", "left", "bottom"]) expect(flex.hasAttribute(attr)).toBe(false);
 
     const grid = container.querySelector(".display-grid") as HTMLElement;

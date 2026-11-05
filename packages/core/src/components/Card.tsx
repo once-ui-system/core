@@ -38,13 +38,17 @@ const Card = ({
   ...flex
 }: CardProps) => {
   const interactive = Boolean(onClick || href);
+  // A width on the card belongs to the whole card: the outer element hugs the
+  // surface instead of stretching, so the click area matches what you see.
+  // maxWidth alone is not one: such a card still fills its row up to the cap.
+  const sized = flex.width !== undefined || flex.fitWidth === true || flex.fit === true;
   return (
     <ElementType
       tabIndex={interactive ? 0 : undefined}
       className={classNames(
         "reset-button-styles",
         "display-flex",
-        "fill-width",
+        sized ? "fit-width" : "fill-width",
         fillHeight ? "fill-height" : undefined,
         "min-width-0",
         interactive && "focus-ring",
@@ -55,6 +59,9 @@ const Card = ({
         interactive && `radius-${flex.radius ?? "l"}`,
       )}
       href={href}
+      // A clickable card is an action, never a form submit: a Card with
+      // onClick inside a form must not send it.
+      type={onClick && !href ? "button" : undefined}
       // ElementType runs `onClick` on a link as well as on a button. The
       // surface below must not carry it too: a click on the content would
       // bubble to this element and run it twice, which undoes a toggle.

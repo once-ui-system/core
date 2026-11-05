@@ -3,6 +3,7 @@ import { Animated } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 import type { TShirtSizes } from "../types";
 import { type FlexProps, flexStyle } from "./Flex";
+import { nativeDriver } from "./motion";
 import { useReduceMotion } from "./useReduceMotion";
 
 /**
@@ -32,8 +33,8 @@ export function Skeleton({ shape = "line", size = "m", delay = 0, ...flex }: Ske
     if (reduceMotion) return;
     const pulse = Animated.loop(
       Animated.sequence([
-        Animated.timing(opacity, { toValue: 0.4, duration: 800, useNativeDriver: true }),
-        Animated.timing(opacity, { toValue: 1, duration: 800, useNativeDriver: true }),
+        Animated.timing(opacity, { toValue: 0.4, duration: 800, useNativeDriver: nativeDriver }),
+        Animated.timing(opacity, { toValue: 1, duration: 800, useNativeDriver: nativeDriver }),
       ]),
     );
     const timer = setTimeout(() => pulse.start(), delay);

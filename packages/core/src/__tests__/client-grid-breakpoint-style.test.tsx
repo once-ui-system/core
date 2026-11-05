@@ -100,7 +100,8 @@ describe("ClientGrid breakpoint style", () => {
     );
     const grid = container.querySelector(".display-grid") as HTMLElement;
     expect(grid.style.width).toBe(t(20));
-    for (const cls of ["m-p-8", "m-g-4", "m-top-16"]) expect(grid.classList).toContain(cls);
+    for (const cls of ["m-padding-8", "m-g-4", "m-offset-top-16"])
+      expect(grid.classList).toContain(cls);
     expect(grid.style.padding).toBe("");
     expect(grid.style.gap).toBe("");
     expect(grid.style.top).toBe("");

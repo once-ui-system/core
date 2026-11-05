@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import type { FC, ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { Flex } from "../components/Flex";
@@ -105,6 +106,34 @@ describe("enumerable style props as classes", () => {
       // None of the props leaks onto the DOM as an attribute.
       expect(html).not.toMatch(/userselect|blendmode|backdropblur|\sblur=/i);
     }
+  });
+
+  it("maps emphasis to its look classes on Flex and Grid, with true as glow", () => {
+    type Emphasised = FC<{ emphasis?: boolean | "edge" | "glow" | "aura"; children?: ReactNode }>;
+    for (const Component of [Flex, Grid] as Emphasised[]) {
+      const on = classesOf(renderToStaticMarkup(<Component emphasis>x</Component>));
+      expect(on).toContain("fx-emphasis");
+      expect(on).toContain("fx-emphasis-glow");
+      const aura = classesOf(renderToStaticMarkup(<Component emphasis="aura">x</Component>));
+      expect(aura).toContain("fx-emphasis-aura");
+      const off = classesOf(renderToStaticMarkup(<Component emphasis={false}>x</Component>));
+      expect(off.some((cls) => cls.startsWith("fx-emphasis"))).toBe(false);
+      expect(renderToStaticMarkup(<Component emphasis="edge">x</Component>)).not.toMatch(
+        /emphasis=/i,
+      );
+    }
+  });
+
+  it("puts the emphasis edge over a border of any width, on whole pixels", () => {
+    const css = readFileSync(
+      join(__dirname, "../../../foundations/scss/styles/utilities.scss"),
+      "utf8",
+    );
+    for (const width of [1, 2, 4, 8]) {
+      expect(css).toContain(`&.border-${width}::before { inset: -${width}px; }`);
+    }
+    expect(css).toContain("padding: var(--emphasis-width, 1px);");
+    expect(css).toContain("prefers-reduced-motion");
   });
 
   it("writes a number as px, inline, still on the server", () => {

@@ -14,7 +14,8 @@
   "description": "ReactNode",
   "disabled": "boolean = false",
   "aria-label": "string",
-  "style": "ViewStyle"
+  "style": "ViewStyle",
+  "testID": "string"
  },
  "resolvedMixins": {
   "ControlChromeProps": {

@@ -10,6 +10,7 @@ import {
 import { useTheme } from "../theme/ThemeProvider";
 import { Column, Row } from "./Flex";
 import { IconButton } from "./IconButton";
+import { nativeDriver } from "./motion";
 import { Scrim } from "./Scrim";
 import { Heading, Text } from "./Text";
 import { useReduceMotion } from "./useReduceMotion";
@@ -40,6 +41,8 @@ export interface DrawerProps {
   "aria-label"?: string;
   children?: ReactNode;
   style?: ViewStyle;
+  /** Finds the panel in end-to-end tests while it is open. */
+  testID?: string;
 }
 
 const SIZES = { s: 20, m: 28, l: 40 } as const;
@@ -62,6 +65,7 @@ export function Drawer({
   "aria-label": ariaLabel,
   children,
   style,
+  testID,
 }: DrawerProps) {
   const theme = useTheme();
   const window = useWindowDimensions();
@@ -75,7 +79,7 @@ export function Drawer({
     const animation = Animated.timing(progress, {
       toValue: open ? 1 : 0,
       duration: reduceMotion ? 0 : 240,
-      useNativeDriver: true,
+      useNativeDriver: nativeDriver,
     });
     animation.start(({ finished }) => {
       if (finished && !open) setMounted(false);
@@ -128,6 +132,7 @@ export function Drawer({
         aria-modal
         aria-label={ariaLabel}
         role="dialog"
+        testID={testID}
         style={[
           panel,
           { transform: [horizontal ? { translateX: translate } : { translateY: translate }] },

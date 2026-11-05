@@ -2773,7 +2773,7 @@ export default function ComponentsCheck() {
               label: "Collapsible",
               element: (
                 <CodeBlock
-                  isCollapsible
+                  collapsible
                   maxLines={3}
                   copyButton
                   actions={
@@ -2842,7 +2842,7 @@ export default function ComponentsCheck() {
               label: "Collapsible (maxLines=0)",
               element: (
                 <CodeBlock
-                  isCollapsible
+                  collapsible
                   maxLines={0}
                   copyButton
                   preview={

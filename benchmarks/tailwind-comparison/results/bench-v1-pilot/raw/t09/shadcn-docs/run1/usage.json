@@ -1,0 +1,319 @@
+{
+  "exact": true,
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 7,
+      "input_tokens": 111116,
+      "output_tokens": 14185
+    }
+  ],
+  "calls": [
+    {
+      "attempt": 0,
+      "id": "msg_011CgfsviBnGViCwHRn8TqEg",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 2056,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 216,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cgfsvu1trqcBp9M5jatmj",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 5225,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 337,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cgfsw7evE1i1S3mzcryJq",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 8688,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 481,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgfswSkrx5gJZojk8oah1",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 19426,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 582,
+        "output_tokens_details": {
+          "thinking_tokens": 357
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgfswuhMU3t1Ld28bxP7N",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 23935,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 353,
+        "output_tokens_details": {
+          "thinking_tokens": 239
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgfsxFfPgG4skKZPMsMDC",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 25422,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 86,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgfsxRDd71PG7Pj1eBosZ",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "end_turn",
+      "usage": {
+        "input_tokens": 26364,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 12130,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": ".",
+      "chars": 14
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/README.md",
+      "chars": 1186
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/globals.css",
+      "chars": 4219
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/layout.tsx",
+      "chars": 431
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project",
+      "chars": 106
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/components",
+      "chars": 3
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/sonner.tsx",
+      "chars": 1034
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/button.tsx",
+      "chars": 2391
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/card.tsx",
+      "chars": 1986
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/switch.tsx",
+      "chars": 1407
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/package.json",
+      "chars": 1103
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/table.tsx",
+      "chars": 2477
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/accordion.tsx",
+      "chars": 2047
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/dropdown-menu.tsx",
+      "chars": 8417
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/sheet.tsx",
+      "chars": 4187
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/badge.tsx",
+      "chars": 1775
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/toggle-group.tsx",
+      "chars": 2308
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/lib",
+      "chars": 8
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/navigation-menu.tsx",
+      "chars": 6657
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/separator.tsx",
+      "chars": 693
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/label.tsx",
+      "chars": 605
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/tsconfig.json",
+      "chars": 720
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/toggle.tsx",
+      "chars": 1564
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/input.tsx",
+      "chars": 961
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/tooltip.tsx",
+      "chars": 1829
+    }
+  ]
+}

@@ -609,12 +609,9 @@ export function CartesianPlot({
             direction={legend.direction}
             variant={variant}
             hidden={allSeries.map((s) => hidden.includes(s.key))}
-            onToggle={
+            onHiddenChange={
               allSeries.length > 1
-                ? (i) => {
-                    const key = allSeries[i].key;
-                    setHidden((h) => (h.includes(key) ? h.filter((k) => k !== key) : [...h, key]));
-                  }
+                ? (next) => setHidden(allSeries.filter((_, i) => next[i]).map((s) => s.key))
                 : undefined
             }
           />

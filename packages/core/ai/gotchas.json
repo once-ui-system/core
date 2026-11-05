@@ -125,7 +125,7 @@
     "components": ["Background"]
   },
   "api.renamed": {
-    "rule": "Write 2.x prop names, not 1.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onValueChange/defaultValue (not selected/onToggle/defaultSelected), Tag tone (not scheme or variant), Button tone=\"danger\" (not variant=\"danger\"), Text/Heading textVariant (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius). The validator names the 2.x prop.",
+    "rule": "Write 3.0 prop names, not 1.x or 2.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onValueChange/defaultValue (not selected/onToggle/defaultSelected), Tag tone (not scheme or variant), Button tone=\"danger\" (not variant=\"danger\"), Text/Heading textVariant (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius), Table onSelectedChange (not onSelectionChange), CodeBlock collapsible (not isCollapsible). The validator names the 3.0 prop.",
     "components": [
       "SegmentedControl",
       "Dialog",
@@ -158,7 +158,7 @@
     "components": ["Logo"]
   },
   "Logo.text": {
-    "rule": "wordmark is an image source. For a name set in type, use <Logo icon=\"/mark.svg\" text=\"Acme\" />.",
+    "rule": "No designed logo yet: <Logo text=\"Acme\" monogram /> sets the name in type beside a favicon-style mark (a bare shape, black or white with the theme). Never draw an icon or wordmark SVG yourself; a hand-made mark looks worse than the monogram. When the owner's SVGs exist, pass them as icon (it replaces the monogram) and wordmark (an image source, not text).",
     "components": ["Logo"]
   },
   "Tag.inline": {
@@ -245,5 +245,9 @@
   "Map.positions": {
     "rule": "Positions are [longitude, latitude], not [lat, lng]. Map needs a height (or fill inside a sized parent); it shadows the global Map, so import it as another name in a file that also uses new Map().",
     "components": ["Map", "MapMarker", "MapMarkers", "MapPopup", "MapCircle"]
+  },
+  "Button.submit": {
+    "rule": "A Button in a form that should submit it needs type=\"submit\": with neither onClick, href nor type it renders a div, unlike a native <button>.",
+    "components": ["Button", "IconButton"]
   }
 }

@@ -163,6 +163,37 @@ after the icon if there is one. A link is then named by the text.
   ]}
 />
 
+## Monogram
+
+For a brand with no designed icon yet, `monogram` draws a favicon-style mark at the icon's height:
+a bare solid shape with no tile behind it, in the strongest text colour, so it is black in light mode
+and white in dark mode. `monogram` picks one of a few geometric shapes from the name, so a product
+always gets the same mark. A string draws those characters instead, as a heavy glyph. Beside `text`
+the mark is decorative. When the real mark exists, pass it as `icon`: an icon always replaces the
+monogram.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="24" center>
+      <Logo text="Acme" monogram size="s" />
+      <Logo text="Holo Zone" monogram size="l" />
+      <Logo text="Acme" monogram="Ac" size="l" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Logo text="Acme" monogram size="s" />
+<Logo text="Holo Zone" monogram size="l" />
+<Logo text="Acme" monogram="Ac" size="l" />`,
+      language: "tsx",
+      label: "Monogram"
+    }
+  ]}
+/>
+
 ## As link
 
 The Logo component can function as a link when provided with an `href` property.

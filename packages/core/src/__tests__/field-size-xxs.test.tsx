@@ -111,16 +111,16 @@ describe("Input size xxs", () => {
         suffix={<span>⌘K</span>}
       />,
     );
-    expect(container.querySelector(".pl-8")).not.toBeNull();
-    expect(container.querySelector(".pr-8")).not.toBeNull();
-    expect(container.querySelector(".pl-12")).toBeNull();
+    expect(container.querySelector(".padding-left-8")).not.toBeNull();
+    expect(container.querySelector(".padding-right-8")).not.toBeNull();
+    expect(container.querySelector(".padding-left-12")).toBeNull();
   });
 
   it("keeps a 12px prefix inset at the existing sizes", () => {
     const { container } = render(
       <Input id="q" placeholder="Search" size="xs" prefix={<Icon name="search" size="xs" />} />,
     );
-    expect(container.querySelector(".pl-12")).not.toBeNull();
+    expect(container.querySelector(".padding-left-12")).not.toBeNull();
   });
 
   it("comes down from a Form, and the Form rounds its group to match", () => {

@@ -22,6 +22,8 @@ export interface SwitchProps extends ControlChromeProps {
   /** The name when there is no text `label`, as core's `aria-label` (2.x's `ariaLabel`). */
   "aria-label"?: string;
   style?: ViewStyle;
+  /** Finds the switch, the pressable a test taps, in end-to-end tests. */
+  testID?: string;
 }
 
 // Switch.module.scss: track width and height and the knob, per size.
@@ -46,6 +48,7 @@ export function Switch({
   error,
   errorMessage,
   style,
+  testID,
 }: SwitchProps) {
   const theme = useTheme();
   const chrome = controlChrome({ size: size ?? theme.controlSize, error, errorMessage });
@@ -59,6 +62,7 @@ export function Switch({
   return (
     <Pressable
       accessibilityRole="switch"
+      testID={testID}
       accessibilityLabel={typeof label === "string" ? label : ariaLabel}
       aria-checked={on}
       aria-disabled={disabled}

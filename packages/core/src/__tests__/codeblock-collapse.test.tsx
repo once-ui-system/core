@@ -19,7 +19,7 @@ const collapsed = async (background?: string) => {
   const { container } = render(
     <CodeBlock
       compact
-      isCollapsible
+      collapsible
       maxLines={3}
       {...(background ? { background: background as never } : {})}
       codes={[{ code: long, language: "tsx", label: "Example" }]}

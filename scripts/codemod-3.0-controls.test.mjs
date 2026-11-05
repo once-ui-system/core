@@ -166,3 +166,63 @@ describe("default* and size renames", () => {
     );
   });
 });
+
+describe("freeze sweep renames", () => {
+  it("renames Table's selection handler, before and after the DataTable merge", () => {
+    assert.equal(
+      body(`${core("Table")}<Table rows={r} selectable selected={s} onSelectionChange={setS} />`),
+      `<Table rows={r} selectable selected={s} onSelectedChange={setS} />`,
+    );
+    const { out } = transform(
+      `${core("DataTable")}<DataTable rows={r} selectable onSelectionChange={setS} />`,
+    );
+    assert.match(out, /<Table rows=\{r\} selectable onSelectedChange=\{setS\} \/>/);
+  });
+
+  it("renames CodeBlock isCollapsible to collapsible", () => {
+    assert.equal(
+      body(`${core("CodeBlock")}<CodeBlock codes={c} isCollapsible={false} />`),
+      `<CodeBlock codes={c} collapsible={false} />`,
+    );
+  });
+
+  it("renames MediaUpload initialPreviewImage to defaultPreviewImage", () => {
+    assert.equal(
+      body(`${core("MediaUpload")}<MediaUpload initialPreviewImage="/a.jpg" />`),
+      `<MediaUpload defaultPreviewImage="/a.jpg" />`,
+    );
+  });
+});
+
+describe("DatePicker month wiring", () => {
+  it("reports currentMonth, currentYear and onMonthChange", () => {
+    const { warnings } = transform(
+      `${core("DatePicker")}<DatePicker currentMonth={m} currentYear={y} onMonthChange={step} />`,
+    );
+    for (const name of ["currentMonth", "currentYear", "onMonthChange"]) {
+      assert.ok(warnings.some((w) => w.includes(`<DatePicker> ${name}`)), name);
+    }
+  });
+});
+
+describe("LogoLoader (2.x after 2.6) takes 3.0's names", () => {
+  it("renames color to tone and ariaLabel to aria-label", () => {
+    const { out } = transform(
+      `${core("LogoLoader")}<LogoLoader svg={s} color="brand" ariaLabel="Opening" />`,
+    );
+    assert.match(out, /<LogoLoader svg=\{s\} tone="brand" aria-label="Opening" \/>/);
+  });
+});
+
+describe("Map parts take tone", () => {
+  it("renames MapPin and MapCircle color, and the MapColor type", () => {
+    const { out, warnings } = transform(
+      `import { MapPin, MapCircle, type MapColor } from "@once-ui-system/core/map";\nconst c: MapColor = "accent";\n<MapPin color="accent" />;\n<MapCircle position={p} radius={4} color={c} />;`,
+    );
+    assert.match(out, /<MapPin tone="accent" \/>/);
+    assert.match(out, /<MapCircle position=\{p\} radius=\{4\} tone=\{c\} \/>/);
+    assert.match(out, /type MapTone as MapColor/);
+    // `/map` is a 3.0 subpath, so the import stays quiet.
+    assert.deepEqual(warnings, []);
+  });
+});

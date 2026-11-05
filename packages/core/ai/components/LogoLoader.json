@@ -1,0 +1,30 @@
+{
+ "name": "LogoLoader",
+ "group": "components",
+ "props": {
+  "svg": "string",
+  "src": "string",
+  "height": "number | string = 120",
+  "tone": "LogoLoaderTone = neutral",
+  "settled": "boolean = false",
+  "order": "\"reading\" | \"document\" = reading",
+  "onComplete": "() => void"
+ },
+ "tags": [
+  "feedback",
+  "media"
+ ],
+ "pairsWith": [
+  "Logo",
+  "Column"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "LogoLoaderTone": [
+   "neutral",
+   "brand",
+   "accent",
+   "inherit"
+  ]
+ }
+}

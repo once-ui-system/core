@@ -115,6 +115,7 @@ const ServerFlex = ({
   overflowY,
   zIndex,
   shadow,
+  emphasis,
   cursor,
   userSelect,
   blendMode,
@@ -206,33 +207,33 @@ const ServerFlex = ({
     elementReset(Component),
     position && `position-${position}`,
     hide && "flex-hide",
-    spacingClass("p", padding),
-    spacingClass("pl", paddingLeft),
-    spacingClass("pr", paddingRight),
-    spacingClass("pt", paddingTop),
-    spacingClass("pb", paddingBottom),
-    spacingClass("px", paddingX),
-    spacingClass("py", paddingY),
-    spacingClass("m", margin),
-    spacingClass("ml", marginLeft),
-    spacingClass("mr", marginRight),
-    spacingClass("mt", marginTop),
-    spacingClass("mb", marginBottom),
-    spacingClass("mx", marginX),
-    spacingClass("my", marginY),
+    spacingClass("padding", padding),
+    spacingClass("padding-left", paddingLeft),
+    spacingClass("padding-right", paddingRight),
+    spacingClass("padding-top", paddingTop),
+    spacingClass("padding-bottom", paddingBottom),
+    spacingClass("padding-x", paddingX),
+    spacingClass("padding-y", paddingY),
+    spacingClass("margin", margin),
+    spacingClass("margin-left", marginLeft),
+    spacingClass("margin-right", marginRight),
+    spacingClass("margin-top", marginTop),
+    spacingClass("margin-bottom", marginBottom),
+    spacingClass("margin-x", marginX),
+    spacingClass("margin-y", marginY),
     gap === "-1"
       ? direction === "column" || direction === "column-reverse"
         ? "g-vertical--1"
         : "g-horizontal--1"
       : spacingClass("g", gap),
     typeof top === "string" && !isCSSUnit(top) && top
-      ? `top-${top}`
+      ? `offset-top-${top}`
       : position === "sticky" && top === undefined
-        ? "top-0"
+        ? "offset-top-0"
         : undefined,
-    typeof right === "string" && !isCSSUnit(right) && right && `right-${right}`,
-    typeof bottom === "string" && !isCSSUnit(bottom) && bottom && `bottom-${bottom}`,
-    typeof left === "string" && !isCSSUnit(left) && left && `left-${left}`,
+    typeof right === "string" && !isCSSUnit(right) && right && `offset-right-${right}`,
+    typeof bottom === "string" && !isCSSUnit(bottom) && bottom && `offset-bottom-${bottom}`,
+    typeof left === "string" && !isCSSUnit(left) && left && `offset-left-${left}`,
     generateDynamicClass("background", background),
     generateDynamicClass("solid", solid),
     // Handle border color: boolean uses default-border, string uses dynamic class
@@ -306,6 +307,8 @@ const ServerFlex = ({
     minHeight === BELOW_HEADER && "min-height-below-header",
     maxHeight === BELOW_HEADER && "max-height-below-header",
     shadow && `shadow-${shadow}`,
+    emphasis && "fx-emphasis",
+    emphasis && `fx-emphasis-${emphasis === true ? "glow" : emphasis}`,
     zIndex !== undefined && `z-index-${zIndex}`,
     cursorProp.className,
     userSelect && `user-select-${userSelect}`,

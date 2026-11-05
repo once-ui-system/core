@@ -2,7 +2,7 @@
 
 import classNames from "clsx";
 import type React from "react";
-import { type ReactNode, useId, useRef, useState } from "react";
+import { type ReactNode, useEffect, useId, useRef, useState } from "react";
 import { Column } from "../../components/Column.js";
 import { Icon } from "../../components/Icon.js";
 import { IconButton } from "../../components/IconButton.js";
@@ -68,9 +68,55 @@ export interface ChatComposerProps
   ref?: React.Ref<HTMLTextAreaElement>;
 }
 
+/** A picked image as a thumbnail, its object URL released when it goes. */
+function ImagePreview({
+  file,
+  removeLabel,
+  onRemove,
+}: {
+  file: File;
+  removeLabel: string;
+  onRemove: () => void;
+}) {
+  const [src, setSrc] = useState<string>();
+
+  useEffect(() => {
+    // Not every environment can make one (a test DOM); the frame stays empty.
+    if (typeof URL.createObjectURL !== "function") return;
+    const url = URL.createObjectURL(file);
+    setSrc(url);
+    return () => URL.revokeObjectURL(url);
+  }, [file]);
+
+  return (
+    <Row
+      radius="m"
+      border="neutral-alpha-medium"
+      background="neutral-alpha-weak"
+      overflow="hidden"
+      className={styles.imagePreview}
+    >
+      {src && (
+        // biome-ignore lint/performance/noImgElement: a local blob URL, which an image optimizer cannot fetch
+        <img src={src} alt={file.name} className={styles.imagePreviewImage} />
+      )}
+      <IconButton
+        icon="close"
+        size="s"
+        variant="secondary"
+        aria-label={removeLabel}
+        tooltip={removeLabel}
+        onClick={onRemove}
+        className={styles.imagePreviewRemove}
+      />
+    </Row>
+  );
+}
+
 /**
  * The input bar under a conversation: a field that grows with the draft, an
- * optional attach button with the picked files as removable chips, and send.
+ * optional attach button with the picked files (images as thumbnails, other
+ * files as chips, each removable), and send.
  */
 const ChatComposer = ({
   ref,
@@ -235,35 +281,46 @@ const ChatComposer = ({
         }
       >
         {files.length > 0 && (
-          <Row gap="4" wrap paddingX="8" paddingBottom="8">
-            {files.map(({ id: fileId, file }) => (
-              <Row
-                key={fileId}
-                gap="4"
-                vertical="center"
-                paddingLeft="8"
-                paddingY="2"
-                paddingRight="2"
-                radius="full"
-                background="neutral-alpha-weak"
-                border="neutral-alpha-medium"
-                className={styles.attachment}
-              >
-                <Icon name={file.type.startsWith("image/") ? "image" : "document"} size="xs" />
-                <Text textVariant="label-default-s" truncate>
-                  {file.name}
-                </Text>
-                <IconButton
-                  icon="close"
-                  size="s"
-                  variant="ghost"
-                  aria-label={removeLabel(file.name)}
-                  onClick={() =>
+          <Row gap="4" wrap vertical="end" paddingX="8" paddingBottom="8">
+            {files.map(({ id: fileId, file }) =>
+              file.type.startsWith("image/") ? (
+                <ImagePreview
+                  key={fileId}
+                  file={file}
+                  removeLabel={removeLabel(file.name)}
+                  onRemove={() =>
                     setFiles((current) => current.filter((entry) => entry.id !== fileId))
                   }
                 />
-              </Row>
-            ))}
+              ) : (
+                <Row
+                  key={fileId}
+                  gap="4"
+                  vertical="center"
+                  paddingLeft="8"
+                  paddingY="2"
+                  paddingRight="2"
+                  radius="full"
+                  background="neutral-alpha-weak"
+                  border="neutral-alpha-medium"
+                  className={styles.attachment}
+                >
+                  <Icon name="document" size="xs" />
+                  <Text textVariant="label-default-s" truncate>
+                    {file.name}
+                  </Text>
+                  <IconButton
+                    icon="close"
+                    size="s"
+                    variant="ghost"
+                    aria-label={removeLabel(file.name)}
+                    onClick={() =>
+                      setFiles((current) => current.filter((entry) => entry.id !== fileId))
+                    }
+                  />
+                </Row>
+              ),
+            )}
           </Row>
         )}
         {hasToolbar && (

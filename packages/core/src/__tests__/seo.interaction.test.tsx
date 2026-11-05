@@ -33,7 +33,7 @@ describe("Schema", () => {
       headline: "Hello </script> world",
       datePublished: "2026-01-02",
       dateModified: "2026-01-02",
-      image: `https://site.com/og?title=${encodeURIComponent("Hello </script> world")}`,
+      image: `https://site.com/api/og/generate?title=${encodeURIComponent("Hello </script> world")}`,
     });
     // The title cannot close the script early.
     expect(script.innerHTML).not.toContain("</script>");

@@ -169,9 +169,9 @@ describe("tokens stay strings", () => {
         x
       </Flex>,
     );
-    expect(html).toContain("p-16");
+    expect(html).toContain("padding-16");
     expect(html).toContain("g-8");
-    expect(html).toContain("top-4");
+    expect(html).toContain("offset-top-4");
     expect(styleOf(html)).toContain("width:var(--static-space-40)");
     expect(styleOf(html)).not.toContain("padding");
   });

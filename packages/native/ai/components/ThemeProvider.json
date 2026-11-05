@@ -5,6 +5,8 @@
  "mixins": [],
  "props": {
   "theme": "Theme = \"system\"",
+  "defaultTheme": "Theme = \"dark\"",
+  "transition": "\"all\" | \"micro\" | \"macro\"",
   "brand": "Schemes | \"custom\"",
   "accent": "Schemes | \"custom\"",
   "neutral": "NeutralColor | \"custom\"",

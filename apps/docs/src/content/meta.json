@@ -6,15 +6,16 @@
     "quick-start": 2,
     "ai-coding": 3,
     "config": 4,
-    "basics": 5,
-    "contexts": 6,
-    "modules": 7,
-    "form-controls": 8,
-    "components": 9,
-    "data": 10,
-    "effects": 11,
-    "utils": 12,
-    "hooks": 13,
-    "native": 14
+    "tailwind": 5,
+    "basics": 6,
+    "contexts": 7,
+    "modules": 8,
+    "form-controls": 9,
+    "components": 10,
+    "data": 11,
+    "effects": 12,
+    "utils": 13,
+    "hooks": 14,
+    "native": 15
   }
 }

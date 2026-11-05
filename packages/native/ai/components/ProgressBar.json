@@ -10,7 +10,8 @@
   "showLabel": "boolean = true",
   "labelPosition": "\"top\" | \"bottom\" | \"left\" | \"right\" = \"bottom\"",
   "barBackground": "Colors = \"brand-strong\"",
-  "style": "ViewStyle"
+  "style": "ViewStyle",
+  "testID": "string"
  },
  "resolvedMixins": {},
  "types": {

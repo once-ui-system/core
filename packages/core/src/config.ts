@@ -80,8 +80,9 @@ type CheckedConfig<T> = {
 };
 
 /**
- * Type an app's `once-ui.config`. It returns its argument unchanged; what it
- * adds is checking and inference.
+ * Type an app's `once-ui.config`, whose `style` keys are ThemeProvider's
+ * props (an exact brand colour is `brand: "custom", brandSeed: "#0F766E"`).
+ * It returns its argument unchanged; what it adds is checking and inference.
  *
  * Every value is checked against the union Once UI accepts (`brand: "yelow"`
  * fails), a misspelt key in a section Once UI owns fails (`solidstyle`), and
@@ -92,6 +93,7 @@ type CheckedConfig<T> = {
  * // once-ui.config.ts (or .js — the types come through either way)
  * export const { style, dataStyle } = defineConfig({
  *   style: { theme: "system", brand: "cyan", solidStyle: "flat" },
+ *   // or an exact brand colour: brand: "custom", brandSeed: "#0F766E"
  *   dataStyle: { variant: "gradient", mode: "categorical" },
  * });
  *

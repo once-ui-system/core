@@ -21,7 +21,8 @@ export function leafLayout(props: Omit<LeafProps, "className" | "style" | "fillW
   const offsetClasses: (string | false)[] = [];
   for (const side of SIDES) {
     const value = props[side];
-    if (typeof value === "string" && !isCSSUnit(value)) offsetClasses.push(`${side}-${value}`);
+    if (typeof value === "string" && !isCSSUnit(value))
+      offsetClasses.push(`offset-${side}-${value}`);
     else {
       const inline = offsetValue(value);
       if (inline !== undefined) offsets[side] = inline;
@@ -29,13 +30,13 @@ export function leafLayout(props: Omit<LeafProps, "className" | "style" | "fillW
   }
   return {
     classes: [
-      spacingClass("m", margin),
-      spacingClass("mt", marginTop),
-      spacingClass("mr", marginRight),
-      spacingClass("mb", marginBottom),
-      spacingClass("ml", marginLeft),
-      spacingClass("mx", marginX),
-      spacingClass("my", marginY),
+      spacingClass("margin", margin),
+      spacingClass("margin-top", marginTop),
+      spacingClass("margin-right", marginRight),
+      spacingClass("margin-bottom", marginBottom),
+      spacingClass("margin-left", marginLeft),
+      spacingClass("margin-x", marginX),
+      spacingClass("margin-y", marginY),
       flex !== undefined && `flex-${flex}`,
       ...offsetClasses,
     ],

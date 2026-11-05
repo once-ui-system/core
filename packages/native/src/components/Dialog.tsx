@@ -3,6 +3,7 @@ import { Animated, Modal, ScrollView, View, type ViewStyle } from "react-native"
 import { useTheme } from "../theme/ThemeProvider";
 import { Column, Row } from "./Flex";
 import { IconButton } from "./IconButton";
+import { nativeDriver } from "./motion";
 import { Scrim } from "./Scrim";
 import { Heading, Text } from "./Text";
 import { useReduceMotion } from "./useReduceMotion";
@@ -37,6 +38,8 @@ export interface DialogProps {
   /** Edge to edge, without the sheet's padding, as core's `flush`. */
   flush?: boolean;
   style?: ViewStyle;
+  /** Finds the sheet in end-to-end tests while it is open. */
+  testID?: string;
 }
 
 /**
@@ -60,6 +63,7 @@ export function Dialog({
   closeOnClickaway = true,
   flush = false,
   style,
+  testID,
 }: DialogProps) {
   const theme = useTheme();
   const pad = flush ? 0 : theme.space("24");
@@ -76,7 +80,7 @@ export function Dialog({
     const animation = Animated.timing(progress, {
       toValue: open ? 1 : 0,
       duration: reduceMotion ? 0 : 240,
-      useNativeDriver: true,
+      useNativeDriver: nativeDriver,
     });
     animation.start(({ finished }) => {
       if (finished && !open) setMounted(false);
@@ -109,6 +113,7 @@ export function Dialog({
           }}
           aria-modal
           role="dialog"
+          testID={testID}
           style={[
             {
               maxHeight: "90%",

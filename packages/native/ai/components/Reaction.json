@@ -11,7 +11,8 @@
   "playKey": "number | string",
   "decorative": "boolean = false",
   "children": "ReactNode",
-  "style": "StyleProp<ViewStyle>"
+  "style": "StyleProp<ViewStyle>",
+  "testID": "string"
  },
  "resolvedMixins": {
   "ReactionOption": {
