@@ -1096,3 +1096,25 @@ describe("responsive.props", () => {
     expect(rules(`<PricingCard s={{ wide: true }} />`)).not.toContain("responsive.props");
   });
 });
+
+describe("Select as a form value", () => {
+  it("points a Select with no label at a Button with a Dropdown", () => {
+    const src = `<Select value={sort} onValueChange={setSort} options={options} />`;
+    expect(issues(src).find((i) => i.rule === "Select.toolbar")?.message).toMatch(
+      /Dropdown of Options/,
+    );
+  });
+
+  it("leaves a labelled Select alone", () => {
+    expect(rules(`<Select label="Timezone" options={options} />`)).not.toContain("Select.toolbar");
+    expect(rules(`<Select aria-label="Timezone" options={options} />`)).not.toContain(
+      "Select.toolbar",
+    );
+    expect(rules(`<Select {...field} options={options} />`)).not.toContain("Select.toolbar");
+  });
+
+  it("flags a chevron passed by hand", () => {
+    const src = `<Select label="Country" options={options} suffix={<Icon name="chevronDown" />} />`;
+    expect(rules(src)).toContain("Select.chevron");
+  });
+});

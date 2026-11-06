@@ -81,6 +81,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Icons | `IconName` (the IconName type below) only |
 | Logos grid | `LogoCloud` with `columns` set |
 | Tabs | `Tabs` > `TabList` > `Tab`, `TabPanel` (`orientation="vertical"` for a settings nav) |
+| Pick one of a few | A form value with a label (timezone, country, role on a form): `Select`. A toolbar view control or action (sort, filter, export): `Dropdown` with `Option`s and `trigger={<Button variant="secondary" suffixIcon="chevronDown">Role: Admin</Button>}`, the label naming the current choice (a long, searchable filter list: `Select size="xxs" searchable` with a `label`). Two to four choices always shown: `SegmentedControl` |
 | Mobile nav, side sheet | `Drawer`, not a hand-made overlay |
 | Page trail | `Breadcrumbs items={[...]}` |
 | Keyboard shortcut | `useHotkeys("mod+k", fn)` + `Kbd keys="mod+k" label="Search"` |
@@ -601,7 +602,7 @@ type UserSelect = "text" | "auto" | "none" | "all"
 
 ## Gotchas
 
-- Fixed in 2.1: Select closes on pick and stays closed — focus returning to the field no longer reopens it — and a multiple Select stays open while picking. Use Select with value and onValueChange; do not build a local picker from Dropdown and Options to get this.
+- Fixed in 2.1: Select closes on pick and stays closed — focus returning to the field no longer reopens it — and a multiple Select stays open while picking. For a form value, use Select with label, value and onValueChange; do not rebuild it from Dropdown and Options to get this. Select draws its own chevron (a suffix you pass replaces it). A toolbar sort, filter or action picker is not a form value: use a Dropdown with Options behind a secondary Button with suffixIcon="chevronDown" that names the current choice.
 - Positions are [longitude, latitude], not [lat, lng]. Map needs a height (or fill inside a sized parent); it shadows the global Map, so import it as another name in a file that also uses new Map().
 - Never cast an icon name with `as IconName`: the cast compiles a name the registry does not have, and it renders nothing. Use a name from iconNames; in data, type the field as IconName ({ icon: IconName }[]) or write the literal `as const`, so the type check still runs.
 - Field heights run a step above Button's: Input size xs is 40px, s 48px, m 56px (the default). A field beside a size="s" Button (32px), as in a toolbar or filter row, takes size="xxs", which is 32px too; Form size="xxs" sets it for every field inside. An xxs field has no floating label: label shows as the placeholder, so keep label for the accessible name.
@@ -634,6 +635,10 @@ type UserSelect = "text" | "auto" | "none" | "all"
  * filter, a searchable, sortable, paginated Table with status tags and row
  * actions, and an empty state that offers a way back.
  *
+ * The role filter is a toolbar picker: a secondary Button that opens a
+ * Dropdown of Options and names the current choice. Select is for a form
+ * value with a label (a timezone, a country), not for a view control.
+ *
  * Table searches and sorts by the text inside each cell, so a cell that is a
  * component (the name with its email, the status Tag) should carry its text as
  * children, not only in a prop.
@@ -641,7 +646,9 @@ type UserSelect = "text" | "auto" | "none" | "all"
 import {
   Button,
   Column,
+  Dropdown,
   Heading,
+  Option,
   Row,
   SegmentedControl,
   Table,
@@ -705,7 +712,12 @@ export function ListPageExample({
   onRemove?: (member: Member) => void;
 }) {
   const [filter, setFilter] = useState<Filter>("all");
-  const visible = members.filter((member) => filter === "all" || member.status === filter);
+  const [role, setRole] = useState("all");
+  const roles = [...new Set(members.map((member) => member.role))];
+  const visible = members.filter(
+    (member) =>
+      (filter === "all" || member.status === filter) && (role === "all" || member.role === role),
+  );
 
   return (
     <Column as="main" fillWidth horizontal="center" paddingY="48" paddingX="24">
@@ -730,17 +742,35 @@ export function ListPageExample({
           </Button>
         </Row>
 
-        <SegmentedControl
-          fillWidth={false}
-          value={filter}
-          onValueChange={(value) => setFilter(value as Filter)}
-          buttons={[
-            { value: "all", label: "All" },
-            { value: "active", label: "Active" },
-            { value: "invited", label: "Invited" },
-            { value: "suspended", label: "Suspended" },
-          ]}
-        />
+        <Row gap="8" vertical="center" wrap>
+          <SegmentedControl
+            fillWidth={false}
+            value={filter}
+            onValueChange={(value) => setFilter(value as Filter)}
+            buttons={[
+              { value: "all", label: "All" },
+              { value: "active", label: "Active" },
+              { value: "invited", label: "Invited" },
+              { value: "suspended", label: "Suspended" },
+            ]}
+          />
+          <Dropdown
+            selectedOption={role}
+            onSelect={setRole}
+            trigger={
+              <Button variant="secondary" suffixIcon="chevronDown">
+                {role === "all" ? "All roles" : role}
+              </Button>
+            }
+          >
+            <Column padding="4" gap="2">
+              <Option value="all" label="All roles" />
+              {roles.map((name) => (
+                <Option key={name} value={name} label={name} />
+              ))}
+            </Column>
+          </Dropdown>
+        </Row>
 
         <Table
           searchable
@@ -752,7 +782,14 @@ export function ListPageExample({
               <Text textVariant="body-default-s" onBackground="neutral-weak">
                 No members match this filter.
               </Text>
-              <Button size="s" variant="secondary" onClick={() => setFilter("all")}>
+              <Button
+                size="s"
+                variant="secondary"
+                onClick={() => {
+                  setFilter("all");
+                  setRole("all");
+                }}
+              >
                 Show everyone
               </Button>
             </Column>

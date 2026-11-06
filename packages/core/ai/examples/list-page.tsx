@@ -6,6 +6,10 @@
  * filter, a searchable, sortable, paginated Table with status tags and row
  * actions, and an empty state that offers a way back.
  *
+ * The role filter is a toolbar picker: a secondary Button that opens a
+ * Dropdown of Options and names the current choice. Select is for a form
+ * value with a label (a timezone, a country), not for a view control.
+ *
  * Table searches and sorts by the text inside each cell, so a cell that is a
  * component (the name with its email, the status Tag) should carry its text as
  * children, not only in a prop.
@@ -13,7 +17,9 @@
 import {
   Button,
   Column,
+  Dropdown,
   Heading,
+  Option,
   Row,
   SegmentedControl,
   Table,
@@ -77,7 +83,12 @@ export function ListPageExample({
   onRemove?: (member: Member) => void;
 }) {
   const [filter, setFilter] = useState<Filter>("all");
-  const visible = members.filter((member) => filter === "all" || member.status === filter);
+  const [role, setRole] = useState("all");
+  const roles = [...new Set(members.map((member) => member.role))];
+  const visible = members.filter(
+    (member) =>
+      (filter === "all" || member.status === filter) && (role === "all" || member.role === role),
+  );
 
   return (
     <Column as="main" fillWidth horizontal="center" paddingY="48" paddingX="24">
@@ -102,17 +113,35 @@ export function ListPageExample({
           </Button>
         </Row>
 
-        <SegmentedControl
-          fillWidth={false}
-          value={filter}
-          onValueChange={(value) => setFilter(value as Filter)}
-          buttons={[
-            { value: "all", label: "All" },
-            { value: "active", label: "Active" },
-            { value: "invited", label: "Invited" },
-            { value: "suspended", label: "Suspended" },
-          ]}
-        />
+        <Row gap="8" vertical="center" wrap>
+          <SegmentedControl
+            fillWidth={false}
+            value={filter}
+            onValueChange={(value) => setFilter(value as Filter)}
+            buttons={[
+              { value: "all", label: "All" },
+              { value: "active", label: "Active" },
+              { value: "invited", label: "Invited" },
+              { value: "suspended", label: "Suspended" },
+            ]}
+          />
+          <Dropdown
+            selectedOption={role}
+            onSelect={setRole}
+            trigger={
+              <Button variant="secondary" suffixIcon="chevronDown">
+                {role === "all" ? "All roles" : role}
+              </Button>
+            }
+          >
+            <Column padding="4" gap="2">
+              <Option value="all" label="All roles" />
+              {roles.map((name) => (
+                <Option key={name} value={name} label={name} />
+              ))}
+            </Column>
+          </Dropdown>
+        </Row>
 
         <Table
           searchable
@@ -124,7 +153,14 @@ export function ListPageExample({
               <Text textVariant="body-default-s" onBackground="neutral-weak">
                 No members match this filter.
               </Text>
-              <Button size="s" variant="secondary" onClick={() => setFilter("all")}>
+              <Button
+                size="s"
+                variant="secondary"
+                onClick={() => {
+                  setFilter("all");
+                  setRole("all");
+                }}
+              >
                 Show everyone
               </Button>
             </Column>

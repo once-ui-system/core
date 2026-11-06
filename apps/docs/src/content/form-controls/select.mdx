@@ -1,14 +1,20 @@
 ---
 title: "Select"
 summary: "Select provides a dropdown menu for choosing from a list of options with optional search functionality."
-updatedAt: "2025-06-15"
+updatedAt: "2026-11-06"
 docs: "once-ui/form-controls/select.mdx"
 github: "components/Select.tsx"
 navLabel: "Select"
 navIcon: "switch"
 ---
 
-The `Select` component offers a dropdown menu for selecting from a list of options. It's built on top of the `DropdownWrapper` and `Input` components, providing a consistent user experience with other form controls.
+The `Select` component offers a dropdown menu for selecting from a list of options. It's built on top of the `Dropdown` and `Input` components, providing a consistent user experience with other form controls. It draws a chevron that turns up while the list is open; a `suffix` you pass takes its place.
+
+## When to use Select
+
+Use `Select` for a form value: a field with a label that sits in a form or a settings row and is submitted, such as a timezone, a country or a member's role.
+
+For a sort, filter, view or action picker on a toolbar or page header, use a secondary `Button` with `suffixIcon="chevronDown"` as the trigger of a `Dropdown` of `Option`s, and let the button's label name the current choice ("Sort: Newest"). It reads as a control, not as a field. A toolbar filter over a long list that people search is the exception: use the [toolbar size](#toolbar-size) below. Two to four choices that should stay visible fit a `SegmentedControl`.
 
 <CodeBlock
     marginTop="16"
