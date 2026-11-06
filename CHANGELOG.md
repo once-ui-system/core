@@ -13,6 +13,18 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [2.8.0] — 2026-11-06
+
+Minor: `SegmentedControl` gets a new `sliding` prop. It is on by default, which changes how
+selection looks (an improvement that rides a minor, per RELEASING.md). Plus one `Banner` fix.
+
+### Changed
+
+- **`SegmentedControl` selection slides.** The selected background now slides along the
+  rail to the picked option, morphing its width between options of different widths. It
+  doesn't slide under reduced motion, `compact` keeps the static look, and
+  `sliding={false}` turns it off. The first paint (and server render) is unchanged.
+
 ### Fixed
 
 - **`Banner` dismiss button sits at the right edge again.** In production bundles the
