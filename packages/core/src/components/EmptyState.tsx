@@ -40,7 +40,8 @@ export interface EmptyStateProps
 }
 
 const SIZES = {
-  s: { paddingY: "24", gap: "12", icon: "m", title: "heading-strong-s", body: "body-default-s" },
+  // `s` keeps the look Table's empty states had before they used this.
+  s: { paddingY: "xl", gap: "m", icon: "l", title: "heading-strong-s", body: "body-default-s" },
   m: { paddingY: "48", gap: "16", icon: "l", title: "heading-strong-m", body: "body-default-m" },
   l: { paddingY: "80", gap: "20", icon: "xl", title: "heading-strong-l", body: "body-default-m" },
 } as const;
@@ -71,7 +72,7 @@ const EmptyState = ({
       horizontal="center"
       gap={s.gap}
       paddingY={s.paddingY}
-      paddingX="24"
+      paddingX={size === "s" ? "xl" : "24"}
       className={classNames(styles.emptyState, className)}
       data-size={size}
       {...rest}
