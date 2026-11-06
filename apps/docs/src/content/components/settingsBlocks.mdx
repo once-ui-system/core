@@ -87,7 +87,7 @@ Only `getAccount` is required. Leave a method out and its row is not shown.
 
 export const account: AccountAdapter = {
   getAccount: () => fetch("/api/account").then((r) => r.json()),
-  updateProfile: (patch) => patch("/api/account", patch),
+  updateProfile: (changes) => patch("/api/account", changes),
   avatar: { upload: (file) => upload("/api/account/avatar", file) },
   changeEmail: (email, proof) => post("/api/account/email", { email, ...proof }),
   changePassword: (next, proof, { signOutOthers }) =>
