@@ -1,0 +1,142 @@
+---
+title: "Settings blocks"
+summary: "Profile, sign-in and security, and organization settings in one flow, for any auth provider."
+updatedAt: "2026-11-06"
+docs: "once-ui/components/settingsBlocks.mdx"
+github: "blocks/src/settings"
+navLabel: "Settings blocks"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+Every app grows the same settings: a photo, a name, an email, a password,
+two-step verification, signed-in devices, and the organization's name and
+danger zone. The settings blocks are that flow, built once from `Setting`
+rows with small controls of one height.
+
+They come from `@once-ui-system/blocks` and know nothing about auth. Each one
+reads and writes through an **adapter** the app supplies, so the same blocks
+work on Supabase, Better Auth or anything else.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={<SettingsBlocksExample />}
+  codes={[
+    {
+      code:
+`import {
+  AccountSettings,
+  OrganizationSettings,
+  SecuritySettings,
+  SettingsLayout,
+} from "@once-ui-system/blocks";
+
+<SettingsLayout
+  sections={[
+    { value: "profile", label: "Profile", icon: "person",
+      content: <AccountSettings adapter={account} fields={{ username: true }} /> },
+    { value: "security", label: "Sign-in & security", icon: "security",
+      content: <SecuritySettings adapter={account} /> },
+    { value: "organization", label: "Organization", icon: "organization",
+      content: <OrganizationSettings adapter={organization} /> },
+  ]}
+/>`,
+      language: "tsx",
+      label: "Settings"
+    }
+  ]}
+/>
+
+The preview runs on `createDemoAccountAdapter()` and
+`createDemoOrganizationAdapter()`, which keep everything in memory. The
+two-step code there is `123456`. An app's demo mode can use them too.
+
+## How it behaves
+
+- **Values at rest.** Each row shows its value with an Edit button. Edit turns
+  that row alone into a field with Save and Cancel; Enter saves and Escape puts
+  it back. Every row saves on its own, so switching sections loses nothing.
+- **Sensitive changes in a dialog.** Changing the email or password, setting
+  up two-step verification and deleting the account ask for the current
+  password first. An account with no password passes `{ recentSignIn: true }`
+  and the adapter checks the session's age.
+- **Email changes wait for the link.** The row shows the new address as
+  pending until it is confirmed, with a way to cancel.
+- **Two-step verification in three steps.** Scan the code or copy the key,
+  enter a code, save the backup codes.
+- **Only what works.** A row appears only when the adapter implements it. A
+  provider that cannot list sessions shows just "Sign out everywhere else". The
+  last way to sign in cannot be disconnected.
+- **Roles.** Owners and admins edit the organization; members see it read only
+  and can leave. Deleting it asks for its address to be typed.
+
+## The adapter
+
+Only `getAccount` is required. Leave a method out and its row is not shown.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`import type { AccountAdapter } from "@once-ui-system/blocks";
+
+export const account: AccountAdapter = {
+  getAccount: () => fetch("/api/account").then((r) => r.json()),
+  updateProfile: (patch) => patch("/api/account", patch),
+  avatar: { upload: (file) => upload("/api/account/avatar", file) },
+  changeEmail: (email, proof) => post("/api/account/email", { email, ...proof }),
+  changePassword: (next, proof, { signOutOthers }) =>
+    post("/api/account/password", { next, signOutOthers, ...proof }),
+  twoFactor: {
+    enabled: () => get("/api/account/2fa"),
+    enroll: (proof) => post("/api/account/2fa", proof), // { secret, uri, qrCode? }
+    verify: (code) => post("/api/account/2fa/verify", { code }), // { backupCodes? }
+    disable: (code) => post("/api/account/2fa/disable", { code }),
+  },
+  sessions: { revokeOthers: () => post("/api/account/sessions/revoke-others") },
+};`,
+      language: "tsx",
+      label: "Adapter"
+    }
+  ]}
+/>
+
+Uploads arrive cropped to a centred square of at most 512 px, so the app
+stores what it shows.
+
+## Languages
+
+Every string goes through `labels`. Pass a partial object to change a few, or
+`settingsLabelsHu` for the Hungarian set. `SettingsLayout` passes its labels to
+every block inside it.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={<SettingsBlocksExample hungarian />}
+  codes={[
+    {
+      code:
+`import { settingsLabelsHu, SettingsLayout } from "@once-ui-system/blocks";
+
+<SettingsLayout labels={settingsLabelsHu} sections={sections} />`,
+      language: "tsx",
+      label: "Hungarian"
+    }
+  ]}
+/>
+
+## App rows
+
+`extraRows` adds rows only one app has: a public bio on the profile, API keys
+under security, or business details on the organization.
+
+```tsx
+<OrganizationSettings adapter={organization} extraRows={<BusinessDetails />} />
+```
