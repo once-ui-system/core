@@ -46,6 +46,7 @@
   "EmojiPickerDropdown": {"purpose":"Emoji picker in a dropdown, opened from a trigger such as a message input's button"},
   "Fade": {"purpose":"Gradient fade strip at the edge of a scroll container, optionally blurred or patterned","avoid":"Wrapping content — it is an absolute edge overlay, not a container"},
   "FadingLettersFx": {"purpose":"Text that fades in and out letter by letter with a stagger"},
+  "EmptyState": {"purpose":"Empty page, panel or list: visual, title, one line, next action"},
   "Feedback": {"purpose":"Inline alert with variant colour, icon, title, description and optional close"},
   "Field": {"purpose":"Label, hint and error around one control, with the id, aria-describedby, aria-invalid and aria-required wired for you"},
   "Fieldset": {"purpose":"Titled form section: a real fieldset with legend and description, laying its fields out like a Form grid"},

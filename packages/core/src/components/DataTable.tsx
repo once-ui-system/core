@@ -12,6 +12,7 @@ import { Checkbox } from "./Checkbox";
 import { Column } from "./Column";
 import styles from "./DataTable.module.scss";
 import { DropdownWrapper } from "./DropdownWrapper";
+import { EmptyState } from "./EmptyState";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
 import { Input } from "./Input";
@@ -807,29 +808,27 @@ function DataTable<T>({
       <td colSpan={columnCount} className={tableStyles.empty}>
         {noResults
           ? (noResultsState ?? (
-              <Column center padding="xl" gap="m">
-                <Icon name="search" size="l" onBackground="neutral-weak" />
-                <Column center gap="4">
-                  <Text variant="heading-strong-s">{text.noResults}</Text>
-                  <Text variant="body-default-s" onBackground="neutral-weak">
-                    {text.noResultsHint}
-                  </Text>
-                </Column>
-                <Button size="s" variant="secondary" onClick={clearQuery}>
-                  {text.clearFilters}
-                </Button>
-              </Column>
+              <EmptyState
+                size="s"
+                icon="search"
+                titleAs="h3"
+                title={text.noResults}
+                description={text.noResultsHint}
+                action={
+                  <Button size="s" variant="secondary" onClick={clearQuery}>
+                    {text.clearFilters}
+                  </Button>
+                }
+              />
             ))
           : (emptyState ?? (
-              <Column center padding="xl" gap="m">
-                <Icon name="inbox" size="l" onBackground="neutral-weak" />
-                <Column center gap="4">
-                  <Text variant="heading-strong-s">No data available</Text>
-                  <Text variant="body-default-s" onBackground="neutral-weak">
-                    There are no items to display
-                  </Text>
-                </Column>
-              </Column>
+              <EmptyState
+                size="s"
+                icon="inbox"
+                titleAs="h3"
+                title="No data available"
+                description="There are no items to display"
+              />
             ))}
       </td>
     </tr>

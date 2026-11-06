@@ -851,6 +851,11 @@
    "particle",
    "celebration"
   ],
+  "EmptyStateSize": [
+   "l",
+   "m",
+   "s"
+  ],
   "FieldControl": {
    "id": "!string",
    "invalid": "!boolean",
@@ -3331,6 +3336,30 @@
     "text": "!string",
     "animationState": "!AnimationState",
     "messageIdx": "number = 0"
+   }
+  },
+  "EmptyState": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "visual": "ReactNode",
+    "icon": "IconName",
+    "title": "!ReactNode",
+    "description": "ReactNode",
+    "action": "ReactNode",
+    "secondaryAction": "ReactNode",
+    "size": "EmptyStateSize = m",
+    "titleAs": "\"h1\" | \"h2\" | \"h3\" | \"h4\" | \"h5\" | \"h6\" = h2"
    }
   },
   "Feedback": {

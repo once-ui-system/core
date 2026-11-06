@@ -25,11 +25,22 @@ selection looks (an improvement that rides a minor, per RELEASING.md). Plus one 
   doesn't slide under reduced motion, `compact` keeps the static look, and
   `sliding={false}` turns it off. The first paint (and server render) is unchanged.
 
+### Added
+
+- **`EmptyState`.** What a page, panel or list shows before it has anything in it: a
+  `visual` (a `Mascot`, a Cube Emote, an illustration) or an `icon`, a `title`, one line of
+  `description`, and an `action` with an optional `secondaryAction`. `size` is `s` inside a
+  table or list, `m` (default) in a card and `l` for a whole page; `titleAs` sets the
+  heading level. `DataTable`'s own empty and no-results states are now built from it, with
+  the same text and actions as before.
+
 ### Fixed
 
 - **`Banner` dismiss button sits at the right edge again.** In production bundles the
   button's own `position: relative` could load after the banner's rule and win, which put
   the close button inline after the text instead of at the strip's right edge.
+- **`Mascot surface="flat"` is flat.** The eyes no longer keep their white glint on the
+  flat surface.
 - **`DatePicker` opens without a second animation.** The calendar no longer wipes in through
   a blurred `RevealFx` mask after the dropdown has already faded in, and switching between
   the calendar and the time panel is instant instead of waiting 400 ms. Inline pickers show
