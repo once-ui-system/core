@@ -3008,27 +3008,6 @@
     "onBlurCapture": "React.FocusEventHandler<HTMLDivElement>"
    }
   },
-  "Fade": {
-   "group": "components",
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "className": "string",
-    "to": "\"bottom\" | \"top\" | \"left\" | \"right\" = bottom",
-    "base": "BaseColor = page",
-    "blur": "number | CSSUnit",
-    "pattern": "{ display?: boolean; size?: SpacingToken; } = { display: false, size: \"4\", }",
-    "style": "React.CSSProperties",
-    "children": "ReactNode",
-    "position": "CSSProperties[\"position\"] = relative"
-   }
-  },
   "EmptyState": {
    "group": "components",
    "mixins": [
@@ -3048,6 +3027,27 @@
     "secondaryAction": "ReactNode",
     "size": "EmptyStateSize = m",
     "titleAs": "\"h1\" | \"h2\" | \"h3\" | \"h4\" | \"h5\" | \"h6\" = h2"
+   }
+  },
+  "Fade": {
+   "group": "components",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "className": "string",
+    "to": "\"bottom\" | \"top\" | \"left\" | \"right\" = bottom",
+    "base": "BaseColor = page",
+    "blur": "number | CSSUnit",
+    "pattern": "{ display?: boolean; size?: SpacingToken; } = { display: false, size: \"4\", }",
+    "style": "React.CSSProperties",
+    "children": "ReactNode",
+    "position": "CSSProperties[\"position\"] = relative"
    }
   },
   "Feedback": {

@@ -20,6 +20,7 @@
   "./components/Dialog": 38981,
   "./components/Drawer": 38820,
   "./components/Dropdown": 45174,
+  "./components/EmptyState": 21774,
   "./components/Fade": 7781,
   "./components/Feedback": 35670,
   "./components/Field": 8619,
