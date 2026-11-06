@@ -13,11 +13,13 @@
  "props": {
   "type": "CelebrationType = confetti",
   "speed": "Speed",
-  "colors": "string[] = [\"brand-solid-medium\", \"accent-solid-medium\"]",
+  "colors": "string[]",
   "intensity": "number = 50",
-  "duration": "number",
-  "trigger": "\"mount\" | \"hover\" | \"manual\" | \"click\" = mount",
-  "active": "boolean = true",
+  "duration": "number = 3000",
+  "trigger": "\"mount\" | \"hover\" | \"click\" = mount",
+  "active": "boolean",
+  "defaultActive": "boolean",
+  "onActiveChange": "(active: boolean) => void",
   "reducedMotion": "boolean | \"auto\" = auto",
   "children": "React.ReactNode"
  },

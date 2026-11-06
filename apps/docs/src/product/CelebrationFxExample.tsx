@@ -12,18 +12,15 @@ export function CelebrationFxExample() {
       <CelebrationFx
         height="16rem"
         type="fireworks"
-        trigger="manual"
         active={active}
+        onActiveChange={setActive}
       />
       <Button
         rounded
         size="s"
         weight="default"
         variant="secondary"
-        onClick={() => {
-          setActive(true);
-          setTimeout(() => setActive(false), 3000);
-        }}
+        onClick={() => setActive(true)}
       >
         Launch Fireworks
       </Button>

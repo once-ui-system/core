@@ -396,7 +396,52 @@ function rewriteFeedback(src, attrs) {
   };
 }
 
-const REWRITES = { Dialog: rewriteDialog, CodeBlock: rewriteCodeBlock, Accordion: rewriteAccordion, Feedback: rewriteFeedback };
+/**
+ * CelebrationFx and WeatherFx: `active` is a state prop in 3.0
+ * (`active` / `defaultActive` / `onActiveChange`), so `trigger="manual"` is
+ * gone: passing `active` already says the parent drives it. 2.x read `active`
+ * only with the manual trigger, so elsewhere it did nothing and is dropped.
+ * WeatherFx started off under the manual trigger; with the trigger gone it
+ * would start at mount, so it keeps `defaultActive={false}` when no `active`
+ * was set. CelebrationFx now ends after 3 s by default (`duration`); 2.x ran
+ * until unmount, which is reported where a celebration started by itself.
+ */
+function rewriteActiveTrigger(tag) {
+  return (src, attrs) => {
+    const edits = [];
+    const warnings = [];
+    const trigger = attrs.find((a) => a.name === "trigger");
+    const active = attrs.find((a) => a.name === "active");
+    const value = trigger && trigger.value !== null ? expressionOf(trigger.value) : null;
+    const literal = value === null ? null : /^(["'])([\w-]+)\1$/.exec(value)?.[2] ?? null;
+    if (trigger && literal === null) {
+      warnings.push(
+        `trigger is computed: "manual" is gone in 3.0 (drive it with active and onActiveChange); remove that case`,
+      );
+    } else if (literal === "manual") {
+      if (!active && tag === "WeatherFx") {
+        edits.push({ at: trigger.at, end: trigger.end, text: "defaultActive={false}", hit: 'trigger="manual" → defaultActive={false} (it started off)' });
+      } else {
+        edits.push({ at: withLeadingSpace(src, trigger.at), end: trigger.end, text: "", hit: 'trigger="manual" removed (active drives it)' });
+      }
+    } else if (active) {
+      edits.push({
+        at: withLeadingSpace(src, active.at),
+        end: active.end,
+        text: "",
+        hit: `active removed (2.x read it only with trigger="manual")`,
+      });
+    }
+    // A click burst always ended on its own; every other celebration ran until unmount.
+    if (tag === "CelebrationFx" && literal !== "click" && !attrs.some((a) => a.name === "duration")) {
+      warnings.push("ends after 3000 ms by default in 3.0 (2.x ran until unmount); pass duration={0} to keep it running");
+    }
+    return { edits, warnings };
+  };
+}
+
+const REWRITES = { Dialog: rewriteDialog, CodeBlock: rewriteCodeBlock, Accordion: rewriteAccordion, Feedback: rewriteFeedback,
+  CelebrationFx: rewriteActiveTrigger("CelebrationFx"), WeatherFx: rewriteActiveTrigger("WeatherFx") };
 
 /**
  * Exports 3.0 renamed: old → new. A1, G6. A lower-case name is a function:

@@ -1,8 +1,8 @@
 import { LayoutProvider } from "@once-ui-system/core";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import type React from "react";
 import { createRef } from "react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { expectNoAxeViolations } from "../test/axe.js";
 import {
   controlAnimationFrames,
@@ -30,9 +30,10 @@ const giveLayout = () =>
 
 /**
  * WeatherFx draws rain, snow, leaves or lightning on a decorative canvas
- * behind its children, from mount, while hovered, toggled by click, or while
- * `active` (manual). No frame loop runs under reduced motion, and unmount
- * cancels the loop.
+ * behind its children. `active` / `defaultActive` / `onActiveChange` is its
+ * state: on from mount, while hovered, toggled by click, or set by the parent.
+ * No frame loop runs under reduced motion, unmount cancels the loop, and the
+ * loop sleeps once the weather has stopped and fallen away.
  */
 describe("WeatherFx", () => {
   let canvas: ReturnType<typeof fakeCanvasContext>;
@@ -40,6 +41,9 @@ describe("WeatherFx", () => {
     canvas = fakeCanvasContext();
     mockReducedMotion(false);
     giveLayout();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it("renders children over a decorative canvas", async () => {
@@ -56,8 +60,8 @@ describe("WeatherFx", () => {
 
   it.each([
     ["rain", "stroke"],
-    ["snow", "arc"],
-    ["leaves", "ellipse"],
+    ["snow", "drawImage"],
+    ["leaves", "drawImage"],
   ] as const)("draws %s from mount", (type, call) => {
     const frames = controlAnimationFrames();
     render(<WeatherFx type={type} intensity={10} reducedMotion={false} />, { wrapper });
@@ -66,25 +70,95 @@ describe("WeatherFx", () => {
     expect(frames.pending()).toHaveLength(1);
   });
 
-  it("draws while `active` from the first render with the manual trigger", () => {
+  it("draws while `active` from the first render", () => {
     const frames = controlAnimationFrames();
-    render(<WeatherFx trigger="manual" active intensity={10} reducedMotion={false} />, {
+    render(<WeatherFx trigger="click" active intensity={10} reducedMotion={false} />, {
       wrapper,
     });
     frames.step(3);
     expect(canvas.calls.get("stroke")).toBeGreaterThan(0);
   });
 
-  it("starts drawing when `active` turns on with the manual trigger", () => {
+  it("starts drawing when a controlled `active` turns on", () => {
     const frames = controlAnimationFrames();
-    const { rerender } = render(
-      <WeatherFx trigger="manual" intensity={10} reducedMotion={false} />,
-      { wrapper },
-    );
+    const { rerender } = render(<WeatherFx active={false} intensity={10} reducedMotion={false} />, {
+      wrapper,
+    });
     frames.step(3);
     expect(canvas.calls.get("stroke")).toBeUndefined();
-    rerender(<WeatherFx trigger="manual" active intensity={10} reducedMotion={false} />);
+    rerender(<WeatherFx active intensity={10} reducedMotion={false} />);
     frames.step(3);
+    expect(canvas.calls.get("stroke")).toBeGreaterThan(0);
+  });
+
+  it("stops after `duration`, tells the parent, and lets the loop sleep", () => {
+    vi.useFakeTimers();
+    const frames = controlAnimationFrames();
+    const onActiveChange = vi.fn();
+    render(
+      <WeatherFx
+        duration={500}
+        intensity={10}
+        onActiveChange={onActiveChange}
+        reducedMotion={false}
+      />,
+      { wrapper },
+    );
+    frames.step(5);
+    act(() => {
+      vi.advanceTimersByTime(500);
+    });
+    expect(onActiveChange).toHaveBeenCalledWith(false);
+    frames.step(200);
+    expect(frames.pending()).toHaveLength(0);
+  });
+
+  it("starts afresh when `type` changes", () => {
+    const frames = controlAnimationFrames();
+    const { rerender } = render(<WeatherFx intensity={10} reducedMotion={false} />, { wrapper });
+    frames.step(2);
+    rerender(<WeatherFx type="snow" intensity={10} reducedMotion={false} />);
+    const before = canvas.calls.get("stroke") ?? 0;
+    frames.step(2);
+    // Snow draws flakes now; no rain drop is carried over as a broken flake.
+    expect(canvas.calls.get("stroke") ?? 0).toBe(before);
+    expect(canvas.calls.get("drawImage")).toBeGreaterThan(0);
+  });
+
+  it("keeps lightning under three flashes a second at any intensity", () => {
+    const frames = controlAnimationFrames();
+    render(<WeatherFx type="lightning" intensity={400} reducedMotion={false} />, { wrapper });
+    // Each visible bolt lights the sky once a frame, so the fills per frame
+    // count the bolts on screen. A strike is a rise in that count; the bolts of
+    // one strike land within 25 ms of each other, so rises a few frames apart
+    // are the same strike.
+    const starts: number[] = [];
+    let total = 0;
+    let visible = 0;
+    for (let i = 0; i < 600; i++) {
+      frames.step(1, 16);
+      const now = canvas.calls.get("fillRect") ?? 0;
+      const bolts = now - total;
+      total = now;
+      if (bolts > visible && (starts.length === 0 || i - starts[starts.length - 1] > 4)) {
+        starts.push(i);
+      }
+      visible = bolts;
+    }
+    // 600 frames of 16 ms is 9.6 s: at most one strike every half second.
+    expect(starts.length).toBeLessThanOrEqual(Math.ceil(9.6 / 0.5) + 1);
+  });
+
+  it("keeps the trigger working when the parent passes its own handlers", () => {
+    const frames = controlAnimationFrames();
+    const onClick = vi.fn();
+    const { container } = render(
+      <WeatherFx trigger="click" intensity={5} onClick={onClick} reducedMotion={false} />,
+      { wrapper },
+    );
+    fireEvent.click(container.firstElementChild as HTMLElement);
+    frames.step(2);
+    expect(onClick).toHaveBeenCalledTimes(1);
     expect(canvas.calls.get("stroke")).toBeGreaterThan(0);
   });
 
@@ -125,10 +199,9 @@ describe("WeatherFx", () => {
     expect(frames.request).not.toHaveBeenCalled();
   });
 
-  it("cancels its frame and resize listener on unmount, and forwards its ref", () => {
+  it("cancels its frame on unmount, and forwards its ref", () => {
     const frames = controlAnimationFrames();
     const ref = createRef<HTMLDivElement>();
-    const remove = vi.spyOn(window, "removeEventListener");
     const { container, unmount } = render(<WeatherFx ref={ref} reducedMotion={false} />, {
       wrapper,
     });
@@ -136,6 +209,5 @@ describe("WeatherFx", () => {
     const [id] = frames.pending();
     unmount();
     expect(frames.cancel).toHaveBeenCalledWith(id);
-    expect(remove).toHaveBeenCalledWith("resize", expect.any(Function));
   });
 });
