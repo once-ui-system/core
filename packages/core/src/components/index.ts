@@ -44,6 +44,7 @@ export * from "./EmojiPicker";
 export * from "./EmojiPickerDropdown";
 export * from "./Fade";
 export * from "./FadingLettersFx";
+export * from "./EmptyState";
 export * from "./Feedback";
 export * from "./Field";
 export * from "./Fieldset";
