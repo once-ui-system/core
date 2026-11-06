@@ -81,6 +81,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Icons | `IconName` (the IconName type below) only |
 | Logos grid | `LogoCloud` with `columns` set |
 | Tabs | `Tabs` > `TabList` > `Tab`, `TabPanel` (`orientation="vertical"` for a settings nav) |
+| Pick one of a few | A form value with a label (timezone, country, role on a form): `Select`. A toolbar view control or action (sort, filter, export): `Dropdown` with `Option`s and `trigger={<Button variant="secondary" suffixIcon="chevronDown">Role: Admin</Button>}`, the label naming the current choice (a long, searchable filter list: `Select size="xxs" searchable` with a `label`). Two to four choices always shown: `SegmentedControl` |
 | Mobile nav, side sheet | `Drawer`, not a hand-made overlay |
 | Page trail | `Breadcrumbs items={[...]}` |
 | Keyboard shortcut | `useHotkeys("mod+k", fn)` + `Kbd keys="mod+k" label="Search"` |
@@ -650,7 +651,7 @@ type UserSelect = "text" | "auto" | "none" | "all"
 
 ## Gotchas
 
-- Fixed in 2.1: Select closes on pick and stays closed — focus returning to the field no longer reopens it — and a multiple Select stays open while picking. Use Select with value and onValueChange; do not build a local picker from Dropdown and Options to get this.
+- Fixed in 2.1: Select closes on pick and stays closed — focus returning to the field no longer reopens it — and a multiple Select stays open while picking. For a form value, use Select with label, value and onValueChange; do not rebuild it from Dropdown and Options to get this. Select draws its own chevron (a suffix you pass replaces it). A toolbar sort, filter or action picker is not a form value: use a Dropdown with Options behind a secondary Button with suffixIcon="chevronDown" that names the current choice.
 - Fixed in 2.1: NumberInput follows its value prop after mount (an undo, a reset, a change made elsewhere) without rewriting what the user is typing. Pass value and onValueChange; do not remount it with a key to push a new value in.
 - Never cast an icon name with `as IconName`: the cast compiles a name the registry does not have, and it renders nothing. Use a name from iconNames; in data, type the field as IconName ({ icon: IconName }[]) or write the literal `as const`, so the type check still runs.
 - Field heights run a step above Button's: Input size xs is 40px, s 48px, m 56px (the default). A field beside a size="s" Button (32px), as in a toolbar or filter row, takes size="xxs", which is 32px too; Form size="xxs" sets it for every field inside. An xxs field has no floating label: label shows as the placeholder, so keep label for the accessible name.

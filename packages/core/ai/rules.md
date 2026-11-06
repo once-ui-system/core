@@ -132,6 +132,8 @@ Breakpoints, padding, background, border, radius, sizes and `hide` exist only on
 
 14. Buttons: `variant` is the appearance, `primary | secondary | tertiary | ghost | link | subtle` (`primary` is the default), and `tone` the palette, `brand | accent | neutral | info | success | warning | danger`: a destructive button is `<Button tone="danger">`; pair with `prefixIcon`/`suffixIcon` (icon names, not elements). `IconButton` for icon-only actions with `tooltip`.
 
+14a. Select or a Button with a Dropdown: `Select` is a form value. It has a `label`, sits in a `Form` or a settings row, and is submitted (timezone, country, a member's role). Sort, filter, view and action pickers on a toolbar or page header are a secondary `Button` with `suffixIcon="chevronDown"` as a `Dropdown` trigger, holding `Option`s, with the button's label naming the current choice ("Sort: Newest", "Role: Admin"). Select already draws its chevron; do not pass one. A toolbar filter over a long list someone searches is the exception: `Select size="xxs"` with a `label` and `searchable`. Two to four choices that should stay visible are a `SegmentedControl`.
+
 14b. Icon names must come from `iconNames` in catalog.json (spec.json carries the same list). In 2.0 `IconName` is a real union, so an unregistered name is a type error rather than a blank space — do not guess a plausible one, and never reach for `as IconName` to silence the check. If no registered icon fits, omit the icon. The registry is 99 icons; brand marks (github, discord, google) are deliberately not among them, so an app registers its own.
 
 14c. Components with a text prop render it — never pass the same text as both prop and children, it renders twice:

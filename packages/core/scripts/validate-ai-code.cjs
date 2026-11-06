@@ -1574,6 +1574,27 @@ function validate(source, spec, iconNames, options = {}) {
     );
   }
 
+  // Select is a form value: it has a label and is submitted. One with no
+  // label is almost always a toolbar sort or filter, which reads as a text
+  // field there; a chevron passed by hand doubles the one Select draws.
+  let selectUnlabelled = false;
+  let selectChevron = false;
+  for (const t of tags) {
+    if (t.name !== "Select") continue;
+    const named = hasProp(t.attrs, "label") || hasProp(t.attrs, "aria-label");
+    if (!named && !hasSpread(t.attrs)) selectUnlabelled = true;
+    if (/\bsuffix=\{[^}]*chevronDown/.test(t.attrs)) selectChevron = true;
+  }
+  if (selectUnlabelled) {
+    add(
+      "Select.toolbar",
+      'Select without a label: Select is a form value with a label. For a toolbar sort, filter or action picker use a Dropdown of Options with trigger={<Button variant="secondary" suffixIcon="chevronDown">Role: Admin</Button>}; for a form field, give the Select its label',
+    );
+  }
+  if (selectChevron) {
+    add("Select.chevron", "Select draws its own chevron since 3.0: drop the chevronDown suffix");
+  }
+
   if (/<Fade[^>]*>[\s\S]*<(Column|Row)[^>]*overflowY/.test(source)) {
     add("Fade.edge", "Fade wrapping scroll content — use as absolute edge strip instead");
   }

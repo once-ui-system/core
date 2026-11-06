@@ -514,6 +514,37 @@ const Select = ({
     }
   };
 
+  /**
+   * The chevron that marks the field as a list, turned up while it is open.
+   * Without it a closed Select read as a text field. A `suffix` the caller
+   * passes takes its place. The field does not reach under the suffix, so a
+   * press on the chevron does what a press on the field does: it focuses
+   * the field (which opens the list) or, already focused, toggles it.
+   */
+  const chevron = (
+    <Flex
+      aria-hidden="true"
+      cursor={rest.disabled ? undefined : "interactive"}
+      onMouseDown={(event: React.MouseEvent) => event.preventDefault()}
+      onClick={() => {
+        const field = fieldRef.current;
+        if (!field || rest.disabled) return;
+        if (document.activeElement !== field) field.focus();
+        else setOpen(!isOpenRef.current);
+      }}
+    >
+      <Icon
+        name="chevronDown"
+        size="s"
+        onBackground="neutral-medium"
+        style={{
+          transition: "transform var(--transition-duration-micro-medium) var(--transition-eased)",
+          transform: isDropdownOpen ? "rotate(180deg)" : undefined,
+        }}
+      />
+    </Flex>
+  );
+
   /** The listbox's name: the field's own. */
   const listboxLabel = rest["aria-label"] || rest.label || rest.placeholder || "Options";
 
@@ -544,6 +575,7 @@ const Select = ({
             {...rest}
             ref={fieldRef}
             activeIndex={currentActive}
+            suffix={rest.suffix === undefined ? chevron : rest.suffix}
             style={{
               textOverflow: "ellipsis",
               ...style,

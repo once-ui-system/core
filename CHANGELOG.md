@@ -32,6 +32,14 @@ entry below that had landed by then:
 
 ### Added
 
+- **`Select` draws a chevron.** A closed Select read as a text field unless a
+  chevron was passed by hand. It now shows `chevronDown` by default, turned up
+  while the list is open, and a press on it opens and closes the list like a
+  press on the field. A `suffix` you pass still takes its place, so remove a
+  hand-made chevron suffix. The agent rules now separate the two pickers:
+  `Select` for a labelled form value, a secondary `Button` with a `Dropdown` for
+  toolbar sort, filter and action pickers, and the validator flags a Select
+  with no label (`Select.toolbar`) or a doubled chevron (`Select.chevron`).
 - **Tailwind CSS v4 adapter, `@once-ui-system/core/tailwind.css`.** Import it
   before Tailwind (`@import "@once-ui-system/core/tailwind.css"; @import
   "tailwindcss";`) and Once UI's tokens become Tailwind classes that follow the

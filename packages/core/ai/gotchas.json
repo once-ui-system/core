@@ -90,7 +90,7 @@
     ]
   },
   "Select.closed": {
-    "rule": "Fixed in 2.1: Select closes on pick and stays closed — focus returning to the field no longer reopens it — and a multiple Select stays open while picking. Use Select with value and onValueChange; do not build a local picker from Dropdown and Options to get this.",
+    "rule": "Fixed in 2.1: Select closes on pick and stays closed — focus returning to the field no longer reopens it — and a multiple Select stays open while picking. For a form value, use Select with label, value and onValueChange; do not rebuild it from Dropdown and Options to get this. Select draws its own chevron (a suffix you pass replaces it). A toolbar sort, filter or action picker is not a form value: use a Dropdown with Options behind a secondary Button with suffixIcon=\"chevronDown\" that names the current choice.",
     "components": ["Select"]
   },
   "Button.trigger": {
