@@ -30,6 +30,10 @@ selection looks (an improvement that rides a minor, per RELEASING.md). Plus one 
 - **`Banner` dismiss button sits at the right edge again.** In production bundles the
   button's own `position: relative` could load after the banner's rule and win, which put
   the close button inline after the text instead of at the strip's right edge.
+- **`DatePicker` opens without a second animation.** The calendar no longer wipes in through
+  a blurred `RevealFx` mask after the dropdown has already faded in, and switching between
+  the calendar and the time panel is instant instead of waiting 400 ms. Inline pickers show
+  at once too.
 
 ## [2.7.0] — 2026-11-05
 

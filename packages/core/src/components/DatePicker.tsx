@@ -22,7 +22,6 @@ import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
 import { NumberInput } from "./NumberInput";
 import { Option } from "./Option";
-import { RevealFx } from "./RevealFx";
 import { Row } from "./Row";
 import { SegmentedControl } from "./SegmentedControl";
 import { Text } from "./Text";
@@ -206,7 +205,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     >(initialTime);
     const [isPM, setIsPM] = useState(initialTime?.hours ? initialTime.hours >= 12 : false);
     const [isTimeSelector, setIsTimeSelector] = useState(false);
-    const [isTransitioning, setIsTransitioning] = useState(true);
     const [isMonthOpen, setIsMonthOpen] = useState(false);
     const [isYearOpen, setIsYearOpen] = useState(false);
     const [isReady, setIsReady] = useState(false);
@@ -316,7 +314,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 
     useEffect(() => {
       const timer = setTimeout(() => {
-        setIsTransitioning(true);
         setIsReady(true);
       }, 100);
 
@@ -385,13 +382,13 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     /** The grid's name: the month it shows, which tells two calendars side by side apart. */
     const gridLabel = monthYear(currentMonth, currentYear);
 
-    const handleTimeToggle = (show: boolean) => {
-      setIsTransitioning(false);
-      setTimeout(() => {
-        setIsTimeSelector(show);
-        setIsTransitioning(true);
-      }, 400);
-    };
+    /**
+     * Swaps the calendar for the time panel and back at once. Both used to
+     * wipe in through RevealFx (a blurred mask, 250 ms, after a 400 ms wait
+     * on the toggle), on top of the dropdown's own fade and scale: the panel
+     * opened twice and a click on the clock waited most of a second.
+     */
+    const handleTimeToggle = (show: boolean) => setIsTimeSelector(show);
 
     const closeDropdown = useContext(DropdownCloseContext);
 
@@ -1068,13 +1065,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           )}
         </Flex>
 
-        <RevealFx
-          fillWidth
-          center
-          key={isTimeSelector ? "time" : "date"}
-          revealed={isTransitioning}
-          speed={250}
-        >
+        <Flex fillWidth center key={isTimeSelector ? "time" : "date"}>
           {isTimeSelector ? (
             <Column maxWidth={24} center padding="32" gap="32">
               <SegmentedControl
@@ -1177,7 +1168,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               <FollowFocusedDay gridRef={gridRef} />
             </ArrowNavigation>
           )}
-        </RevealFx>
+        </Flex>
       </Column>
     );
   },
