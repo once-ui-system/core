@@ -274,6 +274,11 @@
     "tags": ["effect", "motion"],
     "pairsWith": ["Heading", "Text"]
   },
+  "EmptyState": {
+    "purpose": "Empty page, panel or list: visual, title, one line, next action",
+    "tags": ["feedback"],
+    "pairsWith": ["Mascot", "Button"]
+  },
   "Feedback": {
     "purpose": "Inline alert with variant colour, icon, title, description and optional close",
     "tags": ["feedback"],

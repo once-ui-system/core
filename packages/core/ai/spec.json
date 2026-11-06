@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
- "version": "2.7.0",
- "generated": "2026-11-04",
+ "version": "2.8.0",
+ "generated": "2026-11-06",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -850,6 +850,11 @@
    "weather",
    "particle",
    "celebration"
+  ],
+  "EmptyStateSize": [
+   "l",
+   "m",
+   "s"
   ],
   "FieldControl": {
    "id": "!string",
@@ -3333,6 +3338,30 @@
     "messageIdx": "number = 0"
    }
   },
+  "EmptyState": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "visual": "ReactNode",
+    "icon": "IconName",
+    "title": "!ReactNode",
+    "description": "ReactNode",
+    "action": "ReactNode",
+    "secondaryAction": "ReactNode",
+    "size": "EmptyStateSize = m",
+    "titleAs": "\"h1\" | \"h2\" | \"h3\" | \"h4\" | \"h5\" | \"h6\" = h2"
+   }
+  },
   "Feedback": {
    "group": "components",
    "extends": [
@@ -4603,6 +4632,7 @@
     "value": "string",
     "compact": "boolean = false",
     "semantics": "\"tabs\" | \"radio\" = tabs",
+    "sliding": "boolean = true",
     "scroll": "boolean = true",
     "className": "string",
     "style": "React.CSSProperties"

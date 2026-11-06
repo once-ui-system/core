@@ -50,6 +50,7 @@ import {
   EmojiPickerDropdown,
   Fade,
   FadingLettersFx,
+  EmptyState,
   Feedback,
   Field,
   Fieldset,
@@ -387,6 +388,7 @@ const mdxComponents = createMdxComponents({
   OgCard,
   Card,
   CursorCard,
+  EmptyState,
   Feedback,
   FileTree,
 
