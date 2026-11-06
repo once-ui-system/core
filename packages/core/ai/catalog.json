@@ -25,6 +25,7 @@
   "Drawer": {"purpose":"Modal sheet that slides in from any edge, with focus trap and scroll lock: mobile nav, filters, side panels"},
   "Dropdown": {"purpose":"Trigger and the floating menu it opens, with arrow keys; openOn=\"contextmenu\" for right-click (2.x ContextMenu)"},
   "Fade": {"purpose":"Gradient fade strip at the edge of a scroll container, optionally blurred or patterned","avoid":"Wrapping content — it is an absolute edge overlay, not a container"},
+  "EmptyState": {"purpose":"Empty page, panel or list: visual, title, one line, next action"},
   "Feedback": {"purpose":"Inline alert with variant colour, icon, title, description and optional close"},
   "Field": {"purpose":"Label, hint and error around one control, with the id and aria attributes wired for you"},
   "Fieldset": {"purpose":"Titled form section: a real fieldset with legend and description, laying its fields out like a Form grid"},

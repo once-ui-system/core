@@ -19,6 +19,7 @@ export * from "./Dialog.js";
 export * from "./Drawer.js";
 export * from "./Dropdown.js";
 export * from "./Fade.js";
+export * from "./EmptyState.js";
 export * from "./Feedback.js";
 export * from "./Field.js";
 export * from "./Fieldset.js";

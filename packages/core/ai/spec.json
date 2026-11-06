@@ -876,6 +876,11 @@
    "particle",
    "celebration"
   ],
+  "EmptyStateSize": [
+   "s",
+   "l",
+   "m"
+  ],
   "FadeState": [
    "entering",
    "visible",
@@ -3022,6 +3027,27 @@
     "style": "React.CSSProperties",
     "children": "ReactNode",
     "position": "CSSProperties[\"position\"] = relative"
+   }
+  },
+  "EmptyState": {
+   "group": "components",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "visual": "ReactNode",
+    "icon": "IconName",
+    "title": "!ReactNode",
+    "description": "ReactNode",
+    "action": "ReactNode",
+    "secondaryAction": "ReactNode",
+    "size": "EmptyStateSize = m",
+    "titleAs": "\"h1\" | \"h2\" | \"h3\" | \"h4\" | \"h5\" | \"h6\" = h2"
    }
   },
   "Feedback": {

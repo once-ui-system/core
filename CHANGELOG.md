@@ -32,6 +32,10 @@ entry below that had landed by then:
 
 ### Added
 
+- **`EmptyState`.** Also in 2.8: a `visual` (Mascot, Cube Emote) or `icon`, a `title`,
+  one line of `description` and an `action`, at `size` `s`, `m` or `l`. `Table`'s own
+  empty and no-results states are built from it. `Mascot surface="flat"` no longer paints
+  the eye glint.
 - **`Select` draws a chevron.** A closed Select read as a text field unless a
   chevron was passed by hand. It now shows `chevronDown` by default, turned up
   while the list is open, and a press on it opens and closes the list like a
