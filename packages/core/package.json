@@ -145,6 +145,10 @@
       "types": "./dist/components/Dropdown.d.ts",
       "default": "./dist/components/Dropdown.js"
     },
+    "./components/EmptyState": {
+      "types": "./dist/components/EmptyState.d.ts",
+      "default": "./dist/components/EmptyState.js"
+    },
     "./components/Fade": {
       "types": "./dist/components/Fade.d.ts",
       "default": "./dist/components/Fade.js"
