@@ -9,7 +9,7 @@ export function WeatherFxExample() {
 
   return (
     <Row height="16rem" gap="8" fillWidth vertical="end" horizontal="center" padding="24">
-      <WeatherFx position="absolute" left="0" top="0" type="snow" trigger="manual" active={on} intensity={60} />
+      <WeatherFx position="absolute" left="0" top="0" type="snow" active={on} onActiveChange={setOn} intensity={60} />
       <Button rounded size="s" variant="secondary" onClick={() => setOn((v) => !v)}>
         {on ? "Stop" : "Start"}
       </Button>

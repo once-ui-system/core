@@ -806,7 +806,7 @@ For lightning, the `intensity` prop controls strike frequency and bolt patterns.
 
 ## Duration
 
-Control how long particles are emitted with the `duration` prop, in milliseconds (seconds until 3.0). After the duration, existing particles finish their animation but no new ones spawn.
+Control how long particles are emitted with the `duration` prop, in milliseconds. After the duration, `active` turns off (`onActiveChange(false)`): what is falling finishes and no new particles spawn.
 
 <CodeBlock
   marginTop="16"
@@ -950,7 +950,7 @@ Use `trigger="click"` to toggle emission on click.
   ]}
 />
 
-Use `trigger="manual"` with the `active` prop to control emission from parent state.
+Drive it from parent state with `active` and `onActiveChange`, whatever the trigger.
 
 <CodeBlock
   marginTop="16"
@@ -976,7 +976,7 @@ export function Demo() {
         <ToggleButton onClick={() => setOn((v) => !v)}>
           {on ? "Stop" : "Start"}
         </ToggleButton>
-        <WeatherFx height="16rem" type="snow" trigger="manual" active={on} intensity={60} />
+        <WeatherFx height="16rem" type="snow" active={on} onActiveChange={setOn} intensity={60} />
       </Row>
     );
 }
@@ -989,7 +989,9 @@ export function Demo() {
 
 ## Performance
 
-WeatherFx automatically detects low-end devices and the `prefers-reduced-motion` system setting. When either is detected, the animation is completely disabled (no particles are rendered). You can override this with the `reducedMotion` prop.
+WeatherFx draws with time-based motion at your screen's pixel ratio (up to 2x), sleeps once the weather has stopped or is scrolled off screen, and picks its colours up again when the theme changes. Lightning never strikes more than twice a second, whatever the `intensity`, to stay clear of flashing that can trigger seizures.
+
+Under the `prefers-reduced-motion` system setting, and on low-end devices, rain, snow and leaves show a still frame instead of animating; lightning shows nothing. Override this with the `reducedMotion` prop.
 
 See [useReducedMotion](/hooks/useReducedMotion) for details.
 
@@ -1004,8 +1006,10 @@ See [useReducedMotion](/hooks/useReducedMotion) for details.
     intensity: "How much of it there is.",
     angle: "Fall angle, in degrees.",
     duration: "Stop after this long, in milliseconds. Runs indefinitely if unset.",
-    trigger: "What starts it. \"manual\" hands control to active.",
-    active: "Run it, when trigger is \"manual\".",
+    trigger: "What starts it by itself: mount, hover (a tap on touch screens) or click (toggles).",
+    active: "Whether the weather runs. Controlled; pair with onActiveChange.",
+    defaultActive: "The first value of active when uncontrolled. Defaults to trigger === \"mount\".",
+    onActiveChange: "Called when it starts or stops by hover, click or duration.",
     reducedMotion: "\"auto\" follows the reader's system setting, which is the right default for anything ambient.",
     children: "Content drawn above the weather.",
   }}

@@ -13,12 +13,14 @@
  "props": {
   "type": "WeatherType = rain",
   "speed": "Speed",
-  "colors": "string[] = [\"brand-solid-medium\"]",
+  "colors": "string[]",
   "intensity": "number = 50",
   "angle": "number = 0",
   "duration": "number",
-  "trigger": "\"mount\" | \"hover\" | \"click\" | \"manual\" = mount",
-  "active": "boolean = false",
+  "trigger": "\"mount\" | \"hover\" | \"click\" = mount",
+  "active": "boolean",
+  "defaultActive": "boolean",
+  "onActiveChange": "(active: boolean) => void",
   "reducedMotion": "boolean | \"auto\" = auto",
   "children": "React.ReactNode"
  },

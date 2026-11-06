@@ -102,3 +102,25 @@ describe("idempotence", () => {
     assert.deepEqual(run(once).hits, []);
   });
 });
+
+describe("CelebrationFx and WeatherFx: active is state, trigger=\"manual\" is gone", () => {
+  const fx = (tag, attrs) => run(`${core(tag)}<${tag} ${attrs} />`);
+  const line = (tag, attrs) => fx(tag, attrs).out.split("\n").find((l) => l.startsWith(`<${tag}`));
+
+  it("drops the manual trigger where active drives it", () => {
+    assert.equal(line("CelebrationFx", 'trigger="manual" active={on} duration={4000}'), "<CelebrationFx active={on} duration={4000} />");
+    assert.equal(line("WeatherFx", 'type="snow" trigger="manual" active={on}'), '<WeatherFx type="snow" active={on} />');
+  });
+  it("keeps WeatherFx off at mount when the manual trigger had no active", () => {
+    assert.equal(line("WeatherFx", 'trigger="manual"'), "<WeatherFx defaultActive={false} />");
+  });
+  it("drops an active 2.x never read", () => {
+    assert.equal(line("WeatherFx", 'trigger="hover" active={false}'), '<WeatherFx trigger="hover" />');
+    assert.equal(line("CelebrationFx", "active duration={3000}"), "<CelebrationFx duration={3000} />");
+  });
+  it("reports a computed trigger and a celebration with no duration", () => {
+    assert.match(fx("WeatherFx", "trigger={mode}").warnings.join("\n"), /trigger is computed/);
+    assert.match(fx("CelebrationFx", 'type="fireworks"').warnings.join("\n"), /ends after 3000 ms/);
+    assert.doesNotMatch(fx("CelebrationFx", 'trigger="click"').warnings.join("\n"), /ends after 3000 ms/);
+  });
+});

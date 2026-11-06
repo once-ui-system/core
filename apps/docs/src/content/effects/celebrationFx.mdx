@@ -78,7 +78,7 @@ Choose between `confetti` (falling particles) or `fireworks` (explosive bursts).
 
 ## Trigger
 
-Control when the celebration starts with `mount` (automatic), `hover` (on mouse enter), `click` (fires from click position), or `manual` (controlled via `active` prop).
+Control when the celebration starts with `mount` (on load), `hover` (while the pointer is over it; a tap on touch screens) or `click` (a burst from the click position). A celebration runs for `duration` (3000 ms by default), then what is in the air settles.
 
 <CodeBlock
   marginTop="16"
@@ -256,7 +256,7 @@ Control particle density with `intensity` and animation speed with `speed`.
   ]}
 />
 
-Control the celebration programmatically using `trigger="manual"` and the `active` prop.
+Start it from your own state with `active` and `onActiveChange`, like any other stateful component. `onActiveChange(false)` arrives when `duration` ends, so the button below can fire again.
 
 <CodeBlock
   marginTop="16"
@@ -284,14 +284,11 @@ export function demo() {
         <CelebrationFx
           height="16rem"
           type="fireworks"
-          trigger="manual"
           active={active}
+          onActiveChange={setActive}
         />
         <Button
-          onClick={() => {
-            setActive(true);
-            setTimeout(() => setActive(false), 3000);
-          }}
+          onClick={() => setActive(true)}
         >
           Launch Fireworks
         </Button>
@@ -367,7 +364,9 @@ Use `CelebrationFx` as a wrapper to overlay celebrations behind any content.
 
 ## Performance
 
-CelebrationFx automatically detects low-end devices and the `prefers-reduced-motion` system setting. When either is detected, the animation is completely disabled. You can override this with the `reducedMotion` prop.
+CelebrationFx draws with time-based motion at your screen's pixel ratio (up to 2x), sleeps when everything has landed or the effect is scrolled off screen, and picks its colours up again when the theme changes.
+
+Under the `prefers-reduced-motion` system setting, and on low-end devices, it shows a still frame instead of animating: scattered confetti or a frozen burst while `active`. Override this with the `reducedMotion` prop.
 
 See [useReducedMotion](/hooks/useReducedMotion) for details.
 
@@ -380,11 +379,13 @@ The `CelebrationFx` component extends all layout props from `Flex` plus the foll
   describe={{
     type: "Which celebration to render.",
     speed: "Motion multiplier: 1 is the default. \"slow\", \"medium\" and \"fast\" are 0.5, 1 and 2.",
-    colors: "Palette for the pieces.",
-    intensity: "How much of it there is.",
-    duration: "Stop after this long, in milliseconds (seconds until 3.0). Runs indefinitely if unset.",
-    trigger: "What starts it. \"manual\" hands control to active.",
-    active: "Run it, when trigger is \"manual\".",
+    colors: "Palette: tokens (brand-solid-medium, accent-weak), custom properties or CSS colours.",
+    intensity: "How much of it there is: pieces per cannon, or sparks per shell. 0 to 200.",
+    duration: "How long it runs once started, in milliseconds. 0 or Infinity runs until active turns off.",
+    trigger: "What starts it by itself: mount, hover or click.",
+    active: "Whether it is celebrating. Controlled; pair with onActiveChange.",
+    defaultActive: "The first value of active when uncontrolled. Defaults to trigger === \"mount\".",
+    onActiveChange: "Called when it starts (hover) or ends (duration, pointer leaving).",
     reducedMotion: "\"auto\" follows the reader's system setting, which is the right default for anything ambient.",
     children: "Content drawn above the celebration.",
   }}

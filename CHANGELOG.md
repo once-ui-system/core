@@ -235,6 +235,23 @@ entry below that had landed by then:
 
 ### Changed
 
+- **CelebrationFx and WeatherFx follow the state contract**: `active` / `defaultActive`
+  / `onActiveChange`, controlled only when `active` is set, with any `trigger`;
+  `trigger="manual"` is gone. `duration` ending, hover and click report through
+  `onActiveChange`. CelebrationFx ends after 3000 ms by default (it ran until unmount);
+  `duration={0}` keeps it going. The codemod removes `trigger="manual"` and reports
+  celebrations with no `duration`.
+- **CelebrationFx and WeatherFx redrawn**: confetti fires from two cannons and tumbles
+  like paper, fireworks rise on a trail and burst into glowing sparks with a flash,
+  rain, snow and leaves fall in depth (near ones larger, faster and stronger), leaves
+  blend two colours by default, and lightning gets a bright core. On a light page the
+  glows stay flat instead of adding light. Motion is time-based (the same pace on 60
+  and 120 Hz screens), the canvas follows the device pixel ratio (to 2x, was always
+  2x) and its container's size, the loop sleeps once everything has settled or while
+  off screen, and colours take every form the other colour props do (`brand-weak`,
+  `--x`, `#fff`) and follow theme changes. Under reduced motion they show a still
+  frame instead of nothing (lightning shows nothing).
+
 - **2.x through 2.6 and main's unreleased fixes are in 3.0** (merged before the freeze):
   `Nav` icon rail, `Logo` monogram, `Mask` feather, `emphasis` on Flex and Grid,
   `LogoLoader`, stacked chat messages and image thumbnails, mesh, link and dismiss on
@@ -526,6 +543,18 @@ entry below that had landed by then:
   them); bundles list neighbouring props of one type on one line.
 
 ### Fixed
+
+- CelebrationFx: switching `type` mid-flight threw; fireworks were never cleaned up
+  while emitting (the list grew about three shells a second for as long as the page
+  stayed open); the hover, click and manual triggers dropped a wave of confetti at
+  mount; click bursts were never removed; a parent `onClick`, `onMouseEnter` or
+  `onMouseLeave` switched the trigger off. WeatherFx: switching `type` drew the old
+  particles as the new kind; lightning removed bolts while iterating them; a parent
+  handler switched the trigger off. Both: the loop ran forever after the effect ended,
+  restarted on every parent render (the default `colors` array was new each time), and
+  painted a frame before reduced motion was read.
+- WeatherFx lightning never strikes more than twice a second, whatever the
+  `intensity` (it reached 3.3 a second at 100, over the WCAG 2.3.1 flash threshold).
 
 - **`Fade` no longer fades its own children.** The gradient, blur and pattern are
   painted on a layer behind them, so a button or label inside a Fade stays

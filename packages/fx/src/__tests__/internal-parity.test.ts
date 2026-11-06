@@ -30,6 +30,12 @@ describe("copies of core's internal helpers", () => {
     );
   });
 
+  it("useControllableState is core's, word for word", () => {
+    expect(body(path.resolve(__dirname, "../internal/useControllableState.ts"))).toBe(
+      body(path.join(CORE, "internal/useControllableState.ts")),
+    );
+  });
+
   it("cannotHover is core's, word for word", () => {
     expect(body(path.resolve(__dirname, "../internal/pointer.ts"))).toBe(
       body(path.join(CORE, "internal/pointer.ts")),
