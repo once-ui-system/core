@@ -64,6 +64,10 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
         }}
         border="neutral-medium"
         background="surface"
+        // Clip to the rounded panel. The scrolling column inside clips only to
+        // its square box, so a Background glow behind a menu's header painted
+        // past the panel's rounded corners and over its border.
+        overflow="hidden"
         className={disabled ? "cursor-not-allowed" : undefined}
         style={{ opacity: disabled ? 0.6 : undefined }}
         // Only when it is: "false" is the default, and on a panel with no
