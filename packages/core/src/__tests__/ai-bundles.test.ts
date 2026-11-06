@@ -46,9 +46,11 @@ describe("ai harness without spec.json", () => {
   // had to be cut to fit them. 3.0 adds 300 more, about 75 tokens, for
   // Sparkline and ChartSummary, which arrived with the catalog at 25,497.
   // The 2.x merge adds 300 more for LogoLoader, Logo's monogram and Map's
-  // globe, which brought it to 25,899.
+  // globe, which brought it to 25,899. The settings blocks (AccountSettings,
+  // SecuritySettings, OrganizationSettings, SettingsLayout) add 529 bytes,
+  // about 130 tokens, which brought it to 26,428.
   it("keeps the catalog small enough to load on every task", () => {
-    expect(statSync(path.join(AI, "catalog.json")).size).toBeLessThan(26_100);
+    expect(statSync(path.join(AI, "catalog.json")).size).toBeLessThan(26_500);
   });
 });
 
