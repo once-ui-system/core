@@ -236,14 +236,14 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - placement?: Placement
 - trigger: ReactNode
 - children?: ReactNode
-- openOn?: "click" | "contextmenu" = click
+- openOn?: "click" | "hover" | "contextmenu" = click
+- openDelay, closeDelay, optionsCount?: number
 - selectedOption, className, dropdownId?: string
 - style?: React.CSSProperties
 - onSelect?: (value: string) => void
 - onOpenChange?: (open: boolean) => void
 - navigationLayout?: NavigationLayout
 - columns?: number | string
-- optionsCount?: number
 - onFocusCapture, onBlurCapture?: React.FocusEventHandler<HTMLDivElement>
 
 ### Option

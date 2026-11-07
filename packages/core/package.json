@@ -353,6 +353,10 @@
       "types": "./dist/components/StyleScope.d.ts",
       "default": "./dist/components/StyleScope.js"
     },
+    "./components/Submenu": {
+      "types": "./dist/components/Submenu.d.ts",
+      "default": "./dist/components/Submenu.js"
+    },
     "./components/SubmitButton": {
       "types": "./dist/components/SubmitButton.d.ts",
       "default": "./dist/components/SubmitButton.js"

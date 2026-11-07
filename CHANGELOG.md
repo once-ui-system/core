@@ -32,6 +32,21 @@ entry below that had landed by then:
 
 ### Added
 
+- **Nested menus: `Submenu`.** Put a `Submenu` among a Dropdown's Options (or
+  a context menu's) to open a nested menu, as deep as needed. It opens when the
+  pointer rests on it, on a click or tap, and with Right arrow, Enter or Space;
+  Left arrow or Escape closes one level and returns focus to its item. The
+  pointer can cut diagonally into an open submenu across the items below
+  without closing it. A pick at any depth reaches the Dropdown's `onSelect`.
+  With a Submenu inside, the panel is a `menu` of `menuitem`s and each item
+  carries `aria-haspopup`, `aria-expanded` and `aria-controls`.
+- **`Dropdown openOn="hover"`.** Opens when the pointer rests on the trigger
+  (`openDelay`, 100 ms) and closes once it has been away from the trigger and
+  every panel of the menu for `closeDelay` (300 ms). A hover-opened panel
+  leaves focus and page scroll alone; a click pins it, and the keyboard and
+  touch open it as a click does.
+- **Typeahead in menus and lists.** In an open Dropdown, context menu or
+  Submenu, typing the first letters of an item moves focus to it.
 - **`Select` draws a chevron.** A closed Select read as a text field unless a
   chevron was passed by hand. It now shows `chevronDown` by default, turned up
   while the list is open, and a press on it opens and closes the list like a

@@ -14,7 +14,7 @@ export interface DropdownTriggerState {
   /** The dropdown is open: the trigger's `aria-expanded`. */
   expanded: boolean;
   /** What opens: the trigger's `aria-haspopup`. */
-  haspopup: "listbox" | "grid" | "dialog";
+  haspopup: "listbox" | "grid" | "dialog" | "menu";
   /**
    * Called by a trigger that renders as a real button, so the wrapper stops
    * announcing itself as one around it. Returns the matching unregister.
