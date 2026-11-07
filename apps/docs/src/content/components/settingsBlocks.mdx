@@ -73,6 +73,23 @@ two-step code there is `123456`. An app's demo mode can use them too.
 - **Roles.** Owners and admins edit the organization; members see it read only
   and can leave. Deleting it asks for its address to be typed.
 
+## Where buttons go
+
+One rule for every row and dialog, so a button is always where the eye looks
+for it:
+
+- **Rows.** The value or status comes first, then a quiet action (`tertiary`,
+  such as Remove or Cancel change), then the row's one action (`secondary`,
+  such as Edit, Change or Set up) at the trailing edge. Rows never use a
+  primary button: a page of rows has no single main action.
+- **Committing.** The button that commits (Save, Send link, Verify, Delete) is
+  `primary`, with `tone="danger"` when it destroys something, and always last.
+  Cancel is `tertiary`, just before it. Inline edits and dialog footers follow
+  the same order; a dialog's step count sits at the footer's start.
+- **Narrow rows.** When a row is too narrow for both, the controls wrap under
+  the label and stay at the trailing edge, as core's `Setting` places them.
+- **One height.** Every control in the blocks is `size="s"`.
+
 ## The adapter
 
 Only `getAccount` is required. Leave a method out and its row is not shown.

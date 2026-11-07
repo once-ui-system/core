@@ -438,7 +438,7 @@ function TwoFactorSetting({ account, adapter }: { account: Account; adapter: Acc
                 {labels.twoFactor.turnOff}
               </Button>
             ) : (
-              <Button size="s" onClick={() => setStep("scan")}>
+              <Button size="s" variant="secondary" onClick={() => setStep("scan")}>
                 {labels.twoFactor.setUp}
               </Button>
             )}
