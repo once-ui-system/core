@@ -371,9 +371,78 @@
    "importFrom": "@once-ui-system/blocks",
    "kind": "function",
    "signature": "(value: unknown) => value is SectionType"
+  },
+  "useSettingsLabels": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "hook",
+   "signature": "(labels?: SettingsLabelsInput) => SettingsLabels",
+   "doc": "The labels in context, with a block's own `labels` prop over them."
+  },
+  "useAccount": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "hook",
+   "signature": "(adapter: AccountAdapter) => { account: Account | null; data: Account | null; error: unknown; loading: boolean; reload: () => Promise<Account | null>; update: (next: void | Account | undefined) => Promise<...>; setData: Dispatch<...>; }",
+   "doc": "The signed-in person's account, read through the adapter."
+  },
+  "useOrganization": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "hook",
+   "signature": "(adapter: OrganizationAdapter) => { organization: Organization | null; data: Organization | null; error: unknown; loading: boolean; reload: () => Promise<Organization | null>; update: (next: void | ... 1 more ... | undefined) => Promise<...>; setData: Dispatch<...>; }",
+   "doc": "The organization, read through the adapter."
+  },
+  "createDemoAccountAdapter": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "function",
+   "signature": "(options?: DemoAccountOptions) => AccountAdapter"
+  },
+  "createDemoOrganizationAdapter": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "function",
+   "signature": "(options?: DemoOrganizationOptions) => OrganizationAdapter"
+  },
+  "defaultSettingsLabels": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "SettingsLabels"
+  },
+  "settingsLabelsHu": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "SettingsLabels"
   }
  },
  "types": {
+  "Account": {
+   "id": "!string",
+   "email": "!string",
+   "emailVerified": "boolean",
+   "pendingEmail": "string | null",
+   "name": "string | null",
+   "username": "string | null",
+   "avatarUrl": "string | null",
+   "hasPassword": "boolean",
+   "passwordChangedAt": "string | null",
+   "createdAt": "string | null"
+  },
+  "AccountAdapter": {
+   "getAccount": "!() => Promise<Account>",
+   "updateProfile": "((patch: ProfilePatch) => Promise<void | Account>) | undefined",
+   "avatar": "{ /** Receives the image already cropped square and resized. Returns its URL. */ upload(file: Blob): Promise<string>; remove?(): Promise<void>; }",
+   "changeEmail": "((next: string, proof: Reauth) => Promise<void | { pending: string; }>) | undefined",
+   "cancelEmailChange": "(() => Promise<void>) | undefined",
+   "changePassword": "((next: string, proof: Reauth, options: { signOutOthers: boolean; }) => Promise<void>) | undefined",
+   "twoFactor": "{ enabled(): Promise<boolean>; enroll(proof: Reauth): Promise<TwoFactorEnrollment>; /** Confirms the first code. Returns backup codes when the provider has them. */ verify(code: string): Promise<{ backupCodes?: string[] } | void>; disable(code: string): Promise<void>; }",
+   "identities": "{ list(): Promise<Identity[]>; /** The providers people may connect, in the order they are shown. */ providers: Provider[]; /** Usually a redirect to the provider: it may never resolve. */ link(provider: string): Promise<void>; unlink(id: string): Promise<void>; }",
+   "sessions": "{ /** Leave out when the provider cannot list sessions (Supabase): only * \"sign out everywhere else\" is shown. */ list?(): Promise<Session[]>; revoke?(id: string): Promise<void>; revokeOthers(): Promise<void>; }",
+   "deleteAccount": "((proof: Reauth) => Promise<void>) | undefined"
+  },
   "AdapterImageProps": {
    "src": "!string",
    "alt": "!string",
@@ -495,6 +564,14 @@
    "height": "!number | CSSUnit",
    "axis": "!{ stroke: string; }",
    "tick": "!{ fill: string; fontSize: number; line: boolean; }"
+  },
+  "DemoAccountOptions": {
+   "account": "Partial<Account>",
+   "latency": "number"
+  },
+  "DemoOrganizationOptions": {
+   "organization": "Partial<Organization>",
+   "latency": "number"
   },
   "Density": [
    "normal",
@@ -631,6 +708,12 @@
    "wordmark",
    "world"
   ],
+  "Identity": {
+   "id": "!string",
+   "provider": "!string",
+   "detail": "string | null",
+   "connectedAt": "string | null"
+  },
   "InteractiveCursor": [
    "default",
    "pointer"
@@ -812,6 +895,25 @@
    "pageBackground": "ThemeColor",
    "surfaceBackground": "ThemeColor"
   },
+  "OrgRole": [
+   "string & {}",
+   "owner",
+   "admin",
+   "member"
+  ],
+  "Organization": {
+   "slug": "!string",
+   "name": "!string",
+   "logoUrl": "string | null",
+   "role": "!OrgRole"
+  },
+  "OrganizationAdapter": {
+   "getOrganization": "!() => Promise<Organization>",
+   "rename": "((name: string) => Promise<void | Organization>) | undefined",
+   "logo": "{ upload(file: Blob): Promise<string>; remove?(): Promise<void>; }",
+   "leave": "(() => Promise<void>) | undefined",
+   "delete": "(() => Promise<void>) | undefined"
+  },
   "PhotoViewerItem": {
    "src": "!string",
    "alt": "!string",
@@ -819,6 +921,15 @@
    "caption": "string",
    "width": "number",
    "height": "number"
+  },
+  "ProfilePatch": {
+   "name": "string",
+   "username": "string"
+  },
+  "Provider": {
+   "id": "!string",
+   "label": "!string",
+   "icon": "IconName"
   },
   "ReactionMotion": [
    "pop",
@@ -839,6 +950,10 @@
    "src": "string",
    "motion": "ReactionMotion"
   },
+  "Reauth": [
+   "{ password: string; }",
+   "{ recentSignIn: true; }"
+  ],
   "ResolvedTheme": [
    "dark",
    "light"
@@ -927,6 +1042,54 @@
    "cta",
    "contact"
   ],
+  "Session": {
+   "id": "!string",
+   "item": "!HTMLElement",
+   "label": "!string",
+   "source": "!SortableList",
+   "sourceIndex": "!number",
+   "target": "!SortableList",
+   "targetIndex": "!number",
+   "mode": "!\"pointer\" | \"keyboard\"",
+   "rect": "!DOMRect",
+   "start": "!{ x: number; y: number }",
+   "pointer": "!{ x: number; y: number }",
+   "clone": "!HTMLElement",
+   "line": "!HTMLElement",
+   "shifts": "!Map<HTMLElement, { value: number; vertical: boolean }>",
+   "touched": "!Set<HTMLElement>",
+   "reduced": "!boolean",
+   "frame": "!number",
+   "hover": "!{ el: Element | null; since: number; fired: boolean }",
+   "settling": "!boolean",
+   "teardown": "!Array<() => void>"
+  },
+  "SettingsLabels": {
+   "common": "!{ edit: string; add: string; save: string; cancel: string; close: string; next: string; back: string; notSet: string; saved: string; failed: string; copy: string; copied: string; currentPassword: string; /** Shown instead of the password field when the account has none. */ recentSignInNote: string; nav: string; }",
+   "sections": "!{ profile: string; security: string; organization: string; }",
+   "profile": "!{ title: string; description: string; photo: string; photoDescription: string; upload: string; remove: string; photoSaved: string; photoRemoved: string; name: string; nameDescription: string; username: string; usernameDescription: string; email: string; emailDescription: string; verified: string; unverified: string; pending: (address: string) => string; change: string; }",
+   "email": "!{ title: string; description: string; newEmail: string; send: string; sent: (address: string) => string; cancelChange: string; changeCancelled: string; }",
+   "password": "!{ row: string; rowDescription: (changedAt?: string) => string; set: string; change: string; title: string; description: string; newPassword: string; tooShort: string; signOutOthers: string; changed: string; }",
+   "twoFactor": "!{ row: string; rowDescription: string; on: string; off: string; setUp: string; turnOff: string; step: (step: number, of: number) => string; scanTitle: string; scanDescription: string; qrAlt: string; orEnterKey: string; codeTitle: string; codeDescription: string; verify: string; wrongCode: string; backupTitle: string; backupDescription: string; done: string; enabled: string; disableTitle: string; disableDescription: string; disabled: string; }",
+   "identities": "!{ title: string; connect: string; disconnect: string; notConnected: string; connectedSince: (date: string) => string; disconnected: string; lastMethod: string; }",
+   "sessions": "!{ title: string; thisDevice: string; signOut: string; signOutOthers: string; signOutOthersDescription: string; signedOut: string; othersSignedOut: string; }",
+   "danger": "!{ title: string; deleteAccount: string; deleteAccountDescription: string; deleteAccountTitle: string; deleteAccountBody: string; deleteAccountConfirm: string; }",
+   "organization": "!{ title: string; description: string; readOnly: string; logo: string; logoDescription: string; name: string; nameDescription: string; address: string; addressDescription: string; leave: string; leaveDescription: string; leaveTitle: string; leaveBody: string; delete: string; deleteDescription: string; deleteTitle: string; deleteBody: string; typeToConfirm: (slug: string) => string; }",
+   "formatDate": "!(iso: string) => string"
+  },
+  "SettingsLabelsInput": {
+   "common": "{ edit: string; add: string; save: string; cancel: string; close: string; next: string; back: string; notSet: string; saved: string; failed: string; copy: string; copied: string; currentPassword: string; /** Shown instead of the password field when the account has none. */ recentSignInNote: string; nav: string; }",
+   "sections": "{ profile: string; security: string; organization: string; }",
+   "profile": "{ title: string; description: string; photo: string; photoDescription: string; upload: string; remove: string; photoSaved: string; photoRemoved: string; name: string; nameDescription: string; username: string; usernameDescription: string; email: string; emailDescription: string; verified: string; unverified: string; pending: (address: string) => string; change: string; }",
+   "email": "{ title: string; description: string; newEmail: string; send: string; sent: (address: string) => string; cancelChange: string; changeCancelled: string; }",
+   "password": "{ row: string; rowDescription: (changedAt?: string) => string; set: string; change: string; title: string; description: string; newPassword: string; tooShort: string; signOutOthers: string; changed: string; }",
+   "twoFactor": "{ row: string; rowDescription: string; on: string; off: string; setUp: string; turnOff: string; step: (step: number, of: number) => string; scanTitle: string; scanDescription: string; qrAlt: string; orEnterKey: string; codeTitle: string; codeDescription: string; verify: string; wrongCode: string; backupTitle: string; backupDescription: string; done: string; enabled: string; disableTitle: string; disableDescription: string; disabled: string; }",
+   "identities": "{ title: string; connect: string; disconnect: string; notConnected: string; connectedSince: (date: string) => string; disconnected: string; lastMethod: string; }",
+   "sessions": "{ title: string; thisDevice: string; signOut: string; signOutOthers: string; signOutOthersDescription: string; signedOut: string; othersSignedOut: string; }",
+   "danger": "{ title: string; deleteAccount: string; deleteAccountDescription: string; deleteAccountTitle: string; deleteAccountBody: string; deleteAccountConfirm: string; }",
+   "organization": "{ title: string; description: string; readOnly: string; logo: string; logoDescription: string; name: string; nameDescription: string; address: string; addressDescription: string; leave: string; leaveDescription: string; leaveTitle: string; leaveBody: string; delete: string; deleteDescription: string; deleteTitle: string; deleteBody: string; typeToConfirm: (slug: string) => string; }",
+   "formatDate": "(iso: string) => string"
+  },
   "SolidStyle": [
    "flat",
    "plastic"
@@ -936,6 +1099,40 @@
    "contrast",
    "inverse"
   ],
+  "SortableAnnouncement": {
+   "item": "!string",
+   "position": "!number",
+   "total": "!number",
+   "list": "string"
+  },
+  "SortableDirection": [
+   "row",
+   "column"
+  ],
+  "SortableLabels": {
+   "instructions": "!string",
+   "handle": "!(item?: string) => string",
+   "lifted": "!(a: SortableAnnouncement) => string",
+   "moved": "!(a: SortableAnnouncement) => string",
+   "dropped": "!(a: SortableAnnouncement) => string",
+   "cancelled": "!(a: SortableAnnouncement) => string"
+  },
+  "SortableList": {
+   "el": "!HTMLElement",
+   "name": "!() => string",
+   "group": "!() => string",
+   "direction": "!() => SortableDirection",
+   "label": "!() => string | undefined",
+   "disabled": "!() => boolean",
+   "handle": "!() => boolean",
+   "labels": "!() => SortableLabels",
+   "reorder": "!(id: string, from: number, to: number) => void",
+   "move": "() => ((id: string, to: SortablePosition, from: SortablePosition) => void) | undefined"
+  },
+  "SortablePosition": {
+   "list": "!string",
+   "index": "!number"
+  },
   "StreamingOptions": {
    "initialData": "!T[]",
    "windowSize": "!number",
@@ -1075,6 +1272,11 @@
    "micro",
    "macro"
   ],
+  "TwoFactorEnrollment": {
+   "secret": "!string",
+   "uri": "!string",
+   "qrCode": "string"
+  },
   "UseHotkeysOptions": {
    "enabled": "boolean",
    "allowWhileTyping": "boolean",

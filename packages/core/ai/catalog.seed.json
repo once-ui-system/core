@@ -14,6 +14,11 @@
     "tags": ["content", "marketing", "disclosure"],
     "pairsWith": ["Column", "Text", "Heading"]
   },
+  "AccountSettings": {
+    "purpose": "Settings: photo, name, email via an AccountAdapter",
+    "tags": ["settings", "auth"],
+    "pairsWith": ["SettingsLayout", "SecuritySettings"]
+  },
   "AdapterProvider": {
     "purpose": "The app's link and image components for every Once UI link and image; core/next's LayoutProvider installs Next's",
     "tags": ["provider"],
@@ -630,6 +635,11 @@
     "tags": ["form", "auth"],
     "pairsWith": ["Dialog", "Column", "Button"]
   },
+  "OrganizationSettings": {
+    "purpose": "Settings: org logo, name, leave or delete via an adapter",
+    "tags": ["settings"],
+    "pairsWith": ["SettingsLayout"]
+  },
   "Pagination": {
     "purpose": "Page buttons in a nav landmark with previous/next, ellipses and an optional per-page select",
     "tags": ["navigation", "data"],
@@ -731,6 +741,11 @@
     "tags": ["marketing"],
     "pairsWith": ["HeroSection"]
   },
+  "SecuritySettings": {
+    "purpose": "Settings: password, 2FA, devices, deletion via an AccountAdapter",
+    "tags": ["settings", "auth"],
+    "pairsWith": ["SettingsLayout", "AccountSettings"]
+  },
   "SegmentedControl": {
     "purpose": "Pick one of 2–5 options from a row of buttons (billing period, view mode)",
     "tags": ["control", "dashboard"],
@@ -745,6 +760,17 @@
     "purpose": "Settings row: label and description left, one control right; `axes` for X/Y pairs, `control` and `open` for a group",
     "tags": ["settings", "form"],
     "pairsWith": ["Switch", "Select", "Slider", "Tooltip"]
+  },
+  "SettingsLabelsProvider": {
+    "partOf": "SettingsLayout",
+    "purpose": "One labels object for the settings blocks below it (settingsLabelsHu: Hungarian)",
+    "tags": ["settings"],
+    "pairsWith": ["SettingsLayout"]
+  },
+  "SettingsLayout": {
+    "purpose": "Settings page: section tabs around the settings blocks",
+    "tags": ["settings", "navigation"],
+    "pairsWith": ["AccountSettings", "SecuritySettings"]
   },
   "ShineFx": {
     "purpose": "Shine sweeping across text; speed in ms",
