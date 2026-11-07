@@ -9,6 +9,17 @@ import styles from "./SegmentedControl.module.scss";
 import { Text } from "./Text";
 import { ToggleButton, type ToggleButtonProps } from "./ToggleButton";
 
+/** The rail's radius for options of this size (or radius) inside 4px of padding. */
+function railRadius(
+  first: { size?: ToggleButtonProps["size"]; radius?: ToggleButtonProps["radius"] } | undefined,
+  compact: boolean | undefined,
+) {
+  const inner = first?.radius ?? first?.size ?? "m";
+  if (compact || inner === "none") return "l" as const;
+  if (inner === "full") return "full" as const;
+  return `${inner}-4` as const;
+}
+
 const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 interface ButtonOption extends Omit<ToggleButtonProps, "selected"> {
@@ -235,7 +246,10 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
         style={scroll ? { minWidth: "max-content" } : { minWidth: 0 }}
         gap={compact ? "-1" : "2"}
         padding={compact ? "0" : "4"}
-        radius="l"
+        // The rail's corners follow the options inside it: their radius plus
+        // the 4px padding, so the gap round a selected option stays even at
+        // every size. A fixed "l" left small options with a too-round rail.
+        radius={railRadius(buttons[0], compact)}
         border={compact ? undefined : "neutral-alpha-weak"}
       >
         {buttons.map(({ onClick, description, ...button }, index) => {

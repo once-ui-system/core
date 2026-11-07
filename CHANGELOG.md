@@ -15,6 +15,9 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **`SegmentedControl`'s rail follows its options' corners.** Its radius was a fixed `l`,
+  so small options sat in a rail that was too round. It is now the options' radius plus the
+  4px padding (`s-4`, `m-4`, `l-4`), so the gap round the selected option stays even.
 - **Dropdowns clip their content to their rounded corners.** A `Background` glow behind a
   menu's header (as in Stack's account menu) filled the panel's top corners square, past
   the rounded edge. The panel now hides what falls outside its radius.
