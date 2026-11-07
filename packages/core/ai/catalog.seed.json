@@ -208,9 +208,9 @@
     "pairsWith": ["NavItem", "Column", "Button"]
   },
   "Dropdown": {
-    "purpose": "Trigger and the floating menu it opens, with arrow keys; openOn=\"contextmenu\" for right-click (2.x ContextMenu)",
+    "purpose": "Trigger and the floating menu it opens, with arrow keys; openOn=\"hover\" or \"contextmenu\" (2.x ContextMenu)",
     "tags": ["overlay", "navigation", "action"],
-    "pairsWith": ["Option", "Button", "Column"]
+    "pairsWith": ["Option", "Submenu", "Button", "Column"]
   },
   "Effect": {
     "purpose": "One slot for the interchangeable ambient effects (blob, matrix, weather, particle, celebration)",
@@ -954,6 +954,11 @@
     "purpose": "Site colours, theme and fonts on one subtree",
     "tags": ["theme", "layout"],
     "pairsWith": ["ThemeProvider", "Column"]
+  },
+  "Submenu": {
+    "purpose": "Item in a Dropdown or context menu that opens a nested menu on hover, click or Right arrow",
+    "tags": ["overlay", "navigation", "action"],
+    "pairsWith": ["Dropdown", "Option"]
   },
   "SubmitButton": {
     "purpose": "Submit Button that shows a spinner and ignores repeat presses while its Form's async onSubmit runs",

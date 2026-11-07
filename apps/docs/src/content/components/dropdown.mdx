@@ -1,7 +1,7 @@
 ---
 title: "Dropdown"
 summary: "A trigger and the floating panel it opens: menus of options, pickers and selectors, and right-click context menus."
-updatedAt: "2026-10-11"
+updatedAt: "2026-11-07"
 docs: "once-ui/components/dropdown.mdx"
 github: "components/Dropdown.tsx"
 navLabel: "Dropdown"
@@ -229,6 +229,64 @@ dropdown opens from the keyboard as well as the mouse. There is no need to add
 `type="button"` or an empty `onClick` to make it one. A disabled trigger does not
 open the dropdown.
 
+## Nested menus
+
+Put a `Submenu` among the Options to nest a menu: its children are the items of the next level, and a Submenu can hold another. A pick at any depth reaches the Dropdown's `onSelect` and closes the whole menu, as any pick does. Submenus work in a context menu (`openOn="contextmenu"`) the same way.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth height="16rem" horizontal="center" vertical="start">
+      <Dropdown openOn="hover" trigger={<Button variant="secondary" suffixIcon="chevronDown">File</Button>}><Column padding="4" gap="2" minWidth="12rem">
+    <Option value="new" label="New file" prefix={<Icon size="xs" name="document" onBackground="neutral-weak" />} />
+    <Submenu label="Share" prefix={<Icon size="xs" name="send" onBackground="neutral-weak" />}>
+      <Option value="email" label="Email" />
+      <Option value="link" label="Copy link" />
+      <Submenu label="Export as">
+        <Option value="pdf" label="PDF" />
+        <Option value="png" label="PNG" />
+        <Option value="svg" label="SVG" />
+      </Submenu>
+    </Submenu>
+    <Option value="rename" label="Rename" prefix={<Icon size="xs" name="edit" onBackground="neutral-weak" />} />
+    <Line marginY="2" />
+    <Option value="delete" label="Delete" danger prefix={<Icon size="xs" name="delete" onBackground="danger-medium" />} />
+  </Column></Dropdown>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Dropdown openOn="hover" trigger={<Button variant="secondary" suffixIcon="chevronDown">File</Button>}><Column padding="4" gap="2" minWidth="12rem">
+    <Option value="new" label="New file" prefix={<Icon size="xs" name="document" onBackground="neutral-weak" />} />
+    <Submenu label="Share" prefix={<Icon size="xs" name="send" onBackground="neutral-weak" />}>
+      <Option value="email" label="Email" />
+      <Option value="link" label="Copy link" />
+      <Submenu label="Export as">
+        <Option value="pdf" label="PDF" />
+        <Option value="png" label="PNG" />
+        <Option value="svg" label="SVG" />
+      </Submenu>
+    </Submenu>
+    <Option value="rename" label="Rename" prefix={<Icon size="xs" name="edit" onBackground="neutral-weak" />} />
+    <Line marginY="2" />
+    <Option value="delete" label="Delete" danger prefix={<Icon size="xs" name="delete" onBackground="danger-medium" />} />
+  </Column></Dropdown>`,
+      language: "tsx",
+      label: "Submenu"
+    }
+  ]}
+/>
+
+A submenu opens when the pointer rests on its item for a moment (`openDelay`, 100 ms), on a click or tap, and with Right arrow, Enter or Space, which also move focus to its first item. Left arrow or Escape closes it and returns focus to its item; Escape on the first level then closes the menu. The pointer can cut diagonally from the item into the open submenu across the items below it without closing it, and the submenu opens on the other side, or shifts, near the edge of the screen. In right-to-left layouts the arrows swap.
+
+With a Submenu inside, the Dropdown's panel is a `menu`, its Options are `menuitem`s and its trigger says `aria-haspopup="menu"`. Each Submenu's item carries `aria-haspopup`, `aria-expanded` and `aria-controls`, and its panel is a `menu` named after it. In any menu or list, typing the first letters of an item moves to it.
+
+## Open on hover
+
+`openOn="hover"` also opens the panel when the pointer rests on the trigger (`openDelay`, 100 ms by default) and closes it once the pointer has been away from the trigger and every panel of the menu for `closeDelay` (300 ms), enough to cross the gap or overshoot an edge. A panel the pointer opened leaves focus on the page and does not lock scrolling. A click on the trigger pins it open, and from the keyboard (Enter, Space, or an arrow key while it is open) it behaves as a click-opened dropdown. Touch screens have no hover, so a tap opens it there. The example above opens on hover.
+
 ## Context menu
 
 `openOn="contextmenu"` opens the Dropdown at the pointer on right-click (or the context menu key) over its `trigger`, as a `menu` of `menuitem`s that stays on screen. `contents` renders no box around the trigger. It was `ContextMenu` in 2.x, which took the region as children and the menu as `dropdown`.
@@ -345,7 +403,9 @@ The menu opens at the pointer, or at the element when it is opened from the keyb
   describe={{
     trigger: "The element that opens the dropdown.",
     children: "What opens. Usually a Column of Options.",
-    openOn: "What opens it: a click on the trigger, or a right-click (\"contextmenu\") at the pointer.",
+    openOn: "What opens it: a click on the trigger, the pointer resting on it (\"hover\", a click still works), or a right-click (\"contextmenu\") at the pointer.",
+    openDelay: "With openOn=\"hover\": how long, in ms, the pointer rests on the trigger before it opens.",
+    closeDelay: "With openOn=\"hover\": how long, in ms, the pointer may be away from the trigger and its panels before it closes.",
     disabled: "With openOn=\"contextmenu\": the region does not open the menu, and is dimmed.",
     contents: "With openOn=\"contextmenu\": no box around the trigger (display: contents).",
     placement: "Which side of the trigger it opens on, and how it aligns.",
@@ -370,4 +430,20 @@ The menu opens at the pointer, or at the element when it is opened from the keyb
     ["style", "React.CSSProperties"],
     ["className", "string"]
   ]}
+/>
+### Submenu
+
+<PropsTable
+  component="Submenu"
+  describe={{
+    label: "The item's label in the menu around it. Also names the submenu.",
+    prefix: "Before the label: an icon, an avatar.",
+    description: "A second line under the label.",
+    suffix: "After the label. Defaults to a chevron pointing the way the submenu opens.",
+    disabled: "The item cannot open its submenu, and is skipped by the arrow keys.",
+    children: "The submenu's items: Options, more Submenus, Lines between groups.",
+    minWidth: "Lower bound on the submenu's width: a number is on the token scale (16 = 1rem), a string a CSS length.",
+    maxWidth: "Upper bound on the submenu's width: a number is on the token scale (16 = 1rem), a string a CSS length.",
+    openDelay: "How long, in ms, the pointer rests on the item before the submenu opens.",
+  }}
 />

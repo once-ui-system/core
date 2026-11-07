@@ -9,7 +9,9 @@
   "placement": "Placement",
   "trigger": "!ReactNode",
   "children": "ReactNode",
-  "openOn": "\"click\" | \"contextmenu\" = click",
+  "openOn": "\"click\" | \"hover\" | \"contextmenu\" = click",
+  "openDelay": "number",
+  "closeDelay": "number",
   "disabled": "boolean",
   "contents": "boolean",
   "selectedOption": "string",
@@ -36,6 +38,7 @@
  ],
  "pairsWith": [
   "Option",
+  "Submenu",
   "Button",
   "Column"
  ],
