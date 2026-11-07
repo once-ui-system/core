@@ -13,6 +13,12 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Fixed
+
+- **Dropdowns clip their content to their rounded corners.** A `Background` glow behind a
+  menu's header (as in Stack's account menu) filled the panel's top corners square, past
+  the rounded edge. The panel now hides what falls outside its radius.
+
 ## [2.8.0] — 2026-11-06
 
 Minor: `SegmentedControl` gets a new `sliding` prop. It is on by default, which changes how
