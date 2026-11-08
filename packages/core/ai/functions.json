@@ -81,6 +81,34 @@
    "type": "{ readonly light: \"https://tiles.openfreemap.org/styles/positron\"; readonly dark: \"https://tiles.openfreemap.org/styles/dark\"; }",
    "doc": "OpenFreeMap: OpenStreetMap vector tiles with no key, no account and no view limit, commercial use included."
   },
+  "resolveSceneColor": {
+   "group": "scene",
+   "importFrom": "@once-ui-system/core/scene",
+   "kind": "function",
+   "signature": "(color: SceneColor, element: Element | null) => { r: number; g: number; b: number; a: number }",
+   "doc": "A scene colour as sRGB channels from 0 to 1 and an alpha, resolved in the theme `element` is drawn in."
+  },
+  "sceneColorVariable": {
+   "group": "scene",
+   "importFrom": "@once-ui-system/core/scene",
+   "kind": "function",
+   "signature": "(color: SceneColor) => string | null",
+   "doc": "The CSS custom property a scene colour reads, or null for a plain CSS colour."
+  },
+  "useScene": {
+   "group": "scene",
+   "importFrom": "@once-ui-system/core/scene",
+   "kind": "hook",
+   "signature": "() => SceneContextValue",
+   "doc": "The scene these components sit in."
+  },
+  "useSceneFrame": {
+   "group": "scene",
+   "importFrom": "@once-ui-system/core/scene",
+   "kind": "hook",
+   "signature": "(callback: (frame: SceneFrame) => void) => void",
+   "doc": "Runs `callback` before every frame, for animation: spin a part, follow a value."
+  },
   "useArrowNavigation": {
    "group": "hooks",
    "kind": "hook",
@@ -495,6 +523,13 @@
    "{ type: \"item\"; item: T; position: LngLat; }",
    "{ type: \"cluster\"; id: string; items: T[]; position: LngLat; }"
   ],
+  "Color": [
+   "string",
+   "number",
+   "ColorInstance",
+   "ArrayLike<number>",
+   "Record<string, any>"
+  ],
   "CursorPresetValue": [
    "rounded",
    "soft",
@@ -863,6 +898,55 @@
    "95",
    "105"
   ],
+  "SceneColor": [
+   "string & {}",
+   "neutral-strong",
+   "neutral-medium",
+   "neutral-weak",
+   "brand-strong",
+   "brand-medium",
+   "brand-weak",
+   "accent-strong",
+   "accent-medium",
+   "accent-weak",
+   "info-strong",
+   "info-medium",
+   "info-weak",
+   "danger-strong",
+   "danger-medium",
+   "danger-weak",
+   "warning-strong",
+   "warning-medium",
+   "warning-weak",
+   "success-strong",
+   "success-medium",
+   "success-weak",
+   "`--${string}`"
+  ],
+  "SceneContextValue": {
+   "three": "!ThreeModule",
+   "scene": "!Three.Scene",
+   "camera": "!Three.PerspectiveCamera",
+   "renderer": "!Three.WebGLRenderer",
+   "container": "!HTMLDivElement",
+   "invalidate": "!() => void",
+   "color": "!(color: SceneColor) => { color: Three.Color; alpha: number }",
+   "themeVersion": "!number",
+   "theme": "!\"light\" | \"dark\"",
+   "reducedMotion": "!boolean",
+   "onFrame": "!(callback: (frame: SceneFrame) => void) => () => void",
+   "addPickable": "!(object: Three.Object3D, handlers: ScenePointerHandlers) => () => void",
+   "loadModel": "!(src: string) => Promise<Three.Object3D>"
+  },
+  "SceneFrame": {
+   "delta": "!number",
+   "elapsed": "!number"
+  },
+  "ScenePointerHandlers": {
+   "onClick": "() => void",
+   "onPointerEnter": "() => void",
+   "onPointerLeave": "() => void"
+  },
   "SchemeRampWeight": [
    "100",
    "200",
@@ -1070,6 +1154,7 @@
    "Partial<Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string>>",
    "SchemeScaleByTheme"
   ],
+  "ThreeModule": "typeof import(\"three\")",
   "ToastContextProps": {
    "toasts": "!Toast[]",
    "addToast": "!(toast: Omit<Toast, \"id\"> | LegacyToast) => string",

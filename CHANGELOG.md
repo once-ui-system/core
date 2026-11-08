@@ -11,6 +11,18 @@ Entries before 1.7.13 are reconstructed from GitHub releases and git history and
 incomplete; reconciling them against actual npm release history is a scheduled roadmap
 item (see `ROADMAP.md`, Week 4).
 
+## [3.1.0] - Unreleased
+
+### Added
+
+- `@once-ui-system/core/scene`: `Scene`, a 3D viewport on three.js that wears the
+  theme, with `SceneMesh`, `SceneGroup`, `SceneModel` (glTF), `SceneLabel` (HTML pinned
+  to a 3D point), `useSceneFrame` and `useScene`. Token colours (`color="brand-strong"`)
+  follow the brand, accent and neutral; lights, floor shadow and grid follow light and
+  dark. Orbit, turntable or fixed camera; draws on demand and pauses off screen, in hidden
+  tabs and for reduced motion. `three` is an optional peer, loaded only when a scene
+  renders. Non-breaking.
+
 ## [3.0.0] - Unreleased
 
 Breaking. Built on the `feat/3-0-breaking-cleanup` branch; [MIGRATING.md](MIGRATING.md#2x--30)

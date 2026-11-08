@@ -473,6 +473,10 @@
       "types": "./dist/modules/map/index.d.ts",
       "default": "./dist/modules/map/index.js"
     },
+    "./scene": {
+      "types": "./dist/modules/scene/index.d.ts",
+      "default": "./dist/modules/scene/index.js"
+    },
     "./mdx": {
       "types": "./dist/modules/mdx/index.d.ts",
       "default": "./dist/modules/mdx/index.js"
@@ -516,7 +520,8 @@
     "next": ">=15.5",
     "prismjs": "^1.30.0",
     "react": ">=19",
-    "react-dom": ">=19"
+    "react-dom": ">=19",
+    "three": ">=0.160.0"
   },
   "peerDependenciesMeta": {
     "next": {
@@ -530,6 +535,9 @@
     },
     "compressorjs": {
       "optional": true
+    },
+    "three": {
+      "optional": true
     }
   },
   "devDependencies": {
@@ -542,6 +550,7 @@
     "@types/node": "26.1.2",
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
+    "@types/three": "0.186.0",
     "@vitest/ui": "^4.1.12",
     "axe-core": "^4.10.3",
     "esbuild": "0.27.7",
@@ -551,6 +560,7 @@
     "react-icons": "^5.7.0",
     "rimraf": "^6.1.3",
     "sass": "^1.77.6",
+    "three": "0.186.1",
     "typescript": "6.0.3",
     "vite": "^7.3.7",
     "vitest": "^4.1.12"

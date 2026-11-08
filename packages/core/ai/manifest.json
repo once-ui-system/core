@@ -125,6 +125,38 @@
     "MapViewport"
    ]
   },
+  "@once-ui-system/core/scene": {
+   "use": "Scene: a 3D viewport on three.js in theme colours, with SceneMesh, SceneGroup, SceneModel (glTF), SceneLabel (HTML pinned to a 3D point) and useSceneFrame for animation",
+   "peer": "three",
+   "exports": [
+    "Scene",
+    "SceneGroup",
+    "SceneLabel",
+    "SceneMesh",
+    "SceneModel",
+    "resolveSceneColor",
+    "sceneColorVariable",
+    "useScene",
+    "useSceneFrame"
+   ],
+   "types": [
+    "SceneCamera",
+    "SceneColor",
+    "SceneContextValue",
+    "SceneControls",
+    "SceneFrame",
+    "SceneGeometry",
+    "SceneGroupProps",
+    "SceneLabelProps",
+    "SceneLabels",
+    "SceneLighting",
+    "SceneMeshProps",
+    "SceneModelProps",
+    "SceneProps",
+    "SceneTransformProps",
+    "Vec3"
+   ]
+  },
   "@once-ui-system/core/mdx": {
    "use": "MDX content through Once UI: mdxComponents for next-mdx-remote or @next/mdx, createMdxComponents(overrides) to replace elements or register tags, and the Mdx* elements to wrap",
    "peer": "prismjs",

@@ -601,6 +601,13 @@
    "prefixIcon": "IconName",
    "startLineNumber": "number"
   },
+  "Color": [
+   "string",
+   "number",
+   "ColorInstance",
+   "ArrayLike<number>",
+   "Record<string, any>"
+  ],
   "ColorInputLabels": {
    "remove": "string",
    "adjustOpacity": "string",
@@ -1714,6 +1721,85 @@
    "95",
    "105"
   ],
+  "SceneCamera": {
+   "position": "Vec3",
+   "target": "Vec3",
+   "fov": "number"
+  },
+  "SceneColor": [
+   "string & {}",
+   "neutral-strong",
+   "neutral-medium",
+   "neutral-weak",
+   "brand-strong",
+   "brand-medium",
+   "brand-weak",
+   "accent-strong",
+   "accent-medium",
+   "accent-weak",
+   "info-strong",
+   "info-medium",
+   "info-weak",
+   "danger-strong",
+   "danger-medium",
+   "danger-weak",
+   "warning-strong",
+   "warning-medium",
+   "warning-weak",
+   "success-strong",
+   "success-medium",
+   "success-weak",
+   "`--${string}`"
+  ],
+  "SceneContextValue": {
+   "three": "!ThreeModule",
+   "scene": "!Three.Scene",
+   "camera": "!Three.PerspectiveCamera",
+   "renderer": "!Three.WebGLRenderer",
+   "container": "!HTMLDivElement",
+   "invalidate": "!() => void",
+   "color": "!(color: SceneColor) => { color: Three.Color; alpha: number }",
+   "themeVersion": "!number",
+   "theme": "!\"light\" | \"dark\"",
+   "reducedMotion": "!boolean",
+   "onFrame": "!(callback: (frame: SceneFrame) => void) => () => void",
+   "addPickable": "!(object: Three.Object3D, handlers: ScenePointerHandlers) => () => void",
+   "loadModel": "!(src: string) => Promise<Three.Object3D>"
+  },
+  "SceneControls": [
+   "none",
+   "orbit",
+   "turntable"
+  ],
+  "SceneFrame": {
+   "delta": "!number",
+   "elapsed": "!number"
+  },
+  "SceneGeometry": [
+   "circle",
+   "box",
+   "sphere",
+   "cylinder",
+   "cone",
+   "capsule",
+   "torus",
+   "plane",
+   "ring"
+  ],
+  "SceneLabels": {
+   "scene": "!string",
+   "unavailable": "!string"
+  },
+  "SceneLighting": [
+   "none",
+   "neutral",
+   "studio"
+  ],
+  "ScenePointerHandlers": {
+   "onClick": "() => void",
+   "onPointerEnter": "() => void",
+   "onPointerLeave": "() => void"
+  },
   "SchemeRampWeight": [
    "100",
    "200",
@@ -2446,6 +2532,7 @@
    "dark": "string",
    "light": "string"
   },
+  "ThreeModule": "typeof import(\"three\")",
   "ThumbnailItem": {
    "scaling": "number",
    "height": "SpacingToken | number | CSSUnit",
@@ -2514,6 +2601,9 @@
    "NumberFormatOptions",
    "(value: number) => string"
   ],
+  "Vec3": {
+   "[key: number]": "number"
+  },
   "VoiceState": [
    "idle",
    "listening",
@@ -5336,6 +5426,103 @@
     "closeLabel": "string = Close"
    }
   },
+  "Scene": {
+   "group": "scene",
+   "importFrom": "@once-ui-system/core/scene",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "camera": "SceneCamera",
+    "controls": "SceneControls",
+    "autoRotateSpeed": "number",
+    "zoom": "boolean",
+    "lighting": "SceneLighting",
+    "floor": "boolean | \"shadow\" | \"grid\"",
+    "shadows": "boolean",
+    "maxPixelRatio": "number",
+    "onSceneLoad": "(context: SceneContextValue) => void",
+    "labels": "Partial<SceneLabels>",
+    "children": "React.ReactNode"
+   }
+  },
+  "SceneGroup": {
+   "group": "scene",
+   "importFrom": "@once-ui-system/core/scene",
+   "props": {
+    "onClick": "() => void",
+    "onPointerEnter": "() => void",
+    "onPointerLeave": "() => void",
+    "position": "Vec3",
+    "rotation": "Vec3",
+    "scale": "number | Vec3",
+    "visible": "boolean",
+    "name": "string",
+    "children": "React.ReactNode"
+   }
+  },
+  "SceneLabel": {
+   "group": "scene",
+   "importFrom": "@once-ui-system/core/scene",
+   "props": {
+    "position": "Vec3 = [0, 0, 0]",
+    "anchor": "\"center\" | \"top\" | \"bottom\" | \"left\" | \"right\" = bottom",
+    "hideBehind": "boolean = true",
+    "children": "!React.ReactNode",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "SceneMesh": {
+   "group": "scene",
+   "importFrom": "@once-ui-system/core/scene",
+   "props": {
+    "onClick": "() => void",
+    "onPointerEnter": "() => void",
+    "onPointerLeave": "() => void",
+    "position": "Vec3",
+    "rotation": "Vec3",
+    "scale": "number | Vec3",
+    "visible": "boolean",
+    "name": "string",
+    "geometry": "SceneGeometry = box",
+    "args": "readonly number[]",
+    "color": "SceneColor = neutral-medium",
+    "emissive": "SceneColor",
+    "emissiveIntensity": "number",
+    "metalness": "number = 0.1",
+    "roughness": "number = 0.5",
+    "opacity": "number = 1",
+    "wireframe": "boolean = false",
+    "shadow": "boolean = true",
+    "children": "React.ReactNode"
+   }
+  },
+  "SceneModel": {
+   "group": "scene",
+   "importFrom": "@once-ui-system/core/scene",
+   "props": {
+    "onClick": "() => void",
+    "onPointerEnter": "() => void",
+    "onPointerLeave": "() => void",
+    "position": "Vec3",
+    "rotation": "Vec3",
+    "scale": "number | Vec3",
+    "visible": "boolean",
+    "name": "string",
+    "src": "!string",
+    "color": "SceneColor",
+    "shadow": "boolean = true",
+    "onLoad": "(model: Three.Object3D) => void",
+    "onError": "(error: unknown) => void",
+    "children": "React.ReactNode"
+   }
+  },
   "AdapterProvider": {
    "group": "contexts",
    "props": {
@@ -6649,6 +6836,34 @@
    "kind": "value",
    "type": "{ readonly light: \"https://tiles.openfreemap.org/styles/positron\"; readonly dark: \"https://tiles.openfreemap.org/styles/dark\"; }",
    "doc": "OpenFreeMap: OpenStreetMap vector tiles with no key, no account and no view limit, commercial use included."
+  },
+  "resolveSceneColor": {
+   "group": "scene",
+   "importFrom": "@once-ui-system/core/scene",
+   "kind": "function",
+   "signature": "(color: SceneColor, element: Element | null) => { r: number; g: number; b: number; a: number }",
+   "doc": "A scene colour as sRGB channels from 0 to 1 and an alpha, resolved in the theme `element` is drawn in."
+  },
+  "sceneColorVariable": {
+   "group": "scene",
+   "importFrom": "@once-ui-system/core/scene",
+   "kind": "function",
+   "signature": "(color: SceneColor) => string | null",
+   "doc": "The CSS custom property a scene colour reads, or null for a plain CSS colour."
+  },
+  "useScene": {
+   "group": "scene",
+   "importFrom": "@once-ui-system/core/scene",
+   "kind": "hook",
+   "signature": "() => SceneContextValue",
+   "doc": "The scene these components sit in."
+  },
+  "useSceneFrame": {
+   "group": "scene",
+   "importFrom": "@once-ui-system/core/scene",
+   "kind": "hook",
+   "signature": "(callback: (frame: SceneFrame) => void) => void",
+   "doc": "Runs `callback` before every frame, for animation: spin a part, follow a value."
   },
   "useArrowNavigation": {
    "group": "hooks",
