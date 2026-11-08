@@ -235,9 +235,6 @@ same chart with `animation={false}`.
     animationEasing: "A CSS easing: ease, ease-in-out, linear or a cubic-bezier().",
     reverseX: "Move the x axis to the top.",
     reverseY: "Move the y axis to the right.",
-    thresholds: "Limits across the value axis: { value } for a line, { from, to } for a band, with a label, a tone and the side that is out of limits.",
-    annotations: "Moments on the x axis: { x, label, tone }.",
-    yDomain: "The value axis' range, [min, max], in place of zero to the data's top.",
     grid: "Which grid lines to draw.",
     axis: "Which axes to label.",
     legend: "Legend position and visibility.",
@@ -246,4 +243,9 @@ same chart with `animation={false}`.
     error: "Render the error state instead of the chart.",
     border: "Panel border colour. false removes it.",
   }}
+  content={[
+    ["thresholds", "ChartThreshold[]", "-", "Limits across the value axis: { value } for a line, { from, to } for a band, with a label, a tone and the side that is out of limits."],
+    ["annotations", "ChartAnnotation[]", "-", "Moments on the x axis: { x, label, tone }."],
+    ["yDomain", "[number, number]", "-", "The value axis' range, [min, max], in place of zero to the data's top."],
+  ]}
 />
