@@ -152,6 +152,13 @@ entry below that had landed by then:
   `sectionSchemas` describes each one as plain JSON (fields, layouts, a sample) for an
   editor panel or an agent. Ported from Aveiro's sections, which Tavilio and the housing
   marketplace duplicate.
+- **More page sections and layouts in blocks**, from Aveiro's site builder:
+  `GallerySection` (`grid`, `mosaic`, `masonry`; every photo opens large), three
+  hero layouts that open on the picture (`fullscreen`, `halves`, `editorial`, with
+  the headline one size up where the words carry the screen), `CtaSection` `cover`
+  (the call on a photo across the page) and `StatsSection` `strip` (figures in a
+  ruled band). `heroLayoutGuide` and `sectionSchemas.hero.layoutGuide` say in one
+  sentence when each hero layout suits, for a model picking one.
 - **`phone` and `mapPin` icons** in the built-in set.
 - **CodeBlock `actions`**: controls of your own in the header, before copy.
 - **`density`** in the theme (`once-ui.config` `style`, ThemeProvider, ThemeInit),

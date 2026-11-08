@@ -4,6 +4,8 @@ import {
   ctaLayouts,
   faqLayouts,
   featuresLayouts,
+  galleryLayouts,
+  heroLayoutGuide,
   heroLayouts,
   IMAGE_SIDES,
   logosLayouts,
@@ -54,6 +56,7 @@ export type SectionType =
   | "features"
   | "about"
   | "stats"
+  | "gallery"
   | "testimonials"
   | "team"
   | "pricing"
@@ -71,6 +74,8 @@ export interface SectionSchema {
   description: string;
   /** The `layout` values, first = default. */
   layouts: readonly string[];
+  /** When each layout suits, one sentence each, for a model picking one. */
+  layoutGuide?: Readonly<Record<string, string>>;
   fields: SectionField[];
   /** Filled-in example props: a new section's starting copy, and a model's example. */
   sample: Record<string, unknown>;
@@ -122,6 +127,7 @@ export const sectionSchemas: Record<SectionType, SectionSchema> = {
     label: "Hero",
     description: "The page's opening: headline, lead, two buttons and a picture",
     layouts: heroLayouts,
+    layoutGuide: heroLayoutGuide,
     fields: [layoutField(heroLayouts), ...heading, ...actionPair, ...image, width],
     sample: {
       eyebrow: "Welcome",
@@ -227,6 +233,31 @@ export const sectionSchemas: Record<SectionType, SectionSchema> = {
         { value: "4.9", label: "Average rating" },
       ],
     },
+  },
+  gallery: {
+    type: "gallery",
+    component: "GallerySection",
+    label: "Gallery",
+    description: "Photos of the work, the place or the product, each opening large on a click",
+    layouts: galleryLayouts,
+    fields: [
+      layoutField(galleryLayouts),
+      ...heading,
+      {
+        key: "items",
+        kind: "list",
+        label: "Photos",
+        rowTitle: "caption",
+        max: 24,
+        fields: [
+          { key: "image", kind: "image", label: "Photo" },
+          { key: "alt", kind: "text", label: "Image description" },
+          { key: "caption", kind: "text", label: "Caption" },
+        ],
+      },
+      width,
+    ],
+    sample: { title: "Gallery", items: [] },
   },
   testimonials: {
     type: "testimonials",
@@ -391,7 +422,13 @@ export const sectionSchemas: Record<SectionType, SectionSchema> = {
     label: "Call to action",
     description: "The one thing to do next, usually the page's last section",
     layouts: ctaLayouts,
-    fields: [layoutField(ctaLayouts), ...heading, ...actionPair, width],
+    fields: [
+      layoutField(ctaLayouts),
+      ...heading,
+      ...actionPair,
+      ...image.map((field) => ({ ...field, when: { key: "layout", is: ["cover"] } })),
+      width,
+    ],
     sample: {
       title: "Ready when you are",
       primaryLabel: "Get in touch",

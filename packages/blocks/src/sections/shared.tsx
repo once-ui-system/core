@@ -60,6 +60,7 @@ export function SectionHeader({
   description,
   center = false,
   hero = false,
+  display = false,
   maxWidth = "40rem",
 }: {
   eyebrow?: unknown;
@@ -67,6 +68,8 @@ export function SectionHeader({
   description?: unknown;
   center?: boolean;
   hero?: boolean;
+  /** The hero's headline one size up, for the layouts where the words carry the screen. */
+  display?: boolean;
   maxWidth?: ComponentProps<typeof Column>["maxWidth"];
 }) {
   const e = text(eyebrow);
@@ -88,7 +91,9 @@ export function SectionHeader({
       {t && (
         <Heading
           as={hero ? "h1" : "h2"}
-          textVariant={hero ? "display-strong-l" : "display-strong-xs"}
+          textVariant={
+            hero ? (display ? "display-strong-xl" : "display-strong-l") : "display-strong-xs"
+          }
         >
           {t}
         </Heading>

@@ -3,7 +3,11 @@ import type React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import {
+  CtaSection,
+  GallerySection,
   HeroSection,
+  heroLayoutGuide,
+  heroLayouts,
   PricingSection,
   Sections,
   sectionComponents,
@@ -75,6 +79,51 @@ describe("page sections", () => {
     );
     expect(out).toContain('href="/de/start"');
     expect(out).toContain('href="/de/buy"');
+  });
+
+  it("guides every hero layout in one sentence", () => {
+    for (const layout of heroLayouts) expect(heroLayoutGuide[layout]).toBeTruthy();
+    expect(sectionSchemas.hero.layoutGuide).toBe(heroLayoutGuide);
+  });
+
+  it("sets the hero headline one size up where the words carry the screen", () => {
+    for (const layout of ["fullscreen", "editorial"]) {
+      expect(html(<HeroSection layout={layout} title="Hi" />)).toContain("font-xl");
+    }
+    expect(html(<HeroSection layout="split" title="Hi" />)).not.toContain("font-xl");
+  });
+
+  it("runs the editorial hero's buttons through resolveHref", () => {
+    const out = html(
+      <HeroSection
+        layout="editorial"
+        title="Hi"
+        primaryLabel="Go"
+        primaryHref="/start"
+        resolveHref={(href) => `/de${href}`}
+      />,
+    );
+    expect(out).toContain('href="/de/start"');
+  });
+
+  it("shows only the gallery photos it can draw", () => {
+    const items = [
+      { image: "/a.jpg", alt: "A" },
+      { image: "", alt: "lost" },
+      { image: "/b.jpg", caption: "Bee" },
+      { image: "/c.jpg" },
+      { image: "/d.jpg" },
+    ];
+    for (const layout of ["grid", "mosaic", "masonry"]) {
+      const out = html(<GallerySection layout={layout} items={items} />);
+      expect(out.match(/<img/g)?.length, layout).toBe(4);
+      expect(out, layout).toContain("Bee");
+    }
+  });
+
+  it("draws the cover call on its photo, and the banner without one", () => {
+    expect(html(<CtaSection layout="cover" title="Come by" image="/band.jpg" />)).toContain("<img");
+    expect(html(<CtaSection layout="cover" title="Come by" />)).not.toContain("<img");
   });
 
   it("hands an unknown type to renderCustom and skips it otherwise", () => {
