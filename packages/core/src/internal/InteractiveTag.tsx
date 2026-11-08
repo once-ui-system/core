@@ -14,7 +14,8 @@ import { Text } from "../components/Text.js";
  * each side: m is a 28px pill with 12 beside the text.
  */
 const PADDING_X = { xs: "2", s: "4", m: "8", l: "8", xl: "12" } as const;
-const PADDING_Y = { xs: "0", s: "0", m: "2", l: "4", xl: "8" } as const;
+// The height is fixed per size in Tag.module.scss, with the label centred.
+const PADDING_Y = { xs: "0", s: "0", m: "0", l: "0", xl: "0" } as const;
 const TEXT = {
   xs: "body-default-xs",
   s: "body-default-s",
@@ -129,6 +130,7 @@ export const InteractiveTag = ({
   const tagClassName = classNames(
     styles.tag,
     styles.toggle,
+    styles[`size-${size}`],
     auto && styles.auto,
     // Selected, a toggle is solid ink; a tone given here makes it solid in that tone.
     tone && styles[`tone-${tone}`],
@@ -145,7 +147,7 @@ export const InteractiveTag = ({
       <Flex paddingX="4">
         <Text
           textVariant={textVariant ?? TEXT[size]}
-          className={auto && !textVariant ? styles.text : undefined}
+          className={classNames(styles.label, auto && !textVariant && styles.text)}
         >
           {label || children}
         </Text>

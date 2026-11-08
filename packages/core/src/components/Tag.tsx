@@ -227,7 +227,7 @@ const Tag = ({
       }
       paddingLeft={announce && prefixIcon ? "8" : look.paddingX[size]}
       paddingRight={announce && arrow ? "8" : look.paddingX[size]}
-      paddingY={look.paddingY[size]}
+      paddingY={hairline ? "0" : look.paddingY[size]}
       vertical="center"
       radius={announce ? "full" : "s"}
       gap={announce ? "8" : "4"}
@@ -243,6 +243,7 @@ const Tag = ({
         effect ? styles.beam : undefined,
         announce ? styles.announce : undefined,
         hairline ? styles.hairline : undefined,
+        hairline ? styles[`size-${size}`] : undefined,
         hairline ? styles[`tone-${palette}`] : undefined,
         hairline && onClick ? styles.clickable : undefined,
         className,
@@ -273,7 +274,12 @@ const Tag = ({
         label || children
       ) : (
         <Row as={phrasing ? "span" : undefined} style={{ userSelect: "none" }} vertical="center">
-          <Text textVariant={textVariant ?? look.text[size]}>{label || children}</Text>
+          <Text
+            textVariant={textVariant ?? look.text[size]}
+            className={hairline ? styles.label : undefined}
+          >
+            {label || children}
+          </Text>
         </Row>
       )}
       {suffixIcon && <Icon name={suffixIcon} size={ICON[size]} className={iconClass} />}
