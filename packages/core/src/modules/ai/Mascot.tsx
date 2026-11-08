@@ -7,6 +7,7 @@ import { Flex } from "../../components/Flex.js";
 import type { LeafPropsOf } from "../../interfaces.js";
 import type { CSSUnit } from "../../types.js";
 import { tokenLength } from "../../utils/layoutClasses.js";
+import { accessoryLayers, isMascotAccessory, type MascotAccessory } from "./accessories.js";
 import { type AudioLevelSource, createAudioMeter } from "./audioLevel.js";
 import {
   baseMood,
@@ -93,8 +94,14 @@ export interface MascotProps extends MascotLook, Omit<LeafPropsOf<"div">, "child
   mood?: MascotMood;
   /** A string or number that picks a whole look; props you pass win over it. See `mascotLook`. */
   seed?: string | number;
-  /** SVG drawn with the body in its 200 × 200 box (a hat, an antenna), moving with it. */
-  accessory?: React.ReactNode;
+  /**
+   * Something it wears, moving with the body. A built-in one (`antenna`, `bow`, `beanie`,
+   * `headphones`, `sprout`, `helmet`, `crown`, `catEars`, `partyHat`), several at once as a
+   * list, or your own SVG drawn in the body's 200 × 200 box. Built-ins fit any body shape.
+   */
+  accessory?: MascotAccessory | MascotAccessory[] | React.ReactNode;
+  /** One color for the built-in accessories, in place of each one's own. */
+  accessoryColor?: string;
   /** `pointer` follows the cursor, `{ x, y }` from -1 to 1 looks that way, `center` looks ahead. */
   lookAt?: "pointer" | "center" | { x: number; y: number };
   /** Loudness from 0 to 1 that drives the body (and mouth) while speaking. Takes precedence over `source`. */
@@ -426,6 +433,7 @@ const FlatMascot = ({
   cheeks,
   personality,
   accessory,
+  accessoryColor,
   lookAt = "pointer",
   level,
   source,
@@ -478,6 +486,18 @@ const FlatMascot = ({
 
   const shape = bodyShape(look.roundness, look.aspect);
   const body = bodyPath ? { d: bodyPath, top: 26, bottom: 182, halfWidth: 82 } : shape;
+  const builtIn = (Array.isArray(accessory) ? accessory : [accessory]).filter(isMascotAccessory);
+  const worn = builtIn.length
+    ? accessoryLayers(
+        builtIn,
+        {
+          a: body.halfWidth,
+          b: (body.bottom - body.top) / 2,
+          n: bodyPath ? 3 : 2 + (1 - clamp(look.roundness, 0, 1)) * 4,
+        },
+        accessoryColor,
+      )
+    : { back: null, on: accessory, front: null };
   const spread = Math.min(29 * look.eyeSpacing, body.halfWidth - 22);
   const eyeY = 96 + clamp(look.eyeHeight, -1, 1) * 30;
   const tile = look.eyes === "tile";
@@ -608,6 +628,7 @@ const FlatMascot = ({
             )}
             style={{ transformOrigin: `100px ${body.bottom}px` }}
           >
+            {worn.back && <g className={styles.accessory}>{worn.back}</g>}
             <path d={body.d} className={styles.fill} />
             <g clipPath={`url(#${id}-clip)`}>
               <path d={body.d} fill={`url(#${id}-shade)`} className={styles.shade} />
@@ -618,7 +639,7 @@ const FlatMascot = ({
               </g>
             </g>
             <path d={body.d} className={styles.edge} />
-            {accessory && <g className={styles.accessory}>{accessory}</g>}
+            {worn.on && <g className={styles.accessory}>{worn.on}</g>}
             <g className={styles.face}>
               <g className={styles.flick}>
                 {look.brows &&
@@ -676,6 +697,7 @@ const FlatMascot = ({
                 }}
               />
             </g>
+            {worn.front && <g className={styles.accessory}>{worn.front}</g>}
           </g>
         </g>
         {state === "sleeping" && (

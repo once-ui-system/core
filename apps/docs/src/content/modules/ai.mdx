@@ -198,8 +198,7 @@ Every part of the look is a prop, so two products never have to share a characte
 scheme or any CSS color and every shade comes from it; `roundness`, `aspect` or your own `bodyPath`
 set the outline; `surface` is `glossy`, `matte`, `flat` or `glass`. `eyes` is `tile`, `pill`,
 `round`, `wide`, `dot` or your own path, placed with `eyeSize`, `eyeSpacing` and `eyeHeight`.
-`mouth`, `brows` and `cheeks` add features that follow the mood, `accessory` draws your own SVG with
-the body, and `personality` makes it `calm` or `bouncy`. Or pass a `seed` (a product name, a user
+`mouth`, `brows` and `cheeks` add features that follow the mood, `accessory` dresses it (below), and `personality` makes it `calm` or `bouncy`. Or pass a `seed` (a product name, a user
 id) and `mascotLook(seed)` picks a whole look; props you pass still win.
 
 <CodeBlock
@@ -227,6 +226,36 @@ id) and `mascotLook(seed)` picks a whole look; props you pass still win.
       language: "tsx",
       label: "Customize"
     }
+  ]}
+/>
+
+### Accessories
+
+Nine built-in accessories, flat and chunky so they read at avatar size: `antenna`, `bow`, `beanie`,
+`headphones`, `sprout`, `helmet`, `crown`, `catEars` and `partyHat`. Each one is placed from the body's
+own outline, so it fits a block as well as a circle, and moves and squashes with it. Pass a list to wear
+several, and `accessoryColor` to tint them all one color. Your own SVG still works: draw it in the
+body's 200 × 200 box.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="24" center wrap>
+      <Mascot size="m" surface="flat" accessory="helmet" color="#ffd24d" mouth="smile" />
+      <Mascot size="m" surface="flat" accessory="headphones" color="#ff7aa8" mouth="smile" />
+      <Mascot size="m" surface="flat" accessory="catEars" color="#e8ecf2" mouth="dot" cheeks />
+      <Mascot size="m" surface="flat" accessory="sprout" color="#ff8a5c" roundness={1} />
+      <Mascot size="m" surface="flat" accessory={["crown", "bow"]} color="#a78bfa" mouth="smile" />
+    </Row>
+  }
+  codes={[
+    {
+      code: `<Mascot surface="flat" accessory="helmet" />
+<Mascot surface="flat" accessory={["crown", "bow"]} accessoryColor="#ffd24d" />`,
+      language: "tsx",
+      label: "Accessories",
+    },
   ]}
 />
 
@@ -358,7 +387,9 @@ the cube shows while it thinks but does not turn.
     mouth: "none, smile, dot or line; follows the mood and moves while speaking.",
     brows: "Brows that follow the mood.",
     cheeks: "Blush under the eyes.",
-    accessory: "SVG drawn with the body in its 200 × 200 box.",
+    accessory:
+      "antenna, bow, beanie, headphones, sprout, helmet, crown, catEars or partyHat, a list of them, or your own SVG in the 200 × 200 box.",
+    accessoryColor: "One color for the built-in accessories, in place of each one's own.",
     personality: "calm, default or bouncy.",
     lookAt: "pointer, center, or a direction from -1 to 1.",
     level: "Loudness from 0 to 1 that makes the body pulse while speaking.",
