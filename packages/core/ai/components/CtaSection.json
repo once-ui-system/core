@@ -12,7 +12,9 @@
   "primaryLabel": "string",
   "primaryHref": "string",
   "secondaryLabel": "string",
-  "secondaryHref": "string"
+  "secondaryHref": "string",
+  "image": "string",
+  "imageAlt": "string"
  },
  "tags": [
   "marketing"

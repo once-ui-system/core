@@ -45,6 +45,7 @@ const PAGE_SECTIONS = [
   "CtaSection",
   "FaqSection",
   "FeaturesSection",
+  "GallerySection",
   "HeroSection",
   "LogosSection",
   "PricingSection",
