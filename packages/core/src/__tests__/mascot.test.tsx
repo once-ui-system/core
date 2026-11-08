@@ -3,8 +3,8 @@ import type { ReactElement, ReactNode } from "react";
 import { renderToString } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import { LayoutProvider } from "../contexts/LayoutProvider";
-import { Mascot, mascotLook } from "../modules/ai/Mascot";
 import { MASCOT_ACCESSORIES } from "../modules/ai/accessories";
+import { Mascot, mascotLook } from "../modules/ai/Mascot";
 import { expectNoAxeViolations } from "../test/axe";
 
 const wrapper = ({ children }: { children: ReactNode }) => (
