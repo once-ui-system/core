@@ -21,6 +21,11 @@
   "TextVariant": "`${TextType}-${TextWeight}-${TextSize}`"
  },
  "mixins": {
+  "ChartMarksProps": {
+   "thresholds": "readonly ChartThreshold[]",
+   "annotations": "readonly ChartAnnotation[]",
+   "yDomain": "[number, number]"
+  },
   "ChartProps": {
    "title": "React.ReactNode",
    "description": "React.ReactNode",
@@ -324,9 +329,64 @@
    "href": "!string",
    "children": "React.ReactNode"
   },
+  "Alarm": {
+   "id": "!string",
+   "label": "!string",
+   "priority": "!AlarmPriority",
+   "active": "!boolean",
+   "acknowledged": "!boolean",
+   "tag": "string",
+   "since": "Date | string | number",
+   "detail": "string",
+   "shelved": "boolean"
+  },
+  "AlarmAction": [
+   "{ type: \"raise\"; id: string; at?: string | number | Date | undefined; detail?: string | undefined; }",
+   "{ type: \"clear\"; id: string; at?: string | number | Date | undefined; }",
+   "{ type: \"acknowledge\"; ids: readonly string[]; }",
+   "{ type: \"acknowledgeAll\"; }",
+   "{ type: \"shelve\"; id: string; shelved: boolean; }"
+  ],
+  "AlarmCounts": {
+   "active": "!number",
+   "unacknowledged": "!number",
+   "shelved": "!number",
+   "byPriority": "!Record<AlarmPriority, number>"
+  },
+  "AlarmLabels": {
+   "priority": "!Record<AlarmPriority, string>",
+   "state": "!Record<AlarmState, string>",
+   "acknowledge": "!string",
+   "acknowledgeAll": "!string",
+   "announce": "!(alarm: Alarm, priority: string) => string",
+   "empty": "!string",
+   "counts": "!(active: number, unacknowledged: number) => string"
+  },
+  "AlarmPriority": [
+   "medium",
+   "critical",
+   "high",
+   "low"
+  ],
+  "AlarmState": [
+   "normal",
+   "shelved",
+   "unacknowledged",
+   "acknowledged",
+   "returned"
+  ],
   "Alternate": {
    "href": "!string",
    "hrefLang": "!string"
+  },
+  "AnnunciatorLabels": {
+   "acknowledge": "string",
+   "acknowledgeAll": "string",
+   "announce": "(alarm: Alarm, priority: string) => string",
+   "empty": "string",
+   "counts": "(active: number, unacknowledged: number) => string",
+   "priority": "Partial<AlarmLabels[\"priority\"]>",
+   "state": "Partial<AlarmLabels[\"state\"]>"
   },
   "AnySection": [
    "ComponentClass<any, any>",
@@ -516,17 +576,18 @@
    "left": "SpacingToken | number | CSSUnit",
    "fillWidth": "boolean",
    "position": "CSSProperties[\"position\"]",
-   "disabled": "boolean",
    "href": "string",
+   "disabled": "boolean",
    "size": "TShirtSizes",
    "corners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
    "variant": "\"ghost\" | \"outline\" | \"subtle\"",
    "weight": "\"default\" | \"strong\"",
-   "truncate": "boolean",
    "rounded": "boolean",
    "prefixIcon": "IconName",
-   "suffixIcon": "IconName"
+   "suffixIcon": "IconName",
+   "truncate": "boolean"
   },
+  "ButtonProps": "Button props",
   "ButtonVariant": [
    "link",
    "ghost",
@@ -543,6 +604,18 @@
    "confetti",
    "fireworks"
   ],
+  "ChartAnnotation": {
+   "x": "!string | number | Date",
+   "label": "!string",
+   "tone": "ChartMarkTone"
+  },
+  "ChartMarkTone": [
+   "neutral",
+   "info",
+   "danger",
+   "warning",
+   "success"
+  ],
   "ChartMode": [
    "categorical",
    "divergent",
@@ -554,6 +627,14 @@
    "height": "!number | CSSUnit",
    "axis": "!{ stroke: string; }",
    "tick": "!{ fill: string; fontSize: number; line: boolean; }"
+  },
+  "ChartThreshold": {
+   "value": "number",
+   "from": "number",
+   "to": "number",
+   "label": "!string",
+   "tone": "ChartMarkTone",
+   "direction": "\"above\" | \"below\" | \"none\""
   },
   "ChartVariant": [
    "flat",
@@ -715,6 +796,11 @@
    "l",
    "m"
   ],
+  "ConfirmButtonLabels": {
+   "confirm": "!string",
+   "armed": "!string",
+   "holding": "!string"
+  },
   "CountFxProps": "CountFx props",
   "CSSUnit": [
    "`${number}px`",
@@ -1714,6 +1800,53 @@
    "95",
    "105"
   ],
+  "SchematicKind": [
+   "vessel",
+   "tank",
+   "pump",
+   "valve",
+   "exchanger",
+   "turbine",
+   "sensor",
+   "box"
+  ],
+  "SchematicLabels": {
+   "state": "!Record<SchematicState, string>",
+   "open": "!string",
+   "closed": "!string",
+   "stopped": "!string",
+   "flow": "!(from: string, to: string, link: SchematicLink) => string",
+   "flowsHeading": "!string"
+  },
+  "SchematicLink": {
+   "id": "string",
+   "from": "!string",
+   "to": "!string",
+   "via": "readonly [number, number][]",
+   "flow": "number",
+   "state": "SchematicState",
+   "label": "string"
+  },
+  "SchematicNode": {
+   "id": "!string",
+   "kind": "!SchematicKind",
+   "x": "!number",
+   "y": "!number",
+   "label": "!string",
+   "value": "string",
+   "state": "SchematicState",
+   "running": "boolean",
+   "open": "boolean",
+   "width": "number",
+   "height": "number",
+   "tag": "string"
+  },
+  "SchematicState": [
+   "warning",
+   "off",
+   "normal",
+   "alarm"
+  ],
   "SchemeRampWeight": [
    "100",
    "200",
@@ -2135,8 +2268,8 @@
    "advanced": "{ section?: boolean; surface?: boolean; density?: boolean; scaling?: boolean; dataStyle?: boolean; transition?: boolean; }"
   },
   "StylePersistence": [
-   "none",
    "local",
+   "none",
    "StylePersistenceAdapter"
   ],
   "StylePersistenceAdapter": {
@@ -2295,8 +2428,8 @@
    "body",
    "code",
    "label",
-   "heading",
-   "display"
+   "display",
+   "heading"
   ],
   "TextVariant": [
    "body-strong-xl",
@@ -2359,26 +2492,6 @@
    "label-medium-s",
    "label-medium-l",
    "label-medium-m",
-   "heading-strong-xl",
-   "heading-strong-xs",
-   "heading-strong-s",
-   "heading-strong-l",
-   "heading-strong-m",
-   "heading-default-xl",
-   "heading-default-xs",
-   "heading-default-s",
-   "heading-default-l",
-   "heading-default-m",
-   "heading-normal-xl",
-   "heading-normal-xs",
-   "heading-normal-s",
-   "heading-normal-l",
-   "heading-normal-m",
-   "heading-medium-xl",
-   "heading-medium-xs",
-   "heading-medium-s",
-   "heading-medium-l",
-   "heading-medium-m",
    "display-strong-xl",
    "display-strong-xs",
    "display-strong-s",
@@ -2398,7 +2511,27 @@
    "display-medium-xs",
    "display-medium-s",
    "display-medium-l",
-   "display-medium-m"
+   "display-medium-m",
+   "heading-strong-xl",
+   "heading-strong-xs",
+   "heading-strong-s",
+   "heading-strong-l",
+   "heading-strong-m",
+   "heading-default-xl",
+   "heading-default-xs",
+   "heading-default-s",
+   "heading-default-l",
+   "heading-default-m",
+   "heading-normal-xl",
+   "heading-normal-xs",
+   "heading-normal-s",
+   "heading-normal-l",
+   "heading-normal-m",
+   "heading-medium-xl",
+   "heading-medium-xs",
+   "heading-medium-s",
+   "heading-medium-l",
+   "heading-medium-m"
   ],
   "TextWeight": [
    "strong",
@@ -2494,6 +2627,11 @@
    "m",
    "xs"
   ],
+  "UseAlarmsOptions": {
+   "alarms": "readonly Alarm[]",
+   "defaultAlarms": "readonly Alarm[]",
+   "onAlarmsChange": "(alarms: Alarm[]) => void"
+  },
   "UseHotkeysOptions": {
    "enabled": "boolean",
    "allowWhileTyping": "boolean",
@@ -2582,6 +2720,28 @@
     "style": "React.CSSProperties"
    }
   },
+  "AlarmList": {
+   "group": "components",
+   "props": {
+    "alarms": "!readonly Alarm[] = []",
+    "onAcknowledge": "(ids: string[]) => void",
+    "showNormal": "boolean = false",
+    "showShelved": "boolean = false",
+    "header": "React.ReactNode | false",
+    "announce": "boolean = true",
+    "locale": "string",
+    "timeZone": "string",
+    "labels": "AnnunciatorLabels"
+   }
+  },
+  "AlarmMark": {
+   "group": "components",
+   "props": {
+    "priority": "!AlarmPriority",
+    "size": "number = 16",
+    "label": "string"
+   }
+  },
   "Animation": {
    "group": "components",
    "mixins": [
@@ -2616,6 +2776,16 @@
     "portal": "boolean = false",
     "placement": "Placement = top",
     "offsetDistance": "SpacingToken = 8"
+   }
+  },
+  "Annunciator": {
+   "group": "components",
+   "props": {
+    "alarms": "!readonly Alarm[] = []",
+    "onAcknowledge": "(ids: string[]) => void",
+    "columns": "number",
+    "flash": "boolean = true",
+    "labels": "AnnunciatorLabels"
    }
   },
   "Arrow": {
@@ -2854,6 +3024,26 @@
     "direction": "column"
    },
    "preferOver": "Flex with direction=\"column\""
+  },
+  "ConfirmButton": {
+   "group": "components",
+   "extends": [
+    "Button"
+   ],
+   "mixins": [
+    "LeafProps"
+   ],
+   "props": {
+    "onConfirm": "!() => void",
+    "mode": "\"twice\" | \"hold\" = twice",
+    "labels": "Partial<ConfirmButtonLabels>",
+    "timeout": "number = 4000",
+    "holdDuration": "number = 1500",
+    "armed": "boolean",
+    "defaultArmed": "boolean = false",
+    "onArmedChange": "(armed: boolean) => void",
+    "armedTone": "ButtonProps[\"tone\"] = danger"
+   }
   },
   "DateInput": {
    "group": "components",
@@ -3759,6 +3949,19 @@
     "direction": "row"
    },
    "preferOver": "Flex with direction=\"row\""
+  },
+  "Schematic": {
+   "group": "components",
+   "props": {
+    "nodes": "!readonly SchematicNode[] = []",
+    "links": "readonly SchematicLink[] = []",
+    "viewBox": "[number, number, number, number]",
+    "selected": "string",
+    "onNodeSelect": "(id: string) => void",
+    "minWidth": "number = 560",
+    "aria-label": "!string",
+    "labels": "Partial<SchematicLabels>"
+   }
   },
   "Scroller": {
    "group": "components",
@@ -4793,6 +4996,7 @@
    "group": "data",
    "importFrom": "@once-ui-system/core/data",
    "mixins": [
+    "ChartMarksProps",
     "ChartProps",
     "CommonProps",
     "DisplayProps",
@@ -4861,6 +5065,8 @@
     "locale": "string",
     "date": "DateConfig",
     "title": "string",
+    "thresholds": "readonly ChartThreshold[]",
+    "annotations": "readonly ChartAnnotation[]",
     "caption": "ReactNode",
     "id": "string"
    }
@@ -4952,6 +5158,7 @@
    "group": "data",
    "importFrom": "@once-ui-system/core/data",
    "mixins": [
+    "ChartMarksProps",
     "ChartProps",
     "CommonProps",
     "DisplayProps",
@@ -4979,6 +5186,7 @@
    "group": "data",
    "importFrom": "@once-ui-system/core/data",
    "mixins": [
+    "ChartMarksProps",
     "ChartProps",
     "CommonProps",
     "DisplayProps",
@@ -6713,6 +6921,46 @@
    "group": "hooks",
    "kind": "hook",
    "signature": "<T extends Record<string, any>>(options: StreamingViewportOptions<T>) => StreamingViewportResult<T>"
+  },
+  "alarmState": {
+   "group": "hooks",
+   "kind": "function",
+   "signature": "(alarm: Alarm) => AlarmState"
+  },
+  "needsAcknowledge": {
+   "group": "hooks",
+   "kind": "function",
+   "signature": "(alarm: Alarm) => boolean",
+   "doc": "An alarm still waits for an operator: unacknowledged, or cleared without being seen."
+  },
+  "sortAlarms": {
+   "group": "hooks",
+   "kind": "function",
+   "signature": "(alarms: readonly Alarm[]) => Alarm[]",
+   "doc": "Alarms in the order an operator works them: unacknowledged first, then standing, then cleared; within each, the most urgent, then the newest."
+  },
+  "countAlarms": {
+   "group": "hooks",
+   "kind": "function",
+   "signature": "(alarms: readonly Alarm[]) => AlarmCounts"
+  },
+  "alarmsReducer": {
+   "group": "hooks",
+   "kind": "function",
+   "signature": "(alarms: readonly Alarm[], action: AlarmAction) => Alarm[]",
+   "doc": "The alarm rules as a pure function, for a reducer, a server or a test: `alarmsReducer(alarms, { type: \"acknowledge\", ids: [\"rcp-b\"] })`."
+  },
+  "useAlarms": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "(options?: UseAlarmsOptions) => { alarms: Alarm[]; counts: AlarmCounts; dispatch: (action: AlarmAction) => void; raise: (id: string, options?: { at?: string | number | Date | undefined; detail?: string | undefined; }) => void; clear: (id: string, at?: string | ... 2 more ... | undefined) => void; acknowledge: (ids: string | readonly string[]) => v...",
+   "doc": "A set of alarms and the actions an operator and the plant take on them."
+  },
+  "ALARM_PRIORITIES": {
+   "group": "hooks",
+   "kind": "value",
+   "type": "readonly AlarmPriority[]",
+   "doc": "The priorities from most to least urgent."
   },
   "selectNavHref": {
    "group": "utils",

@@ -47,9 +47,11 @@ describe("ai harness without spec.json", () => {
   // Sparkline and ChartSummary, which arrived with the catalog at 25,497.
   // The 2.x merge adds 300 more for LogoLoader, Logo's monogram and Map's
   // globe, which brought it to 25,899. GallerySection adds 100 more; it
-  // brought the catalog to 26,132.
+  // brought the catalog to 26,132. The control-room pieces (AlarmList,
+  // AlarmMark, Annunciator, ConfirmButton, Schematic) add 500 more, about 125
+  // tokens; they brought it to 26,616.
   it("keeps the catalog small enough to load on every task", () => {
-    expect(statSync(path.join(AI, "catalog.json")).size).toBeLessThan(26_200);
+    expect(statSync(path.join(AI, "catalog.json")).size).toBeLessThan(26_700);
   });
 });
 

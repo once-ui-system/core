@@ -1,0 +1,26 @@
+{
+ "name": "AlarmMark",
+ "group": "components",
+ "props": {
+  "priority": "!AlarmPriority",
+  "size": "number = 16",
+  "label": "string"
+ },
+ "tags": [
+  "data",
+  "feedback"
+ ],
+ "pairsWith": [
+  "AlarmList",
+  "Annunciator"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "AlarmPriority": [
+   "medium",
+   "critical",
+   "high",
+   "low"
+  ]
+ }
+}

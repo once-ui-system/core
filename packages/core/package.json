@@ -73,9 +73,21 @@
       "types": "./dist/components/AccordionGroup.d.ts",
       "default": "./dist/components/AccordionGroup.js"
     },
+    "./components/AlarmList": {
+      "types": "./dist/components/AlarmList.d.ts",
+      "default": "./dist/components/AlarmList.js"
+    },
+    "./components/AlarmMark": {
+      "types": "./dist/components/AlarmMark.d.ts",
+      "default": "./dist/components/AlarmMark.js"
+    },
     "./components/Animation": {
       "types": "./dist/components/Animation.d.ts",
       "default": "./dist/components/Animation.js"
+    },
+    "./components/Annunciator": {
+      "types": "./dist/components/Annunciator.d.ts",
+      "default": "./dist/components/Annunciator.js"
     },
     "./components/Arrow": {
       "types": "./dist/components/Arrow.d.ts",
@@ -124,6 +136,10 @@
     "./components/Column": {
       "types": "./dist/components/Column.d.ts",
       "default": "./dist/components/Column.js"
+    },
+    "./components/ConfirmButton": {
+      "types": "./dist/components/ConfirmButton.d.ts",
+      "default": "./dist/components/ConfirmButton.js"
     },
     "./components/DateInput": {
       "types": "./dist/components/DateInput.d.ts",
@@ -304,6 +320,10 @@
     "./components/Row": {
       "types": "./dist/components/Row.d.ts",
       "default": "./dist/components/Row.js"
+    },
+    "./components/Schematic": {
+      "types": "./dist/components/Schematic.d.ts",
+      "default": "./dist/components/Schematic.js"
     },
     "./components/Scroller": {
       "types": "./dist/components/Scroller.d.ts",

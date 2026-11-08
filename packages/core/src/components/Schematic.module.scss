@@ -1,0 +1,229 @@
+// Parts and lines. A state is drawn as a stroke pattern as well as a colour:
+// warning dashed, alarm heavy, off hollow and struck through.
+.schematic {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  min-width: var(--schematic-min-width, 0);
+  height: auto;
+  overflow: visible;
+  font-family: var(--font-body);
+}
+
+// --- Lines ----------------------------------------------------------------
+
+.link {
+  --link-color: var(--neutral-on-background-weak);
+
+  &[data-flowing] {
+    --link-color: var(--brand-on-background-medium);
+  }
+
+  &[data-state="warning"] {
+    --link-color: var(--warning-on-background-medium);
+  }
+
+  &[data-state="alarm"] {
+    --link-color: var(--danger-on-background-medium);
+  }
+
+  &[data-state="off"] {
+    --link-color: var(--neutral-alpha-strong);
+  }
+}
+
+.pipe {
+  fill: none;
+  stroke: var(--neutral-alpha-strong);
+  stroke-width: 6;
+  stroke-linejoin: round;
+
+  .link[data-state="alarm"] & {
+    stroke-width: 8;
+  }
+
+  .link[data-state="off"] & {
+    stroke-width: 3;
+    stroke-dasharray: 2 4;
+  }
+}
+
+.flow {
+  fill: none;
+  stroke: var(--link-color);
+  stroke-width: 2;
+  stroke-dasharray: 6 6;
+  stroke-linejoin: round;
+  animation: schematic-flow var(--flow-duration, 1s) linear infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes schematic-flow {
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+
+.arrow {
+  fill: var(--link-color);
+  stroke: var(--page-background);
+  stroke-width: 1;
+}
+
+.linkLabel {
+  fill: var(--neutral-on-background-medium);
+  font-size: 11px;
+}
+
+// --- Parts ----------------------------------------------------------------
+
+.node {
+  --node-stroke: var(--neutral-on-background-medium);
+  --node-fill: var(--neutral-background-strong);
+
+  outline: none;
+
+  --node-text: var(--neutral-on-background-medium);
+
+  &[data-state="warning"] {
+    --node-stroke: var(--warning-solid-medium);
+    --node-text: var(--warning-on-background-strong);
+  }
+
+  &[data-state="alarm"] {
+    --node-stroke: var(--danger-solid-medium);
+    --node-text: var(--danger-on-background-strong);
+  }
+
+  &[data-state="off"] {
+    --node-stroke: var(--neutral-alpha-strong);
+    --node-fill: var(--page-background);
+  }
+}
+
+.symbol {
+  rect,
+  circle,
+  path {
+    fill: var(--node-fill);
+    stroke: var(--node-stroke);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+  }
+
+  .node[data-state="warning"] & :is(rect, circle, path) {
+    stroke-width: 2;
+    stroke-dasharray: 5 3;
+  }
+
+  // Alarm: a heavy solid line.
+  .node[data-state="alarm"] & > :first-child {
+    stroke-width: 4;
+  }
+
+  .node[data-selected] & > :first-child {
+    stroke: var(--brand-border-strong);
+    stroke-width: 3;
+  }
+
+  .interactive:focus-visible & > :first-child {
+    stroke: var(--neutral-on-background-strong);
+    stroke-width: 3;
+  }
+
+  .inner,
+  .line {
+    fill: none;
+    stroke-dasharray: none;
+  }
+
+  .inner {
+    fill: var(--node-stroke);
+    stroke: none;
+  }
+
+  .hollow {
+    fill: var(--page-background);
+  }
+
+  .node[data-kind="valve"] & path:not(.hollow) {
+    fill: var(--node-stroke);
+  }
+}
+
+.strike {
+  stroke: var(--neutral-on-background-weak);
+  stroke-width: 1.5;
+}
+
+.impeller {
+  animation: schematic-spin 1.6s linear infinite;
+
+  .node[data-stopped] & {
+    animation: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes schematic-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.interactive {
+  cursor: pointer;
+}
+
+// Text keeps a halo of the page colour, so a line running under it never crosses it.
+.text text,
+.linkLabel {
+  paint-order: stroke;
+  stroke: var(--page-background);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+.text {
+  pointer-events: none;
+}
+
+.tag {
+  fill: var(--neutral-on-background-strong);
+  font-family: var(--font-code);
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+}
+
+.label {
+  fill: var(--neutral-on-background-strong);
+  font-size: 12px;
+  font-weight: var(--font-weight-label-strong);
+}
+
+.value {
+  fill: var(--neutral-on-background-medium);
+  font-family: var(--font-code);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.status {
+  fill: var(--node-text);
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.06em;
+}

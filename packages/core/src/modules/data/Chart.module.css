@@ -32,6 +32,19 @@
   user-select: none;
 }
 
+/* A threshold's or annotation's name, in the plot: a solid chip so it reads over the data. */
+.markLabel {
+  position: absolute;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  padding: 2px 4px;
+  border-radius: var(--radius-xs);
+  background: var(--page-background);
+  font-weight: var(--font-weight-body-strong);
+}
+
 .tooltip {
   position: absolute;
   top: 0;

@@ -19,10 +19,25 @@
     "tags": ["provider"],
     "pairsWith": ["LayoutProvider"]
   },
+  "AlarmList": {
+    "purpose": "Alarms in working order with priority, state in words and Acknowledge",
+    "tags": ["data", "feedback"],
+    "pairsWith": ["Annunciator", "Button"]
+  },
+  "AlarmMark": {
+    "purpose": "Alarm priority as a numbered shape that reads without colour",
+    "tags": ["data", "feedback"],
+    "pairsWith": ["AlarmList", "Annunciator"]
+  },
   "Animation": {
     "purpose": "Preset enter/exit animation (fade, scale, slide, blur) on hover, click or a controlled trigger",
     "tags": ["effect", "motion", "overlay"],
     "pairsWith": ["HoverCard", "Column"]
+  },
+  "Annunciator": {
+    "purpose": "Alarm panel: a tile per point, lit by state, press to acknowledge",
+    "tags": ["data", "feedback"],
+    "pairsWith": ["AlarmList", "AlarmMark"]
   },
   "Arrow": {
     "purpose": "Small arrow that slides in while its trigger element is hovered, on a card or link",
@@ -151,6 +166,11 @@
     "purpose": "Before/after comparison: two images or panes split by a draggable divider",
     "tags": ["media", "marketing"],
     "pairsWith": ["Column", "Media"]
+  },
+  "ConfirmButton": {
+    "purpose": "Button for hard-to-undo actions: press twice or hold to confirm",
+    "tags": ["action", "form"],
+    "pairsWith": ["Button", "Dialog"]
   },
   "ContactSection": {
     "purpose": "Site section: contact details as links",
@@ -715,6 +735,11 @@
     "purpose": "Scrolling row with arrows and fades; track props make a carousel track, auto a marquee (2.x AutoScroll)",
     "tags": ["layout"],
     "pairsWith": ["Row", "Tag", "Logo", "Card"]
+  },
+  "Schematic": {
+    "purpose": "Process schematic from data: pumps, valves, vessels and flow lines",
+    "tags": ["data"],
+    "pairsWith": ["AlarmList", "LineChart"]
   },
   "ScrollLock": {
     "purpose": "Freezes page scroll while enabled, keeping one referenced region scrollable",
