@@ -253,14 +253,6 @@ function draw(kind: MascotAccessory, body: AccessoryBody, tint: string): Layers 
           <g>
             <circle cx={100} cy={cy} r={r} fill="none" stroke={GLASS} strokeWidth={10} />
             <path
-              d={`M${100 - r * 0.62} ${cy - r * 0.42} A${r * 0.76} ${r * 0.76} 0 0 1 ${100 - r * 0.12} ${cy - r * 0.74}`}
-              fill="none"
-              stroke={GLASS}
-              strokeWidth={8}
-              strokeLinecap="round"
-              opacity={0.75}
-            />
-            <path
               d={`M100 ${cy - r} L100 ${cy - r - 12}`}
               stroke={GLASS}
               strokeWidth={6}
