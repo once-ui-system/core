@@ -9,9 +9,12 @@ import type { TagProps } from "../components/Tag.js";
 import styles from "../components/Tag.module.scss";
 import { Text } from "../components/Text.js";
 
-/** Padding, text and icons per size. m is 2.x's Chip. */
-const PADDING_X = { xs: "2", s: "4", m: "8", l: "12", xl: "16" } as const;
-const PADDING_Y = { xs: "0", s: "2", m: "4", l: "8", xl: "12" } as const;
+/**
+ * Padding, text and icons per size, round a label that has 4 of its own on
+ * each side: m is a 28px pill with 12 beside the text.
+ */
+const PADDING_X = { xs: "2", s: "4", m: "8", l: "8", xl: "12" } as const;
+const PADDING_Y = { xs: "0", s: "0", m: "2", l: "4", xl: "8" } as const;
 const TEXT = {
   xs: "body-default-xs",
   s: "body-default-s",
@@ -21,7 +24,7 @@ const TEXT = {
 } as const;
 const ICON = { xs: "xs", s: "xs", m: "s", l: "s", xl: "m" } as const;
 
-type InteractiveTagProps = Omit<TagProps, "variant" | "href" | "arrow" | "effect">;
+type InteractiveTagProps = Omit<TagProps, "variant" | "href" | "arrow" | "effect" | "dot">;
 
 type RestProps = Omit<
   InteractiveTagProps,
@@ -127,7 +130,8 @@ export const InteractiveTag = ({
     styles.tag,
     styles.toggle,
     auto && styles.auto,
-    styles[`tone-${tone ?? "brand"}`],
+    // Selected, a toggle is solid ink; a tone given here makes it solid in that tone.
+    tone && styles[`tone-${tone}`],
     {
       [styles.selected]: selected,
       [styles.unselected]: !selected,
@@ -138,7 +142,7 @@ export const InteractiveTag = ({
   const content = (
     <>
       {prefixIcon && <Icon name={prefixIcon} size={ICON[size]} className={iconClass} />}
-      <Flex paddingX="8" paddingY="2">
+      <Flex paddingX="4">
         <Text
           textVariant={textVariant ?? TEXT[size]}
           className={auto && !textVariant ? styles.text : undefined}
@@ -199,7 +203,11 @@ export const InteractiveTag = ({
       <Flex vertical="center" className={styles.action} {...control} {...controlProps}>
         {content}
       </Flex>
-      <IconButton style={{ color: "inherit" }} {...combinedIconButtonProps} />
+      <IconButton
+        style={{ color: "inherit" }}
+        {...combinedIconButtonProps}
+        className={classNames(styles.remove, removeButtonProps.className)}
+      />
     </Flex>
   );
 };

@@ -47,7 +47,7 @@ navIcon: "components"
 
 ## Tone
 
-`tone` is the palette: `brand`, `accent`, `neutral` (the default), `info`, `success`, `warning` or `danger`. The gradient look is a `variant`.
+A Tag is a neutral hairline, and its `tone` is a dot before the label: `brand`, `accent`, `neutral`, `info`, `success`, `warning` or `danger`. The colour stays in the dot, so a table full of statuses stays calm. Without a `tone` there is no dot; `dot` shows or hides it either way, and a `prefixIcon` takes the dot's place in the tone's colour. The gradient look is a `variant`.
 
 <CodeBlock
   marginTop="16"
@@ -191,7 +191,7 @@ An announcement lays its children out in the pill itself, so they take its `gap`
 
 ## Toggle
 
-With `selected` or `onRemove` a Tag is a toggle: a `role="button"` with `aria-pressed`, pressed by a click, Enter or Space. An `onClick` alone keeps the static look, in its tone and size, as a plain button. Selected, it draws in its tone (`brand` unless given one); unselected, in neutral. `selected` defaults to false. This was `Chip` in 2.x, where it defaulted to true.
+With `selected` or `onRemove` a Tag is a toggle: a `role="button"` with `aria-pressed`, pressed by a click, Enter or Space. An `onClick` alone keeps the static look, in its tone and size, as a plain button. Unselected, it is a hairline pill; selected, it is solid ink (solid in its `tone` when given one). `selected` defaults to false. This was `Chip` in 2.x, where it defaulted to true.
 
 <CodeBlock
   marginTop="16"
