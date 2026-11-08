@@ -1,0 +1,15 @@
+// A Submenu's item is drawn as an Option (Option.module.scss); these add the
+// states only it has. While its submenu is open it keeps the hover fill, so
+// the path from the item into the panel stays visible as the pointer and
+// focus move on into the panel.
+.trigger {
+    &[data-open] > .row:not(:hover),
+    &[data-highlighted="true"] > .row:not(:hover) {
+        background: var(--neutral-alpha-weak);
+        border-color: var(--neutral-alpha-medium);
+    }
+
+    &[aria-disabled="true"] > .row {
+        opacity: 0.6;
+    }
+}

@@ -1,0 +1,53 @@
+{
+ "name": "Submenu",
+ "group": "components",
+ "props": {
+  "label": "!ReactNode",
+  "prefix": "ReactNode",
+  "description": "ReactNode",
+  "suffix": "ReactNode",
+  "disabled": "boolean = false",
+  "children": "ReactNode",
+  "minWidth": "number | CSSUnit = 192",
+  "maxWidth": "number | CSSUnit",
+  "openDelay": "number",
+  "className": "string",
+  "style": "React.CSSProperties"
+ },
+ "tags": [
+  "overlay",
+  "navigation",
+  "action"
+ ],
+ "pairsWith": [
+  "Dropdown",
+  "Option"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "CSSUnit": [
+   "`${number}px`",
+   "`${number}rem`",
+   "`${number}em`",
+   "`${number}ch`",
+   "`${number}%`",
+   "`${number}vh`",
+   "`${number}vw`",
+   "`${number}dvh`",
+   "`${number}dvw`",
+   "`${number}svh`",
+   "`${number}svw`",
+   "`${number}lvh`",
+   "`${number}lvw`",
+   "`${number}vmin`",
+   "`${number}vmax`",
+   "`${number}cqw`",
+   "`${number}cqh`",
+   "`calc(${string})`",
+   "`min(${string})`",
+   "`max(${string})`",
+   "`clamp(${string})`",
+   "`var(${string})`"
+  ]
+ }
+}
