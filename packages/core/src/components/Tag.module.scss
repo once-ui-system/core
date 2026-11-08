@@ -11,6 +11,26 @@
         background-clip: padding-box;
     }
 
+    // The default look: a neutral hairline on the page, white on light
+    // (inputs are white there), with the tone in a dot or prefix icon.
+    &.hairline {
+        background: transparent;
+
+        :global([data-theme="light"]) & {
+            background: var(--static-white);
+        }
+    }
+
+    &.clickable {
+        transition: border-color var(--transition-micro-medium);
+
+        @media (hover: hover) {
+            &:hover {
+                border-color: var(--neutral-alpha-strong);
+            }
+        }
+    }
+
     // As 2.x's Badge: a long announcement wraps inside its pill.
     &.announce {
         white-space: normal;
@@ -102,14 +122,56 @@
     }
 }
 
-// A Tag with `selected`, `onClick` or `onRemove` is a toggle (2.x's Chip).
-// Selected, it draws in its tone (brand unless one is given); unselected, in
-// neutral.
+// A fixed height per size, with the label trimmed to its cap height so it
+// sits in the optical middle whatever the font's line metrics: a line box
+// centres the em box, and most fonts (Geist among them) carry more room
+// above the caps than below the baseline, which lifts the text. A browser
+// without text-box keeps the line box, as before.
+// Written out, not generated, so every class is a literal in the source.
+.hairline {
+    &.size-xs { height: var(--static-space-16); }
+    &.size-s { height: var(--static-space-20); }
+    &.size-m { height: var(--static-space-24); }
+    &.size-l { height: calc(var(--static-space-24) + var(--static-space-4)); }
+    &.size-xl { height: var(--static-space-32); }
+}
+
+.toggle {
+    &.size-xs { height: var(--static-space-20); }
+    &.size-s { height: var(--static-space-24); }
+    &.size-m { height: calc(var(--static-space-24) + var(--static-space-4)); }
+    &.size-l { height: var(--static-space-32); }
+    &.size-xl { height: var(--static-space-40); }
+}
+
+.label {
+    text-box: trim-both cap alphabetic;
+}
+
+// The tone's dot: the most saturated step of its scale, which is 600 on dark
+// and 500 on light (the light scale runs from dark to pale).
+.dot {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: var(--radius-full);
+    background: var(--tag-dot);
+}
+
+.toneIcon {
+    color: var(--tag-dot);
+}
+
+// A toggle (2.x's Chip) in a hairline when off. On, it is solid ink, or
+// solid in its tone when one is given.
 @mixin tone($tone) {
-    --tag-selected: var(--#{$tone}-alpha-medium);
-    --tag-selected-active: var(--#{$tone}-alpha-weak);
-    --tag-on-selected: var(--#{$tone}-on-background-medium);
-    --tag-on-selected-active: var(--#{$tone}-on-background-weak);
+    --tag-dot: var(--function-#{$tone}-600);
+    --tag-tone-solid: var(--#{$tone}-solid-strong);
+    --tag-tone-on-solid: var(--#{$tone}-on-solid-strong);
+
+    :global([data-theme="light"]) & {
+        --tag-dot: var(--function-#{$tone}-500);
+    }
 }
 
 // Written out, not generated, so every class is a literal in the source.
@@ -136,44 +198,60 @@
 }
 
 .toggle {
-    &.selected {
-        background: var(--tag-selected);
-        color: var(--tag-on-selected);
-
-        &:focus {
-            background: var(--tag-selected);
-        }
-
-        @media (hover: hover) {
-            &:hover {
-                background: var(--tag-selected);
-            }
-        }
-
-        &:active {
-            background: var(--tag-selected-active);
-            color: var(--tag-on-selected-active);
-        }
-    }
+    border: 1px solid var(--neutral-alpha-medium);
+    transition:
+        background-color var(--transition-micro-medium),
+        border-color var(--transition-micro-medium),
+        color var(--transition-micro-medium);
 
     &.unselected {
-        background: var(--neutral-alpha-weak);
+        background: transparent;
         color: var(--neutral-on-background-medium);
 
+        :global([data-theme="light"]) & {
+            background: var(--static-white);
+        }
+
         &:focus {
-            background: var(--neutral-alpha-medium);
+            color: var(--neutral-on-background-strong);
+            border-color: var(--neutral-alpha-strong);
         }
 
         @media (hover: hover) {
             &:hover {
-                background: var(--neutral-alpha-medium);
+                color: var(--neutral-on-background-strong);
+                border-color: var(--neutral-alpha-strong);
             }
         }
 
         &:active {
             background: var(--neutral-alpha-weak);
-            color: var(--neutral-on-background-weak);
         }
+    }
+
+    &.selected {
+        // Ink: the page's strongest text colour as the fill, the page as the text.
+        --tag-solid: var(--neutral-on-background-strong);
+        --tag-on-solid: var(--page-background);
+        border-color: transparent;
+        background: var(--tag-solid);
+        color: var(--tag-on-solid);
+
+        @media (hover: hover) {
+            &:hover {
+                opacity: 0.9;
+            }
+        }
+
+        &:active {
+            opacity: 0.8;
+        }
+    }
+
+    // A tone given to a toggle draws it solid in that tone when on.
+    &.selected[class*="tone-"] {
+        --tag-solid: var(--tag-tone-solid);
+        --tag-on-solid: var(--tag-tone-on-solid);
     }
 
     &:disabled {
@@ -187,6 +265,25 @@
     }
 }
 
+// The remove button: the same 24px hit area, a smaller glyph, tucked into
+// the tag's padding.
+.remove {
+    margin-block: calc(-1 * var(--static-space-4));
+    margin-right: calc(-1 * var(--static-space-4));
+    opacity: 0.64;
+
+    @media (hover: hover) {
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    :global(svg) {
+        width: var(--static-space-12);
+        height: var(--static-space-12);
+    }
+}
+
 // With one, the toggle beside the remove button is.
 .action {
     @include touch.target;
@@ -197,12 +294,9 @@
 // it was the control: the same background, and the browser's own focus ring
 // around the whole tag. Rules of their own, so a browser without `:has()`
 // drops only these and keeps the ring on the control itself.
-.toggle.selected:has(> .action:focus) {
-    background: var(--tag-selected);
-}
-
 .toggle.unselected:has(> .action:focus) {
-    background: var(--neutral-alpha-medium);
+    color: var(--neutral-on-background-strong);
+    border-color: var(--neutral-alpha-strong);
 }
 
 .toggle:has(> .action:focus-visible) {
@@ -221,6 +315,11 @@
     @include density.parts(s) {
         padding: var(--static-space-1) var(--static-space-8);
 
+        &.hairline {
+            height: var(--static-space-20);
+            padding-block: 0;
+        }
+
         &.announce {
             padding: var(--static-space-2) var(--static-space-8);
 
@@ -230,7 +329,8 @@
         }
 
         &.toggle {
-            padding: var(--static-space-2) var(--static-space-4);
+            height: var(--static-space-24);
+            padding: var(--static-space-0) var(--static-space-4);
 
             .text {
                 @include density.text(body, s);
@@ -245,13 +345,19 @@
     @include density.parts(l) {
         padding: var(--static-space-4) var(--static-space-12);
 
+        &.hairline {
+            height: calc(var(--static-space-24) + var(--static-space-4));
+            padding-block: 0;
+        }
+
         &.announce {
             padding: var(--static-space-8) var(--static-space-16);
             @include density.text(label, m);
         }
 
         &.toggle {
-            padding: var(--static-space-8) var(--static-space-12);
+            height: var(--static-space-32);
+            padding: var(--static-space-0) var(--static-space-8);
 
             .text {
                 @include density.text(body, m);

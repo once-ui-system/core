@@ -374,8 +374,8 @@ Avoid: Passing the same text as label and children — the children are dropped
 - size?: TShirtSizes
 - label?: string = ""
 - prefixIcon, suffixIcon?: IconName
+- dot, arrow, selected, interactive?: boolean
 - href?: string
-- arrow, selected, interactive?: boolean
 - effect?: boolean = variant === "announce"
 - onClick?: MouseEventHandler<HTMLDivElement>
 - onRemove?: () => void
