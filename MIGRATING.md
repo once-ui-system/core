@@ -345,11 +345,14 @@ is how CodeBlock's header keeps its grey icons.
   `id="badge"`).
 - A Tag with `selected`, `onClick` or `onRemove` is the toggle (2.x Chip):
   `role="button"` with `aria-pressed`, a remove button beside it, drawn
-  selected in its tone (`brand` by default). **`selected` defaults to false**;
+  selected as solid ink (solid in its `tone` when given one). **`selected` defaults to false**;
   Chip's defaulted to true, so a 2.x `<Chip label="x" />` was drawn and
   announced as selected.
-- A Tag with only `onClick` keeps 2.x Tag's look, in its tone and size, and
+- A Tag with only `onClick` keeps the static look, in its tone and size, and
   is now a focusable button that Enter and Space press.
+- The static look changed: a neutral hairline with the tone in a dot before
+  the label (or in the `prefixIcon`), in place of 2.x's tinted fill and
+  border. `dot={false}` hides the dot.
 
 | 2.x | 3.0 | Codemod |
 | --- | --- | --- |
