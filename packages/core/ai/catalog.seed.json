@@ -238,6 +238,11 @@
     "tags": ["marketing"],
     "pairsWith": ["Sections"]
   },
+  "GallerySection": {
+    "purpose": "Site section: photo grid, mosaic or masonry",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
+  },
   "Feedback": {
     "purpose": "Inline alert with variant colour, icon, title, description and optional close",
     "tags": ["feedback"],

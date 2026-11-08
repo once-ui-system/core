@@ -190,6 +190,7 @@
   "CtaSection": {"purpose":"Site section: the closing call to action","importFrom":"@once-ui-system/blocks"},
   "FaqSection": {"purpose":"Site section: questions and answers","importFrom":"@once-ui-system/blocks"},
   "FeaturesSection": {"purpose":"Site section: features with icons","importFrom":"@once-ui-system/blocks"},
+  "GallerySection": {"purpose":"Site section: photo grid, mosaic or masonry","importFrom":"@once-ui-system/blocks"},
   "HeroSection": {"purpose":"Site section: h1, lead, buttons, picture","importFrom":"@once-ui-system/blocks"},
   "LogosSection": {"purpose":"Site section: client or press logos","importFrom":"@once-ui-system/blocks"},
   "PricingSection": {"purpose":"Site section: plans side by side, one highlighted","importFrom":"@once-ui-system/blocks"},

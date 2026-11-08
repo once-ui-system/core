@@ -1,4 +1,4 @@
-// Page sections for site builders: hero, features, about, stats,
+// Page sections for site builders: hero, features, about, stats, gallery,
 // testimonials, team, pricing, FAQ, logos, call to action and contact. Each
 // reads its props defensively, takes a `layout`, and is described as plain
 // data in `sectionSchemas` for an editor panel or a model.
@@ -7,6 +7,7 @@ export * from "./ContactSection.js";
 export * from "./CtaSection.js";
 export * from "./FaqSection.js";
 export * from "./FeaturesSection.js";
+export * from "./GallerySection.js";
 export * from "./HeroSection.js";
 export * from "./LogosSection.js";
 export {
@@ -15,6 +16,8 @@ export {
   ctaLayouts,
   faqLayouts,
   featuresLayouts,
+  galleryLayouts,
+  heroLayoutGuide,
   heroLayouts,
   logosLayouts,
   pricingLayouts,
