@@ -76,10 +76,11 @@ export interface MascotProps extends MascotLook, Omit<LeafPropsOf<"div">, "child
   /**
    * `cube`: the mascot is drawn in 3D, and while it thinks it turns into a 2 × 2 cube, the Once UI
    * mark, and solves it with no face showing. When it stops thinking the cube clicks into place,
-   * shows the logo for a beat and softens back into the mascot. Needs WebGL; without it the
-   * flat mascot shows instead.
+   * shows the logo for a beat and softens back into the mascot. `d20`: the same, but it firms
+   * into a twenty-sided die that tumbles while it thinks and lands face on when it stops. Both
+   * need WebGL; without it the flat mascot shows instead.
    */
-  working?: "cube";
+  working?: "cube" | "d20";
   /**
    * Kawaii effects: heart, star or laughing eyes, blush, tears, a sweat drop, an anger mark and
    * symbols rising off the head. `true` (default) draws the ones a mood brings, `false` none, and a
@@ -364,6 +365,7 @@ function Mouth({
  *
  * `working="cube"` draws it in 3D: while it thinks it becomes the Once UI cube
  * and solves it, then shows the logo and softens back with its face.
+ * `working="d20"` firms into a twenty-sided die that tumbles and lands instead.
  */
 const Mascot = (props: MascotProps) => {
   const {
@@ -375,8 +377,8 @@ const Mascot = (props: MascotProps) => {
     ...rest
   } = props;
   const full = { ...rest, state, mood, lookAt, size };
-  return working === "cube" ? (
-    <MascotCube props={full} fallback={<FlatMascot {...full} />} />
+  return working === "cube" || working === "d20" ? (
+    <MascotCube props={{ ...full, working }} fallback={<FlatMascot {...full} />} />
   ) : (
     <FlatMascot {...full} />
   );
