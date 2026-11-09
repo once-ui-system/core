@@ -1,0 +1,63 @@
+/* The preview's floor: a soft spot of the page behind the mascot. */
+.stage {
+    min-height: 15rem;
+    background: radial-gradient(circle at 50% 60%, var(--neutral-alpha-weak), transparent 70%);
+    border-bottom: 1px solid var(--neutral-alpha-medium);
+}
+
+.swatch {
+    display: block;
+    width: var(--static-space-24);
+    height: var(--static-space-24);
+    border-radius: var(--radius-full);
+    border: 1px solid var(--neutral-alpha-strong);
+}
+
+.tiles {
+    max-width: 20rem;
+}
+
+.tile {
+    width: var(--static-space-56);
+    height: var(--static-space-56);
+    padding: 0;
+}
+
+/* The still mascot the files are drawn from: rendered, never seen. */
+.still {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    clip-path: inset(50%);
+}
+
+/* Preview beside the controls, stuck while they scroll; above them when narrow. */
+.layout {
+    display: grid;
+    grid-template-columns: minmax(18rem, 1fr) minmax(20rem, 1.4fr);
+    gap: var(--static-space-24);
+    align-items: start;
+}
+
+.aside {
+    position: sticky;
+    top: var(--static-space-16);
+}
+
+@media (max-width: 52rem) {
+    .layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .aside {
+        position: static;
+    }
+}
+
+/* A slider's room in its row: wide beside a label, the whole row when stacked. */
+.amount {
+    width: min(14rem, 100%);
+    min-width: 8rem;
+}

@@ -65,14 +65,34 @@ const SECTIONS = [
   "Advanced",
 ].map((part) => `StylePanel${part}`);
 
+/** MascotPanel (after 3.0): the panel, its parts and hooks, and a random design. */
+const MASCOT_PANEL = [
+  "MascotPanel",
+  ...[
+    "Root",
+    "Preview",
+    "Actions",
+    "Body",
+    "Color",
+    "Eyes",
+    "Face",
+    "Accessories",
+    "Working",
+    "Motion",
+  ].map((part) => `MascotPanel${part}`),
+  "useMascotPanel",
+  "useMascotPanelLabels",
+  "randomMascotDesign",
+];
+
 describe("@once-ui-system/blocks", () => {
-  it("exports the six blocks, StylePanel's sections, its hook and the page sections", () => {
+  it("exports the six blocks, StylePanel's sections, its hook, MascotPanel and the page sections", () => {
     expect(Object.keys(blocks).sort()).toEqual(
-      [...BLOCKS, ...SECTIONS, "useStylePanel", ...PAGE_SECTIONS].sort(),
+      [...BLOCKS, ...SECTIONS, "useStylePanel", ...MASCOT_PANEL, ...PAGE_SECTIONS].sort(),
     );
   });
 
-  it.each([...BLOCKS, ...SECTIONS, ...PAGE_SECTIONS, "useStylePanel"])(
+  it.each([...BLOCKS, ...SECTIONS, ...PAGE_SECTIONS, ...MASCOT_PANEL, "useStylePanel"])(
     "%s is not on @once-ui-system/core",
     (name) => {
       expect(name in core).toBe(false);

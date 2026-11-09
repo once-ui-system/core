@@ -53,12 +53,20 @@ function Providers({ children }: { children: React.ReactNode }) {
 
 /** StylePanel's sections read the state StylePanelRoot holds, so they render inside one. */
 const needsRoot = (name: string) => /^StylePanel(?!Root$)./.test(name);
+/** MascotPanel's likewise read MascotPanelRoot's. */
+const needsMascotRoot = (name: string) => /^MascotPanel(?!Root$)./.test(name);
 
 function element(name: string, Component: AnyComponent) {
   const child = createElement(Component, fixtures[name] ?? {});
   return (
     <Providers>
-      {needsRoot(name) ? <Blocks.StylePanelRoot>{child}</Blocks.StylePanelRoot> : child}
+      {needsRoot(name) ? (
+        <Blocks.StylePanelRoot>{child}</Blocks.StylePanelRoot>
+      ) : needsMascotRoot(name) ? (
+        <Blocks.MascotPanelRoot>{child}</Blocks.MascotPanelRoot>
+      ) : (
+        child
+      )}
     </Providers>
   );
 }

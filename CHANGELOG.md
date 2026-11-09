@@ -11,6 +11,22 @@ Entries before 1.7.13 are reconstructed from GitHub releases and git history and
 incomplete; reconciling them against actual npm release history is a scheduled roadmap
 item (see `ROADMAP.md`, Week 4).
 
+## [3.1.0] - Unreleased
+
+### Added
+
+- **`MascotPanel`** in `@once-ui-system/blocks`: a character designer for the Mascot,
+  built like StylePanel. Body, eyes, face, accessories (several at once), working style
+  (`cube`, `d20`) and personality, a preview that tries every state and mood without
+  saving it, and free exports: Randomize, Reset, Copy JSON, Copy JSX, SVG and PNG. The
+  `exports` slot takes a product's own buttons. Composable from `MascotPanelRoot` and
+  its parts, with `value`/`onValueChange` or `defaultValue` and `storageKey`, `labels`,
+  `visibility`, `stacked` and `preview` (`side`, `top`, `none`).
+- **`MascotDesign`** in core: the designed part of a Mascot as plain JSON (`v: 1`), with
+  `parseMascotDesign` (reads stored or AI-written values safely, never throws),
+  `mascotDesignProps`, `MASCOT_DESIGN_DEFAULTS` and `MASCOT_DESIGN_RANGES`. The Mascot
+  reads its defaults from the same constant.
+
 ## [3.0.0] - Unreleased
 
 Breaking. Built on the `feat/3-0-breaking-cleanup` branch; [MIGRATING.md](MIGRATING.md#2x--30)

@@ -9,6 +9,7 @@ import type { CSSUnit } from "../../types.js";
 import { tokenLength } from "../../utils/layoutClasses.js";
 import { accessoryLayers, isMascotAccessory, type MascotAccessory } from "./accessories.js";
 import { type AudioLevelSource, createAudioMeter } from "./audioLevel.js";
+import { MASCOT_DESIGN_DEFAULTS } from "./design.js";
 import {
   baseMood,
   EyeGlyph,
@@ -118,20 +119,9 @@ export interface MascotProps extends MascotLook, Omit<LeafPropsOf<"div">, "child
 const SIZE = { s: 32, m: 48, l: 96, xl: 160 } as const;
 const SCHEMES = new Set(["brand", "accent", "neutral"]);
 
-const DEFAULT_LOOK: Required<Omit<MascotLook, "bodyPath" | "eyeColor" | "sides" | "face">> = {
-  color: "brand",
-  roundness: 0.7,
-  aspect: 1,
-  surface: "glossy",
-  eyes: "tile",
-  eyeSize: 1,
-  eyeSpacing: 1,
-  eyeHeight: 0,
-  mouth: "none",
-  brows: false,
-  cheeks: false,
-  personality: "default",
-};
+// One source for the defaults, shared with stored designs (design.ts).
+const DEFAULT_LOOK: Required<Omit<MascotLook, "bodyPath" | "eyeColor" | "sides" | "face">> =
+  MASCOT_DESIGN_DEFAULTS;
 
 const STATE_LABEL: Record<MascotState, string> = {
   idle: "Assistant",

@@ -1174,6 +1174,10 @@ function AdvancedGroup({
  * and the rest. 3.0 drops the `StylePanel.Brand` statics, which a server
  * component cannot reach through a client module.
  */
+/*
+ * For MascotPanel, which lays its rows out the same way. Not re-exported from
+ * the package: StylePanel.tsx names its public exports one by one.
+ */
 export {
   AccentRow as StylePanelAccent,
   AdvancedGroup as StylePanelAdvanced,
@@ -1187,6 +1191,7 @@ export {
   EffectRow as StylePanelEffect,
   Group as StylePanelGroup,
   NeutralRow as StylePanelNeutral,
+  Options as StylePanelOptions,
   PageGroup as StylePanelPage,
   Root as StylePanelRoot,
   Row as StylePanelRow,
@@ -1194,8 +1199,10 @@ export {
   ShapeRow as StylePanelShape,
   SolidRow as StylePanelSolid,
   SolidStyleGroup as StylePanelSolidStyle,
+  StylePanelStackedContext,
   SurfaceRow as StylePanelSurface,
   ThemeRow as StylePanelTheme,
   TransitionRow as StylePanelTransition,
+  useGroupName,
   useStylePanel,
 };

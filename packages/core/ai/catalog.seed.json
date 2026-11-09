@@ -449,6 +449,71 @@
     "tags": ["ai", "chat", "decoration"],
     "pairsWith": ["VoiceVisualizer", "WorkingIndicator"]
   },
+  "MascotPanel": {
+    "purpose": "Character designer for Mascot, editing a stored MascotDesign; or compose MascotPanelRoot and its parts",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["Mascot", "MascotPanelRoot"]
+  },
+  "MascotPanelRoot": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel state, labels and layout; holds the MascotDesign its parts edit",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanel", "Mascot"]
+  },
+  "MascotPanelPreview": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel group: live Mascot with state and mood to try, and the actions; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelActions": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel buttons: randomize, reset, copy JSON or JSX, SVG and PNG; `exports` adds more; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelBody": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel group: color, roundness, width and surface; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelColor": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel row: brand, accent, neutral or custom body color; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelEyes": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel group: eye shape, size, spacing, height and color; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelFace": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel group: mouth, brows and cheeks; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelAccessories": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel group: accessory tiles (several at once) and one accessory color; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelWorking": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel group: none, cube or d20 while thinking, with sides and face; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelMotion": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel group: personality (calm, default, bouncy); inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
   "Map": {
     "purpose": "Themed map on free tiles with React markers and a controlled viewport (needs maplibre-gl)",
     "tags": ["map", "location", "list"],

@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "3.0.0-beta.1",
- "generated": "2026-11-08",
+ "generated": "2026-11-09",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root; '@once-ui-system/fx' and '@once-ui-system/blocks' are packages of their own, installed beside core.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -759,8 +759,8 @@
   ],
   "CursorPresetValue": [
    "rounded",
-   "soft",
    "dot",
+   "soft",
    "system"
   ],
   "CurveType": [
@@ -875,6 +875,13 @@
    "weather",
    "particle",
    "celebration"
+  ],
+  "EyeShape": [
+   "round",
+   "tile",
+   "pill",
+   "wide",
+   "dot"
   ],
   "FadeState": [
    "entering",
@@ -1113,6 +1120,15 @@
    "6",
    "7",
    "11"
+  ],
+  "GroupKey": [
+   "body",
+   "eyes",
+   "working",
+   "face",
+   "motion",
+   "preview",
+   "accessories"
   ],
   "IconButtonProps": "IconButton props",
   "IconComponent": [
@@ -1367,6 +1383,28 @@
    "catEars",
    "partyHat"
   ],
+  "MascotDesign": {
+   "v": "!1",
+   "color": "\"brand\" | \"accent\" | \"neutral\" | (string & {})",
+   "roundness": "number",
+   "aspect": "number",
+   "bodyPath": "string",
+   "surface": "\"glossy\" | \"matte\" | \"flat\" | \"glass\"",
+   "eyes": "\"tile\" | \"pill\" | \"round\" | \"wide\" | \"dot\" | { path: string }",
+   "eyeSize": "number",
+   "eyeSpacing": "number",
+   "eyeHeight": "number",
+   "eyeColor": "string",
+   "mouth": "\"none\" | \"smile\" | \"dot\" | \"line\"",
+   "brows": "boolean",
+   "cheeks": "boolean",
+   "personality": "\"calm\" | \"default\" | \"bouncy\"",
+   "accessory": "MascotAccessory[]",
+   "accessoryColor": "string",
+   "working": "\"cube\" | \"d20\"",
+   "sides": "MascotSides",
+   "face": "\"3d\" | \"flat\""
+  },
   "MascotEffect": [
    "heartEyes",
    "starEyes",
@@ -1413,6 +1451,41 @@
    "crying",
    "angry",
    "confused"
+  ],
+  "MascotPanelContextValue": {
+   "value": "!MascotDesign",
+   "set": "!(patch: Partial<Omit<MascotDesign, \"v\">>) => void",
+   "replace": "!(next: MascotDesign) => void",
+   "trial": "!{ state: MascotState; mood: MascotMood }",
+   "setTrial": "!(next: Partial<{ state: MascotState; mood: MascotMood }>) => void"
+  },
+  "MascotPanelHeading": {
+   "title": "string",
+   "description": "string"
+  },
+  "MascotPanelLabels": {
+   "groups": "Partial<Record<GroupKey, MascotPanelHeading>>",
+   "rows": "Partial< Record< | \"color\" | \"roundness\" | \"aspect\" | \"surface\" | \"eyes\" | \"eyeSize\" | \"eyeSpacing\" | \"eyeHeight\" | \"eyeColor\" | \"mouth\" | \"brows\" | \"cheeks\" | \"accessories\" | \"accessoryColor\" | \"working\" | \"sides\" | \"face\" | \"personality\" | \"state\" | \"mood\", string > >",
+   "options": "{ colors?: Partial<Record<Scheme | \"custom\", string>>; surface?: Partial<Record<NonNullable<MascotDesign[\"surface\"]>, string>>; eyes?: Partial<Record<EyeShape, string>>; mouth?: Partial<Record<NonNullable<MascotDesign[\"mouth\"]>, string>>; personality?: Partial<Record<NonNullable<MascotDesign[\"personality\"]>, string>>; working?: Partial<Record<\"none\" | \"cube\" | \"d20\", string>>; sides?: Partial<Record<\"classic\" | \"tints\" | \"mono\", string>>; face?: Partial<Record<\"3d\" | \"flat\", string>>; state?: Partial<Record<MascotState, string>>; mood?: Partial<Record<MascotMood, string>>; accessories?: Partial<Record<MascotAccessory, string>>; }",
+   "actions": "Partial< Record< \"randomize\" | \"reset\" | \"copyJson\" | \"copyJsx\" | \"copied\" | \"downloadSvg\" | \"downloadPng\", string > >",
+   "preview": "string",
+   "colorSwatch": "(name: string) => string"
+  },
+  "MascotPanelRootProps": "MascotPanelRoot props",
+  "MascotPanelVisibility": {
+   "preview": "{ section?: boolean; state?: boolean; mood?: boolean; actions?: boolean }",
+   "body": "{ section?: boolean; color?: boolean; roundness?: boolean; aspect?: boolean; surface?: boolean; }",
+   "eyes": "{ section?: boolean; eyes?: boolean; eyeSize?: boolean; eyeSpacing?: boolean; eyeHeight?: boolean; eyeColor?: boolean; }",
+   "face": "{ section?: boolean; mouth?: boolean; brows?: boolean; cheeks?: boolean }",
+   "accessories": "{ section?: boolean; accessories?: boolean; accessoryColor?: boolean }",
+   "working": "{ section?: boolean; working?: boolean; sides?: boolean; face?: boolean }",
+   "motion": "{ section?: boolean; personality?: boolean }"
+  },
+  "MascotSides": [
+   "classic",
+   "tints",
+   "mono",
+   "Partial<Record<\"top\" | \"right\" | \"bottom\" | \"left\" | \"front\" | \"back\", string>>"
   ],
   "MascotState": [
    "idle",
@@ -1724,6 +1797,11 @@
    "110",
    "95",
    "105"
+  ],
+  "Scheme": [
+   "neutral",
+   "brand",
+   "accent"
   ],
   "SchemeRampWeight": [
    "100",
@@ -2215,8 +2293,8 @@
    "neutral": "NeutralColor | \"custom\"",
    "brand": "Schemes | \"custom\"",
    "accent": "Schemes | \"custom\"",
-   "solidStyle": "SolidStyle",
    "surface": "SurfaceStyle",
+   "solidStyle": "SolidStyle",
    "brandSeed": "string",
    "accentSeed": "string",
    "neutralSeed": "string",
@@ -5990,6 +6068,200 @@
     "rotationInterval": "number = ANIMATION_DURATION"
    }
   },
+  "MascotPanelAccessories": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "title": "ReactNode | false",
+    "description": "ReactNode | false",
+    "rows": "MascotPanelVisibility[\"accessories\"]"
+   }
+  },
+  "MascotPanelActions": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "exports": "ReactNode",
+    "filename": "string = mascot"
+   }
+  },
+  "MascotPanelBody": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "title": "ReactNode | false",
+    "description": "ReactNode | false",
+    "rows": "MascotPanelVisibility[\"body\"]"
+   }
+  },
+  "MascotPanelColor": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "ReactNode | false"
+   }
+  },
+  "MascotPanelEyes": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "title": "ReactNode | false",
+    "description": "ReactNode | false",
+    "rows": "MascotPanelVisibility[\"eyes\"]"
+   }
+  },
+  "MascotPanelFace": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "title": "ReactNode | false",
+    "description": "ReactNode | false",
+    "rows": "MascotPanelVisibility[\"face\"]"
+   }
+  },
+  "MascotPanelMotion": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "title": "ReactNode | false",
+    "description": "ReactNode | false",
+    "rows": "MascotPanelVisibility[\"motion\"]"
+   }
+  },
+  "MascotPanelPreview": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "title": "ReactNode | false",
+    "description": "ReactNode | false",
+    "rows": "MascotPanelVisibility[\"preview\"]",
+    "exports": "ReactNode"
+   }
+  },
+  "MascotPanelRoot": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "value": "MascotDesign",
+    "defaultValue": "MascotDesign",
+    "onValueChange": "(next: MascotDesign, changed: Partial<MascotDesign>) => void",
+    "storageKey": "string",
+    "labels": "MascotPanelLabels",
+    "stacked": "boolean = false"
+   }
+  },
+  "MascotPanelWorking": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "title": "ReactNode | false",
+    "description": "ReactNode | false",
+    "rows": "MascotPanelVisibility[\"working\"]"
+   }
+  },
+  "MascotPanel": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "defaultValue": "MascotDesign",
+    "storageKey": "string",
+    "stacked": "boolean",
+    "value": "MascotPanelRootProps[\"value\"]",
+    "onValueChange": "MascotPanelRootProps[\"onValueChange\"]",
+    "labels": "MascotPanelLabels",
+    "visibility": "MascotPanelVisibility",
+    "preview": "\"side\" | \"top\" | \"none\" = side",
+    "exports": "ReactNode"
+   }
+  },
   "ScrollToTop": {
    "group": "blocks",
    "importFrom": "@once-ui-system/blocks",
@@ -6622,6 +6894,30 @@
    "kind": "value",
    "type": "readonly MascotAccessory[]"
   },
+  "MASCOT_DESIGN_DEFAULTS": {
+   "group": "modules",
+   "kind": "value",
+   "type": "{ readonly color: \"brand\"; readonly roundness: 0.7; readonly aspect: 1; readonly surface: \"glossy\"; readonly eyes: \"tile\"; readonly eyeSize: 1; readonly eyeSpacing: 1; readonly eyeHeight: 0; readonly mouth: \"none\"; readonly brows: false; readonly cheeks: false; readonly personality: \"default\"; }",
+   "doc": "The look a mascot has when a design leaves a part out."
+  },
+  "MASCOT_DESIGN_RANGES": {
+   "group": "modules",
+   "kind": "value",
+   "type": "{ readonly roundness: readonly [0, 1]; readonly aspect: readonly [0.6, 1.6]; readonly eyeSize: readonly [0.5, 1.8]; readonly eyeSpacing: readonly [0.5, 1.6]; readonly eyeHeight: readonly [-1, 1]; }",
+   "doc": "Where each number is allowed to go."
+  },
+  "mascotDesignProps": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(design: MascotDesign) => Omit<MascotDesign, \"v\">",
+   "doc": "The props a design gives `<Mascot />`."
+  },
+  "parseMascotDesign": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(input: unknown) => MascotDesign",
+   "doc": "Reads a stored, posted or AI-written design and returns one that is safe to render."
+  },
   "useAudioLevel": {
    "group": "modules",
    "kind": "hook",
@@ -6859,6 +7155,27 @@
    "kind": "function",
    "signature": "<T extends OnceUIConfig>(config: T & CheckedConfig<T>) => T",
    "doc": "Type an app's `once-ui.config`, whose `style` keys are ThemeProvider's props (an exact brand colour is `brand: \"custom\", brandSeed: \"#0F766E\"`)."
+  },
+  "randomMascotDesign": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "function",
+   "signature": "(keep?: Pick<MascotDesign, \"working\" | \"sides\" | \"face\">) => MascotDesign",
+   "doc": "A whole new look, keeping how it works."
+  },
+  "useMascotPanel": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "hook",
+   "signature": "() => MascotPanelContextValue",
+   "doc": "The panel's state, for a custom row inside a MascotPanelRoot."
+  },
+  "useMascotPanelLabels": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "() => Complete<MascotPanelLabels>",
+   "doc": "Use the panel's labels in a custom row."
   },
   "useStylePanel": {
    "group": "blocks",
