@@ -1,0 +1,200 @@
+// Timeline: hairline nodes on a hairline rail, with the tone as a vivid dot
+// (the Tag's dot), not a filled disc. A step not reached is an empty node on a
+// dashed rail; the current step (`brand`) carries a soft halo.
+
+.timeline {
+    // Node size without a marker, and the box a marker sits in.
+    --timeline-node: 14px;
+    --timeline-marker: 32px;
+    // The height of a label's first line: the node centres on it.
+    --timeline-row: 24px;
+    --timeline-rail: 1px;
+}
+
+.size-xs {
+    --timeline-node: 10px;
+    --timeline-marker: 20px;
+    --timeline-row: 20px;
+}
+.size-s {
+    --timeline-node: 12px;
+    --timeline-marker: 24px;
+    --timeline-row: 20px;
+}
+.size-l {
+    --timeline-node: 16px;
+    --timeline-marker: 40px;
+    --timeline-row: 28px;
+}
+.size-xl {
+    --timeline-node: 18px;
+    --timeline-marker: 48px;
+    --timeline-row: 32px;
+}
+
+// The column (or row) that holds a step's node and its rail.
+.track {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: max(var(--timeline-node), var(--timeline-row));
+}
+
+.hasMarker .track {
+    width: var(--timeline-marker);
+}
+
+.anchor {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--timeline-row);
+}
+
+.hasMarker .anchor {
+    height: var(--timeline-marker);
+}
+
+.node {
+    position: relative;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--timeline-node);
+    height: var(--timeline-node);
+    border-radius: var(--radius-full);
+    border: 1px solid var(--neutral-alpha-strong);
+    background: var(--page-background);
+    color: var(--neutral-on-background-weak);
+    font-variant-numeric: tabular-nums;
+}
+
+.hasMarker .node {
+    width: var(--timeline-marker);
+    height: var(--timeline-marker);
+}
+
+// A step reached: the vivid dot inside the node, or the marker in the tone.
+.dot {
+    width: 50%;
+    height: 50%;
+    border-radius: var(--radius-full);
+    background: var(--timeline-dot);
+}
+
+.reached {
+    border-color: var(--neutral-border-strong);
+    color: var(--timeline-dot);
+}
+
+.upcoming {
+    border-color: var(--neutral-alpha-medium);
+}
+
+// The current step: the node in the tone's hairline with a soft halo.
+.current {
+    border-color: var(--timeline-dot);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--timeline-dot) 18%, transparent);
+}
+
+// The rail between two steps: solid up to the last step reached, dashed after.
+.rail {
+    flex: 1 1 auto;
+    min-height: 8px;
+    width: var(--timeline-rail);
+    background: var(--neutral-border-strong);
+}
+
+.railUpcoming {
+    background: repeating-linear-gradient(
+        to bottom,
+        var(--neutral-alpha-strong) 0 3px,
+        transparent 3px 7px
+    );
+}
+
+.row .track {
+    flex-direction: row;
+    width: 100%;
+    height: var(--timeline-row);
+}
+
+.row.hasMarker .track {
+    height: var(--timeline-marker);
+}
+
+.row .rail {
+    min-height: 0;
+    min-width: 8px;
+    width: auto;
+    height: var(--timeline-rail);
+}
+
+.row .railUpcoming {
+    background: repeating-linear-gradient(
+        to right,
+        var(--neutral-alpha-strong) 0 3px,
+        transparent 3px 7px
+    );
+}
+
+// The first and last steps of a row have no rail on their outer side; this
+// keeps the node where the rail would have started.
+.railNone {
+    background: none;
+}
+
+.content {
+    min-width: 0;
+}
+
+// The label sits on the node's line.
+.labelRow {
+    display: flex;
+    align-items: center;
+    min-height: var(--timeline-row);
+}
+
+.hasMarker .labelRow {
+    min-height: var(--timeline-marker);
+}
+
+.upcomingLabel {
+    color: var(--neutral-on-background-medium);
+}
+
+// The tone's dot colour: the most saturated step of its scale, as in Tag
+// (600 on dark, 500 on light, where the light scale runs dark to pale).
+@mixin tone($tone) {
+    --timeline-dot: var(--function-#{$tone}-600);
+
+    :global([data-theme="light"]) & {
+        --timeline-dot: var(--function-#{$tone}-500);
+    }
+}
+
+// Written out, not generated, so every class is a literal in the source.
+.tone-brand {
+    @include tone(brand);
+}
+.tone-accent {
+    @include tone(accent);
+}
+.tone-neutral {
+    @include tone(neutral);
+}
+.tone-info {
+    @include tone(info);
+}
+.tone-success {
+    @include tone(success);
+}
+.tone-warning {
+    @include tone(warning);
+}
+.tone-danger {
+    @include tone(danger);
+}
