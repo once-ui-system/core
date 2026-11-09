@@ -111,6 +111,7 @@ const AlarmList = ({
             <Button
               size="s"
               variant="secondary"
+              weight="default"
               label={labels.acknowledgeAll}
               onClick={() => onAcknowledge(waiting)}
             />
@@ -154,8 +155,10 @@ const AlarmList = ({
                 </span>
                 {onAcknowledge && needsAcknowledge(alarm) ? (
                   <Button
+                    className={styles.rowAction}
                     size="s"
-                    variant="tertiary"
+                    variant="secondary"
+                    weight="default"
                     label={labels.acknowledge}
                     aria-label={`${labels.acknowledge}: ${alarm.label}`}
                     onClick={() => onAcknowledge([alarm.id])}

@@ -69,7 +69,7 @@ const Annunciator = ({
         {
           ...(columns
             ? {
-                "--annunciator-columns": `repeat(auto-fill, minmax(max(var(--annunciator-min, 140px), calc((100% - ${columns - 1} * var(--static-space-4)) / ${columns})), 1fr))`,
+                "--annunciator-columns": `repeat(auto-fill, minmax(max(var(--annunciator-min, 140px), calc((100% - ${columns - 1} * var(--annunciator-gap)) / ${columns})), 1fr))`,
               }
             : {}),
           ...style,

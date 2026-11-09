@@ -63,7 +63,9 @@
   list-style: none;
   display: grid;
   grid-template-columns: var(--annunciator-columns, repeat(auto-fill, minmax(160px, 1fr)));
-  gap: var(--static-space-4);
+  // Room for the new-alarm double outline (4px) between neighbours.
+  --annunciator-gap: var(--static-space-12);
+  gap: var(--annunciator-gap);
   margin: 0;
   padding: 0;
 }
@@ -210,6 +212,7 @@
 }
 
 .row {
+  position: relative;
   display: grid;
   grid-template-columns: 16px minmax(0, 1fr) auto;
   align-items: center;
@@ -264,6 +267,37 @@
   margin-right: var(--static-space-8);
   color: var(--neutral-on-background-medium);
   font-family: var(--font-code);
+}
+
+// With a mouse, a row's Acknowledge shows on hover or keyboard focus, over the
+// row's end, so a long list does not repeat it on every line. Touch screens
+// keep it in place. The row's edge and bold label already say it waits.
+@media (hover: hover) {
+  .row {
+    grid-template-columns: 16px minmax(0, 1fr);
+  }
+
+  .rowAction {
+    position: absolute;
+    right: var(--static-space-12);
+    top: 50%;
+    translate: 0 -50%;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+  }
+
+  .row:hover .rowAction,
+  .row:focus-within .rowAction {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rowAction {
+      transition: none;
+    }
+  }
 }
 
 // Priority and state in words, the time, the detail: one line that wraps.
