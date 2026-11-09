@@ -262,6 +262,29 @@ off, so the shape is one solid color. Everything else from the flat mascot carri
 The cube draws with WebGL and no extra dependency. It only animates while it is on screen, and
 where WebGL is missing it renders the flat mascot instead.
 
+### D20
+
+`working="d20"` works the same way with a twenty-sided die. While it thinks, the blob firms into
+the die and tumbles, now slow, now in a quick spin. When the work is done it lands with a face
+toward you, point up, holds it for a beat and softens back into the blob with its face. The die
+takes the mascot's color, and every look prop carries over; `sides` only applies to the cube.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<MascotD20Example />}
+  codes={[
+    {
+      code:
+`<Mascot working="d20" state={busy ? "thinking" : "idle"} />
+<Mascot working="d20" color="accent" eyes="pill" />
+<Mascot working="d20" surface="matte" face="flat" />`,
+      language: "tsx",
+      label: "D20"
+    }
+  ]}
+/>
+
 ## LogoSpinner
 
 The four tiles of the Once UI mark, moving. `twist` parts the tiles, turns a quarter and clicks
