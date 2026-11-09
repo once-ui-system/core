@@ -10,9 +10,9 @@ export interface TimelineItem {
   label?: React.ReactNode;
   description?: React.ReactNode;
   /**
-   * A step reached, in its palette: a vivid dot in the step's node (or its
-   * marker in the tone) and, for `danger`, its text. `brand` is the current
-   * step and carries a halo. Leave it out for a step not reached yet: an
+   * A step reached, in its palette: a vivid dot off centre in the step's node
+   * (or its marker in the tone) and, for `danger`, its text. `brand` is the
+   * current step: its dot orbits the node (it stays put under reduced motion). Leave it out for a step not reached yet: an
    * empty node on a dashed rail. 2.x's `state: "active"` is `tone: "brand"`.
    */
   tone?: Tone;
@@ -75,7 +75,13 @@ const Timeline = ({
             </Text>
           ) : null
         ) : (
-          item.tone && <span className={styles.dot} />
+          // The dot sits off centre on purpose, so a step never reads as a
+          // radio button; on the current step it orbits the node.
+          item.tone && (
+            <span className={styles.orbit} aria-hidden>
+              <span className={styles.dot} />
+            </span>
+          )
         )}
       </span>
     );

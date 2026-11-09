@@ -78,11 +78,40 @@
 }
 
 // A step reached: the vivid dot inside the node, or the marker in the tone.
+// The dot sits off centre (towards the top right), so a node never reads as
+// a radio button. `.orbit` fills the node and turns on the current step.
+.orbit {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+}
+
 .dot {
-    width: 50%;
-    height: 50%;
+    position: absolute;
+    width: 42%;
+    height: 42%;
+    left: 50%;
+    top: 50%;
     border-radius: var(--radius-full);
     background: var(--timeline-dot);
+    // Centred, then a third of its own size up and to the right.
+    transform: translate(-17%, -83%);
+}
+
+.current .orbit {
+    animation: timeline-orbit 2.4s linear infinite;
+}
+
+@keyframes timeline-orbit {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .current .orbit {
+        animation: none;
+    }
 }
 
 .reached {
