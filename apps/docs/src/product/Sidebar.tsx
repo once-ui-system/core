@@ -411,15 +411,6 @@ const SidebarContent: React.FC<{
             pathname={pathname}
           />
         )}
-        {platform.id === "web" && (
-          <ResourceLink
-            href="/mascot"
-            icon="sparkle"
-            label="Mascot designer"
-            tag="New"
-            pathname={pathname}
-          />
-        )}
         <ResourceLink
           href="https://github.com/once-ui-system/core/releases"
           icon="github"

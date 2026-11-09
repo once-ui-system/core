@@ -9,7 +9,6 @@ export default async function sitemap() {
 
   const staticPages = [
     { url: baseURL, lastModified: new Date().toISOString() },
-    { url: `${baseURL}/mascot`, lastModified: new Date().toISOString() },
   ];
 
   return [...staticPages, ...contentPages];
