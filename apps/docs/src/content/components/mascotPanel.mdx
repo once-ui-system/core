@@ -53,21 +53,21 @@ Without `value` the panel keeps its own state from `defaultValue`, and with `sto
 - **Working:** what it turns into while it thinks: nothing, the `cube` or the `d20`, with its sides and face.
 - **Motion:** its personality.
 
-The pickers for surface, eye shape, mouth, accessories, state and mood are tiles that show your mascot with each option on, so people see what they pick. Arrow keys move between the tiles.
+The pickers for surface, eye shape, mouth, accessories, state and mood are one scrolling row of tiles, each showing your mascot with that option on, so people see what they pick. Arrow keys move between the tiles.
 
 The preview tries every state and mood, kawaii ones included. That part is never saved.
 
 ## Exports
 
-The actions under the preview are free: Randomize, Reset, Copy JSON, Copy JSX, and the flat mascot as an SVG or PNG file, drawn in the browser. Pass `exports` to add your own buttons after them; they read the design with `useMascotPanel()`.
+The preview's "more" menu, in its top right corner, holds Randomize, Reset and the free exports: Copy JSON, Copy JSX, and the flat mascot as an SVG or PNG file, drawn in the browser. Pass `exports` to add your own menu items after them; they read the design with `useMascotPanel()`.
 
 ```tsx
-function GifButton() {
+function GifItem() {
   const { value } = useMascotPanel();
-  return <Button size="s" variant="tertiary" onClick={() => makeGif(value)}>GIF</Button>;
+  return <Option value="gif" label="Download GIF" onClick={() => makeGif(value)} />;
 }
 
-<MascotPanel exports={<GifButton />} />
+<MascotPanel exports={<GifItem />} />
 ```
 
 ## Compose your own

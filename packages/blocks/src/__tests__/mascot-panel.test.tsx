@@ -110,6 +110,23 @@ describe("MascotPanel", () => {
     expect(onValueChange).not.toHaveBeenCalled();
   });
 
+  it("keeps Randomize, Reset and the exports in the preview's more menu", async () => {
+    const onValueChange = vi.fn();
+    render(<MascotPanel value={{ v: 1, eyes: "dot" }} onValueChange={onValueChange} />, {
+      wrapper,
+    });
+    expect(screen.queryByText("Copy JSON")).toBeNull();
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: "More" }));
+    });
+    expect(await screen.findByText("Copy JSON")).toBeTruthy();
+    expect(screen.getByText("Download PNG")).toBeTruthy();
+    await act(async () => {
+      fireEvent.click(screen.getByText("Reset"));
+    });
+    expect(onValueChange).toHaveBeenLastCalledWith({ v: 1 }, expect.anything());
+  });
+
   it("hides sections and rows, and translates", () => {
     render(
       <MascotPanel

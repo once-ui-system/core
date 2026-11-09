@@ -59,11 +59,11 @@ export interface MascotPanelProps extends MascotPanelRootProps {
    */
   preview?: "side" | "top" | "none";
   /**
-   * Export buttons after the free ones (JSON, JSX, SVG, PNG): a product's own,
+   * Menu items after the free exports (JSON, JSX, SVG, PNG) in the preview's "more" menu: a product's own,
    * or Pro ones such as animated emotes. They read the design with `useMascotPanel()`.
    */
   exports?: ReactNode;
-  /** Labels above controls. Defaults to on with `preview="side"`, where each column is narrow. */
+  /** Labels above every control. Off by default: sliders and switches sit beside their label, and the pickers take the row under theirs. */
   stacked?: boolean;
 }
 
@@ -102,8 +102,7 @@ const MascotPanel = ({
     </Column>
   );
   return (
-    // Beside the preview the controls have half the width, so their labels go above them.
-    <MascotPanelRoot ref={ref} stacked={stacked ?? preview === "side"} {...rest}>
+    <MascotPanelRoot ref={ref} stacked={stacked} {...rest}>
       {preview === "side" && previewSection ? (
         <div className={styles.layout}>
           <div className={styles.aside}>{previewSection}</div>

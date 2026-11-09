@@ -1,10 +1,14 @@
 "use client";
 
 import {
-  Button,
   ColorInput,
   Column,
+  Dropdown,
   Flex,
+  Icon,
+  IconButton,
+  type IconName,
+  Line,
   MASCOT_ACCESSORIES,
   MASCOT_DESIGN_DEFAULTS,
   MASCOT_DESIGN_RANGES,
@@ -16,6 +20,7 @@ import {
   type MascotState,
   mascotDesignProps,
   mascotLook,
+  Option,
   parseMascotDesign,
   Slider,
   Switch,
@@ -110,7 +115,7 @@ export interface MascotPanelLabels {
   };
   actions?: Partial<
     Record<
-      "randomize" | "reset" | "copyJson" | "copyJsx" | "copied" | "downloadSvg" | "downloadPng",
+      "more" | "randomize" | "reset" | "copyJson" | "copyJsx" | "downloadSvg" | "downloadPng",
       string
     >
   >;
@@ -154,13 +159,13 @@ const named = <K extends string>(keys: readonly K[], names: Partial<Record<K, st
 
 const DEFAULT_LABELS: ResolvedLabels = {
   groups: {
-    preview: { title: "Preview", description: "Try its states and moods; none of this is saved" },
-    body: { title: "Body", description: "Color, shape and surface" },
-    eyes: { title: "Eyes", description: "Shape, size and placement" },
-    face: { title: "Face", description: "Mouth, brows and cheeks" },
-    accessories: { title: "Accessories", description: "What it wears" },
-    working: { title: "Working", description: "What it turns into while it thinks" },
-    motion: { title: "Motion", description: "How it moves" },
+    preview: { title: "Preview", description: "" },
+    body: { title: "Body", description: "" },
+    eyes: { title: "Eyes", description: "" },
+    face: { title: "Face", description: "" },
+    accessories: { title: "Accessories", description: "" },
+    working: { title: "Working", description: "" },
+    motion: { title: "Motion", description: "" },
   },
   rows: {
     color: "Color",
@@ -201,13 +206,13 @@ const DEFAULT_LABELS: ResolvedLabels = {
     }),
   },
   actions: {
+    more: "More",
     randomize: "Randomize",
     reset: "Reset",
     copyJson: "Copy JSON",
     copyJsx: "Copy JSX",
-    copied: "Copied",
-    downloadSvg: "SVG",
-    downloadPng: "PNG",
+    downloadSvg: "Download SVG",
+    downloadPng: "Download PNG",
   },
   preview: "Mascot preview",
   colorSwatch: (name) => `Body color: ${name}`,
@@ -397,8 +402,25 @@ function Picker<T extends string>({
   look: (option: T) => Partial<MascotProps>;
 }) {
   const groupName = useGroupName(name);
+  const row = useRef<HTMLDivElement>(null);
+  // Keep the chosen tile in view as the row scrolls, without moving the page.
+  useEffect(() => {
+    const box = row.current;
+    const tile = box?.querySelector<HTMLElement>(`[aria-checked="true"]`);
+    if (!box || !tile || value === undefined) return;
+    const left = tile.offsetLeft - box.offsetLeft;
+    if (left < box.scrollLeft || left + tile.offsetWidth > box.scrollLeft + box.clientWidth) {
+      box.scrollLeft = left - (box.clientWidth - tile.offsetWidth) / 2;
+    }
+  }, [value]);
   return (
-    <Flex role="radiogroup" {...groupName} onKeyDown={radioGroupKeyDown} className={styles.picks}>
+    <Flex
+      ref={row}
+      role="radiogroup"
+      {...groupName}
+      onKeyDown={radioGroupKeyDown}
+      className={styles.picks}
+    >
       {options.map((option) => {
         const checked = option === value;
         const choose = () => onChange(option);
@@ -439,9 +461,11 @@ function Picker<T extends string>({
 
 /** A row whose control takes the whole width, under its label. */
 function WideRow(props: StyleRowProps) {
+  // Line up with the inline rows around it, whose padding is wider.
+  const stacked = useContext(StylePanelStackedContext);
   return (
     <StylePanelStackedContext.Provider value>
-      <Row {...props} />
+      <Row paddingX={stacked ? undefined : "24"} {...props} />
     </StylePanelStackedContext.Provider>
   );
 }
@@ -620,7 +644,7 @@ function useHeading(group: GroupKey, { title, description }: StyleGroupProps) {
   const labels = useLabels().groups[group];
   return {
     title: prefer(title, labels.title),
-    description: prefer(description, labels.description),
+    description: prefer(description, labels.description || false),
   };
 }
 
@@ -782,7 +806,7 @@ function AccessoryTiles() {
   const groupName = useGroupName(labels.rows.accessories);
   const look = mascotDesignProps({ ...value, working: undefined, accessory: undefined });
   return (
-    <Flex wrap gap="4" role="group" {...groupName} className={styles.tiles}>
+    <Flex gap="4" role="group" {...groupName} className={classNames(styles.picks, styles.tiles)}>
       {MASCOT_ACCESSORIES.map((name) => {
         const on = worn.includes(name);
         return (
@@ -829,9 +853,9 @@ function AccessoriesGroup({
   return (
     <Group {...useHeading("accessories", { title, description })} {...rest}>
       {show(rows, "accessories") && (
-        <Row label={labels.rows.accessories} vertical="start">
+        <WideRow label={labels.rows.accessories}>
           <AccessoryTiles />
-        </Row>
+        </WideRow>
       )}
       {show(rows, "accessoryColor") && (
         <Row label={labels.rows.accessoryColor}>
@@ -935,24 +959,12 @@ export function randomMascotDesign(keep?: Pick<MascotDesign, "working" | "sides"
   return parseMascotDesign({ ...look, accessory, ...keep });
 }
 
-function useFlash() {
-  const [flashed, setFlashed] = useState<string | null>(null);
-  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  useEffect(() => () => clearTimeout(timer.current), []);
-  return [
-    flashed,
-    (key: string) => {
-      setFlashed(key);
-      clearTimeout(timer.current);
-      timer.current = setTimeout(() => setFlashed(null), 1400);
-    },
-  ] as const;
-}
-
-export interface MascotPanelActionsProps extends React.ComponentProps<typeof Flex> {
+export interface MascotPanelActionsProps
+  extends Omit<React.ComponentProps<typeof Flex>, "children"> {
   /**
-   * More export buttons after the free ones: a product's own, or Pro ones such
-   * as animated emotes. Each can read the design with `useMascotPanel()`.
+   * More menu items after the free ones: a product's own, or Pro ones such as
+   * animated emotes. Pass core `Option`s; each can read the design with
+   * `useMascotPanel()`.
    */
   exports?: ReactNode;
   /** The file name downloads start with. */
@@ -960,21 +972,19 @@ export interface MascotPanelActionsProps extends React.ComponentProps<typeof Fle
 }
 
 /**
- * Randomize, Reset, and the free exports: the design as JSON or JSX, and the
- * flat mascot as an SVG or PNG file.
+ * The preview's "more" menu: Randomize, Reset, and the free exports, the
+ * design as JSON or JSX and the flat mascot as an SVG or PNG file.
  */
 function Actions({ exports, filename = "mascot", ...rest }: MascotPanelActionsProps) {
   const { value, replace } = useMascotPanel();
   const labels = useLabels();
-  const [flashed, flash] = useFlash();
   // The files are drawn from a still, flat mascot kept out of sight, so they
   // are the same whatever the preview is doing, cube and d20 included.
   const still = useRef<HTMLDivElement>(null);
 
-  const copy = async (key: string, text: string) => {
+  const copy = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      flash(key);
     } catch {
       // No clipboard (an insecure page, a denied permission): nothing to undo.
     }
@@ -985,48 +995,50 @@ function Actions({ exports, filename = "mascot", ...rest }: MascotPanelActionsPr
     return svg ? standaloneSvg(svg) : null;
   };
 
+  const item = (key: string, label: string, icon: IconName, run: () => void) => (
+    <Option
+      key={key}
+      value={key}
+      label={label}
+      prefix={<Icon name={icon} size="xs" onBackground="neutral-weak" />}
+      onClick={run}
+    />
+  );
+
   return (
-    <Flex wrap gap="8" {...rest}>
-      <Button
-        size="s"
-        variant="secondary"
-        prefixIcon="sparkle"
-        onClick={() => replace(randomMascotDesign(value))}
+    <Flex {...rest}>
+      <Dropdown
+        placement="bottom-end"
+        minWidth={12}
+        trigger={
+          <IconButton
+            icon="moreHorizontal"
+            variant="tertiary"
+            size="m"
+            tooltip={labels.actions.more}
+            aria-label={labels.actions.more}
+          />
+        }
       >
-        {labels.actions.randomize}
-      </Button>
-      <Button size="s" variant="tertiary" onClick={() => replace({ v: 1 })}>
-        {labels.actions.reset}
-      </Button>
-      <Button size="s" variant="tertiary" onClick={() => copy("json", designJson(value))}>
-        {flashed === "json" ? labels.actions.copied : labels.actions.copyJson}
-      </Button>
-      <Button size="s" variant="tertiary" onClick={() => copy("jsx", designJsx(value))}>
-        {flashed === "jsx" ? labels.actions.copied : labels.actions.copyJsx}
-      </Button>
-      <Button
-        size="s"
-        variant="tertiary"
-        prefixIcon="download"
-        onClick={() => {
-          const text = svgText();
-          if (text) download(text, `${filename}.svg`, "image/svg+xml");
-        }}
-      >
-        {labels.actions.downloadSvg}
-      </Button>
-      <Button
-        size="s"
-        variant="tertiary"
-        prefixIcon="download"
-        onClick={async () => {
-          const text = svgText();
-          if (text) download(await svgToPng(text), `${filename}.png`);
-        }}
-      >
-        {labels.actions.downloadPng}
-      </Button>
-      {exports}
+        <Column padding="4" gap="2">
+          {item("randomize", labels.actions.randomize, "sparkle", () =>
+            replace(randomMascotDesign(value)),
+          )}
+          {item("reset", labels.actions.reset, "refresh", () => replace({ v: 1 }))}
+          <Line marginY="4" />
+          {item("json", labels.actions.copyJson, "copy", () => copy(designJson(value)))}
+          {item("jsx", labels.actions.copyJsx, "code", () => copy(designJsx(value)))}
+          {item("svg", labels.actions.downloadSvg, "download", () => {
+            const text = svgText();
+            if (text) download(text, `${filename}.svg`, "image/svg+xml");
+          })}
+          {item("png", labels.actions.downloadPng, "download", async () => {
+            const text = svgText();
+            if (text) download(await svgToPng(text), `${filename}.png`);
+          })}
+          {exports}
+        </Column>
+      </Dropdown>
       <div ref={still} className={styles.still} aria-hidden>
         <Mascot
           {...mascotDesignProps({ ...value, working: undefined })}
@@ -1048,7 +1060,7 @@ function Preview({
   ...rest
 }: StyleGroupProps & {
   rows?: MascotPanelVisibility["preview"];
-  /** More export buttons, after the free ones. */
+  /** More menu items, after the free ones. */
   exports?: ReactNode;
 }) {
   const { value, trial, setTrial } = useMascotPanel();
@@ -1059,6 +1071,7 @@ function Preview({
     <StylePanelStackedContext.Provider value>
       <Group {...heading} {...rest}>
         <Flex fillWidth center paddingY="32" className={styles.stage}>
+          {show(rows, "actions") && <Actions className={styles.corner} exports={exports} />}
           <Mascot
             {...mascotDesignProps(value)}
             state={trial.state}
@@ -1091,7 +1104,6 @@ function Preview({
             />
           </Row>
         )}
-        {show(rows, "actions") && <Actions padding="16" exports={exports} />}
       </Group>
     </StylePanelStackedContext.Provider>
   );

@@ -1,5 +1,6 @@
 /* The preview's floor: a soft spot of the page behind the mascot. */
 .stage {
+    position: relative;
     min-height: 15rem;
     background: radial-gradient(circle at 50% 60%, var(--neutral-alpha-weak), transparent 70%);
     border-bottom: 1px solid var(--neutral-alpha-medium);
@@ -14,13 +15,23 @@
 }
 
 .tiles {
-    max-width: 20rem;
+    > * {
+        flex: 0 0 auto;
+    }
 }
 
 .tile {
     width: var(--static-space-56);
     height: var(--static-space-56);
     padding: 0;
+}
+
+/* The preview's "more" menu, in its top right corner. */
+.corner {
+    position: absolute;
+    top: var(--static-space-8);
+    right: var(--static-space-8);
+    z-index: 1;
 }
 
 /* The still mascot the files are drawn from: rendered, never seen. */
@@ -62,12 +73,24 @@
     min-width: 8rem;
 }
 
-/* A picker's tiles: a small mascot over its option's name, as many to a line as fit. */
+/* A picker's tiles: one row, a small mascot over each option's name, scrolled sideways. */
 .picks {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 4rem);
+    display: flex;
+    flex-wrap: nowrap;
     gap: var(--static-space-4);
     width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+    /* Room for the focus ring, which the scroll box would clip. */
+    padding: var(--static-space-2);
+    margin: calc(-1 * var(--static-space-2));
+
+    > * {
+        flex: 0 0 4rem;
+        scroll-snap-align: start;
+    }
 }
 
 .pick {
