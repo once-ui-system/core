@@ -53,7 +53,7 @@ export function PiePlot({
 }: PiePlotProps) {
   const ref = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
-  const { width: W, height: H } = usePlotSize(ref);
+  const { width: W, height: H } = usePlotSize(ref, id);
   const [hidden, setHidden] = useState<number[]>([]);
   const [active, setActive] = useState<{ index: number; x?: number; y?: number } | null>(null);
 

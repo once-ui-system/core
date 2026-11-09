@@ -575,6 +575,20 @@ entry below that had landed by then:
 
 ### Fixed
 
+- Dashboards spent their loading time recalculating styles. `Skeleton` pulsed
+  `background-color`, which only the main thread can animate, so every skeleton
+  cost a style recalc every frame; it now pulses `opacity` on the compositor,
+  with 40 pulses per animation iteration (React's root `animationiteration`
+  listener made Chromium tick animations around every boundary), and `Table`
+  animates its skeleton rows rather than each cell. `Flex` skips its breakpoint
+  pass when it has no breakpoint object and no longer writes its unset inline
+  styles as `""` on mount. Charts measure their plot and legend with a
+  ResizeObserver instead of forcing a layout from a layout effect, and keep
+  their size while they load. On a dashboard Overview at 4x CPU: style recalc
+  while loading 2,718 to 255 ms, range-switch INP 376 to 296 ms
+  (`benchmarks/dashboard-overview`).
+- The body keeps no browser margin: `body { margin: 0 }`, layered, for an app
+  whose body is not a Once UI `Column`.
 - CelebrationFx: switching `type` mid-flight threw; fireworks were never cleaned up
   while emitting (the list grew about three shells a second for as long as the page
   stayed open); the hover, click and manual triggers dropped a wave of confetti at
