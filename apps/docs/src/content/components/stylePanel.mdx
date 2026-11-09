@@ -141,6 +141,16 @@ one with a [custom colour](#custom-colour), still takes the layout props of a
 size, so that they fit a sidebar; whatever still overflows scrolls, and the chosen swatch or
 option is scrolled into view.
 
+## Size
+
+`size="s"` tightens the panel: less padding in each row and less room between
+groups, for an app where the default spacing is too much. `m` is the default.
+MascotPanel takes the same prop.
+
+```tsx
+<StylePanel size="s" />
+```
+
 ## Owning the state
 
 By default the panel reads and writes `ThemeProvider`, which persists to
@@ -352,6 +362,7 @@ generated from one colour.
     labels: "Every string the panel shows or announces, over the English defaults. Groups and rows read it; their own props still win.",
     customColors: "End the Brand and Accent swatches with a custom colour, reported as brandSeed and accentSeed. Controlled mode only.",
     stacked: "Put each row's label above its control, for a narrow sidebar.",
+    size: "How much room rows and groups take: m (default), or s for a denser panel.",
   }}
   content={[
     ["className"],

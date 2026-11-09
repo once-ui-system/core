@@ -4,6 +4,10 @@
     min-height: 15rem;
     background: radial-gradient(circle at 50% 60%, var(--neutral-alpha-weak), transparent 70%);
     border-bottom: 1px solid var(--neutral-alpha-medium);
+
+    .small & {
+        min-height: 10rem;
+    }
 }
 
 .swatch {
@@ -24,6 +28,11 @@
     width: var(--static-space-56);
     height: var(--static-space-56);
     padding: 0;
+
+    .small & {
+        width: var(--static-space-48);
+        height: var(--static-space-48);
+    }
 }
 
 /* The preview's "more" menu, in its top right corner. */
@@ -73,23 +82,26 @@
     min-width: 8rem;
 }
 
-/* A picker's tiles: one row, a small mascot over each option's name, scrolled sideways. */
+/* A picker's tiles: one row, a small mascot over each option's name, in a Scroller. */
+.strip {
+    width: 100%;
+    max-width: 100%;
+}
+
 .picks {
     display: flex;
     flex-wrap: nowrap;
     gap: var(--static-space-4);
-    width: 100%;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x proximity;
-    scrollbar-width: thin;
+    min-width: max-content;
     /* Room for the focus ring, which the scroll box would clip. */
     padding: var(--static-space-2);
-    margin: calc(-1 * var(--static-space-2));
 
     > * {
-        flex: 0 0 4rem;
-        scroll-snap-align: start;
+        flex: 0 0 3.75rem;
+    }
+
+    .small & > * {
+        flex-basis: 3.5rem;
     }
 }
 

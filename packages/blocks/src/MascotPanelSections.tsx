@@ -22,6 +22,7 @@ import {
   mascotLook,
   Option,
   parseMascotDesign,
+  Scroller,
   Slider,
   Switch,
   Text,
@@ -55,6 +56,8 @@ import {
   StylePanelOptions as Options,
   StylePanelRow as Row,
   type StyleGroupProps,
+  type StylePanelSize,
+  StylePanelSizeContext,
   StylePanelStackedContext,
   type StyleRowProps,
   useGroupName,
@@ -275,6 +278,8 @@ export interface MascotPanelRootProps
   labels?: MascotPanelLabels;
   /** Put each row's label above its control, for a narrow sidebar. */
   stacked?: boolean;
+  /** How much room rows, groups and picker tiles take: `m` (default), or `s` for a denser panel. */
+  size?: StylePanelSize;
 }
 
 const Root = function Root({
@@ -285,6 +290,8 @@ const Root = function Root({
   storageKey,
   labels,
   stacked = false,
+  size = "m",
+  className,
   children,
   ...rest
 }: MascotPanelRootProps) {
@@ -341,9 +348,17 @@ const Root = function Root({
     <MascotPanelContext.Provider value={context}>
       <MascotPanelLabelsContext.Provider value={resolvedLabels}>
         <StylePanelStackedContext.Provider value={stacked}>
-          <Column fillWidth gap="16" ref={ref} {...rest}>
-            {children}
-          </Column>
+          <StylePanelSizeContext.Provider value={size}>
+            <Column
+              fillWidth
+              gap={size === "s" ? "8" : "16"}
+              ref={ref}
+              className={classNames(size === "s" && styles.small, className)}
+              {...rest}
+            >
+              {children}
+            </Column>
+          </StylePanelSizeContext.Provider>
         </StylePanelStackedContext.Provider>
       </MascotPanelLabelsContext.Provider>
     </MascotPanelContext.Provider>
@@ -381,6 +396,23 @@ function Choice<T extends string>({
   );
 }
 
+/** The nearest box that scrolls sideways. */
+function scrollParent(node: HTMLElement | null): HTMLElement | null {
+  for (let at = node?.parentElement; at; at = at.parentElement) {
+    if (at.scrollWidth > at.clientWidth) return at;
+  }
+  return null;
+}
+
+/** A strip of tiles that scrolls sideways, with edge fades and scroll buttons when it overflows. */
+function Strip({ children }: { children: ReactNode }) {
+  return (
+    <Scroller minWidth={0} fitWidth className={styles.strip}>
+      {children}
+    </Scroller>
+  );
+}
+
 /**
  * One choice from a set, as tiles that each show the mascot with that option
  * on, so people see what they pick. Takes the row's width, under its label.
@@ -401,61 +433,71 @@ function Picker<T extends string>({
   /** The mascot a tile shows for its option. */
   look: (option: T) => Partial<MascotProps>;
 }) {
+  const tileMascot = useContext(StylePanelSizeContext) === "s" ? 32 : 40;
   const groupName = useGroupName(name);
   const row = useRef<HTMLDivElement>(null);
-  // Keep the chosen tile in view as the row scrolls, without moving the page.
+  // Keep the chosen tile in view as the strip scrolls, without moving the page.
   useEffect(() => {
-    const box = row.current;
-    const tile = box?.querySelector<HTMLElement>(`[aria-checked="true"]`);
+    const tile = row.current?.querySelector<HTMLElement>(`[aria-checked="true"]`);
+    const box = scrollParent(row.current);
     if (!box || !tile || value === undefined) return;
-    const left = tile.offsetLeft - box.offsetLeft;
-    if (left < box.scrollLeft || left + tile.offsetWidth > box.scrollLeft + box.clientWidth) {
-      box.scrollLeft = left - (box.clientWidth - tile.offsetWidth) / 2;
+    const view = box.getBoundingClientRect();
+    const at = tile.getBoundingClientRect();
+    if (at.left < view.left || at.right > view.right) {
+      box.scrollLeft += at.left - view.left - (view.width - at.width) / 2;
     }
   }, [value]);
   return (
-    <Flex
-      ref={row}
-      role="radiogroup"
-      {...groupName}
-      onKeyDown={radioGroupKeyDown}
-      className={styles.picks}
-    >
-      {options.map((option) => {
-        const checked = option === value;
-        const choose = () => onChange(option);
-        return (
-          <Flex
-            key={option}
-            direction="column"
-            horizontal="center"
-            gap="4"
-            role="radio"
-            aria-checked={checked}
-            aria-label={names[option]}
-            title={names[option]}
-            tabIndex={checked ? 0 : -1}
-            className={classNames(
-              swatchStyles.select,
-              styles.pick,
-              checked && swatchStyles.selected,
-            )}
-            onClick={choose}
-            onKeyDown={(event) => activateOnKey(event, choose)}
-          >
-            <Mascot {...look(option)} size={40} lookAt="center" poke={false} aria-hidden />
-            <Text
-              variant="label-default-xs"
-              onBackground="neutral-medium"
-              className={styles.caption}
-              aria-hidden
+    <Strip>
+      <Flex
+        ref={row}
+        role="radiogroup"
+        {...groupName}
+        onKeyDown={radioGroupKeyDown}
+        className={styles.picks}
+      >
+        {options.map((option) => {
+          const checked = option === value;
+          const choose = () => onChange(option);
+          return (
+            <Flex
+              key={option}
+              direction="column"
+              horizontal="center"
+              gap="4"
+              role="radio"
+              aria-checked={checked}
+              aria-label={names[option]}
+              title={names[option]}
+              tabIndex={checked ? 0 : -1}
+              className={classNames(
+                swatchStyles.select,
+                styles.pick,
+                checked && swatchStyles.selected,
+              )}
+              onClick={choose}
+              onKeyDown={(event) => activateOnKey(event, choose)}
             >
-              {names[option]}
-            </Text>
-          </Flex>
-        );
-      })}
-    </Flex>
+              <Mascot
+                {...look(option)}
+                size={tileMascot}
+                lookAt="center"
+                poke={false}
+                aria-hidden
+              />
+              <Text
+                variant="label-default-xs"
+                onBackground="neutral-medium"
+                className={styles.caption}
+                aria-hidden
+              >
+                {names[option]}
+              </Text>
+            </Flex>
+          );
+        })}
+      </Flex>
+    </Strip>
   );
 }
 
@@ -463,9 +505,10 @@ function Picker<T extends string>({
 function WideRow(props: StyleRowProps) {
   // Line up with the inline rows around it, whose padding is wider.
   const stacked = useContext(StylePanelStackedContext);
+  const small = useContext(StylePanelSizeContext) === "s";
   return (
     <StylePanelStackedContext.Provider value>
-      <Row paddingX={stacked ? undefined : "24"} {...props} />
+      <Row paddingX={stacked ? undefined : small ? "16" : "24"} {...props} />
     </StylePanelStackedContext.Provider>
   );
 }
@@ -803,42 +846,45 @@ function AccessoryTiles() {
   const { value, set } = useMascotPanel();
   const labels = useLabels();
   const worn = value.accessory ?? [];
+  const tileMascot = useContext(StylePanelSizeContext) === "s" ? 32 : 40;
   const groupName = useGroupName(labels.rows.accessories);
   const look = mascotDesignProps({ ...value, working: undefined, accessory: undefined });
   return (
-    <Flex gap="4" role="group" {...groupName} className={classNames(styles.picks, styles.tiles)}>
-      {MASCOT_ACCESSORIES.map((name) => {
-        const on = worn.includes(name);
-        return (
-          <ToggleButton
-            key={name}
-            selected={on}
-            aria-pressed={on}
-            aria-label={labels.options.accessories[name]}
-            title={labels.options.accessories[name]}
-            variant="ghost"
-            className={styles.tile}
-            onClick={() =>
-              set({
-                accessory: on
-                  ? worn.filter((item) => item !== name)
-                  : MASCOT_ACCESSORIES.filter((item) => item === name || worn.includes(item)),
-              })
-            }
-          >
-            <Mascot
-              {...look}
-              accessory={name}
-              accessoryColor={value.accessoryColor}
-              size={40}
-              lookAt="center"
-              poke={false}
-              aria-hidden
-            />
-          </ToggleButton>
-        );
-      })}
-    </Flex>
+    <Strip>
+      <Flex gap="4" role="group" {...groupName} className={classNames(styles.picks, styles.tiles)}>
+        {MASCOT_ACCESSORIES.map((name) => {
+          const on = worn.includes(name);
+          return (
+            <ToggleButton
+              key={name}
+              selected={on}
+              aria-pressed={on}
+              aria-label={labels.options.accessories[name]}
+              title={labels.options.accessories[name]}
+              variant="ghost"
+              className={styles.tile}
+              onClick={() =>
+                set({
+                  accessory: on
+                    ? worn.filter((item) => item !== name)
+                    : MASCOT_ACCESSORIES.filter((item) => item === name || worn.includes(item)),
+                })
+              }
+            >
+              <Mascot
+                {...look}
+                accessory={name}
+                accessoryColor={value.accessoryColor}
+                size={tileMascot}
+                lookAt="center"
+                poke={false}
+                aria-hidden
+              />
+            </ToggleButton>
+          );
+        })}
+      </Flex>
+    </Strip>
   );
 }
 
@@ -1066,17 +1112,18 @@ function Preview({
   const { value, trial, setTrial } = useMascotPanel();
   const labels = useLabels();
   const heading = useHeading("preview", { title, description });
+  const small = useContext(StylePanelSizeContext) === "s";
   // State and mood hold many options: they get the row's width, under their label.
   return (
     <StylePanelStackedContext.Provider value>
       <Group {...heading} {...rest}>
-        <Flex fillWidth center paddingY="32" className={styles.stage}>
+        <Flex fillWidth center paddingY={small ? "16" : "32"} className={styles.stage}>
           {show(rows, "actions") && <Actions className={styles.corner} exports={exports} />}
           <Mascot
             {...mascotDesignProps(value)}
             state={trial.state}
             mood={trial.mood}
-            size="xl"
+            size={small ? "l" : "xl"}
             aria-label={labels.preview}
           />
         </Flex>

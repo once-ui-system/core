@@ -23,6 +23,7 @@ export type {
   StylePanelRootProps,
   StylePanelRowLabels,
   StylePanelSchemeRow,
+  StylePanelSize,
   StylePanelSwatchLabels,
   StylePanelValue,
   StylePanelVisibility,

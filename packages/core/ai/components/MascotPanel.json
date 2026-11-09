@@ -13,13 +13,14 @@
  "props": {
   "defaultValue": "MascotDesign",
   "storageKey": "string",
-  "stacked": "boolean",
+  "size": "StylePanelSize",
   "value": "MascotPanelRootProps[\"value\"]",
   "onValueChange": "MascotPanelRootProps[\"onValueChange\"]",
   "labels": "MascotPanelLabels",
   "visibility": "MascotPanelVisibility",
   "preview": "\"side\" | \"top\" | \"none\" = side",
-  "exports": "ReactNode"
+  "exports": "ReactNode",
+  "stacked": "boolean"
  },
  "tags": [
   "ai",
@@ -222,7 +223,7 @@
    "groups": "Partial<Record<GroupKey, MascotPanelHeading>>",
    "rows": "Partial< Record< | \"color\" | \"roundness\" | \"aspect\" | \"surface\" | \"eyes\" | \"eyeSize\" | \"eyeSpacing\" | \"eyeHeight\" | \"eyeColor\" | \"mouth\" | \"brows\" | \"cheeks\" | \"accessories\" | \"accessoryColor\" | \"working\" | \"sides\" | \"face\" | \"personality\" | \"state\" | \"mood\", string > >",
    "options": "{ colors?: Partial<Record<Scheme | \"custom\", string>>; surface?: Partial<Record<NonNullable<MascotDesign[\"surface\"]>, string>>; eyes?: Partial<Record<EyeShape, string>>; mouth?: Partial<Record<NonNullable<MascotDesign[\"mouth\"]>, string>>; personality?: Partial<Record<NonNullable<MascotDesign[\"personality\"]>, string>>; working?: Partial<Record<\"none\" | \"cube\" | \"d20\", string>>; sides?: Partial<Record<\"classic\" | \"tints\" | \"mono\", string>>; face?: Partial<Record<\"3d\" | \"flat\", string>>; state?: Partial<Record<MascotState, string>>; mood?: Partial<Record<MascotMood, string>>; accessories?: Partial<Record<MascotAccessory, string>>; }",
-   "actions": "Partial< Record< \"randomize\" | \"reset\" | \"copyJson\" | \"copyJsx\" | \"copied\" | \"downloadSvg\" | \"downloadPng\", string > >",
+   "actions": "Partial< Record< \"more\" | \"randomize\" | \"reset\" | \"copyJson\" | \"copyJsx\" | \"downloadSvg\" | \"downloadPng\", string > >",
    "preview": "string",
    "colorSwatch": "(name: string) => string"
   },
@@ -253,6 +254,10 @@
    "neutral",
    "brand",
    "accent"
+  ],
+  "StylePanelSize": [
+   "s",
+   "m"
   ]
  }
 }

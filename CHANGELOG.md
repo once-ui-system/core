@@ -17,11 +17,15 @@ item (see `ROADMAP.md`, Week 4).
 
 - **`MascotPanel`** in `@once-ui-system/blocks`: a character designer for the Mascot,
   built like StylePanel. Body, eyes, face, accessories (several at once), working style
-  (`cube`, `d20`) and personality, a preview that tries every state and mood without
-  saving it, and free exports: Randomize, Reset, Copy JSON, Copy JSX, SVG and PNG. The
-  `exports` slot takes a product's own buttons. Composable from `MascotPanelRoot` and
-  its parts, with `value`/`onValueChange` or `defaultValue` and `storageKey`, `labels`,
-  `visibility`, `stacked` and `preview` (`side`, `top`, `none`).
+  (`cube`, `d20`) and personality. Pickers are scrolling rows of tiles, each showing the
+  mascot with that option on. The preview tries every state and mood without saving it,
+  and its "more" menu holds Randomize, Reset and the free exports: Copy JSON, Copy JSX,
+  SVG and PNG. The `exports` slot adds a product's own menu items. Composable from
+  `MascotPanelRoot` and its parts, with `value`/`onValueChange` or `defaultValue` and
+  `storageKey`, `labels`, `visibility`, `stacked`, `size` and `preview` (`side`, `top`,
+  `none`).
+- **StylePanel `size`**: `s` tightens rows and groups for apps where the default
+  spacing is too much; `m` is the default.
 - **`MascotDesign`** in core: the designed part of a Mascot as plain JSON (`v: 1`), with
   `parseMascotDesign` (reads stored or AI-written values safely, never throws),
   `mascotDesignProps`, `MASCOT_DESIGN_DEFAULTS` and `MASCOT_DESIGN_RANGES`. The Mascot

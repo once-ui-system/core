@@ -11,6 +11,7 @@
   "StyleProps"
  ],
  "props": {
+  "size": "StylePanelSize",
   "visibility": "StylePanelVisibility",
   "value": "StylePanelRootProps[\"value\"]",
   "onValueChange": "StylePanelRootProps[\"onValueChange\"]",
@@ -281,6 +282,10 @@
   "StylePanelSchemeRow": [
    "brand",
    "accent"
+  ],
+  "StylePanelSize": [
+   "s",
+   "m"
   ],
   "StylePanelSwatchLabels": {
    "shape": "(name: string) => string",
