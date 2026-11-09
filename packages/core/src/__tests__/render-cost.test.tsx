@@ -1,6 +1,6 @@
-import { act, render } from "@testing-library/react";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { act, render } from "@testing-library/react";
 import type React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Flex } from "../components/Flex";
@@ -88,7 +88,9 @@ describe("skeleton animation cost", () => {
 });
 
 describe("chart plot measuring", () => {
-  type Callback = (entries: { borderBoxSize: { inlineSize: number; blockSize: number }[] }[]) => void;
+  type Callback = (
+    entries: { borderBoxSize: { inlineSize: number; blockSize: number }[] }[],
+  ) => void;
   let observers: { cb: Callback; el?: Element }[] = [];
   let rect: ReturnType<typeof vi.spyOn>;
 
@@ -128,14 +130,12 @@ describe("chart plot measuring", () => {
   });
 
   it("draws at the size the observer reports, and keeps it across a reload", () => {
-    const { container, rerender } = render(
-      <LineChart series={[{ key: "a" }]} data={data} />,
-      { wrapper: wrap },
-    );
+    const { container, rerender } = render(<LineChart series={[{ key: "a" }]} data={data} />, {
+      wrapper: wrap,
+    });
     const plot = () => container.querySelector("svg[viewBox]") as SVGElement;
     act(() => {
-      for (const o of observers)
-        o.cb([{ borderBoxSize: [{ inlineSize: 500, blockSize: 200 }] }]);
+      for (const o of observers) o.cb([{ borderBoxSize: [{ inlineSize: 500, blockSize: 200 }] }]);
     });
     expect(plot().getAttribute("viewBox")).toBe("0 0 500 200");
 
