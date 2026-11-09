@@ -418,7 +418,10 @@ const ALIGN = {
   right: { th: tableStyles.thAlignRight, td: tableStyles.tdAlignRight, row: "end" },
 } as const;
 
-const SKELETON_WIDTHS = ["8rem", "6rem", "10rem", "5rem", "7rem"] as const;
+// Shares of the cell, not lengths: a percentage adds nothing to an auto table's
+// column widths, so the headers size the columns while rows load, as the data
+// will, and the columns don't jump sideways when it arrives.
+const SKELETON_WIDTHS = ["80%", "60%", "90%", "50%", "70%"] as const;
 
 /**
  * A table of typed rows: column definitions instead of pre-rendered cells,
