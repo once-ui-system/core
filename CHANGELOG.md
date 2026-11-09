@@ -309,8 +309,9 @@ entry below that had landed by then:
   `MissingDependency` fallback. The plot sizes itself to its container with a
   ResizeObserver, drawing at 640 × 320 until it is measured. The props are
   unchanged. New in the browser: the arrow keys (and Home, End, Escape) move
-  the tooltip through the points, a legend entry is a button that hides or
-  shows its series (or slice), and the entry animations follow
+  the tooltip through the points, the tooltip glides from point to point
+  instead of jumping, a legend entry is a button that hides or shows its
+  series (or slice), and the entry animations and the glide follow
   `prefers-reduced-motion`. The four charts' own code is 13.1 KB gzipped
   (minified, React external), where recharts alone was 126 KB. A PieChart's
   legend now lists slices in data order in their own colours (it sorted them
