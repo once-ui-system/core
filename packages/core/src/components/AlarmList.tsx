@@ -154,15 +154,16 @@ const AlarmList = ({
                   </span>
                 </span>
                 {onAcknowledge && needsAcknowledge(alarm) ? (
-                  <Button
-                    className={styles.rowAction}
-                    size="s"
-                    variant="secondary"
-                    weight="default"
-                    label={labels.acknowledge}
-                    aria-label={`${labels.acknowledge}: ${alarm.label}`}
-                    onClick={() => onAcknowledge([alarm.id])}
-                  />
+                  <span className={styles.rowAction}>
+                    <Button
+                      size="s"
+                      variant="secondary"
+                      weight="default"
+                      label={labels.acknowledge}
+                      aria-label={`${labels.acknowledge}: ${alarm.label}`}
+                      onClick={() => onAcknowledge([alarm.id])}
+                    />
+                  </span>
                 ) : null}
               </li>
             );

@@ -63,8 +63,8 @@
   list-style: none;
   display: grid;
   grid-template-columns: var(--annunciator-columns, repeat(auto-fill, minmax(160px, 1fr)));
-  // Room for the new-alarm double outline (4px) between neighbours.
-  --annunciator-gap: var(--static-space-12);
+  // Room for the new-alarm double outline (4px) and air between neighbours.
+  --annunciator-gap: var(--static-space-16);
   gap: var(--annunciator-gap);
   margin: 0;
   padding: 0;
@@ -282,6 +282,11 @@
     right: var(--static-space-12);
     top: 50%;
     translate: 0 -50%;
+    display: flex;
+    // Covers the row's text it sits over, fading it out on the left.
+    border-radius: var(--radius-m);
+    background: var(--surface-background);
+    box-shadow: -16px 0 16px var(--surface-background);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.15s ease;

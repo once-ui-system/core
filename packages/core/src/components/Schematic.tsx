@@ -142,7 +142,7 @@ function PartSymbol({ node }: { node: SchematicNode }) {
           <circle cx={x} cy={y} r={r} />
           <g className={styles.impeller} style={{ transformOrigin: `${x}px ${y}px` }}>
             <path
-              d={`M${x - r * 0.55} ${y - r * 0.5} L${x + r * 0.65} ${y} L${x - r * 0.55} ${y + r * 0.5} Z`}
+              d={`M${x - r * 0.35} ${y - r * 0.4} L${x + r * 0.5} ${y} L${x - r * 0.35} ${y + r * 0.4} Z`}
               className={styles.inner}
             />
           </g>
