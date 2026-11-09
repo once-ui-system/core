@@ -61,3 +61,29 @@
     width: min(14rem, 100%);
     min-width: 8rem;
 }
+
+/* A picker's tiles: a small mascot over its option's name, as many to a line as fit. */
+.picks {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 4rem);
+    gap: var(--static-space-4);
+    width: 100%;
+}
+
+.pick {
+    padding: var(--static-space-8) var(--static-space-4) var(--static-space-4);
+    cursor: pointer;
+    min-width: 0;
+
+    &:focus-visible {
+        outline: 2px solid var(--brand-solid-strong);
+        outline-offset: 1px;
+    }
+}
+
+.caption {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

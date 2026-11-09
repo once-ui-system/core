@@ -12,12 +12,14 @@ import {
   type MascotAccessory,
   type MascotDesign,
   type MascotMood,
+  type MascotProps,
   type MascotState,
   mascotDesignProps,
   mascotLook,
   parseMascotDesign,
   Slider,
   Switch,
+  Text,
   ToggleButton,
 } from "@once-ui-system/core";
 import classNames from "clsx";
@@ -374,6 +376,79 @@ function Choice<T extends string>({
   );
 }
 
+/**
+ * One choice from a set, as tiles that each show the mascot with that option
+ * on, so people see what they pick. Takes the row's width, under its label.
+ */
+function Picker<T extends string>({
+  options,
+  names,
+  value,
+  onChange,
+  name,
+  look,
+}: {
+  options: readonly T[];
+  names: Record<T, string>;
+  value: T;
+  onChange: (value: T) => void;
+  name: string;
+  /** The mascot a tile shows for its option. */
+  look: (option: T) => Partial<MascotProps>;
+}) {
+  const groupName = useGroupName(name);
+  return (
+    <Flex role="radiogroup" {...groupName} onKeyDown={radioGroupKeyDown} className={styles.picks}>
+      {options.map((option) => {
+        const checked = option === value;
+        const choose = () => onChange(option);
+        return (
+          <Flex
+            key={option}
+            direction="column"
+            horizontal="center"
+            gap="4"
+            role="radio"
+            aria-checked={checked}
+            aria-label={names[option]}
+            title={names[option]}
+            tabIndex={checked ? 0 : -1}
+            className={classNames(
+              swatchStyles.select,
+              styles.pick,
+              checked && swatchStyles.selected,
+            )}
+            onClick={choose}
+            onKeyDown={(event) => activateOnKey(event, choose)}
+          >
+            <Mascot {...look(option)} size={40} lookAt="center" poke={false} aria-hidden />
+            <Text
+              variant="label-default-xs"
+              onBackground="neutral-medium"
+              className={styles.caption}
+              aria-hidden
+            >
+              {names[option]}
+            </Text>
+          </Flex>
+        );
+      })}
+    </Flex>
+  );
+}
+
+/** A row whose control takes the whole width, under its label. */
+function WideRow(props: StyleRowProps) {
+  return (
+    <StylePanelStackedContext.Provider value>
+      <Row {...props} />
+    </StylePanelStackedContext.Provider>
+  );
+}
+
+/** The flat mascot as designed, for a picker's tiles. */
+const flatLook = (value: MascotDesign) => mascotDesignProps({ ...value, working: undefined });
+
 /** A number on its range, named by the row. */
 function Amount({
   value,
@@ -582,15 +657,16 @@ function BodyGroup({
         </Row>
       )}
       {show(rows, "surface") && (
-        <Row label={labels.rows.surface}>
-          <Choice
+        <WideRow label={labels.rows.surface}>
+          <Picker
             name={labels.rows.surface}
             options={["glossy", "matte", "flat", "glass"] as const}
             names={labels.options.surface}
             value={look.surface}
             onChange={(surface) => set({ surface })}
+            look={(surface) => ({ ...flatLook(value), surface })}
           />
-        </Row>
+        </WideRow>
       )}
     </Group>
   );
@@ -609,15 +685,16 @@ function EyesGroup({
   return (
     <Group {...useHeading("eyes", { title, description })} {...rest}>
       {show(rows, "eyes") && (
-        <Row label={labels.rows.eyes}>
-          <Choice
+        <WideRow label={labels.rows.eyes}>
+          <Picker
             name={labels.rows.eyes}
             options={["tile", "pill", "round", "wide", "dot"] as const}
             names={labels.options.eyes}
             value={shape}
             onChange={(eyes) => set({ eyes })}
+            look={(eyes) => ({ ...flatLook(value), eyes })}
           />
-        </Row>
+        </WideRow>
       )}
       {(
         [
@@ -664,15 +741,16 @@ function FaceGroup({
   return (
     <Group {...useHeading("face", { title, description })} {...rest}>
       {show(rows, "mouth") && (
-        <Row label={labels.rows.mouth}>
-          <Choice
+        <WideRow label={labels.rows.mouth}>
+          <Picker
             name={labels.rows.mouth}
             options={["none", "smile", "dot", "line"] as const}
             names={labels.options.mouth}
             value={look.mouth}
             onChange={(mouth) => set({ mouth })}
+            look={(mouth) => ({ ...flatLook(value), mouth })}
           />
-        </Row>
+        </WideRow>
       )}
       {show(rows, "brows") && (
         <Row label={labels.rows.brows}>
@@ -991,23 +1069,25 @@ function Preview({
         </Flex>
         {show(rows, "state") && (
           <Row label={labels.rows.state}>
-            <Choice
+            <Picker
               name={labels.rows.state}
               options={STATES}
               names={labels.options.state}
               value={trial.state}
               onChange={(state) => setTrial({ state })}
+              look={(state) => ({ ...flatLook(value), state })}
             />
           </Row>
         )}
         {show(rows, "mood") && (
           <Row label={labels.rows.mood}>
-            <Options
+            <Picker
               name={labels.rows.mood}
+              options={MOODS}
+              names={labels.options.mood}
               value={trial.mood}
-              defaultValue="neutral"
-              onValueChange={(mood) => setTrial({ mood: mood as MascotMood })}
-              buttons={MOODS.map((mood) => ({ label: labels.options.mood[mood], value: mood }))}
+              onChange={(mood) => setTrial({ mood })}
+              look={(mood) => ({ ...flatLook(value), mood })}
             />
           </Row>
         )}

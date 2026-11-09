@@ -59,6 +59,21 @@ describe("MascotPanel", () => {
     expect(onValueChange).toHaveBeenLastCalledWith({ v: 1, accessory: [] }, { accessory: [] });
   });
 
+  it("shows each pick as a mascot tile and moves between them with the arrows", () => {
+    const onValueChange = vi.fn();
+    render(<MascotPanel value={{ v: 1, mouth: "smile" }} onValueChange={onValueChange} />, {
+      wrapper,
+    });
+    const mouth = screen.getByRole("radiogroup", { name: "Mouth" });
+    const smile = within(mouth).getByRole("radio", { name: "Smile" });
+    expect(smile.getAttribute("aria-checked")).toBe("true");
+    expect(smile.getAttribute("tabindex")).toBe("0");
+    expect(smile.querySelector("svg")).toBeTruthy();
+    smile.focus();
+    fireEvent.keyDown(smile, { key: "ArrowRight" });
+    expect(onValueChange).toHaveBeenLastCalledWith({ v: 1, mouth: "dot" }, { mouth: "dot" });
+  });
+
   it("drops a working style set back to none, and shows sides only with one", () => {
     const onValueChange = vi.fn();
     const design: MascotDesign = { v: 1, working: "d20" };
