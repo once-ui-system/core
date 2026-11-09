@@ -74,6 +74,12 @@ function tiltAt(body: AccessoryBody, dx: number): number {
   return (Math.atan(slope) * 180) / Math.PI;
 }
 
+/** Half the body's width at height `y`. */
+function halfWidthAt(body: AccessoryBody, y: number): number {
+  const t = Math.min(1, Math.abs(y - 104) / body.b);
+  return body.a * (1 - t ** body.n) ** (1 / body.n);
+}
+
 interface Layers {
   back?: React.ReactNode;
   on?: React.ReactNode;
@@ -96,7 +102,7 @@ function draw(kind: MascotAccessory, body: AccessoryBody, tint: string): Layers 
             <path
               d={`M100 ${top + 4} Q${100 + 8 * c} ${top - 12 * c} 100 ${tip}`}
               fill="none"
-              stroke={INK}
+              stroke={tint}
               strokeWidth={8}
               strokeLinecap="round"
             />
@@ -107,33 +113,40 @@ function draw(kind: MascotAccessory, body: AccessoryBody, tint: string): Layers 
     }
 
     case "sprout": {
-      const base = top + 3;
-      const stem = top - 12 * c;
+      // A curved stem that grows out of the head on a soft flared foot, with two
+      // pointed leaves springing from its tip.
+      const base = top + 5;
+      const tipX = 100 + 3 * c;
+      const tipY = top - 13 * c;
+      const foot = 7 * c;
+      const half = 2.6 * c;
+      const leaf = (angle: number, length: number, width: number) => {
+        const rad = (angle * Math.PI) / 180;
+        const ux = Math.sin(rad);
+        const uy = -Math.cos(rad);
+        const ex = tipX + ux * length;
+        const ey = tipY + uy * length;
+        const px = -uy * width;
+        const py = ux * width;
+        const m1x = tipX + ux * length * 0.3;
+        const m1y = tipY + uy * length * 0.3;
+        const m2x = tipX + ux * length * 0.85;
+        const m2y = tipY + uy * length * 0.85;
+        return `M${tipX} ${tipY} C${m1x + px} ${m1y + py} ${m2x + px * 0.9} ${m2y + py * 0.9} ${ex} ${ey} C${m2x - px * 0.9} ${m2y - py * 0.9} ${m1x - px} ${m1y - py} ${tipX} ${tipY}Z`;
+      };
       return {
         on: (
           <g>
             <path
-              d={`M100 ${base} L100 ${stem}`}
+              d={`M${100 - foot} ${base} C${100 - half} ${base - 2} ${100 - half} ${top - 4 * c} ${tipX - half * 0.8} ${tipY} L${tipX + half * 0.8} ${tipY} C${100 + half} ${top - 4 * c} ${100 + half} ${base - 2} ${100 + foot} ${base}Z`}
+              fill={tint}
               stroke={tint}
-              strokeWidth={6}
-              strokeLinecap="round"
+              strokeWidth={2}
+              strokeLinejoin="round"
             />
-            <ellipse
-              cx={100 - 13 * c}
-              cy={stem - 6 * c}
-              rx={14 * c}
-              ry={9 * c}
-              fill={tint}
-              transform={`rotate(-28 ${100 - 13 * c} ${stem - 6 * c})`}
-            />
-            <ellipse
-              cx={100 + 14 * c}
-              cy={stem - 9 * c}
-              rx={16 * c}
-              ry={10 * c}
-              fill={tint}
-              transform={`rotate(24 ${100 + 14 * c} ${stem - 9 * c})`}
-            />
+            <path d={leaf(-62, 26 * c, 8.5 * c)} fill={tint} />
+            <path d={leaf(54, 30 * c, 10 * c)} fill={tint} />
+            <circle cx={tipX} cy={tipY} r={half * 1.1} fill={tint} />
           </g>
         ),
       };
@@ -177,66 +190,87 @@ function draw(kind: MascotAccessory, body: AccessoryBody, tint: string): Layers 
     }
 
     case "beanie": {
-      const dx = body.a * 0.84;
-      const edge = topAt(body, dx) + 6;
-      const crown = top - 22 * s;
-      const brim = 13 * s;
+      // A knit hat pulled well down: it follows the head's own outline to just
+      // above the eyes, with a folded cuff and a pompom.
+      const hem = 104 - body.b * 0.36;
+      const cuff = 17 * s;
+      const pad = 4;
+      const lift = 12 * s;
+      const pts: string[] = [];
+      for (let i = 0; i <= 48; i += 1) {
+        const t = Math.PI + (i / 48) * Math.PI;
+        const cos = Math.cos(t);
+        const sin = Math.sin(t);
+        const x = 100 + (body.a + pad) * Math.sign(cos) * Math.abs(cos) ** (2 / body.n);
+        let y = 104 + (body.b + pad) * Math.sign(sin) * Math.abs(sin) ** (2 / body.n);
+        if (y > hem) continue;
+        const k = (x - 100) / (body.a + pad);
+        y -= lift * Math.max(0, 1 - k * k);
+        pts.push(`${x.toFixed(2)} ${y.toFixed(2)}`);
+      }
+      const reach = halfWidthAt(body, hem) + pad;
+      const crownY = top - pad - lift;
+      const sag = 5 * s;
+      const capPath = `M${100 - reach} ${hem} L${pts.join(" L")} L${100 + reach} ${hem} Q100 ${hem + sag * 2} ${100 - reach} ${hem}Z`;
+      const cuffPath = `M${100 - reach} ${hem - cuff} Q100 ${hem - cuff + sag * 2} ${100 + reach} ${hem - cuff} L${100 + reach} ${hem} Q100 ${hem + sag * 2} ${100 - reach} ${hem}Z`;
       return {
         on: (
           <g>
-            <path
-              d={`M${100 - dx} ${edge} C${100 - dx} ${crown} ${100 + dx} ${crown} ${100 + dx} ${edge}Z`}
-              fill={tint}
-            />
-            <path
-              d={`M${100 - dx - 3} ${edge} Q100 ${edge - 20 * s} ${100 + dx + 3} ${edge} L${100 + dx + 3} ${edge + brim * 0.2} Q100 ${edge - 20 * s + brim} ${100 - dx - 3} ${edge + brim * 0.2}Z`}
-              fill={tint}
-            />
-            <path
-              d={`M${100 - dx - 3} ${edge} Q100 ${edge - 20 * s} ${100 + dx + 3} ${edge} L${100 + dx + 3} ${edge + brim * 0.2} Q100 ${edge - 20 * s + brim} ${100 - dx - 3} ${edge + brim * 0.2}Z`}
-              fill={INK}
-              opacity={0.16}
-            />
-            <circle cx={100} cy={crown + 4 * s} r={12 * s} fill={tint} />
+            <path d={capPath} fill={tint} stroke={tint} strokeWidth={2} strokeLinejoin="round" />
+            <path d={cuffPath} fill={INK} opacity={0.14} />
+            <circle cx={100} cy={crownY - 2 * c} r={9 * c} fill={tint} />
           </g>
         ),
       };
     }
 
     case "headphones": {
-      const reach = body.a + 4;
-      const cupW = 22 * s;
-      const cupH = 40 * s;
+      // Chunky over-ear cans: a thick padded band in the accessory color, so it
+      // reads on dark and light surfaces alike, and big rounded cups.
+      const cupW = 24 * c * 0.8;
+      const cupH = 44 * c * 0.8;
+      const cupY = 100;
+      const reach = halfWidthAt(body, cupY) + cupW * 0.28;
+      const bandW = 13 * s;
+      const arcTop = top - 12 * s;
+      const startY = cupY - cupH * 0.42;
+      const band = `M${100 - reach} ${startY} C${100 - reach} ${arcTop - 10 * s} ${100 + reach} ${arcTop - 10 * s} ${100 + reach} ${startY}`;
       return {
         on: (
           <g>
-            <path
-              d={`M${100 - reach + 6} 96 C${100 - reach + 6} ${top - 30 * s} ${100 + reach - 6} ${top - 30 * s} ${100 + reach - 6} 96`}
-              fill="none"
-              stroke={INK}
-              strokeWidth={9}
-              strokeLinecap="round"
-            />
-            {([-1, 1] as const).map((side) => (
-              <g key={side}>
-                <rect
-                  x={side < 0 ? 100 - reach - cupW / 2 : 100 + reach - cupW / 2}
-                  y={104 - cupH / 2}
-                  width={cupW}
-                  height={cupH}
-                  rx={cupW / 2}
-                  fill={INK}
-                />
-                <rect
-                  x={side < 0 ? 100 - reach - cupW / 2 - 5 : 100 + reach - cupW / 2 + 5}
-                  y={104 - cupH / 2 + 5}
-                  width={cupW}
-                  height={cupH - 10}
-                  rx={cupW / 2}
-                  fill={tint}
-                />
-              </g>
-            ))}
+            <path d={band} fill="none" stroke={tint} strokeWidth={bandW} strokeLinecap="round" />
+            {([-1, 1] as const).map((side) => {
+              const cx = 100 + side * reach;
+              return (
+                <g key={side}>
+                  <rect
+                    x={cx - cupW / 2 - side * 3 * s}
+                    y={cupY - cupH / 2 + 4 * s}
+                    width={cupW}
+                    height={cupH - 8 * s}
+                    rx={cupW / 2}
+                    fill={tint}
+                  />
+                  <rect
+                    x={cx - cupW / 2 - side * 3 * s}
+                    y={cupY - cupH / 2 + 4 * s}
+                    width={cupW}
+                    height={cupH - 8 * s}
+                    rx={cupW / 2}
+                    fill={INK}
+                    opacity={0.2}
+                  />
+                  <rect
+                    x={cx - cupW / 2 + side * 4 * s}
+                    y={cupY - cupH / 2}
+                    width={cupW}
+                    height={cupH}
+                    rx={cupW / 2}
+                    fill={tint}
+                  />
+                </g>
+              );
+            })}
           </g>
         ),
       };
