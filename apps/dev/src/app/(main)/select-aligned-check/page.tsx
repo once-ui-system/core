@@ -1,6 +1,6 @@
 "use client";
 
-import { Column, Row, Select, Text } from "@once-ui-system/core";
+import { Button, Column, DropdownWrapper, Option, Row, Select, Text } from "@once-ui-system/core";
 import { useState } from "react";
 
 /**
@@ -14,6 +14,8 @@ import { useState } from "react";
  * 3. No selection: the first option sits over the field.
  * 4. Near the top or bottom of the viewport: opens as a normal dropdown.
  * 5. Searchable: opens as a normal dropdown.
+ * 6. A Button trigger on DropdownWrapper `alignSelected`: the selected
+ *    option lands on the button's label.
  */
 const SIZES = ["XS", "S", "M", "L", "XL"].map((v) => ({ label: v, value: v }));
 const ZONES = [
@@ -48,6 +50,8 @@ export default function SelectAlignedCheck() {
   const [empty, setEmpty] = useState("");
   const [edge, setEdge] = useState("XL");
   const [search, setSearch] = useState("M");
+  const [sort, setSort] = useState("Newest");
+  const [sortOpen, setSortOpen] = useState(false);
 
   return (
     <Column fillWidth horizontal="center" paddingX="16">
@@ -96,6 +100,37 @@ export default function SelectAlignedCheck() {
           value={search}
           onSelect={(v) => setSearch(v as string)}
         />
+        <Row>
+          <DropdownWrapper
+            alignSelected
+            open={sortOpen}
+            onOpenChange={setSortOpen}
+            minWidth={12}
+            trigger={
+              <Button id="aligned-button" variant="secondary" suffixIcon="chevronDown">
+                {sort}
+              </Button>
+            }
+            dropdown={
+              <Column padding="4" gap="2" fillWidth>
+                {["Oldest", "Price: low to high", "Newest", "Price: high to low", "Popular"].map(
+                  (v) => (
+                    <Option
+                      key={v}
+                      value={v}
+                      label={v}
+                      selected={v === sort}
+                      onClick={() => {
+                        setSort(v);
+                        setSortOpen(false);
+                      }}
+                    />
+                  ),
+                )}
+              </Column>
+            }
+          />
+        </Row>
         <Select
           id="dropdown-default"
           label="Default dropdown"
