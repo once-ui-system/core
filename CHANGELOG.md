@@ -269,6 +269,17 @@ entry below that had landed by then:
 
 ### Changed
 
+- **Alpha tokens in light mode are as visible as in dark.** `--*-alpha-weak`,
+  `-medium` and `-strong` came from step 600 in both themes, a light mid-tone
+  that stands out on a dark page but barely shows on a light one (strong:
+  2.4:1 against the page in dark, 1.6:1 in light). Light now mixes them from
+  step 400 for neutral and info and step 500 for brand, accent and the status
+  colours, at the same 15, 30 and 50%, so hairlines, hovers, tracks and
+  tinted fills in light read about as strongly as in dark. Names and dark
+  values are unchanged. The `--scheme-*-600-15/30/50` variables stay, now only
+  read by dark; custom schemes need nothing new. The token export writes these
+  as `"{function-neutral-400}/0.15"`, which `@once-ui-system/native` resolves.
+
 - **CelebrationFx and WeatherFx follow the state contract**: `active` / `defaultActive`
   / `onActiveChange`, controlled only when `active` is set, with any `trigger`;
   `trigger="manual"` is gone. `duration` ending, hover and click report through
@@ -584,6 +595,9 @@ entry below that had landed by then:
   content's width. NavItem now truncates by default (`truncate={false}` keeps the
   old overflow), and `ToggleButton`'s `truncate` prop, which did nothing, ends a
   long text label in an ellipsis.
+- A selected `ToggleButton` keeps its fill on hover and deepens it, instead
+  of dropping to the idle-hover grey and looking deselected (`subtle` went
+  near invisible in dark).
 - CelebrationFx: switching `type` mid-flight threw; fireworks were never cleaned up
   while emitting (the list grew about three shells a second for as long as the page
   stayed open); the hover, click and manual triggers dropped a wave of confetti at
