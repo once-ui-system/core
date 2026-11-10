@@ -480,6 +480,13 @@ const DropdownMenu = ({
 
   // Store the previously focused element to restore focus when dropdown closes
   const previouslyFocusedElement = useRef<Element | null>(null);
+  /**
+   * Set when a click outside closed the panel. Focus then stays where that
+   * click put it, as it would after any other click: handing it back to the
+   * trigger refocused an empty DateInput, whose label floated on and on over
+   * nothing after the user had clicked away.
+   */
+  const closedByOutsideClickRef = useRef(false);
 
   // Force update when dropdown opens
   useEffect(() => {
@@ -557,6 +564,9 @@ const DropdownMenu = ({
 
   useEffect(() => {
     if (isOpen && mounted) {
+      // The handler marks every click outside, open or not; only one made
+      // while this panel is open counts.
+      closedByOutsideClickRef.current = false;
       // Store the currently focused element before focusing the dropdown.
       // A panel the pointer opened leaves focus alone, so has none to restore.
       previouslyFocusedElement.current = hoverOpenedRef.current ? null : document.activeElement;
@@ -616,7 +626,11 @@ const DropdownMenu = ({
       setFocusedIndex(-1);
       setOpensOn(null);
 
-      if (previouslyFocusedElement.current) {
+      const closedByOutsideClick = closedByOutsideClickRef.current;
+      closedByOutsideClickRef.current = false;
+      if (closedByOutsideClick) {
+        previouslyFocusedElement.current = null;
+      } else if (previouslyFocusedElement.current) {
         // A combobox's field had focus all along, so focus that is now
         // somewhere else was put there by the user — Tab out of the field,
         // a click on another control — and stays. Only focus lost with the
@@ -710,6 +724,7 @@ const DropdownMenu = ({
         !isClickOnDropdownPortal &&
         !isClickOnDropdownElement
       ) {
+        closedByOutsideClickRef.current = true;
         handleOpenChange(false);
         setFocusedIndex(-1);
       } else {
