@@ -606,6 +606,10 @@ entry below that had landed by then:
   They now take two fifths of the circle at every size (custom sizes too), in
   medium weight on a soft neutral fill, trimmed to the cap height so they sit
   in the middle.
+- **Agent bundles no longer say `Text` takes padding.** A stale gotcha told
+  agents that `Text` and `Heading` take padding, which is a type error in 3.0.
+  It now says to put padding on a `<Column>` around them, matching the
+  validator's `layout.leafProps` hint.
 - **A long `NavItem` label ends in an ellipsis.** In a narrow Nav the label ran
   out of the row with no ellipsis, because the rows around it kept their
   content's width. NavItem now truncates by default (`truncate={false}` keeps the

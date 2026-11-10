@@ -200,7 +200,7 @@
     "components": ["Column", "Background"]
   },
   "layout.responsiveProps": {
-    "rule": "Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid; Text and Heading take just s={{ hide: true }}. Button and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there. Text and Heading take padding and flex but no radius or border; put those on the wrapper.",
+    "rule": "Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid; Text and Heading take just s={{ hide: true }}. Button and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there. Text and Heading take margins and flex but no padding, radius or border; put those on a Column around them.",
     "inRules": true,
     "components": ["Flex", "Row", "Column", "Grid", "Button", "Text"]
   },
