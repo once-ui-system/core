@@ -1,0 +1,239 @@
+{
+  "arm": "S",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 3128
+    },
+    "build": {
+      "ok": true,
+      "ms": 22380
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 2983,
+          "height": 3093,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 2983,
+          "height": 2279,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 2983,
+          "height": 1661,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 2983,
+              "height": 3093,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 2983,
+              "height": 2279,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 2983,
+              "height": 1661,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 3,
+            "nodes": 38,
+            "serious_or_critical": 1,
+            "ids": [
+              "label-content-name-mismatch:serious:35",
+              "landmark-one-main:moderate:1",
+              "region:moderate:2"
+            ]
+          }
+        },
+        "/guests": {
+          "viewports": {
+            "phone": {
+              "text": 3054,
+              "height": 7249,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 3054,
+              "height": 2795,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 3054,
+              "height": 1993,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 3,
+            "nodes": 3,
+            "serious_or_critical": 1,
+            "ids": [
+              "landmark-one-main:moderate:1",
+              "region:moderate:1",
+              "scrollable-region-focusable:serious:1"
+            ]
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 3,
+        "nodes": 38,
+        "serious_or_critical": 1,
+        "ids": [
+          "label-content-name-mismatch:serious:35",
+          "landmark-one-main:moderate:1",
+          "region:moderate:2"
+        ]
+      },
+      "interaction": {
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 13835,
+          "settled": false
+        },
+        "/ tablet": {
+          "ms": 1763,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1766,
+          "settled": true
+        },
+        "/guests phone": {
+          "ms": 1829,
+          "settled": true
+        },
+        "/guests tablet": {
+          "ms": 1787,
+          "settled": true
+        },
+        "/guests desktop": {
+          "ms": 1807,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 271,
+          "distinct_fontSize": 16,
+          "distinct_color": 7,
+          "distinct_background": 27,
+          "distinct_radius": 8,
+          "distinct_shadow": 3,
+          "distinct_spacing": 12,
+          "spacing_on_4px_grid": 0.423
+        },
+        "/guests": {
+          "elements": 461,
+          "distinct_fontSize": 9,
+          "distinct_color": 6,
+          "distinct_background": 14,
+          "distinct_radius": 6,
+          "distinct_shadow": 0,
+          "distinct_spacing": 11,
+          "spacing_on_4px_grid": 0.116
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 399.7,
+          "css_kb": 53.1,
+          "fcp_ms": 488,
+          "cls": 0,
+          "long_task_ms": 0
+        },
+        "/guests": {
+          "js_kb": 399.7,
+          "css_kb": 53.1,
+          "fcp_ms": 276,
+          "cls": 0,
+          "long_task_ms": 0
+        }
+      },
+      "views": {
+        "table-selected phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-phone.jpg"
+        },
+        "table-selected tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-tablet.jpg"
+        },
+        "table-selected desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "src/lib/data.ts",
+    "src/lib/plan.tsx",
+    "src/components/seatwise/seatwise.css",
+    "src/components/seatwise/AppFrame.tsx",
+    "src/components/seatwise/bits.tsx",
+    "src/components/seatwise/RoomPlan.tsx",
+    "src/components/seatwise/SidePanel.tsx",
+    "src/components/seatwise/PlanView.tsx",
+    "src/components/seatwise/GuestsView.tsx",
+    "src/app/page.tsx",
+    "src/app/guests/page.tsx",
+    "src/app/layout.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ src/lib/data.ts: no mechanical issues\n✓ src/lib/plan.tsx: no mechanical issues\n✗ src/components/seatwise/AppFrame.tsx: 1 issue(s)\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ src/components/seatwise/bits.tsx: no mechanical issues\n✗ src/components/seatwise/RoomPlan.tsx: 1 issue(s)\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✗ src/components/seatwise/SidePanel.tsx: 2 issue(s)\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ src/components/seatwise/PlanView.tsx: no mechanical issues\n✗ src/components/seatwise/GuestsView.tsx: 2 issue(s)\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ src/app/page.tsx: no mechanical issues\n✓ src/app/guests/page.tsx: no mechanical issues\n✗ src/app/layout.tsx: 1 issue(s)\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint",
+    "validator": {
+      "package_version": "2.6.0",
+      "script_sha256": "ab274b3e6be15eb6"
+    }
+  }
+}
