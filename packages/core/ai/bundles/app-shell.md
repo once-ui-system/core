@@ -189,6 +189,7 @@ Mixins: LeafProps.
 - label, children?: ReactNode
 - selected, rounded, truncate, disabled?: boolean = false
 - variant?: "ghost" | "outline" | "subtle" = ghost
+- tone?: Tone = neutral
 - size?: TShirtSizes
 - radius?: RadiusSize
 - corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
@@ -252,6 +253,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - href?: string
 - value: string
 - danger, selected, highlighted?: boolean
+- tone?: Tone = neutral
 - disabled?: boolean = false
 - tabIndex?: number
 - onClick?: (value: string) => void

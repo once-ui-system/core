@@ -154,3 +154,47 @@
         }
     }
 }
+// `tone` colours the selected state; neutral is the grey above. A tinted fill,
+// the label and icons in the tone, the way sibling apps mark the current page
+// (brand-alpha-weak fill). Hover deepens the fill instead of greying it.
+@mixin tone($tone) {
+    &.selected:not([data-disabled]) {
+        background: var(--#{$tone}-alpha-weak);
+        border-color: var(--static-transparent);
+        color: var(--#{$tone}-on-background-strong);
+
+        svg {
+            color: var(--#{$tone}-on-background-weak);
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            &:hover {
+                background: var(--#{$tone}-alpha-medium);
+                border-color: var(--static-transparent);
+            }
+        }
+    }
+
+    &.outline.selected:not([data-disabled]) {
+        border-color: var(--#{$tone}-alpha-medium);
+    }
+}
+
+.tone-brand {
+    @include tone(brand);
+}
+.tone-accent {
+    @include tone(accent);
+}
+.tone-info {
+    @include tone(info);
+}
+.tone-success {
+    @include tone(success);
+}
+.tone-warning {
+    @include tone(warning);
+}
+.tone-danger {
+    @include tone(danger);
+}

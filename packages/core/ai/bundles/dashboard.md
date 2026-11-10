@@ -365,6 +365,7 @@ Mixins: LeafProps.
 - label, children?: ReactNode
 - selected, rounded, truncate, disabled?: boolean = false
 - variant?: "ghost" | "outline" | "subtle" = ghost
+- tone?: Tone = neutral
 - size?: TShirtSizes
 - radius?: RadiusSize
 - corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
@@ -586,7 +587,7 @@ type BlendMode = "color" | "screen" | "normal" | "multiply" | "overlay" | "darke
 type BlurSize = "s" | "xl" | "l" | "m" | "xs"
 type BorderStyle = "rounded" | "playful" | "conservative" | "sharp"
 type BreakpointKey = "s" | "xl" | "l" | "m" | "xs"
-type ButtonOption = LeafProps & { value: string; description?: ReactNode; label?: ReactNode; children?: ReactNode; horizontal?: "start" | "center" | "end" | "between"; radius?: RadiusSize; disabled?: boolean; href?: string; size?: TShirtSizes; corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"; variant?: "ghost" | "outline" | "subtle"; weight?: "default" | "strong"; truncate?: boolean; rounded?: boolean; prefixIcon?: IconName; suffixIcon?: IconName }
+type ButtonOption = LeafProps & { value: string; description?: ReactNode; label?: ReactNode; children?: ReactNode; horizontal?: "start" | "center" | "end" | "between"; radius?: RadiusSize; disabled?: boolean; href?: string; size?: TShirtSizes; corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"; variant?: "ghost" | "outline" | "subtle"; tone?: Tone; weight?: "default" | "strong"; truncate?: boolean; rounded?: boolean; prefixIcon?: IconName; suffixIcon?: IconName }
 // type ButtonVariant is one of these strings: link ghost subtle primary secondary tertiary
 type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}ch` | `${number}%` | `${number}vh` | `${number}vw` | `${number}dvh` | `${number}dvw` | `${number}svh` | `${number}svw` | `${number}lvh` | `${number}lvw` | `${number}vmin` | `${number}vmax` | `${number}cqw` | `${number}cqh` | `calc(${string})` | `min(${string})` | `max(${string})` | `clamp(${string})` | `var(${string})`
 type ChartVariant = "flat" | "outline" | "gradient"

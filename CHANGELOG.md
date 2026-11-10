@@ -32,6 +32,10 @@ entry below that had landed by then:
 
 ### Added
 
+- `ToggleButton` and `Option` take `tone`, the palette of their selected state,
+  as on `Button`. `neutral` (the default) keeps the grey fill; `brand`,
+  `accent` and the status tones tint the fill and colour the label and icons,
+  the way a sidebar or a menu marks the current item.
 - **Nested menus: `Submenu`.** Put a `Submenu` among a Dropdown's Options (or
   a context menu's) to open a nested menu, as deep as needed. It opens when the
   pointer rests on it, on a click or tap, and with Right arrow, Enter or Space;

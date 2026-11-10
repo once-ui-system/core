@@ -176,6 +176,7 @@ Mixins: LeafProps.
 - label, children?: ReactNode
 - selected, rounded, truncate, disabled?: boolean = false
 - variant?: "ghost" | "outline" | "subtle" = ghost
+- tone?: Tone = neutral
 - size?: TShirtSizes
 - radius?: RadiusSize
 - corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"

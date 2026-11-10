@@ -96,6 +96,51 @@
     }
 }
 
+// `tone` colours the selected state, as on ToggleButton: a tinted fill and
+// the label in the tone. Hover and focus deepen the tint instead of greying it.
+@mixin tone($tone) {
+    color: var(--#{$tone}-on-background-strong);
+
+    &:not(:hover):not(:focus) {
+        background: var(--#{$tone}-alpha-weak);
+    }
+
+    &:focus {
+        background: var(--#{$tone}-alpha-medium);
+        border-color: var(--#{$tone}-alpha-medium);
+    }
+
+    @media (hover: hover) {
+        &:hover {
+            background: var(--#{$tone}-alpha-medium);
+            border-color: var(--#{$tone}-alpha-medium);
+        }
+    }
+
+    svg {
+        color: var(--#{$tone}-on-background-weak);
+    }
+}
+
+.option.selected.tone-brand {
+    @include tone(brand);
+}
+.option.selected.tone-accent {
+    @include tone(accent);
+}
+.option.selected.tone-info {
+    @include tone(info);
+}
+.option.selected.tone-success {
+    @include tone(success);
+}
+.option.selected.tone-warning {
+    @include tone(warning);
+}
+.option.selected.tone-danger {
+    @include tone(danger);
+}
+
 .focused {
     background: var(--neutral-background-strong);
 }
