@@ -194,6 +194,7 @@ Extends Input, DropdownWrapper.
 - emptyState?: ReactNode = No results
 - onSelect?: (value: string | string[]) => void
 - placement?: Placement
+- position?: "dropdown" | "aligned" = dropdown
 - searchable, multiple?: boolean = false
 - className?: string
 - style?: React.CSSProperties
@@ -215,7 +216,7 @@ Extends Input, DropdownWrapper.
 - span?: number
 
 ### DropdownWrapper
-- fillWidth, nested, disableTriggerClick?: boolean = false
+- fillWidth, nested, disableTriggerClick, alignSelected?: boolean = false
 - minWidth, maxWidth, minHeight, optionsCount?: number
 - placement?: Placement = bottom-start
 - trigger, dropdown: ReactNode
