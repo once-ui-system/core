@@ -12,7 +12,8 @@
  * `tokens/README.md` for the format.
  *
  * Values are rewritten for readers without a CSS engine: `oklch()` and `rgba()`
- * become hex (8 digits when translucent), `var(--x)` becomes `{x}`, shadows
+ * become hex (8 digits when translucent), `var(--x)` becomes `{x}`,
+ * `color-mix(in srgb, var(--x) 15%, transparent)` becomes `{x}/0.15`, shadows
  * become arrays and arithmetic `calc()` on one unit is evaluated. Lengths keep
  * their unit ("1.5rem", "1px") because rem follows the root font size, which
  * Once UI changes per device (`--font-scaling-*`).
@@ -102,6 +103,11 @@ function value(name, raw) {
   const v = raw.trim();
   const ref = v.match(/^var\(--([\w-]+)\)$/);
   if (ref) return ref[1] === name ? undefined : `{${ref[1]}}`;
+  // `color-mix(in srgb, var(--x) 15%, transparent)`: token x at 15% opacity.
+  const mix = v.match(
+    /^color-mix\(\s*in srgb\s*,\s*var\(--([\w-]+)\)\s+([\d.]+)%\s*,\s*transparent\s*\)$/,
+  );
+  if (mix) return `{${mix[1]}}/${+(+mix[2] / 100).toFixed(4)}`;
   if (/^-?[\d.]+$/.test(v)) return Number(v);
   return color(v) ?? (name.startsWith("shadow-") ? shadow(v) : null) ?? calc(v) ?? v;
 }

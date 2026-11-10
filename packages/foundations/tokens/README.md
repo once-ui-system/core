@@ -35,7 +35,7 @@ To resolve a theme, take every layer whose `when` entries all equal your
 settings (and whose `maxWidth`, if any, is at least your screen width), apply
 them in order of how many conditions they have (`:root` counts as one), then
 file order — the same order the CSS cascade uses — and follow `{name}`
-references until you reach a value.
+references until you reach a value (for `{name}/a`, scale the colour's alpha by `a`).
 
 Values:
 
@@ -43,6 +43,7 @@ Values:
 | --- | --- | --- |
 | Colour | `"#2d69fa"`, `"#0000001f"` | sRGB hex, converted from the OKLCH source; 8 digits when translucent. |
 | Reference | `"{function-brand-300}"` | Another token. |
+| Translucent reference | `"{function-neutral-400}/0.15"` | Another colour token at that opacity (multiplied with its own alpha). From `color-mix(in srgb, var(--x) 15%, transparent)`. |
 | Length | `"0.75rem"`, `"1px"` | rem follows the root font size: 16px, 15px on phones (`font-scaling-mobile`). |
 | Number | `500`, `1.1` | Font weights, multipliers. |
 | Shadow | `[{ "x": 0, "y": 1, "blur": 2, "spread": 0, "color": "#00000014" }]` | One entry per layer. |
