@@ -1,0 +1,23 @@
+{
+  "arm": "M",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/AppShell.tsx(98,81): error TS2353: Object literal may only specify known properties, and 'fontWeight' does not exist in type 'TypographyProps<\"span\", { component?: \"span\" | undefined; }> | ((ownerState: ListItemTextOwnerState) => TypographyProps<\"span\", { component?: \"span\" | undefined; }>)'.\ncomponents/AppShell.tsx(147,21): error TS2353: Object literal may only specify known properties, and 'fontWeight' does not exist in type 'TypographyProps<\"span\", { component?: \"span\" | undefined; }> | ((ownerState: ListItemTextOwnerState) => TypographyProps<\"span\", { component?: \"span\" | undefined; }>)'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 3026
+    }
+  },
+  "files": [
+    "app/theme.ts",
+    "app/layout.tsx",
+    "lib/data.ts",
+    "lib/nav.ts",
+    "components/AppShell.tsx",
+    "app/page.tsx",
+    "app/projects/page.tsx",
+    "app/reports/page.tsx",
+    "app/settings/page.tsx"
+  ]
+}
