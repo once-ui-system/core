@@ -14,6 +14,8 @@ When the request doesn't specify design intent, ask these five questions first (
 
 If you can't ask (or the user says "you decide"), default to: restrained, centered with `maxWidth="m"` content, single brand accent, one subtle gradient (recipes.md #1), no placeholder images (use `Avatar`, `Logo`, `Icon`).
 
+That default is for a landing page. For an app (signed-in, records, forms), the first build step is the theme, not a page: in `once-ui.config` `style` set `brand` (a named scheme, or `"custom"` with `brandSeed: "#hex"`), `neutral`, and `solid: "color"` so primary buttons carry the brand (`"contrast"` draws them black or white), and give `--font-heading` a family of its own in the root layout. One brand accent, no ambient layers or effects. Shipping the starter's gray/blue/contrast unchanged reads as unbranded.
+
 ## Layout primitives
 
 1. Use `Row` and `Column` for layout. `Flex` with `direction` is only for dynamic direction. A `Flex` with no direction at all is a `Row` (`Flex` defaults to row).
@@ -85,6 +87,22 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 <Column background="surface" border radius="l" padding="24" gap="16">
 ```
 
+8b. Same-shaped records (members, bookings, tickets) go on **one** surface with row dividers and aligned columns, or in a `Table`, which is already a surface. Never a bordered card per row, and never a surface inside a surface: no `Table` or filled tile inside a bordered panel. Put the section heading above the surface, not in it.
+
+```tsx
+<Column as="ul" background="surface" border radius="l">
+  {rows.map((r, i) => (
+    <Row as="li" key={r.id} borderTop={i > 0} paddingX="16" paddingY="12" gap="16" vertical="center">
+      <Column flex={1} gap="4">{/* name, then metadata at body-default-s */}</Column>
+      <Row width={128}>{/* status Tag: fixed width keeps the column aligned */}</Row>
+      <IconButton icon="moreHorizontal" variant="tertiary" tooltip="Actions" />
+    </Row>
+  ))}
+</Column>
+```
+
+8c. Critical is louder than status. A routine state (confirmed, active) is a plain `Tag` with a `tone`; a critical one (an allergy, a failed payment, an overdue check) adds weight: a `Tag` with `prefixIcon="warning"`, or a `Feedback tone="danger"` with `icon` and `title` at the top of the record. Urgency is always `danger` or `warning`, and the same state takes the same tone everywhere; `info` is never urgent.
+
 ## Text
 
 9. Use `Text` and `Heading` with `textVariant="{type}-{weight}-{size}"` (the same prop as on Flex; `variant` was 2.x): type = `body | heading | display | label | code`, weight = `default | strong`, size = `xs | s | m | l | xl`. Examples: `body-default-m`, `heading-strong-s`, `label-default-s`, `display-strong-m`.
@@ -97,6 +115,8 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 // Bad
 <Row><Text textVariant="label-default-s" onBackground="neutral-weak">Updated today</Text></Row>
 ```
+
+10b. App type floor: anything a user must read in an app (metadata, labels, table cells, timestamps) is `body-default-s` or larger, or `label-default-s`. `xs` text in `neutral-weak` is for what nobody needs to read.
 
 ## Responsive
 
@@ -252,7 +272,7 @@ Siblings holding content get `zIndex={1}`. That layer and its content sibling ar
 25. `LogoCloud` extends `Grid` — always set `columns` (and responsive overrides), or logos stack in one column: `columns="4" m={{ columns: 3 }} s={{ columns: 2 }}`.
    A logo that changes with the theme is one `Logo` with a source per theme — `<Logo wordmark={{ light: "/logo-light.svg", dark: "/logo-dark.svg" }} />`, and `icon` takes the same pair — not a `<Logo showIn="dark">` beside a `<Logo showIn="light">`. Keep `showIn` for a logo that should only appear in one theme.
 
-26. Use decoration recipes from `recipes.md` verbatim, then adjust. Application shells — a dashboard with a sidebar, a data-driven nav, a two-pane editor — come from `layouts.md` the same way. Budget: at most one ambient background layer per section, ambient motion in at most the hero and final CTA, one accent color family per page.
+26. Use decoration recipes from `recipes.md` verbatim, then adjust. Application shells — a dashboard with a sidebar, a data-driven nav, a two-pane editor, a phone header, a plan or map canvas, a selection with a details panel — come from `layouts.md` the same way. Budget: at most one ambient background layer per section, ambient motion in at most the hero and final CTA, one accent color family per page.
 
 ## Motion
 
