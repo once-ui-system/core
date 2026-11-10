@@ -6,7 +6,7 @@ Recipes for the shells a product sits inside, as opposed to the decoration in
 Use them verbatim, then adjust. The values that look arbitrary usually are not —
 the notes say which ones matter and why.
 
-All three compile: they are also `ai/examples/app-shell.tsx`, which `pnpm
+Recipes 1–3 compile: they are also `ai/examples/app-shell.tsx`, which `pnpm
 typecheck` covers, so a renamed prop breaks the recipe rather than leaving it
 quietly wrong.
 
@@ -173,6 +173,105 @@ around it: toolbar, layer list, canvas and a working timeline.
 - **The timeline is a sibling of the split, not inside it.** It spans both panes,
   and putting it in one makes the divider drag it.
 
+## 4. App header on a phone
+
+A header that only wraps leaves the avatar orphaned on a line of its own. On
+a phone it is three rows: logo and account, then search, then the primary
+action at full width.
+
+```tsx
+<Column fillWidth gap="12" paddingX="16" paddingY="12">
+  <Row fillWidth vertical="center" gap="16">
+    <Logo icon="/logo.svg" href="/" />
+    <Row flex={1} s={{ hide: true }}>{search}</Row>
+    <Row s={{ hide: true }}><Button prefixIcon="plus">New booking</Button></Row>
+    <Avatar value="AP" size="s" style={{ marginLeft: "auto" }} />
+  </Row>
+  <Column hide s={{ hide: false }} fillWidth gap="8">
+    {search}
+    <Button fillWidth prefixIcon="plus">New booking</Button>
+  </Column>
+</Column>
+```
+
+- `search` is one element, `<Input id="search" size="xxs" label="Search"
+  prefix={<Icon name="search" size="xs" />} />`, placed once per layout; only one
+  of the two rows is ever shown.
+- `marginLeft: "auto"` keeps the avatar at the right edge on every width.
+
+## 5. Plan or map canvas
+
+Floor plans, seat maps and site maps are inline SVG, not absolutely
+positioned boxes. A `viewBox` at 100% width fits any screen; a fixed-width
+canvas clips on a phone.
+
+```tsx
+<Column fillWidth background="surface" border radius="l" padding="16">
+  <svg viewBox="0 0 800 500" width="100%" role="group" aria-label="Floor plan"
+    style={{ display: "block", height: "auto" }}>
+    <rect width="800" height="500" fill="var(--neutral-background-weak)" />    {/* floor */}
+    <rect x="24" y="24" width="240" height="32" fill="var(--neutral-solid-medium)" /> {/* bar */}
+    <rect x="0" y="0" width="800" height="8" fill="var(--neutral-alpha-strong)" />  {/* window wall */}
+    {tables.map((t) => (
+      <g key={t.id} className={styles.item} tabIndex={0} role="button"
+        aria-label={`Table ${t.label}, ${t.seats} seats`} aria-pressed={t.id === selectedId}
+        onClick={() => setSelectedId(t.id)}
+        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedId(t.id); } }}>
+        <circle className={styles.ring} cx={t.x} cy={t.y} r={50} fill="transparent" strokeWidth={4}
+          stroke={t.id === selectedId ? "var(--brand-solid-strong)" : "none"} />
+        <circle cx={t.x} cy={t.y} r={36} fill={`var(--data-${zoneColor[t.zone]})`} />
+        <text x={t.x} y={t.y} textAnchor="middle" dominantBaseline="central"
+          fill="var(--neutral-on-background-strong)">{t.label}</text>
+      </g>
+    ))}
+  </svg>
+</Column>
+```
+
+```css
+/* canvas.module.css */
+.item { cursor: pointer; outline: none; }
+.item:focus-visible .ring { stroke: var(--neutral-on-background-strong); stroke-dasharray: 6 4; }
+```
+
+- **Hit size.** Every item is at least 44px across at a 360px-wide phone:
+  `44 * viewBoxWidth / 360` units (about 100 in an 800-wide plan). The
+  transparent `ring` circle carries the hit area when the drawing is smaller.
+- **Fixtures in distinct fills.** Floor, walls, bar and windows each take their
+  own neutral (`background`, `solid`, `alpha`), so they never read as seats.
+- **Groups from the categorical palette.** A zone, section or table type is a
+  `var(--data-{name})` colour (`blue`, `emerald`, `orange`, `violet`…), which
+  `DataThemeProvider mode="categorical"` defines in both themes. Name each
+  group in a legend too, so colour is never the only cue.
+- **Focus is drawn in CSS.** SVG elements take no `outline`; the
+  `:focus-visible` rule draws the ring, distinct from the brand selection ring.
+
+## 6. Selection with a details panel
+
+A selected item gets a brand ring and a raised fill: `border="brand-medium"
+background="brand-alpha-weak"` on a row or tile, the brand `ring` on a canvas
+item. Its details sit beside the list or canvas on desktop, and in a `Drawer`
+from the bottom on a phone.
+
+```tsx
+const { maxWidth } = useLayout();
+const phone = maxWidth("s");
+
+<Row fillWidth gap="24">
+  <Column flex={1}>{/* list or canvas */}</Column>
+  <Column s={{ hide: true }} width={320} fitHeight position="sticky" top="24"
+    background="surface" border radius="l" padding="24" gap="16">
+    {selected ? <Details item={selected} /> : <Text onBackground="neutral-weak">Select a table to see its details.</Text>}
+  </Column>
+</Row>
+<Drawer open={phone && Boolean(selected)} onClose={() => setSelectedId(null)} side="bottom" title={selected?.label}>
+  {selected && <Details item={selected} />}
+</Drawer>
+```
+
+- One `Details` component, two homes: the panel and the drawer never drift apart.
+- The empty panel says what to do, so the column is never blank.
+
 ## Anti-patterns
 
 - A dashboard with no scrolling pane — the whole document scrolls and the nav
@@ -186,3 +285,5 @@ around it: toolbar, layer list, canvas and a working timeline.
 - Icons on both a NavGroup and its children — two columns of icons, no hierarchy.
 - `overflow` on the SplitView instead of on its panels — the divider stops
   tracking the pointer.
+- A floor plan or map at a fixed pixel width — it clips on a phone. Use an SVG
+  `viewBox` at 100% width.

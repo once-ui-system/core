@@ -40,6 +40,8 @@ Static panel recipe (pricing tiers, stats, settings sections):
 - `Card` = interactive only (`href` or `onClick`). Static panels = Column + surface recipe.
 - Colors: `{tone}-{weight}` or `{tone}-alpha-{weight}`. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`.
 - `background` also: `surface | overlay | page | transparent`
+- Same-shaped records: one surface with divided rows (`borderTop={i > 0}`) and aligned columns, or a `Table`; never a card per row or a surface in a surface
+- Critical outranks status: `Feedback tone="danger"` with `icon` and `title`, or `Tag` with `prefixIcon`; urgent is `danger`/`warning`, never `info`
 
 ## Typography
 
@@ -47,6 +49,7 @@ Static panel recipe (pricing tiers, stats, settings sections):
 - Section titles: `display-strong-xs` or `display-strong-s` — not `heading-*`
 - Eyebrow: `<Text textVariant="label-default-s" onBackground="brand-medium">`
 - Text on layout: `textVariant` + `onBackground` on Row/Column instead of nesting Text
+- App text a user must read (metadata, cells): `body-default-s` minimum, never `xs` `neutral-weak`
 
 ## Decoration
 
@@ -134,3 +137,5 @@ Every type a prop names is defined in the slice's (or bundle's) `types`.
 ## Before building
 
 If design intent unclear, ask: content style, layout width, color approach, decoration level, imagery. Default: restrained, centered `maxWidth="m"`, single brand accent, one subtle gradient, no placeholder images.
+
+An app: set the theme first: `brand` or `brandSeed`, `neutral`, `solid: "color"`, a `--font-heading` family; no ambient decoration. Phone header, plan canvas, selection: `ai/layouts.md`.

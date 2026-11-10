@@ -274,6 +274,13 @@ entry below that had landed by then:
 
 ### Changed
 
+- **Agent guidance for apps that look designed, not stock.** From the
+  real-world bench: AGENTS.md and the rules now set the theme first (brand,
+  neutral, `solid: "color"`, a heading font), keep same-shaped records on one
+  surface with divided rows, make critical states louder than status, and set
+  a `body-default-s` floor for app text. `ai/layouts.md` gains a phone header,
+  a plan/map canvas that fits any width, and a selection pattern; a new
+  `field.errorTiming` gotcha keeps field errors until blur or submit.
 - **Alpha tokens in light mode are as visible as in dark.** `--*-alpha-weak`,
   `-medium` and `-strong` came from step 600 in both themes, a light mid-tone
   that stands out on a dark page but barely shows on a light one (strong:

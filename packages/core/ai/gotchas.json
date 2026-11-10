@@ -249,5 +249,9 @@
   "Button.submit": {
     "rule": "A Button in a form that should submit it needs type=\"submit\": with neither onClick, href nor type it renders a div, unlike a native <button>.",
     "components": ["Button", "IconButton"]
+  },
+  "field.errorTiming": {
+    "rule": "Show a field's error after it is blurred or the form is submitted, never on open: keep a touched flag per field and pass errorMessage={touched.email ? errors.email : undefined}. A form or Dialog that opens with red required-field errors reads as broken.",
+    "components": ["Input", "Textarea", "Select", "NumberInput", "Form"]
   }
 }

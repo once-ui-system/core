@@ -42,6 +42,8 @@ Static panel recipe (pricing tiers, stats, settings sections):
 - `Card` = interactive only (`href` or `onClick`). Static panels = Column + surface recipe.
 - Colors: `{tone}-{weight}` or `{tone}-alpha-{weight}`. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`.
 - `background` also: `surface | overlay | page | transparent`
+- Same-shaped records: one surface with divided rows (`borderTop={i > 0}`) and aligned columns, or a `Table`; never a card per row or a surface in a surface
+- Critical outranks status: `Feedback tone="danger"` with `icon` and `title`, or `Tag` with `prefixIcon`; urgent is `danger`/`warning`, never `info`
 
 ### Typography
 
@@ -49,6 +51,7 @@ Static panel recipe (pricing tiers, stats, settings sections):
 - Section titles: `display-strong-xs` or `display-strong-s` — not `heading-*`
 - Eyebrow: `<Text textVariant="label-default-s" onBackground="brand-medium">`
 - Text on layout: `textVariant` + `onBackground` on Row/Column instead of nesting Text
+- App text a user must read (metadata, cells): `body-default-s` minimum, never `xs` `neutral-weak`
 
 ### Decoration
 
@@ -135,6 +138,8 @@ Every type a prop names is defined in the slice's (or bundle's) `types`.
 ### Before building
 
 If design intent unclear, ask: content style, layout width, color approach, decoration level, imagery. Default: restrained, centered `maxWidth="m"`, single brand accent, one subtle gradient, no placeholder images.
+
+An app: set the theme first: `brand` or `brandSeed`, `neutral`, `solid: "color"`, a `--font-heading` family; no ambient decoration. Phone header, plan canvas, selection: `ai/layouts.md`.
 
 ## Components
 
@@ -615,6 +620,7 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - overflow="hidden" on full-bleed sections clips glows into hard bands — only use when parent has radius.
 - Leaf components (Button, IconButton, ToggleButton, the fields, Switch, Checkbox, RadioButton, Text, Heading, Icon, Avatar, Spinner, StatusIndicator, Kbd, InlineCode, ProgressBar, Logo, SmartLink, NavIcon) take only margins, flex, fillWidth, position, top/right/bottom/left, className and style besides their own props. Padding, background, border, radius, sizes, hide and breakpoints go on a Row around it (a Column around Text or Heading; <Row fit> for an Icon's box).
 - A Button in a form that should submit it needs type="submit": with neither onClick, href nor type it renders a div, unlike a native <button>.
+- Show a field's error after it is blurred or the form is submitted, never on open: keep a touched flag per field and pass errorMessage={touched.email ? errors.email : undefined}. A form or Dialog that opens with red required-field errors reads as broken.
 
 ## Quality bar
 
@@ -804,7 +810,7 @@ export function ListPageExample({
           rows={visible.map((member) => [
             <Column key="name" gap="4">
               <Text textVariant="label-default-s">{member.name}</Text>
-              <Text textVariant="body-default-xs" onBackground="neutral-weak">
+              <Text textVariant="body-default-s" onBackground="neutral-weak">
                 {member.email}
               </Text>
             </Column>,
