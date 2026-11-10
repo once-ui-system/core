@@ -399,9 +399,16 @@
     --brand-border-medium:          var(--function-brand-900);
     --brand-border-weak:            var(--function-brand-1000);
   
-    --brand-alpha-strong:           var(--function-brand-600-50);
-    --brand-alpha-medium:           var(--function-brand-600-30);
-    --brand-alpha-weak:             var(--function-brand-600-15);
+    /* Alphas in light come from step 400, not 600 as in dark. Step 600 is a
+       light mid-tone: on a dark page it stands out, on #f9f9f9 or white it
+       barely shows (strong reached 1.6:1 against the page here, 2.4:1 in
+       dark). Step 400 at the same percentages gives light the weight dark
+       has: about 1.24, 1.57 and 2.23:1 for weak, medium and strong.
+       Brand, accent and the status colours use step 500 instead: step 400
+       is darker but greyer, and washed the hue out of tinted fills. */
+    --brand-alpha-strong:           color-mix(in srgb, var(--function-brand-500) 50%, transparent);
+    --brand-alpha-medium:           color-mix(in srgb, var(--function-brand-500) 30%, transparent);
+    --brand-alpha-weak:             color-mix(in srgb, var(--function-brand-500) 15%, transparent);
 
     /* See the dark block: the brand solids as data-solid="color" has them. */
     --brand-color-strong:           var(--function-brand-500);
@@ -429,9 +436,9 @@
     --accent-border-medium:         var(--function-accent-900);
     --accent-border-weak:           var(--function-accent-1000);
   
-    --accent-alpha-strong:          var(--function-accent-600-50);
-    --accent-alpha-medium:          var(--function-accent-600-30);
-    --accent-alpha-weak:            var(--function-accent-600-15);
+    --accent-alpha-strong:          color-mix(in srgb, var(--function-accent-500) 50%, transparent);
+    --accent-alpha-medium:          color-mix(in srgb, var(--function-accent-500) 30%, transparent);
+    --accent-alpha-weak:            color-mix(in srgb, var(--function-accent-500) 15%, transparent);
 
     /* The page sits a step below its surfaces, as dark mode's does: an
        off-white canvas with white cards on it, so layers read by elevation
@@ -460,9 +467,9 @@
     --neutral-border-medium:        var(--function-neutral-900);
     --neutral-border-weak:          var(--function-neutral-1000);
   
-    --neutral-alpha-strong:         var(--function-neutral-600-50);
-    --neutral-alpha-medium:         var(--function-neutral-600-30);
-    --neutral-alpha-weak:           var(--function-neutral-600-15);
+    --neutral-alpha-strong:         color-mix(in srgb, var(--function-neutral-400) 50%, transparent);
+    --neutral-alpha-medium:         color-mix(in srgb, var(--function-neutral-400) 30%, transparent);
+    --neutral-alpha-weak:           color-mix(in srgb, var(--function-neutral-400) 15%, transparent);
 }
 
 [data-theme="light"] {
@@ -502,9 +509,9 @@
     --info-border-medium:           var(--function-info-900);
     --info-border-weak:             var(--function-info-1000);
   
-    --info-alpha-strong:            var(--function-info-600-50);
-    --info-alpha-medium:            var(--function-info-600-30);
-    --info-alpha-weak:              var(--function-info-600-15);
+    --info-alpha-strong:            color-mix(in srgb, var(--function-info-400) 50%, transparent);
+    --info-alpha-medium:            color-mix(in srgb, var(--function-info-400) 30%, transparent);
+    --info-alpha-weak:              color-mix(in srgb, var(--function-info-400) 15%, transparent);
 
     /* warning */
     --warning-background-strong:    var(--function-warning-800);
@@ -527,9 +534,9 @@
     --warning-border-medium:        var(--function-warning-900);
     --warning-border-weak:          var(--function-warning-1000);
   
-    --warning-alpha-strong:         var(--function-warning-600-50);
-    --warning-alpha-medium:         var(--function-warning-600-30);
-    --warning-alpha-weak:           var(--function-warning-600-15);
+    --warning-alpha-strong:         color-mix(in srgb, var(--function-warning-500) 50%, transparent);
+    --warning-alpha-medium:         color-mix(in srgb, var(--function-warning-500) 30%, transparent);
+    --warning-alpha-weak:           color-mix(in srgb, var(--function-warning-500) 15%, transparent);
    
     /* danger */   
     --danger-background-strong:     var(--function-danger-800);
@@ -552,9 +559,9 @@
     --danger-border-medium:         var(--function-danger-900);
     --danger-border-weak:           var(--function-danger-1000);
   
-    --danger-alpha-strong:          var(--function-danger-600-50);
-    --danger-alpha-medium:          var(--function-danger-600-30);
-    --danger-alpha-weak:            var(--function-danger-600-15);
+    --danger-alpha-strong:          color-mix(in srgb, var(--function-danger-500) 50%, transparent);
+    --danger-alpha-medium:          color-mix(in srgb, var(--function-danger-500) 30%, transparent);
+    --danger-alpha-weak:            color-mix(in srgb, var(--function-danger-500) 15%, transparent);
    
     /* success */   
     --success-background-strong:    var(--function-success-800);
@@ -577,9 +584,9 @@
     --success-border-medium:        var(--function-success-900);
     --success-border-weak:          var(--function-success-1000);
   
-    --success-alpha-strong:         var(--function-success-600-50);
-    --success-alpha-medium:         var(--function-success-600-30);
-    --success-alpha-weak:           var(--function-success-600-15);
+    --success-alpha-strong:         color-mix(in srgb, var(--function-success-500) 50%, transparent);
+    --success-alpha-medium:         color-mix(in srgb, var(--function-success-500) 30%, transparent);
+    --success-alpha-weak:           color-mix(in srgb, var(--function-success-500) 15%, transparent);
     
     .dark-flex {
         display: none;

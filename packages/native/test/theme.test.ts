@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createTheme, defaultSettings, resolveTokens } from "../src/theme";
+import { createTheme, defaultSettings, resolveTokens, withAlpha } from "../src/theme";
 
 const dark = { ...defaultSettings, theme: "dark" as const };
 
@@ -10,6 +10,23 @@ describe("theme", () => {
     expect(t["brand-solid-strong"]).toBe(t["scheme-emerald-500"]);
     // Core's default solid is "contrast": a neutral solid, not the brand.
     expect(base["brand-solid-strong"]).toBe(base["scheme-gray-1000"]);
+  });
+
+  it("resolves translucent references: light alphas are step 400, dark step 600", () => {
+    const light = resolveTokens({ ...defaultSettings, theme: "light" }, 400);
+    const dark = resolveTokens({ ...defaultSettings, theme: "dark" }, 400);
+    const step = (theme: Record<string, unknown>, n: number) =>
+      String(theme[`function-neutral-${n}`]).slice(0, 7);
+    expect(light["neutral-alpha-weak"]).toBe(`${step(light, 400)}26`);
+    expect(light["neutral-alpha-medium"]).toBe(`${step(light, 400)}4d`);
+    expect(light["neutral-alpha-strong"]).toBe(`${step(light, 400)}80`);
+    expect(String(dark["neutral-alpha-strong"]).slice(0, 7)).toBe(step(dark, 600));
+  });
+
+  it("scales a colour's own alpha by a translucent reference", () => {
+    expect(withAlpha("#808080", 0.5)).toBe("#80808080");
+    expect(withAlpha("#80808080", 0.5)).toBe("#80808040");
+    expect(withAlpha("1rem", 0.5)).toBeUndefined();
   });
 
   it("uses the phone breakpoint and root size on narrow screens", () => {
