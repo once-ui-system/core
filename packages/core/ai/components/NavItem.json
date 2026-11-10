@@ -12,7 +12,8 @@
   "icon": "IconName",
   "prefix": "ReactNode",
   "badge": "number | ReactNode",
-  "indicator": "boolean"
+  "indicator": "boolean",
+  "truncate": "boolean = true"
  },
  "tags": [
   "navigation"

@@ -1,10 +1,11 @@
 "use client";
 
 import classNames from "clsx";
-import React, { ReactNode } from "react";
-import { IconName } from "../icons.js";
+import type React from "react";
+import type { ReactNode } from "react";
+import type { IconName } from "../icons.js";
 import type { LeafProps } from "../interfaces.js";
-import { RadiusSize, Tone, TShirtSizes } from "../types.js";
+import type { RadiusSize, Tone, TShirtSizes } from "../types.js";
 import { leafLayout, takeLeafProps } from "../utils/leafLayout.js";
 import { ElementType } from "./ElementType.js";
 import { Flex } from "./Flex.js";
@@ -96,6 +97,8 @@ const ToggleButton = ({
   const size = sizeProp ?? "m";
   const auto = sizeProp === undefined;
   const iconClass = auto ? styles.icon : undefined;
+  // The label, wrapped so `truncate` can end a long one in an ellipsis.
+  const content = label || children;
   return (
     <ElementType
       ref={ref}
@@ -139,16 +142,20 @@ const ToggleButton = ({
           className={iconClass}
         />
       )}
-      {(label || children) && (
+      {content && (
         <Flex
           fillWidth={fillWidth}
           horizontal={horizontal}
           paddingX={size === "xl" ? "12" : size === "l" ? "8" : size === "s" ? "4" : "2"}
           textVariant={`label-${weight}-${size === "xl" ? "l" : size === "l" ? "m" : "s"}`}
           position="static"
-          className={auto ? styles.label : undefined}
+          className={classNames(auto && styles.label, truncate && "min-width-0")}
         >
-          {label || children}
+          {truncate && (typeof content === "string" || typeof content === "number") ? (
+            <span className="truncate">{content}</span>
+          ) : (
+            content
+          )}
         </Flex>
       )}
       {suffixIcon && (

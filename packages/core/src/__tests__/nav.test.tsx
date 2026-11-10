@@ -94,12 +94,15 @@ describe("NavGroup", () => {
  */
 describe("Nav", () => {
   const link = (name: string) => screen.getByRole("link", { name }) as HTMLElement;
+  // The row that carries the label's text style, however deep the label sits.
+  const labelRow = (name: string) =>
+    screen.getByText(name).closest("[class*='font-']") as HTMLElement;
 
   it("leaves a bare NavItem at 40px with a full-contrast label", () => {
     render(<NavItem href="/a" label="Alpha" selected />, { wrapper: wrap });
     expect(link("Alpha").className).toMatch(/_l_/);
     expect(link("Alpha").getAttribute("aria-current")).toBe("page");
-    const text = screen.getByText("Alpha").parentElement as HTMLElement;
+    const text = labelRow("Alpha");
     expect(text.className).toMatch(/font-default font-m/);
     expect(text.className).not.toMatch(/on-background-weak/);
   });
@@ -112,9 +115,7 @@ describe("Nav", () => {
       { wrapper: wrap },
     );
     expect(link("Alpha").className).toMatch(/_m_/);
-    expect((screen.getByText("Alpha").parentElement as HTMLElement).className).toMatch(
-      /font-default font-s/,
-    );
+    expect(labelRow("Alpha").className).toMatch(/font-default font-s/);
   });
 
   // One density scale: a Nav with no density of its own takes the theme's
@@ -179,8 +180,8 @@ describe("Nav", () => {
       </Nav>,
       { wrapper: wrap },
     );
-    const alpha = screen.getByText("Alpha").parentElement as HTMLElement;
-    const beta = screen.getByText("Beta").parentElement as HTMLElement;
+    const alpha = labelRow("Alpha");
+    const beta = labelRow("Beta");
     expect(alpha.className).toMatch(/neutral-on-background-strong font-label font-strong/);
     expect(beta.className).toMatch(/neutral-on-background-weak font-label font-default/);
   });
