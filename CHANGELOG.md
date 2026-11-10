@@ -595,6 +595,17 @@ entry below that had landed by then:
 
 ### Fixed
 
+- **SegmentedControl's selected pill keeps its corners.** The pill copied its
+  corners from the selected option's computed style once, at mount, before
+  ThemeProvider had set the theme, so it could stay square. It now takes them
+  from the radius token in CSS. `compact` no longer joins outlined segments
+  with square inner corners: it is the same bordered track with a sliding
+  pill, 2px in from the border instead of 4px.
+- **Avatar initials are sized from the circle and centred.** They were body
+  text that filled the `m` circle and sat high in it, light grey on white.
+  They now take two fifths of the circle at every size (custom sizes too), in
+  medium weight on a soft neutral fill, trimmed to the cap height so they sit
+  in the middle.
 - **A long `NavItem` label ends in an ellipsis.** In a narrow Nav the label ran
   out of the row with no ellipsis, because the rows around it kept their
   content's width. NavItem now truncates by default (`truncate={false}` keeps the
