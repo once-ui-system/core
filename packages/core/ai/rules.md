@@ -378,7 +378,9 @@ paints it and `ThemeProvider` lets the visitor change it. `theme: "light"` or
 so leave `theme` out (or `"system"`) for a switchable site. An exact brand
 colour is `brand: "custom", brandSeed: "#0F766E"`: the hex is step 500, which
 every brand solid uses in both themes, and the other steps are generated
-around it (`accentSeed`, `neutralSeed` likewise). Only a brand book that fixes
+around it (`accentSeed`, `neutralSeed` likewise). With a brand colour, mark
+the page you are on in it: `<Nav tone="brand">` tints the current NavItem and
+colours its label and icon (the default `neutral` is a grey fill). Only a brand book that fixes
 every shade needs `brandScale`, `accentScale` or `neutralScale`, one colour per
 step (`{ 100: "#…", …, 1200: "#…" }`), numbered dark to light in both themes:
 100 is the darkest, 1200 the lightest (the reverse of Tailwind). A seed fills

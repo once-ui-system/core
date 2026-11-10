@@ -32,6 +32,11 @@ entry below that had landed by then:
 
 ### Added
 
+- **`tone` on `Nav`**: marks the current row in a palette for every NavItem
+  inside. `<Nav tone="brand">` tints the current page and colours its label and
+  icon in the brand colour; the default stays the neutral grey fill, and a
+  NavItem's own `tone` still wins. The agent rules, AGENTS.md and the app-shell
+  example use it when an app has a brand colour.
 - `ToggleButton` and `Option` take `tone`, the palette of their selected state,
   as on `Button`. `neutral` (the default) keeps the grey fill; `brand`,
   `accent` and the status tones tint the fill and colour the label and icons,
