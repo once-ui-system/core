@@ -227,3 +227,47 @@ describe("Nav", () => {
     expect(screen.getByRole("button", { name: "Add" })).toBeDefined();
   });
 });
+
+/**
+ * `tone` on a Nav marks the current row in that palette for every NavItem
+ * inside, the way most apps show the page you are on in the brand colour.
+ */
+describe("Nav: tone", () => {
+  const link = (name: string) => screen.getByRole("link", { name }) as HTMLElement;
+  const labelRow = (name: string) =>
+    screen.getByText(name).closest("[class*='font-']") as HTMLElement;
+
+  it("is neutral by default", () => {
+    render(
+      <Nav>
+        <NavItem href="/a" label="Alpha" selected />
+      </Nav>,
+      { wrapper: wrap },
+    );
+    expect(link("Alpha").className).not.toMatch(/tone-brand/);
+  });
+
+  it("passes the Nav's tone to every item, and an item's own tone wins", () => {
+    render(
+      <Nav tone="brand">
+        <NavItem href="/a" label="Alpha" selected />
+        <NavItem href="/b" label="Beta" tone="neutral" selected />
+      </Nav>,
+      { wrapper: wrap },
+    );
+    expect(link("Alpha").className).toMatch(/tone-brand/);
+    expect(link("Beta").className).not.toMatch(/tone-brand/);
+  });
+
+  it("lets a toned current row take its colour from the tone in subtle", () => {
+    render(
+      <Nav tone="brand" variant="subtle">
+        <NavItem href="/a" label="Alpha" selected />
+        <NavItem href="/b" label="Beta" />
+      </Nav>,
+      { wrapper: wrap },
+    );
+    expect(labelRow("Alpha").className).not.toMatch(/neutral-on-background/);
+    expect(labelRow("Beta").className).toMatch(/neutral-on-background-weak/);
+  });
+});

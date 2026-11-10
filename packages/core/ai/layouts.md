@@ -91,7 +91,7 @@ const current = selectNavHref(pathname, nav.flatMap((i) =>
   i.items ? i.items.map((s) => s.href) : [i.href],
 ));
 
-<Nav fill paddingX="8" aria-label="Main">
+<Nav fill paddingX="8" tone="brand" aria-label="Main">
   {nav.map((item) =>
     item.items ? (
       <NavGroup

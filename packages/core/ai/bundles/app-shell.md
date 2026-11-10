@@ -25,7 +25,7 @@ This file is complete for this task: the rules (all of `rules.compact.md`), the 
 - Control size for a whole app: `density: "compact" | "normal" | "spacious"` in the config `style` (`data-density`), not `size="s"` on every Button; it also picks scaling 95/100/105 unless `scaling` is set. Give `size` only where one control differs
 - `Flex` only when direction changes at breakpoints: `<Row s={{ direction: "column" }}>`
 - Subtree theme: `theme`, `themeBorder`, `themeSolid`, `themeSurface` on Flex/Row/Column/Grid and components built on them (`Background`, `Tag`, effects) — not raw `data-theme`/`data-border`/`data-solid`. `Button`/`IconButton` have no typed prop: keep `data-border="rounded"`
-- App theme in `once-ui.config` `style`: `defaultTheme: "light"` = starts light, visitor can switch (`theme: "light"` forces it and `setTheme` does nothing). Exact brand colour: `brand: "custom", brandSeed: "#hex"` (the hex is step 500, every brand solid in both themes). Only a full brand book needs `brandScale` `{ 100: "#…", …, 1200: "#…" }`, numbered dark to light (100 darkest, the reverse of Tailwind; per theme `{ light: {…}, dark: {…} }`), page/card colour: `pageBackground`/`surfaceBackground` (token or colour, or `{ light, dark }`), not overrides of semantic CSS variables
+- App theme in `once-ui.config` `style`: `defaultTheme: "light"` = starts light, visitor can switch (`theme: "light"` forces it and `setTheme` does nothing). Exact brand colour: `brand: "custom", brandSeed: "#hex"` (the hex is step 500, every brand solid in both themes); show it on the current page with `<Nav tone="brand">`. Only a full brand book needs `brandScale` `{ 100: "#…", …, 1200: "#…" }`, numbered dark to light (100 darkest, the reverse of Tailwind; per theme `{ light: {…}, dark: {…} }`), page/card colour: `pageBackground`/`surfaceBackground` (token or colour, or `{ light, dark }`), not overrides of semantic CSS variables
 - Page skeleton: `Column as="main" fillWidth horizontal="center"` → content `Column maxWidth="l"` → sections
 - Section gaps: `"104"` between sections, `"24"`–`"40"` inside. Never `"48"` between major sections.
 - Responsive: breakpoint props `xl l m s xs` — never media queries for layout
@@ -163,6 +163,7 @@ Avoid: Layout props: it takes padding, margin, flex and s={{ hide }} but no othe
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 - density?: NavDensity
 - variant?: NavVariant = solid
+- tone?: Tone = neutral
 - rail?: boolean = true
 - collapsed, expandOnHover?: boolean = false
 - expandedWidth?: number | SpacingToken = 256
@@ -713,7 +714,7 @@ const current = selectNavHref(pathname, nav.flatMap((i) =>
   i.items ? i.items.map((s) => s.href) : [i.href],
 ));
 
-<Nav fill paddingX="8" aria-label="Main">
+<Nav fill paddingX="8" tone="brand" aria-label="Main">
   {nav.map((item) =>
     item.items ? (
       <NavGroup

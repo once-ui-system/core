@@ -12,6 +12,7 @@
  "props": {
   "density": "NavDensity",
   "variant": "NavVariant = solid",
+  "tone": "Tone = neutral",
   "rail": "boolean = true",
   "collapsed": "boolean = false",
   "expandOnHover": "boolean = false",
@@ -180,6 +181,15 @@
    "80",
    "104",
    "128"
+  ],
+  "Tone": [
+   "neutral",
+   "brand",
+   "accent",
+   "info",
+   "danger",
+   "warning",
+   "success"
   ]
  }
 }
