@@ -14,8 +14,9 @@ const FlexImpl = ({
   xs,
   style,
   hide,
-  ...props
+  ...rest
 }: ServerFlexProps & { ref?: Ref<HTMLElement> }) => {
+  const props = withGroupRole(rest);
   // Check if we need client-side functionality
   const needsClientSide = () => {
     // Custom cursor requires client-side
@@ -72,6 +73,21 @@ const FlexImpl = ({
 };
 
 FlexImpl.displayName = "Flex";
+
+/**
+ * A label on a plain `div` or `span` is not allowed by ARIA unless the element
+ * has a role (axe: `aria-prohibited-attr`), and screen readers ignore it. A
+ * labelled Flex with no role of its own becomes a `group`, the role that names
+ * a set of related content. Any explicit `role`, or another element via `as`,
+ * is left alone.
+ */
+function withGroupRole<P extends Record<string, unknown>>(props: P): P {
+  const labelled = props["aria-label"] != null || props["aria-labelledby"] != null;
+  if (!labelled || props.role != null) return props;
+  const as = props.as;
+  if (as != null && as !== "div" && as !== "span") return props;
+  return { ...props, role: "group" };
+}
 
 /**
  * A flex container. `as` picks the element and types its attributes and ref:

@@ -101,6 +101,10 @@ const MatrixFx = ({
         entries.forEach((entry) => {
           isVisibleRef.current = entry.isIntersecting;
         });
+        // The loop sleeps while offscreen (see `animate`); wake it on return.
+        if (isVisibleRef.current && !animationRef.current && animateFnRef.current) {
+          animationRef.current = requestAnimationFrame(animateFnRef.current);
+        }
       },
       {
         // Start animating when 10% visible for smooth transitions
@@ -306,9 +310,10 @@ const MatrixFx = ({
           return;
         }
 
-        // Skip rendering if not visible in viewport
+        // Offscreen: stop the loop instead of spinning on empty frames. The
+        // IntersectionObserver restarts it when the grid comes back into view.
         if (!isVisibleRef.current) {
-          animationRef.current = requestAnimationFrame(animate);
+          animationRef.current = undefined;
           return;
         }
 
