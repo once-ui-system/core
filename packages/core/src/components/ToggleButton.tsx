@@ -112,7 +112,7 @@ const ToggleButton = ({
         auto && styles.auto,
         auto && radius === undefined && styles.autoRadius,
         selected && styles.selected,
-        tone !== "neutral" && styles[`tone-${tone}`],
+        tone !== "neutral" && [styles.toned, styles[`tone-${tone}`]],
         corners === "none" || radius === "none"
           ? "radius-none"
           : corners

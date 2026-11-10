@@ -184,6 +184,7 @@ const Option = ({
         className={classNames(styles.option, {
           [styles.danger]: danger,
           [styles.selected]: selected,
+          [styles.toned]: toned,
           [styles[`tone-${tone}`]]: toned,
           [styles.highlighted]: highlighted || isHighlightedByClass,
           [styles.disabled]: disabled,
