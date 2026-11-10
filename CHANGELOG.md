@@ -590,6 +590,10 @@ entry below that had landed by then:
 
 ### Fixed
 
+- A selected `ToggleButton` keeps its fill on hover and deepens it, instead
+  of dropping to the idle-hover grey and looking deselected (`subtle` went
+  near invisible in dark).
+
 - CelebrationFx: switching `type` mid-flight threw; fireworks were never cleaned up
   while emitting (the list grew about three shells a second for as long as the page
   stayed open); the hover, click and manual triggers dropped a wave of confetti at

@@ -30,6 +30,16 @@
         border-color: var(--neutral-alpha-weak);
     }
 
+    // Hovering a selected button deepens its fill, as the tones do. The plain
+    // hover above outranks .selected, so it used to drop the selected fill to
+    // the idle-hover one and the current item looked deselected.
+    @media (hover: hover) and (pointer: fine) {
+        &.selected:hover:not([data-disabled]) {
+            background-color: var(--neutral-alpha-strong);
+            border-color: var(--neutral-alpha-weak);
+        }
+    }
+
     &[data-disabled] {
         background: var(--neutral-background-medium);
         color: var(--neutral-on-background-weak);
@@ -150,7 +160,7 @@
         }
 
         &.selected:hover:not([data-disabled]) {
-            background: var(--neutral-background-medium);
+            background: var(--neutral-alpha-strong);
         }
     }
 }
