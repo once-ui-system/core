@@ -406,6 +406,7 @@ Mixins: LeafProps.
 - prefix?: ReactNode
 - badge?: number | ReactNode
 - indicator?: boolean
+- truncate?: boolean = true
 
 ### Grid
 Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProps.

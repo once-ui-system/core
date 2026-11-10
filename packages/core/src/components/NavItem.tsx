@@ -32,6 +32,11 @@ interface NavItemProps
   badge?: number | ReactNode;
   /** A dot at the end of the row, for unread with no number worth showing. */
   indicator?: boolean;
+  /**
+   * End a label too long for the row with an ellipsis, on one line. On by
+   * default; `false` lets a long label overflow the row as before.
+   */
+  truncate?: boolean;
 }
 
 /**
@@ -49,6 +54,7 @@ const NavItem = ({
   badge,
   indicator,
   size,
+  truncate = true,
   className,
   ...toggle
 }: NavItemProps) => {
@@ -72,6 +78,7 @@ const NavItem = ({
       size={size ?? sizes.toggle}
       radius="m"
       aria-current={toggle.href && selected ? "page" : undefined}
+      truncate={truncate}
       className={classNames(
         variant === "minimal" && styles.quiet,
         !size && density === "spacious" && styles.spacious,
@@ -87,7 +94,7 @@ const NavItem = ({
         textVariant={`label-${emphasis && selected ? "strong" : "default"}-${sizes.text}`}
         onBackground={emphasis ? (selected ? "neutral-strong" : "neutral-weak") : undefined}
       >
-        <Row gap={sizes.iconGap} vertical="center">
+        <Row gap={sizes.iconGap} vertical="center" className={truncate ? "min-width-0" : undefined}>
           {icon && (
             <Icon
               name={icon}
@@ -101,9 +108,15 @@ const NavItem = ({
             </Row>
           )}
           {collapsed ? (
-            <Row opacity={0} transition="micro-medium">
-              {label}
+            <Row
+              opacity={0}
+              transition="micro-medium"
+              className={truncate ? "min-width-0" : undefined}
+            >
+              {truncate ? <span className="truncate">{label}</span> : label}
             </Row>
+          ) : truncate ? (
+            <span className="truncate">{label}</span>
           ) : (
             label
           )}
@@ -125,7 +138,14 @@ const NavItem = ({
           </Row>
         )}
         {indicator && badge === undefined && !collapsed && (
-          <Row width="8" height="8" radius="full" solid="brand-strong" aria-hidden="true" />
+          <Row
+            width="8"
+            minWidth="8"
+            height="8"
+            radius="full"
+            solid="brand-strong"
+            aria-hidden="true"
+          />
         )}
       </Row>
     </ToggleButton>

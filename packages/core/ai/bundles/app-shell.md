@@ -183,6 +183,7 @@ Mixins: LeafProps.
 - prefix?: ReactNode
 - badge?: number | ReactNode
 - indicator?: boolean
+- truncate?: boolean = true
 
 ### ToggleButton
 Mixins: LeafProps.

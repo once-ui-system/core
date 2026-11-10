@@ -590,6 +590,11 @@ entry below that had landed by then:
 
 ### Fixed
 
+- **A long `NavItem` label ends in an ellipsis.** In a narrow Nav the label ran
+  out of the row with no ellipsis, because the rows around it kept their
+  content's width. NavItem now truncates by default (`truncate={false}` keeps the
+  old overflow), and `ToggleButton`'s `truncate` prop, which did nothing, ends a
+  long text label in an ellipsis.
 - A selected `ToggleButton` keeps its fill on hover and deepens it, instead
   of dropping to the idle-hover grey and looking deselected (`subtle` went
   near invisible in dark).
