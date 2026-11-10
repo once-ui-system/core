@@ -1,0 +1,214 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-serif: Georgia, "Times New Roman", serif;
+  /* Lumen: one 2px corner radius for every control, card and menu. */
+  --radius-sm: var(--radius);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-xl: var(--radius);
+  --radius-2xl: var(--radius);
+  --radius-3xl: var(--radius);
+  --radius-4xl: var(--radius);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+/* Lumen light theme: brand teal #0F766E on cool slate neutrals. */
+:root {
+  --radius: 2px;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.208 0.042 265.755);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.208 0.042 265.755);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.208 0.042 265.755);
+  --primary: #0f766e;
+  --primary-foreground: oklch(0.984 0.003 247.858);
+  --secondary: oklch(0.968 0.007 247.896);
+  --secondary-foreground: oklch(0.279 0.041 260.031);
+  --muted: oklch(0.968 0.007 247.896);
+  --muted-foreground: oklch(0.446 0.043 257.281);
+  --accent: oklch(0.968 0.007 247.896);
+  --accent-foreground: oklch(0.208 0.042 265.755);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.929 0.013 255.508);
+  --input: oklch(0.869 0.022 252.894);
+  --ring: #0f766e;
+  --chart-1: #0f766e;
+  --chart-2: oklch(0.554 0.046 257.417);
+  --chart-3: oklch(0.704 0.14 182.503);
+  --chart-4: oklch(0.372 0.044 257.287);
+  --chart-5: oklch(0.869 0.022 252.894);
+  --sidebar: oklch(0.984 0.003 247.858);
+  --sidebar-foreground: oklch(0.208 0.042 265.755);
+  --sidebar-primary: #0f766e;
+  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-accent: oklch(0.929 0.013 255.508);
+  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
+  --sidebar-border: oklch(0.929 0.013 255.508);
+  --sidebar-ring: #0f766e;
+}
+
+.dark {
+  --background: oklch(0.129 0.042 264.695);
+  --foreground: oklch(0.968 0.007 247.896);
+  --card: oklch(0.208 0.042 265.755);
+  --card-foreground: oklch(0.968 0.007 247.896);
+  --popover: oklch(0.208 0.042 265.755);
+  --popover-foreground: oklch(0.968 0.007 247.896);
+  --primary: oklch(0.777 0.152 181.912);
+  --primary-foreground: oklch(0.129 0.042 264.695);
+  --secondary: oklch(0.279 0.041 260.031);
+  --secondary-foreground: oklch(0.968 0.007 247.896);
+  --muted: oklch(0.279 0.041 260.031);
+  --muted-foreground: oklch(0.704 0.04 256.788);
+  --accent: oklch(0.279 0.041 260.031);
+  --accent-foreground: oklch(0.968 0.007 247.896);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.777 0.152 181.912);
+  --sidebar: oklch(0.208 0.042 265.755);
+  --sidebar-foreground: oklch(0.968 0.007 247.896);
+  --sidebar-primary: oklch(0.777 0.152 181.912);
+  --sidebar-primary-foreground: oklch(0.129 0.042 264.695);
+  --sidebar-accent: oklch(0.279 0.041 260.031);
+  --sidebar-accent-foreground: oklch(0.968 0.007 247.896);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.777 0.152 181.912);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-serif);
+    letter-spacing: -0.005em;
+  }
+}
+
+/*
+ * Lumen density (compact) and identity, applied once through the design
+ * system's data-slot hooks so every screen follows it.
+ */
+[data-slot="button"][data-size="default"] {
+  height: 2rem;
+  padding-inline: 0.75rem;
+}
+[data-slot="button"][data-size="sm"] {
+  height: 1.75rem;
+  padding-inline: 0.625rem;
+  font-size: 0.8125rem;
+}
+[data-slot="input"] {
+  height: 2rem;
+  padding-block: 0.125rem;
+  font-size: 0.875rem;
+  box-shadow: none;
+}
+[data-slot="card"] {
+  gap: 0.5rem;
+  padding-block: 0.75rem;
+  box-shadow: none;
+}
+[data-slot="card-header"] {
+  gap: 0.25rem;
+  padding-inline: 0.75rem;
+}
+[data-slot="card-content"],
+[data-slot="card-footer"] {
+  padding-inline: 0.75rem;
+}
+[data-slot="card-title"] {
+  font-family: var(--font-serif);
+  font-size: 0.9375rem;
+}
+[data-slot="card-description"] {
+  font-size: 0.8125rem;
+}
+[data-slot="table"] {
+  font-size: 0.8125rem;
+}
+[data-slot="table-head"] {
+  height: 2rem;
+  padding-inline: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+[data-slot="table-cell"] {
+  padding: 0.375rem 0.5rem;
+}
+[data-slot="badge"] {
+  border-radius: var(--radius);
+  padding-block: 0;
+  font-size: 0.6875rem;
+}
+[data-slot="sidebar-menu-button"][data-size="default"] {
+  height: 1.75rem;
+  font-size: 0.8125rem;
+}
+[data-slot="sidebar-menu"] {
+  gap: 0.125rem;
+}
+[data-slot="sidebar-group"] {
+  padding: 0.375rem 0.5rem;
+}
+[data-slot="sidebar-group-label"] {
+  height: 1.5rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+[data-slot="label"] {
+  font-size: 0.8125rem;
+}
+
+/* The current navigation item carries the brand colour. */
+[data-slot="sidebar-menu-button"][data-active="true"],
+[data-slot="sidebar-menu-sub-button"][data-active="true"] {
+  background-color: var(--sidebar-primary);
+  color: var(--sidebar-primary-foreground);
+}

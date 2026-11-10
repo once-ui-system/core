@@ -1,0 +1,18 @@
+/* Lumen type: a serif for headings, the system sans for body text. No network fonts. */
+:root {
+  --font-heading: Georgia, "Times New Roman", serif;
+  --font-body: ui-sans-serif, system-ui, sans-serif;
+  --font-label: ui-sans-serif, system-ui, sans-serif;
+  --font-code: ui-monospace, monospace;
+}
+
+/* Lumen corners: 2px on buttons, inputs, cards and menus, set once on the radius tokens. */
+:root,
+:root[data-border],
+[data-border] {
+  --radius-xs: 2px;
+  --radius-s: 2px;
+  --radius-m: 2px;
+  --radius-l: 2px;
+  --radius-xl: 2px;
+}

@@ -11,3 +11,5 @@ results/bench-v1-invalid-chakra/**/*.jpg
 results/bench-v1/blind/
 results/bench-v1-blind-n1/
 results/bench-v2-brand-pilot/**/*.jpg
+results/bench-v2-cc/**/*.jpg
+results/bench-v2-cc/blind/

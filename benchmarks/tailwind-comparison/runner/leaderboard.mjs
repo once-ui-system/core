@@ -76,6 +76,10 @@ for (const dir of resultDirs) {
     const state = JSON.parse(fs.readFileSync(path.join(runDir, "run.json"), "utf8"));
     const usagePath = path.join(runDir, "usage.json");
     const usage = fs.existsSync(usagePath) ? JSON.parse(fs.readFileSync(usagePath, "utf8")) : { calls: [] };
+    // Claude Code track (pilot-usage.mjs format): token counts include Claude Code's own
+    // overhead and aren't comparable with API runs, so cost and tokens are left out.
+    const ccTrack = Array.isArray(usage.attempts) && !usage.calls;
+    usage.calls ??= [];
     let input = 0;
     let output = 0;
     for (const c of usage.calls.filter((c) => c.usage)) {
@@ -92,8 +96,8 @@ for (const dir of resultDirs) {
       status: state.status,
       pass1: state.status === "accepted" && state.accepted_attempt === 0,
       accepted: state.status === "accepted",
-      cost: (input * P.input + output * P.output) / 1e6,
-      tokens: input + output,
+      cost: ccTrack ? null : (input * P.input + output * P.output) / 1e6,
+      tokens: ccTrack ? null : input + output,
       calls: usage.calls.filter((c) => c.usage).length,
     };
     if (row.accepted) {

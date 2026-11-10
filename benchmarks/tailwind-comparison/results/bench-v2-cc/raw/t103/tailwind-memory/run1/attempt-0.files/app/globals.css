@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand: #E8590C */
+  --color-brand-300: #f7b58a;
+  --color-brand-400: #f2873f;
+  --color-brand-500: #e8590c;
+  --color-brand-600: #c2480a;
+  --color-brand-700: #9a3a08;
+
+  /* Warm stone neutrals, named by role (dark is the default theme) */
+  --color-canvas: #0c0a09;
+  --color-surface: #1c1917;
+  --color-raised: #292524;
+  --color-line: #44403c;
+  --color-fg: #fafaf9;
+  --color-muted: #a8a29e;
+  --color-on-brand: #0c0a09;
+
+  /* 4px corner radius everywhere */
+  --radius-xs: 4px;
+  --radius-sm: 4px;
+  --radius-md: 4px;
+  --radius-lg: 4px;
+  --radius-xl: 4px;
+  --radius-2xl: 4px;
+
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    background-color: var(--color-canvas);
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-mono);
+    letter-spacing: -0.01em;
+  }
+
+  a {
+    text-underline-offset: 3px;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+  }
+}
