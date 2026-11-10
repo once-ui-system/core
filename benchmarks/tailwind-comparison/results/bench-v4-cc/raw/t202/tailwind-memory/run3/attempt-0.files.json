@@ -1,0 +1,18 @@
+{
+  "files": [
+    "app/layout.tsx",
+    "app/globals.css",
+    "lib/data.ts",
+    "lib/plan.ts",
+    "components/PlanProvider.tsx",
+    "components/AppShell.tsx",
+    "components/GuestBits.tsx",
+    "components/RoomPlan.tsx",
+    "components/PlanPanels.tsx",
+    "components/PlanView.tsx",
+    "components/GuestList.tsx",
+    "app/page.tsx",
+    "app/guests/page.tsx"
+  ],
+  "rejected": []
+}

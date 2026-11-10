@@ -1,0 +1,139 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 7,
+      "input_total": 551993,
+      "input_uncached": 14,
+      "cache_creation": 101879,
+      "cache_read": 450100,
+      "visible_output_tokens_o200k": 24446,
+      "visible_output_tokens_claudeLegacy": 26224,
+      "thinking_blocks": 4
+    },
+    {
+      "attempt": 1,
+      "calls": 3,
+      "input_total": 432737,
+      "input_uncached": 6,
+      "cache_creation": 137719,
+      "cache_read": 295012,
+      "visible_output_tokens_o200k": 24204,
+      "visible_output_tokens_claudeLegacy": 25922,
+      "thinking_blocks": 1
+    },
+    {
+      "attempt": 2,
+      "calls": 3,
+      "input_total": 536316,
+      "input_uncached": 6,
+      "cache_creation": 33662,
+      "cache_read": 502648,
+      "visible_output_tokens_o200k": 24201,
+      "visible_output_tokens_claudeLegacy": 25919,
+      "thinking_blocks": 1
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v4-cc/raw/t202/mui-docs/run3/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/README.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/theme.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/package.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/tsconfig.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/material-ui/customization/dark-mode.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v4-cc/raw/t202/mui-docs/run3/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    },
+    {
+      "attempt": 1,
+      "name": "Read",
+      "path": "../../../results/bench-v4-cc/raw/t202/mui-docs/run3/repair-1.txt"
+    },
+    {
+      "attempt": 1,
+      "name": "Write",
+      "path": "../../../results/bench-v4-cc/raw/t202/mui-docs/run3/attempt-1.tsx"
+    },
+    {
+      "attempt": 1,
+      "name": "SubagentHandback",
+      "path": null
+    },
+    {
+      "attempt": 2,
+      "name": "Read",
+      "path": "../../../results/bench-v4-cc/raw/t202/mui-docs/run3/repair-2.txt"
+    },
+    {
+      "attempt": 2,
+      "name": "Write",
+      "path": "../../../results/bench-v4-cc/raw/t202/mui-docs/run3/attempt-2.tsx"
+    },
+    {
+      "attempt": 2,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": false,
+    "violations": [
+      "disallowed tool: Bash"
+    ]
+  },
+  "arm": "M"
+}

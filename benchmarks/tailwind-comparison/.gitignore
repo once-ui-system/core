@@ -13,3 +13,5 @@ results/bench-v1-blind-n1/
 results/bench-v2-brand-pilot/**/*.jpg
 results/bench-v2-cc/**/*.jpg
 results/bench-v2-cc/blind/
+results/bench-v4-cc/**/*.jpg
+results/bench-v4-cc/blind/
