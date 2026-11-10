@@ -30,7 +30,8 @@ Once UI per run: t201 71 / 71 / 71, t202 67 / 67 / 62. Stack per run: t201 71 / 
 
 ## What it shows
 
-- **Once UI looks stock when no style is given.** It scored 3 for intentionality on all 6 runs, the only system with no run above 3. The rater's notes say "fairly stock card-based design" and generic. Stack, on the same core, scored 4: its scaffold gives the agent a finished shell to build in.
+- **Once UI looks stock when no style is given.** It scored 3 for intentionality on all 6 runs, the only system with no run above 3. The rater's notes say "fairly stock card-based design" and generic. No Once UI run changed the default theme in `providers.tsx`.
+- **Stack scores mostly measure hand-written CSS.** In 5 of 6 Stack runs the agent wrote its own stylesheet (0-1 `@once-ui-system` imports, 103-176 `className`s per run). The one Stack run built from Once UI components (t201 run 2) looks like arm A and scored intentionality 3; the best run, t201 run 3, has no Once UI imports. Do not read S against A as "Once UI plus a shell".
 - **Responsive layout of custom surfaces.** The Once UI seating floor plans were clipped on tablet and phone, and the Table 1 selected view showed no details.
 - **Reliability.** Once UI passed on the first try in 2 of 6 runs. Most repairs were type errors from passing `padding` to `Text`, which the 3.0 `Text` does not accept. Stack and Tailwind passed every run first time; MUI needed a repair on every run.
 - **Quality is close.** The spread is 69-75 on a coarse 1-5 scale, so one rating point moves a system several places.
