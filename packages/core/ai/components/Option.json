@@ -18,6 +18,7 @@
   "description": "React.ReactNode",
   "danger": "boolean",
   "selected": "boolean",
+  "tone": "Tone = neutral",
   "disabled": "boolean = false",
   "highlighted": "boolean",
   "tabIndex": "number",
@@ -151,5 +152,16 @@
    "themeSurface": "SurfaceStyle",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`"
   }
+ },
+ "types": {
+  "Tone": [
+   "neutral",
+   "brand",
+   "accent",
+   "info",
+   "danger",
+   "warning",
+   "success"
+  ]
  }
 }

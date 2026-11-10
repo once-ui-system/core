@@ -4,7 +4,7 @@ import classNames from "clsx";
 import React, { ReactNode } from "react";
 import { IconName } from "../icons.js";
 import type { LeafProps } from "../interfaces.js";
-import { RadiusSize, TShirtSizes } from "../types.js";
+import { RadiusSize, Tone, TShirtSizes } from "../types.js";
 import { leafLayout, takeLeafProps } from "../utils/leafLayout.js";
 import { ElementType } from "./ElementType.js";
 import { Flex } from "./Flex.js";
@@ -15,6 +15,12 @@ interface ToggleButtonCommonProps extends LeafProps {
   label?: ReactNode;
   selected?: boolean;
   variant?: "ghost" | "outline" | "subtle";
+  /**
+   * The palette the selected state draws in, as on Button. `neutral` (the
+   * default) is the grey fill; any other tone tints the fill and colours the
+   * label and icons, the way a sidebar marks the page you are on.
+   */
+  tone?: Tone;
   /**
    * Left out, the theme's `density` picks it: s when compact, m when normal
    * (the default), l when spacious. A size given here always wins.
@@ -56,6 +62,7 @@ const ToggleButton = ({
   label,
   selected = false,
   variant = "ghost",
+  tone = "neutral",
   size: sizeProp,
   radius,
   corners,
@@ -105,6 +112,7 @@ const ToggleButton = ({
         auto && styles.auto,
         auto && radius === undefined && styles.autoRadius,
         selected && styles.selected,
+        tone !== "neutral" && [styles.toned, styles[`tone-${tone}`]],
         corners === "none" || radius === "none"
           ? "radius-none"
           : corners
