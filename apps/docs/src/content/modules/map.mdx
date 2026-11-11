@@ -97,6 +97,18 @@ const [open, setOpen] = useState<Listing>();
 </Map>
 ```
 
+## Routes
+
+`MapRoute` draws a path in a `tone`: a delivery, a run, a flight. Give it `progress` (0 to 1) and the part travelled is solid while the rest is dashed, so a moving courier reads at a glance. `dashed` draws a planned route. The line sits on a casing in the page colour, so it reads on either basemap.
+
+<MapRouteExample />
+
+```tsx
+<Map height={384} defaultViewport={{ center: [19.0506, 47.5034], zoom: 14 }}>
+  <MapRoute path={route} progress={0.4} />
+</Map>
+```
+
 ## Globe and 3D buildings
 
 `projection="globe"` curves the world into a globe when zoomed out and flattens it as you zoom in, so a camera travelling between cities reads as a journey. `buildings="3d"` raises buildings to their real height from zoom 13. They run from the neutral surface up to the brand colour for the tallest, and follow the theme like the rest of the map. Tilt the camera with `pitch` to see them.
@@ -189,3 +201,5 @@ The map is a focusable region: arrow keys pan, `+` and `-` zoom, and the frame s
 <PropsTable component="MapPopup" />
 
 <PropsTable component="MapCircle" />
+
+<PropsTable component="MapRoute" />

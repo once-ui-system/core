@@ -11,6 +11,12 @@ Entries before 1.7.13 are reconstructed from GitHub releases and git history and
 incomplete; reconciling them against actual npm release history is a scheduled roadmap
 item (see `ROADMAP.md`, Week 4).
 
+## [3.1.0] - Unreleased
+
+### Added
+
+- `MapRoute` in `@once-ui-system/core/map`: a route line in a `tone`, solid for the part travelled and dashed ahead with `progress`, or dashed throughout for a planned route. It sits on a page-colour casing and follows the theme.
+
 ## [3.0.0] - Unreleased
 
 Breaking. Built on the `feat/3-0-breaking-cleanup` branch; [MIGRATING.md](MIGRATING.md#2x--30)

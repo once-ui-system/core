@@ -81,6 +81,13 @@
    "type": "{ readonly light: \"https://tiles.openfreemap.org/styles/positron\"; readonly dark: \"https://tiles.openfreemap.org/styles/dark\"; }",
    "doc": "OpenFreeMap: OpenStreetMap vector tiles with no key, no account and no view limit, commercial use included."
   },
+  "splitPath": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "kind": "function",
+   "signature": "(path: readonly LngLat[], progress: number) => { behind: [number, number][]; ahead: [number, number][] }",
+   "doc": "Splits a path at a fraction of its length: the part travelled and the part ahead, which share the split point so the two lines meet."
+  },
   "useArrowNavigation": {
    "group": "hooks",
    "kind": "hook",
