@@ -274,6 +274,11 @@ entry below that had landed by then:
 
 ### Changed
 
+- **Agent guidance: system parts for brand, alerts and charts, and one
+  surface level.** Agents now reach for `Logo` (with `text` and `monogram`)
+  instead of an icon beside text, `Feedback` instead of hand-built alert boxes,
+  and the `data` charts instead of hand-drawn SVG, and keep one raised surface
+  for content instead of grey cards on grey.
 - **Agent guidance for apps that look designed, not stock.** From the
   real-world bench: AGENTS.md and the rules now set the theme first (brand,
   neutral, `solid: "color"`, a heading font), keep same-shaped records on one
