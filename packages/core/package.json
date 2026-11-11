@@ -480,7 +480,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "pnpm clean && pnpm sync-foundations && pnpm generate-emoji-data && pnpm generate-ai-spec && tsc --project tsconfig.build.json && pnpm copy-files && pnpm build:css && pnpm build:css-modules",
+    "build": "pnpm clean && pnpm sync-foundations && pnpm generate-emoji-data && pnpm generate-ai-spec && tsc --project tsconfig.build.json && node scripts/flatten-barrels.mjs && pnpm copy-files && pnpm build:css && pnpm build:css-modules",
     "sync-foundations": "node scripts/sync-foundations.cjs scss",
     "build:css": "node scripts/sync-foundations.cjs css",
     "build:css-modules": "node scripts/compile-css-modules.cjs",
