@@ -1,8 +1,8 @@
 # Chat UI
 
-Message list with avatars, typing indicator, composer with send and attach, conversation list
+An assistant or team chat: conversation list, thread with a typing or working state, composer with send and attach, the assistant's Mascot, every loading, empty and error state
 
-This file is complete for this task: the rules (all of `rules.compact.md`), the props, mixins and types of every component below, every gotcha for these components and a gold example. Write the page from it; reading the rules, catalog, gotchas, manifest or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.
+This file is complete for this task: the rules (all of `rules.compact.md`), the props, mixins and types of every component below, every gotcha for these components, the quality bar and a gold example. Write the page from it; reading the rules, catalog, gotchas, manifest or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.
 
 ## Rules
 
@@ -96,6 +96,23 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Native attributes | Every component also takes its element's own: `aria-*`, `id`, `role`, `onClick`; `type` on `Button`; `value`, `onChange`, `type` on `Input` |
 | MDX content | `mdxComponents` / `createMdxComponents` from `/mdx` |
 | Multi-part component | List prop (`items`, `columns`, `options`) for same-shaped data, else plain named parts (`SortableItem`, `StylePanelBrand`); never `Sortable.Item` |
+| Brand mark (header, sidebar, splash, favicon-sized) | `Logo text="Name" monogram` (or `icon`/`wordmark`), never a drawn SVG or Icon + Text |
+| An assistant, guide or character | `Mascot` (`state` idle/listening/thinking/speaking, `mood`, `accessory`, `color`, `eyes`) — never a hand-drawn SVG creature |
+| AI or long work in progress | `WorkingIndicator` (its verbs, or yours); `Mascot state="thinking"` beside it in a chat |
+| File or photo upload | `MediaUpload` from `/media` (drop, paste, preview, loading, error) or `ChatComposer attach`, never `<input type="file">` |
+| Places, routes, areas | `Map` from `/map` with `MapMarkers`/`MapPin`/`MapPopup`/`MapCircle`, never a static image or a list of addresses |
+| Steps, history, a run's progress | `Timeline` |
+
+Before writing a component of your own, check `catalog.json`: if one of its purposes fits, use it and give it your content.
+
+### Build it to ship, not to screenshot
+
+Even when the brief says nothing about data, build the app as if a backend were coming tomorrow. 90% of briefs won't ask; every one expects it.
+
+- **Data layer:** a `lib/data.ts` (or `lib/api.ts`) of typed async functions, `getX()`, `createX()`, `updateX()`, returning typed records. Behind them, mock data with a short delay (`await wait(400)`). Screens call these functions, never import the mock array, so a real API replaces the functions and no screen changes.
+- **Four states on every screen that loads data:** loading (`Skeleton` shaped like the content, never a lone spinner on a whole page), empty (a title, one line of help and the action that fills it), error (`Feedback tone="danger"` with a Retry `Button`), filled.
+- **Writes:** optimistic update, `loading` on the pressed `Button`, rollback plus `addToast({ tone: "danger" })` on failure; a sent chat message gets `status` and `onRetry`.
+- **Forms:** `Form` with field errors and `FormErrorSummary`, disabled submit while saving.
 
 ### Imports
 
@@ -144,6 +161,12 @@ Every type a prop names is defined in the slice's (or bundle's) `types`.
 If design intent unclear, ask: content style, layout width, color approach, decoration level, imagery. Default: restrained, centered `maxWidth="m"`, single brand accent, one subtle gradient, no placeholder images.
 
 An app: set the theme first: `brand` or `brandSeed`, `neutral`, `solid: "color"`, a `--font-heading` family; no ambient decoration. Phone header, plan canvas, selection: `ai/layouts.md`.
+
+Make it look designed, not stock:
+
+- One idea carries the screen. A map app is the map, full-bleed (`fill`, `height="100dvh"`), with its lists and details on floating panels over it (`background="surface"`, `border`, `radius="l"`, `shadow="l"`, `position="absolute"` with offsets); not a map in a card beside a table. A chat with an assistant gives the assistant a face: the `Mascot` in the header and the empty state, reacting while it works.
+- The brand is identity, not paint: `Logo` in the header, the `Mascot`'s `color`, `Nav tone="brand"`, one brand action per view. Never tint every surface or fill every button.
+- Work apps: `density: "compact"`, `border: "conservative"`, dark first. Hierarchy from type and spacing, not from grey cards inside grey cards.
 
 ## Components
 
@@ -305,6 +328,87 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - vert?: boolean
 - style?: React.CSSProperties
 
+### Mascot
+Mixins: LeafProps.
+- working?: "cube" | "d20"
+- effects?: boolean | MascotEffect[]
+- poke, brows, cheeks?: boolean
+- state?: MascotState = idle
+- mood?: MascotMood = neutral
+- seed?: string | number
+- accessory?: React.ReactNode
+- lookAt?: "pointer" | "center" | { x: number; y: number } = pointer
+- level, roundness, aspect, eyeSize, eyeSpacing, eyeHeight?: number
+- source?: AudioLevelSource | null
+- size?: "s" | "m" | "l" | "xl" | number | CSSUnit = l
+- aria-label, bodyPath, eyeColor?: string
+- color?: "brand" | "accent" | "neutral" | (string & {})
+- surface?: "glossy" | "matte" | "flat" | "glass"
+- eyes?: "tile" | "pill" | "round" | "wide" | "dot" | { path: string }
+- mouth?: "none" | "smile" | "dot" | "line"
+- personality?: "calm" | "default" | "bouncy"
+- sides?: "classic" | "tints" | "mono" | Partial<Record<"top" | "front" | "right" | "bottom" | "back" | "left", string>>
+- face?: "3d" | "flat"
+
+### Logo
+Mixins: LeafProps.
+- size?: TShirtSizes = m
+- icon, wordmark?: LogoSource
+- text, href?: string
+- monogram?: boolean | string
+- showIn?: "dark" | "light"
+- brand?: { copy?: boolean; url?: string }
+
+### WorkingIndicator
+Mixins: LeafProps.
+- verbs?: readonly string[] = workingVerbs
+- label, detail?: ReactNode
+- interval?: number = 2800
+- shuffle, shimmer?: boolean = true
+- showElapsed?: boolean = false
+- startedAt?: Date | number
+- loader?: ReactNode | false
+- size?: "s" | "m" | "l" = m
+- aria-label?: string
+
+### Skeleton
+Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+- width, height, minHeight, maxHeight?: number | StaticSpacingToken | CSSUnit
+- minWidth, maxWidth?: number | SpacingToken | CSSUnit
+- shape?: "line" | "circle" | "block" = line
+- size?: "xl" | "l" | "m" | "s" | "xs" = m
+- delay?: number
+- style?: React.CSSProperties
+- className?: string
+
+### Feedback
+Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+- tone?: Tone = info
+- showIcon?: boolean = true
+- icon?: IconName
+- title, description, className?: string
+- showCloseButton?: boolean = false
+- onClose?: () => void
+- style?: React.CSSProperties
+- children?: ReactNode
+
+### Tag
+Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+Avoid: Passing the same text as label and children — the children are dropped
+- tone?: Tone
+- variant?: "default" | "gradient" | "announce" = default
+- size?: TShirtSizes
+- label?: string = ""
+- prefixIcon, suffixIcon?: IconName
+- dot, arrow, selected, interactive?: boolean
+- href?: string
+- effect?: boolean = variant === "announce"
+- onClick?: MouseEventHandler<HTMLDivElement>
+- onRemove?: () => void
+- removeButtonProps?: Partial<IconButtonProps>
+- as?: "div" | "span"
+- children?: ReactNode
+
 ### Grid
 Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProps.
 - as?: ElementType
@@ -375,23 +479,6 @@ Mixins: LeafProps.
 - span?: number
 - fillWidth?: boolean = true
 
-### Tag
-Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-Avoid: Passing the same text as label and children — the children are dropped
-- tone?: Tone
-- variant?: "default" | "gradient" | "announce" = default
-- size?: TShirtSizes
-- label?: string = ""
-- prefixIcon, suffixIcon?: IconName
-- dot, arrow, selected, interactive?: boolean
-- href?: string
-- effect?: boolean = variant === "announce"
-- onClick?: MouseEventHandler<HTMLDivElement>
-- onRemove?: () => void
-- removeButtonProps?: Partial<IconButtonProps>
-- as?: "div" | "span"
-- children?: ReactNode
-
 ### Dialog
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 - open: boolean
@@ -405,16 +492,6 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - closeLabel?: string = Close
 - onHeightChange?: (height: number) => void
 - minHeight?: number
-
-### Skeleton
-Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-- width, height, minHeight, maxHeight?: number | StaticSpacingToken | CSSUnit
-- minWidth, maxWidth?: number | SpacingToken | CSSUnit
-- shape?: "line" | "circle" | "block" = line
-- size?: "xl" | "l" | "m" | "s" | "xs" = m
-- delay?: number
-- style?: React.CSSProperties
-- className?: string
 
 ### VisuallyHidden
 - children?: ReactNode
@@ -516,6 +593,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ## Types
 
 ```ts
+type AudioLevelSource = "HTMLMediaElement" | "MediaStream" | "AnalyserNode"
 type AvatarProps = Avatar props
 type AwaitedReactNode = "undefined" | "null" | "string" | "number" | "bigint" | "false" | "true" | "ReactPortal" | ReactElement<unknown, string | JSXElementConstructor<any>> | "Iterable<ReactNode>"
 type BaseColor = Colors | "page" | "surface" | "overlay" | "transparent"
@@ -545,6 +623,10 @@ type IconButtonProps = IconButton props
 // type IconName is one of these names, and only these:
 // symbol code link menu search time video filter image security opacity download info danger warning adjustments arrowDown arrowLeft arrowRight arrowUp arrowUpRight ball banknotes barChart bell bolt book bookmark calendar cart chat check checkbox chevronDoubleLeft chevronDoubleRight chevronDown chevronLeft chevronRight chevronUp chevronsLeftRight clipboard close computer copy cube dark dislike document edit enter eye eyeDropper eyeOff file flag folder food forward gift globe grid grip heart help home inbox light like linearGauge lock logout mail mapPin maximize minimize minus moreHorizontal newspaper organization pause paw payment people person personRemove phone play plus radialGauge refresh return screen send settings smiley sparkle star starFill store tag trash trend trendDown trendUp upload volume volumeOff wordmark world
 type LegacyToast = { variant?: Tone; tone?: Tone; children?: ReactNode; message?: ReactNode; action?: ReactNode; duration?: number }
+type LogoSource = "string" | { light: string; dark: string; }
+// type MascotEffect is one of these strings: heartEyes starEyes laughEyes blush sweat tears anger hearts sparkles question
+// type MascotMood is one of these strings: neutral happy surprised sad skeptical wink focused determined love excited laughing embarrassed crying angry confused
+type MascotState = "idle" | "listening" | "thinking" | "speaking" | "sleeping"
 // type Opacity is one of these strings: 0 10 20 30 40 50 60 70 80 90 100
 type Placement = "top" | "right" | "bottom" | "left" | `${"top" | "right" | "bottom" | "left"}-${"end" | "start"}`
 type RadiusNest = "4" | "8"
@@ -573,100 +655,284 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - Field heights run a step above Button's: Input size xs is 40px, s 48px, m 56px (the default). A field beside a size="s" Button (32px), as in a toolbar or filter row, takes size="xxs", which is 32px too; Form size="xxs" sets it for every field inside. An xxs field has no floating label: label shows as the placeholder, so keep label for the accessible name.
 - Fixed in 2.1: a Button or IconButton that is a Dropdown trigger renders a real <button type="button"> with aria-haspopup and aria-expanded, so it is reachable by keyboard. Pass it as trigger as is; do not add type="button" or a no-op onClick, or wrap it in a focusable Row, to make it one.
 - Write 3.0 prop names, not 1.x or 2.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onValueChange/defaultValue (not selected/onToggle/defaultSelected), Tag tone (not scheme or variant), Button tone="danger" (not variant="danger"), Text/Heading textVariant (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius), Table onSelectedChange (not onSelectionChange), CodeBlock collapsible (not isCollapsible). The validator names the 3.0 prop.
+- No designed logo yet: <Logo text="Acme" monogram /> sets the name in type beside a favicon-style mark (a bare shape, black or white with the theme). Never draw an icon or wordmark SVG yourself; a hand-made mark looks worse than the monogram. When the owner's SVGs exist, pass them as icon (it replaces the monogram) and wordmark (an image source, not text).
 - Tag is a div by default; inside a sentence (<Text as="p">, <p>) give it as="span".
 - overflow="hidden" on full-bleed sections clips glows into hard bands — only use when parent has radius.
 - Leaf components (Button, IconButton, ToggleButton, the fields, Switch, Checkbox, RadioButton, Text, Heading, Icon, Avatar, Spinner, StatusIndicator, Kbd, InlineCode, ProgressBar, Logo, SmartLink, NavIcon) take only margins, flex, fillWidth, position, top/right/bottom/left, className and style besides their own props. Padding, background, border, radius, sizes, hide and breakpoints go on a Row around it (a Column around Text or Heading; <Row fit> for an Icon's box).
 - A Button in a form that should submit it needs type="submit": with neither onClick, href nor type it renders a div, unlike a native <button>.
 - Show a field's error after it is blurred or the form is submitted, never on open: keep a touched flag per field and pass errorMessage={touched.email ? errors.email : undefined}. A form or Dialog that opens with red required-field errors reads as broken.
 
-## Gold example (`examples/blocks/Chat1.tsx`)
+## Quality bar
+
+- An assistant has a face: Mascot in the header (state follows the work: thinking while it answers) and large in the empty state; the brand mark is Logo, never a drawn SVG
+- Every view that loads data shows loading (Skeleton shaped like the content), empty (title, one line, the action that fills it), error (Feedback tone="danger" with Retry) and filled, through a typed lib/ data layer of async functions over mock data — even when the brief never mentions data
+- A sent message shows status sending, then sent; a failed one shows status failed with onRetry; attachments go through ChatComposer attach
+- An empty thread is a welcome: the Mascot, one question, and two to four suggestion Tags that send themselves
+
+## Gold example (`examples/chat.tsx`)
 
 ```tsx
 "use client";
 
-import { Avatar, Column, Row, Text } from "@once-ui-system/core";
-import { useState } from "react";
-import type { ChatMember } from "./content/chat1content";
-import { chatMembers } from "./content/chat1content";
-import { Feed3 } from "./Feed3";
-import { Sidebar4 } from "./Sidebar4";
-import { Sidebar5 } from "./Sidebar5";
-import { Table1 } from "./Table1";
+/**
+ * Gold example: an assistant chat, built to ship.
+ * Target: a conversation list and a thread with an assistant that has a face
+ * (Mascot), a brand mark (Logo), attachments through the composer, and every
+ * state a real backend produces: loading, empty, error, sending, failed with
+ * retry, and the assistant working.
+ *
+ * The data layer sits at the top, in what would be `lib/assistant.ts`: typed
+ * async functions over mock data with a delay. The screens call only these
+ * functions, so a real API replaces their bodies and no screen changes.
+ */
+import {
+  Button,
+  ChatComposer,
+  type ChatComposerMessage,
+  ChatMessage,
+  ChatMessageList,
+  type ChatMessageStatus,
+  Column,
+  ConversationItem,
+  Feedback,
+  IconButton,
+  Line,
+  Logo,
+  Mascot,
+  Row,
+  Skeleton,
+  Tag,
+  Text,
+  useToast,
+  WorkingIndicator,
+} from "@once-ui-system/core";
+import { useCallback, useEffect, useState } from "react";
 
-type MemberRow = ChatMember["members"][number] & { group: string };
+// ── lib/assistant.ts ─────────────────────────────────────────────────────
 
-export const Chat1 = () => {
-  const [activeItem, setActiveItem] = useState<string | undefined>(undefined);
+export type Message = {
+  id: string;
+  from: "self" | "assistant";
+  text: string;
+  sentAt: Date;
+  status?: ChatMessageStatus;
+};
 
-  const membersData = chatMembers.flatMap((section) =>
-    (section.members ?? []).map((m) => ({
-      ...m,
-      group: section.title,
-    })),
-  );
+export type Conversation = { id: string; title: string; preview: string; updatedAt: Date };
 
-  const membersColumns = [
-    {
-      key: "member",
-      title: <Text textVariant="label-default-s">Member</Text>,
-      render: (item: MemberRow) => (
-        <Row fillWidth gap="12" vertical="center">
-          <Avatar src={item.avatar || undefined} />
-          <Column fillWidth>
-            <Text textVariant="label-default-s">{item.name}</Text>
-            <Text textVariant="body-default-xs" onBackground="neutral-weak" truncate>
-              {item.status}
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const conversations: Conversation[] = [
+  {
+    id: "c1",
+    title: "Trip to Lisbon",
+    preview: "Three days is enough for…",
+    updatedAt: new Date(),
+  },
+  { id: "c2", title: "Weekly plan", preview: "Move the review to…", updatedAt: new Date() },
+];
+const threads: Record<string, Message[]> = { c1: [], c2: [] };
+
+export const assistant = {
+  async listConversations(): Promise<Conversation[]> {
+    await wait(400);
+    return conversations;
+  },
+  async getMessages(conversationId: string): Promise<Message[]> {
+    await wait(300);
+    return threads[conversationId] ?? [];
+  },
+  /** Resolves with the assistant's reply; rejects when the request fails. */
+  async send(conversationId: string, text: string, files: File[]): Promise<Message> {
+    await wait(1200);
+    const reply: Message = {
+      id: crypto.randomUUID(),
+      from: "assistant",
+      text: files.length
+        ? `Got ${files.length} file(s). ${text}`
+        : `Here is what I found about “${text}”.`,
+      sentAt: new Date(),
+    };
+    threads[conversationId] = [...(threads[conversationId] ?? []), reply];
+    return reply;
+  },
+};
+
+// ── the screen ───────────────────────────────────────────────────────────
+
+type Load<T> = { status: "loading" } | { status: "error" } | { status: "ready"; data: T };
+
+const SUGGESTIONS = ["Plan my week", "Summarise a file", "Ideas for a trip"];
+
+export function ChatExample() {
+  const { addToast } = useToast();
+  const [list, setList] = useState<Load<Conversation[]>>({ status: "loading" });
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [thread, setThread] = useState<Load<Message[]>>({ status: "loading" });
+  const [working, setWorking] = useState(false);
+
+  const loadList = useCallback(() => {
+    setList({ status: "loading" });
+    assistant
+      .listConversations()
+      .then((data) => {
+        setList({ status: "ready", data });
+        setActiveId((id) => id ?? data[0]?.id ?? null);
+      })
+      .catch(() => setList({ status: "error" }));
+  }, []);
+
+  const loadThread = useCallback((id: string) => {
+    setThread({ status: "loading" });
+    assistant
+      .getMessages(id)
+      .then((data) => setThread({ status: "ready", data }))
+      .catch(() => setThread({ status: "error" }));
+  }, []);
+
+  useEffect(loadList, [loadList]);
+  useEffect(() => {
+    if (activeId) loadThread(activeId);
+  }, [activeId, loadThread]);
+
+  const messages = thread.status === "ready" ? thread.data : [];
+  const setMessages = (update: (current: Message[]) => Message[]) =>
+    setThread((t) => (t.status === "ready" ? { status: "ready", data: update(t.data) } : t));
+
+  // Optimistic: the message shows at once as sending, turns failed with a
+  // retry when the request fails, and the assistant's face says it is working.
+  const send = async ({ text, files }: ChatComposerMessage, retryId?: string) => {
+    if (!activeId) return;
+    const id = retryId ?? crypto.randomUUID();
+    const mine: Message = { id, from: "self", text, sentAt: new Date(), status: "sending" };
+    setMessages((current) =>
+      retryId ? current.map((m) => (m.id === id ? mine : m)) : [...current, mine],
+    );
+    setWorking(true);
+    try {
+      const reply = await assistant.send(activeId, text, files);
+      setMessages((current) => [
+        ...current.map((m) => (m.id === id ? { ...m, status: "sent" as const } : m)),
+        reply,
+      ]);
+    } catch {
+      setMessages((current) =>
+        current.map((m) => (m.id === id ? { ...m, status: "failed" as const } : m)),
+      );
+      addToast({ tone: "danger", message: "The assistant couldn't answer. Try again." });
+    } finally {
+      setWorking(false);
+    }
+  };
+
+  return (
+    <Row fill height="100dvh" background="page">
+      <Column width={20} borderRight padding="12" gap="8" s={{ hide: true }}>
+        <Row paddingX="8" paddingY="8" horizontal="between" vertical="center">
+          <Logo text="Sol" monogram size="s" />
+          <IconButton icon="plus" variant="tertiary" tooltip="New chat" />
+        </Row>
+        {list.status === "loading" &&
+          [0, 1, 2].map((i) => <Skeleton key={i} shape="block" height={56} />)}
+        {list.status === "error" && (
+          <Feedback tone="danger" title="Chats didn't load">
+            <Button size="s" variant="secondary" label="Retry" onClick={loadList} />
+          </Feedback>
+        )}
+        {list.status === "ready" && list.data.length === 0 && (
+          <Text onBackground="neutral-weak" textVariant="body-default-s" marginX="8">
+            No chats yet. Start one with the + button.
+          </Text>
+        )}
+        {list.status === "ready" &&
+          list.data.map((c) => (
+            <ConversationItem
+              key={c.id}
+              name={c.title}
+              preview={c.preview}
+              time={c.updatedAt}
+              selected={c.id === activeId}
+              onClick={() => setActiveId(c.id)}
+            />
+          ))}
+      </Column>
+
+      <Column fill>
+        <Row paddingX="20" paddingY="12" gap="12" vertical="center" borderBottom>
+          <Mascot size="s" state={working ? "thinking" : "idle"} color="brand" aria-label="Sol" />
+          <Column>
+            <Text textVariant="label-strong-m">Sol</Text>
+            <Text textVariant="body-default-xs" onBackground="neutral-weak">
+              {working ? "Thinking…" : "Your assistant"}
             </Text>
           </Column>
         </Row>
-      ),
-    },
-    {
-      key: "group",
-      title: <Text textVariant="label-default-s">Role</Text>,
-      render: (item: MemberRow) => (
-        <Text textVariant="label-default-s" onBackground="neutral-weak">
-          {item.group}
-        </Text>
-      ),
-    },
-    {
-      key: "status",
-      title: <Text textVariant="label-default-s">Bio</Text>,
-      render: (item: MemberRow) => (
-        <Text textVariant="label-default-s" onBackground="neutral-weak" truncate>
-          {item.bio || "—"}
-        </Text>
-      ),
-    },
-  ];
 
-  return (
-    <Row fill>
-      <Sidebar4 activeItem={activeItem} onSelectItem={setActiveItem} />
-      {activeItem === "Members" ? (
-        <Row fillWidth padding="24">
-          <Table1
-            fitHeight
-            background="surface"
-            data={membersData}
-            columns={membersColumns}
-            selectable
-            getId={(i: MemberRow) => i.name}
-            heading={<Text textVariant="label-default-m">Members</Text>}
-            showSearch
-            filterFn={(item: MemberRow, q: string) =>
-              [item.name, item.status, item.bio, item.group]
-                .filter(Boolean)
-                .some((v: string) => v.toLowerCase().includes(q))
-            }
+        {thread.status === "loading" && (
+          <Column fill padding="24" gap="16">
+            <Skeleton shape="block" width={24} height={48} />
+            <Skeleton shape="block" width={32} height={64} style={{ alignSelf: "flex-end" }} />
+          </Column>
+        )}
+        {thread.status === "error" && (
+          <Column fill center padding="24">
+            <Feedback
+              tone="danger"
+              title="This chat didn't load"
+              description="Check your connection and try again."
+            >
+              <Button
+                size="s"
+                variant="secondary"
+                label="Retry"
+                onClick={() => activeId && loadThread(activeId)}
+              />
+            </Feedback>
+          </Column>
+        )}
+        {thread.status === "ready" && messages.length === 0 && !working && (
+          // The empty state is the assistant's welcome: its face, one line, and a way to start.
+          <Column fill center gap="16" padding="24">
+            <Mascot size="xl" mood="happy" color="brand" poke aria-label="Sol says hello" />
+            <Text textVariant="heading-strong-m">What can I help with?</Text>
+            <Row gap="8" wrap horizontal="center">
+              {SUGGESTIONS.map((s) => (
+                <Tag key={s} label={s} onClick={() => send({ text: s, files: [] })} />
+              ))}
+            </Row>
+          </Column>
+        )}
+        {thread.status === "ready" && (messages.length > 0 || working) && (
+          <ChatMessageList fill paddingX="20" paddingY="16" aria-label="Messages">
+            {messages.map((m) => (
+              <ChatMessage
+                key={m.id}
+                from={m.from === "self" ? "self" : "other"}
+                time={m.sentAt}
+                status={m.status}
+                onRetry={
+                  m.status === "failed" ? () => send({ text: m.text, files: [] }, m.id) : undefined
+                }
+              >
+                {m.text}
+              </ChatMessage>
+            ))}
+            {working && <WorkingIndicator size="s" />}
+          </ChatMessageList>
+        )}
+
+        <Line />
+        <Column padding="16">
+          <ChatComposer
+            onSend={(message) => send(message)}
+            attach={{ accept: "image/*,.pdf" }}
+            loading={working}
+            disabled={!activeId || thread.status !== "ready"}
+            placeholder="Ask Sol anything"
           />
-        </Row>
-      ) : (
-        <Feed3 />
-      )}
-      <Sidebar5 />
+        </Column>
+      </Column>
     </Row>
   );
-};
+}
 ```

@@ -96,6 +96,23 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Native attributes | Every component also takes its element's own: `aria-*`, `id`, `role`, `onClick`; `type` on `Button`; `value`, `onChange`, `type` on `Input` |
 | MDX content | `mdxComponents` / `createMdxComponents` from `/mdx` |
 | Multi-part component | List prop (`items`, `columns`, `options`) for same-shaped data, else plain named parts (`SortableItem`, `StylePanelBrand`); never `Sortable.Item` |
+| Brand mark (header, sidebar, splash, favicon-sized) | `Logo text="Name" monogram` (or `icon`/`wordmark`), never a drawn SVG or Icon + Text |
+| An assistant, guide or character | `Mascot` (`state` idle/listening/thinking/speaking, `mood`, `accessory`, `color`, `eyes`) — never a hand-drawn SVG creature |
+| AI or long work in progress | `WorkingIndicator` (its verbs, or yours); `Mascot state="thinking"` beside it in a chat |
+| File or photo upload | `MediaUpload` from `/media` (drop, paste, preview, loading, error) or `ChatComposer attach`, never `<input type="file">` |
+| Places, routes, areas | `Map` from `/map` with `MapMarkers`/`MapPin`/`MapPopup`/`MapCircle`, never a static image or a list of addresses |
+| Steps, history, a run's progress | `Timeline` |
+
+Before writing a component of your own, check `catalog.json`: if one of its purposes fits, use it and give it your content.
+
+### Build it to ship, not to screenshot
+
+Even when the brief says nothing about data, build the app as if a backend were coming tomorrow. 90% of briefs won't ask; every one expects it.
+
+- **Data layer:** a `lib/data.ts` (or `lib/api.ts`) of typed async functions, `getX()`, `createX()`, `updateX()`, returning typed records. Behind them, mock data with a short delay (`await wait(400)`). Screens call these functions, never import the mock array, so a real API replaces the functions and no screen changes.
+- **Four states on every screen that loads data:** loading (`Skeleton` shaped like the content, never a lone spinner on a whole page), empty (a title, one line of help and the action that fills it), error (`Feedback tone="danger"` with a Retry `Button`), filled.
+- **Writes:** optimistic update, `loading` on the pressed `Button`, rollback plus `addToast({ tone: "danger" })` on failure; a sent chat message gets `status` and `onRetry`.
+- **Forms:** `Form` with field errors and `FormErrorSummary`, disabled submit while saving.
 
 ### Imports
 
@@ -144,6 +161,12 @@ Every type a prop names is defined in the slice's (or bundle's) `types`.
 If design intent unclear, ask: content style, layout width, color approach, decoration level, imagery. Default: restrained, centered `maxWidth="m"`, single brand accent, one subtle gradient, no placeholder images.
 
 An app: set the theme first: `brand` or `brandSeed`, `neutral`, `solid: "color"`, a `--font-heading` family; no ambient decoration. Phone header, plan canvas, selection: `ai/layouts.md`.
+
+Make it look designed, not stock:
+
+- One idea carries the screen. A map app is the map, full-bleed (`fill`, `height="100dvh"`), with its lists and details on floating panels over it (`background="surface"`, `border`, `radius="l"`, `shadow="l"`, `position="absolute"` with offsets); not a map in a card beside a table. A chat with an assistant gives the assistant a face: the `Mascot` in the header and the empty state, reacting while it works.
+- The brand is identity, not paint: `Logo` in the header, the `Mascot`'s `color`, `Nav tone="brand"`, one brand action per view. Never tint every surface or fill every button.
+- Work apps: `density: "compact"`, `border: "conservative"`, dark first. Hierarchy from type and spacing, not from grey cards inside grey cards.
 
 ## Components
 
@@ -235,18 +258,26 @@ Avoid: Raw img elements
 - objectFit?: CSSProperties["objectFit"] = cover
 - className?: string
 
-### Grid
-Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProps.
-- as?: ElementType
-- position?: CSSProperties["position"] = relative
-- scrollbar?: "default" | "minimal" = minimal
-- masonry?: boolean
+### Skeleton
+Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+- width, height, minHeight, maxHeight?: number | StaticSpacingToken | CSSUnit
+- minWidth, maxWidth?: number | SpacingToken | CSSUnit
+- shape?: "line" | "circle" | "block" = line
+- size?: "xl" | "l" | "m" | "s" | "xs" = m
+- delay?: number
+- style?: React.CSSProperties
+- className?: string
 
-### Heading
-Mixins: CommonProps, LeafProps, TextProps.
-Avoid: Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd
-- wrap?: CSSProperties["textWrap"] = balance
-- opacity?: Opacity
+### Feedback
+Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+- tone?: Tone = info
+- showIcon?: boolean = true
+- icon?: IconName
+- title, description, className?: string
+- showCloseButton?: boolean = false
+- onClose?: () => void
+- style?: React.CSSProperties
+- children?: ReactNode
 
 ### Button
 Mixins: LeafProps.
@@ -262,6 +293,19 @@ Mixins: LeafProps.
 - horizontal?: "start" | "center" | "end" | "between" = center
 - children?: ReactNode
 - onClick?: React.MouseEventHandler<HTMLElement>
+
+### Grid
+Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProps.
+- as?: ElementType
+- position?: CSSProperties["position"] = relative
+- scrollbar?: "default" | "minimal" = minimal
+- masonry?: boolean
+
+### Heading
+Mixins: CommonProps, LeafProps, TextProps.
+Avoid: Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd
+- wrap?: CSSProperties["textWrap"] = balance
+- opacity?: Opacity
 
 ### Icon
 Mixins: LeafProps.
@@ -344,16 +388,6 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - closeLabel?: string = Close
 - onHeightChange?: (height: number) => void
 - minHeight?: number
-
-### Skeleton
-Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-- width, height, minHeight, maxHeight?: number | StaticSpacingToken | CSSUnit
-- minWidth, maxWidth?: number | SpacingToken | CSSUnit
-- shape?: "line" | "circle" | "block" = line
-- size?: "xl" | "l" | "m" | "s" | "xs" = m
-- delay?: number
-- style?: React.CSSProperties
-- className?: string
 
 ### VisuallyHidden
 - children?: ReactNode
@@ -517,6 +551,8 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - overflowY="auto" on each SplitView panel, never on the SplitView; set labels so the tabs it collapses into below collapseBelow are named
 - Scrubber is a sibling of the SplitView, spanning both panes; onGestureStart pauses playback
 - IconButtons with tooltips in a Row with borderBottom; one primary action at most
+- Every view that loads data shows loading (Skeleton shaped like the content), empty (title, one line, the action that fills it), error (Feedback tone="danger" with Retry) and filled, through a typed lib/ data layer of async functions over mock data — even when the brief never mentions data
+- Writes are optimistic: loading on the pressed Button, rollback plus addToast({ tone: "danger" }) when the save fails
 
 ## Layout shell
 
@@ -570,16 +606,32 @@ around it: toolbar, layer list, canvas and a working timeline.
  * `ai/layouts.md` §3 says why each piece sits where it does: overflow on the
  * panels and not the SplitView, labels for the tabs it collapses into, the
  * timeline as a sibling of the split, playback paused while scrubbing.
+ *
+ * The project loads and saves through `project` (what would be
+ * `lib/project.ts`): async functions over mock data, so a real API replaces
+ * them. The shell covers loading, a failed load, an empty project with its
+ * way to start, and saving with a rollback when a save fails.
  */
-import { Column, IconButton, Row, SplitView, Text, ToggleButton } from "@once-ui-system/core";
+import {
+  Button,
+  Column,
+  Feedback,
+  IconButton,
+  Row,
+  Skeleton,
+  SplitView,
+  Text,
+  ToggleButton,
+  useToast,
+} from "@once-ui-system/core";
 import { Scrubber } from "@once-ui-system/core/media";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type Track = NonNullable<React.ComponentProps<typeof Scrubber>["tracks"]>[number];
 
 const DURATION = 30;
 
-const initialTracks: Track[] = [
+const sampleTracks: Track[] = [
   {
     id: "video",
     tone: "brand",
@@ -598,13 +650,70 @@ const initialTracks: Track[] = [
   },
 ];
 
+// ── lib/project.ts ──
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+export const project = {
+  async load(): Promise<Track[]> {
+    await wait(500);
+    return sampleTracks;
+  },
+  /** Rejects when the save fails, so the editor can roll back. */
+  async save(tracks: Track[]): Promise<void> {
+    await wait(300);
+    if (!tracks) throw new Error("Nothing to save");
+  },
+};
+
 export function EditorExample() {
-  const [tracks, setTracks] = useState(initialTracks);
+  const { addToast } = useToast();
+  const [status, setStatus] = useState<"loading" | "error" | "ready">("loading");
+  const [tracks, setTracks] = useState<Track[]>([]);
   const [time, setTime] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [selected, setSelected] = useState<string | null>("intro");
 
+  const load = useCallback(() => {
+    setStatus("loading");
+    project
+      .load()
+      .then((loaded) => {
+        setTracks(loaded);
+        setStatus("ready");
+      })
+      .catch(() => setStatus("error"));
+  }, []);
+  useEffect(load, [load]);
+
+  // Optimistic: the change shows at once and goes back if the save fails.
+  const change = (next: Track[]) => {
+    const before = tracks;
+    setTracks(next);
+    project.save(next).catch(() => {
+      setTracks(before);
+      addToast({ tone: "danger", message: "Couldn't save that change." });
+    });
+  };
+
   const blocks = tracks.flatMap((track) => track.blocks);
+
+  if (status === "loading") {
+    return (
+      <Column fillWidth height="100dvh" padding="12" gap="12">
+        <Skeleton shape="block" height={40} />
+        <Skeleton shape="block" fill />
+        <Skeleton shape="block" height={96} />
+      </Column>
+    );
+  }
+  if (status === "error") {
+    return (
+      <Column fillWidth height="100dvh" center padding="24">
+        <Feedback tone="danger" title="The project didn't open">
+          <Button size="s" variant="secondary" label="Retry" onClick={load} />
+        </Feedback>
+      </Column>
+    );
+  }
   const current = blocks.find((block) => block.id === selected);
 
   return (
@@ -641,6 +750,14 @@ export function EditorExample() {
         labels={{ left: "Layers", right: "Canvas" }}
         leftPanel={
           <Column fill overflowY="auto" padding="8" gap="4">
+            {blocks.length === 0 && (
+              <Column padding="16" gap="8">
+                <Text textVariant="label-strong-s">No clips yet</Text>
+                <Text textVariant="body-default-s" onBackground="neutral-weak">
+                  Add a clip to start the timeline.
+                </Text>
+              </Column>
+            )}
             {blocks.map((block) => (
               <ToggleButton
                 key={block.id}
@@ -675,8 +792,8 @@ export function EditorExample() {
           onSelectedChange={setSelected}
           onGestureStart={() => setPlaying(false)}
           onBlockChange={(trackId, blockId, next) =>
-            setTracks((all) =>
-              all.map((track) =>
+            change(
+              tracks.map((track) =>
                 track.id !== trackId
                   ? track
                   : {

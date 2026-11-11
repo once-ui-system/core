@@ -8,16 +8,32 @@
  * `ai/layouts.md` §3 says why each piece sits where it does: overflow on the
  * panels and not the SplitView, labels for the tabs it collapses into, the
  * timeline as a sibling of the split, playback paused while scrubbing.
+ *
+ * The project loads and saves through `project` (what would be
+ * `lib/project.ts`): async functions over mock data, so a real API replaces
+ * them. The shell covers loading, a failed load, an empty project with its
+ * way to start, and saving with a rollback when a save fails.
  */
-import { Column, IconButton, Row, SplitView, Text, ToggleButton } from "@once-ui-system/core";
+import {
+  Button,
+  Column,
+  Feedback,
+  IconButton,
+  Row,
+  Skeleton,
+  SplitView,
+  Text,
+  ToggleButton,
+  useToast,
+} from "@once-ui-system/core";
 import { Scrubber } from "@once-ui-system/core/media";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type Track = NonNullable<React.ComponentProps<typeof Scrubber>["tracks"]>[number];
 
 const DURATION = 30;
 
-const initialTracks: Track[] = [
+const sampleTracks: Track[] = [
   {
     id: "video",
     tone: "brand",
@@ -36,13 +52,70 @@ const initialTracks: Track[] = [
   },
 ];
 
+// ── lib/project.ts ──
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+export const project = {
+  async load(): Promise<Track[]> {
+    await wait(500);
+    return sampleTracks;
+  },
+  /** Rejects when the save fails, so the editor can roll back. */
+  async save(tracks: Track[]): Promise<void> {
+    await wait(300);
+    if (!tracks) throw new Error("Nothing to save");
+  },
+};
+
 export function EditorExample() {
-  const [tracks, setTracks] = useState(initialTracks);
+  const { addToast } = useToast();
+  const [status, setStatus] = useState<"loading" | "error" | "ready">("loading");
+  const [tracks, setTracks] = useState<Track[]>([]);
   const [time, setTime] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [selected, setSelected] = useState<string | null>("intro");
 
+  const load = useCallback(() => {
+    setStatus("loading");
+    project
+      .load()
+      .then((loaded) => {
+        setTracks(loaded);
+        setStatus("ready");
+      })
+      .catch(() => setStatus("error"));
+  }, []);
+  useEffect(load, [load]);
+
+  // Optimistic: the change shows at once and goes back if the save fails.
+  const change = (next: Track[]) => {
+    const before = tracks;
+    setTracks(next);
+    project.save(next).catch(() => {
+      setTracks(before);
+      addToast({ tone: "danger", message: "Couldn't save that change." });
+    });
+  };
+
   const blocks = tracks.flatMap((track) => track.blocks);
+
+  if (status === "loading") {
+    return (
+      <Column fillWidth height="100dvh" padding="12" gap="12">
+        <Skeleton shape="block" height={40} />
+        <Skeleton shape="block" fill />
+        <Skeleton shape="block" height={96} />
+      </Column>
+    );
+  }
+  if (status === "error") {
+    return (
+      <Column fillWidth height="100dvh" center padding="24">
+        <Feedback tone="danger" title="The project didn't open">
+          <Button size="s" variant="secondary" label="Retry" onClick={load} />
+        </Feedback>
+      </Column>
+    );
+  }
   const current = blocks.find((block) => block.id === selected);
 
   return (
@@ -79,6 +152,14 @@ export function EditorExample() {
         labels={{ left: "Layers", right: "Canvas" }}
         leftPanel={
           <Column fill overflowY="auto" padding="8" gap="4">
+            {blocks.length === 0 && (
+              <Column padding="16" gap="8">
+                <Text textVariant="label-strong-s">No clips yet</Text>
+                <Text textVariant="body-default-s" onBackground="neutral-weak">
+                  Add a clip to start the timeline.
+                </Text>
+              </Column>
+            )}
             {blocks.map((block) => (
               <ToggleButton
                 key={block.id}
@@ -113,8 +194,8 @@ export function EditorExample() {
           onSelectedChange={setSelected}
           onGestureStart={() => setPlaying(false)}
           onBlockChange={(trackId, blockId, next) =>
-            setTracks((all) =>
-              all.map((track) =>
+            change(
+              tracks.map((track) =>
                 track.id !== trackId
                   ? track
                   : {

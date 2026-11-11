@@ -1,0 +1,42 @@
+{
+  "id": "map-app",
+  "title": "Map app",
+  "description": "A map-first app: full-bleed Map with floating panels for the list and the selected item, markers that cluster, areas, filters, and every loading, empty and error state",
+  "components": [
+    "Map",
+    "MapMarkers",
+    "MapPin",
+    "MapPopup",
+    "MapCircle",
+    "Column",
+    "Row",
+    "Text",
+    "Button",
+    "Card",
+    "Tag",
+    "SegmentedControl",
+    "Timeline",
+    "Logo",
+    "Skeleton",
+    "Feedback",
+    "Drawer"
+  ],
+  "recipes": [],
+  "example": "examples/map-app.tsx",
+  "gotchas": [
+    "layout.shorthands",
+    "zIndex.scope",
+    "layout.responsiveProps",
+    "size.rem",
+    "spacing.tokens",
+    "layout.noSpanOrType"
+  ],
+  "quality": {
+    "map": "The Map fills the screen (fill, height=\"100dvh\"); lists and details float over it as panels (background=\"surface\", border, radius=\"l\", shadow=\"l\", position=\"absolute\" with offsets), never a map in a card beside a table",
+    "markers": "MapMarkers with cluster and activeId; MapPin tone carries status with a text label too; selecting in the list frames the item on the map",
+    "identity": "Logo in the panel header; status as Tags with tone and words, urgent ones danger",
+    "phone": "On a phone the list panel becomes a bottom sheet (s={{ … }} on the panel) or a Drawer; the map stays full-bleed",
+    "states": "Every view that loads data shows loading (Skeleton shaped like the content), empty (title, one line, the action that fills it), error (Feedback tone=\"danger\" with Retry) and filled, through a typed lib/ data layer of async functions over mock data — even when the brief never mentions data",
+    "writes": "Writes are optimistic: loading on the pressed Button, rollback plus addToast({ tone: \"danger\" }) when the save fails"
+  }
+}

@@ -101,7 +101,12 @@ describe("ai task bundles as one Markdown read", () => {
       expect(md).toContain("## Layout");
       if (task.example) expect(md).toContain(`## Gold example (\`${task.example}\`)`);
       expect(md).not.toMatch(/see spec\.json/);
-      expect(md.length).toBeLessThan(50_000);
+      // 50,000 until 3.1; raised by 4,000 (about 1,000 tokens) for the rules
+      // that make an app ship rather than screenshot: the shipped component
+      // for each need (Mascot, Logo, MediaUpload, Map), the four data states
+      // and the data layer, and how a designed app looks. Benchmark apps
+      // without them hand-drew a mascot and had no loading or error state.
+      expect(md.length).toBeLessThan(54_000);
     },
   );
 

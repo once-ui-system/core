@@ -1118,3 +1118,65 @@ describe("Select as a form value", () => {
     expect(rules(src)).toContain("Select.chevron");
   });
 });
+
+describe("ship, not screenshot", () => {
+  it("points a hand-drawn character at Mascot", () => {
+    const src = `export function SprigMascot() {
+      return (<svg viewBox="0 0 10 10"><circle cx="1" cy="1" r="1" /><circle cx="2" cy="1" r="1" /><ellipse cx="5" cy="5" rx="2" ry="1" /><path d="M0 0" /><path d="M1 1" /><path d="M2 2" /></svg>);
+    }`;
+    expect(rules(src)).toContain("components.mascot");
+    expect(rules(`${src}\nconst x = <Mascot />;`)).not.toContain("components.mascot");
+  });
+
+  it("points a hand-built brand mark at Logo and a file input at MediaUpload", () => {
+    expect(
+      rules(`function AppLogo() { return <Row><Icon name="leaf" /><Text>Sprig</Text></Row>; }`),
+    ).toContain("components.logo");
+    expect(rules(`function Attach() { return <input type="file" />; }`)).toContain(
+      "components.upload",
+    );
+  });
+
+  it("asks loaded data for loading and error states", () => {
+    const src = `export function Plants() {
+      const [plants, setPlants] = useState([]);
+      useEffect(() => { fetch("/api/plants").then((r) => r.json()).then(setPlants); }, []);
+      return (<Column>{plants.map((p) => <Text key={p.id}>{p.name}</Text>)}</Column>);
+    }`;
+    expect(rules(src)).toEqual(
+      expect.arrayContaining(["states.loading", "states.error", "states.empty"]),
+    );
+    const handled = src
+      .replace(
+        "<Column>",
+        '<Column>{loading && <Skeleton />}{error && <Feedback tone="danger" />}{plants.length === 0 && <Text>None yet</Text>}',
+      )
+      .replace("then(setPlants)", "then(setPlants).catch(setError)");
+    expect(rules(handled)).not.toEqual(expect.arrayContaining(["states.loading"]));
+    expect(rules(handled)).not.toContain("states.error");
+    expect(rules(handled)).not.toContain("states.empty");
+  });
+
+  it("leaves a fixed list alone and asks inline records for a data layer", () => {
+    expect(
+      rules(
+        `const links = [1, 2]; export const Nav = () => { return (<Row>{links.map((l) => <Text key={l}>{l}</Text>)}</Row>); };`,
+      ),
+    ).not.toContain("states.empty");
+    const records = Array.from({ length: 6 }, (_, i) => `{ id: "${i}", name: "N${i}" }`).join(", ");
+    expect(
+      rules(`const items = [${records}]; export const L = () => { return (<Column />); };`),
+    ).toContain("data.layer");
+  });
+
+  it("finds nothing in the gold examples", () => {
+    for (const file of ["chat", "map-app", "editor", "list-page", "dashboard"]) {
+      const src = fs.readFileSync(
+        path.join(__dirname, "..", "..", "ai", "examples", `${file}.tsx`),
+        "utf8",
+      );
+      const found = rules(src).filter((r) => /^(components|states|data)\./.test(r));
+      expect({ file, found }).toEqual({ file, found: [] });
+    }
+  });
+});
