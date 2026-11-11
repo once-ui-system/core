@@ -334,7 +334,7 @@ export function Calendar<E extends CalendarEvent = CalendarEvent>({
             />
           </Row>
           <div style={{ flex: "1 1 12rem", minWidth: 0 }}>
-            <Text as="h2" variant="heading-strong-m" aria-live="polite">
+            <Text as="h2" textVariant="heading-strong-m" aria-live="polite">
               {title}
             </Text>
           </div>
@@ -491,7 +491,7 @@ function MonthView<E extends CalendarEvent>({
         {weeks[0]?.map((day) => (
           // biome-ignore lint/a11y/useSemanticElements lint/a11y/useFocusableInteractive: a header of the ARIA grid
           <div key={day.getDay()} role="columnheader" className={styles.weekdayHeader}>
-            <Text variant="label-default-s">{formats.weekdayShort.format(day)}</Text>
+            <Text textVariant="label-default-s">{formats.weekdayShort.format(day)}</Text>
           </div>
         ))}
       </div>
@@ -554,7 +554,7 @@ function MonthView<E extends CalendarEvent>({
                     aria-hidden
                     onClick={() => openDay(day)}
                   >
-                    <Text variant="label-default-s">{day.getDate()}</Text>
+                    <Text textVariant="label-default-s">{day.getDate()}</Text>
                   </button>
                   {starting.map((segment) => {
                     const { event } = segment;
@@ -576,7 +576,7 @@ function MonthView<E extends CalendarEvent>({
                           onClick={() => onEventSelect?.(event)}
                         >
                           {!bar && !customRender && <span className={styles.dot} />}
-                          <Text variant="label-default-s" className={styles.eventLine}>
+                          <Text textVariant="label-default-s" className={styles.eventLine}>
                             {eventContent(event, bar ? "" : formatStart(formats, event), !bar)}
                           </Text>
                         </button>
@@ -590,7 +590,7 @@ function MonthView<E extends CalendarEvent>({
                       style={{ "--calendar-lane": maxEventsPerDay } as CSSProperties}
                       onClick={() => openDay(day)}
                     >
-                      <Text variant="label-default-s">{labels.more(hidden[index])}</Text>
+                      <Text textVariant="label-default-s">{labels.more(hidden[index])}</Text>
                     </button>
                   )}
                 </div>
@@ -783,9 +783,9 @@ function TimeView<E extends CalendarEvent>({
           const today = now ? isSameDay(day, now) : false;
           const content = (
             <>
-              <Text variant="label-default-s">{formats.weekdayShort.format(day)}</Text>
+              <Text textVariant="label-default-s">{formats.weekdayShort.format(day)}</Text>
               <Text
-                variant="heading-strong-s"
+                textVariant="heading-strong-s"
                 className={styles.todayNumber}
                 data-today={today}
                 aria-current={today ? "date" : undefined}
@@ -813,7 +813,7 @@ function TimeView<E extends CalendarEvent>({
       </div>
       {allDaySegments.length > 0 && (
         <div className={styles.allDayRow}>
-          <Text variant="label-default-xs" className={styles.allDayLabel} style={{ gridColumn: 1 }}>
+          <Text textVariant="label-default-xs" className={styles.allDayLabel} style={{ gridColumn: 1 }}>
             {labels.allDay}
           </Text>
           {allDaySegments.map((segment) => (
@@ -835,7 +835,7 @@ function TimeView<E extends CalendarEvent>({
                 aria-label={eventLabel(segment.event)}
                 onClick={() => onEventSelect?.(segment.event)}
               >
-                <Text variant="label-default-s" className={styles.eventText}>
+                <Text textVariant="label-default-s" className={styles.eventText}>
                   {eventContent(segment.event, labels.allDay, false)}
                 </Text>
               </button>
@@ -851,7 +851,7 @@ function TimeView<E extends CalendarEvent>({
               i === 0 ? null : (
                 <Text
                   key={hour}
-                  variant="label-default-xs"
+                  textVariant="label-default-xs"
                   className={styles.hourLabel}
                   style={{ top: `${(i / hours) * 100}%` }}
                 >
@@ -932,7 +932,7 @@ function TimeView<E extends CalendarEvent>({
                           }}
                         >
                           <Text
-                            variant="label-strong-s"
+                            textVariant="label-strong-s"
                             className={styles.eventText}
                             style={short ? { whiteSpace: "nowrap" } : undefined}
                           >
@@ -943,7 +943,7 @@ function TimeView<E extends CalendarEvent>({
                             )}
                           </Text>
                           {!short && (
-                            <Text variant="label-default-xs" className={styles.eventTime}>
+                            <Text textVariant="label-default-xs" className={styles.eventTime}>
                               {`${formats.time.format(block.event.start)} – ${formats.time.format(block.event.end)}`}
                               {block.event.description ? ` · ${block.event.description}` : ""}
                             </Text>
@@ -971,7 +971,7 @@ function TimeView<E extends CalendarEvent>({
                       height: `${minutesToPercent(Math.min(ghost.to, rangeEnd)) - minutesToPercent(Math.max(ghost.from, rangeStart))}%`,
                     }}
                   >
-                    <Text variant="label-default-xs">
+                    <Text textVariant="label-default-xs">
                       {ghost.title ? `${ghost.title} · ` : ""}
                       {formats.time.format(addMinutes(day, ghost.from))} –{" "}
                       {formats.time.format(addMinutes(day, ghost.to))}
