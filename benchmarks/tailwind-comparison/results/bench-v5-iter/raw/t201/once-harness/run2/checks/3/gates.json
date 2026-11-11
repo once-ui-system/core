@@ -1,0 +1,232 @@
+{
+  "arm": "A",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2520
+    },
+    "build": {
+      "ok": true,
+      "ms": 12522
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 2484,
+          "height": 3801,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 2484,
+          "height": 3625,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 2581,
+          "height": 2291,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 2484,
+              "height": 3801,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 2484,
+              "height": 3625,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 2581,
+              "height": 2291,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 5,
+            "serious_or_critical": 2,
+            "ids": [
+              "color-contrast:serious:4",
+              "label-content-name-mismatch:serious:1"
+            ]
+          }
+        },
+        "/patients/p-104": {
+          "viewports": {
+            "phone": {
+              "text": 1541,
+              "height": 2437,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1541,
+              "height": 2060,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1638,
+              "height": 1739,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 1,
+            "serious_or_critical": 1,
+            "ids": [
+              "label-content-name-mismatch:serious:1"
+            ]
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 2,
+        "nodes": 5,
+        "serious_or_critical": 2,
+        "ids": [
+          "color-contrast:serious:4",
+          "label-content-name-mismatch:serious:1"
+        ]
+      },
+      "interaction": {
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1771,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1776,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/patients/p-104 phone": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/patients/p-104 tablet": {
+          "ms": 1765,
+          "settled": true
+        },
+        "/patients/p-104 desktop": {
+          "ms": 1772,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 502,
+          "distinct_fontSize": 9,
+          "distinct_color": 5,
+          "distinct_background": 10,
+          "distinct_radius": 4,
+          "distinct_shadow": 1,
+          "distinct_spacing": 7,
+          "spacing_on_4px_grid": 0.944
+        },
+        "/patients/p-104": {
+          "elements": 257,
+          "distinct_fontSize": 10,
+          "distinct_color": 6,
+          "distinct_background": 6,
+          "distinct_radius": 4,
+          "distinct_shadow": 0,
+          "distinct_spacing": 7,
+          "spacing_on_4px_grid": 0.875
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 361.7,
+          "css_kb": 60.8,
+          "fcp_ms": 256,
+          "cls": 0,
+          "long_task_ms": 2
+        },
+        "/patients/p-104": {
+          "js_kb": 361.7,
+          "css_kb": 60.8,
+          "fcp_ms": 200,
+          "cls": 0,
+          "long_task_ms": 15
+        }
+      },
+      "views": {
+        "new-appointment phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-phone.jpg"
+        },
+        "new-appointment tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-tablet.jpg"
+        },
+        "new-appointment desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "components/AlertTags.tsx",
+    "components/AppHeader.tsx",
+    "components/BookDialog.tsx",
+    "components/Schedule.tsx",
+    "components/WeightTrend.tsx",
+    "lib/data.ts"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/layout.tsx: 1 issue(s)\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint\n✓ app/page.tsx: no mechanical issues\n✗ app/patients/[id]/page.tsx: 3 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ components/AlertTags.tsx: no mechanical issues\n✗ components/AppHeader.tsx: 2 issue(s)\n  [layout.defaults] position=\"relative\" is the default — omit it\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ components/BookDialog.tsx: no mechanical issues\n✗ components/Schedule.tsx: 2 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ components/WeightTrend.tsx: no mechanical issues\n✓ lib/data.ts: no mechanical issues",
+    "validator": {
+      "package_version": "3.0.0-beta.1",
+      "script_sha256": "8b6fb92b077251ad"
+    }
+  }
+}

@@ -15,3 +15,5 @@ results/bench-v2-cc/**/*.jpg
 results/bench-v2-cc/blind/
 results/bench-v4-cc/**/*.jpg
 results/bench-v4-cc/blind/
+results/bench-v5-iter/**/*.jpg
+results/bench-v5-iter/blind/

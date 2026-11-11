@@ -1,0 +1,29 @@
+{
+  "check": "1",
+  "at": "2026-11-10T23:26:13.085Z",
+  "ms": 4525,
+  "files": [
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "app/theme.ts",
+    "components/AlertChips.tsx",
+    "components/AppShell.tsx",
+    "components/BookDialog.tsx",
+    "components/PatientRecord.tsx",
+    "components/PatientSearch.tsx",
+    "components/Schedule.tsx",
+    "lib/data.ts"
+  ],
+  "passed": false,
+  "gates_passed": false,
+  "failed_gate": "typecheck",
+  "adherence": {
+    "system": 165,
+    "raw": 0,
+    "share": 1,
+    "colours": 0,
+    "cssLines": 0,
+    "ok": true,
+    "reasons": []
+  }
+}
