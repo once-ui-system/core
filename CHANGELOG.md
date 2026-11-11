@@ -11,23 +11,6 @@ Entries before 1.7.13 are reconstructed from GitHub releases and git history and
 incomplete; reconciling them against actual npm release history is a scheduled roadmap
 item (see `ROADMAP.md`, Week 4).
 
-## [3.1.0] - Unreleased
-
-### Performance
-
-- **Root imports ship only what a page uses under Turbopack.** The build now
-  rewrites every `export * from` in the emitted JavaScript as the list of
-  names it carries (`scripts/flatten-barrels.mjs`, after `tsc`). Turbopack
-  (Next 16's default build) shipped every client component, with its CSS,
-  to any page whose server component imported one component from the root;
-  with named re-exports it ships the ones imported. A Next 16 page with a
-  `Button` and a `Column`: component CSS 108 KB to 11 KB, page JavaScript
-  861 KB to 678 KB. The Stack landing page on 2.8 with the same rewrite: JS
-  451 KB to 357 KB. Every entry point exports exactly the same names (checked
-  by bundling each before and after); the `.d.ts` files and the sources keep
-  their star exports. Per-component paths (`/components/Button`) still work
-  and are no longer needed for this.
-
 ## [3.0.0] - Unreleased
 
 Breaking. Built on the `feat/3-0-breaking-cleanup` branch; [MIGRATING.md](MIGRATING.md#2x--30)
@@ -288,6 +271,21 @@ entry below that had landed by then:
   has shipped compiled `.module.css` since 2.1 and no shipped file imports Sass; the
   sources and `dist/styles/breakpoints.scss` only served the workspace's watch build,
   which now runs the CSS compile itself (`pnpm dev`). `sideEffects` is `["*.css"]`.
+
+### Performance
+
+- **Root imports ship only what a page uses under Turbopack.** The build now
+  rewrites every `export * from` in the emitted JavaScript as the list of
+  names it carries (`scripts/flatten-barrels.mjs`, after `tsc`). Turbopack
+  (Next 16's default build) shipped every client component, with its CSS,
+  to any page whose server component imported one component from the root;
+  with named re-exports it ships the ones imported. A Next 16 page with a
+  `Button` and a `Column`: component CSS 108 KB to 11 KB, page JavaScript
+  861 KB to 678 KB. The Stack landing page on 2.8 with the same rewrite: JS
+  451 KB to 357 KB. Every entry point exports exactly the same names (checked
+  by bundling each before and after); the `.d.ts` files and the sources keep
+  their star exports. Per-component paths (`/components/Button`) still work;
+  they are no longer needed for this.
 
 ### Changed
 
