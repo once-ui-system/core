@@ -272,6 +272,21 @@ entry below that had landed by then:
   sources and `dist/styles/breakpoints.scss` only served the workspace's watch build,
   which now runs the CSS compile itself (`pnpm dev`). `sideEffects` is `["*.css"]`.
 
+### Performance
+
+- **Root imports ship only what a page uses under Turbopack.** The build now
+  rewrites every `export * from` in the emitted JavaScript as the list of
+  names it carries (`scripts/flatten-barrels.mjs`, after `tsc`). Turbopack
+  (Next 16's default build) shipped every client component, with its CSS,
+  to any page whose server component imported one component from the root;
+  with named re-exports it ships the ones imported. A Next 16 page with a
+  `Button` and a `Column`: component CSS 108 KB to 11 KB, page JavaScript
+  861 KB to 678 KB. The Stack landing page on 2.8 with the same rewrite: JS
+  451 KB to 357 KB. Every entry point exports exactly the same names (checked
+  by bundling each before and after); the `.d.ts` files and the sources keep
+  their star exports. Per-component paths (`/components/Button`) still work;
+  they are no longer needed for this.
+
 ### Changed
 
 - **Agent guidance: system parts for brand, alerts and charts, and one
