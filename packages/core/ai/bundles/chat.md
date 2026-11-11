@@ -251,7 +251,7 @@ Extends DropdownWrapper.
 - columns?: GridSize = 8
 
 ### DropdownWrapper
-- fillWidth, nested, disableTriggerClick?: boolean = false
+- fillWidth, nested, disableTriggerClick, alignSelected?: boolean = false
 - minWidth, maxWidth, minHeight, optionsCount?: number
 - placement?: Placement = bottom-start
 - trigger, dropdown: ReactNode

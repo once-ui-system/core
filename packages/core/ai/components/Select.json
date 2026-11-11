@@ -11,6 +11,7 @@
   "emptyState": "ReactNode = No results",
   "onSelect": "(value: string | string[]) => void",
   "placement": "Placement",
+  "position": "\"dropdown\" | \"aligned\" = dropdown",
   "searchable": "boolean = false",
   "className": "string",
   "style": "React.CSSProperties",
