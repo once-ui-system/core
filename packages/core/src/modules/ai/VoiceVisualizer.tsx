@@ -159,7 +159,9 @@ const VoiceVisualizer = forwardRef<HTMLDivElement, VoiceVisualizerProps>(
               aria-hidden="true"
             />
             <span className={styles.voiceOrb} aria-hidden="true">
-              <span className={styles.voiceSwirl} />
+              <span className={styles.voiceSwirlClip}>
+                <span className={styles.voiceSwirl} />
+              </span>
             </span>
           </>
         ) : (
