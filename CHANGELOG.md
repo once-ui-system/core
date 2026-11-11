@@ -168,6 +168,10 @@ entry below that had landed by then:
   (the call on a photo across the page) and `StatsSection` `strip` (figures in a
   ruled band). `heroLayoutGuide` and `sectionSchemas.hero.layoutGuide` say in one
   sentence when each hero layout suits, for a model picking one.
+- **`fillWidth` on `DateInput`**, single and `range`: the field stretches to its
+  container's width like the inputs around it, and the calendar panel keeps at least
+  its own width. Before, the wrapper was always as wide as its content, so a date
+  range in a form sat narrower than the fields below it.
 - **`phone` and `mapPin` icons** in the built-in set.
 - **CodeBlock `actions`**: controls of your own in the header, before copy.
 - **`density`** in the theme (`once-ui.config` `style`, ThemeProvider, ThemeInit),
