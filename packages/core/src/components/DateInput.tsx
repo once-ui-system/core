@@ -9,6 +9,7 @@ import { DropdownComboboxContext } from "./DropdownTriggerContext.js";
 import { Flex } from "./Flex.js";
 import { Input } from "./Input.js";
 import { Row } from "./Row.js";
+import type { CSSUnit } from "../types.js";
 
 interface SingleDateInputProps
   extends Omit<
@@ -36,6 +37,12 @@ interface SingleDateInputProps
   /** Receives every open and close the field makes. */
   onOpenChange?: (open: boolean) => void;
   minHeight?: number;
+  /**
+   * Stretch the field to its container's width, like the inputs around it.
+   * The picker panel keeps at least its own width. Default `false`: the
+   * field is as wide as its content.
+   */
+  fillWidth?: boolean;
   timePicker?: boolean;
   minDate?: Date;
   maxDate?: Date;
@@ -90,6 +97,7 @@ const SingleDateInput = ({
   onOpenChange,
   error,
   minHeight,
+  fillWidth = false,
   className,
   style,
   timePicker = false,
@@ -198,7 +206,10 @@ const SingleDateInput = ({
             {...rest}
           />
         }
-        fillWidth={false}
+        fillWidth={fillWidth}
+        // Filling, the panel takes the field's width but never less than the
+        // calendar needs.
+        minWidth={fillWidth ? ("fit-content" as CSSUnit) : undefined}
         minHeight={minHeight}
         open={isOpen}
         onOpenChange={setIsOpen}
@@ -270,6 +281,12 @@ interface RangeDateInputProps
   onOpenChange?: (open: boolean) => void;
   minHeight?: number;
   /**
+   * Stretch the field to its container's width, like the inputs around it.
+   * The picker panel keeps at least its own width. Default `false`: the
+   * field is as wide as its content.
+   */
+  fillWidth?: boolean;
+  /**
    * The locale the fields' dates and the calendar's month and weekday names
    * are in, as a BCP 47 tag such as "de" or "pt-BR". Without it (or with a
    * tag the platform does not accept) they are in US English, as before.
@@ -318,6 +335,7 @@ const RangeDateInput = ({
   onOpenChange,
   error,
   minHeight,
+  fillWidth = false,
   className,
   style,
   locale,
@@ -463,7 +481,10 @@ const RangeDateInput = ({
     <DropdownComboboxContext.Provider value={true}>
       <Dropdown
         ref={ref}
-        fillWidth={false}
+        fillWidth={fillWidth}
+        // Filling, the panel takes the field's width but never less than the
+        // calendar needs.
+        minWidth={fillWidth ? ("fit-content" as CSSUnit) : undefined}
         trigger={trigger}
         minHeight={minHeight}
         open={isOpen}
