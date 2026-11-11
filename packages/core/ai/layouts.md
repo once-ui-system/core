@@ -203,7 +203,7 @@ action at full width.
 
 Floor plans, seat maps and site maps are inline SVG, not absolutely
 positioned boxes. A `viewBox` at 100% width fits any screen; a fixed-width
-canvas clips on a phone.
+canvas clips on a phone. Give the canvas no `minWidth`: it scales with its box. Fixtures stay neutral, with one accent for state.
 
 ```tsx
 <Column fillWidth background="surface" border radius="l" padding="16">

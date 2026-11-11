@@ -274,6 +274,14 @@ entry below that had landed by then:
 
 ### Changed
 
+- **Agent guidance: system parts for brand, alerts and charts, and one
+  surface level.** Agents now reach for `Logo` (with `text` and `monogram`)
+  instead of an icon beside text, `Feedback` instead of hand-built alert boxes,
+  and the `data` charts instead of hand-drawn SVG, and keep one raised surface
+  for content instead of grey cards on grey.
+  Work apps set `density: "compact"` and `border: "conservative"`, key
+  numbers are one divided strip, a screen has one primary action, and a
+  chart's `height` is a string with a `brand-strong` series.
 - **Agent guidance for apps that look designed, not stock.** From the
   real-world bench: AGENTS.md and the rules now set the theme first (brand,
   neutral, `solid: "color"`, a heading font), keep same-shaped records on one
@@ -613,6 +621,7 @@ entry below that had landed by then:
   They now take two fifths of the circle at every size (custom sizes too), in
   medium weight on a soft neutral fill, trimmed to the cap height so they sit
   in the middle.
+  They never go under 9px, so `s` stays legible at compact density.
 - **Agent bundles no longer say `Text` takes padding.** A stale gotcha told
   agents that `Text` and `Heading` take padding, which is a type error in 3.0.
   It now says to put padding on a `<Column>` around them, matching the

@@ -73,7 +73,8 @@
     }
 
     .avatar .value {
-        font-size: 38cqmin;
+        // Never under 9px, or s at compact density drops to about 7px.
+        font-size: max(9px, 38cqmin);
     }
 }
 
