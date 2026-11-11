@@ -125,6 +125,34 @@
     "MapViewport"
    ]
   },
+  "@once-ui-system/core/calendar": {
+   "use": "Calendar: month, week and day views of events, with picking empty time and dragging events",
+   "exports": [
+    "Calendar",
+    "addDays",
+    "addMonths",
+    "isAllDayLike",
+    "isSameDay",
+    "layoutDay",
+    "layoutSpans",
+    "startOfDay",
+    "startOfWeek",
+    "stepDate",
+    "touchesDay",
+    "viewDays"
+   ],
+   "types": [
+    "CalendarEvent",
+    "CalendarEventBase",
+    "CalendarEventChange",
+    "CalendarLabels",
+    "CalendarProps",
+    "CalendarSlot",
+    "CalendarView",
+    "SpanSegment",
+    "TimedBlock"
+   ]
+  },
   "@once-ui-system/core/mdx": {
    "use": "MDX content through Once UI: mdxComponents for next-mdx-remote or @next/mdx, createMdxComponents(overrides) to replace elements or register tags, and the Mdx* elements to wrap",
    "peer": "prismjs",

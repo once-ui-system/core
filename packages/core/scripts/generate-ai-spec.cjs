@@ -63,6 +63,11 @@ const BARRELS = [
     group: "map",
     importFrom: "@once-ui-system/core/map",
   },
+  {
+    file: path.join(SRC, "modules", "calendar", "index.ts"),
+    group: "calendar",
+    importFrom: "@once-ui-system/core/calendar",
+  },
   // The hooks are root exports, but no barrel above reaches them, so an
   // agent never learned `useHotkeys` or `useInViewport` existed except from
   // prose in the rules.
@@ -137,6 +142,10 @@ const ENTRY_POINTS = [
     specifier: "@once-ui-system/core/map",
     use: "Map with React markers, clustering, popups and areas on free OpenStreetMap tiles",
     peer: "maplibre-gl",
+  },
+  {
+    specifier: "@once-ui-system/core/calendar",
+    use: "Calendar: month, week and day views of events, with picking empty time and dragging events",
   },
   {
     specifier: "@once-ui-system/core/mdx",

@@ -17,6 +17,7 @@ const ENTRIES: Record<string, string> = {
   "@once-ui-system/core": "core/src/index.ts",
   "@once-ui-system/core/next": "core/src/next/index.ts",
   "@once-ui-system/core/data": "core/src/modules/data/index.ts",
+  "@once-ui-system/core/calendar": "core/src/modules/calendar/index.ts",
   "@once-ui-system/core/code": "core/src/modules/code/index.ts",
   "@once-ui-system/core/emoji": "core/src/modules/emoji/index.ts",
   "@once-ui-system/core/map": "core/src/modules/map/index.ts",

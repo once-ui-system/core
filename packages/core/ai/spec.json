@@ -536,6 +536,48 @@
    "secondary",
    "tertiary"
   ],
+  "CalendarEvent": {
+   "id": "!string",
+   "title": "!string",
+   "start": "!Date",
+   "end": "!Date",
+   "allDay": "boolean",
+   "tone": "Tone",
+   "description": "string",
+   "editable": "boolean"
+  },
+  "CalendarEventBase": {
+   "id": "!string",
+   "start": "!Date",
+   "end": "!Date",
+   "allDay": "boolean"
+  },
+  "CalendarEventChange": {
+   "event": "!CalendarEvent",
+   "start": "!Date",
+   "end": "!Date"
+  },
+  "CalendarLabels": {
+   "today": "!string",
+   "previous": "!string",
+   "next": "!string",
+   "month": "!string",
+   "week": "!string",
+   "day": "!string",
+   "allDay": "!string",
+   "more": "!(count: number) => string",
+   "view": "!string"
+  },
+  "CalendarSlot": {
+   "start": "!Date",
+   "end": "!Date",
+   "allDay": "!boolean"
+  },
+  "CalendarView": [
+   "month",
+   "week",
+   "day"
+  ],
   "CarouselItem": {
    "slide": "!string | React.ReactNode",
    "alt": "string"
@@ -859,6 +901,10 @@
    "color": "ColorValue",
    "size": "SpacingToken"
   },
+  "Drag": [
+   "{ kind: \"create\"; dayIndex: number; anchor: number; current: number; }",
+   "{ kind: \"move\" | \"resize\"; event: E; startX: number; startY: number; grab: number; duration: number; dayIndex: number; top: number; bottom: number; moved: boolean; }"
+  ],
   "DropdownProps": "Dropdown props",
   "EasingCurve": [
    "bounce",
@@ -1929,6 +1975,14 @@
    "104",
    "128"
   ],
+  "SpanSegment": {
+   "event": "!CalendarEventBase",
+   "startIndex": "!number",
+   "span": "!number",
+   "lane": "!number",
+   "continuesBefore": "!boolean",
+   "continuesAfter": "!boolean"
+  },
   "SparklineCurve": [
    "step",
    "linear",
@@ -2451,6 +2505,15 @@
    "scaling": "number",
    "height": "SpacingToken | number | CSSUnit",
    "sizes": "string | number"
+  },
+  "TimedBlock": {
+   "event": "!CalendarEventBase",
+   "top": "!number",
+   "bottom": "!number",
+   "lane": "!number",
+   "lanes": "!number",
+   "continuesBefore": "!boolean",
+   "continuesAfter": "!boolean"
   },
   "TimelineItem": {
    "label": "React.ReactNode",
@@ -5342,6 +5405,40 @@
     "closeLabel": "string = Close"
    }
   },
+  "Calendar": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "props": {
+    "events": "!CalendarEvent[]",
+    "view": "CalendarView",
+    "defaultView": "CalendarView = month",
+    "onViewChange": "(view: CalendarView) => void",
+    "views": "CalendarView[] = [\"month\", \"week\", \"day\"]",
+    "date": "Date",
+    "defaultDate": "Date",
+    "onDateChange": "(date: Date) => void",
+    "locale": "string",
+    "weekStartsOn": "number",
+    "dayStartHour": "number = 0",
+    "dayEndHour": "number = 24",
+    "scrollToHour": "number = 8",
+    "snapMinutes": "number = 15",
+    "defaultDuration": "number = 60",
+    "maxEventsPerDay": "number = 3",
+    "height": "string = 36rem",
+    "onEventSelect": "(event: CalendarEvent) => void",
+    "onSlotSelect": "(slot: CalendarSlot) => void",
+    "onEventChange": "(change: CalendarEventChange<CalendarEvent>) => void",
+    "renderEvent": "(event: CalendarEvent, context: { view: CalendarView; timeLabel: string }) => ReactNode",
+    "toolbar": "boolean = true",
+    "toolbarEnd": "ReactNode",
+    "labels": "Partial<CalendarLabels>",
+    "now": "Date",
+    "className": "string",
+    "style": "CSSProperties",
+    "aria-label": "string"
+   }
+  },
   "AdapterProvider": {
    "group": "contexts",
    "props": {
@@ -6655,6 +6752,82 @@
    "kind": "value",
    "type": "{ readonly light: \"https://tiles.openfreemap.org/styles/positron\"; readonly dark: \"https://tiles.openfreemap.org/styles/dark\"; }",
    "doc": "OpenFreeMap: OpenStreetMap vector tiles with no key, no account and no view limit, commercial use included."
+  },
+  "addDays": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "kind": "function",
+   "signature": "(date: Date, days: number) => Date",
+   "doc": "The date `days` days on, at the same clock time (summer time kept)."
+  },
+  "addMonths": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "kind": "function",
+   "signature": "(date: Date, months: number) => Date",
+   "doc": "The same day of the month `months` months on, clamped to the month's end."
+  },
+  "isAllDayLike": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "kind": "function",
+   "signature": "(event: CalendarEventBase) => boolean",
+   "doc": "Whether the event goes in a view's all-day row rather than the hours: it is marked all-day, or it runs across midnight for a full day or more."
+  },
+  "isSameDay": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "kind": "function",
+   "signature": "(a: Date, b: Date) => boolean"
+  },
+  "layoutDay": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "kind": "function",
+   "signature": "<E extends CalendarEventBase>(events: E[], day: Date, minMinutes?: number) => TimedBlock<E>[]",
+   "doc": "One day's timed events as blocks, side by side where they overlap, the way calendar apps draw them: each group of events that overlap one another shares the column width, and an event takes the fir..."
+  },
+  "layoutSpans": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "kind": "function",
+   "signature": "<E extends CalendarEventBase>(events: E[], days: Date[]) => SpanSegment<E>[]",
+   "doc": "Events as bars across a row of days (a week of the month, or the all-day row above the hours), each in the first lane free over its whole span."
+  },
+  "startOfDay": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "kind": "function",
+   "signature": "(date: Date) => Date",
+   "doc": "Midnight at the start of the date's day."
+  },
+  "startOfWeek": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "kind": "function",
+   "signature": "(date: Date, weekStartsOn?: number) => Date",
+   "doc": "The first day of the date's week, for a week that starts on `weekStartsOn` (0 Sunday)."
+  },
+  "stepDate": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "kind": "function",
+   "signature": "(view: CalendarView, date: Date, step: number) => Date",
+   "doc": "The date one step back or on in the view: a month, a week or a day."
+  },
+  "touchesDay": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "kind": "function",
+   "signature": "(event: CalendarEventBase, day: Date) => boolean",
+   "doc": "Whether the event touches the day: it starts before the day ends and ends after it starts."
+  },
+  "viewDays": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "kind": "function",
+   "signature": "(view: CalendarView, date: Date, weekStartsOn?: number) => Date[]",
+   "doc": "The days a view shows, midnight each: one, seven, or whole weeks round the month."
   },
   "useArrowNavigation": {
    "group": "hooks",

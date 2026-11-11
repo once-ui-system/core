@@ -4,6 +4,7 @@ import { createElement } from "react";
 import { renderToString } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import * as Core from "../index";
+import * as CalendarModule from "../modules/calendar/index";
 import * as Code from "../modules/code/index";
 import * as Data from "../modules/data/index";
 import * as Emoji from "../modules/emoji/index";
@@ -29,6 +30,7 @@ const exportsUnderTest: Record<string, unknown> = {
   ...MediaModule,
   ...Emoji,
   ...MapModule,
+  ...CalendarModule,
 };
 
 const noop = () => {};
@@ -36,6 +38,7 @@ const avatar = { src: "/avatar.jpg" };
 
 /** Props for components whose required props make an empty render meaningless. */
 const fixtures: Record<string, Record<string, unknown>> = {
+  Calendar: { events: [], defaultDate: new Date(2026, 10, 11) },
   AvatarGroup: { avatars: [avatar, avatar, { value: "AB" }] },
   Breadcrumbs: { items: [{ label: "Home", href: "/" }, { label: "Docs" }] },
   ColorInput: { id: "color", label: "Colour", value: "#ff0000", onValueChange: noop },

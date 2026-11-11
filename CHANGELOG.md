@@ -11,6 +11,12 @@ Entries before 1.7.13 are reconstructed from GitHub releases and git history and
 incomplete; reconciling them against actual npm release history is a scheduled roadmap
 item (see `ROADMAP.md`, Week 4).
 
+## [3.1.0] - Unreleased
+
+### Added
+
+- `Calendar` in `@once-ui-system/core/calendar`: month, week and day views of events. Overlapping events sit side by side, events of a day or more run as bars, and a crowded month day folds into "n more". `onSlotSelect` lets people drag or click empty time (or press a month day) to pick a slot, and `onEventChange` lets them drag an event to a new time or day or drag its end. There's a now line, the toolbar has its own slot for app controls, `locale` and `labels` translate it, and the month view is an ARIA grid you can move through with the keyboard. The layout helpers (`layoutDay`, `layoutSpans`, `viewDays`) are exported too.
+
 ## [3.0.0] - Unreleased
 
 Breaking. Built on the `feat/3-0-breaking-cleanup` branch; [MIGRATING.md](MIGRATING.md#2x--30)

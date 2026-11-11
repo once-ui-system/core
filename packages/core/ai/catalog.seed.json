@@ -449,6 +449,11 @@
     "tags": ["ai", "chat", "decoration"],
     "pairsWith": ["VoiceVisualizer", "WorkingIndicator"]
   },
+  "Calendar": {
+    "purpose": "Month/week/day of events, drag to book",
+    "tags": ["calendar", "schedule"],
+    "pairsWith": ["Dialog"]
+  },
   "Map": {
     "purpose": "Themed map on free tiles with React markers and a controlled viewport (needs maplibre-gl)",
     "tags": ["map", "location", "list"],
