@@ -25,7 +25,7 @@ Read everything you need in one step, before writing: every file you read is sen
 - Subtree theme: `theme`, `themeBorder`, `themeSolid`, `themeSurface` on Flex/Row/Column/Grid and components built on them (`Background`, `Tag`, effects) — not raw `data-theme`/`data-border`/`data-solid`. `Button`/`IconButton` have no typed prop: keep `data-border="rounded"`
 - App theme in `once-ui.config` `style`: `defaultTheme: "light"` = starts light, visitor can switch (`theme: "light"` forces it and `setTheme` does nothing). Exact brand colour: `brand: "custom", brandSeed: "#hex"` (the hex is step 500, every brand solid in both themes); show it on the current page with `<Nav tone="brand">`. `brandScale` only for a full brand book, 100 darkest to 1200 lightest. Page/card colour: `pageBackground`/`surfaceBackground` (token or colour, or `{ light, dark }`), not overrides of semantic CSS variables
 - Page skeleton: `Column as="main" fillWidth horizontal="center"` → content `Column maxWidth="l"` → sections
-- Section gaps: `"104"` between sections, `"24"`–`"40"` inside. Never `"48"` between major sections.
+- Section gaps: `"104"` between sections, `"24"`–`"40"` inside.
 - Responsive: breakpoint props `xl l m s xs` — never media queries for layout
 
 ## Surfaces
@@ -36,14 +36,14 @@ Static panel recipe (pricing tiers, stats, settings sections):
 <Column background="surface" border radius="l" padding="24" gap="16">
 ```
 
-- Bare `border` (and `borderTop`, `borderBottom`, …) = the default border. Name a colour only to deviate: `border="brand-alpha-medium"`.
+- Bare `border`/`borderTop` = the default border. Name a colour only to deviate: `border="brand-alpha-medium"`.
 - `Card` = interactive only (`href` or `onClick`). Static panels = Column + surface recipe.
 - Colors: `{tone}-{weight}` or `{tone}-alpha-{weight}`. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`.
 - `background` also: `surface | overlay | page | transparent`
 - Same-shaped records: one surface, divided rows (`borderTop={i > 0}`), or a `Table`; never a card per row
 - One raised `surface` for content on `page`; sections inside are spacing + `borderTop`, not grey cards
 - Alerts: `Feedback`, never a hand-built `role="alert"` box
-- Charts: `@once-ui-system/core/data` (`LineChart`, `BarChart`…), never hand-drawn SVG
+- Charts: `@once-ui-system/core/data` (`LineChart`, `BarChart`…), never hand-drawn SVG; `height="16rem"` (a string), series `color: "brand-strong"`
 - Brand mark: `<Logo text="Name" monogram />`, never `Icon` + `Text`
 - Critical outranks status: `Feedback tone="danger"` or `Tag prefixIcon`; urgent is `danger`/`warning`, never `info`
 
