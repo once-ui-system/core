@@ -1,4 +1,4 @@
-import { Column, Grid, Text } from "@once-ui-system/core";
+import { Column, Grid, Row, Text } from "@once-ui-system/core";
 import { statsLayouts } from "./layouts.js";
 import { choice, rows, text } from "./props.js";
 import { type SectionBaseProps, SectionHeader, SectionShell, sectionWidth } from "./shared.js";
@@ -11,7 +11,8 @@ export interface StatsSectionProps extends SectionBaseProps {
 const columnsFor = (count: number) => Math.min(4, Math.max(1, count)) as 1 | 2 | 3 | 4;
 
 // A few figures that make the case: the number large, what it counts under
-// it. `row` sets them in an open row divided by rules, `cards` frames each.
+// it. `row` sets them in an open row divided by rules, `cards` frames each,
+// `strip` lines them up in a ruled band beside the heading.
 export function StatsSection(props: StatsSectionProps) {
   const layout = choice(props.layout, statsLayouts, "row");
   const width = sectionWidth(props.width);
@@ -25,6 +26,49 @@ export function StatsSection(props: StatsSectionProps) {
     .filter((s) => s.value);
   const columns = columnsFor(stats.length);
   const cards = layout === "cards";
+
+  if (layout === "strip") {
+    // A band of facts between two rules: the heading on one side, the
+    // figures in a line on the other. Light enough to sit right under a hero.
+    return (
+      <SectionShell width={width}>
+        <Row
+          fillWidth
+          gap="48"
+          paddingY="32"
+          vertical="center"
+          borderTop="neutral-alpha-medium"
+          borderBottom="neutral-alpha-medium"
+          m={{ direction: "column", vertical: "start", gap: "24" }}
+        >
+          <Column flex={1} fillWidth m={{ flex: "0" }}>
+            <SectionHeader eyebrow={props.eyebrow} title={props.title} maxWidth="24rem" />
+          </Column>
+          <Column flex={2} m={{ flex: "0" }} fillWidth>
+            <Grid
+              fillWidth
+              columns={columns}
+              m={{ columns: Math.min(columns, 2) as 1 | 2 }}
+              gap="32"
+            >
+              {stats.map((stat) => (
+                <Column key={stat.key} gap="4">
+                  <Text textVariant="display-strong-s" onBackground="neutral-strong">
+                    {stat.value}
+                  </Text>
+                  {stat.label && (
+                    <Text textVariant="body-default-s" onBackground="neutral-weak">
+                      {stat.label}
+                    </Text>
+                  )}
+                </Column>
+              ))}
+            </Grid>
+          </Column>
+        </Row>
+      </SectionShell>
+    );
+  }
 
   return (
     <SectionShell width={width}>

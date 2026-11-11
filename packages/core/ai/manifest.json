@@ -1,6 +1,6 @@
 {
  "version": "3.0.0-beta.1",
- "generated": "2026-11-06",
+ "generated": "2026-11-11",
  "imports": {
   "@once-ui-system/core": {
    "use": "Components, hooks, providers, defineConfig and types: everything not listed below"
@@ -265,6 +265,7 @@
     "CtaSection",
     "FaqSection",
     "FeaturesSection",
+    "GallerySection",
     "HeroSection",
     "LogosSection",
     "PricingSection",
@@ -278,6 +279,8 @@
     "ctaLayouts",
     "faqLayouts",
     "featuresLayouts",
+    "galleryLayouts",
+    "heroLayoutGuide",
     "heroLayouts",
     "logosLayouts",
     "pricingLayouts",
@@ -297,6 +300,7 @@
     "CtaSectionProps",
     "FaqSectionProps",
     "FeaturesSectionProps",
+    "GallerySectionProps",
     "HeroSectionProps",
     "LogosSectionProps",
     "PricingSectionProps",

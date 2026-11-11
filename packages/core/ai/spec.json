@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "3.0.0-beta.1",
- "generated": "2026-11-06",
+ "generated": "2026-11-11",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root; '@once-ui-system/fx' and '@once-ui-system/blocks' are packages of their own, installed beside core.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -521,6 +521,7 @@
    "size": "TShirtSizes",
    "corners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
    "variant": "\"ghost\" | \"outline\" | \"subtle\"",
+   "tone": "Tone",
    "weight": "\"default\" | \"strong\"",
    "truncate": "boolean",
    "rounded": "boolean",
@@ -1830,6 +1831,7 @@
    "label": "!string",
    "description": "!string",
    "layouts": "!readonly string[]",
+   "layoutGuide": "Readonly<Record<string, string>>",
    "fields": "!SectionField[]",
    "sample": "!Record<string, unknown>"
   },
@@ -1838,6 +1840,7 @@
    "hero",
    "features",
    "stats",
+   "gallery",
    "testimonials",
    "team",
    "pricing",
@@ -2878,6 +2881,7 @@
     "defaultOpen": "boolean",
     "onOpenChange": "(open: boolean) => void",
     "minHeight": "number",
+    "fillWidth": "boolean",
     "timePicker": "boolean",
     "minDate": "Date",
     "maxDate": "Date",
@@ -2987,7 +2991,9 @@
     "placement": "Placement",
     "trigger": "!ReactNode",
     "children": "ReactNode",
-    "openOn": "\"click\" | \"contextmenu\" = click",
+    "openOn": "\"click\" | \"hover\" | \"contextmenu\" = click",
+    "openDelay": "number",
+    "closeDelay": "number",
     "disabled": "boolean",
     "contents": "boolean",
     "selectedOption": "string",
@@ -3502,6 +3508,7 @@
    "props": {
     "density": "NavDensity",
     "variant": "NavVariant = solid",
+    "tone": "Tone = neutral",
     "rail": "boolean = true",
     "collapsed": "boolean = false",
     "expandOnHover": "boolean = false",
@@ -3566,7 +3573,8 @@
     "icon": "IconName",
     "prefix": "ReactNode",
     "badge": "number | ReactNode",
-    "indicator": "boolean"
+    "indicator": "boolean",
+    "truncate": "boolean = true"
    }
   },
   "NumberInput": {
@@ -3634,6 +3642,7 @@
     "description": "React.ReactNode",
     "danger": "boolean",
     "selected": "boolean",
+    "tone": "Tone = neutral",
     "disabled": "boolean = false",
     "highlighted": "boolean",
     "tabIndex": "number",
@@ -4058,6 +4067,22 @@
     "children": "React.ReactNode"
    }
   },
+  "Submenu": {
+   "group": "components",
+   "props": {
+    "label": "!ReactNode",
+    "prefix": "ReactNode",
+    "description": "ReactNode",
+    "suffix": "ReactNode",
+    "disabled": "boolean = false",
+    "children": "ReactNode",
+    "minWidth": "number | CSSUnit = 192",
+    "maxWidth": "number | CSSUnit",
+    "openDelay": "number",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
   "SubmitButton": {
    "group": "components",
    "extends": [
@@ -4241,6 +4266,7 @@
     "label": "string = \"\"",
     "prefixIcon": "IconName",
     "suffixIcon": "IconName",
+    "dot": "boolean",
     "href": "string",
     "arrow": "boolean",
     "effect": "boolean = variant === \"announce\"",
@@ -4371,6 +4397,7 @@
     "label": "ReactNode",
     "selected": "boolean = false",
     "variant": "\"ghost\" | \"outline\" | \"subtle\" = ghost",
+    "tone": "Tone = neutral",
     "size": "TShirtSizes",
     "radius": "RadiusSize",
     "corners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
@@ -4527,7 +4554,7 @@
     "LeafProps"
    ],
    "props": {
-    "working": "\"cube\"",
+    "working": "\"cube\" | \"d20\"",
     "effects": "boolean | MascotEffect[]",
     "poke": "boolean",
     "state": "MascotState = idle",
@@ -6434,7 +6461,9 @@
     "primaryLabel": "string",
     "primaryHref": "string",
     "secondaryLabel": "string",
-    "secondaryHref": "string"
+    "secondaryHref": "string",
+    "image": "string",
+    "imageAlt": "string"
    }
   },
   "FaqSection": {
@@ -6462,6 +6491,19 @@
     "resolveHref": "(href: string) => string",
     "columns": "string",
     "items": "{ icon?: string; title?: string; description?: string }[]"
+   }
+  },
+  "GallerySection": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "props": {
+    "layout": "string",
+    "width": "string",
+    "eyebrow": "string",
+    "title": "string",
+    "description": "string",
+    "resolveHref": "(href: string) => string",
+    "items": "{ image?: string; alt?: string; caption?: string }[]"
    }
   },
   "HeroSection": {
@@ -6568,7 +6610,7 @@
   "useNavStyle": {
    "group": "components",
    "kind": "hook",
-   "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly rail: \"8\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: D...",
+   "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly rail: \"8\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; ... 4 more...",
    "doc": "The look the nearest Nav set, or the defaults outside one."
   },
   "photoViewerIndexFromUrl": {
@@ -6855,7 +6897,7 @@
    "group": "blocks",
    "importFrom": "@once-ui-system/blocks",
    "kind": "value",
-   "type": "readonly [\"banner\", \"split\", \"minimal\"]"
+   "type": "readonly [\"banner\", \"split\", \"minimal\", \"cover\"]"
   },
   "faqLayouts": {
    "group": "blocks",
@@ -6869,11 +6911,24 @@
    "kind": "value",
    "type": "readonly [\"cards\", \"list\", \"split\"]"
   },
+  "galleryLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"grid\", \"mosaic\", \"masonry\"]"
+  },
+  "heroLayoutGuide": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "Record<(typeof heroLayouts)[number], string>",
+   "doc": "One sentence per hero layout on when it suits, for a model choosing one (or an editor's tooltip)."
+  },
   "heroLayouts": {
    "group": "blocks",
    "importFrom": "@once-ui-system/blocks",
    "kind": "value",
-   "type": "readonly [\"split\", \"centered\", \"cover\", \"boxed\"]"
+   "type": "readonly [\"split\", \"centered\", \"cover\", \"boxed\", \"fullscreen\", \"halves\", \"editorial\"]"
   },
   "logosLayouts": {
    "group": "blocks",
@@ -6891,7 +6946,7 @@
    "group": "blocks",
    "importFrom": "@once-ui-system/blocks",
    "kind": "value",
-   "type": "readonly [\"row\", \"cards\"]"
+   "type": "readonly [\"row\", \"cards\", \"strip\"]"
   },
   "teamLayouts": {
    "group": "blocks",

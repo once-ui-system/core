@@ -23,8 +23,7 @@
   "feedback"
  ],
  "pairsWith": [
-  "Mascot",
-  "Button"
+  "Mascot"
  ],
  "mixinsRef": [
   "CommonProps",

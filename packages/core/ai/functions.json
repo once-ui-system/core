@@ -9,7 +9,7 @@
   "useNavStyle": {
    "group": "components",
    "kind": "hook",
-   "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly rail: \"8\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: D...",
+   "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly rail: \"8\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; ... 4 more...",
    "doc": "The look the nearest Nav set, or the defaults outside one."
   },
   "photoViewerIndexFromUrl": {
@@ -296,7 +296,7 @@
    "group": "blocks",
    "importFrom": "@once-ui-system/blocks",
    "kind": "value",
-   "type": "readonly [\"banner\", \"split\", \"minimal\"]"
+   "type": "readonly [\"banner\", \"split\", \"minimal\", \"cover\"]"
   },
   "faqLayouts": {
    "group": "blocks",
@@ -310,11 +310,24 @@
    "kind": "value",
    "type": "readonly [\"cards\", \"list\", \"split\"]"
   },
+  "galleryLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"grid\", \"mosaic\", \"masonry\"]"
+  },
+  "heroLayoutGuide": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "Record<(typeof heroLayouts)[number], string>",
+   "doc": "One sentence per hero layout on when it suits, for a model choosing one (or an editor's tooltip)."
+  },
   "heroLayouts": {
    "group": "blocks",
    "importFrom": "@once-ui-system/blocks",
    "kind": "value",
-   "type": "readonly [\"split\", \"centered\", \"cover\", \"boxed\"]"
+   "type": "readonly [\"split\", \"centered\", \"cover\", \"boxed\", \"fullscreen\", \"halves\", \"editorial\"]"
   },
   "logosLayouts": {
    "group": "blocks",
@@ -332,7 +345,7 @@
    "group": "blocks",
    "importFrom": "@once-ui-system/blocks",
    "kind": "value",
-   "type": "readonly [\"row\", \"cards\"]"
+   "type": "readonly [\"row\", \"cards\", \"strip\"]"
   },
   "teamLayouts": {
    "group": "blocks",
@@ -911,6 +924,7 @@
    "label": "!string",
    "description": "!string",
    "layouts": "!readonly string[]",
+   "layoutGuide": "Readonly<Record<string, string>>",
    "fields": "!SectionField[]",
    "sample": "!Record<string, unknown>"
   },
@@ -919,6 +933,7 @@
    "hero",
    "features",
    "stats",
+   "gallery",
    "testimonials",
    "team",
    "pricing",

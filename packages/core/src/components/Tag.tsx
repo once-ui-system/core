@@ -42,6 +42,12 @@ export interface TagProps extends Omit<React.ComponentProps<typeof Flex>, "onCli
   label?: string;
   prefixIcon?: IconName;
   suffixIcon?: IconName;
+  /**
+   * A small dot in the tone's colour before the label: the hairline tag's
+   * way of showing its tone. Defaults to true on a default tag with a `tone`;
+   * `false` hides it. Not drawn on `gradient` or `announce`.
+   */
+  dot?: boolean;
   /** Makes the tag a link. */
   href?: string;
   /** An arrow that slides in on hover. Defaults to true with `href`. */
@@ -114,6 +120,7 @@ const Tag = ({
   label = "",
   prefixIcon,
   suffixIcon,
+  dot: dotProp,
   href,
   arrow: arrowProp,
   effect = variant === "announce",
@@ -168,6 +175,10 @@ const Tag = ({
   const gradient = variant === "gradient";
   const look = LOOK[announce ? "announce" : "default"];
   const palette = tone ?? (announce ? "brand" : "neutral");
+  // The default tag is a neutral hairline; its tone lives in the dot (and a
+  // prefix icon), so a table full of statuses stays calm.
+  const hairline = !announce && !gradient;
+  const dot = hairline && (dotProp ?? tone !== undefined);
   // A link tag's pointer handler, passed through for the caller.
   const pointer = onClick
     ? { onClick: onClick as unknown as React.MouseEventHandler<HTMLAnchorElement> }
@@ -195,7 +206,7 @@ const Tag = ({
       fitWidth
       // An announcement is a quiet pill on the surface; the icon and the beam
       // carry the colour. A `tone` still tints its edge and text.
-      background={announce ? "surface" : gradient ? undefined : `${palette}-weak`}
+      background={announce ? "surface" : undefined}
       border={
         announce
           ? tone
@@ -203,7 +214,7 @@ const Tag = ({
             : "neutral-alpha-medium"
           : gradient
             ? "brand-medium"
-            : `${palette}-alpha-medium`
+            : "neutral-alpha-medium"
       }
       onBackground={
         announce
@@ -212,11 +223,11 @@ const Tag = ({
             : "neutral-strong"
           : gradient
             ? undefined
-            : `${palette}-medium`
+            : "neutral-strong"
       }
       paddingLeft={announce && prefixIcon ? "8" : look.paddingX[size]}
       paddingRight={announce && arrow ? "8" : look.paddingX[size]}
-      paddingY={look.paddingY[size]}
+      paddingY={hairline ? "0" : look.paddingY[size]}
       vertical="center"
       radius={announce ? "full" : "s"}
       gap={announce ? "8" : "4"}
@@ -231,6 +242,10 @@ const Tag = ({
         gradient ? styles.gradient : undefined,
         effect ? styles.beam : undefined,
         announce ? styles.announce : undefined,
+        hairline ? styles.hairline : undefined,
+        hairline ? styles[`size-${size}`] : undefined,
+        hairline ? styles[`tone-${palette}`] : undefined,
+        hairline && onClick ? styles.clickable : undefined,
         className,
       )}
       style={style}
@@ -246,15 +261,25 @@ const Tag = ({
             onBackground={`${palette}-medium`}
           />
         ) : (
-          <Icon name={prefixIcon} size={ICON[size]} className={iconClass} />
+          <Icon
+            name={prefixIcon}
+            size={ICON[size]}
+            className={classNames(iconClass, hairline && tone && styles.toneIcon)}
+          />
         ))}
+      {dot && !prefixIcon && <span aria-hidden="true" className={styles.dot} />}
       {announce ? (
         // As 2.x's Badge: the text sits in the pill itself, so children
         // lay out with the pill's own gap and padding.
         label || children
       ) : (
         <Row as={phrasing ? "span" : undefined} style={{ userSelect: "none" }} vertical="center">
-          <Text textVariant={textVariant ?? look.text[size]}>{label || children}</Text>
+          <Text
+            textVariant={textVariant ?? look.text[size]}
+            className={hairline ? styles.label : undefined}
+          >
+            {label || children}
+          </Text>
         </Row>
       )}
       {suffixIcon && <Icon name={suffixIcon} size={ICON[size]} className={iconClass} />}

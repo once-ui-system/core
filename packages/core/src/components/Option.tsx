@@ -2,6 +2,7 @@
 
 import classNames from "clsx";
 import React, { KeyboardEvent, useContext, useEffect, useRef, useState } from "react";
+import type { Tone } from "../types.js";
 import { Column } from "./Column.js";
 import { ElementType } from "./ElementType.js";
 import styles from "./Option.module.scss";
@@ -18,6 +19,12 @@ export interface OptionProps extends Omit<React.ComponentProps<typeof Row>, "onC
   description?: React.ReactNode;
   danger?: boolean;
   selected?: boolean;
+  /**
+   * The palette the selected state draws in, as on ToggleButton and Button.
+   * `neutral` (the default) is the quiet grey fill; any other tone tints the
+   * fill and colours the label, so the current value stands out.
+   */
+  tone?: Tone;
   disabled?: boolean;
   highlighted?: boolean;
   tabIndex?: number;
@@ -36,6 +43,7 @@ const Option = ({
   description,
   danger,
   selected,
+  tone = "neutral",
   disabled = false,
   highlighted,
   tabIndex,
@@ -122,6 +130,7 @@ const Option = ({
     }
   };
 
+  const toned = Boolean(selected) && tone !== "neutral" && !danger;
   return (
     <ElementType
       id={id}
@@ -169,11 +178,14 @@ const Option = ({
         borderStyle="solid"
         cursor={disabled ? "not-allowed" : "interactive"}
         transition="micro-medium"
-        // A danger option takes its color from the stylesheet, label and icon alike.
-        onBackground={danger ? undefined : "neutral-strong"}
+        // A danger option, or a selected one in a tone, takes its color from
+        // the stylesheet, label and icon alike.
+        onBackground={danger || toned ? undefined : "neutral-strong"}
         className={classNames(styles.option, {
           [styles.danger]: danger,
           [styles.selected]: selected,
+          [styles.toned]: toned,
+          [styles[`tone-${tone}`]]: toned,
           [styles.highlighted]: highlighted || isHighlightedByClass,
           [styles.disabled]: disabled,
         })}
@@ -182,7 +194,7 @@ const Option = ({
         {prefix && <Row className={styles.prefix}>{prefix}</Row>}
         <Column fillWidth align="left">
           <Text
-            onBackground={danger ? undefined : "neutral-strong"}
+            onBackground={danger || toned ? undefined : "neutral-strong"}
             textVariant="label-default-s"
             truncate
           >

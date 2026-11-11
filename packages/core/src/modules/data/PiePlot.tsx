@@ -10,6 +10,7 @@ import { RadialGradient } from "./Gradient.js";
 import type { ChartProps, ChartVariant, DataPoint, DateConfig } from "./interfaces.js";
 import { Legend } from "./Legend.js";
 import { getDistributedColor } from "./utils/colorDistribution.js";
+import { placeTooltip } from "./utils/placeTooltip.js";
 import { sectorPath } from "./utils/scale.js";
 
 export interface PiePlotProps {
@@ -105,10 +106,7 @@ export function PiePlot({
     const scale = Math.min(box.clientWidth / W, box.clientHeight / H) || 1;
     const x = active.x ?? box.clientWidth / 2 + (cx - W / 2 + r * Math.cos(mid)) * scale;
     const y = active.y ?? box.clientHeight / 2 + (cy - H / 2 + r * Math.sin(mid)) * scale;
-    let left = x + 10;
-    if (left + el.offsetWidth > box.clientWidth) left = Math.max(0, x - el.offsetWidth - 10);
-    const top = Math.max(0, Math.min(y + 10, box.clientHeight - el.offsetHeight));
-    el.style.transform = `translate(${left}px, ${top}px)`;
+    placeTooltip(el, box, x, y);
   });
 
   const point = (event: React.PointerEvent, index: number) => {

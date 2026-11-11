@@ -36,6 +36,30 @@ entry below that had landed by then:
   one line of `description` and an `action`, at `size` `s`, `m` or `l`. `Table`'s own
   empty and no-results states are built from it. `Mascot surface="flat"` no longer paints
   the eye glint.
+- **`tone` on `Nav`**: marks the current row in a palette for every NavItem
+  inside. `<Nav tone="brand">` tints the current page and colours its label and
+  icon in the brand colour; the default stays the neutral grey fill, and a
+  NavItem's own `tone` still wins. The agent rules, AGENTS.md and the app-shell
+  example use it when an app has a brand colour.
+- `ToggleButton` and `Option` take `tone`, the palette of their selected state,
+  as on `Button`. `neutral` (the default) keeps the grey fill; `brand`,
+  `accent` and the status tones tint the fill and colour the label and icons,
+  the way a sidebar or a menu marks the current item.
+- **Nested menus: `Submenu`.** Put a `Submenu` among a Dropdown's Options (or
+  a context menu's) to open a nested menu, as deep as needed. It opens when the
+  pointer rests on it, on a click or tap, and with Right arrow, Enter or Space;
+  Left arrow or Escape closes one level and returns focus to its item. The
+  pointer can cut diagonally into an open submenu across the items below
+  without closing it. A pick at any depth reaches the Dropdown's `onSelect`.
+  With a Submenu inside, the panel is a `menu` of `menuitem`s and each item
+  carries `aria-haspopup`, `aria-expanded` and `aria-controls`.
+- **`Dropdown openOn="hover"`.** Opens when the pointer rests on the trigger
+  (`openDelay`, 100 ms) and closes once it has been away from the trigger and
+  every panel of the menu for `closeDelay` (300 ms). A hover-opened panel
+  leaves focus and page scroll alone; a click pins it, and the keyboard and
+  touch open it as a click does.
+- **Typeahead in menus and lists.** In an open Dropdown, context menu or
+  Submenu, typing the first letters of an item moves focus to it.
 - **`Select` draws a chevron.** A closed Select read as a text field unless a
   chevron was passed by hand. It now shows `chevronDown` by default, turned up
   while the list is open, and a press on it opens and closes the list like a
@@ -141,6 +165,17 @@ entry below that had landed by then:
   `sectionSchemas` describes each one as plain JSON (fields, layouts, a sample) for an
   editor panel or an agent. Ported from Aveiro's sections, which Tavilio and the housing
   marketplace duplicate.
+- **More page sections and layouts in blocks**, from Aveiro's site builder:
+  `GallerySection` (`grid`, `mosaic`, `masonry`; every photo opens large), three
+  hero layouts that open on the picture (`fullscreen`, `halves`, `editorial`, with
+  the headline one size up where the words carry the screen), `CtaSection` `cover`
+  (the call on a photo across the page) and `StatsSection` `strip` (figures in a
+  ruled band). `heroLayoutGuide` and `sectionSchemas.hero.layoutGuide` say in one
+  sentence when each hero layout suits, for a model picking one.
+- **`fillWidth` on `DateInput`**, single and `range`: the field stretches to its
+  container's width like the inputs around it, and the calendar panel keeps at least
+  its own width. Before, the wrapper was always as wide as its content, so a date
+  range in a form sat narrower than the fields below it.
 - **`phone` and `mapPin` icons** in the built-in set.
 - **CodeBlock `actions`**: controls of your own in the header, before copy.
 - **`density`** in the theme (`once-ui.config` `style`, ThemeProvider, ThemeInit),
@@ -245,7 +280,48 @@ entry below that had landed by then:
   sources and `dist/styles/breakpoints.scss` only served the workspace's watch build,
   which now runs the CSS compile itself (`pnpm dev`). `sideEffects` is `["*.css"]`.
 
+### Performance
+
+- **Root imports ship only what a page uses under Turbopack.** The build now
+  rewrites every `export * from` in the emitted JavaScript as the list of
+  names it carries (`scripts/flatten-barrels.mjs`, after `tsc`). Turbopack
+  (Next 16's default build) shipped every client component, with its CSS,
+  to any page whose server component imported one component from the root;
+  with named re-exports it ships the ones imported. A Next 16 page with a
+  `Button` and a `Column`: component CSS 108 KB to 11 KB, page JavaScript
+  861 KB to 678 KB. The Stack landing page on 2.8 with the same rewrite: JS
+  451 KB to 357 KB. Every entry point exports exactly the same names (checked
+  by bundling each before and after); the `.d.ts` files and the sources keep
+  their star exports. Per-component paths (`/components/Button`) still work;
+  they are no longer needed for this.
+
 ### Changed
+
+- **Agent guidance: system parts for brand, alerts and charts, and one
+  surface level.** Agents now reach for `Logo` (with `text` and `monogram`)
+  instead of an icon beside text, `Feedback` instead of hand-built alert boxes,
+  and the `data` charts instead of hand-drawn SVG, and keep one raised surface
+  for content instead of grey cards on grey.
+  Work apps set `density: "compact"` and `border: "conservative"`, key
+  numbers are one divided strip, a screen has one primary action, and a
+  chart's `height` is a string with a `brand-strong` series.
+- **Agent guidance for apps that look designed, not stock.** From the
+  real-world bench: AGENTS.md and the rules now set the theme first (brand,
+  neutral, `solid: "color"`, a heading font), keep same-shaped records on one
+  surface with divided rows, make critical states louder than status, and set
+  a `body-default-s` floor for app text. `ai/layouts.md` gains a phone header,
+  a plan/map canvas that fits any width, and a selection pattern; a new
+  `field.errorTiming` gotcha keeps field errors until blur or submit.
+- **Alpha tokens in light mode are as visible as in dark.** `--*-alpha-weak`,
+  `-medium` and `-strong` came from step 600 in both themes, a light mid-tone
+  that stands out on a dark page but barely shows on a light one (strong:
+  2.4:1 against the page in dark, 1.6:1 in light). Light now mixes them from
+  step 400 for neutral and info and step 500 for brand, accent and the status
+  colours, at the same 15, 30 and 50%, so hairlines, hovers, tracks and
+  tinted fills in light read about as strongly as in dark. Names and dark
+  values are unchanged. The `--scheme-*-600-15/30/50` variables stay, now only
+  read by dark; custom schemes need nothing new. The token export writes these
+  as `"{function-neutral-400}/0.15"`, which `@once-ui-system/native` resolves.
 
 - **CelebrationFx and WeatherFx follow the state contract**: `active` / `defaultActive`
   / `onActiveChange`, controlled only when `active` is set, with any `trigger`;
@@ -291,8 +367,9 @@ entry below that had landed by then:
   `MissingDependency` fallback. The plot sizes itself to its container with a
   ResizeObserver, drawing at 640 × 320 until it is measured. The props are
   unchanged. New in the browser: the arrow keys (and Home, End, Escape) move
-  the tooltip through the points, a legend entry is a button that hides or
-  shows its series (or slice), and the entry animations follow
+  the tooltip through the points, the tooltip glides from point to point
+  instead of jumping, a legend entry is a button that hides or shows its
+  series (or slice), and the entry animations and the glide follow
   `prefers-reduced-motion`. The four charts' own code is 13.1 KB gzipped
   (minified, React external), where recharts alone was 126 KB. A PieChart's
   legend now lists slices in data order in their own colours (it sorted them
@@ -556,6 +633,30 @@ entry below that had landed by then:
 
 ### Fixed
 
+- **SegmentedControl's selected pill keeps its corners.** The pill copied its
+  corners from the selected option's computed style once, at mount, before
+  ThemeProvider had set the theme, so it could stay square. It now takes them
+  from the radius token in CSS. `compact` no longer joins outlined segments
+  with square inner corners: it is the same bordered track with a sliding
+  pill, 2px in from the border instead of 4px.
+- **Avatar initials are sized from the circle and centred.** They were body
+  text that filled the `m` circle and sat high in it, light grey on white.
+  They now take two fifths of the circle at every size (custom sizes too), in
+  medium weight on a soft neutral fill, trimmed to the cap height so they sit
+  in the middle.
+  They never go under 9px, so `s` stays legible at compact density.
+- **Agent bundles no longer say `Text` takes padding.** A stale gotcha told
+  agents that `Text` and `Heading` take padding, which is a type error in 3.0.
+  It now says to put padding on a `<Column>` around them, matching the
+  validator's `layout.leafProps` hint.
+- **A long `NavItem` label ends in an ellipsis.** In a narrow Nav the label ran
+  out of the row with no ellipsis, because the rows around it kept their
+  content's width. NavItem now truncates by default (`truncate={false}` keeps the
+  old overflow), and `ToggleButton`'s `truncate` prop, which did nothing, ends a
+  long text label in an ellipsis.
+- A selected `ToggleButton` keeps its fill on hover and deepens it, instead
+  of dropping to the idle-hover grey and looking deselected (`subtle` went
+  near invisible in dark).
 - CelebrationFx: switching `type` mid-flight threw; fireworks were never cleaned up
   while emitting (the list grew about three shells a second for as long as the page
   stayed open); the hover, click and manual triggers dropped a wave of confetti at
