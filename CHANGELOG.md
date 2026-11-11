@@ -602,6 +602,17 @@ entry below that had landed by then:
 
 ### Fixed
 
+- **SegmentedControl's selected pill keeps its corners.** The pill copied its
+  corners from the selected option's computed style once, at mount, before
+  ThemeProvider had set the theme, so it could stay square. It now takes them
+  from the radius token in CSS. `compact` no longer joins outlined segments
+  with square inner corners: it is the same bordered track with a sliding
+  pill, 2px in from the border instead of 4px.
+- **Avatar initials are sized from the circle and centred.** They were body
+  text that filled the `m` circle and sat high in it, light grey on white.
+  They now take two fifths of the circle at every size (custom sizes too), in
+  medium weight on a soft neutral fill, trimmed to the cap height so they sit
+  in the middle.
 - **Agent bundles no longer say `Text` takes padding.** A stale gotcha told
   agents that `Text` and `Heading` take padding, which is a type error in 3.0.
   It now says to put padding on a `<Column>` around them, matching the
