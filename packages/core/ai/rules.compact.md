@@ -178,7 +178,7 @@ Make it look designed, not stock:
 - No empty panes: every region has content, an empty state, or collapses away; text over an image or map sits in a panel and wraps or `truncate`s.
 - Work apps: `density: "compact"`, `border: "conservative"`, dark first. Hierarchy from type and spacing, not nested grey cards.
 - Say what matters at a glance: a strip of the 3–4 numbers the user acts on (label, `heading-strong` value, status `Tag`), colour that means a status, labels, not decoration.
-- Map labels stay readable: `MapMarkers cluster`; a unit or place is `MapPin icon="…" tone="…"` labelled with its status (type as icon, status as tone and word; its name when active); never a bare text pill; kinds never overlap; a legend panel (collapsed below `l`) names tones and areas.
+- Map labels stay readable: `MapMarkers cluster`; a unit or place is `MapPin icon="…" tone="…"` (its type as the icon, its status as the tone, both at rest), its name only when active; never a text pill; kinds never overlap; a legend panel (collapsed below `l`) names tones and areas.
 - Every action shows its result where it happened (a split block becomes two, an assigned pin changes colour); one that cannot apply does the nearest useful thing or is disabled with a reason; never a toast alone. No empty bands: a timeline takes its content's height.
 - Data colours carry through: a status or category is the block's, pin's or `Tag`'s `tone`.
 - Secondary pages keep the shell and brand; items are Cards with status and actions. One preview per thing.

@@ -160,7 +160,7 @@ export function MapAppExample() {
               onClick={() => setSelectedId(job.id)}
               aria-label={`${job.title}, ${STATUS[job.status].label}`}
             >
-              {job.id === selectedId ? job.title : STATUS[job.status].label}
+              {job.id === selectedId ? job.title : undefined}
             </MapPin>
           )}
         />
