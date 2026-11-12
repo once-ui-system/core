@@ -644,6 +644,17 @@ entry below that had landed by then:
 
 ### Fixed
 
+- **`color: "brand"` paints a chart in the brand.** A bare `brand` or
+  `accent` on a series, slice, sparkline or gauge was `var(--data-brand)`,
+  which no theme defines, so it drew nothing; and `brand-strong`, the usual
+  workaround, is the brand's text colour: white in dark, black in light. In a
+  chart, `brand` and `accent` are now the theme's colours at the palette's
+  step (`var(--function-brand-400)`), matching the data hues in both themes.
+- **A chart whose request failed says so.** With `error` set and `data`
+  empty, as `data={data ?? []}` leaves it when a fetch fails, a chart showed
+  its empty message ("No data available for the selected period") instead of
+  `errorState`. `ChartStatus` now puts an error before empty: loading, then
+  error, then empty.
 - **`MediaVideoPlayer` shows a focus ring.** The player is a tab stop of its own
   (Space plays, the arrows seek) but drew no outline, so keyboard focus on it
   was invisible. It now draws the brand focus ring, inset.
