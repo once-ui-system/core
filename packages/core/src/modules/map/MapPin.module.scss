@@ -30,6 +30,7 @@
   justify-content: center;
   width: var(--static-space-32);
   height: var(--static-space-32);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--map-pin-solid) 30%, transparent), var(--shadow-m);
   padding: 0;
   border-radius: var(--radius-full);
   border: 2px solid var(--surface-background);
@@ -42,8 +43,8 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 1.5em;
-  height: 1.5em;
+  width: 1.75em;
+  height: 1.75em;
   border-radius: var(--radius-full);
   color: var(--map-pin-on-solid);
   background: var(--map-pin-solid);
@@ -59,6 +60,10 @@
 
 .pill:has(.disc) {
   padding-left: var(--static-space-2);
+}
+
+.pill.toned {
+  border: 2px solid var(--map-pin-solid);
 }
 
 // A pill's status at rest: a mark in its tone before the label.

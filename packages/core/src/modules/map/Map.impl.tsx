@@ -169,12 +169,14 @@ function ensureWorker(workerUrl?: string) {
 
 /** Land use, land cover and parks: the fills that patch a dark basemap. */
 const LAND_LAYERS = new Set(["landuse", "landcover", "park"]);
+/** Roads and rails: bright lines on a dark basemap that outshine the data. */
+const ROAD_LAYERS = new Set(["transportation"]);
 
 /**
  * Paints the style's background layers with the page background token. On a
- * dark page it also fades the land-use fills, whose greys and browns read as
- * a muddy patchwork against a tinted page, so data drawn on top carries the
- * colour.
+ * dark page it also fades the land-use fills, whose greys read as a muddy
+ * patchwork against a tinted page, and dims the roads, whose bright lines
+ * outshine the data, so what is drawn on top carries the colour.
  */
 function tintStyle(map: MapLibreMap, dark: boolean) {
   const background = tokenColor("--page-background");
@@ -187,7 +189,14 @@ function tintStyle(map: MapLibreMap, dark: boolean) {
       "source-layer" in layer &&
       LAND_LAYERS.has(String(layer["source-layer"]))
     ) {
-      map.setPaintProperty(layer.id, "fill-opacity", 0.3);
+      map.setPaintProperty(layer.id, "fill-opacity", 0.12);
+    } else if (
+      dark &&
+      layer.type === "line" &&
+      "source-layer" in layer &&
+      ROAD_LAYERS.has(String(layer["source-layer"]))
+    ) {
+      map.setPaintProperty(layer.id, "line-opacity", 0.45);
     }
   }
 }

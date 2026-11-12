@@ -63,6 +63,8 @@ const MapPin = ({
     styles.pin,
     styles[kind],
     active && styles.active,
+    // A set tone rings the whole pill, so status reads at a glance.
+    kind === "pill" && (toneProp || icon) && styles.toned,
     (href || onClick) && styles.interactive,
     className,
   );

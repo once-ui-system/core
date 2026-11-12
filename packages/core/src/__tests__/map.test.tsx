@@ -295,10 +295,12 @@ describe("Map", () => {
     await settle();
     const map = calls.maps[0];
     map.layers.push({ id: "landuse_park", type: "fill", "source-layer": "park" });
+    map.layers.push({ id: "road_minor", type: "line", "source-layer": "transportation" });
     map.setPaintProperty.mockClear();
     act(() => map.fire("style.load"));
-    expect(map.setPaintProperty).toHaveBeenCalledWith("landuse_park", "fill-opacity", 0.3);
-    expect(map.setPaintProperty).not.toHaveBeenCalledWith("building", "fill-opacity", 0.3);
+    expect(map.setPaintProperty).toHaveBeenCalledWith("landuse_park", "fill-opacity", 0.12);
+    expect(map.setPaintProperty).toHaveBeenCalledWith("road_minor", "line-opacity", 0.45);
+    expect(map.setPaintProperty).not.toHaveBeenCalledWith("building", "fill-opacity", 0.12);
   });
 
   it("keeps a light basemap's land-use fills as drawn", async () => {
@@ -313,7 +315,7 @@ describe("Map", () => {
     const map = calls.maps[0];
     map.layers.push({ id: "landuse_park", type: "fill", "source-layer": "park" });
     act(() => map.fire("style.load"));
-    expect(map.setPaintProperty).not.toHaveBeenCalledWith("landuse_park", "fill-opacity", 0.3);
+    expect(map.setPaintProperty).not.toHaveBeenCalledWith("landuse_park", "fill-opacity", 0.12);
   });
 
   it("clusters items into a pill that zooms in", async () => {
@@ -408,11 +410,13 @@ describe("MapPin", () => {
   it("shows a set tone at rest as a mark before the label", () => {
     const { container } = render(<MapPin tone="warning">En route</MapPin>);
     expect(container.querySelector("[class*='status']")).toBeTruthy();
+    expect((container.firstElementChild as HTMLElement).className).toMatch(/toned/);
   });
 
   it("leaves a plain price pill as it was", () => {
     const { container } = render(<MapPin>45M Ft</MapPin>);
     expect(container.querySelector("[class*='status']")).toBeNull();
+    expect((container.firstElementChild as HTMLElement).className).not.toMatch(/toned/);
     expect(container.querySelector("[class*='disc']")).toBeNull();
   });
 });
