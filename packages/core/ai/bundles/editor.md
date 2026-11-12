@@ -178,7 +178,17 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - onBlockContextMenu?: (event: React.MouseEvent, trackId: string, blockId: string) => void
 - showTime?: boolean = true
 - formatTime?: (time: number) => string = defaultFormatTime
-- step?: number
+- step, zoom?: number
+- ruler?: boolean = false
+- labelWidth?: string = 8rem
+- markers?: ScrubberMarker[] = []
+- snap?: boolean | number = false
+- defaultZoom?: number = 1
+- onZoomChange?: (zoom: number) => void
+- maxZoom?: number = 40
+- range?: ScrubberRange | null = null
+- onRangeChange?: (range: ScrubberRange | null) => void
+- renderPreview?: (time: number) => React.ReactNode
 
 ### ToggleButton
 Mixins: LeafProps.
@@ -479,8 +489,10 @@ type LegacyToast = { variant?: Tone; tone?: Tone; children?: ReactNode; message?
 // type Opacity is one of these strings: 0 10 20 30 40 50 60 70 80 90 100
 type RadiusNest = "4" | "8"
 // type RadiusSize is one of these strings: s xl l m xs none full
-type ScrubberBlock = { id: string; start: number; end: number; label?: React.ReactNode; tone?: Tone; locked?: boolean }
-type ScrubberTrack = { id: string; blocks: ScrubberBlock[]; height?: SpacingToken; tone?: Tone; movable?: boolean; resizable?: boolean; onAdd?: (time: number) => void }
+type ScrubberBlock = { id: string; start: number; end: number; label?: React.ReactNode; tone?: Tone; locked?: boolean; variant?: "solid" | "gap"; badge?: React.ReactNode; content?: React.ReactNode; highlight?: boolean; description?: string }
+type ScrubberMarker = { id: string; time: number; label?: string; tone?: Tone }
+type ScrubberRange = { start: number; end: number }
+type ScrubberTrack = { id: string; blocks: ScrubberBlock[]; height?: SpacingToken; tone?: Tone; movable?: boolean; resizable?: boolean; onAdd?: (time: number) => void; label?: React.ReactNode }
 type ShadowSize = "s" | "xl" | "l" | "m" | "xs"
 type SolidType = "color" | "contrast" | "inverse"
 // type SpacingToken is one of these strings: s xl l m xs 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
