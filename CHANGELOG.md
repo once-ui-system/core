@@ -633,6 +633,9 @@ entry below that had landed by then:
 
 ### Fixed
 
+- **`MediaVideoPlayer` shows a focus ring.** The player is a tab stop of its own
+  (Space plays, the arrows seek) but drew no outline, so keyboard focus on it
+  was invisible. It now draws the brand focus ring, inset.
 - **A ghost Input or Textarea gets no border on focus.** Focus gave it the
   same darker border as a default field, so a ghost field inside a frame (a
   chat composer, a toolbar search) showed a second box inset in that frame.

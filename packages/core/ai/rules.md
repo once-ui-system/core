@@ -150,7 +150,8 @@ Breakpoints, padding, background, border, radius, sizes and `hide` exist only on
     - Tabs → `Tabs` > `TabList` > `Tab` with a `TabPanel` per value (`orientation="vertical"` for a settings nav). `SegmentedControl` picks a value; it is not a tab set
     - Mobile nav, filters, a side sheet → `Drawer` (`side`, `size`); it brings the focus trap, scroll lock and Escape a hand-made overlay misses
     - Where-am-I trail → `Breadcrumbs items={[{ label, href }, ...]}`; the last item is the current page
-    - Keyboard shortcuts → `useHotkeys("mod+k", fn)` (it skips while the user types), shown with `Kbd keys="mod+k" label="Search"`
+    - Keyboard shortcuts → `useHotkeys("mod+k", fn)` (it skips while the user types), shown with `Kbd keys="mod+k" label="Search"`. Put `aria-keyshortcuts` on the control the shortcut presses (`<Button aria-keyshortcuts="Control+K Meta+K">Search</Button>`), so screen readers announce it too
+    - A `Table` row that opens something → a link or `Button` in one of its cells (`cell: row => <SmartLink href={row.href}>{row.name}</SmartLink>`). `onRowClick` alone is a pointer shortcut: a row is not a tab stop and Enter does nothing on it
     - Text for screen readers only, skip links → `VisuallyHidden` (`focusable` for a skip link)
     - Markdown/MDX content → `mdxComponents` or `createMdxComponents({...})` from `/mdx` (rule 30), never a hand-written element map
 
