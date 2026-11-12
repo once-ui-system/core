@@ -43,7 +43,11 @@
     "layout.noSpanOrType",
     "RevealFx.primaryContent",
     "layout.noBaseline",
-    "Chart.xAxis"
+    "Chart.xAxis",
+    "Chart.xKey",
+    "Chart.dateRange",
+    "Chart.color",
+    "Chart.serverProps"
   ],
   "quality": {
     "statCard": "Column surface recipe — not Card",
