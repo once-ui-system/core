@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useAdapters } from "../contexts/AdapterProvider.js";
 import { useToast } from "../contexts/ToastProvider.js";
 import type { LeafProps } from "../interfaces.js";
-import type { SpacingToken, TShirtSizes } from "../types.js";
+import type { SpacingToken, Tone, TShirtSizes } from "../types.js";
 import { leafLayout, takeLeafProps } from "../utils/leafLayout.js";
 import { Column } from "./Column.js";
 import { Dropdown } from "./Dropdown.js";
@@ -90,6 +90,15 @@ interface LogoProps
    * @example <Logo text="Acme" monogram href="/" />
    */
   monogram?: boolean | string;
+  /**
+   * Draws the monogram as an app-icon tile in this palette: the tone's
+   * strongest solid behind, its on-solid colour for the mark. The brand's
+   * colour in the header without an icon file. Without it the monogram is
+   * a bare mark in the text colour.
+   *
+   * @example <Logo text="Acme" monogram="A" tone="brand" />
+   */
+  tone?: Tone;
   href?: string;
   /**
    * Show this logo only in one theme. For a logo that changes with the
@@ -107,6 +116,7 @@ const Logo = ({
   wordmark,
   text,
   monogram,
+  tone,
   className,
   style,
   showIn,
@@ -184,7 +194,14 @@ const Logo = ({
       height,
       minWidth: height,
       color: "var(--neutral-on-background-strong)",
+      ...(tone && {
+        color: `var(--${tone}-on-solid-strong)`,
+        background: `var(--${tone}-solid-strong)`,
+        borderRadius: `calc(${height} * 0.28)`,
+      }),
     };
+    // On a tile the mark sits inside it, so it is drawn smaller.
+    const inset = tone ? 0.62 : 1;
     if (!letters) {
       return (
         <span {...a11y} data-monogram="shape" style={box}>
@@ -193,7 +210,7 @@ const Logo = ({
             fill="currentColor"
             focusable="false"
             aria-hidden="true"
-            style={{ width: height, height }}
+            style={{ width: `calc(${height} * ${inset})`, height: `calc(${height} * ${inset})` }}
           >
             <path fillRule="evenodd" d={monogramShape(text)} />
           </svg>
@@ -211,7 +228,7 @@ const Logo = ({
         className="font-heading"
         style={{
           ...box,
-          fontSize: `calc(${height} * ${fontScale})`,
+          fontSize: `calc(${height} * ${fontScale * inset})`,
           fontWeight: 800,
           lineHeight: 1,
           letterSpacing: "-0.04em",

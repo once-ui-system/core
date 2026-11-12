@@ -93,3 +93,19 @@ describe("Logo monogram", () => {
     expect(screen.getByText("Acme").style.marginLeft).toBe("calc(var(--static-space-32) / 4)");
   });
 });
+
+describe("Logo tone", () => {
+  it("draws the monogram on a tile in the tone", () => {
+    const { container } = render(<Logo text="Acme" monogram="A" tone="brand" />, { wrapper });
+    const mark = container.querySelector('[data-monogram="letters"]') as HTMLElement;
+    expect(mark.style.background).toBe("var(--brand-solid-strong)");
+    expect(mark.style.color).toBe("var(--brand-on-solid-strong)");
+  });
+
+  it("keeps the bare mark in the text colour without a tone", () => {
+    const { container } = render(<Logo text="Acme" monogram />, { wrapper });
+    const mark = container.querySelector('[data-monogram="shape"]') as HTMLElement;
+    expect(mark.style.background).toBe("");
+    expect(mark.style.color).toBe("var(--neutral-on-background-strong)");
+  });
+});
