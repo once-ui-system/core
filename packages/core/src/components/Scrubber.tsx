@@ -962,7 +962,7 @@ interface ScrubberFilmstripProps {
 }
 
 /** Thumbnails across a block, for `ScrubberBlock.content`. */
-const ScrubberFilmstrip = ({ frames }: ScrubberFilmstripProps) => (
+const ScrubberFilmstrip = ({ frames = [] }: ScrubberFilmstripProps) => (
   <Row fill aria-hidden>
     {frames.map((src, index) => (
       // biome-ignore lint/performance/noImgElement: frames are blob or data URLs drawn at a few pixels; next/image would only add work
@@ -993,7 +993,7 @@ interface ScrubberWaveformProps {
 }
 
 /** A mirrored waveform across a block, for `ScrubberBlock.content`. */
-const ScrubberWaveform = ({ peaks, tone = "brand" }: ScrubberWaveformProps) => {
+const ScrubberWaveform = ({ peaks = [], tone = "brand" }: ScrubberWaveformProps) => {
   const count = Math.max(1, peaks.length);
   return (
     <svg

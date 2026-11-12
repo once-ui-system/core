@@ -14,6 +14,7 @@ export type {
   ScrubberTrack,
   ScrubberWaveformProps,
 } from "../../components/Scrubber.js";
-export { Scrubber, ScrubberFilmstrip, ScrubberWaveform } from "../../components/Scrubber.js";
+export { Scrubber } from "../../components/Scrubber.js";
+export { ScrubberFilmstrip, ScrubberWaveform } from "../../components/Scrubber.js";
 export type { MediaUploadProps } from "./MediaUpload.js";
 export { MediaUpload } from "./MediaUpload.js";
