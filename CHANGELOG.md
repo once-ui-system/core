@@ -32,6 +32,10 @@ entry below that had landed by then:
 
 ### Added
 
+- **`EmptyState`.** Also in 2.8: a `visual` (Mascot, Cube Emote) or `icon`, a `title`,
+  one line of `description` and an `action`, at `size` `s`, `m` or `l`. `Table`'s own
+  empty and no-results states are built from it. `Mascot surface="flat"` no longer paints
+  the eye glint.
 - **`tone` on `Nav`**: marks the current row in a palette for every NavItem
   inside. `<Nav tone="brand">` tints the current page and colours its label and
   icon in the brand colour; the default stays the neutral grey fill, and a

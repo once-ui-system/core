@@ -35,6 +35,7 @@ import {
   Drawer,
   Dropdown,
   Fade,
+  EmptyState,
   Feedback,
   Field,
   Fieldset,
@@ -355,6 +356,7 @@ const mdxComponents = createMdxComponents({
   HoverCard,
   OgCard,
   Card,
+  EmptyState,
   Feedback,
   FileTree,
 
