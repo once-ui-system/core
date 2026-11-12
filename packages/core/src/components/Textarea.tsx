@@ -52,6 +52,9 @@ interface TextareaProps
     | "bottom-left";
   prefix?: ReactNode;
   suffix?: ReactNode;
+  /** `ghost` drops the border and fill for a field that sits inside a frame of
+   *  its own, such as a composer or a toolbar. It shows no border on focus
+   *  either: give the frame a `:focus-within` style, or set `focusRing`. */
   variant?: "default" | "ghost";
   /** Draw the standard focus ring around the field while it has focus. Off by
    *  default — the quiet, borderless native look is deliberate — but a form a
@@ -258,6 +261,7 @@ const Textarea = ({
         vertical="stretch"
         className={classNames(
           styles.base,
+          variant === "ghost" && styles.ghost,
           focusRing && styles.focusRing,
           styles[resolvedSize],
           lines !== "auto" && resize !== "none" && styles.resizeHandle,

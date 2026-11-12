@@ -647,6 +647,15 @@ entry below that had landed by then:
 
 ### Fixed
 
+- **A ghost Input or Textarea gets no border on focus.** Focus gave it the
+  same darker border as a default field, so a ghost field inside a frame (a
+  chat composer, a toolbar search) showed a second box inset in that frame.
+  The frame now shows focus with `:focus-within`, or the field sets
+  `focusRing`.
+- **Mascot `working="cube"` accepts `color="var(--token)"`.** The colour
+  was painted through a canvas, which can't read custom properties, so the
+  cube came out black. A `var()` is now looked up on the element first,
+  falling back to its own fallback value.
 - **SegmentedControl's selected pill keeps its corners.** The pill copied its
   corners from the selected option's computed style once, at mount, before
   ThemeProvider had set the theme, so it could stay square. It now takes them
