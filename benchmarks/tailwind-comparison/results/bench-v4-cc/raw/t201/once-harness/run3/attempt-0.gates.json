@@ -1,0 +1,39 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/SearchBox.tsx(77,19): error TS2769: No overload matches this call.\n  Overload 1 of 2, '(props: TextProps<\"span\"> & CommonProps & LeafProps & Pick<DisplayProps, \"opacity\"> & Omit<DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>, \"ref\"> & { ...; }): ReactNode', gave the following error.\n    Type '{ children: string[]; padding: string; onBackground: \"neutral-weak\"; textVariant: \"body-default-m\"; }' is not assignable to type 'IntrinsicAttributes & TextProps<\"span\"> & CommonProps & LeafProps & Pick<DisplayProps, \"opacity\"> & Omit<...> & { ...; }'.\n      Property 'padding' does not exist on type 'IntrinsicAttributes & TextProps<\"span\"> & CommonProps & LeafProps & Pick<DisplayProps, \"opacity\"> & Omit<...> & { ...; }'.\n  Overload 2 of 2, '(props: Omit<TypeProps<\"span\">, \"as\"> & { as?: TextElement | undefined; ref?: undefined; }): ReactNode', gave the following error.\n    Type '{ children: string[]; padding: string; onBackground: \"neutral-weak\"; textVariant: \"body-default-m\"; }' is not assignable to type 'IntrinsicAttributes & Omit<TypeProps<\"span\">, \"as\"> & { as?: TextElement | undefined; ref?: undefined; }'.\n      Property 'padding' does not exist on type 'IntrinsicAttributes & Omit<TypeProps<\"span\">, \"as\"> & { as?: TextElement | undefined; ref?: undefined; }'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2350
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "lib/time.ts",
+    "lib/schedule.ts",
+    "components/DeskProvider.tsx",
+    "components/StatusTag.tsx",
+    "components/Alerts.tsx",
+    "components/SearchBox.tsx",
+    "components/AppHeader.tsx",
+    "components/BookingDialog.tsx",
+    "components/WaitingList.tsx",
+    "components/ScheduleView.tsx",
+    "components/Panel.tsx",
+    "components/WeightChart.tsx",
+    "components/PatientRecord.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "app/layout.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ lib/data.ts: no mechanical issues\n✓ lib/time.ts: no mechanical issues\n✓ lib/schedule.ts: no mechanical issues\n✓ components/DeskProvider.tsx: no mechanical issues\n✓ components/StatusTag.tsx: no mechanical issues\n✓ components/Alerts.tsx: no mechanical issues\n✗ components/SearchBox.tsx: 1 issue(s)\n  [layout.leafProps] Text is a leaf in 3.0 and does not take padding: put it on a <Column> around it (a leaf keeps margins, flex, fillWidth, position and the offsets, className and style)\n✓ components/AppHeader.tsx: no mechanical issues\n✓ components/BookingDialog.tsx: no mechanical issues\n✓ components/WaitingList.tsx: no mechanical issues\n✓ components/ScheduleView.tsx: no mechanical issues\n✓ components/Panel.tsx: no mechanical issues\n✓ components/WeightChart.tsx: no mechanical issues\n✓ components/PatientRecord.tsx: no mechanical issues\n✓ app/page.tsx: no mechanical issues\n✓ app/patients/[id]/page.tsx: no mechanical issues\n✗ app/layout.tsx: 1 issue(s)\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint",
+    "validator": {
+      "package_version": "3.0.0-beta.1",
+      "script_sha256": "8b6fb92b077251ad"
+    }
+  }
+}

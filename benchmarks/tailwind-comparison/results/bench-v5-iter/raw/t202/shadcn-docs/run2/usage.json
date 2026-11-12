@@ -1,0 +1,351 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 32,
+      "input_total": 3946262,
+      "input_uncached": 68,
+      "cache_creation": 396606,
+      "cache_read": 3549588,
+      "visible_output_tokens_o200k": 29110,
+      "visible_output_tokens_claudeLegacy": 31715,
+      "thinking_blocks": 25
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/globals.css"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/badge.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/button.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/lib/data.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/lib/geometry.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/lib/rules.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/lib/plan-store.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "project/app/globals.css"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/app-shell.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/native-select.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/guest-chip.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/stats-bar.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/room.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/room.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/rules-panel.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/table-panel.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/unseated-strip.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/plan-view.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/plan-view.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/guests/guests-view.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/app/guests/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/checks/1/screenshot-desktop.jpg"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/checks/1/view-table-selected-tablet.jpg"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/checks/1/screenshot-guests-desktop.jpg"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/checks/1/view-table-selected-phone.jpg"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/app/globals.css"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/app/globals.css"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/room.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/room.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/room.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/room.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/room.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/room.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/room.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/room.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/lib/geometry.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/guest-chip.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/plan-view.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/plan-view.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/plan-view.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/stats-bar.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/app-shell.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/app-shell.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/app-shell.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/room.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/room.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/files/components/plan/room.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t202/shadcn-docs/run2/checks/2/view-table-selected-desktop.jpg"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../../../../../../tmp/claude-0/-home-user/4c827640-87d8-5312-9539-2f80e180acb1/tasks/bh0311a7h.output"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../../../../../../tmp/claude-0/-home-user/4c827640-87d8-5312-9539-2f80e180acb1/tasks/bh0311a7h.output"
+    }
+  ],
+  "audit": {
+    "ok": false,
+    "violations": [
+      "Glob outside sandbox: /home/user/core/benchmarks/tailwind-comparison/results/bench-v5-iter/raw/t202/shadcn-docs/run2",
+      "disallowed tool: Bash",
+      "disallowed tool: Bash",
+      "Write outside run folder: /home/user/core/benchmarks/tailwind-comparison/work/sandbox/shadcn-docs/project/app/globals.css",
+      "disallowed tool: Bash",
+      "disallowed tool: Bash",
+      "disallowed tool: Bash",
+      "disallowed tool: Bash",
+      "Read outside sandbox: /tmp/claude-0/-home-user/4c827640-87d8-5312-9539-2f80e180acb1/tasks/bh0311a7h.output",
+      "Read outside sandbox: /tmp/claude-0/-home-user/4c827640-87d8-5312-9539-2f80e180acb1/tasks/bh0311a7h.output"
+    ]
+  },
+  "arm": "C"
+}

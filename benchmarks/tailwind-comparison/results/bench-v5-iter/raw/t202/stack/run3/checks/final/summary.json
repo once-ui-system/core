@@ -1,0 +1,27 @@
+{
+  "check": "final",
+  "at": "2026-11-11T00:00:00.421Z",
+  "ms": 66818,
+  "files": [
+    "src/app/guests/page.tsx",
+    "src/app/layout.tsx",
+    "src/app/page.tsx",
+    "src/components/AppFrame.tsx",
+    "src/components/Panels.tsx",
+    "src/components/RoomPlan.tsx",
+    "src/lib/data.ts",
+    "src/lib/plan.tsx"
+  ],
+  "passed": true,
+  "gates_passed": true,
+  "failed_gate": null,
+  "adherence": {
+    "system": 130,
+    "raw": 4,
+    "share": 0.97,
+    "colours": 0,
+    "cssLines": 0,
+    "ok": true,
+    "reasons": []
+  }
+}

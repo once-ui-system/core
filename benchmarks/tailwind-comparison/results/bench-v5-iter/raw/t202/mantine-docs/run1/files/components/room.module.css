@@ -1,0 +1,119 @@
+.scroller { overflow-x: auto; overflow-y: hidden; border-radius: var(--mantine-radius-md); }
+.room {
+  position: relative;
+  box-shadow: inset 0 0 0 3px var(--mantine-color-dark-4);
+  border-radius: var(--mantine-radius-md);
+  background-color: var(--mantine-color-yellow-0);
+  background-image:
+    linear-gradient(to right, var(--mantine-color-yellow-1) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--mantine-color-yellow-1) 1px, transparent 1px);
+  background-size: var(--m) var(--m);
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.fixture {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: 700;
+  pointer-events: none;
+  overflow: hidden;
+}
+.stage { background: var(--mantine-color-dark-7); color: var(--mantine-color-white); border-radius: 6px; box-shadow: var(--mantine-shadow-sm); }
+.dancefloor {
+  background: repeating-conic-gradient(var(--mantine-color-yellow-2) 0 25%, var(--mantine-color-yellow-1) 0 50%) 0 0 / var(--m) var(--m);
+  color: var(--mantine-color-dark-6);
+  border: 2px solid var(--mantine-color-yellow-4);
+  border-radius: 4px;
+}
+.dancefloorLabel { background: var(--mantine-color-white); padding: 2px 8px; border-radius: 4px; }
+.bar { background: var(--mantine-color-yellow-9); color: var(--mantine-color-white); border-radius: 6px; box-shadow: var(--mantine-shadow-sm); }
+.door {
+  background: var(--mantine-color-brand-9);
+  color: var(--mantine-color-white);
+  border-radius: 0 3px 3px 0;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+.tableBody {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--mantine-color-white);
+  border: 2px solid var(--mantine-color-gray-5);
+  color: var(--mantine-color-dark-8);
+  box-shadow: var(--mantine-shadow-sm);
+  cursor: pointer;
+  line-height: 1.15;
+  touch-action: manipulation;
+  transition: box-shadow 0.12s, border-color 0.12s;
+}
+.tableBody:hover { border-color: var(--mantine-color-gray-7); }
+.tableBody:focus-visible, .seat:focus-visible, .chip:focus-visible, .rowButton:focus-visible {
+  outline: 3px solid var(--mantine-color-brand-4);
+  outline-offset: 2px;
+}
+.round { border-radius: 50%; }
+.long { border-radius: 10px; }
+.selected { border-color: var(--mantine-color-brand-9); box-shadow: 0 0 0 4px var(--mantine-color-brand-2); }
+.broken { border-color: var(--mantine-color-red-7); }
+.armedOk { border-style: dashed; border-color: var(--mantine-color-brand-7); background: var(--mantine-color-brand-0); }
+.armedFull { opacity: 0.55; cursor: not-allowed; }
+.dropOver { border-color: var(--mantine-color-brand-9); background: var(--mantine-color-brand-1); box-shadow: 0 0 0 5px var(--mantine-color-brand-3); }
+.flag {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--mantine-color-red-7);
+  color: var(--mantine-color-white);
+  border: 2px solid var(--mantine-color-white);
+  box-shadow: var(--mantine-shadow-sm);
+  pointer-events: none;
+}
+.seat {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--seat-bg);
+  color: var(--mantine-color-white);
+  font-weight: 700;
+  border: 2px solid var(--mantine-color-white);
+  box-shadow: var(--mantine-shadow-sm);
+  cursor: grab;
+  touch-action: manipulation;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.seat:hover { transform: scale(1.1); }
+.seatEmpty {
+  background: var(--mantine-color-gray-0);
+  color: var(--mantine-color-gray-7);
+  border: 2px dashed var(--mantine-color-gray-5);
+  box-shadow: none;
+  font-weight: 500;
+  cursor: pointer;
+}
+.seatTarget { border-color: var(--mantine-color-brand-7); background: var(--mantine-color-brand-1); color: var(--mantine-color-brand-9); cursor: copy; }
+.seatSwap { cursor: copy; }
+.seatArmed { box-shadow: 0 0 0 3px var(--mantine-color-white), 0 0 0 6px var(--mantine-color-brand-9); transform: scale(1.12); }
+.seatFlag { box-shadow: 0 0 0 2px var(--mantine-color-white), 0 0 0 4.5px var(--mantine-color-red-7); }
+.seatDrop { transform: scale(1.18); box-shadow: 0 0 0 3px var(--mantine-color-white), 0 0 0 6px var(--mantine-color-brand-9); }
+.dot { position: absolute; border-radius: 50%; border: 1.5px solid var(--mantine-color-white); background: var(--dot-bg); pointer-events: none; }
+.chip { cursor: grab; touch-action: manipulation; transition: box-shadow 0.12s, background-color 0.12s; }
+.chip:hover { border-color: var(--mantine-color-gray-5); background: var(--mantine-color-gray-0); }
+.chipArmed { border-color: var(--mantine-color-brand-9); background: var(--mantine-color-brand-0); box-shadow: 0 0 0 2px var(--mantine-color-brand-3); }
+.dropZone { transition: box-shadow 0.12s, background-color 0.12s; }
+.dropZoneActive { background: var(--mantine-color-brand-0); box-shadow: inset 0 0 0 2px var(--mantine-color-brand-5); }
+.rowButton { display: block; width: 100%; text-align: left; background: transparent; border: 0; padding: 0; font: inherit; color: inherit; cursor: pointer; border-radius: var(--mantine-radius-md); }
+.rowButton:hover { background: var(--mantine-color-gray-0); }
+@media (prefers-reduced-motion: reduce) {
+  .seat, .tableBody, .chip, .dropZone { transition: none; }
+}

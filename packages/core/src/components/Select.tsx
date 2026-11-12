@@ -43,6 +43,14 @@ interface SelectProps
   emptyState?: ReactNode;
   onSelect?: (value: string | string[]) => void;
   placement?: Placement;
+  /**
+   * How the list opens. `"dropdown"` (the default) below or above the field;
+   * `"aligned"` with the selected option sitting on the field and the others
+   * above and below it in their own order, as macOS draws a pop-up button.
+   * Suits short, settings-style lists. A searchable or multiple Select, and a
+   * field too close to the viewport's edge, open as a dropdown either way.
+   */
+  position?: "dropdown" | "aligned";
   searchable?: boolean;
   className?: string;
   style?: React.CSSProperties;
@@ -190,6 +198,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
       minWidth,
       maxWidth,
       placement,
+      position = "dropdown",
       className,
       fillWidth = true,
       style,
@@ -259,6 +268,8 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
     const stopExpectingFocusRef = useRef<(() => void) | null>(null);
     const isOpenRef = useRef(isDropdownOpen);
     isOpenRef.current = isDropdownOpen;
+    /** Where the pointer last moved over the list: see the list's onMouseMove. */
+    const pointerRef = useRef<{ x: number; y: number } | null>(null);
     /** Whether the list was open when the current press on the field began. */
     const openOnPressRef = useRef(false);
 
@@ -539,6 +550,9 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
           open={isDropdownOpen}
           onOpenChange={setOpen}
           placement={placement}
+          // A search field would sit over the field, and a multiple Select has
+          // no one option to put there.
+          alignSelected={position === "aligned" && !searchable && !multiple}
           closeAfterClick={false}
           disableTriggerClick={true}
           style={{
@@ -620,8 +634,16 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                 paddingTop={searchable ? "4" : undefined}
                 gap="2"
                 // The highlight follows the pointer, as it did when the options
-                // took focus, so the active option is the one under it.
-                onMouseOver={(event: React.MouseEvent<HTMLDivElement>) => {
+                // took focus, so the active option is the one under it. Only
+                // when the pointer moves: the list scrolling under a resting
+                // pointer (the arrow keys bringing an option into view) fired
+                // mouseover, which pulled the highlight back under it. An
+                // aligned list opens right under the pointer that opened it,
+                // so there the arrow keys barely moved at all.
+                onMouseMove={(event: React.MouseEvent<HTMLDivElement>) => {
+                  const last = pointerRef.current;
+                  pointerRef.current = { x: event.clientX, y: event.clientY };
+                  if (last && last.x === event.clientX && last.y === event.clientY) return;
                   const option = (event.target as Element).closest('[role="option"]');
                   if (!option?.id.startsWith(optionIdPrefix)) return;
                   const index = Number(option.id.slice(optionIdPrefix.length));

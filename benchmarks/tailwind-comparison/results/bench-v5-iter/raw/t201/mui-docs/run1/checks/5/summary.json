@@ -1,0 +1,36 @@
+{
+  "check": "5",
+  "at": "2026-11-10T23:21:16.124Z",
+  "ms": 47426,
+  "files": [
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "app/patients/p-104/page.tsx",
+    "app/theme.ts",
+    "components/AlertBadges.tsx",
+    "components/AppShell.tsx",
+    "components/AppointmentRow.tsx",
+    "components/BookDialog.tsx",
+    "components/PatientRecord.tsx",
+    "components/PatientSearch.tsx",
+    "components/ScheduleView.tsx",
+    "components/StatusChip.tsx",
+    "components/WaitingList.tsx",
+    "components/WeightChart.tsx",
+    "lib/clinic-store.tsx",
+    "lib/data.ts"
+  ],
+  "passed": true,
+  "gates_passed": true,
+  "failed_gate": null,
+  "adherence": {
+    "system": 220,
+    "raw": 0,
+    "share": 1,
+    "colours": 1,
+    "cssLines": 0,
+    "ok": true,
+    "reasons": []
+  }
+}

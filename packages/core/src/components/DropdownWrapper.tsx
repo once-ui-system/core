@@ -18,6 +18,7 @@ import React, {
 } from "react";
 import { createPortal } from "react-dom";
 import { NavigationLayout } from "../hooks/useArrowNavigation";
+import { type AlignSelectedData, alignSelected, unlessAligned } from "../internal/alignSelected";
 import type { Placement } from "../types";
 import {
   clearLastOpenedDropdown,
@@ -64,6 +65,13 @@ export interface DropdownWrapperProps {
   optionsCount?: number;
   dropdownId?: string;
   disableTriggerClick?: boolean;
+  /**
+   * Open with the selected option (else the first enabled one) sitting on the
+   * trigger, the rest above and below it in their own order, as macOS draws a
+   * pop-up button. Falls back to `placement` when the trigger is too close to
+   * a viewport edge. Select's `position="aligned"` sets it.
+   */
+  alignSelected?: boolean;
   /** Capture-phase focus on the whole control, trigger and dropdown alike —
    *  the only place a consumer can see focus enter and leave the widget,
    *  since it moves between the two during a normal interaction. */
@@ -103,6 +111,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       optionsCount: propOptionsCount,
       dropdownId: propDropdownId,
       disableTriggerClick = false,
+      alignSelected: alignToSelected = false,
     },
     ref,
   ) => {
@@ -229,6 +238,24 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
 
     // We'll measure the width directly in the floating UI middleware
 
+    /** The panel's width, on both the aligned and the normal path. */
+    const applyWidth = (floatingStyle: CSSStyleDeclaration, availableWidth: number) => {
+      if (fillWidth && triggerRef.current) {
+        // fillWidth means exactly the trigger's width — no hidden floor.
+        // A wider floor pushes the panel past the trigger on "-end"
+        // placements, which reads as broken positioning.
+        const w = `${triggerRef.current.getBoundingClientRect().width}px`;
+        floatingStyle.width = w;
+        floatingStyle.minWidth = minWidth ? `${minWidth}rem` : w;
+      } else {
+        // Let content determine width; only apply an explicit minWidth
+        floatingStyle.width = "";
+        floatingStyle.minWidth = minWidth ? `${minWidth}rem` : "";
+      }
+
+      floatingStyle.maxWidth = maxWidth ? `${maxWidth}rem` : `${availableWidth}px`;
+    };
+
     const {
       x,
       y,
@@ -237,35 +264,36 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       update,
       isPositioned,
       placement: resolvedPlacement,
+      middlewareData,
     } = useFloating({
       placement: placement,
       open: isOpen,
       middleware: [
-        offset(4),
-        flip(),
-        shift(),
-        size({
-          apply({ availableWidth, availableHeight, elements }) {
-            const floatingStyle = elements.floating.style;
-
-            if (fillWidth && triggerRef.current) {
-              // fillWidth means exactly the trigger's width — no hidden floor.
-              // A wider floor pushes the panel past the trigger on "-end"
-              // placements, which reads as broken positioning.
-              const w = `${triggerRef.current.getBoundingClientRect().width}px`;
-              floatingStyle.width = w;
-              floatingStyle.minWidth = minWidth ? `${minWidth}rem` : w;
-            } else {
-              // Let content determine width; only apply an explicit minWidth
-              floatingStyle.width = "";
-              floatingStyle.minWidth = minWidth ? `${minWidth}rem` : "";
-            }
-
-            floatingStyle.maxWidth = maxWidth ? `${maxWidth}rem` : `${availableWidth}px`;
-            floatingStyle.minHeight = `${Math.min(minHeight || 0)}px`;
-            floatingStyle.maxHeight = `${availableHeight}px`;
+        // First, and the rest step aside when it places the panel.
+        alignSelected({
+          enabled: alignToSelected,
+          // What the option lands on: the control in the trigger (a
+          // combobox's field, a button), not a label or hint around it.
+          anchor: () => {
+            const trigger = triggerRef.current;
+            if (!trigger) return null;
+            return trigger.querySelector<HTMLElement>("[aria-expanded]") ?? trigger;
           },
+          applyWidth,
         }),
+        unlessAligned(offset(4)),
+        unlessAligned(flip()),
+        unlessAligned(shift()),
+        unlessAligned(
+          size({
+            apply({ availableWidth, availableHeight, elements }) {
+              const floatingStyle = elements.floating.style;
+              applyWidth(floatingStyle, availableWidth);
+              floatingStyle.minHeight = `${Math.min(minHeight || 0)}px`;
+              floatingStyle.maxHeight = `${availableHeight}px`;
+            },
+          }),
+        ),
       ],
       whileElementsMounted: autoUpdate,
     });
@@ -282,7 +310,10 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
      * `flip()` is in the middleware — a panel that flips above its trigger has
      * to scale from its bottom edge instead.
      */
+    const aligned = middlewareData.alignSelected as AlignSelectedData | undefined;
     const transformOrigin = (() => {
+      // Aligned: from the option on the trigger, so it stays put as it grows.
+      if (aligned?.applied) return `center ${aligned.originY ?? 0}px`;
       const [side, align] = (resolvedPlacement || "bottom").split("-");
       if (side === "top" || side === "bottom") {
         const y = side === "bottom" ? "top" : "bottom";

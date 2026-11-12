@@ -1,0 +1,241 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 11,
+      "input_total": 1006780,
+      "input_uncached": 22,
+      "cache_creation": 103531,
+      "cache_read": 903227,
+      "visible_output_tokens_o200k": 11492,
+      "visible_output_tokens_claudeLegacy": 12747,
+      "thinking_blocks": 6
+    },
+    {
+      "attempt": 1,
+      "calls": 3,
+      "input_total": 435591,
+      "input_uncached": 8,
+      "cache_creation": 15948,
+      "cache_read": 419635,
+      "visible_output_tokens_o200k": 10225,
+      "visible_output_tokens_claudeLegacy": 11172,
+      "thinking_blocks": 1
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t103/chakra-docs/run1/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/README.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/provider.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/color-mode.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/drawer.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/breadcrumb.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/package.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "docs"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "docs"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/theming/customization.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/theming/colors.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/theming/semantic-tokens.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/theming"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/theming/radii.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/theming/typography.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/theming/global-css.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/theming/colors-2.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/theming/recipes.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/components/drawer.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/field.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/switch.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/segmented-control.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/native-select.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/avatar.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/input-group.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/tooltip.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/menu.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/stat.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/progress.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/toaster.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/tsconfig.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/components/link.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/components/table.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v2-cc/raw/t103/chakra-docs/run1/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    },
+    {
+      "attempt": 1,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t103/chakra-docs/run1/repair-1.txt"
+    },
+    {
+      "attempt": 1,
+      "name": "Write",
+      "path": "../../../results/bench-v2-cc/raw/t103/chakra-docs/run1/attempt-1.tsx"
+    },
+    {
+      "attempt": 1,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "K"
+}

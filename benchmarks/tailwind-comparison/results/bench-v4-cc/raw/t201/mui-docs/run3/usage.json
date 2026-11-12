@@ -1,0 +1,157 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 10,
+      "input_total": 790313,
+      "input_uncached": 20,
+      "cache_creation": 82887,
+      "cache_read": 707406,
+      "visible_output_tokens_o200k": 18407,
+      "visible_output_tokens_claudeLegacy": 19874,
+      "thinking_blocks": 6
+    },
+    {
+      "attempt": 1,
+      "calls": 3,
+      "input_total": 368112,
+      "input_uncached": 6,
+      "cache_creation": 111102,
+      "cache_read": 257004,
+      "visible_output_tokens_o200k": 17979,
+      "visible_output_tokens_claudeLegacy": 19335,
+      "thinking_blocks": 1
+    },
+    {
+      "attempt": 2,
+      "calls": 3,
+      "input_total": 448247,
+      "input_uncached": 8,
+      "cache_creation": 25592,
+      "cache_read": 422647,
+      "visible_output_tokens_o200k": 17979,
+      "visible_output_tokens_claudeLegacy": 19338,
+      "thinking_blocks": 1
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v4-cc/raw/t201/mui-docs/run3/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/README.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/theme.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/package.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/material-ui/react-grid.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/x/react-charts/lines.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/material-ui/react-autocomplete.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/material-ui/react-autocomplete.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/material-ui/react-autocomplete.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/x/react-charts"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v4-cc/raw/t201/mui-docs/run3/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "project/tsconfig.json"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    },
+    {
+      "attempt": 1,
+      "name": "Read",
+      "path": "../../../results/bench-v4-cc/raw/t201/mui-docs/run3/repair-1.txt"
+    },
+    {
+      "attempt": 1,
+      "name": "Write",
+      "path": "../../../results/bench-v4-cc/raw/t201/mui-docs/run3/attempt-1.tsx"
+    },
+    {
+      "attempt": 1,
+      "name": "SubagentHandback",
+      "path": null
+    },
+    {
+      "attempt": 2,
+      "name": "Read",
+      "path": "../../../results/bench-v4-cc/raw/t201/mui-docs/run3/repair-2.txt"
+    },
+    {
+      "attempt": 2,
+      "name": "Write",
+      "path": "../../../results/bench-v4-cc/raw/t201/mui-docs/run3/attempt-2.tsx"
+    },
+    {
+      "attempt": 2,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "M"
+}

@@ -1,0 +1,24 @@
+{
+  "arm": "M",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/theme.ts(82,9): error TS2353: Object literal may only specify known properties, and 'containedPrimary' does not exist in type 'Partial<OverridesStyleRules<keyof ButtonClasses, \"MuiButton\", Omit<Theme, \"palette\" | \"components\"> & CssVarsTheme>>'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2837
+    }
+  },
+  "files": [
+    "app/theme.ts",
+    "app/layout.tsx",
+    "lib/data.ts",
+    "components/nav-config.tsx",
+    "components/SideNav.tsx",
+    "components/AppShell.tsx",
+    "app/page.tsx",
+    "app/projects/page.tsx",
+    "app/reports/page.tsx",
+    "app/settings/page.tsx"
+  ]
+}

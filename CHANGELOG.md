@@ -13,6 +13,28 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Added
+
+- **`Select` gets `position="aligned"`.** The list opens with the selected option sitting
+  exactly on the field and the others above and below it in their own order, as macOS draws
+  a pop-up button (the first option, with nothing picked). A long list shows six and a half
+  rows each side and scrolls the rest. Near a viewport edge, and on a searchable or multiple
+  Select, it opens as the usual dropdown. The default stays `"dropdown"`. `DropdownWrapper`
+  takes the same behaviour as `alignSelected`.
+
+### Fixed
+
+- **A Select's highlight stays where the arrow keys put it.** The list scrolling under a
+  resting pointer fired `mouseover`, which moved the highlight back under the pointer, so the
+  keys seemed to skip or stick. The highlight now follows the pointer only when it moves.
+
+- **`SegmentedControl`'s rail follows its options' corners.** Its radius was a fixed `l`,
+  so small options sat in a rail that was too round. It is now the options' radius plus the
+  4px padding (`s-4`, `m-4`, `l-4`), so the gap round the selected option stays even.
+- **Dropdowns clip their content to their rounded corners.** A `Background` glow behind a
+  menu's header (as in Stack's account menu) filled the panel's top corners square, past
+  the rounded edge. The panel now hides what falls outside its radius.
+
 ## [2.8.0] — 2026-11-06
 
 Minor: `SegmentedControl` gets a new `sliding` prop. It is on by default, which changes how

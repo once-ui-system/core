@@ -1,119 +1,108 @@
-import { Card, Column, Grid, Media, Row, Tag, Text } from "@once-ui-system/core";
+import { Card, Grid, Media, Row, Tag, Text } from "@once-ui-system/core";
 import { hasRecentExample } from "@/app/utils/recency";
-import { blocks } from "@/resources";
 import type { BlockItem } from "@/types";
 
-export const BlockCategories: React.FC<React.ComponentProps<typeof Grid>> = ({ ...grid }) => {
+/** The most recent timestamp (ms) among an item's examples. */
+function getLatestTimestamp(item: BlockItem): number {
+  const timestamps = (item.examples ?? [])
+    .map((example) => example.updated || example.created)
+    .filter((date): date is string => Boolean(date))
+    .map((date) => new Date(date).getTime())
+    .filter((time) => !Number.isNaN(time));
+  return timestamps.length ? Math.max(...timestamps) : 0;
+}
+
+type GridColumns = NonNullable<React.ComponentProps<typeof Grid>["columns"]>;
+
+/**
+ * The wider of two column counts, unless it would leave one card alone on the
+ * last row and the narrower one would not (5 cards: 3 + 2 rather than 4 + 1).
+ */
+const columnsFor = (count: number, wide: number, narrow: number) =>
+  String(count > wide && count % wide === 1 && count % narrow !== 1 ? narrow : wide) as GridColumns;
+
+/**
+ * One card per block category, most recently updated first.
+ *
+ * Each card stands on its own (own border and radius, separated by a gap) so a
+ * short last row ends cleanly, and no two borders ever stack into a double line.
+ */
+export function BlockCategoryGrid({ items }: { items: BlockItem[] }) {
+  const sorted = [...items].sort((a, b) => getLatestTimestamp(b) - getLatestTimestamp(a));
   return (
-    <Column fillWidth gap="40" {...grid}>
-      {/* Display section titles in a row */}
-      {Object.entries(blocks)
-        .filter(([key]) => key !== "blocks")
-        .map(([key, section]) => (
-          <Column fillWidth key={key}>
-            <Row
-              paddingX="24"
-              minHeight="56"
-              gap="12"
-              vertical="center"
-              position="sticky"
-              top="56"
-              background="page"
-              zIndex={1}
-            >
-              <Text as="span" variant="heading-strong-s">
-                {section.title}
-              </Text>
-              <Tag size="m" scheme="brand">
-                Pro
-              </Tag>
-            </Row>
-
-            {/* Display section items in a grid */}
-            <Grid
-              fillWidth
-              columns="5"
-              m={{ columns: 2 }}
-              s={{ columns: 1 }}
-              border="neutral-alpha-medium"
-              overflow="hidden"
-              radius="xl"
-            >
-              {/* Handle both array and object formats for items */}
-              {Array.isArray(section.items)
-                ? [...section.items]
-                    .sort((a, b) => getLatestTimestamp(b) - getLatestTimestamp(a))
-                    .map((item, index) => renderItem(item, `${index}`, section.icon))
-                : Object.entries(section.items)
-                    .sort(([, a], [, b]) => getLatestTimestamp(b) - getLatestTimestamp(a))
-                    .map(([itemKey, item]) => renderItem(item, itemKey, section.icon))}
-            </Grid>
-          </Column>
-        ))}
-    </Column>
+    <Grid
+      fillWidth
+      gap="12"
+      columns={columnsFor(sorted.length, 4, 3)}
+      l={{ columns: columnsFor(sorted.length, 3, 2) }}
+      m={{ columns: 2 }}
+      s={{ columns: 1 }}
+    >
+      {sorted.map((item) => (
+        <BlockCategoryCard key={item.href} item={item} />
+      ))}
+    </Grid>
   );
+}
 
-  // Helper function to render each item card
-  function renderItem(item: BlockItem, key: string, _sectionIcon: string) {
-    // Calculate the number of examples in this item
-    const examplesCount = item.examples?.length || 0;
-    const hasNewTag = hasRecentExample(item.examples);
+function BlockCategoryCard({ item }: { item: BlockItem }) {
+  const examplesCount = item.examples?.length ?? 0;
+  const alt = `Preview of the ${item.label} blocks`;
 
-    return (
-      <Card fillWidth key={key} direction="column" href={item.href} border background="overlay">
-        <Row paddingY="24" paddingLeft="32" paddingRight="8" gap="12" fillWidth vertical="center">
-          <Text variant="heading-strong-xs" truncate>
-            {item.label}
-          </Text>
-          <Row gap="8">
-            <Row
-              textVariant="body-default-xs"
-              onBackground="neutral-weak"
-              background="neutral-alpha-weak"
-              border="neutral-alpha-medium"
-              radius="s"
-              padding="2"
-              minWidth="24"
-              center
-            >
-              {examplesCount}
-            </Row>
-            {hasNewTag && <Tag scheme="brand">NEW</Tag>}
-          </Row>
+  return (
+    <Card
+      fillWidth
+      href={item.href}
+      direction="column"
+      radius="l"
+      border
+      background="overlay"
+      overflow="hidden"
+    >
+      <Row fillWidth gap="8" vertical="center" paddingX="20" paddingY="16">
+        <Text variant="heading-strong-s" truncate>
+          {item.label}
+        </Text>
+        <Row
+          textVariant="body-default-xs"
+          onBackground="neutral-weak"
+          background="neutral-alpha-weak"
+          border="neutral-alpha-medium"
+          radius="s"
+          paddingX="4"
+          minWidth="24"
+          center
+        >
+          {examplesCount}
         </Row>
-        <Row paddingLeft="16" fillWidth>
-          <Media
-            sizes="280px"
-            dark
-            src={item.image?.dark || ""}
-            alt={`Illustration for ${item.label} copy-paste block`}
-            borderLeft
-            borderTop
-            aspectRatio="960/880"
-            topLeftRadius="l"
-          />
-          <Media
-            sizes="280px"
-            light
-            src={item.image?.light || ""}
-            alt={`Illustration for ${item.label} copy-paste block`}
-            borderLeft
-            borderTop
-            aspectRatio="960/880"
-            topLeftRadius="l"
-          />
-        </Row>
-      </Card>
-    );
-  }
-
-  // Returns the most recent timestamp (ms) among an item's examples
-  function getLatestTimestamp(item: BlockItem): number {
-    const timestamps = (item.examples ?? [])
-      .map((ex) => ex.updated || ex.created)
-      .filter((d): d is string => Boolean(d))
-      .map((d) => new Date(d).getTime())
-      .filter((t) => !Number.isNaN(t));
-    return timestamps.length ? Math.max(...timestamps) : 0;
-  }
-};
+        {hasRecentExample(item.examples) && (
+          <Tag size="s" scheme="brand">
+            NEW
+          </Tag>
+        )}
+      </Row>
+      <Row fillWidth paddingLeft="20">
+        <Media
+          sizes="(max-width: 768px) 100vw, 400px"
+          dark
+          src={item.image?.dark || ""}
+          alt={alt}
+          borderLeft
+          borderTop
+          aspectRatio="960/880"
+          topLeftRadius="m"
+        />
+        <Media
+          sizes="(max-width: 768px) 100vw, 400px"
+          light
+          src={item.image?.light || ""}
+          alt={alt}
+          borderLeft
+          borderTop
+          aspectRatio="960/880"
+          topLeftRadius="m"
+        />
+      </Row>
+    </Card>
+  );
+}

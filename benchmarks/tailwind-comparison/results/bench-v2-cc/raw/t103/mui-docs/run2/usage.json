@@ -1,0 +1,103 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 6,
+      "input_total": 446136,
+      "input_uncached": 12,
+      "cache_creation": 57950,
+      "cache_read": 388174,
+      "visible_output_tokens_o200k": 8922,
+      "visible_output_tokens_claudeLegacy": 9738,
+      "thinking_blocks": 2
+    },
+    {
+      "attempt": 1,
+      "calls": 3,
+      "input_total": 284339,
+      "input_uncached": 6,
+      "cache_creation": 95299,
+      "cache_read": 189034,
+      "visible_output_tokens_o200k": 232,
+      "visible_output_tokens_claudeLegacy": 253,
+      "thinking_blocks": 1
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t103/mui-docs/run2/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/README.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/theme.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/package.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/material-ui"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v2-cc/raw/t103/mui-docs/run2/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    },
+    {
+      "attempt": 1,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t103/mui-docs/run2/repair-1.txt"
+    },
+    {
+      "attempt": 1,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 1,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": false,
+    "violations": [
+      "disallowed tool: Bash"
+    ]
+  },
+  "arm": "M"
+}
