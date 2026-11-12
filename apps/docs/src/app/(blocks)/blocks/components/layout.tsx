@@ -1,10 +1,14 @@
-import { Column, Heading, Row, Text } from "@once-ui-system/core";
-import type { ReactNode } from "react";
+import { Breadcrumbs, Column, Heading, Row, Text } from "@once-ui-system/core";
+import type { ComponentProps, ReactNode } from "react";
 import { Pagination } from "./Pagination";
 
 interface DocsLayoutProps {
   title?: string;
   description?: ReactNode;
+  /** Trail above the title, e.g. Blocks › Sections › Hero. */
+  breadcrumbs?: ComponentProps<typeof Breadcrumbs>["items"];
+  /** Small detail aligned to the end of the title row, e.g. the variant count. */
+  aside?: ReactNode;
   maxWidth?: number | "xs" | "s" | "m" | "l" | "xl";
   children: ReactNode;
   pagination?: boolean;
@@ -14,6 +18,8 @@ interface DocsLayoutProps {
 const DocsLayout: React.FC<DocsLayoutProps> = ({
   title,
   description,
+  breadcrumbs,
+  aside,
   maxWidth = 96,
   children,
   pagination = true,
@@ -23,18 +29,26 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
     <Row fillWidth horizontal="center">
       <Column as="main" id="main-content" gap="48" maxWidth={maxWidth} padding="l">
         {(title || description) && (
-          <Column fillWidth gap="8" paddingX="s">
-            <Heading align={align} variant="display-strong-xs">
-              {title}
-            </Heading>
-            <Text
-              align={align}
-              variant="body-default-m"
-              onBackground="neutral-medium"
-              wrap="balance"
-            >
-              {description}
-            </Text>
+          <Column fillWidth gap="16" paddingX="s">
+            {breadcrumbs && breadcrumbs.length > 1 && (
+              <Breadcrumbs items={breadcrumbs} aria-label="Breadcrumb" />
+            )}
+            <Row fillWidth wrap gap="16" horizontal="between" style={{ alignItems: "flex-end" }}>
+              <Column gap="8" flex={1} minWidth={20}>
+                <Heading align={align} variant="display-strong-xs">
+                  {title}
+                </Heading>
+                <Text
+                  align={align}
+                  variant="body-default-m"
+                  onBackground="neutral-medium"
+                  wrap="balance"
+                >
+                  {description}
+                </Text>
+              </Column>
+              {aside}
+            </Row>
           </Column>
         )}
         {children}
