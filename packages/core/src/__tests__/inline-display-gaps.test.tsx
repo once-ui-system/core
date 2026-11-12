@@ -131,7 +131,9 @@ describe("Logo text wordmark", () => {
     const { container } = render(<Logo icon="/mark.svg" text="XESO" href="/" />, { wrapper });
     const word = screen.getByText("XESO");
     expect(word).toHaveClass("font-heading");
-    expect(word.style.lineHeight).toBe("var(--static-space-32)");
+    // The slot around the name carries the logo's height; the name is 0.75em of it.
+    expect(word.parentElement?.style.lineHeight).toBe("var(--static-space-32)");
+    expect(word.style.fontSize).toBe("0.75em");
     expect(screen.getByRole("link")).toHaveAccessibleName("XESO");
     expect(container.querySelector("img")).toHaveAttribute("alt", "");
     await expectNoAxeViolations(container);
@@ -139,6 +141,6 @@ describe("Logo text wordmark", () => {
 
   it("renders text alone, sized to the logo", () => {
     render(<Logo text="XESO" size="l" />, { wrapper });
-    expect(screen.getByText("XESO").style.lineHeight).toBe("var(--static-space-40)");
+    expect(screen.getByText("XESO").parentElement?.style.fontSize).toBe("var(--static-space-40)");
   });
 });

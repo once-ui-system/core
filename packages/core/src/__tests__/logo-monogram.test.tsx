@@ -36,6 +36,9 @@ describe("Logo monogram", () => {
     expect(path).not.toBeNull();
     expect(mark.querySelector("svg")).toHaveAttribute("fill", "currentColor");
     expect(screen.getByRole("link")).toHaveAccessibleName("Acme");
+    // Named by its visible text, not a label: axe 4.14 counts the aria-hidden
+    // monogram as visible text a label would have to contain.
+    expect(screen.getByRole("link")).not.toHaveAttribute("aria-label");
     await expectNoAxeViolations(container);
   });
 
@@ -84,13 +87,14 @@ describe("Logo monogram", () => {
   it("changes nothing when not set", () => {
     const { container } = render(<Logo text="Acme" />, { wrapper });
     expect(markOf(container)).toBeNull();
-    expect(screen.getByText("Acme").style.marginLeft).toBe("");
-    expect(container.querySelectorAll("span")).toHaveLength(1);
+    expect(screen.getByText("Acme").parentElement?.style.marginLeft).toBe("");
+    // The name's slot and the name: no mark.
+    expect(container.querySelectorAll("span")).toHaveLength(2);
   });
 
   it("spaces the text from the mark like an icon", () => {
     render(<Logo text="Acme" monogram />, { wrapper });
-    expect(screen.getByText("Acme").style.marginLeft).toBe("calc(var(--static-space-32) / 4)");
+    expect(screen.getByText("Acme").parentElement?.style.marginLeft).toBe("0.25em");
   });
 });
 
