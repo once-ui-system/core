@@ -180,5 +180,8 @@ Make it look designed, not stock:
 - Say what matters at a glance: a header strip of the 3–4 numbers the user acts on (`Row` of label + `heading-strong` value + a status `Tag`), colour that means a status, and labels on things (a map pin's name, a track's name), not decoration.
 - Map labels stay readable: `MapMarkers cluster`; a pin shows its text (`MapPin` with children) only when it is active or there are few, a dot otherwise; status as the pin's `tone`, and a legend panel that names the tones and areas.
 - Every action shows its result where it happened: a split block becomes two on the track, a deleted row leaves, an assigned pin changes colour; a toast alone is not a result.
-- Headers keep their navigation at every width: below `m` it folds into a menu `IconButton` that opens a `Drawer`, never disappears. The chat composer keeps its own height at the bottom; never `fill` it or let its container grow.
+- Data colours carry through: a status or category is the block's, pin's or `Tag`'s `tone`.
+- Secondary pages keep the shell and brand; their items are Cards with status and actions, not a bare list. One preview per thing.
+- Tablet keeps the desktop structure, narrower (`SplitView collapseBelow="s"`, side panels in a `Drawer`), never the phone layout.
+- Headers keep their nav at every width (below `m`: a menu `IconButton` opening a `Drawer`). The chat composer keeps its own height; never `fill` it.
 - Tablet and phone keep the main canvas (map, preview, timeline, chat) on screen: side lists become a `Drawer`, a bottom sheet or a `SegmentedControl` tab below `m`; never open on a list with the canvas pushed off screen or an empty void.
