@@ -23,12 +23,16 @@ const NEXT_IMPORT_ALLOWLIST = [
   // subpath's index re-exports it next to the OG route factories, which need
   // no next/* import: they take a standard Request and return a Response.)
   //
-  // This list is one entry on purpose. Meta.tsx, Schema.tsx and
+  // This list holds only files behind the ./next subpath, on purpose. Meta.tsx, Schema.tsx and
   // server/og-utils.ts were removed from it when core became installable
   // without Next (`next` is an optional peer): Meta declares its own return
   // type, Schema emits a plain <script>, og-utils returns a standard Response.
   // Adding a file back here means Next is a hard requirement again.
   "next/adapters.tsx",
+  // The OG image route draws with next/og's ImageResponse. It sits behind the
+  // same ./next subpath, so an app that never imports that subpath never
+  // resolves next/og, and it moves to @once-ui-system/nextjs with the adapters.
+  "next/ogImage.tsx",
 ];
 
 const SKIPPED_DIRS = new Set(["__tests__", "test", "node_modules"]);
