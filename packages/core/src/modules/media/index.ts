@@ -5,7 +5,15 @@ export { CompareImage } from "../../components/CompareImage.js";
 export type { MediaAudioPlayerProps } from "../../components/MediaAudioPlayer.js";
 export { MediaAudioPlayer } from "../../components/MediaAudioPlayer.js";
 export { MediaVideoPlayer } from "../../components/MediaVideoPlayer.js";
-export type { ScrubberBlock, ScrubberProps, ScrubberTrack } from "../../components/Scrubber.js";
-export { Scrubber } from "../../components/Scrubber.js";
+export type {
+  ScrubberBlock,
+  ScrubberFilmstripProps,
+  ScrubberMarker,
+  ScrubberProps,
+  ScrubberRange,
+  ScrubberTrack,
+  ScrubberWaveformProps,
+} from "../../components/Scrubber.js";
+export { Scrubber, ScrubberFilmstrip, ScrubberWaveform } from "../../components/Scrubber.js";
 export type { MediaUploadProps } from "./MediaUpload.js";
 export { MediaUpload } from "./MediaUpload.js";

@@ -1,0 +1,26 @@
+{
+ "name": "ScrubberWaveform",
+ "partOf": "Scrubber",
+ "purpose": "Mirrored audio waveform across a Scrubber block (block.content)",
+ "group": "media",
+ "importFrom": "@once-ui-system/core/media",
+ "props": {
+  "peaks": "!number[]",
+  "tone": "Tone = brand"
+ },
+ "tags": [
+  "media"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "Tone": [
+   "neutral",
+   "brand",
+   "accent",
+   "info",
+   "danger",
+   "warning",
+   "success"
+  ]
+ }
+}

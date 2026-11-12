@@ -32,6 +32,17 @@ entry below that had landed by then:
 
 ### Added
 
+- **An editor-grade `Scrubber`.** Everything is a new prop, so existing timelines
+  look and behave as before. `ruler` draws round time ticks with a playhead
+  handle, and a track `label` adds a header column. Blocks take
+  `variant: "gap"` (a hatched range that is not in the output, with its reason in
+  `label` and `description`), a corner `badge`, `content` drawn behind the label
+  (new `ScrubberFilmstrip` and `ScrubberWaveform`), and `highlight`, a one-off
+  shimmer for blocks that just changed. Blocks glide to new times. The timeline
+  takes `markers`, `snap` (edges stick to edges, markers and the playhead, with
+  a guide), `zoom` / `defaultZoom` / `onZoomChange` (Ctrl or Cmd + wheel, pinch,
+  `+` and `-`, following the playhead), `range` / `onRangeChange` (Shift-drag)
+  and `renderPreview` (a frame above the hovered time).
 - **`EmptyState`.** Also in 2.8: a `visual` (Mascot, Cube Emote) or `icon`, a `title`,
   one line of `description` and an `action`, at `size` `s`, `m` or `l`. `Table`'s own
   empty and no-results states are built from it. `Mascot surface="flat"` no longer paints

@@ -1780,7 +1780,22 @@
    "end": "!number",
    "label": "React.ReactNode",
    "tone": "Tone",
-   "locked": "boolean"
+   "locked": "boolean",
+   "variant": "\"solid\" | \"gap\"",
+   "badge": "React.ReactNode",
+   "content": "React.ReactNode",
+   "highlight": "boolean",
+   "description": "string"
+  },
+  "ScrubberMarker": {
+   "id": "!string",
+   "time": "!number",
+   "label": "string",
+   "tone": "Tone"
+  },
+  "ScrubberRange": {
+   "start": "!number",
+   "end": "!number"
   },
   "ScrubberTrack": {
    "id": "!string",
@@ -5208,7 +5223,31 @@
     "formatTime": "(time: number) => string = defaultFormatTime",
     "step": "number",
     "ruler": "boolean = false",
-    "labelWidth": "string = 8rem"
+    "labelWidth": "string = 8rem",
+    "markers": "ScrubberMarker[] = []",
+    "snap": "boolean | number = false",
+    "zoom": "number",
+    "defaultZoom": "number = 1",
+    "onZoomChange": "(zoom: number) => void",
+    "maxZoom": "number = 40",
+    "range": "ScrubberRange | null = null",
+    "onRangeChange": "(range: ScrubberRange | null) => void",
+    "renderPreview": "(time: number) => React.ReactNode"
+   }
+  },
+  "ScrubberFilmstrip": {
+   "group": "media",
+   "importFrom": "@once-ui-system/core/media",
+   "props": {
+    "frames": "!string[]"
+   }
+  },
+  "ScrubberWaveform": {
+   "group": "media",
+   "importFrom": "@once-ui-system/core/media",
+   "props": {
+    "peaks": "!number[]",
+    "tone": "Tone = brand"
    }
   },
   "MediaUpload": {
