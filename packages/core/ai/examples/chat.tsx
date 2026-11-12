@@ -91,6 +91,23 @@ type Load<T> = { status: "loading" } | { status: "error" } | { status: "ready"; 
 
 const SUGGESTIONS = ["Plan my week", "Summarise a file", "Ideas for a trip"];
 
+// The mascot shaped into the product, not the default body: Sol plans your
+// days, so it is a warm pebble with a crown of sun rays. A plant app would
+// draw a pot and a sprout, a water app a drop. Paths sit in a 200 × 200 box.
+const SOL = {
+  bodyPath:
+    "M100 28C152 28 180 64 180 110C180 156 148 182 100 182C52 182 20 156 20 110C20 64 48 28 100 28Z",
+  accessory: (
+    <g stroke="var(--accent-solid-strong)" strokeWidth={8} strokeLinecap="round">
+      <path d="M100 18V4" />
+      <path d="M68 24L58 10" />
+      <path d="M132 24L142 10" />
+    </g>
+  ),
+  mouth: "smile",
+  cheeks: true,
+} as const;
+
 export function ChatExample() {
   const { addToast } = useToast();
   const [list, setList] = useState<Load<Conversation[]>>({ status: "loading" });
@@ -186,7 +203,13 @@ export function ChatExample() {
 
       <Column fill>
         <Row paddingX="20" paddingY="12" gap="12" vertical="center" borderBottom>
-          <Mascot size={64} state={working ? "thinking" : "idle"} color="brand" aria-label="Sol" />
+          <Mascot
+            {...SOL}
+            size={64}
+            state={working ? "thinking" : "idle"}
+            color="brand"
+            aria-label="Sol"
+          />
           <Column>
             <Text textVariant="label-strong-m">Sol</Text>
             <Text textVariant="body-default-xs" onBackground="neutral-weak">
@@ -236,7 +259,14 @@ export function ChatExample() {
                 height: "70%",
               }}
             />
-            <Mascot size="xl" mood="happy" color="brand" poke aria-label="Sol says hello" />
+            <Mascot
+              {...SOL}
+              size="xl"
+              mood="happy"
+              color="brand"
+              poke
+              aria-label="Sol says hello"
+            />
             <Text textVariant="heading-strong-m">What can I help with?</Text>
             <Row gap="8" wrap horizontal="center">
               {SUGGESTIONS.map((s) => (
