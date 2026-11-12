@@ -230,19 +230,28 @@ const Logo = ({
   const renderText = () => {
     if (!text) return null;
     const height = `var(--static-space-${sizeMap[size]})`;
+    // The outer span is the slot (font-size = the logo's height), the inner
+    // one the name at three quarters of it: em, not calc(var()), which jsdom
+    // cannot resolve when a test asks for the link's accessible name.
     return (
       <span
-        className="font-heading neutral-on-background-strong"
         style={{
-          fontSize: `calc(${height} * 0.75)`,
+          fontSize: height,
           lineHeight: height,
-          fontWeight: "var(--font-weight-heading-strong)",
-          letterSpacing: "-0.02em",
           whiteSpace: "nowrap",
-          marginLeft: icon || hasMark ? `calc(${height} / 4)` : undefined,
+          marginLeft: icon || hasMark ? "0.25em" : undefined,
         }}
       >
-        {text}
+        <span
+          className="font-heading neutral-on-background-strong"
+          style={{
+            fontSize: "0.75em",
+            fontWeight: "var(--font-weight-heading-strong)",
+            letterSpacing: "-0.02em",
+          }}
+        >
+          {text}
+        </span>
       </span>
     );
   };
@@ -369,7 +378,11 @@ const Logo = ({
           )}
           style={{ ...layout.style, ...style }}
           href={href}
-          aria-label={text || "Trademark"}
+          // With text, the visible name names the link (the mark beside it is
+          // aria-hidden). A label would have to contain every visible
+          // character, the monogram's letter included, or axe 4.14 reports
+          // label-content-name-mismatch.
+          aria-label={text ? undefined : "Trademark"}
           {...props}
         >
           {content}
