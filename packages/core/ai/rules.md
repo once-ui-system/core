@@ -391,8 +391,12 @@ casts:
 // once-ui.config.ts
 import { defineConfig } from "@once-ui-system/core/config";
 export const { style, dataStyle } = defineConfig({ style: { brand: "cyan", theme: "system" }, dataStyle: { mode: "categorical" } });
+```
 
-// or, for an app, from a theme preset: a whole look for its domain
+Or, for an app, from a theme preset: a whole look for its domain.
+
+```tsx
+// once-ui.config.ts
 import { defineConfig, themePreset } from "@once-ui-system/core/config";
 const ops = themePreset("ops", { style: { brandSeed: "#0f766e" } }); // ops | care | creative | commerce
 export const { style, dataStyle } = defineConfig({ style: ops.style, dataStyle: ops.dataStyle });
