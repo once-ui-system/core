@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "3.0.0-beta.1",
- "generated": "2026-11-11",
+ "generated": "2026-11-12",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root; '@once-ui-system/fx' and '@once-ui-system/blocks' are packages of their own, installed beside core.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -1615,6 +1615,31 @@
    "last": "!string",
    "perPage": "!string"
   },
+  "PeerCursorData": {
+   "id": "!string",
+   "name": "!string",
+   "x": "!number",
+   "y": "!number",
+   "scheme": "PeerCursorScheme",
+   "message": "string",
+   "avatar": "string",
+   "idle": "boolean"
+  },
+  "PeerCursorScheme": [
+   "blue",
+   "indigo",
+   "violet",
+   "magenta",
+   "pink",
+   "red",
+   "orange",
+   "yellow",
+   "moss",
+   "green",
+   "emerald",
+   "aqua",
+   "cyan"
+  ],
   "PhotoViewerItem": {
    "src": "!string",
    "alt": "!string",
@@ -2506,6 +2531,12 @@
    "target": "RefObject<HTMLElement | null>",
    "preventDefault": "boolean",
    "sequenceTimeout": "number"
+  },
+  "UsePeerPointerOptions": {
+   "interval": "number",
+   "units": "\"fraction\" | \"px\"",
+   "unproject": "(x: number, y: number) => { x: number; y: number }",
+   "disabled": "boolean"
   },
   "UserSelect": [
    "text",
@@ -3696,6 +3727,36 @@
     "disabled": "boolean = false",
     "labels": "Partial<PaginationLabels>",
     "aria-label": "string"
+   }
+  },
+  "PeerCursor": {
+   "group": "components",
+   "mixins": [
+    "LeafProps"
+   ],
+   "props": {
+    "id": "string",
+    "x": "!number",
+    "y": "!number",
+    "smooth": "boolean = true",
+    "name": "!string",
+    "scheme": "PeerCursorScheme",
+    "message": "string",
+    "avatar": "string",
+    "idle": "boolean = false"
+   }
+  },
+  "PeerCursors": {
+   "group": "components",
+   "mixins": [
+    "LeafProps"
+   ],
+   "props": {
+    "peers": "!PeerCursorData[]",
+    "units": "\"fraction\" | \"px\" = fraction",
+    "project": "(x: number, y: number) => { x: number; y: number }",
+    "scale": "number",
+    "smooth": "boolean = true"
    }
   },
   "PhotoViewer": {
@@ -6612,6 +6673,18 @@
    "kind": "hook",
    "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly rail: \"8\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; ... 4 more...",
    "doc": "The look the nearest Nav set, or the defaults outside one."
+  },
+  "peerColor": {
+   "group": "components",
+   "kind": "function",
+   "signature": "(id: string) => PeerCursorScheme",
+   "doc": "The same hue for the same id on every screen, so a collaborator keeps their colour wherever they show up."
+  },
+  "usePeerPointer": {
+   "group": "components",
+   "kind": "hook",
+   "signature": "(ref: React.RefObject<HTMLElement | null>, onMove: (position: { x: number; y: number } | null) => void, options?: UsePeerPointerOptions) => void",
+   "doc": "Reports your pointer over `ref`'s element, throttled, ready to send to others: `{ x, y }` in `units`, or `null` when it leaves."
   },
   "photoViewerIndexFromUrl": {
    "group": "components",

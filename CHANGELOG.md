@@ -11,6 +11,12 @@ Entries before 1.7.13 are reconstructed from GitHub releases and git history and
 incomplete; reconciling them against actual npm release history is a scheduled roadmap
 item (see `ROADMAP.md`, Week 4).
 
+## [3.1.0] - Unreleased
+
+### Added
+
+- `PeerCursor` and `PeerCursors`: collaborators' pointers for multiplayer views, an arrow in each person's colour with their name (and an optional avatar or live message) that glides between positions without re-rendering. No backend: feed `peers` from any realtime source. `usePeerPointer` reports your own pointer, throttled, in the same units (a fraction of the box, px, or your own coordinates through `unproject`); `peerColor(id)` gives everyone the same hue on every screen.
+
 ## [3.0.0] - Unreleased
 
 Breaking. Built on the `feat/3-0-breaking-cleanup` branch; [MIGRATING.md](MIGRATING.md#2x--30)

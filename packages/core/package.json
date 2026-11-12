@@ -289,6 +289,10 @@
       "types": "./dist/components/Pagination.d.ts",
       "default": "./dist/components/Pagination.js"
     },
+    "./components/PeerCursor": {
+      "types": "./dist/components/PeerCursor.d.ts",
+      "default": "./dist/components/PeerCursor.js"
+    },
     "./components/PhotoViewer": {
       "types": "./dist/components/PhotoViewer.d.ts",
       "default": "./dist/components/PhotoViewer.js"

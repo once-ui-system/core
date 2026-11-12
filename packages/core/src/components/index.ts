@@ -54,6 +54,7 @@ export * from "./OgCard.js";
 export * from "./Option.js";
 export * from "./OTPInput.js";
 export * from "./Pagination.js";
+export * from "./PeerCursor.js";
 export * from "./PhotoViewer.js";
 export * from "./ProgressBar.js";
 export * from "./RadioButton.js";

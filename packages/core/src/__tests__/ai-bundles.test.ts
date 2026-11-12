@@ -47,9 +47,10 @@ describe("ai harness without spec.json", () => {
   // Sparkline and ChartSummary, which arrived with the catalog at 25,497.
   // The 2.x merge adds 300 more for LogoLoader, Logo's monogram and Map's
   // globe, which brought it to 25,899. GallerySection adds 100 more; it
-  // brought the catalog to 26,132.
+  // brought the catalog to 26,132. 3.1 adds 200 more for PeerCursor and
+  // PeerCursors (multiplayer cursors).
   it("keeps the catalog small enough to load on every task", () => {
-    expect(statSync(path.join(AI, "catalog.json")).size).toBeLessThan(26_200);
+    expect(statSync(path.join(AI, "catalog.json")).size).toBeLessThan(26_400);
   });
 });
 
