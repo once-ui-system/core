@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "3.0.0-beta.1",
- "generated": "2026-11-11",
+ "generated": "2026-11-12",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root; '@once-ui-system/fx' and '@once-ui-system/blocks' are packages of their own, installed beside core.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -837,6 +837,10 @@
    "14",
    "17",
    "18"
+  ],
+  "Dispatch": [
+   "undefined",
+   "(args?: any) => any"
   ],
   "DisplayProps": {
    "inline": "boolean",
@@ -1712,6 +1716,36 @@
   "ResolvedTheme": [
    "dark",
    "light"
+  ],
+  "RichTextEditorLabels": {
+   "toolbar": "!string",
+   "bold": "!string",
+   "italic": "!string",
+   "underline": "!string",
+   "strike": "!string",
+   "code": "!string",
+   "heading": "!string",
+   "bulletList": "!string",
+   "orderedList": "!string",
+   "link": "!string",
+   "unlink": "!string",
+   "undo": "!string",
+   "redo": "!string",
+   "linkUrl": "!string",
+   "apply": "!string"
+  },
+  "RichTextTool": [
+   "code",
+   "link",
+   "heading",
+   "bold",
+   "italic",
+   "underline",
+   "strike",
+   "bulletList",
+   "orderedList",
+   "undo",
+   "redo"
   ],
   "ScalingSize": [
    "100",
@@ -5366,6 +5400,38 @@
     "onClose": "() => void",
     "gap": "number = 40",
     "closeLabel": "string = Close"
+   }
+  },
+  "RichTextEditor": {
+   "group": "richtext",
+   "importFrom": "@once-ui-system/core/richtext",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "id": "string",
+    "value": "string",
+    "defaultValue": "string",
+    "onValueChange": "(html: string) => void",
+    "label": "ReactNode",
+    "placeholder": "string",
+    "tools": "RichTextTool[] | false",
+    "disabled": "boolean",
+    "readOnly": "boolean",
+    "minHeight": "string",
+    "maxHeight": "string",
+    "autoFocus": "boolean",
+    "labels": "Partial<RichTextEditorLabels>",
+    "aria-label": "string",
+    "aria-labelledby": "string",
+    "aria-describedby": "string",
+    "aria-invalid": "boolean | \"true\" | \"false\"",
+    "aria-required": "boolean | \"true\" | \"false\""
    }
   },
   "AdapterProvider": {

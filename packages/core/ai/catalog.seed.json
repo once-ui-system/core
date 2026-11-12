@@ -705,6 +705,11 @@
     "tags": ["effect", "motion"],
     "pairsWith": ["useInViewport", "Grid", "Column"]
   },
+  "RichTextEditor": {
+    "purpose": "Formatted text field (bold, headings, lists, links) with an HTML value",
+    "tags": ["form"],
+    "pairsWith": ["Field", "Form", "Button"]
+  },
   "Row": {
     "purpose": "Horizontal flex layout — default direction row",
     "tags": ["layout", "basics"],

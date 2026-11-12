@@ -481,6 +481,10 @@
       "types": "./dist/modules/mdx/index.d.ts",
       "default": "./dist/modules/mdx/index.js"
     },
+    "./richtext": {
+      "types": "./dist/modules/richtext/index.d.ts",
+      "default": "./dist/modules/richtext/index.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
@@ -515,6 +519,10 @@
     "date-fns": "^4.4.0"
   },
   "peerDependencies": {
+    "@tiptap/extensions": "^3.0.0",
+    "@tiptap/pm": "^3.0.0",
+    "@tiptap/react": "^3.0.0",
+    "@tiptap/starter-kit": "^3.0.0",
     "compressorjs": "^1.3.0",
     "maplibre-gl": "^5.0.0 || ^6.0.0",
     "next": ">=15.5",
@@ -534,6 +542,18 @@
     },
     "compressorjs": {
       "optional": true
+    },
+    "@tiptap/extensions": {
+      "optional": true
+    },
+    "@tiptap/pm": {
+      "optional": true
+    },
+    "@tiptap/react": {
+      "optional": true
+    },
+    "@tiptap/starter-kit": {
+      "optional": true
     }
   },
   "devDependencies": {
@@ -543,6 +563,11 @@
     "@testing-library/jest-dom": "^7.0.0",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
+    "@tiptap/core": "^3.33.1",
+    "@tiptap/extensions": "^3.33.1",
+    "@tiptap/pm": "^3.33.1",
+    "@tiptap/react": "^3.33.1",
+    "@tiptap/starter-kit": "^3.33.1",
     "@types/node": "26.1.2",
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",

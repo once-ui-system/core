@@ -49,7 +49,8 @@ describe("ai harness without spec.json", () => {
   // globe, which brought it to 25,899. GallerySection adds 100 more; it
   // brought the catalog to 26,132.
   it("keeps the catalog small enough to load on every task", () => {
-    expect(statSync(path.join(AI, "catalog.json")).size).toBeLessThan(26_200);
+    // RichTextEditor and its /richtext entry add ~150 B.
+    expect(statSync(path.join(AI, "catalog.json")).size).toBeLessThan(26_400);
   });
 });
 
@@ -101,7 +102,9 @@ describe("ai task bundles as one Markdown read", () => {
       expect(md).toContain("## Layout");
       if (task.example) expect(md).toContain(`## Gold example (\`${task.example}\`)`);
       expect(md).not.toMatch(/see spec\.json/);
-      expect(md.length).toBeLessThan(50_000);
+      // The RichTextEditor rows put the dashboard bundle just over 50k;
+      // core#480 raises this cap to 57k with the agent guidance.
+      expect(md.length).toBeLessThan(51_000);
     },
   );
 

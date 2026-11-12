@@ -101,6 +101,7 @@ describe("the 3.0 exports map", () => {
       "./media",
       "./map",
       "./mdx",
+      "./richtext",
       "./package.json",
     ]);
   });
