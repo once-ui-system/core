@@ -46,7 +46,7 @@ Static panel recipe (pricing tiers, stats, settings sections):
 - One raised `surface` for content on `page`; sections inside are spacing + `borderTop`, not grey cards
 - Alerts: `Feedback`, never a hand-built `role="alert"` box
 - Charts: `@once-ui-system/core/data` (`LineChart`, `BarChart`…), never hand-drawn SVG; `height="16rem"` (a string), series `color: "brand-strong"`
-- Brand mark: `<Logo text="Name" monogram="N" />` (its initial, or an `icon`), never `Icon` + `Text`; a bare `monogram` is a placeholder shape
+- Brand mark: `<Logo text="Name" monogram="N" />` (its initial, or an `icon`; beside a `Mascot`, only `text`; never a letter tile), never `Icon` + `Text`; a bare `monogram` is a placeholder shape
 - Critical outranks status: `Feedback tone="danger"` or `Tag prefixIcon`; urgent is `danger`/`warning`, never `info`
 
 ### Typography
@@ -170,22 +170,22 @@ Every type a prop names is defined in the slice's (or bundle's) `types`.
 
 If design intent unclear, ask: content style, layout width, color approach, decoration level, imagery. Default: restrained, centered `maxWidth="m"`, single brand accent, one subtle gradient, no placeholder images.
 
-An app: set the theme first, chosen for the domain, never the template's default blue on grey: `brand`, `accent` and `neutral` (or `brandSeed`), `solid: "color"`, a `--font-heading` family; no ambient decoration. Consumer and care apps go warm (`orange`/`yellow`/`moss` brand on `sand` or `rose`); health and outdoors `green`/`emerald`/`aqua` on `mint` or `sand`; creative tools `violet`/`magenta` on `dusk`; operations, incident and map tools dark first (`theme: "dark"`), a quiet brand on `slate`, status tones carrying the meaning. One shell (header, nav, panels) for every route of the app, in its `layout.tsx`. Phone header, plan canvas, selection: `ai/layouts.md`.
+An app: set the theme first, chosen for the domain, never the template's default blue on grey: `brand`, `accent` and `neutral` (or `brandSeed`), `solid: "color"`, a `--font-heading` via `next/font`; no ambient decoration. Consumer and care apps go warm (`orange`/`yellow`/`moss` brand on `sand` or `rose`); health and outdoors `green`/`emerald`/`aqua` on `mint` or `sand`; creative tools `violet`/`magenta` on `dusk`; operations, incident and map tools dark first (`theme: "dark"`), a quiet brand on `slate`, status tones carry meaning. One shell (header, nav, panels) for every route of the app, in its `layout.tsx`. Phone header, plan canvas, selection: `ai/layouts.md`.
 
 Make it look designed, not stock:
 
-- One idea carries the screen. A map app is the map, full-bleed, its lists and details on floating `surface` panels (`border`, `radius="l"`, `shadow="l"`, `position="absolute"`), never a map in a card beside a table; the selected place's panel acts on it (a write through the data hook, optimistic with rollback). An area gets one small label at its centre, none below zoom 11. A chat with an assistant gives it a face, and the face is the hero: a `Mascot` shaped into the product with `bodyPath` (a pot, a drop, a leaf: a path in 200 × 200) and an `accessory` (a sprout, a hat: SVG in the same box), never the default blob; big in the welcome (`size="xl"`, `poke`), then `size={64}` in the header or a rail with its `state` following the reply, never only a small avatar per reply; a photo the user is asked for is `MediaUpload` (with preview) or `ChatComposer attach`; the empty state is a welcome over a brand `Background` (`gradient`), with suggestion `Tag`s, never a bare page.
+- One idea carries the screen. A map app is the map, full-bleed, its lists and details on floating `surface` panels (`border`, `radius="l"`, `shadow="l"`, `position="absolute"`), never a map in a card beside a table; the selected place's panel acts on it (a write through the data hook, optimistic with rollback). An area gets one small label at its centre, none below zoom 11. A chat with an assistant gives it a face, and the face is the hero: a `Mascot` shaped into the product with `bodyPath` (a pot, a drop, a leaf: a path in 200 × 200) and an `accessory` (a sprout, a hat: SVG, same box), never the default blob; big in the welcome (`size="xl"`, `poke`), then `size={64}` in the header or a rail with its `state` following the reply, never only a small avatar per reply; a photo the user is asked for is `MediaUpload` (with preview) or `ChatComposer attach`; the empty state is a welcome over a brand `Background` (`gradient`), with suggestion `Tag`s, not a bare page.
 - The brand is identity, not paint: `Logo` in the header, the `Mascot`'s `color`, `Nav tone="brand"`, one brand action per view, and the brand on what is selected (a `selected` Card or row, the active tab, the active pin). Never tint every surface or fill every button.
 - No empty panes: every region has content, an empty state, or collapses away; text over an image or map sits in a panel and wraps or `truncate`s.
-- Work apps: `density: "compact"`, `border: "conservative"`, dark first. Hierarchy from type and spacing, not from grey cards inside grey cards.
-- Say what matters at a glance: a strip of the 3–4 numbers the user acts on (label, `heading-strong` value, status `Tag`), colour that means a status, labels on things, not decoration.
-- Map labels stay readable: `MapMarkers cluster`; a pin shows its text (`MapPin` with children) only when it is active or there are few, a dot otherwise; status as the pin's `tone`, and a legend panel that names the tones and areas.
-- Every action shows its result where it happened (a split block becomes two, an assigned pin changes colour); one that cannot apply does the nearest useful thing or is disabled with a reason. A toast alone is neither. No empty bands: a timeline takes its content's height.
+- Work apps: `density: "compact"`, `border: "conservative"`, dark first. Hierarchy from type and spacing, not nested grey cards.
+- Say what matters at a glance: a strip of the 3–4 numbers the user acts on (label, `heading-strong` value, status `Tag`), colour that means a status, labels, not decoration.
+- Map labels stay readable: `MapMarkers cluster`; a pin shows its text (`MapPin` with children) only when it is active or there are few, a dot otherwise; status as the pin's `tone`, never a text pill; kinds never overlap; a legend panel (collapsed below `l`) names tones and areas.
+- Every action shows its result where it happened (a split block becomes two, an assigned pin changes colour); one that cannot apply does the nearest useful thing or is disabled with a reason; never a toast alone. No empty bands: a timeline takes its content's height.
 - Data colours carry through: a status or category is the block's, pin's or `Tag`'s `tone`.
-- Secondary pages keep the shell and brand; their items are Cards with status and actions, not a bare list. One preview per thing.
+- Secondary pages keep the shell and brand; items are Cards with status and actions. One preview per thing.
 - Tablet keeps the desktop structure, narrower (`SplitView collapseBelow="s"`, side panels in a `Drawer`), never the phone layout.
 - Headers keep their nav at every width (below `m`: a menu `IconButton` opening a `Drawer`). The chat composer keeps its own height; never `fill` it.
-- Tablet and phone keep the main canvas (map, preview, timeline, chat) on screen: side lists become a `Drawer`, a bottom sheet or a `SegmentedControl` tab below `m`; never open on a list with the canvas pushed off screen or an empty void.
+- Tablet and phone keep the main canvas (map, preview, timeline, chat) on screen: side lists become a `Drawer`, a bottom sheet or a `SegmentedControl` tab below `m`; never the canvas pushed off screen.
 
 ## Components
 

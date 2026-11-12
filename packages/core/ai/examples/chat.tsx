@@ -173,7 +173,7 @@ export function ChatExample() {
     <Row fill height="100dvh" background="page">
       <Column width={20} borderRight padding="12" gap="8" s={{ hide: true }}>
         <Row paddingX="8" paddingY="8" horizontal="between" vertical="center">
-          <Logo text="Sol" monogram="S" size="s" />
+          <Logo text="Sol" size="s" />
           <IconButton icon="plus" variant="tertiary" tooltip="New chat" />
         </Row>
         {list.status === "loading" &&
