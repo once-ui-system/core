@@ -174,8 +174,8 @@ An app: start `once-ui.config` from its domain's preset, never the default theme
 
 Make it look designed, not stock:
 
-- One idea carries the screen. A map app is the map, full-bleed, its lists and details on floating `surface` panels (`border`, `radius="l"`, `shadow="l"`, `position="absolute"`), never a map in a card beside a table; the selected place's panel acts on it (a write through the data hook, optimistic with rollback). An area gets one small label at its centre, none below zoom 11. A chat with an assistant gives it a face, and the face is the hero: a `Mascot` shaped into the product with `bodyPath` (a pot, a drop, a leaf: a path in 200 × 200) and an `accessory` (a sprout, a hat: SVG, same box), never the default blob; big in the welcome (`size="xl"`, `poke`), then `size={64}` in the header or a rail with its `state` following the reply, never only a small avatar per reply; a photo the user is asked for is `MediaUpload` (with preview) or `ChatComposer attach`; the empty state is a welcome over a brand `Background` (`gradient`), with suggestion `Tag`s, not a bare page.
-- The brand is identity, not paint: `Logo` in the header, the `Mascot`'s `color`, `Nav tone="brand"`, one brand action per view, and the brand on what is selected (a `selected` Card or row, the active tab, the active pin). Never tint every surface or fill every button.
+- One idea carries the screen. A map app is the map, full-bleed, its lists and details on floating `surface` panels (`border`, `radius="l"`, `shadow="l"`, `position="absolute"`), never a map in a card beside a table; the selected place's panel acts on it (a write through the data hook, optimistic with rollback). An area gets one small label at its centre, none below zoom 11. A chat with an assistant gives it a face, and the face is the hero: a `Mascot` shaped into the product with `bodyPath` (a pot, a leaf: a path in 200 × 200) and an `accessory` (a sprout, a hat: SVG, same box), not the default blob; big in the welcome (`size="xl"`, `poke`), then `size={64}` in the header with its `state` following the reply, not just a small avatar per reply; one `Mascot` per view: in the header on the chat route only; beside an `EmptyState`, only its own; a photo is `MediaUpload` or `ChatComposer attach`; the empty chat is a welcome over a brand `Background` (`gradient`) with suggestion `Tag`s.
+- The brand is identity, not paint: `Logo` in the header, the `Mascot`'s `color`, `Nav tone="brand"`, one brand action per view, and the brand on what is selected (a `selected` Card or row, the active tab, the active pin). Never tint every surface.
 - No empty panes: every region has content, an empty state, or collapses away; text over an image or map sits in a panel and wraps or `truncate`s.
 - Hierarchy from type and spacing, not nested grey cards.
 - Say what matters at a glance: a strip of the 3–4 numbers the user acts on (label, `heading-strong` value, status `Tag`), colour that means a status, labels, not decoration.
@@ -862,6 +862,8 @@ export function ChatExample() {
     }
   };
 
+  const welcome = thread.status === "ready" && messages.length === 0 && !working;
+
   return (
     <Row fill height="100dvh" background="page">
       <Column width={20} borderRight padding="12" gap="8" s={{ hide: true }}>
@@ -896,13 +898,16 @@ export function ChatExample() {
 
       <Column fill>
         <Row paddingX="20" paddingY="12" gap="12" vertical="center" borderBottom>
-          <Mascot
-            {...SOL}
-            size={64}
-            state={working ? "thinking" : "idle"}
-            color="brand"
-            aria-label="Sol"
-          />
+          {/* One Mascot per view: the welcome below has it while the chat is empty. */}
+          {!welcome && (
+            <Mascot
+              {...SOL}
+              size={64}
+              state={working ? "thinking" : "idle"}
+              color="brand"
+              aria-label="Sol"
+            />
+          )}
           <Column>
             <Text textVariant="label-strong-m">Sol</Text>
             <Text textVariant="body-default-xs" onBackground="neutral-weak">
@@ -933,7 +938,7 @@ export function ChatExample() {
             </Feedback>
           </Column>
         )}
-        {thread.status === "ready" && messages.length === 0 && !working && (
+        {welcome && (
           // The empty state is the assistant's welcome: its face, one line, and a way to start.
           <Column fill center gap="16" padding="24">
             <Background

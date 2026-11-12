@@ -169,6 +169,8 @@ export function ChatExample() {
     }
   };
 
+  const welcome = thread.status === "ready" && messages.length === 0 && !working;
+
   return (
     <Row fill height="100dvh" background="page">
       <Column width={20} borderRight padding="12" gap="8" s={{ hide: true }}>
@@ -203,13 +205,16 @@ export function ChatExample() {
 
       <Column fill>
         <Row paddingX="20" paddingY="12" gap="12" vertical="center" borderBottom>
-          <Mascot
-            {...SOL}
-            size={64}
-            state={working ? "thinking" : "idle"}
-            color="brand"
-            aria-label="Sol"
-          />
+          {/* One Mascot per view: the welcome below has it while the chat is empty. */}
+          {!welcome && (
+            <Mascot
+              {...SOL}
+              size={64}
+              state={working ? "thinking" : "idle"}
+              color="brand"
+              aria-label="Sol"
+            />
+          )}
           <Column>
             <Text textVariant="label-strong-m">Sol</Text>
             <Text textVariant="body-default-xs" onBackground="neutral-weak">
@@ -240,7 +245,7 @@ export function ChatExample() {
             </Feedback>
           </Column>
         )}
-        {thread.status === "ready" && messages.length === 0 && !working && (
+        {welcome && (
           // The empty state is the assistant's welcome: its face, one line, and a way to start.
           <Column fill center gap="16" padding="24">
             <Background
