@@ -106,7 +106,10 @@ describe("ai task bundles as one Markdown read", () => {
       // for each need (Mascot, Logo, MediaUpload, Map), the four data states
       // and the data layer, and how a designed app looks. Benchmark apps
       // without them hand-drew a mascot and had no loading or error state.
-      expect(md.length).toBeLessThan(54_000);
+      // 57,000 for the looks rules from the blind ratings (a palette for the
+      // domain, readable map labels, the data-hook recipe with its rendered
+      // error): dashboard, the largest bundle, is about 56,050.
+      expect(md.length).toBeLessThan(57_000);
     },
   );
 

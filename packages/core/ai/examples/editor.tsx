@@ -31,7 +31,8 @@ import { useCallback, useEffect, useState } from "react";
 
 type Track = NonNullable<React.ComponentProps<typeof Scrubber>["tracks"]>[number];
 
-const DURATION = 30;
+// Scrubber times are milliseconds: its ruler and clock read them as m:ss.
+const DURATION = 30_000;
 
 const sampleTracks: Track[] = [
   {
@@ -40,15 +41,15 @@ const sampleTracks: Track[] = [
     movable: true,
     resizable: true,
     blocks: [
-      { id: "intro", start: 0, end: 6, label: "Intro" },
-      { id: "demo", start: 6, end: 22, label: "Demo" },
-      { id: "outro", start: 22, end: 30, label: "Outro" },
+      { id: "intro", start: 0, end: 6000, label: "Intro" },
+      { id: "demo", start: 6000, end: 22000, label: "Demo" },
+      { id: "outro", start: 22000, end: 30000, label: "Outro" },
     ],
   },
   {
     id: "audio",
     tone: "accent",
-    blocks: [{ id: "music", start: 0, end: 30, label: "Music", locked: true }],
+    blocks: [{ id: "music", start: 0, end: 30000, label: "Music", locked: true }],
   },
 ];
 

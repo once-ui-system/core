@@ -112,6 +112,15 @@ Even when the brief says nothing about data, build the app as if a backend were 
 
 - **Data layer:** a `lib/data.ts` (or `lib/api.ts`) of typed async functions, `getX()`, `createX()`, `updateX()`, returning typed records. Behind them, mock data with a short delay (`await wait(400)`). Screens call these functions, never import the mock array, so a real API replaces the functions and no screen changes.
 - **Four states on every screen that loads data:** loading (`Skeleton` shaped like the content, never a lone spinner on a whole page), empty (a title, one line of help and the action that fills it), error, filled. **Error is rendered, not just caught:** keep it in state (`const [error, setError] = useState<Error | null>(null)`, set in `catch`) and render `Feedback tone="danger"` with a Retry `Button` in place of the content; a `catch` that only logs or toasts a read is a blank screen.
+  ```tsx
+  const [state, setState] = useState<{ status: "loading" | "error" | "ready"; data: Job[] }>({ status: "loading", data: [] });
+  const load = useCallback(() => {
+    setState((s) => ({ ...s, status: "loading" }));
+    getJobs().then((data) => setState({ status: "ready", data })).catch(() => setState((s) => ({ ...s, status: "error" })));
+  }, []);
+  useEffect(load, [load]);
+  if (state.status === "error") return <Feedback tone="danger" title="Jobs didn't load"><Button size="s" variant="secondary" label="Retry" onClick={load} /></Feedback>;
+  ```
 - **Writes:** optimistic update, `loading` on the pressed `Button`, rollback plus `addToast({ tone: "danger" })` on failure; a sent chat message gets `status` and `onRetry`.
 - **Forms:** `Form` with field errors and `FormErrorSummary`, disabled submit while saving.
 
@@ -161,13 +170,17 @@ Every type a prop names is defined in the slice's (or bundle's) `types`.
 
 If design intent unclear, ask: content style, layout width, color approach, decoration level, imagery. Default: restrained, centered `maxWidth="m"`, single brand accent, one subtle gradient, no placeholder images.
 
-An app: set the theme first: `brand` or `brandSeed`, `neutral`, `solid: "color"`, a `--font-heading` family; no ambient decoration. Phone header, plan canvas, selection: `ai/layouts.md`.
+An app: set the theme first, chosen for the domain, never the template's default blue on grey: `brand`, `accent` and `neutral` (or `brandSeed`), `solid: "color"`, a `--font-heading` family; no ambient decoration. Consumer and care apps go warm (`orange`/`yellow`/`moss` brand on `sand` or `rose`); health and outdoors `green`/`emerald`/`aqua` on `mint` or `sand`; creative tools `violet`/`magenta` on `dusk`; operations and incident tools a quiet brand on `slate` with the status tones (`danger`, `warning`, `success`) carrying the meaning. One shell (header, nav, panels) for every route of the app, in its `layout.tsx`. Phone header, plan canvas, selection: `ai/layouts.md`.
 
 Make it look designed, not stock:
 
-- One idea carries the screen. A map app is the map, full-bleed (`fill`, `height="100dvh"`), with its lists and details on floating panels over it (`background="surface"`, `border`, `radius="l"`, `shadow="l"`, `position="absolute"` with offsets); not a map in a card beside a table. A chat with an assistant gives the assistant a face: the `Mascot` in the header (`size="m"`) and large in the empty state (`size="xl"`), reacting while it works; the empty state is a welcome over a brand `Background` (`gradient`), with suggestion `Tag`s, never a bare page.
-- The brand is identity, not paint: `Logo` in the header, the `Mascot`'s `color`, `Nav tone="brand"`, one brand action per view. Never tint every surface or fill every button.
+- One idea carries the screen. A map app is the map, full-bleed (`fill`, `height="100dvh"`), with its lists and details on floating panels over it (`background="surface"`, `border`, `radius="l"`, `shadow="l"`, `position="absolute"` with offsets); not a map in a card beside a table. A chat with an assistant gives the assistant a face: the `Mascot` in the header (`size="m"`) and large in the empty state (`size="xl"`), and kept on screen through the conversation with its `state` (`thinking`, `speaking`) following the reply, so it visibly reacts; a photo the user is asked for is `MediaUpload` (with preview) or `ChatComposer attach`; the empty state is a welcome over a brand `Background` (`gradient`), with suggestion `Tag`s, never a bare page.
+- The brand is identity, not paint: `Logo` in the header, the `Mascot`'s `color`, `Nav tone="brand"`, one brand action per view, and the brand on what is selected (a `selected` Card or row, the active tab, the active pin). Never tint every surface or fill every button.
+- No empty panes: every region has content, an empty state, or collapses away; text over an image or map sits in a panel and wraps or `truncate`s at every width.
 - Work apps: `density: "compact"`, `border: "conservative"`, dark first. Hierarchy from type and spacing, not from grey cards inside grey cards.
+- Say what matters at a glance: a header strip of the 3–4 numbers the user acts on (`Row` of label + `heading-strong` value + a status `Tag`), colour that means a status, and labels on things (a map pin's name, a track's name), not decoration.
+- Map labels stay readable: `MapMarkers cluster`; a pin shows its text (`MapPin` with children) only when it is active or there are few, a dot otherwise; status as the pin's `tone`, and a legend panel that names the tones and areas.
+- Tablet and phone keep the main canvas (map, preview, timeline, chat) on screen: side lists become a `Drawer`, a bottom sheet or a `SegmentedControl` tab below `m`; never open on a list with the canvas pushed off screen or an empty void.
 
 ## Components
 
@@ -630,7 +643,8 @@ import { useCallback, useEffect, useState } from "react";
 
 type Track = NonNullable<React.ComponentProps<typeof Scrubber>["tracks"]>[number];
 
-const DURATION = 30;
+// Scrubber times are milliseconds: its ruler and clock read them as m:ss.
+const DURATION = 30_000;
 
 const sampleTracks: Track[] = [
   {
@@ -639,15 +653,15 @@ const sampleTracks: Track[] = [
     movable: true,
     resizable: true,
     blocks: [
-      { id: "intro", start: 0, end: 6, label: "Intro" },
-      { id: "demo", start: 6, end: 22, label: "Demo" },
-      { id: "outro", start: 22, end: 30, label: "Outro" },
+      { id: "intro", start: 0, end: 6000, label: "Intro" },
+      { id: "demo", start: 6000, end: 22000, label: "Demo" },
+      { id: "outro", start: 22000, end: 30000, label: "Outro" },
     ],
   },
   {
     id: "audio",
     tone: "accent",
-    blocks: [{ id: "music", start: 0, end: 30, label: "Music", locked: true }],
+    blocks: [{ id: "music", start: 0, end: 30000, label: "Music", locked: true }],
   },
 ];
 
