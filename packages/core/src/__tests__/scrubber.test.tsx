@@ -206,3 +206,49 @@ describe("Scrubber", () => {
     expect(onBlockContextMenu).toHaveBeenCalledWith(expect.anything(), "zooms", "z1");
   });
 });
+
+describe("Scrubber ruler and track headers", () => {
+  it("picks a round tick interval for the duration", async () => {
+    const { rulerInterval } = await import("../components/Scrubber");
+    expect(rulerInterval(30_000)).toBe(5_000);
+    expect(rulerInterval(10_000)).toBe(1_000);
+    expect(rulerInterval(600_000)).toBe(60_000);
+    expect(rulerInterval(0)).toBe(0);
+  });
+
+  it("labels the ruler's ticks and seeks when it is pressed", () => {
+    const onValueChange = vi.fn();
+    render(
+      <Scrubber duration={30_000} value={0} onValueChange={onValueChange} tracks={tracks} ruler />,
+      { wrapper: wrap },
+    );
+    for (const label of ["0:00", "0:05", "0:15", "0:30"]) {
+      expect(screen.getAllByText(label).length).toBeGreaterThan(0);
+    }
+    const slider = screen.getByRole("slider");
+    stubTrackWidth(slider);
+    fireEvent.pointerDown(screen.getByText("0:15").closest("div")?.parentElement as Element, {
+      button: 0,
+      clientX: 500,
+    });
+    expect(onValueChange).toHaveBeenLastCalledWith(15_000);
+  });
+
+  it("draws a header for every track once one has a label", () => {
+    render(
+      <Scrubber
+        duration={30_000}
+        value={0}
+        onValueChange={() => {}}
+        tracks={[
+          { ...tracks[0], label: "Video" },
+          { id: "audio", blocks: [] },
+        ]}
+      />,
+      { wrapper: wrap },
+    );
+    expect(screen.getByText("Video")).toBeTruthy();
+    // The header column sits outside the slider, so the label is not part of its name.
+    expect(screen.getByRole("slider").textContent).not.toContain("Video");
+  });
+});

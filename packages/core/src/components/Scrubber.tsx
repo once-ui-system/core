@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import type React from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { SpacingToken, Tone } from "../types.js";
 import { Column } from "./Column.js";
-import { Flex } from "./Flex.js";
+import type { Flex } from "./Flex.js";
 import { Row } from "./Row.js";
 import { Text } from "./Text.js";
 
@@ -35,6 +36,11 @@ interface ScrubberTrack {
   resizable?: boolean;
   /** Clicking empty space on the track. Receives the time under the pointer. */
   onAdd?: (time: number) => void;
+  /**
+   * The track's name ("Video", "Voice-over"), in a header column to the left
+   * of the tracks. Give one track a label and every track gets a header.
+   */
+  label?: React.ReactNode;
 }
 
 type DragTarget =
@@ -84,6 +90,26 @@ interface ScrubberProps extends Omit<React.ComponentProps<typeof Flex>, "onChang
   formatTime?: (time: number) => string;
   /** Keyboard step for the playhead. Defaults to 1/100th of `duration`. */
   step?: number;
+  /**
+   * A time ruler above the tracks: ticks at a round interval for the
+   * duration (1 s, 5 s, 30 s, 1 min…), labelled with `formatTime`. Pressing
+   * it seeks. Assumes milliseconds, like `formatTime`'s default.
+   */
+  ruler?: boolean;
+  /** The width of the track header column, when tracks have labels. Default "8rem". */
+  labelWidth?: string;
+}
+
+/** Round tick intervals, in milliseconds. */
+const TICKS = [
+  100, 250, 500, 1_000, 2_000, 5_000, 10_000, 15_000, 30_000, 60_000, 120_000, 300_000, 600_000,
+  900_000, 1_800_000, 3_600_000,
+];
+
+/** The smallest round interval that puts at most `max` ticks on the ruler. */
+export function rulerInterval(duration: number, max = 10): number {
+  if (duration <= 0) return 0;
+  return TICKS.find((tick) => duration / tick <= max) ?? Math.ceil(duration / max);
 }
 
 /** `m:ss` — enough for a clip, and it grows its own hours field if needed. */
@@ -110,6 +136,8 @@ const Scrubber = ({
   showTime = true,
   formatTime = defaultFormatTime,
   step,
+  ruler = false,
+  labelWidth = "8rem",
   "aria-label": ariaLabel = "Seek",
   ...flex
 }: ScrubberProps) => {
@@ -199,199 +227,278 @@ const Scrubber = ({
   };
 
   const keyStep = step ?? duration / 100;
+  const interval = ruler ? rulerInterval(duration) : 0;
+  const ticks =
+    interval > 0
+      ? Array.from({ length: Math.floor(duration / interval) + 1 }, (_, index) => index * interval)
+      : [];
+  const labelled = tracks.some((track) => track.label !== undefined);
+  const rulerHeight = "20";
+
+  const timeline = (
+    <Column
+      ref={trackRef}
+      fillWidth
+      gap="4"
+      // Operable without a pointer: the playhead is the value, the track is
+      // the range. Blocks stay pointer-driven, which is what they are.
+      role="slider"
+      tabIndex={0}
+      // The slider is what gets named, not the outer column the rest of
+      // the props land on.
+      aria-label={ariaLabel}
+      aria-valuemin={0}
+      aria-valuemax={duration}
+      aria-valuenow={value}
+      aria-valuetext={formatTime(value)}
+      onKeyDown={(event: React.KeyboardEvent) => {
+        // Up and Down step too, as on any slider; they used to scroll the page.
+        if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
+          onValueChange(clamp(value - keyStep));
+        } else if (event.key === "ArrowRight" || event.key === "ArrowUp") {
+          onValueChange(clamp(value + keyStep));
+        } else if (event.key === "Home") onValueChange(0);
+        else if (event.key === "End") onValueChange(duration);
+        else return;
+        event.preventDefault();
+      }}
+      style={{ touchAction: "none" }}
+    >
+      {ruler && (
+        <Row
+          fillWidth
+          height={rulerHeight}
+          cursor="pointer"
+          borderBottom
+          onPointerDown={(event: React.PointerEvent) => {
+            if (event.button !== 0) return;
+            onValueChange(timeAt(event.clientX));
+            begin(event, { kind: "seek" });
+          }}
+        >
+          {ticks.map((tick, index) => (
+            <Row
+              key={tick}
+              position="absolute"
+              bottom="0"
+              pointerEvents="none"
+              vertical="end"
+              style={{
+                left: `${pct(tick)}%`,
+                // The first label starts at the edge, the last ends at it,
+                // the rest centre on their tick.
+                transform:
+                  index === 0
+                    ? undefined
+                    : tick >= duration
+                      ? "translateX(-100%)"
+                      : "translateX(-50%)",
+              }}
+            >
+              <Text
+                family="code"
+                textVariant="label-default-xs"
+                onBackground="neutral-weak"
+                marginBottom="4"
+                style={{ userSelect: "none", whiteSpace: "nowrap" }}
+              >
+                {formatTime(tick)}
+              </Text>
+            </Row>
+          ))}
+        </Row>
+      )}
+      {tracks.length === 0 && (
+        <Row
+          fillWidth
+          height="8"
+          radius="full"
+          background="neutral-alpha-medium"
+          cursor="pointer"
+          overflow="hidden"
+          onPointerDown={(event: React.PointerEvent) => {
+            onValueChange(timeAt(event.clientX));
+            begin(event, { kind: "seek" });
+          }}
+        >
+          <Row
+            fillHeight
+            solid="brand-strong"
+            pointerEvents="none"
+            style={{ width: `${pct(value)}%` }}
+          />
+        </Row>
+      )}
+
+      {tracks.map((track) => (
+        <Row
+          key={track.id}
+          fillWidth
+          height={track.height ?? "40"}
+          radius="s"
+          cursor={track.onAdd ? "copy" : "pointer"}
+          onPointerDown={(event: React.PointerEvent) => {
+            // Only the track's own background — a block sits on top and
+            // handles its own gestures.
+            if (event.target !== event.currentTarget || event.button !== 0) return;
+            if (track.onAdd) {
+              track.onAdd(timeAt(event.clientX));
+              return;
+            }
+            onSelectedChange?.(null);
+            onValueChange(timeAt(event.clientX));
+            begin(event, { kind: "seek" });
+          }}
+        >
+          {track.blocks.map((block) => {
+            const isSelected = block.id === selected;
+            const tone = block.tone ?? track.tone ?? "brand";
+            const movable = track.movable && !block.locked;
+            const resizable = track.resizable && !block.locked;
+            return (
+              <Row
+                key={block.id}
+                position="absolute"
+                top="0"
+                bottom="0"
+                center
+                gap="8"
+                overflow="hidden"
+                radius="s"
+                // Selection has to read at a glance on a dense track, so it
+                // moves both the fill and the border a full step rather
+                // than nudging one of them.
+                background={isSelected ? `${tone}-medium` : `${tone}-alpha-weak`}
+                border={isSelected ? `${tone}-strong` : `${tone}-alpha-medium`}
+                cursor={movable ? "grab" : "pointer"}
+                transition="micro-medium"
+                style={{
+                  left: `${pct(block.start)}%`,
+                  // A zero-length block would otherwise be unclickable.
+                  width: `${Math.max(0.5, pct(block.end - block.start))}%`,
+                  userSelect: "none",
+                }}
+                onPointerDown={(event: React.PointerEvent) => {
+                  if (event.button !== 0) return;
+                  onSelectedChange?.(block.id);
+                  if (movable) {
+                    begin(
+                      event,
+                      { kind: "block", trackId: track.id, blockId: block.id, mode: "move" },
+                      block,
+                    );
+                  } else {
+                    event.stopPropagation();
+                    onValueChange(timeAt(event.clientX));
+                    begin(event, { kind: "seek" });
+                  }
+                }}
+                onContextMenu={(event: React.MouseEvent) =>
+                  onBlockContextMenu?.(event, track.id, block.id)
+                }
+              >
+                {block.label && (
+                  <Text
+                    textVariant="label-default-xs"
+                    onBackground={`${tone}-medium`}
+                    truncate
+                    style={{ userSelect: "none" }}
+                  >
+                    {block.label}
+                  </Text>
+                )}
+                {resizable && (
+                  <>
+                    <Row
+                      position="absolute"
+                      top="0"
+                      bottom="0"
+                      left="0"
+                      width="8"
+                      cursor="ew-resize"
+                      background={isSelected ? `${tone}-alpha-strong` : "transparent"}
+                      transition="micro-medium"
+                      onPointerDown={(event: React.PointerEvent) => {
+                        onSelectedChange?.(block.id);
+                        begin(
+                          event,
+                          {
+                            kind: "block",
+                            trackId: track.id,
+                            blockId: block.id,
+                            mode: "start",
+                          },
+                          block,
+                        );
+                      }}
+                    />
+                    <Row
+                      position="absolute"
+                      top="0"
+                      bottom="0"
+                      right="0"
+                      width="8"
+                      cursor="ew-resize"
+                      background={isSelected ? `${tone}-alpha-strong` : "transparent"}
+                      transition="micro-medium"
+                      onPointerDown={(event: React.PointerEvent) => {
+                        onSelectedChange?.(block.id);
+                        begin(
+                          event,
+                          { kind: "block", trackId: track.id, blockId: block.id, mode: "end" },
+                          block,
+                        );
+                      }}
+                    />
+                  </>
+                )}
+              </Row>
+            );
+          })}
+        </Row>
+      ))}
+
+      {tracks.length > 0 && (
+        <Row
+          position="absolute"
+          top="0"
+          bottom="0"
+          solid="accent-strong"
+          pointerEvents="none"
+          zIndex={1}
+          style={{ left: `${pct(value)}%`, width: "2px" }}
+        />
+      )}
+    </Column>
+  );
 
   return (
     <Column ref={ref} fillWidth gap="8" {...flex}>
-      <Column
-        ref={trackRef}
-        fillWidth
-        gap="4"
-        // Operable without a pointer: the playhead is the value, the track is
-        // the range. Blocks stay pointer-driven, which is what they are.
-        role="slider"
-        tabIndex={0}
-        // The slider is what gets named, not the outer column the rest of
-        // the props land on.
-        aria-label={ariaLabel}
-        aria-valuemin={0}
-        aria-valuemax={duration}
-        aria-valuenow={value}
-        aria-valuetext={formatTime(value)}
-        onKeyDown={(event: React.KeyboardEvent) => {
-          // Up and Down step too, as on any slider; they used to scroll the page.
-          if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
-            onValueChange(clamp(value - keyStep));
-          } else if (event.key === "ArrowRight" || event.key === "ArrowUp") {
-            onValueChange(clamp(value + keyStep));
-          } else if (event.key === "Home") onValueChange(0);
-          else if (event.key === "End") onValueChange(duration);
-          else return;
-          event.preventDefault();
-        }}
-        style={{ touchAction: "none" }}
-      >
-        {tracks.length === 0 && (
-          <Row
-            fillWidth
-            height="8"
-            radius="full"
-            background="neutral-alpha-medium"
-            cursor="pointer"
-            overflow="hidden"
-            onPointerDown={(event: React.PointerEvent) => {
-              onValueChange(timeAt(event.clientX));
-              begin(event, { kind: "seek" });
-            }}
-          >
-            <Row
-              fillHeight
-              solid="brand-strong"
-              pointerEvents="none"
-              style={{ width: `${pct(value)}%` }}
-            />
-          </Row>
-        )}
-
-        {tracks.map((track) => (
-          <Row
-            key={track.id}
-            fillWidth
-            height={track.height ?? "40"}
-            radius="s"
-            cursor={track.onAdd ? "copy" : "pointer"}
-            onPointerDown={(event: React.PointerEvent) => {
-              // Only the track's own background — a block sits on top and
-              // handles its own gestures.
-              if (event.target !== event.currentTarget || event.button !== 0) return;
-              if (track.onAdd) {
-                track.onAdd(timeAt(event.clientX));
-                return;
-              }
-              onSelectedChange?.(null);
-              onValueChange(timeAt(event.clientX));
-              begin(event, { kind: "seek" });
-            }}
-          >
-            {track.blocks.map((block) => {
-              const isSelected = block.id === selected;
-              const tone = block.tone ?? track.tone ?? "brand";
-              const movable = track.movable && !block.locked;
-              const resizable = track.resizable && !block.locked;
-              return (
-                <Row
-                  key={block.id}
-                  position="absolute"
-                  top="0"
-                  bottom="0"
-                  center
-                  gap="8"
-                  overflow="hidden"
-                  radius="s"
-                  // Selection has to read at a glance on a dense track, so it
-                  // moves both the fill and the border a full step rather
-                  // than nudging one of them.
-                  background={isSelected ? `${tone}-medium` : `${tone}-alpha-weak`}
-                  border={isSelected ? `${tone}-strong` : `${tone}-alpha-medium`}
-                  cursor={movable ? "grab" : "pointer"}
-                  transition="micro-medium"
-                  style={{
-                    left: `${pct(block.start)}%`,
-                    // A zero-length block would otherwise be unclickable.
-                    width: `${Math.max(0.5, pct(block.end - block.start))}%`,
-                    userSelect: "none",
-                  }}
-                  onPointerDown={(event: React.PointerEvent) => {
-                    if (event.button !== 0) return;
-                    onSelectedChange?.(block.id);
-                    if (movable) {
-                      begin(
-                        event,
-                        { kind: "block", trackId: track.id, blockId: block.id, mode: "move" },
-                        block,
-                      );
-                    } else {
-                      event.stopPropagation();
-                      onValueChange(timeAt(event.clientX));
-                      begin(event, { kind: "seek" });
-                    }
-                  }}
-                  onContextMenu={(event: React.MouseEvent) =>
-                    onBlockContextMenu?.(event, track.id, block.id)
-                  }
-                >
-                  {block.label && (
-                    <Text
-                      textVariant="label-default-xs"
-                      onBackground={`${tone}-medium`}
-                      truncate
-                      style={{ userSelect: "none" }}
-                    >
-                      {block.label}
-                    </Text>
-                  )}
-                  {resizable && (
-                    <>
-                      <Row
-                        position="absolute"
-                        top="0"
-                        bottom="0"
-                        left="0"
-                        width="8"
-                        cursor="ew-resize"
-                        background={isSelected ? `${tone}-alpha-strong` : "transparent"}
-                        transition="micro-medium"
-                        onPointerDown={(event: React.PointerEvent) => {
-                          onSelectedChange?.(block.id);
-                          begin(
-                            event,
-                            {
-                              kind: "block",
-                              trackId: track.id,
-                              blockId: block.id,
-                              mode: "start",
-                            },
-                            block,
-                          );
-                        }}
-                      />
-                      <Row
-                        position="absolute"
-                        top="0"
-                        bottom="0"
-                        right="0"
-                        width="8"
-                        cursor="ew-resize"
-                        background={isSelected ? `${tone}-alpha-strong` : "transparent"}
-                        transition="micro-medium"
-                        onPointerDown={(event: React.PointerEvent) => {
-                          onSelectedChange?.(block.id);
-                          begin(
-                            event,
-                            { kind: "block", trackId: track.id, blockId: block.id, mode: "end" },
-                            block,
-                          );
-                        }}
-                      />
-                    </>
-                  )}
-                </Row>
-              );
-            })}
-          </Row>
-        ))}
-
-        {tracks.length > 0 && (
-          <Row
-            position="absolute"
-            top="0"
-            bottom="0"
-            solid="accent-strong"
-            pointerEvents="none"
-            zIndex={1}
-            style={{ left: `${pct(value)}%`, width: "2px" }}
-          />
-        )}
-      </Column>
+      {labelled ? (
+        <Row fillWidth gap="8">
+          <Column gap="4" style={{ width: labelWidth, flexShrink: 0 }}>
+            {ruler && <Row height={rulerHeight} borderBottom aria-hidden />}
+            {tracks.map((track) => (
+              <Row
+                key={track.id}
+                height={track.height ?? "40"}
+                vertical="center"
+                paddingX="8"
+                radius="s"
+                background="neutral-alpha-weak"
+                minWidth={0}
+              >
+                <Text textVariant="label-default-s" onBackground="neutral-medium" truncate>
+                  {track.label}
+                </Text>
+              </Row>
+            ))}
+          </Column>
+          {timeline}
+        </Row>
+      ) : (
+        timeline
+      )}
 
       {showTime && (
         <Row

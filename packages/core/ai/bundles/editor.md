@@ -179,6 +179,8 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - showTime?: boolean = true
 - formatTime?: (time: number) => string = defaultFormatTime
 - step?: number
+- ruler?: boolean = false
+- labelWidth?: string = 8rem
 
 ### ToggleButton
 Mixins: LeafProps.
@@ -480,7 +482,7 @@ type LegacyToast = { variant?: Tone; tone?: Tone; children?: ReactNode; message?
 type RadiusNest = "4" | "8"
 // type RadiusSize is one of these strings: s xl l m xs none full
 type ScrubberBlock = { id: string; start: number; end: number; label?: React.ReactNode; tone?: Tone; locked?: boolean }
-type ScrubberTrack = { id: string; blocks: ScrubberBlock[]; height?: SpacingToken; tone?: Tone; movable?: boolean; resizable?: boolean; onAdd?: (time: number) => void }
+type ScrubberTrack = { id: string; blocks: ScrubberBlock[]; height?: SpacingToken; tone?: Tone; movable?: boolean; resizable?: boolean; onAdd?: (time: number) => void; label?: React.ReactNode }
 type ShadowSize = "s" | "xl" | "l" | "m" | "xs"
 type SolidType = "color" | "contrast" | "inverse"
 // type SpacingToken is one of these strings: s xl l m xs 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128

@@ -22,7 +22,9 @@
   "onBlockContextMenu": "(event: React.MouseEvent, trackId: string, blockId: string) => void",
   "showTime": "boolean = true",
   "formatTime": "(time: number) => string = defaultFormatTime",
-  "step": "number"
+  "step": "number",
+  "ruler": "boolean = false",
+  "labelWidth": "string = 8rem"
  },
  "tags": [
   "media",
@@ -166,7 +168,8 @@
    "tone": "Tone",
    "movable": "boolean",
    "resizable": "boolean",
-   "onAdd": "(time: number) => void"
+   "onAdd": "(time: number) => void",
+   "label": "React.ReactNode"
   },
   "SpacingToken": [
    "s",
