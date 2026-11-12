@@ -167,36 +167,52 @@ function ensureWorker(workerUrl?: string) {
   );
 }
 
-/** Land use, land cover and parks: the fills that patch a dark basemap. */
-const LAND_LAYERS = new Set(["landuse", "landcover", "park"]);
+/**
+ * Land use, land cover, parks and buildings: the fills that patch a dark
+ * basemap. Names from the OpenMapTiles schema (OpenFreeMap, MapTiler) and the
+ * Protomaps one (CARTO's GL styles).
+ */
+const LAND_LAYERS = new Set(["landuse", "landcover", "park", "natural", "buildings"]);
 /** Roads and rails: bright lines on a dark basemap that outshine the data. */
-const ROAD_LAYERS = new Set(["transportation"]);
+const ROAD_LAYERS = new Set(["transportation", "roads"]);
+
+const sourceLayer = (layer: { "source-layer"?: unknown }) =>
+  "source-layer" in layer ? String(layer["source-layer"]) : "";
 
 /**
  * Paints the style's background layers with the page background token. On a
- * dark page it also fades the land-use fills, whose greys read as a muddy
- * patchwork against a tinted page, and dims the roads, whose bright lines
- * outshine the data, so what is drawn on top carries the colour.
+ * dark page it also re-tints the rest from the theme, so any basemap reads as
+ * a quiet ground for the data, a light one included (an app handed a single
+ * light style URL still gets a dark map): land-use fills fade, water takes a
+ * neutral step, roads take the border colour, and labels the weak text colour
+ * with a halo in the page colour.
  */
 function tintStyle(map: MapLibreMap, dark: boolean) {
   const background = tokenColor("--page-background");
+  const colors = dark
+    ? {
+        water: tokenColor("--neutral-background-medium"),
+        road: tokenColor("--neutral-border-medium"),
+        label: tokenColor("--neutral-on-background-weak"),
+      }
+    : null;
   for (const layer of map.getStyle()?.layers ?? []) {
     if (layer.type === "background") {
       map.setPaintProperty(layer.id, "background-color", background);
-    } else if (
-      dark &&
-      layer.type === "fill" &&
-      "source-layer" in layer &&
-      LAND_LAYERS.has(String(layer["source-layer"]))
-    ) {
+      continue;
+    }
+    if (!colors) continue;
+    const source = sourceLayer(layer as { "source-layer"?: unknown });
+    if (layer.type === "fill" && LAND_LAYERS.has(source)) {
       map.setPaintProperty(layer.id, "fill-opacity", 0.12);
-    } else if (
-      dark &&
-      layer.type === "line" &&
-      "source-layer" in layer &&
-      ROAD_LAYERS.has(String(layer["source-layer"]))
-    ) {
-      map.setPaintProperty(layer.id, "line-opacity", 0.45);
+    } else if (layer.type === "fill" && source === "water") {
+      map.setPaintProperty(layer.id, "fill-color", colors.water);
+    } else if (layer.type === "line" && ROAD_LAYERS.has(source)) {
+      map.setPaintProperty(layer.id, "line-color", colors.road);
+      map.setPaintProperty(layer.id, "line-opacity", 0.7);
+    } else if (layer.type === "symbol" && layer.layout && "text-field" in layer.layout) {
+      map.setPaintProperty(layer.id, "text-color", colors.label);
+      map.setPaintProperty(layer.id, "text-halo-color", background);
     }
   }
 }

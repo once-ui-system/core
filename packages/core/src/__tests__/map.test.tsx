@@ -299,7 +299,12 @@ describe("Map", () => {
     map.setPaintProperty.mockClear();
     act(() => map.fire("style.load"));
     expect(map.setPaintProperty).toHaveBeenCalledWith("landuse_park", "fill-opacity", 0.12);
-    expect(map.setPaintProperty).toHaveBeenCalledWith("road_minor", "line-opacity", 0.45);
+    expect(map.setPaintProperty).toHaveBeenCalledWith("road_minor", "line-opacity", 0.7);
+    expect(map.setPaintProperty).toHaveBeenCalledWith(
+      "road_minor",
+      "line-color",
+      expect.any(String),
+    );
     expect(map.setPaintProperty).not.toHaveBeenCalledWith("building", "fill-opacity", 0.12);
   });
 
