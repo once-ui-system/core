@@ -32,6 +32,20 @@ entry below that had landed by then:
 
 ### Added
 
+- **Open Graph images: `createOgImageRoute` and `defineOgSkin`** in `@once-ui-system/core/next`.
+  One route draws a 1200 × 630 card for every page in the product's skin: the title set
+  large in the heading font (`*words*` in the brand color, optionally in an italic
+  `emphasisFont`), an eyebrow, a description, the domain and the product's mascot looking
+  at the title. Layouts `page`, `hero` and `photo`; `image=` only loads from the app's own
+  origin or the skin's `imageHosts`. Fonts come from disk, data or a Google family fetched
+  once, and a font that fails to load never fails the card. `Meta.generate` already points
+  pages at `/api/og/generate`, so a site gets per-page cards by adding the route.
+  `ogImageUrl`, `readOgCard`, `renderOgCard` and `OG_SCHEMES` (the color schemes as hex)
+  come with it. Docs: Utils › OG images.
+- **`mascotSvg` and `mascotDataUrl`**: the mascot as a still SVG string, with the same look
+  options as `Mascot` and a mood, every color written out, for places without React or
+  CSS (Open Graph images, emails, favicons). `Mascot` and `mascotSvg` share their geometry
+  from `mascotShape.ts`.
 - **`EmptyState`.** Also in 2.8: a `visual` (Mascot, Cube Emote) or `icon`, a `title`,
   one line of `description` and an `action`, at `size` `s`, `m` or `l`. `Table`'s own
   empty and no-results states are built from it. `Mascot surface="flat"` no longer paints
