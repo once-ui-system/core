@@ -129,6 +129,7 @@ const notRendered = new Set([
   // The map components need WebGL and a MapLibre instance; map.test.tsx
   // renders them against a stand-in maplibre-gl, on the client and server.
   "Map",
+  "MapArea",
   "MapCircle",
   "MapMarker",
   "MapMarkers",

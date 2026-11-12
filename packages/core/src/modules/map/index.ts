@@ -1,6 +1,7 @@
 export type { ClusterGroup, MapClusterOptions } from "./cluster.js";
 export { clusterPoints } from "./cluster.js";
 export * from "./Map.js";
+export * from "./MapArea.js";
 export * from "./MapCircle.js";
 export type { MapContextValue } from "./MapContext.js";
 export { useMap } from "./MapContext.js";

@@ -18,16 +18,21 @@ const calls = vi.hoisted(() => ({
 vi.mock("maplibre-gl", () => {
   class Evented {
     handlers: Record<string, ((event?: any) => void)[]> = {};
-    on(type: string, handler: (event?: any) => void) {
-      if (!this.handlers[type]) this.handlers[type] = [];
-      this.handlers[type].push(handler);
+    on(type: string, layerOrHandler: any, maybeHandler?: (event?: any) => void) {
+      // MapLibre's on(type, layerId, handler) form is keyed "type:layer" here.
+      const key = maybeHandler ? `${type}:${layerOrHandler}` : type;
+      const handler = maybeHandler ?? layerOrHandler;
+      if (!this.handlers[key]) this.handlers[key] = [];
+      this.handlers[key].push(handler);
       return this;
     }
     once(type: string, handler: (event?: any) => void) {
       return this.on(type, handler);
     }
-    off(type: string, handler: (event?: any) => void) {
-      this.handlers[type] = (this.handlers[type] ?? []).filter((h) => h !== handler);
+    off(type: string, layerOrHandler: any, maybeHandler?: (event?: any) => void) {
+      const key = maybeHandler ? `${type}:${layerOrHandler}` : type;
+      const handler = maybeHandler ?? layerOrHandler;
+      this.handlers[key] = (this.handlers[key] ?? []).filter((h) => h !== handler);
       return this;
     }
     fire(type: string, event?: any) {
@@ -58,7 +63,14 @@ vi.mock("maplibre-gl", () => {
     setSky = vi.fn();
     setPaintProperty = vi.fn();
     setLayoutProperty = vi.fn();
-    getSource = (id: string) => (id === "openmaptiles" ? {} : undefined);
+    sources: Record<string, any> = {};
+    addSource = vi.fn((id: string, source: any) => {
+      this.sources[id] = { ...source, setData: vi.fn() };
+    });
+    removeSource = vi.fn((id: string) => {
+      delete this.sources[id];
+    });
+    getSource = (id: string) => (id === "openmaptiles" ? {} : this.sources[id]);
     getLayer = (id: string) => this.layers.find((layer) => layer.id === id);
     addLayer = vi.fn((layer: any, before?: string) => {
       const at = this.layers.findIndex((l) => l.id === before);
@@ -141,6 +153,7 @@ vi.mock("maplibre-gl", () => {
 
 const {
   Map: MapView,
+  MapArea,
   MapMarker,
   MapMarkers,
   MapPin,
@@ -349,5 +362,63 @@ describe("Map", () => {
     expect(map.removeLayer).toHaveBeenCalledWith(layer.id);
     expect(map.setLayoutProperty).toHaveBeenLastCalledWith("building", "visibility", "visible");
     expect(map.setProjection).toHaveBeenLastCalledWith({ type: "mercator" });
+  });
+});
+
+describe("MapArea", () => {
+  const zone: [number, number][] = [
+    [19, 47.5],
+    [19.1, 47.5],
+    [19.1, 47.6],
+  ];
+
+  it("closes a ring of points and draws it under the basemap's labels", async () => {
+    renderMap(
+      <MapView defaultViewport={{ center: [19, 47.5], zoom: 10 }}>
+        <MapArea points={zone} tone="danger" outline="dashed" />
+      </MapView>,
+    );
+    await settle();
+    const map = calls.maps[0];
+    act(() => map.fire("style.load"));
+    const [id, source] = map.addSource.mock.calls[0];
+    const ring = source.data.geometry.coordinates[0];
+    expect(ring).toHaveLength(4);
+    expect(ring[3]).toEqual(ring[0]);
+    const added = map.addLayer.mock.calls.filter(([layer]: any[]) => layer.source === id);
+    expect(added.map(([layer]: any[]) => layer.type)).toEqual(["fill", "line"]);
+    expect(added.every(([, before]: any[]) => before === "place_label")).toBe(true);
+    expect(map.setPaintProperty).toHaveBeenCalledWith(`${id}-line`, "line-dasharray", [2, 2]);
+  });
+
+  it("takes GeoJSON, updates it in place and calls onSelect on a click", async () => {
+    const onSelect = vi.fn();
+    const first = { type: "FeatureCollection" as const, features: [] };
+    const view = renderMap(
+      <MapView defaultViewport={{ center: [19, 47.5], zoom: 10 }}>
+        <MapArea data={first} onSelect={onSelect} />
+      </MapView>,
+    );
+    await settle();
+    const map = calls.maps[0];
+    act(() => map.fire("style.load"));
+    const [id] = map.addSource.mock.calls[0];
+    act(() => map.fire(`click:${id}-fill`, {}));
+    expect(onSelect).toHaveBeenCalledTimes(1);
+
+    const next = {
+      type: "Feature" as const,
+      properties: {},
+      geometry: { type: "Polygon" as const, coordinates: [[...zone, zone[0]]] },
+    };
+    view.rerender(
+      <MapView defaultViewport={{ center: [19, 47.5], zoom: 10 }}>
+        <MapArea data={next} onSelect={onSelect} />
+      </MapView>,
+    );
+    expect(map.sources[id].setData).toHaveBeenLastCalledWith(next);
+
+    view.rerender(<MapView defaultViewport={{ center: [19, 47.5], zoom: 10 }} />);
+    expect(map.removeSource).toHaveBeenCalledWith(id);
   });
 });

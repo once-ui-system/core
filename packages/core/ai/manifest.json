@@ -1,6 +1,6 @@
 {
  "version": "3.0.0-beta.1",
- "generated": "2026-11-11",
+ "generated": "2026-11-12",
  "imports": {
   "@once-ui-system/core": {
    "use": "Components, hooks, providers, defineConfig and types: everything not listed below"
@@ -95,6 +95,7 @@
    "peer": "maplibre-gl",
    "exports": [
     "Map",
+    "MapArea",
     "MapCircle",
     "MapMarker",
     "MapMarkers",
@@ -107,6 +108,8 @@
    "types": [
     "ClusterGroup",
     "LngLat",
+    "MapAreaData",
+    "MapAreaProps",
     "MapBuildings",
     "MapCircleProps",
     "MapClusterOptions",

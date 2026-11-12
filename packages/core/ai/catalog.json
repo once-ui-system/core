@@ -1,6 +1,6 @@
 {
  "version": "3.0.0-beta.1",
- "generated": "2026-11-11",
+ "generated": "2026-11-12",
  "iconNames": ["adjustments","arrowDown","arrowLeft","arrowRight","arrowUp","arrowUpRight","ball","banknotes","barChart","bell","bolt","book","bookmark","calendar","cart","chat","check","checkbox","chevronDoubleLeft","chevronDoubleRight","chevronDown","chevronLeft","chevronRight","chevronUp","chevronsLeftRight","clipboard","close","code","computer","copy","cube","danger","dark","dislike","document","download","edit","enter","eye","eyeDropper","eyeOff","file","filter","flag","folder","food","forward","gift","globe","grid","grip","heart","help","home","image","inbox","info","light","like","linearGauge","link","lock","logout","mail","mapPin","maximize","menu","minimize","minus","moreHorizontal","newspaper","opacity","organization","pause","paw","payment","people","person","personRemove","phone","play","plus","radialGauge","refresh","return","screen","search","security","send","settings","smiley","sparkle","star","starFill","store","symbol","tag","time","trash","trend","trendDown","trendUp","upload","video","volume","volumeOff","warning","wordmark","world"],
  "components": {
   "ScrollLock": {"purpose":"Freezes page scroll while enabled, keeping one referenced region scrollable"},
@@ -138,6 +138,7 @@
   "MediaUpload": {"purpose":"Drag-and-drop image upload with preview, compression and resizing (needs compressorjs)","importFrom":"@once-ui-system/core/media"},
   "EmojiPicker": {"purpose":"Searchable emoji grid by category; with trigger it opens in a Dropdown (2.x EmojiPickerDropdown)","importFrom":"@once-ui-system/core/emoji"},
   "Map": {"purpose":"Themed map on free tiles with React markers and a controlled viewport (needs maplibre-gl)","importFrom":"@once-ui-system/core/map"},
+  "MapArea": {"purpose":"Polygon or GeoJSON zones","importFrom":"@once-ui-system/core/map"},
   "MapCircle": {"purpose":"Area in metres, e.g. an approximate address","importFrom":"@once-ui-system/core/map"},
   "MapMarker": {"purpose":"React content at a map position","importFrom":"@once-ui-system/core/map"},
   "MapMarkers": {"purpose":"Markers from data, clustered, one active","importFrom":"@once-ui-system/core/map"},
