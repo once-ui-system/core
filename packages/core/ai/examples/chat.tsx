@@ -186,7 +186,7 @@ export function ChatExample() {
 
       <Column fill>
         <Row paddingX="20" paddingY="12" gap="12" vertical="center" borderBottom>
-          <Mascot size="m" state={working ? "thinking" : "idle"} color="brand" aria-label="Sol" />
+          <Mascot size={64} state={working ? "thinking" : "idle"} color="brand" aria-label="Sol" />
           <Column>
             <Text textVariant="label-strong-m">Sol</Text>
             <Text textVariant="body-default-xs" onBackground="neutral-weak">
