@@ -633,6 +633,17 @@ entry below that had landed by then:
 
 ### Fixed
 
+- **`color: "brand"` paints a chart in the brand.** A bare `brand` or
+  `accent` on a series, slice, sparkline or gauge was `var(--data-brand)`,
+  which no theme defines, so it drew nothing; and `brand-strong`, the usual
+  workaround, is the brand's text colour: white in dark, black in light. In a
+  chart, `brand` and `accent` are now the theme's colours at the palette's
+  step (`var(--function-brand-400)`), matching the data hues in both themes.
+- **A chart whose request failed says so.** With `error` set and `data`
+  empty, as `data={data ?? []}` leaves it when a fetch fails, a chart showed
+  its empty message ("No data available for the selected period") instead of
+  `errorState`. `ChartStatus` now puts an error before empty: loading, then
+  error, then empty.
 - **SegmentedControl's selected pill keeps its corners.** The pill copied its
   corners from the selected option's computed style once, at mount, before
   ThemeProvider had set the theme, so it could stay square. It now takes them
