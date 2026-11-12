@@ -1149,6 +1149,14 @@ describe("ship, not screenshot", () => {
     expect(rules(src)).toContain("map.raw");
   });
 
+  it("flags maplibre-gl.css, which overrides Map's own styles", () => {
+    expect(
+      rules(
+        `import "maplibre-gl/dist/maplibre-gl.css";\nexport default function Layout() { return null; }`,
+      ),
+    ).toContain("map.css");
+  });
+
   it("points a hand-drawn character at Mascot", () => {
     const src = `export function SprigMascot() {
       return (<svg viewBox="0 0 10 10"><circle cx="1" cy="1" r="1" /><circle cx="2" cy="1" r="1" /><ellipse cx="5" cy="5" rx="2" ry="1" /><path d="M0 0" /><path d="M1 1" /><path d="M2 2" /></svg>);

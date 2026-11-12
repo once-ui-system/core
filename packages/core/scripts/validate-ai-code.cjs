@@ -1659,6 +1659,13 @@ function shippedComponentIssues(source) {
         "Replaces or fetches the map style by hand, which blanks the basemap: keep <Map> in charge of the style; add your own layers with useMap() (addSource/addLayer in an effect keyed on styleVersion, removed on cleanup)",
     });
   }
+  if (/maplibre-gl\/dist\/maplibre-gl\.css/.test(source)) {
+    found.push({
+      rule: "map.css",
+      message:
+        "Imports maplibre-gl.css, which is unlayered and overrides Map's own styles (controls, popups, the canvas): remove it, <Map> brings what it needs",
+    });
+  }
   if (/<input[^>]*type=["']file["']/.test(source) && !uses("MediaUpload")) {
     found.push({
       rule: "components.upload",
