@@ -1759,6 +1759,11 @@
         "solid-inset-distance": 0,
         "solid-inset-size": 0,
         "solid-border-width": 0,
+        "solid-glow-near": "0rem",
+        "solid-glow-far": "0rem",
+        "solid-glow-near-mix": "0%",
+        "solid-glow-far-mix": "0%",
+        "solid-glow-rim": "{static-transparent}",
         "backdrop-filter": "none",
         "surface-border": "{static-transparent}",
         "surface-background": "{neutral-background-medium}",
@@ -2303,6 +2308,43 @@
         "solid-inset-distance": "-1rem",
         "solid-inset-size": "1rem",
         "solid-border-width": "1px"
+      }
+    },
+    {
+      "when": {
+        "solidStyle": "glow"
+      },
+      "tokens": {
+        "solid-border-width": "1px",
+        "solid-glow-near": "0.625rem",
+        "solid-glow-far": "1.75rem",
+        "solid-glow-near-mix": "55%",
+        "solid-glow-far-mix": "22%",
+        "solid-glow-rim": "{static-white-medium}"
+      }
+    },
+    {
+      "when": {
+        "solidStyle": "glow",
+        "theme": "light"
+      },
+      "tokens": {
+        "solid-glow-near": "0.5rem",
+        "solid-glow-far": "1.25rem",
+        "solid-glow-near-mix": "45%",
+        "solid-glow-far-mix": "14%"
+      }
+    },
+    {
+      "when": {
+        "solidStyle": "glow",
+        "theme": "light"
+      },
+      "tokens": {
+        "solid-glow-near": "0.5rem",
+        "solid-glow-far": "1.25rem",
+        "solid-glow-near-mix": "45%",
+        "solid-glow-far-mix": "14%"
       }
     },
     {

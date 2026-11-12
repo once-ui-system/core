@@ -23,14 +23,14 @@ const copy = (from, to) => {
 const mode = process.argv[2];
 
 if (mode === "scss") {
-  for (const file of ["breakpoints.scss", "touch.scss", "density.scss"]) {
+  for (const file of ["breakpoints.scss", "touch.scss", "density.scss", "glow.scss"]) {
     copy(
       path.join(foundationsRoot, "scss", "styles", file),
       path.join(__dirname, "..", "src", "styles", file),
     );
   }
   console.log(
-    "Synced breakpoints.scss, touch.scss and density.scss from @once-ui-system/foundations",
+    "Synced breakpoints.scss, touch.scss, density.scss and glow.scss from @once-ui-system/foundations",
   );
 } else if (mode === "css") {
   for (const file of ["tokens.css", "styles.css"]) {

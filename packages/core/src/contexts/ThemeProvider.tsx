@@ -24,7 +24,7 @@ export type Theme = "dark" | "light" | "system";
 /** Every neutral scheme tokens.css ships a `[data-neutral]` mapping for. */
 export type NeutralColor = "sand" | "gray" | "slate" | "rose" | "mint" | "dusk";
 export type SolidType = "color" | "contrast" | "inverse";
-export type SolidStyle = "flat" | "plastic";
+export type SolidStyle = "flat" | "plastic" | "glow";
 /** Every corner style tokens.css ships a `[data-border]` mapping for. */
 export type BorderStyle = "rounded" | "playful" | "conservative" | "sharp";
 export type SurfaceStyle = "filled" | "translucent";
