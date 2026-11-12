@@ -121,13 +121,13 @@
       "types": "./dist/components/ColorInput.d.ts",
       "default": "./dist/components/ColorInput.js"
     },
-    "./components/Combobox": {
-      "types": "./dist/components/Combobox.d.ts",
-      "default": "./dist/components/Combobox.js"
-    },
     "./components/Column": {
       "types": "./dist/components/Column.d.ts",
       "default": "./dist/components/Column.js"
+    },
+    "./components/Combobox": {
+      "types": "./dist/components/Combobox.d.ts",
+      "default": "./dist/components/Combobox.js"
     },
     "./components/DateInput": {
       "types": "./dist/components/DateInput.d.ts",
