@@ -776,3 +776,8 @@
 
 /* Reduced motion: the global rule ends these animations; the character keeps
    its poses, lids and expressions, and its eyes still follow, without moving on its own. */
+
+/* Flat means flat: no painted glint on the eyes either. */
+.mascot[data-surface="flat"] .glint {
+  opacity: 0;
+}
