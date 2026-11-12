@@ -144,6 +144,48 @@ Import it from `@once-ui-system/core/config`. That entry has no runtime dependen
   ]}
 />
 
+## Theme presets
+
+A theme that only changes the brand colour still looks like the default. A preset sets every axis together: a tinted page and a lifted surface in both themes, the brand and accent, how solids fill, corners, density, motion, and the faces it was drawn with. Start from the one closest to the product and change only what is yours, usually `brandSeed`.
+
+<ThemePresetGallery />
+
+| Preset | For | Starts in | Heading face |
+|---|---|---|---|
+| `ops` | Operations, incidents, dispatch, maps, monitoring | dark, compact | Space Grotesk |
+| `care` | Consumer, health, home, food, pets, plants | light | Bricolage Grotesque |
+| `creative` | Editors, studios, media and design tools | dark | Sora |
+| `commerce` | Stores, bookings, marketplaces, venues | light | Instrument Sans |
+
+<CodeBlock
+  marginBottom="24"
+  codes={[
+    {
+      code: `import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
+import { defineConfig, themePreset } from "@once-ui-system/core/config";
+
+// The preset, with the product's own brand colour on top.
+const care = themePreset("care", { style: { brandSeed: "#c2410c" } });
+
+export const { style, dataStyle } = defineConfig({
+  style: care.style,
+  dataStyle: care.dataStyle,
+});
+
+// care.fonts names the faces: heading.nextFont is "Bricolage_Grotesque".
+const heading = Bricolage_Grotesque({ variable: "--font-heading", subsets: ["latin"] });
+const body = Geist({ variable: "--font-body", subsets: ["latin"] });
+const label = Geist({ variable: "--font-label", subsets: ["latin"] });
+const code = Geist_Mono({ variable: "--font-code", subsets: ["latin"] });
+export const fonts = { heading, body, label, code };`,
+      language: "ts",
+      label: "once-ui.config.ts",
+    },
+  ]}
+/>
+
+`themePreset(name, overrides)` returns `style`, `dataStyle` and `fonts`. A `brandSeed` or `brandScale` in the overrides switches the brand to `"custom"`; a named `brand` drops the preset's seed. `themePresets` holds the presets themselves, for a picker or a `StyleScope` preview like the one above.
+
 ## Upgrading a 2.0 config
 
 A 2.0 layout cast every value (`style.brand as Schemes`) and renamed keys for `ThemeInit` (`"solid-style": style.solidStyle`). Both still compile. To drop them, wrap the existing objects in `defineConfig`, then pass `config={style} dataStyle={dataStyle}` to `ThemeInit` and spread the sections into the providers.

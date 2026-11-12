@@ -107,3 +107,4 @@ type CheckedConfig<T> = {
 export function defineConfig<T extends OnceUIConfig>(config: T & CheckedConfig<T>): T {
   return config;
 }
+export * from "./presets.js";

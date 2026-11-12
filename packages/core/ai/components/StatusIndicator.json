@@ -46,6 +46,13 @@
  },
  "types": {
   "StatusIndicatorScheme": [
+   "slate",
+   "sand",
+   "gray",
+   "rose",
+   "mint",
+   "dusk",
+   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -57,14 +64,7 @@
    "moss",
    "green",
    "emerald",
-   "aqua",
-   "cyan",
-   "sand",
-   "gray",
-   "slate",
-   "rose",
-   "mint",
-   "dusk"
+   "aqua"
   ],
   "TShirtSizes": [
    "s",

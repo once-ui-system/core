@@ -1649,6 +1649,19 @@ function shippedComponentIssues(source) {
         'A bare `monogram` draws a placeholder shape: give the brand its initial, <Logo text="Name" monogram="N" />, or an icon',
     });
   }
+  // An app config that sets a few colours by hand and nothing else reads as the
+  // stock theme in blind ratings; a preset sets every axis of a look at once.
+  if (
+    /\bdefineConfig\(/.test(source) &&
+    /\bstyle\s*:/.test(source) &&
+    !/\bthemePreset\(|\bthemePresets\b|\bpageBackground\b|\bbrandScale\b/.test(source)
+  ) {
+    found.push({
+      rule: "theme.preset",
+      message:
+        'Sets the theme by hand from the defaults: start from the preset for the app\'s domain, themePreset("ops" | "care" | "creative" | "commerce") from "@once-ui-system/core/config", and change only the product\'s own (brandSeed)',
+    });
+  }
   if (
     /\.setStyle\(|new\s+maplibre(gl)?\.Map\(|fetch\([^)]*style(\.json)?/i.test(source) &&
     /@once-ui-system\/core\/map/.test(source)

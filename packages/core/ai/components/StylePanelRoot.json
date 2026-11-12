@@ -160,8 +160,8 @@
   ],
   "BorderStyle": [
    "rounded",
-   "playful",
    "conservative",
+   "playful",
    "sharp"
   ],
   "ChartMode": [
@@ -175,9 +175,9 @@
    "spacious"
   ],
   "NeutralColor": [
+   "slate",
    "sand",
    "gray",
-   "slate",
    "rose",
    "mint",
    "dusk"
@@ -190,6 +190,7 @@
    "105"
   ],
   "Schemes": [
+   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -201,8 +202,7 @@
    "moss",
    "green",
    "emerald",
-   "aqua",
-   "cyan"
+   "aqua"
   ],
   "ScrollerLabels": {
    "previous": "string",

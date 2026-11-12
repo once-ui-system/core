@@ -170,14 +170,14 @@ Every type a prop names is defined in the slice's (or bundle's) `types`.
 
 If design intent unclear, ask: content style, layout width, color approach, decoration level, imagery. Default: restrained, centered `maxWidth="m"`, single brand accent, one subtle gradient, no placeholder images.
 
-An app: set the theme first, chosen for the domain, never the template's default blue on grey: `brand`, `accent` and `neutral` (or `brandSeed`), `solid: "color"`, a `--font-heading` via `next/font`; no ambient decoration. Consumer and care apps go warm (`orange`/`yellow`/`moss` brand on `sand` or `rose`); health and outdoors `green`/`emerald`/`aqua` on `mint` or `sand`; creative tools `violet`/`magenta` on `dusk`; operations, incident and map tools dark first (`theme: "dark"`), a quiet brand on `slate`, status tones carry meaning. One shell (header, nav, panels) for every route of the app, in its `layout.tsx`. Phone header, plan canvas, selection: `ai/layouts.md`.
+An app: start `once-ui.config` from its domain's preset, never the default theme: `const p = themePreset("ops")` from `@once-ui-system/core/config` (`ops`: operations, dispatch, maps; `care`: consumer, health, home; `creative`: editors, media; `commerce`: stores, bookings), `defineConfig({ style: p.style, dataStyle: p.dataStyle })`, and load `p.fonts` (`heading.nextFont`…) from `next/font/google` as `--font-heading`, `--font-body`, `--font-code`. Change only the product's own: `themePreset("care", { style: { brandSeed: "#…" } })`. No ambient decoration. One shell (header, nav, panels) for every route of the app, in its `layout.tsx`. Phone header, plan canvas, selection: `ai/layouts.md`.
 
 Make it look designed, not stock:
 
 - One idea carries the screen. A map app is the map, full-bleed, its lists and details on floating `surface` panels (`border`, `radius="l"`, `shadow="l"`, `position="absolute"`), never a map in a card beside a table; the selected place's panel acts on it (a write through the data hook, optimistic with rollback). An area gets one small label at its centre, none below zoom 11. A chat with an assistant gives it a face, and the face is the hero: a `Mascot` shaped into the product with `bodyPath` (a pot, a drop, a leaf: a path in 200 × 200) and an `accessory` (a sprout, a hat: SVG, same box), never the default blob; big in the welcome (`size="xl"`, `poke`), then `size={64}` in the header or a rail with its `state` following the reply, never only a small avatar per reply; a photo the user is asked for is `MediaUpload` (with preview) or `ChatComposer attach`; the empty state is a welcome over a brand `Background` (`gradient`), with suggestion `Tag`s, not a bare page.
 - The brand is identity, not paint: `Logo` in the header, the `Mascot`'s `color`, `Nav tone="brand"`, one brand action per view, and the brand on what is selected (a `selected` Card or row, the active tab, the active pin). Never tint every surface or fill every button.
 - No empty panes: every region has content, an empty state, or collapses away; text over an image or map sits in a panel and wraps or `truncate`s.
-- Work apps: `density: "compact"`, `border: "conservative"`, dark first. Hierarchy from type and spacing, not nested grey cards.
+- Hierarchy from type and spacing, not nested grey cards.
 - Say what matters at a glance: a strip of the 3–4 numbers the user acts on (label, `heading-strong` value, status `Tag`), colour that means a status, labels, not decoration.
 - Map labels stay readable: `MapMarkers cluster`; a pin shows its text (`MapPin` with children) only when it is active or there are few, a dot otherwise; status as the pin's `tone`, never a text pill; kinds never overlap; a legend panel (collapsed below `l`) names tones and areas.
 - Every action shows its result where it happened (a split block becomes two, an assigned pin changes colour); one that cannot apply does the nearest useful thing or is disabled with a reason; never a toast alone. No empty bands: a timeline takes its content's height.
@@ -648,7 +648,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ```ts
 type BlendMode = "color" | "screen" | "normal" | "multiply" | "overlay" | "darken" | "lighten" | "difference" | "exclusion" | "hue" | "saturation" | "luminosity" | `color-${"dodge" | "burn"}` | "hard-light" | "soft-light" | "plus-lighter"
 type BlurSize = "s" | "xl" | "l" | "m" | "xs"
-type BorderStyle = "rounded" | "playful" | "conservative" | "sharp"
+type BorderStyle = "rounded" | "conservative" | "playful" | "sharp"
 type Breakpoint = "s" | "xl" | "l" | "m" | "xs"
 type BreakpointKey = "s" | "xl" | "l" | "m" | "xs"
 // type ButtonVariant is one of these strings: link ghost subtle primary secondary tertiary
@@ -657,7 +657,7 @@ type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}ch` | 
 type ColorWeight = "strong" | "medium" | "weak"
 type Colors = `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-${"strong" | "medium" | "weak"}` | `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-alpha-${"strong" | "medium" | "weak"}`
 type ColumnHide = Partial<Record<BreakpointKey, boolean>>
-type CursorPresetValue = "rounded" | "soft" | "dot" | "system"
+type CursorPresetValue = "rounded" | "system" | "soft" | "dot"
 // type FieldSize is one of these strings: s xl l m xs xxs
 // type FlexBreakpointProps: an object of these Flex props, all optional (padding* is padding, paddingX, paddingTop and the rest):
 // center style direction horizontal vertical wrap flex textVariant background solid border* radius shadow padding* margin* gap top right bottom left width height maxWidth minWidth minHeight maxHeight fit* fill* aspectRatio onBackground onSolid align hide pointerEvents position overflow* scrollbar transition opacity zIndex
@@ -682,7 +682,7 @@ type ShadowSize = "s" | "xl" | "l" | "m" | "xs"
 type SolidType = "color" | "contrast" | "inverse"
 // type SpacingToken is one of these strings: s xl l m xs 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
 // type StaticSpacingToken is one of these strings: 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
-// type StatusIndicatorScheme is one of these strings: blue indigo violet magenta pink red orange yellow moss green emerald aqua cyan sand gray slate rose mint dusk
+// type StatusIndicatorScheme is one of these strings: slate sand gray rose mint dusk cyan blue indigo violet magenta pink red orange yellow moss green emerald aqua
 type SurfaceStyle = "filled" | "translucent"
 type TShirtSizes = "s" | "xl" | "l" | "m" | "xs"
 type TableAction = { icon: string; label?: string; tooltip?: string; variant?: "primary" | "secondary" | "tertiary" | "ghost"; tone?: Tone; onClick: (row: unknown, index: number) => void; disabled?: (row: unknown, index: number) => boolean }

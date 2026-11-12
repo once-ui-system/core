@@ -1,5 +1,5 @@
 {
-  ".": 195427,
+  ".": 205708,
   "./components/Accordion": 25101,
   "./components/AccordionGroup": 25538,
   "./components/Animation": 16513,
@@ -92,7 +92,7 @@
   "./css/styles.css": 22766,
   "./css/tokens.css": 11742,
   "./tailwind.css": 3636,
-  "./config": 70,
+  "./config": 1104,
   "./server": 6033,
   "./next": 7165,
   "./data": 88981,

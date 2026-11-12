@@ -29,8 +29,8 @@
   ],
   "BorderStyle": [
    "rounded",
-   "playful",
    "conservative",
+   "playful",
    "sharp"
   ],
   "ChartMode": [
@@ -40,9 +40,9 @@
   ],
   "CursorPresetValue": [
    "rounded",
+   "system",
    "soft",
-   "dot",
-   "system"
+   "dot"
   ],
   "Density": [
    "normal",
@@ -62,9 +62,9 @@
    "pointer"
   ],
   "NeutralColor": [
+   "slate",
    "sand",
    "gray",
-   "slate",
    "rose",
    "mint",
    "dusk"
@@ -125,6 +125,7 @@
    "dark": "SchemeScale"
   },
   "Schemes": [
+   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -136,8 +137,7 @@
    "moss",
    "green",
    "emerald",
-   "aqua",
-   "cyan"
+   "aqua"
   ],
   "SolidStyle": [
    "flat",

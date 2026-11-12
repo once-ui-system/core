@@ -144,14 +144,14 @@
  "types": {
   "BorderStyle": [
    "rounded",
-   "playful",
    "conservative",
+   "playful",
    "sharp"
   ],
   "NeutralColor": [
+   "slate",
    "sand",
    "gray",
-   "slate",
    "rose",
    "mint",
    "dusk"
@@ -176,6 +176,7 @@
    "dark": "SchemeScale"
   },
   "Schemes": [
+   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -187,8 +188,7 @@
    "moss",
    "green",
    "emerald",
-   "aqua",
-   "cyan"
+   "aqua"
   ],
   "SolidStyle": [
    "flat",
