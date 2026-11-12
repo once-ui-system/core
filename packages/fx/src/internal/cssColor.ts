@@ -17,7 +17,9 @@
  *   `var(--brand-on-background-weak)`.
  *
  * With a `prefix` (the charts pass `data-`), a palette hue is that palette's
- * token first: `blue` is `var(--data-blue)`, not the CSS colour `blue`.
+ * token first: `blue` is `var(--data-blue)`, not the CSS colour `blue`; and
+ * `brand` or `accent` is the theme's colour at the palette's step,
+ * `var(--function-brand-400)`.
  *
  * 2.x wrapped every value in `var(--…)`, so `#fff` became `var(--#fff)` and
  * `brand-weak` became `var(--brand-weak)`, neither of which paints anything.
@@ -57,6 +59,9 @@ const DATA_HUES = new Set(
   ),
 );
 
+/** The theme's own colours, which a chart takes as hues: `brand`, `accent`. */
+const THEME_HUES = new Set(["brand", "accent"]);
+
 const TONE_WEIGHT = /^(neutral|brand|accent|info|danger|warning|success)-(weak|medium|strong)$/;
 
 /** A value CSS can paint as written, with no token lookup. */
@@ -71,6 +76,10 @@ export function isRawColor(value: string): boolean {
 export function cssColor(value: string, prefix = ""): string {
   const v = value.trim();
   if (prefix && DATA_HUES.has(v)) return `var(--${prefix}${v})`;
+  // In a chart, `brand` and `accent` are the theme's colours at the step the
+  // palette hues are drawn at, so they sit with them in light and dark. A bare
+  // tone was `var(--data-brand)` before, which no theme defines.
+  if (prefix && THEME_HUES.has(v)) return `var(--function-${v}-400)`;
   if (isRawColor(v)) return v;
   if (v.startsWith("--")) return `var(${v})`;
   const short = TONE_WEIGHT.exec(v);
