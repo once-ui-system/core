@@ -272,6 +272,9 @@ const Logo = ({
     return (
       <span
         style={{
+          // inline-flex makes the name a flex item, so its line box is the
+          // slot's line-height alone and the logo keeps its height.
+          display: "inline-flex",
           fontSize: height,
           lineHeight: height,
           whiteSpace: "nowrap",
