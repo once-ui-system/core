@@ -78,10 +78,13 @@
   right: var(--static-space-16);
   bottom: var(--static-space-16);
   pointer-events: auto;
+  /* Nested radius: the buttons' radius plus the padding around them. */
+  border-radius: calc(var(--radius-m) + var(--static-space-2));
 }
 
-.zoomLabel {
-  min-width: 3.5rem;
+.controls .zoomLabel {
+  min-width: 2.75rem;
+  border-radius: var(--radius-m);
   font-variant-numeric: tabular-nums;
 }
 

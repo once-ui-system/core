@@ -571,8 +571,7 @@ export function Canvas({
               className={styles.controls}
               data-canvas-ui=""
               gap="2"
-              padding="4"
-              radius="m"
+              padding="2"
               background="surface"
               border="neutral-alpha-medium"
               shadow="s"
@@ -587,7 +586,7 @@ export function Canvas({
                 onClick={() => api.zoomBy(1 / 1.25)}
               />
               <Button
-                size="s"
+                size="xs"
                 variant="ghost"
                 className={styles.zoomLabel}
                 aria-label={labels.resetZoom}
