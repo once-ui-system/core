@@ -169,7 +169,7 @@ Every type a prop names is defined in the slice's (or bundle's) `types`.
 
 If design intent unclear, ask: content style, layout width, color approach, decoration level, imagery. Default: restrained, centered `maxWidth="m"`, single brand accent, one subtle gradient, no placeholder images.
 
-An app: start `once-ui.config` from its domain's preset, never the default theme: `const p = themePreset("ops")` from `@once-ui-system/core/config` (`ops`: operations, dispatch, maps; `care`: consumer, health, home; `creative`: editors, media; `commerce`: stores, bookings), `defineConfig({ style: p.style, dataStyle: p.dataStyle })`, and load `p.fonts` (`heading.nextFont`…) from `next/font/google` as `--font-heading`, `--font-body`, `--font-code`. Change only the product's own: `themePreset("care", { style: { brandSeed: "#…" } })`. No ambient decoration. One shell (header, nav, panels) for every route of the app, in its `layout.tsx`. Phone header, plan canvas, selection: `ai/layouts.md`.
+An app: set the theme first: `const p = themePreset("ops")` from `@once-ui-system/core/config` (`ops`: operations, dispatch, maps; `care`: consumer, health, home; `creative`: editors, media; `commerce`: stores, bookings), its own colour as `themePreset("care", { style: { brandSeed: "#…" } })`. Wherever the theme lives: `once-ui.config` (`defineConfig({ style: p.style, dataStyle: p.dataStyle })`) or the providers (`<ThemeInit config={p.style} />`, `<ThemeProvider {...p.style}>`, `<DataThemeProvider {...p.dataStyle}>`). Fonts: `p.fonts` via `next/font` where the network allows. No ambient decoration. One shell (header, nav, panels) for every route of the app, in its `layout.tsx`. Phone header, plan canvas, selection: `ai/layouts.md`.
 
 Make it look designed, not stock:
 

@@ -14,7 +14,7 @@ When the request doesn't specify design intent, ask these five questions first (
 
 If you can't ask (or the user says "you decide"), default to: restrained, centered with `maxWidth="m"` content, single brand accent, one subtle gradient (recipes.md #1), no placeholder images (use `Avatar`, `Logo`, `Icon`).
 
-That default is for a landing page. For an app (signed-in, records, forms), the first build step is the theme, not a page: start `once-ui.config` from the theme preset for the app's domain, `themePreset("ops" | "care" | "creative" | "commerce")` (rule 30c), which sets page and surface in both themes, brand, accent, solids, corners, density and the faces to load with `next/font`. Change only what is the product's own, usually `brandSeed`. One brand accent, no ambient layers or effects. Shipping the starter's gray/blue/contrast unchanged reads as unbranded.
+That default is for a landing page. For an app (signed-in, records, forms), the first build step is the theme, not a page: set it from the theme preset for the app's domain, in `once-ui.config` or in the props of `ThemeInit`, `ThemeProvider` and `DataThemeProvider` wherever the app mounts them, `themePreset("ops" | "care" | "creative" | "commerce")` (rule 30c), which sets page and surface in both themes, brand, accent, solids, corners, density and the faces to load with `next/font`. Change only what is the product's own, usually `brandSeed`. One brand accent, no ambient layers or effects. Shipping the starter's gray/blue/contrast unchanged reads as unbranded.
 
 ## Layout primitives
 

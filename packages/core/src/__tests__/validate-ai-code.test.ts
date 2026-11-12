@@ -1151,11 +1151,23 @@ describe("ship, not screenshot", () => {
 
   it("points a hand-set app theme at a preset", () => {
     expect(
-      rules(`export const { style } = defineConfig({ style: { brand: "cyan", neutral: "gray" } });`),
+      rules(
+        `export const { style } = defineConfig({ style: { brand: "cyan", neutral: "gray" } });`,
+      ),
     ).toContain("theme.preset");
     expect(
       rules(
         `const p = themePreset("care", { style: { brandSeed: "#c2410c" } });\nexport const { style } = defineConfig({ style: p.style });`,
+      ),
+    ).not.toContain("theme.preset");
+    expect(
+      rules(
+        `export function Providers({ children }) { return <ThemeProvider brand="cyan" neutral="gray">{children}</ThemeProvider>; }`,
+      ),
+    ).toContain("theme.preset");
+    expect(
+      rules(
+        `const p = themePreset("ops");\nexport function Providers({ children }) { return <ThemeProvider {...p.style} brand="cyan">{children}</ThemeProvider>; }`,
       ),
     ).not.toContain("theme.preset");
     // A config that sets its own page and surface already chose a look.

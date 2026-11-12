@@ -1652,8 +1652,8 @@ function shippedComponentIssues(source) {
   // An app config that sets a few colours by hand and nothing else reads as the
   // stock theme in blind ratings; a preset sets every axis of a look at once.
   if (
-    /\bdefineConfig\(/.test(source) &&
-    /\bstyle\s*:/.test(source) &&
+    ((/\bdefineConfig\(/.test(source) && /\bstyle\s*:/.test(source)) ||
+      /<ThemeProvider\b[^>]*\b(brand|neutral|solid|border)=/.test(source)) &&
     !/\bthemePreset\(|\bthemePresets\b|\bpageBackground\b|\bbrandScale\b/.test(source)
   ) {
     found.push({
