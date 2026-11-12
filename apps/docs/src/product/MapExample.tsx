@@ -205,3 +205,65 @@ export function MapControlledExample() {
     </Column>
   );
 }
+
+const UNITS = [
+  {
+    id: "m12",
+    call: "M12",
+    kind: "heart",
+    status: "danger",
+    label: "Responding",
+    position: [19.0559, 47.5068],
+  },
+  {
+    id: "e4",
+    call: "E4",
+    kind: "bolt",
+    status: "warning",
+    label: "En route",
+    position: [19.0368, 47.4925],
+  },
+  {
+    id: "p7",
+    call: "P7",
+    kind: "security",
+    status: "success",
+    label: "Available",
+    position: [19.0703, 47.4893],
+  },
+  {
+    id: "m3",
+    call: "M3",
+    kind: "heart",
+    status: "success",
+    label: "Available",
+    position: [19.022, 47.507],
+  },
+] as const;
+
+export function MapStatusExample() {
+  const [active, setActive] = useState<string>("e4");
+  return (
+    <Map
+      height={400}
+      bounds={UNITS.map((unit) => [...unit.position] as LngLat)}
+      labels={{ map: "Units" }}
+    >
+      <MapMarkers
+        items={UNITS.map((unit) => ({ ...unit, position: [...unit.position] as LngLat }))}
+        activeId={active}
+        renderItem={(unit) => (
+          <MapPin
+            icon={unit.kind}
+            tone={unit.status}
+            active={unit.id === active}
+            onClick={() => setActive(unit.id)}
+            aria-label={`${unit.call}, ${unit.label}`}
+          >
+            {unit.id === active ? `${unit.call} · ${unit.label}` : undefined}
+          </MapPin>
+        )}
+      />
+    </Map>
+  );
+}

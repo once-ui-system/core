@@ -3,6 +3,8 @@
 import classNames from "clsx";
 import type React from "react";
 import { ElementType } from "../../components/ElementType.js";
+import { Icon } from "../../components/Icon.js";
+import type { IconName } from "../../icons.js";
 import styles from "./MapPin.module.scss";
 import type { MapTone } from "./types.js";
 
@@ -11,13 +13,26 @@ export interface MapPinProps
   ref?: React.Ref<HTMLElement>;
   /** The pin's text: a price, a count, a short name. Omit for a dot. */
   children?: React.ReactNode;
-  /** Something before the label, such as an Icon or Avatar. */
+  /** Something before the label, such as an Avatar. For a type icon, use `icon`. */
   prefix?: React.ReactNode;
-  /** "pill" carries a label; "dot" marks a point. Default "pill" with children, else "dot". */
-  variant?: "pill" | "dot";
+  /**
+   * What the place is (an ambulance, a hydrant, a café), on a disc in `tone`
+   * that shows at rest, so type and status read without opening the pin.
+   * Alone it is a round marker; with children it leads the pill.
+   */
+  icon?: IconName;
+  /**
+   * "pill" carries a label; "icon" is a round marker for `icon`; "dot" marks
+   * a point. Default "pill" with children, "icon" with only an icon, else "dot".
+   */
+  variant?: "pill" | "icon" | "dot";
   /** The hovered or selected pin: solid in `tone`. */
   active?: boolean;
-  /** The palette when active (and always, for a dot). Default "brand". */
+  /**
+   * The status colour. A dot and an icon disc wear it always; a pill shows it
+   * as a leading mark at rest when `tone` is set, and fills with it when
+   * active. Default "brand".
+   */
   tone?: MapTone;
   /** A pin that opens a page. Without `href` or `onClick` it is not focusable. */
   href?: string;
@@ -32,16 +47,18 @@ const MapPin = ({
   ref,
   children,
   prefix,
+  icon,
   variant,
   active = false,
-  tone = "brand",
+  tone: toneProp,
   href,
   onClick,
   className,
   style,
   ...rest
 }: MapPinProps) => {
-  const kind = variant ?? (children || prefix ? "pill" : "dot");
+  const tone = toneProp ?? "brand";
+  const kind = variant ?? (children || prefix ? "pill" : icon ? "icon" : "dot");
   const classes = classNames(
     styles.pin,
     styles[kind],
@@ -57,6 +74,13 @@ const MapPin = ({
   const content = (
     <>
       {prefix}
+      {icon && kind !== "dot" ? (
+        <span className={styles.disc} aria-hidden="true">
+          <Icon name={icon} decorative />
+        </span>
+      ) : (
+        kind === "pill" && toneProp && <span className={styles.status} aria-hidden="true" />
+      )}
       {kind === "pill" && children}
     </>
   );

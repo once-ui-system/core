@@ -167,12 +167,27 @@ function ensureWorker(workerUrl?: string) {
   );
 }
 
-/** Paints the style's background layers with the page background token. */
-function tintStyle(map: MapLibreMap) {
+/** Land use, land cover and parks: the fills that patch a dark basemap. */
+const LAND_LAYERS = new Set(["landuse", "landcover", "park"]);
+
+/**
+ * Paints the style's background layers with the page background token. On a
+ * dark page it also fades the land-use fills, whose greys and browns read as
+ * a muddy patchwork against a tinted page, so data drawn on top carries the
+ * colour.
+ */
+function tintStyle(map: MapLibreMap, dark: boolean) {
   const background = tokenColor("--page-background");
   for (const layer of map.getStyle()?.layers ?? []) {
     if (layer.type === "background") {
       map.setPaintProperty(layer.id, "background-color", background);
+    } else if (
+      dark &&
+      layer.type === "fill" &&
+      "source-layer" in layer &&
+      LAND_LAYERS.has(String(layer["source-layer"]))
+    ) {
+      map.setPaintProperty(layer.id, "fill-opacity", 0.3);
     }
   }
 }
@@ -215,8 +230,15 @@ const MapImpl = ({
   const [failed, setFailed] = useState(false);
 
   // Callbacks and options the long-lived listeners read without re-binding.
-  const latest = useRef({ onViewportChange, onMapClick, onMapLoad, tint, reducedMotion });
-  latest.current = { onViewportChange, onMapClick, onMapLoad, tint, reducedMotion };
+  const latest = useRef({
+    onViewportChange,
+    onMapClick,
+    onMapLoad,
+    tint,
+    reducedMotion,
+    resolvedTheme,
+  });
+  latest.current = { onViewportChange, onMapClick, onMapLoad, tint, reducedMotion, resolvedTheme };
   const appliedStyle = useRef<MapStyleSource | null>(null);
   const boundsKey = bounds && bounds.length > 0 ? JSON.stringify(bounds) : "";
   const framedKey = useRef("");
@@ -281,7 +303,7 @@ const MapImpl = ({
     framedKey.current = boundsKey;
 
     instance.on("style.load", () => {
-      if (latest.current.tint) tintStyle(instance);
+      if (latest.current.tint) tintStyle(instance, latest.current.resolvedTheme === "dark");
       setStyleVersion((version) => version + 1);
     });
     instance.once("load", () => latest.current.onMapLoad?.(instance));
@@ -315,11 +337,11 @@ const MapImpl = ({
       // fires no style.load: re-tint and re-add shapes once it settles.
       map.setStyle(next);
       map.once("idle", () => {
-        if (latest.current.tint) tintStyle(map);
+        if (latest.current.tint) tintStyle(map, latest.current.resolvedTheme === "dark");
         setStyleVersion((version) => version + 1);
       });
     } else if (tint && map.isStyleLoaded()) {
-      tintStyle(map);
+      tintStyle(map, resolvedTheme === "dark");
       setStyleVersion((version) => version + 1);
     }
   }, [map, mapStyle, resolvedTheme, tint]);

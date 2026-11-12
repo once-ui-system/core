@@ -44,6 +44,8 @@ export type Job = {
   address: string;
   position: LngLat;
   status: JobStatus;
+  /** What kind of job: the pin's icon (its status is the pin's tone). */
+  kind: "home" | "bolt";
   /** Metres round the address the job may be anywhere in. */
   radius: number;
   history: { label: string; at: string }[];
@@ -58,6 +60,7 @@ const seed: Job[] = [
     address: "Andrássy út 12",
     position: [19.0583, 47.5025],
     status: "open",
+    kind: "home",
     radius: 150,
     history: [{ label: "Reported", at: "08:10" }],
   },
@@ -67,6 +70,7 @@ const seed: Job[] = [
     address: "Váci utca 40",
     position: [19.0526, 47.4927],
     status: "late",
+    kind: "bolt",
     radius: 120,
     history: [
       { label: "Reported", at: "07:20" },
@@ -148,12 +152,15 @@ export function MapAppExample() {
           activeId={selectedId ?? undefined}
           cluster
           renderItem={(job) => (
+            // Type as the icon, status as the tone, both at rest; the name only when selected.
             <MapPin
+              icon={job.kind}
               tone={STATUS[job.status].tone}
               active={job.id === selectedId}
               onClick={() => setSelectedId(job.id)}
+              aria-label={`${job.title}, ${STATUS[job.status].label}`}
             >
-              {job.title}
+              {job.id === selectedId ? job.title : undefined}
             </MapPin>
           )}
         />

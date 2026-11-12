@@ -32,6 +32,24 @@ import { Map, MapMarker } from "@once-ui-system/core/map";
 
 Positions are `[longitude, latitude]`, the order MapLibre and GeoJSON use. The map renders on the client only; on the server and until MapLibre loads it draws an empty frame of the same size, so the page does not shift.
 
+## Units and status
+
+For things that move or change state (vehicles, crews, sensors), give each pin an `icon` for what it is and a `tone` for its state. Both show at rest, so a dispatcher reads the board without opening a pin; the name can wait until the pin is active.
+
+<MapStatusExample />
+
+```tsx
+<MapPin
+  icon="heart"
+  tone="danger"
+  active={unit.id === active}
+  onClick={() => setActive(unit.id)}
+  aria-label="M12, Responding"
+>
+  {unit.id === active ? "M12 · Responding" : undefined}
+</MapPin>
+```
+
 ## Listings, clustering and popups
 
 `MapMarkers` takes your items (each with an `id` and a `position`) and renders one marker per item. `cluster` merges markers that overlap into a count that zooms in when pressed. `activeId` lifts one marker above the rest, for the item hovered in a result list. `bounds` frames a list of positions and frames it again whenever the list changes, so a new search is always in view.

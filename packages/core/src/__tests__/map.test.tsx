@@ -284,6 +284,38 @@ describe("Map", () => {
     expect(screen.getByRole("link", { name: "45M Ft" })).toBeTruthy();
   });
 
+  it("fades a dark basemap's land-use fills under the page tint", async () => {
+    render(
+      <ThemeProvider theme="dark">
+        <LayoutProvider>
+          <MapView defaultViewport={{ center: [19, 47.5], zoom: 12 }} />
+        </LayoutProvider>
+      </ThemeProvider>,
+    );
+    await settle();
+    const map = calls.maps[0];
+    map.layers.push({ id: "landuse_park", type: "fill", "source-layer": "park" });
+    map.setPaintProperty.mockClear();
+    act(() => map.fire("style.load"));
+    expect(map.setPaintProperty).toHaveBeenCalledWith("landuse_park", "fill-opacity", 0.3);
+    expect(map.setPaintProperty).not.toHaveBeenCalledWith("building", "fill-opacity", 0.3);
+  });
+
+  it("keeps a light basemap's land-use fills as drawn", async () => {
+    render(
+      <ThemeProvider theme="light">
+        <LayoutProvider>
+          <MapView defaultViewport={{ center: [19, 47.5], zoom: 12 }} />
+        </LayoutProvider>
+      </ThemeProvider>,
+    );
+    await settle();
+    const map = calls.maps[0];
+    map.layers.push({ id: "landuse_park", type: "fill", "source-layer": "park" });
+    act(() => map.fire("style.load"));
+    expect(map.setPaintProperty).not.toHaveBeenCalledWith("landuse_park", "fill-opacity", 0.3);
+  });
+
   it("clusters items into a pill that zooms in", async () => {
     renderMap(
       <MapView defaultViewport={{ center: [19, 47.5], zoom: 10 }}>
@@ -349,5 +381,38 @@ describe("Map", () => {
     expect(map.removeLayer).toHaveBeenCalledWith(layer.id);
     expect(map.setLayoutProperty).toHaveBeenLastCalledWith("building", "visibility", "visible");
     expect(map.setProjection).toHaveBeenLastCalledWith({ type: "mercator" });
+  });
+});
+
+describe("MapPin", () => {
+  it("draws a type icon on a status disc as a round marker", () => {
+    const { container } = render(<MapPin icon="check" tone="danger" aria-label="Unit 12" />);
+    const pin = container.firstElementChild as HTMLElement;
+    expect(pin.className).toMatch(/icon/);
+    expect(pin.style.getPropertyValue("--map-pin-solid")).toBe("var(--danger-solid-strong)");
+    expect(pin.querySelector("[class*='disc']")).toBeTruthy();
+  });
+
+  it("leads a pill with the icon disc", () => {
+    const { container } = render(
+      <MapPin icon="check" tone="success">
+        M12
+      </MapPin>,
+    );
+    const pin = container.firstElementChild as HTMLElement;
+    expect(pin.className).toMatch(/pill/);
+    expect(pin.querySelector("[class*='disc']")).toBeTruthy();
+    expect(pin.textContent).toBe("M12");
+  });
+
+  it("shows a set tone at rest as a mark before the label", () => {
+    const { container } = render(<MapPin tone="warning">En route</MapPin>);
+    expect(container.querySelector("[class*='status']")).toBeTruthy();
+  });
+
+  it("leaves a plain price pill as it was", () => {
+    const { container } = render(<MapPin>45M Ft</MapPin>);
+    expect(container.querySelector("[class*='status']")).toBeNull();
+    expect(container.querySelector("[class*='disc']")).toBeNull();
   });
 });
