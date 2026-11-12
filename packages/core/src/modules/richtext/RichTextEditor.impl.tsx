@@ -306,7 +306,6 @@ const RichTextEditorImpl = ({
               aria-label={text.linkUrl}
               placeholder="https://"
               value={linkDraft}
-              // biome-ignore lint/a11y/noAutofocus: the reader opened this field to type in it
               autoFocus
               onChange={(event) => setLinkDraft(event.target.value)}
               onKeyDown={(event) => {
