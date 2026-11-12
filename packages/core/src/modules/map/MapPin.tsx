@@ -6,6 +6,7 @@ import { ElementType } from "../../components/ElementType.js";
 import { Icon } from "../../components/Icon.js";
 import type { IconName } from "../../icons.js";
 import styles from "./MapPin.module.scss";
+import { toneVars } from "./tokenColor.js";
 import type { MapTone } from "./types.js";
 
 export interface MapPinProps
@@ -68,9 +69,10 @@ const MapPin = ({
     (href || onClick) && styles.interactive,
     className,
   );
+  const vars = toneVars(tone);
   const colorStyle = {
-    "--map-pin-solid": `var(--${tone}-solid-strong)`,
-    "--map-pin-on-solid": `var(--${tone}-on-solid-strong)`,
+    "--map-pin-solid": `var(${vars.solid})`,
+    "--map-pin-on-solid": `var(${vars.onSolid})`,
     ...style,
   } as React.CSSProperties;
   const content = (

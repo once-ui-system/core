@@ -400,6 +400,13 @@ describe("MapPin", () => {
     expect(pin.querySelector("[class*='disc']")).toBeTruthy();
   });
 
+  it("keeps the brand's colour when solids are contrast (ink, not colour)", () => {
+    const { container } = render(<MapPin icon="check" aria-label="Unit 3" />);
+    const pin = container.firstElementChild as HTMLElement;
+    expect(pin.style.getPropertyValue("--map-pin-solid")).toBe("var(--function-brand-500)");
+    expect(pin.style.getPropertyValue("--map-pin-on-solid")).toBe("var(--static-white)");
+  });
+
   it("leads a pill with the icon disc", () => {
     const { container } = render(
       <MapPin icon="check" tone="success">
