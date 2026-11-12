@@ -239,24 +239,8 @@
     "components": ["Flex", "Row", "Column", "Grid"]
   },
   "Chart.xAxis": {
-    "rule": "The x axis reads the first key of data[0] that is not a series key (date, label, month). Put that key first in every point and list only the plotted keys in series: series={[{ key: \"visitors\" }]} with data={[{ date: \"Oct 1\", visitors: 1840 }]}.",
+    "rule": "The x axis is xKey, else the first non-series key of data[0]: pass xKey when rows carry an id. A missing value is a gap. Series color: a data hue (\"blue\"), \"brand\" (not \"brand-strong\", white in dark) or CSS; a pie slice takes color from its row.",
     "components": ["LineChart", "BarChart", "LineBarChart"]
-  },
-  "Chart.xKey": {
-    "rule": "Pass xKey whenever rows carry more than the x value and the series (an id, a slug): without it the x axis is the first non-series key of data[0], so an API row that leads with id puts ids on the axis. Rows are drawn in the order given, never sorted; a missing or null value is a gap, not a zero.",
-    "components": ["LineChart", "BarChart", "LineBarChart"]
-  },
-  "Chart.dateRange": {
-    "rule": "date.start and date.end filter the rows to that range (rows outside are not drawn); they do not stretch the axis. Leave them out to draw every row. Date x values need date.format (\"MMM yyyy\"), or a Date prints its long toString().",
-    "components": ["LineChart", "BarChart", "LineBarChart"]
-  },
-  "Chart.color": {
-    "rule": "A series color is a data hue (\"blue\", \"emerald\", \"gray\", \"contrast\"), \"brand\" or \"accent\" (the theme's colour at the palette step; \"brand-strong\" is a text colour, white in dark) or a CSS colour. PieChart ignores series.color: colour a slice with a color key on its row.",
-    "components": ["LineChart", "BarChart", "LineBarChart", "PieChart"]
-  },
-  "Chart.serverProps": {
-    "rule": "Charts are client components: from a server component pass valueFormat as \"compact\", \"percent\" or Intl options, never a function, and keep date.onRangeChange in a client wrapper. A function prop from a server component fails to render.",
-    "components": ["LineChart", "BarChart", "LineBarChart", "PieChart"]
   },
   "Map.positions": {
     "rule": "Positions are [longitude, latitude], not [lat, lng]. Map needs a height (or fill inside a sized parent); it shadows the global Map, so import it as another name in a file that also uses new Map().",

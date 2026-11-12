@@ -665,11 +665,7 @@ type ValueFormat = "number" | "compact" | "percent" | "NumberFormatOptions" | (v
 
 ## Gotchas
 
-- The x axis reads the first key of data[0] that is not a series key (date, label, month). Put that key first in every point and list only the plotted keys in series: series={[{ key: "visitors" }]} with data={[{ date: "Oct 1", visitors: 1840 }]}.
-- Pass xKey whenever rows carry more than the x value and the series (an id, a slug): without it the x axis is the first non-series key of data[0], so an API row that leads with id puts ids on the axis. Rows are drawn in the order given, never sorted; a missing or null value is a gap, not a zero.
-- date.start and date.end filter the rows to that range (rows outside are not drawn); they do not stretch the axis. Leave them out to draw every row. Date x values need date.format ("MMM yyyy"), or a Date prints its long toString().
-- A series color is a data hue ("blue", "emerald", "gray", "contrast"), "brand" or "accent" (the theme's colour at the palette step; "brand-strong" is a text colour, white in dark) or a CSS colour. PieChart ignores series.color: colour a slice with a color key on its row.
-- Charts are client components: from a server component pass valueFormat as "compact", "percent" or Intl options, never a function, and keep date.onRangeChange in a client wrapper. A function prop from a server component fails to render.
+- The x axis is xKey, else the first non-series key of data[0]: pass xKey when rows carry an id. A missing value is a gap. Series color: a data hue ("blue"), "brand" (not "brand-strong", white in dark) or CSS; a pie slice takes color from its row.
 - x/y are percent positions of the container (50/50 = center).
 - StatusIndicator takes scheme="green" | "red" | "orange" | "sand" etc., a fixed palette hue, or tone="success" | "danger" | "brand" etc., a theme role that follows the theme; not color, its 2.x name, and not variant. Avatar's statusIndicator is { scheme } or { tone }.
 - Never cast an icon name with `as IconName`: the cast compiles a name the registry does not have, and it renders nothing. Use a name from iconNames; in data, type the field as IconName ({ icon: IconName }[]) or write the literal `as const`, so the type check still runs.
