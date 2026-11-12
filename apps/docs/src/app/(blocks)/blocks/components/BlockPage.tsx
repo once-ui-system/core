@@ -338,8 +338,13 @@ export function BlockPage({
   const [mode, setMode] = useState<ViewMode>("focus");
   const [activeId, setActiveId] = useState(ids[0] ?? "");
 
+  // `?view=all` opens on the full list (the visual check uses it to shoot every block).
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("view") === "all") setMode("all");
+  }, []);
+
   // The block in focus follows the URL hash (#About7), so a link to one block
-  // opens on that block and the back button keeps working between blocks.
+  // opens on that block.
   // biome-ignore lint/correctness/useExhaustiveDependencies: idsKey stands in for ids, which is a new array every render
   useEffect(() => {
     const sync = () => {

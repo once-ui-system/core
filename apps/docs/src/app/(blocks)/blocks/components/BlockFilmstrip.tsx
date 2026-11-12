@@ -45,6 +45,32 @@ export function BlockFilmstrip({
   const stripRef = useRef<HTMLDivElement>(null);
   const drag = useRef({ down: false, startX: 0, startScroll: 0, moved: false });
 
+  // The previews are second copies of blocks the page also renders in full, and
+  // they come first in the document. Blocks hard-code ids (`id="email"`), so a
+  // label in the real block would point at the hidden copy's field. Strip ids
+  // and label targets from the previews as they mount.
+  useEffect(() => {
+    const strip = stripRef.current;
+    if (!ready || !strip) return;
+    const scrub = () => {
+      for (const element of strip.querySelectorAll("[data-filmstrip-canvas] [id]")) {
+        element.removeAttribute("id");
+      }
+      for (const label of strip.querySelectorAll("[data-filmstrip-canvas] label[for]")) {
+        label.removeAttribute("for");
+      }
+    };
+    scrub();
+    const observer = new MutationObserver(scrub);
+    observer.observe(strip, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      attributeFilter: ["id", "for"],
+    });
+    return () => observer.disconnect();
+  }, [ready]);
+
   useEffect(() => {
     const show = () => setReady(true);
     if ("requestIdleCallback" in window) {
@@ -216,6 +242,7 @@ export function BlockFilmstrip({
                 {ready && (
                   <Column
                     className={styles.canvas}
+                    data-filmstrip-canvas
                     position="absolute"
                     top="0"
                     left="0"
