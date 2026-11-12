@@ -218,6 +218,14 @@ describe("Map", () => {
     expect(calls.maps[0].getCanvas().getAttribute("aria-label")).toBe("Budapest");
   });
 
+  it("pins the canvas container inline, so an app's maplibre-gl.css cannot collapse it", async () => {
+    renderMap(<MapView />);
+    await settle();
+    const container = calls.maps[0].container as HTMLElement;
+    expect(container.style.position).toBe("absolute");
+    expect(container.style.inset).toBe("0px");
+  });
+
   it("frames bounds on first render and again when they change", async () => {
     const view = renderMap(
       <MapView
