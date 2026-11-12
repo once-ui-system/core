@@ -741,6 +741,11 @@
     "tags": ["control", "dashboard"],
     "pairsWith": ["Row", "Grid"]
   },
+  "Combobox": {
+    "purpose": "Free-text field with suggestions",
+    "tags": ["form"],
+    "pairsWith": ["Select"]
+  },
   "Select": {
     "purpose": "Dropdown select for one or many options, with optional search",
     "tags": ["form", "dashboard"],

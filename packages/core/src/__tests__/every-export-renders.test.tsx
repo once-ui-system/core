@@ -61,6 +61,11 @@ const fixtures: Record<string, Record<string, unknown>> = {
       { value: "b", label: "B" },
     ],
   },
+  Combobox: {
+    id: "combobox",
+    label: "City",
+    options: [{ label: "Oslo", value: "osl" }],
+  },
   Select: {
     id: "select",
     label: "Fruit",

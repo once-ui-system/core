@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "3.0.0-beta.1",
- "generated": "2026-11-11",
+ "generated": "2026-11-12",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root; '@once-ui-system/fx' and '@once-ui-system/blocks' are packages of their own, installed beside core.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -711,6 +711,10 @@
    "weak"
   ],
   "ColumnHide": "Partial<Record<BreakpointKey, boolean>>",
+  "ComboboxLabels": {
+   "loading": "string"
+  },
+  "ComboboxOption": "Omit<OptionProps, \"selected\" | \"highlighted\" | \"onClick\" | \"href\">",
   "CondensedTShirtSizes": [
    "s",
    "l",
@@ -2839,6 +2843,32 @@
     "onValueChange": "(value: string) => void",
     "supportAlpha": "boolean = false",
     "labels": "ColorInputLabels"
+   }
+  },
+  "Combobox": {
+   "group": "components",
+   "extends": [
+    "Input",
+    "Dropdown"
+   ],
+   "mixins": [
+    "LeafProps"
+   ],
+   "props": {
+    "options": "!ComboboxOption[]",
+    "value": "string",
+    "defaultValue": "string = \"\"",
+    "onValueChange": "(value: string) => void",
+    "onOptionSelect": "(option: ComboboxOption) => void",
+    "open": "boolean",
+    "defaultOpen": "boolean = false",
+    "onOpenChange": "(open: boolean) => void",
+    "filter": "((option: ComboboxOption, query: string) => boolean) | false",
+    "loading": "boolean = false",
+    "emptyState": "ReactNode",
+    "placement": "Placement",
+    "labels": "ComboboxLabels",
+    "fillWidth": "boolean = true"
    }
   },
   "Column": {
