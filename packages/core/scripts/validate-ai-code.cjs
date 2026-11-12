@@ -1642,6 +1642,23 @@ function shippedComponentIssues(source) {
       message: `<${brandMark}> builds a brand mark by hand: use <Logo text="Name" monogram /> (or icon / wordmark sources), which sizes, links and themes it`,
     });
   }
+  if (/<Logo\b[^>]*\bmonogram(?=[\s/>])/.test(source) && !/<Logo\b[^>]*\bicon=/.test(source)) {
+    found.push({
+      rule: "components.logo",
+      message:
+        'A bare `monogram` draws a placeholder shape: give the brand its initial, <Logo text="Name" monogram="N" />, or an icon',
+    });
+  }
+  if (
+    /\.setStyle\(|new\s+maplibre(gl)?\.Map\(|fetch\([^)]*style(\.json)?/i.test(source) &&
+    /@once-ui-system\/core\/map/.test(source)
+  ) {
+    found.push({
+      rule: "map.raw",
+      message:
+        "Replaces or fetches the map style by hand, which blanks the basemap: keep <Map> in charge of the style; add your own layers with useMap() (addSource/addLayer in an effect keyed on styleVersion, removed on cleanup)",
+    });
+  }
   if (/<input[^>]*type=["']file["']/.test(source) && !uses("MediaUpload")) {
     found.push({
       rule: "components.upload",
@@ -1676,11 +1693,19 @@ function stateIssues(source) {
           "Loads data with no loading state: show Skeleton shaped like the content (or Spinner on a control, loading on a Button) while it waits",
       });
     }
-    if (!has(/<Feedback[\s>]|addToast\(|\berror\b\s*[?&]|\bcatch\b|<ChartStatus/)) {
+    // Rendered, not just caught: a catch that only logs, or a toast for a
+    // failed read, leaves a blank screen. A file with no effect only writes,
+    // and a toast with a rollback is its error state.
+    const rendered = has(
+      /<Feedback[\s>]|<ChartStatus|\{\s*!?\s*\w*(error|Error|failed|Failed)\w*\s*(&&|\?)|===\s*["'`](error|failed)["'`]/,
+    );
+    const writesOnly = !has(/\buseEffect\(|\buse(Query|SWR)\b/) && has(/addToast\(/);
+    if (!rendered && !writesOnly) {
       found.push({
         rule: "states.error",
-        message:
-          'Loads or saves data with no error state: catch it and show <Feedback tone="danger"> with a Retry button (a failed write: addToast with tone="danger" and roll the change back)',
+        message: has(/\bcatch\b/)
+          ? 'Catches a failed load but never shows it: keep the error in state (setError in catch) and render <Feedback tone="danger"> with a Retry button in place of the content'
+          : 'Loads data with no error state: keep the error in state and render <Feedback tone="danger"> with a Retry button (a failed write: addToast with tone="danger" and roll the change back)',
       });
     }
   }

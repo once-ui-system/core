@@ -1120,6 +1120,35 @@ describe("Select as a form value", () => {
 });
 
 describe("ship, not screenshot", () => {
+  it("wants a caught load rendered, not only caught", () => {
+    const src = `export function Zones() {
+      const [zones, setZones] = useState([]);
+      useEffect(() => { load().then(setZones).catch((e) => console.error(e)); }, []);
+      return (<Column>{zones.length === 0 && <Text>None</Text>}{zones.map((z) => <Text key={z.id}>{z.name}</Text>)}{loading && <Skeleton />}</Column>);
+    }`;
+    expect(rules(src)).toContain("states.error");
+    expect(
+      rules(
+        src.replace("<Column>", '<Column>{error && <Feedback tone="danger" title="Failed" />}'),
+      ),
+    ).not.toContain("states.error");
+  });
+
+  it("asks a bare monogram for the brand's initial", () => {
+    expect(rules(`export const H = () => { return <Logo text="Sprig" monogram />; };`)).toContain(
+      "components.logo",
+    );
+    expect(
+      rules(`export const H = () => { return <Logo text="Sprig" monogram="S" />; };`),
+    ).not.toContain("components.logo");
+  });
+
+  it("stops a map app replacing the style by hand", () => {
+    const src = `import { Map, useMap } from "@once-ui-system/core/map";
+      export function Layers() { const { map } = useMap(); useEffect(() => { map.setStyle(style, { diff: false }); }, [map]); return <Map />; }`;
+    expect(rules(src)).toContain("map.raw");
+  });
+
   it("points a hand-drawn character at Mascot", () => {
     const src = `export function SprigMascot() {
       return (<svg viewBox="0 0 10 10"><circle cx="1" cy="1" r="1" /><circle cx="2" cy="1" r="1" /><ellipse cx="5" cy="5" rx="2" ry="1" /><path d="M0 0" /><path d="M1 1" /><path d="M2 2" /></svg>);

@@ -181,7 +181,7 @@ export function MapAppExample() {
         s={{ position: "absolute", top: undefined, bottom: "0", left: "0", width: "100%" }}
       >
         <Row padding="16" gap="12" vertical="center" horizontal="between" borderBottom>
-          <Logo text="Fjell Service" monogram size="s" />
+          <Logo text="Fjell Service" monogram="F" size="s" />
           <Tag label={`${items.filter((j) => j.status === "late").length} late`} tone="danger" />
         </Row>
         <Column padding="12" borderBottom>

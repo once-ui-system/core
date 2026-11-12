@@ -12,6 +12,7 @@
  * functions, so a real API replaces their bodies and no screen changes.
  */
 import {
+  Background,
   Button,
   ChatComposer,
   type ChatComposerMessage,
@@ -155,7 +156,7 @@ export function ChatExample() {
     <Row fill height="100dvh" background="page">
       <Column width={20} borderRight padding="12" gap="8" s={{ hide: true }}>
         <Row paddingX="8" paddingY="8" horizontal="between" vertical="center">
-          <Logo text="Sol" monogram size="s" />
+          <Logo text="Sol" monogram="S" size="s" />
           <IconButton icon="plus" variant="tertiary" tooltip="New chat" />
         </Row>
         {list.status === "loading" &&
@@ -185,7 +186,7 @@ export function ChatExample() {
 
       <Column fill>
         <Row paddingX="20" paddingY="12" gap="12" vertical="center" borderBottom>
-          <Mascot size="s" state={working ? "thinking" : "idle"} color="brand" aria-label="Sol" />
+          <Mascot size="m" state={working ? "thinking" : "idle"} color="brand" aria-label="Sol" />
           <Column>
             <Text textVariant="label-strong-m">Sol</Text>
             <Text textVariant="body-default-xs" onBackground="neutral-weak">
@@ -219,6 +220,22 @@ export function ChatExample() {
         {thread.status === "ready" && messages.length === 0 && !working && (
           // The empty state is the assistant's welcome: its face, one line, and a way to start.
           <Column fill center gap="16" padding="24">
+            <Background
+              position="absolute"
+              top="0"
+              left="0"
+              fill
+              pointerEvents="none"
+              gradient={{
+                display: true,
+                colorStart: "brand-alpha-weak",
+                colorEnd: "static-transparent",
+                x: "50%",
+                y: "40%",
+                width: "80%",
+                height: "70%",
+              }}
+            />
             <Mascot size="xl" mood="happy" color="brand" poke aria-label="Sol says hello" />
             <Text textVariant="heading-strong-m">What can I help with?</Text>
             <Row gap="8" wrap horizontal="center">
