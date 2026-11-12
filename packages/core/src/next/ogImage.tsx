@@ -15,7 +15,7 @@
  * heading font and the product's mascot looking at it. Words wrapped in
  * `*asterisks*` in the title are drawn in the brand color.
  */
-import { ImageResponse } from "next/og";
+import { ImageResponse } from "next/og.js";
 import type { CSSProperties, ReactElement, ReactNode } from "react";
 import { type MascotSvgOptions, mascotSvg } from "../modules/ai/mascotSvg.js";
 import { luminance, mixColors, parseColor, withAlpha } from "../utils/colorMath.js";

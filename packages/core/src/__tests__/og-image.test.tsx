@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const calls: { element: unknown; options: Record<string, unknown> }[] = [];
-vi.mock("next/og", () => ({
+vi.mock("next/og.js", () => ({
   ImageResponse: class extends Response {
     constructor(element: unknown, options: Record<string, unknown>) {
       super("png", { headers: options.headers as Record<string, string> });
