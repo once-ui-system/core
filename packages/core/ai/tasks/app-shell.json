@@ -22,25 +22,13 @@
     "Tag",
     "Icon"
   ],
-  "functions": [
-    "selectNavHref",
-    "useTheme"
-  ],
+  "functions": ["selectNavHref", "useTheme"],
   "recipes": [],
-  "layout": [
-    "layouts.md#1-app-shell-with-a-sidebar",
-    "layouts.md#2-data-driven-navigation"
-  ],
+  "layout": ["layouts.md#1-app-shell-with-a-sidebar", "layouts.md#2-data-driven-navigation"],
   "blocks": {
     "manifest": "examples/blocks/manifest.json",
-    "primary": [
-      "Sidebar1",
-      "Header1"
-    ],
-    "compose": [
-      "Dashboard1",
-      "Table1"
-    ]
+    "primary": ["Sidebar1", "Header1"],
+    "compose": ["Dashboard1", "Table1"]
   },
   "gotchas": [
     "layout.shorthands",

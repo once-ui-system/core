@@ -30,9 +30,7 @@
   "example": "examples/settings.tsx",
   "blocks": {
     "manifest": "examples/blocks/manifest.json",
-    "compose": [
-      "Header4"
-    ]
+    "compose": ["Header4"]
   },
   "gotchas": [
     "Card.interactive",

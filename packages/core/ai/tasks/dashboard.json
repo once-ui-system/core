@@ -23,21 +23,13 @@
     "Drawer",
     "NavItem"
   ],
-  "recipes": [
-    "reveal-stagger"
-  ],
+  "recipes": ["reveal-stagger"],
   "layout": "layouts.md#1-app-shell-with-a-sidebar",
   "example": "examples/dashboard.tsx",
   "blocks": {
     "manifest": "examples/blocks/manifest.json",
-    "primary": [
-      "Dashboard1",
-      "Table1"
-    ],
-    "compose": [
-      "Header1",
-      "Sidebar1"
-    ]
+    "primary": ["Dashboard1", "Table1"],
+    "compose": ["Header1", "Sidebar1"]
   },
   "gotchas": [
     "Card.interactive",

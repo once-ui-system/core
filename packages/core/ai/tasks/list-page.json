@@ -24,13 +24,8 @@
   "example": "examples/list-page.tsx",
   "blocks": {
     "manifest": "examples/blocks/manifest.json",
-    "primary": [
-      "Table1"
-    ],
-    "compose": [
-      "Header4",
-      "Sidebar1"
-    ]
+    "primary": ["Table1"],
+    "compose": ["Header4", "Sidebar1"]
   },
   "gotchas": [
     "Card.interactive",
