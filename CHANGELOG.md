@@ -633,6 +633,10 @@ entry below that had landed by then:
 
 ### Fixed
 
+- **`MediaVideoPlayer` shows a focus ring.** The player is a tab stop of its own
+  (Space plays, the arrows seek) but drew no outline, so keyboard focus on it
+  was invisible. It now draws the brand focus ring, inset.
+
 - **SegmentedControl's selected pill keeps its corners.** The pill copied its
   corners from the selected option's computed style once, at mount, before
   ThemeProvider had set the theme, so it could stay square. It now takes them
