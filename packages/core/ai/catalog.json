@@ -1,6 +1,6 @@
 {
  "version": "3.0.0-beta.1",
- "generated": "2026-11-11",
+ "generated": "2026-11-12",
  "iconNames": ["adjustments","arrowDown","arrowLeft","arrowRight","arrowUp","arrowUpRight","ball","banknotes","barChart","bell","bolt","book","bookmark","calendar","cart","chat","check","checkbox","chevronDoubleLeft","chevronDoubleRight","chevronDown","chevronLeft","chevronRight","chevronUp","chevronsLeftRight","clipboard","close","code","computer","copy","cube","danger","dark","dislike","document","download","edit","enter","eye","eyeDropper","eyeOff","file","filter","flag","folder","food","forward","gift","globe","grid","grip","heart","help","home","image","inbox","info","light","like","linearGauge","link","lock","logout","mail","mapPin","maximize","menu","minimize","minus","moreHorizontal","newspaper","opacity","organization","pause","paw","payment","people","person","personRemove","phone","play","plus","radialGauge","refresh","return","screen","search","security","send","settings","smiley","sparkle","star","starFill","store","symbol","tag","time","trash","trend","trendDown","trendUp","upload","video","volume","volumeOff","warning","wordmark","world"],
  "components": {
   "ScrollLock": {"purpose":"Freezes page scroll while enabled, keeping one referenced region scrollable"},
@@ -144,6 +144,13 @@
   "MapMarkers": {"purpose":"Markers from data, clustered, one active","importFrom":"@once-ui-system/core/map"},
   "MapPin": {"purpose":"Marker look: label pill or dot","importFrom":"@once-ui-system/core/map"},
   "MapPopup": {"purpose":"Card above a map position; Escape closes","importFrom":"@once-ui-system/core/map"},
+  "Canvas": {"purpose":"Infinite pan/zoom canvas for editors; CanvasItem, TransformHandles, SnapGuides","importFrom":"@once-ui-system/core/canvas"},
+  "CanvasAnchor": {"purpose":"CanvasAnchor component","importFrom":"@once-ui-system/core/canvas"},
+  "CanvasOverlay": {"purpose":"CanvasOverlay component","importFrom":"@once-ui-system/core/canvas"},
+  "SelectionBox": {"purpose":"SelectionBox component","importFrom":"@once-ui-system/core/canvas"},
+  "CanvasItem": {"purpose":"CanvasItem component","importFrom":"@once-ui-system/core/canvas"},
+  "SnapGuides": {"purpose":"SnapGuides component","importFrom":"@once-ui-system/core/canvas"},
+  "TransformHandles": {"purpose":"TransformHandles component","importFrom":"@once-ui-system/core/canvas"},
   "AdapterProvider": {"purpose":"The app's link and image components for every Once UI link and image; core/next's LayoutProvider installs Next's"},
   "DataThemeProvider": {"purpose":"App-wide chart defaults (variant, mode, height, axis, ticks); read with useDataTheme"},
   "IconProvider": {"purpose":"Adds icons to the built-in set or replaces them, by name, for Icon and every icon prop"},

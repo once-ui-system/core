@@ -1,6 +1,6 @@
 {
  "version": "3.0.0-beta.1",
- "generated": "2026-11-11",
+ "generated": "2026-11-12",
  "imports": {
   "@once-ui-system/core": {
    "use": "Components, hooks, providers, defineConfig and types: everything not listed below"
@@ -123,6 +123,63 @@
     "MapStyleSource",
     "MapTone",
     "MapViewport"
+   ]
+  },
+  "@once-ui-system/core/canvas": {
+   "use": "Infinite canvas for editors: pan and zoom camera, world-placed items, selection box, resize and rotate handles, snap guides",
+   "exports": [
+    "Canvas",
+    "CanvasAnchor",
+    "CanvasOverlay",
+    "SelectionBox",
+    "CanvasItem",
+    "SnapGuides",
+    "TransformHandles",
+    "useCanvas",
+    "useCanvasApi",
+    "fitView",
+    "mapRect",
+    "pointsBounds",
+    "rectAABB",
+    "rectCenter",
+    "rectContains",
+    "rectContainsPoint",
+    "rectCorners",
+    "rectFromPoints",
+    "rectsBounds",
+    "rectsIntersect",
+    "resizeRect",
+    "rotatePoint",
+    "rotateRect",
+    "screenToWorld",
+    "snapRect",
+    "snapToGrid",
+    "worldToScreen",
+    "zoomAt",
+    "useCanvasDrag"
+   ],
+   "types": [
+    "CanvasAnchorProps",
+    "CanvasApi",
+    "CanvasDragOptions",
+    "CanvasDragState",
+    "CanvasGuide",
+    "CanvasHandle",
+    "CanvasItemProps",
+    "CanvasLabels",
+    "CanvasOverlayProps",
+    "CanvasPoint",
+    "CanvasProps",
+    "CanvasRect",
+    "CanvasSelectionBoxInfo",
+    "CanvasTransformInfo",
+    "CanvasView",
+    "ResizeOptions",
+    "SelectionBoxProps",
+    "SnapGuidesProps",
+    "SnapResult",
+    "TransformHandlesLabels",
+    "TransformHandlesProps"
    ]
   },
   "@once-ui-system/core/mdx": {

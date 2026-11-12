@@ -1,0 +1,9 @@
+{
+ "name": "CanvasOverlay",
+ "group": "canvas",
+ "importFrom": "@once-ui-system/core/canvas",
+ "props": {
+  "children": "ReactNode"
+ },
+ "mixinsRef": []
+}

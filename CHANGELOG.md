@@ -11,6 +11,12 @@ Entries before 1.7.13 are reconstructed from GitHub releases and git history and
 incomplete; reconciling them against actual npm release history is a scheduled roadmap
 item (see `ROADMAP.md`, Week 4).
 
+## [3.1.0] - Unreleased
+
+### Added
+
+- `Canvas` in `@once-ui-system/core/canvas`: an infinite canvas for editors. The camera pans and zooms (wheel, ⌘/Ctrl + wheel, pinch, Space or middle-button drag, zoom controls, fit) without re-rendering the items on it. `CanvasItem` places anything in world units, `onSelectionBox` draws a drag-to-select box, `TransformHandles` resizes (Shift keeps the ratio, Alt from the centre) and rotates in screen space with keyboard support, `SnapGuides` shows alignment lines and gaps from `snapRect`, `useCanvasDrag` reports drags in world units, and `CanvasAnchor` pins screen-sized content such as cursors or comments to a world point. The geometry (`resizeRect`, `rotateRect`, `snapRect`, `mapRect`, `rectsBounds`, `fitView` and more) is exported.
+
 ## [3.0.0] - Unreleased
 
 Breaking. Built on the `feat/3-0-breaking-cleanup` branch; [MIGRATING.md](MIGRATING.md#2x--30)

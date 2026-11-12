@@ -454,6 +454,11 @@
     "tags": ["ai", "chat", "decoration"],
     "pairsWith": ["VoiceVisualizer", "WorkingIndicator"]
   },
+  "Canvas": {
+    "purpose": "Infinite pan/zoom canvas for editors; CanvasItem, TransformHandles, SnapGuides",
+    "tags": ["canvas", "editor", "design"],
+    "pairsWith": ["SplitView", "ToggleButton"]
+  },
   "Map": {
     "purpose": "Themed map on free tiles with React markers and a controlled viewport (needs maplibre-gl)",
     "tags": ["map", "location", "list"],

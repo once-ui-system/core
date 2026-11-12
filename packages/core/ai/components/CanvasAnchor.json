@@ -1,0 +1,14 @@
+{
+ "name": "CanvasAnchor",
+ "group": "canvas",
+ "importFrom": "@once-ui-system/core/canvas",
+ "props": {
+  "x": "!number",
+  "y": "!number",
+  "align": "\"top-left\" | \"center\" | \"top\" | \"bottom\" | \"left\" | \"right\" = top-left",
+  "children": "ReactNode",
+  "className": "string",
+  "style": "CSSProperties"
+ },
+ "mixinsRef": []
+}

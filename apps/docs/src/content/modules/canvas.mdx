@@ -1,0 +1,87 @@
+---
+title: "Canvas"
+summary: "An infinite canvas for editors: a camera that pans and zooms, items placed in world units, a selection box, resize and rotate handles, and snap guides."
+updatedAt: "2026-11-12"
+github: "modules/canvas/Canvas.tsx"
+docs: "once-ui/modules/canvas.mdx"
+navLabel: "Canvas"
+navIcon: "grid"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+`Canvas` is the surface under a design tool, a whiteboard or a flow builder: a camera over a plane that pans and zooms, with a grid and zoom controls. It doesn't keep a document. Your app owns the shapes, places them with `CanvasItem`, and draws the selection with `TransformHandles` and `SnapGuides`, which hand every change back to you.
+
+<CanvasExample />
+
+## Import
+
+`Canvas` has its own entry point, so apps that don't use it don't pay for it. It has no dependencies.
+
+```tsx
+import {
+  Canvas,
+  CanvasItem,
+  TransformHandles,
+  useCanvasDrag,
+  rectsBounds,
+} from "@once-ui-system/core/canvas";
+
+<Canvas fit={rectsBounds(shapes)} onBackgroundClick={() => setSelected(null)}>
+  {shapes.map((s) => (
+    <CanvasItem key={s.id} x={s.x} y={s.y} width={s.width} height={s.height} rotation={s.rotation} />
+  ))}
+  {selected && <TransformHandles rect={selected} onTransform={(next) => update(selected.id, next)} />}
+</Canvas>;
+```
+
+## The camera
+
+`view` is `{ x, y, zoom }`: a world point `p` is drawn at `p × zoom + (x, y)`. It's controlled like any other 3.0 state (`view` / `defaultView` / `onViewChange`), and `minZoom` and `maxZoom` bound it.
+
+- **Wheel.** With `wheel="pan"` (the default), scrolling and two fingers on a trackpad move the view, and ⌘/Ctrl + wheel or a pinch zooms towards the pointer, as design tools do. `wheel="zoom"` makes the wheel zoom, as maps do.
+- **Dragging.** Holding Space, or dragging with the middle button, always pans. `panOnDrag` is the hand tool: every drag pans. Without it, a drag on empty canvas draws a selection box when `onSelectionBox` is set, and pans when it isn't.
+- **Touch.** One finger works like the mouse, and two fingers pinch to zoom and pan.
+- **Fit.** `fit` is the box the opening view and the fit button frame, usually `rectsBounds` of everything on the canvas. Until someone moves the view, the canvas keeps it framed as it resizes. Change `fitKey` to frame it again, for example when another document opens.
+- **Shortcuts.** While the pointer is over the canvas or focus is in it: ⌘/Ctrl + and − zoom, Shift+0 goes to 100%, and Shift+1 fits. `shortcuts={false}` turns them off.
+
+A `ref` gives the camera to the app: `zoomBy`, `zoomTo`, `fitTo(rect)`, `screenToWorld`, `worldToScreen` and `clientToWorld`. Inside the canvas, `useCanvasApi()` gives the same functions without re-rendering when the view moves, and `useCanvas()` adds the current `view`.
+
+## Items, dragging and drawing
+
+`CanvasItem` places its children in world units, and they scale with the view. The view moving never re-renders items, so a canvas with hundreds of them still pans smoothly. A press on an item never pans or starts a selection box. Hand that press to `useCanvasDrag()`, which reports the drag in world units (`delta`, `point`) at any zoom.
+
+`onBackgroundPointerDown(event, point)` hears a press on empty canvas. Return `true` to take the gesture, as a rectangle or frame tool does, and track the drag yourself with `useCanvasDrag`. `onBackgroundClick` hears a press that didn't move, usually to clear the selection.
+
+## Selection
+
+`onSelectionBox(rect, { phase, additive })` hears the box in world units as it's drawn, then `null` when it's done. `additive` is true when Shift or ⌘/Ctrl was held. Test your shapes against it with `rectsIntersect` or `rectContains`.
+
+## Resize and rotate
+
+`TransformHandles` draws eight resize handles and a rotate handle around `rect`, in screen space, so they keep their size at any zoom. `onTransform(next, { phase, handle, start })` hears each step.
+
+- Shift keeps the proportions (`keepRatio` always does), and Alt resizes from the centre.
+- Shift snaps a rotation to `rotationStep` (15° by default).
+- A turned box resizes along its own edges, and the side opposite the handle stays where it is.
+- For several things, pass their bounds (`rectsBounds`) and apply the change to each one with `mapRect(child, start, next)`.
+- `snap` adjusts a resized box before it's reported, for example `snapToGrid`.
+
+## Snapping
+
+`snapRect(rect, others, { threshold })` moves a box onto the nearest edge or centre of its neighbours and returns the `guides` to draw with `SnapGuides`, which labels the gap between them. Divide a threshold in screen px by `view.zoom` so snapping feels the same at every zoom.
+
+## Screen-space layers
+
+`CanvasAnchor` pins its children to a world point but keeps their size, for comments, labels or other people's cursors. `CanvasOverlay` puts anything in the screen layer over the world. `overlay` places toolbars over the canvas, and `controlsStart` adds your own buttons to the zoom bar.
+
+## Accessibility
+
+- The canvas is a named application region that takes focus, so keyboard users reach its shortcuts. Give it a `labels.canvas` naming the document.
+- Every handle is a button with a name such as "Resize from the top-left corner". The arrow keys move that side by one unit (ten with Shift) and turn the rotate handle by one degree.
+- The zoom controls are buttons with names, and the zoom readout goes back to 100%.
+- The canvas can't describe your shapes for you. Give each `CanvasItem` a role and a name, or offer a layers list beside the canvas.
+
+## Geometry
+
+The maths is exported for your own tools and for tests: `resizeRect`, `rotateRect`, `snapRect`, `snapToGrid`, `rectsBounds`, `rectAABB`, `rectCorners`, `rectContainsPoint`, `rectFromPoints`, `mapRect`, `fitView`, `zoomAt`, `screenToWorld` and `worldToScreen`.
