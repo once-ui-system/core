@@ -68,7 +68,7 @@ Every prop is optional. Without any, you get the web defaults below, following t
 | `brandSeed`, `accentSeed`, `neutralSeed` | `string` | - | A colour (hex, `rgb()` or `oklch()`) to generate that scheme from, as core's seeds. Implies `"custom"` for its scheme. |
 | `brandScale`, `accentScale`, `neutralScale` | `SchemeScale` | - | That scheme step by step, `{ 100: "#…", …, 1200: "#…" }`. Wins over the seed and implies `"custom"`. |
 | `solid` | `"color" \| "contrast" \| "inverse"` | `"contrast"` | How solid fills, such as the primary `Button`, are coloured. |
-| `solidStyle` | `"flat" \| "plastic"` | `"flat"` | Flat fills, or fills with a highlight and a shade. |
+| `solidStyle` | `"flat" \| "plastic" \| "glow"` | `"flat"` | Flat fills, fills with a highlight and a shade, or (web only) fills that glow in their own colour; native draws glow as a 1px edge. |
 | `border` | `"rounded" \| "playful" \| "conservative" \| "sharp"` | `"playful"` | The radius scale. |
 | `surface` | `"filled" \| "translucent"` | `"filled"` | Opaque surfaces, or surfaces in the alpha colours. |
 | `scaling` | `"90" \| "95" \| "100" \| "105" \| "110"` | `"100"` | Scales spacing, sizes and type, in percent. |
