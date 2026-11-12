@@ -204,8 +204,9 @@
 
 .columnHeader {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
-  gap: var(--static-space-4);
+  column-gap: var(--static-space-4);
   padding: var(--static-space-8);
   min-width: 0;
   border: none;
