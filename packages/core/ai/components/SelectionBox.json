@@ -5,6 +5,9 @@
  "props": {
   "rect": "!CanvasRect | null"
  },
+ "tags": [
+  "canvas"
+ ],
  "mixinsRef": [],
  "types": {
   "CanvasRect": {

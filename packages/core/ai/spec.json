@@ -5489,8 +5489,8 @@
     "fitPadding": "number = 64",
     "fitMaxZoom": "number = 1",
     "onSelectionBox": "(rect: CanvasRect | null, info: CanvasSelectionBoxInfo) => void",
-    "onBackgroundPointerDown": "( event: ReactPointerEvent<HTMLDivElement>, point: CanvasPoint, // biome-ignore lint/suspicious/noConfusingVoidType: a handler that returns nothing declines the gesture ) => boolean | void",
-    "onBackgroundClick": "(event: ReactPointerEvent<HTMLDivElement>, point: CanvasPoint) => void",
+    "onBackgroundPointerDown": "( event: React.PointerEvent<HTMLDivElement>, point: CanvasPoint, // biome-ignore lint/suspicious/noConfusingVoidType: a handler that returns nothing declines the gesture ) => boolean | void",
+    "onBackgroundClick": "(event: React.PointerEvent<HTMLDivElement>, point: CanvasPoint) => void",
     "overlay": "ReactNode",
     "shortcuts": "boolean = true",
     "labels": "Partial<CanvasLabels>",
@@ -5544,7 +5544,7 @@
    "props": {
     "guides": "!CanvasGuide[]",
     "showGaps": "boolean = true",
-    "formatGap": "(gap: number) => string = (g) => `${Math.round(g)}`"
+    "formatGap": "(gap: number) => string"
    }
   },
   "TransformHandles": {
@@ -5558,7 +5558,7 @@
     "keepRatio": "boolean = false",
     "minSize": "number = 1",
     "rotationStep": "number = 15",
-    "handles": "ResizeHandle[] = ALL",
+    "handles": "ResizeHandle[]",
     "snap": "(rect: CanvasRect, handle: ResizeHandle) => CanvasRect",
     "sizeLabel": "ReactNode | false",
     "labels": "Partial<TransformHandlesLabels>",

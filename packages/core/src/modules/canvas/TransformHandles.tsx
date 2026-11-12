@@ -112,7 +112,7 @@ export function TransformHandles({
   keepRatio = false,
   minSize = 1,
   rotationStep = 15,
-  handles = ALL,
+  handles,
   snap,
   sizeLabel,
   labels: labelsProp,
@@ -250,7 +250,7 @@ export function TransformHandles({
       }}
     >
       {resizable &&
-        handles.map((handle) => {
+        (handles ?? ALL).map((handle) => {
           const corner = handle.length === 2;
           if (!corner && small) return null;
           return (

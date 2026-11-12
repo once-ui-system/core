@@ -459,6 +459,12 @@
     "tags": ["canvas", "editor", "design"],
     "pairsWith": ["SplitView", "ToggleButton"]
   },
+  "CanvasItem": { "purpose": "Places content on a Canvas in world units", "tags": ["canvas"] },
+  "TransformHandles": { "purpose": "Resize and rotate handles for a canvas selection", "tags": ["canvas"] },
+  "SnapGuides": { "purpose": "Alignment lines and gaps from snapRect", "tags": ["canvas"] },
+  "SelectionBox": { "purpose": "Drag-to-select box on a Canvas", "tags": ["canvas"] },
+  "CanvasAnchor": { "purpose": "Screen-sized content pinned to a world point", "tags": ["canvas"] },
+  "CanvasOverlay": { "purpose": "Screen-space layer over a Canvas", "tags": ["canvas"] },
   "Map": {
     "purpose": "Themed map on free tiles with React markers and a controlled viewport (needs maplibre-gl)",
     "tags": ["map", "location", "list"],

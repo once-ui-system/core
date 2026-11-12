@@ -5,8 +5,11 @@
  "props": {
   "guides": "!CanvasGuide[]",
   "showGaps": "boolean = true",
-  "formatGap": "(gap: number) => string = (g) => `${Math.round(g)}`"
+  "formatGap": "(gap: number) => string"
  },
+ "tags": [
+  "canvas"
+ ],
  "mixinsRef": [],
  "types": {
   "CanvasGuide": {

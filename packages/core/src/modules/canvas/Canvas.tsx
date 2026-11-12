@@ -116,12 +116,12 @@ export interface CanvasProps {
    * draw a selection box from it.
    */
   onBackgroundPointerDown?: (
-    event: ReactPointerEvent<HTMLDivElement>,
+    event: React.PointerEvent<HTMLDivElement>,
     point: CanvasPoint,
     // biome-ignore lint/suspicious/noConfusingVoidType: a handler that returns nothing declines the gesture
   ) => boolean | void;
   /** A press and release on empty canvas that didn't move: usually, clear the selection. */
-  onBackgroundClick?: (event: ReactPointerEvent<HTMLDivElement>, point: CanvasPoint) => void;
+  onBackgroundClick?: (event: React.PointerEvent<HTMLDivElement>, point: CanvasPoint) => void;
   /** Screen-space content over the canvas, such as toolbars. Positioned by you. */
   overlay?: ReactNode;
   /**

@@ -11,5 +11,8 @@
   "zIndex": "number",
   "children": "ReactNode"
  },
+ "tags": [
+  "canvas"
+ ],
  "mixinsRef": []
 }

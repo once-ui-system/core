@@ -18,11 +18,8 @@ export interface SnapGuidesProps {
  * The alignment lines shown while something snaps to its neighbours, with the
  * gap between them, in screen space.
  */
-export function SnapGuides({
-  guides,
-  showGaps = true,
-  formatGap = (g) => `${Math.round(g)}`,
-}: SnapGuidesProps) {
+export function SnapGuides({ guides, showGaps = true, formatGap }: SnapGuidesProps) {
+  const gapText = formatGap ?? ((g: number) => `${Math.round(g)}`);
   const { view, overlay } = useCanvas();
   if (!overlay || guides.length === 0) return null;
   const lines = guides.map((g) => {
@@ -56,7 +53,7 @@ export function SnapGuides({
               aria-hidden="true"
               style={{ transform: `translate(${(a.x + b.x) / 2}px, ${(a.y + b.y) / 2}px)` }}
             >
-              {formatGap(g.gap)}
+              {gapText(g.gap)}
             </span>
           ) : null,
         )}

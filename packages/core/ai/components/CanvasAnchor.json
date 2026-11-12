@@ -10,5 +10,8 @@
   "className": "string",
   "style": "CSSProperties"
  },
+ "tags": [
+  "canvas"
+ ],
  "mixinsRef": []
 }

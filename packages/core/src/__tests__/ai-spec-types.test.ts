@@ -29,6 +29,7 @@ const NOT_A_TYPE = new Set([
   "HTMLInputElement",
   "MouseEvent",
   "MouseEventHandler",
+  "PointerEvent",
   "FocusEventHandler",
   "FormEvent",
   "FormEventHandler",

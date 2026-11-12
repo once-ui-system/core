@@ -10,12 +10,15 @@
   "keepRatio": "boolean = false",
   "minSize": "number = 1",
   "rotationStep": "number = 15",
-  "handles": "ResizeHandle[] = ALL",
+  "handles": "ResizeHandle[]",
   "snap": "(rect: CanvasRect, handle: ResizeHandle) => CanvasRect",
   "sizeLabel": "ReactNode | false",
   "labels": "Partial<TransformHandlesLabels>",
   "className": "string"
  },
+ "tags": [
+  "canvas"
+ ],
  "mixinsRef": [],
  "types": {
   "CanvasHandle": [
