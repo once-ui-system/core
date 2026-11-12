@@ -309,7 +309,7 @@ Mixins: LeafProps.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 Avoid: Passing the same text as label and children — the children are dropped
 - tone?: Tone
-- variant?: "default" | "gradient" | "announce" = default
+- variant?: "default" | "gradient" | "announce" | "solid" = default
 - size?: TShirtSizes
 - label?: string = ""
 - prefixIcon, suffixIcon?: IconName

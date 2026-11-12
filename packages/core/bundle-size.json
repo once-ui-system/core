@@ -70,6 +70,7 @@
   "./components/Sortable": 43121,
   "./components/Spinner": 7774,
   "./components/SplitView": 44873,
+  "./components/StatTile": 23154,
   "./components/StatusIndicator": 8386,
   "./components/StyleScope": 10751,
   "./components/Submenu": 32611,

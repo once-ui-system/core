@@ -69,6 +69,7 @@ export * from "./SmartLink.js";
 export * from "./Sortable.js";
 export * from "./Spinner.js";
 export * from "./SplitView.js";
+export * from "./StatTile.js";
 export * from "./StatusIndicator.js";
 export * from "./StyleScope.js";
 export * from "./Submenu.js";

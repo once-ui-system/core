@@ -1,6 +1,6 @@
 {
  "version": "3.0.0-beta.1",
- "generated": "2026-11-11",
+ "generated": "2026-11-12",
  "iconNames": ["adjustments","arrowDown","arrowLeft","arrowRight","arrowUp","arrowUpRight","ball","banknotes","barChart","bell","bolt","book","bookmark","calendar","cart","chat","check","checkbox","chevronDoubleLeft","chevronDoubleRight","chevronDown","chevronLeft","chevronRight","chevronUp","chevronsLeftRight","clipboard","close","code","computer","copy","cube","danger","dark","dislike","document","download","edit","enter","eye","eyeDropper","eyeOff","file","filter","flag","folder","food","forward","gift","globe","grid","grip","heart","help","home","image","inbox","info","light","like","linearGauge","link","lock","logout","mail","mapPin","maximize","menu","minimize","minus","moreHorizontal","newspaper","opacity","organization","pause","paw","payment","people","person","personRemove","phone","play","plus","radialGauge","refresh","return","screen","search","security","send","settings","smiley","sparkle","star","starFill","store","symbol","tag","time","trash","trend","trendDown","trendUp","upload","video","volume","volumeOff","warning","wordmark","world"],
  "components": {
   "ScrollLock": {"purpose":"Freezes page scroll while enabled, keeping one referenced region scrollable"},
@@ -76,6 +76,7 @@
   "SortableHandle": {"purpose":"Grip button a Sortable row drags by when the list has handle; drags at once on touch"},
   "SortableItem": {"purpose":"One row of a Sortable, wrapping a NavItem, Card or any row unchanged"},
   "Spinner": {"purpose":"Rotating loader for async and streaming states"},
+  "StatTile": {"purpose":"Key number with its change"},
   "SplitView": {"purpose":"Two panes with a draggable divider, collapsing to one below a breakpoint"},
   "StatusIndicator": {"purpose":"Small status dot (online, error, warning) by palette hue; `pulse` adds a pulsing ring for a live state"},
   "StyleScope": {"purpose":"Site colours, theme and fonts on one subtree"},
