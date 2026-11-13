@@ -8,6 +8,9 @@
     "chat": 4,
     "ai": 5,
     "social": 6,
-    "map": 7
+    "map": 7,
+    "canvas": 8,
+    "scene": 9,
+    "calendar": 10
   }
 }

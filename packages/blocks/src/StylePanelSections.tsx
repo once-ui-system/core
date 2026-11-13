@@ -356,6 +356,12 @@ const useStylePanelLabels = () => useContext(StylePanelLabelsContext);
 /** Whether rows put their label above their control. False outside a Root. */
 const StylePanelStackedContext = createContext(false);
 
+/** How much room the panel's rows and groups take: `m` (default) or the tighter `s`. */
+export type StylePanelSize = "s" | "m";
+
+/** The panel's size, for rows and groups. `m` outside a Root. */
+const StylePanelSizeContext = createContext<StylePanelSize>("m");
+
 /** How a row lays its label against its control: beside it, or above it. */
 const INLINE_LINE = { horizontal: "between", vertical: "center", gap: "24" } as const;
 const STACKED_LINE = {
@@ -363,6 +369,30 @@ const STACKED_LINE = {
   horizontal: "start",
   vertical: "start",
   gap: "12",
+} as const;
+
+/** Each size's spacing: a row's padding and gaps, a group's gaps. */
+const SPACING = {
+  m: {
+    rowX: "24",
+    stackedRowX: "16",
+    rowY: "16",
+    inlineGap: "24",
+    stackedGap: "12",
+    groupGap: "16",
+    headingTop: "12",
+    headingLeft: "16",
+  },
+  s: {
+    rowX: "16",
+    stackedRowX: "12",
+    rowY: "8",
+    inlineGap: "16",
+    stackedGap: "8",
+    groupGap: "8",
+    headingTop: "4",
+    headingLeft: "12",
+  },
 } as const;
 
 /**
@@ -456,6 +486,8 @@ export interface StylePanelRootProps
   /** Put each row's label above its control, for a narrow sidebar. A row's
    *  own layout props still win. */
   stacked?: boolean;
+  /** How much room rows and groups take: `m` (default), or `s` for a denser panel. */
+  size?: StylePanelSize;
 }
 
 const Root = function Root({
@@ -464,6 +496,7 @@ const Root = function Root({
   onValueChange,
   labels,
   stacked = false,
+  size = "m",
   children,
   ...rest
 }: StylePanelRootProps) {
@@ -490,9 +523,11 @@ const Root = function Root({
     <StylePanelContext.Provider value={context}>
       <StylePanelLabelsContext.Provider value={resolvedLabels}>
         <StylePanelStackedContext.Provider value={stacked}>
-          <Column fillWidth gap="16" ref={ref} {...rest}>
-            {children}
-          </Column>
+          <StylePanelSizeContext.Provider value={size}>
+            <Column fillWidth gap={SPACING[size].groupGap} ref={ref} {...rest}>
+              {children}
+            </Column>
+          </StylePanelSizeContext.Provider>
         </StylePanelStackedContext.Provider>
       </StylePanelLabelsContext.Provider>
     </StylePanelContext.Provider>
@@ -515,15 +550,17 @@ function RowLabel({ id, children }: { id?: string; children: ReactNode }) {
  *  drop the divider. */
 function Row({ label, children, className, ...rest }: StyleRowProps) {
   const stacked = useContext(StylePanelStackedContext);
+  const space = SPACING[useContext(StylePanelSizeContext)];
   const labelId = useId();
   return (
     <StyleRowLabelContext.Provider value={label !== false ? labelId : null}>
       <Flex
         className={classNames(styles.row, className)}
         fillWidth
-        paddingX={stacked ? "16" : "24"}
-        paddingY="16"
+        paddingX={stacked ? space.stackedRowX : space.rowX}
+        paddingY={space.rowY}
         {...(stacked ? STACKED_LINE : INLINE_LINE)}
+        gap={stacked ? space.stackedGap : space.inlineGap}
         {...rest}
       >
         {label !== false && <RowLabel id={labelId}>{label}</RowLabel>}
@@ -534,10 +571,11 @@ function Row({ label, children, className, ...rest }: StyleRowProps) {
 }
 
 function Group({ title, description, children, ...rest }: StyleGroupProps) {
+  const space = SPACING[useContext(StylePanelSizeContext)];
   return (
-    <Column fillWidth gap="16" {...rest}>
+    <Column fillWidth gap={space.groupGap} {...rest}>
       {(title !== false || description !== false) && (
-        <Column fillWidth paddingTop="12" paddingLeft="16" gap="4">
+        <Column fillWidth paddingTop={space.headingTop} paddingLeft={space.headingLeft} gap="4">
           {title !== false && (
             <Text textVariant="heading-strong-s" onBackground="neutral-strong">
               {title}
@@ -1175,6 +1213,10 @@ function AdvancedGroup({
  * and the rest. 3.0 drops the `StylePanel.Brand` statics, which a server
  * component cannot reach through a client module.
  */
+/*
+ * For MascotPanel, which lays its rows out the same way. Not re-exported from
+ * the package: StylePanel.tsx names its public exports one by one.
+ */
 export {
   AccentRow as StylePanelAccent,
   AdvancedGroup as StylePanelAdvanced,
@@ -1188,6 +1230,7 @@ export {
   EffectRow as StylePanelEffect,
   Group as StylePanelGroup,
   NeutralRow as StylePanelNeutral,
+  Options as StylePanelOptions,
   PageGroup as StylePanelPage,
   Root as StylePanelRoot,
   Row as StylePanelRow,
@@ -1195,8 +1238,11 @@ export {
   ShapeRow as StylePanelShape,
   SolidRow as StylePanelSolid,
   SolidStyleGroup as StylePanelSolidStyle,
+  StylePanelSizeContext,
+  StylePanelStackedContext,
   SurfaceRow as StylePanelSurface,
   ThemeRow as StylePanelTheme,
   TransitionRow as StylePanelTransition,
+  useGroupName,
   useStylePanel,
 };

@@ -1,19 +1,55 @@
+/* The pulse animates opacity, which the compositor runs off the main thread.
+   It used to animate background-color between two tokens, which no compositor
+   can run: every skeleton on the page cost a style recalc on every frame, for
+   as long as the page loaded (a dashboard with ~230 table skeletons spent
+   2.7 s in style recalc on a 4x-throttled CPU, 0.8 s with opacity).
+
+   One iteration holds $skeleton-cycles pulses. React listens for
+   `animationiteration` on its root, and while a page has that listener
+   Chromium ticks every running animation on the main thread around each
+   iteration boundary, composited or not; a 1.5 s iteration meant a style
+   recalc of every skeleton many times a second. Forty pulses per iteration
+   moves the boundary to once a minute. `ease-in-out` applies to each
+   keyframe segment, so each half pulse still eases. */
+$skeleton-pulse: 1.5s;
+$skeleton-cycles: 40;
+$skeleton-step: 2.5%; // 100% / $skeleton-cycles
+
 @keyframes skeleton-loading {
-    0% {
-        background-color: var(--neutral-background-strong);
-    }
-    50% {
-        background-color: var(--neutral-background-medium);
+    @for $i from 0 through $skeleton-cycles - 1 {
+        #{$i * $skeleton-step} {
+            opacity: 1;
+        }
+        #{($i + 0.5) * $skeleton-step} {
+            opacity: 0.6;
+        }
     }
     100% {
-        background-color: var(--neutral-background-strong);
+        opacity: 1;
     }
 }
 
-.skeleton {
+@mixin pulse {
     animation-name: skeleton-loading;
-    animation-duration: 1.5s;
+    animation-timing-function: ease-in-out;
+    animation-duration: $skeleton-pulse * $skeleton-cycles;
     animation-iteration-count: infinite;
+}
+
+/* A group pulses as one, and the skeletons in it hold still: Table animates
+   each skeleton row instead of every cell in it, a quarter of the
+   animations for the same look. Internal for now. */
+.group {
+    @include pulse;
+}
+
+.skeleton {
+    background-color: var(--neutral-background-strong);
+    @include pulse;
+
+    .group & {
+        animation: none;
+    }
 
     &.block {
         width: 100%;

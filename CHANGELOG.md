@@ -13,9 +13,64 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [3.1.0] - Unreleased
 
+Built on the 3.0 branch and held until 3.0.0 ships.
+
 ### Added
 
 - **Glow solid style.** `solidStyle: "glow"` (`data-solid-style="glow"`) joins flat and plastic: a solid lights its own colour into a soft two-layer halo with a light edge along the top. It applies to primary buttons and icon buttons in every tone, checked switches, checkboxes and radios, and selected Tag toggles with a tone; secondary and neutral controls never glow. Put the attribute on any element to light up one area only. The halo is static (no filter, no animation), brightens on hover, is tighter and paler in the light theme, and goes away under `prefers-contrast: more` and forced colours. New tokens `--solid-glow-near`, `--solid-glow-far`, `--solid-glow-near-mix`, `--solid-glow-far-mix` and `--solid-glow-rim`; the shared `glow.scss` mixin in foundations draws it. The Style panel's Effect row gets a Glow option.
+- `MapRoute` in `@once-ui-system/core/map`: a route line in a `tone`, solid for the part travelled and dashed ahead with `progress`, or dashed throughout for a planned route. It sits on a page-colour casing and follows the theme.
+- `PeerCursor` and `PeerCursors`: collaborators' pointers for multiplayer views, an arrow in each person's colour with their name (and an optional avatar or live message) that glides between positions without re-rendering. No backend: feed `peers` from any realtime source. `usePeerPointer` reports your own pointer, throttled, in the same units (a fraction of the box, px, or your own coordinates through `unproject`); `peerColor(id)` gives everyone the same hue on every screen.
+- `Canvas` in `@once-ui-system/core/canvas`: an infinite canvas for editors. The camera pans and zooms (wheel, ⌘/Ctrl + wheel, pinch, Space or middle-button drag, zoom controls, fit) without re-rendering the items on it. `CanvasItem` places anything in world units, `onSelectionBox` draws a drag-to-select box, `TransformHandles` resizes (Shift keeps the ratio, Alt from the centre) and rotates in screen space with keyboard support, `SnapGuides` shows alignment lines and gaps from `snapRect`, `useCanvasDrag` reports drags in world units, and `CanvasAnchor` pins screen-sized content such as cursors or comments to a world point. The geometry (`resizeRect`, `rotateRect`, `snapRect`, `mapRect`, `rectsBounds`, `fitView` and more) is exported.
+- `@once-ui-system/core/scene`: `Scene`, a 3D viewport on three.js that wears the
+  theme, with `SceneMesh`, `SceneGroup`, `SceneModel` (glTF), `SceneLabel` (HTML pinned
+  to a 3D point), `useSceneFrame` and `useScene`. Token colours (`color="brand-strong"`)
+  follow the brand, accent and neutral; lights, floor shadow and grid follow light and
+  dark. Orbit, turntable or fixed camera; draws on demand and pauses off screen, in hidden
+  tabs and for reduced motion. `three` is an optional peer, loaded only when a scene
+  renders. Non-breaking.
+- **Control-room pieces**, free in core, each readable without colour:
+  - **Chart thresholds and annotations.** `LineChart`, `BarChart` and
+    `LineBarChart` take `thresholds` (a line at `value`, or a band from `from`
+    to `to`) and `annotations` (a moment on the x axis), labelled in the plot.
+    `danger` is a heavy solid line over a hatched band, `warning` a dashed line,
+    the other tones a dotted one. The value axis stretches to every limit, and
+    `yDomain` zooms it. The chart's summary says which series crossed which
+    limit, how often and first when.
+  - **Alarms: `useAlarms`, `Annunciator`, `AlarmList`, `AlarmMark`.** The model
+    follows ISA-18.2 (new, standing, cleared unseen, normal, shelved) as a hook
+    and as the pure `alarmsReducer`. `Annunciator` is a lightbox panel, a tile
+    per point, and `AlarmList` the alarms in working order with Acknowledge and
+    Acknowledge all; incoming alarms are announced. Priorities are numbered
+    shapes, states are written out and drawn as patterns (flash or double
+    outline, dashed edge, hatch).
+  - **`Schematic`.** Parts (vessel, tank, pump, valve, exchanger, turbine,
+    sensor, box) and the lines between them, from data. Flowing lines run
+    dashes in their direction with an arrow; a pump turns while running. Parts
+    are buttons with `onNodeSelect`, and a screen reader hears each part's
+    reading and state, then the flows.
+  - **`ConfirmButton`.** For actions that are hard to take back: press twice
+    (the first press arms it, a double click never confirms) or hold to
+    confirm. Escape, blur or the timeout disarms it.
+### Added
+
+- **`MascotPanel`** in `@once-ui-system/blocks`: a character designer for the Mascot,
+  built like StylePanel. Body, eyes, face, accessories (several at once), working style
+  (`cube`, `d20`) and personality. Pickers are scrolling rows of tiles, each showing the
+  mascot with that option on. The preview tries every state and mood without saving it,
+  and its "more" menu holds Randomize, Reset and the free exports: Copy JSON, Copy JSX,
+  SVG and PNG. The `exports` slot adds a product's own menu items. Composable from
+  `MascotPanelRoot` and its parts, with `value`/`onValueChange` or `defaultValue` and
+  `storageKey`, `labels`, `visibility`, `stacked`, `size` and `preview` (`side`, `top`,
+  `none`).
+- **StylePanel `size`**: `s` tightens rows and groups for apps where the default
+  spacing is too much; `m` is the default.
+- **`MascotDesign`** in core: the designed part of a Mascot as plain JSON (`v: 1`), with
+  `parseMascotDesign` (reads stored or AI-written values safely, never throws),
+  `mascotDesignProps`, `MASCOT_DESIGN_DEFAULTS` and `MASCOT_DESIGN_RANGES`. The Mascot
+  reads its defaults from the same constant.
+### Added
+
+- `Calendar` in `@once-ui-system/core/calendar`: month, week and day views of events. Overlapping events sit side by side, events of a day or more run as bars, and a crowded month day folds into "n more". `onSlotSelect` lets people drag or click empty time (or press a month day) to pick a slot, and `onEventChange` lets them drag an event to a new time or day or drag its end. There's a now line, the toolbar has its own slot for app controls, `locale` and `labels` translate it, and the month view is an ARIA grid you can move through with the keyboard. The layout helpers (`layoutDay`, `layoutSpans`, `viewDays`) are exported too.
 
 ## [3.0.0] - Unreleased
 
@@ -52,6 +107,12 @@ entry below that had landed by then:
   options as `Mascot` and a mood, every color written out, for places without React or
   CSS (Open Graph images, emails, favicons). `Mascot` and `mascotSvg` share their geometry
   from `mascotShape.ts`.
+- **Mascot accessories.** `accessory` takes a built-in one: `antenna`, `bow`,
+  `beanie`, `headphones`, `sprout`, `helmet`, `crown`, `catEars` or
+  `partyHat`, or a list of them. They are flat and chunky, fit any body shape,
+  and sit behind the body, on it or in front of the face as each needs (the
+  helmet's glass goes over the face). `accessoryColor` tints them all. Your
+  own SVG still works. `MASCOT_ACCESSORIES` lists the names.
 - **`Select alignSelected`** (2.x main's `position="aligned"`, renamed: `position` is the CSS position in 3.0): the list opens with the selected
   option sitting on the field and the others above and below it, as macOS draws a
   pop-up button. Near a viewport edge, and on a searchable or multiple Select, it opens
@@ -383,6 +444,11 @@ entry below that had landed by then:
   tall at m, `label-default-s` on the surface colour with a hairline neutral border, the
   icon in brand, and `effect` is a short brand-to-accent beam round the edge (faster on
   hover, still under reduced motion) instead of the sweeping shine.
+- **`Timeline` is drawn in hairlines.** Each step is a hairline node on a 1px rail, and a
+  reached step's tone is a vivid dot inside it (the Tag's dot), not a filled disc. A marker
+  sits in the node in the tone's ink. The current step (`brand`) has a soft halo, and steps
+  not reached yet are empty nodes on a dashed rail with a muted label. The node centres on
+  the label's first line, and there are no colour gradients between steps any more.
 
 - **Spacing, offset and grid-column classes are spelled out** (MIGRATING.md §
   14). `p-16` is `padding-16`, `mt-8` `margin-top-8`, `top-16`
@@ -668,6 +734,25 @@ entry below that had landed by then:
 
 ### Fixed
 
+- A labelled `Flex` (`Row`, `Column`, …) with no `role` of its own renders
+  `role="group"`. ARIA does not allow `aria-label` on a plain `div` or `span`
+  (axe `aria-prohibited-attr`), and Lighthouse flagged it on several sites.
+- `MatrixFx` stops its animation loop while offscreen instead of waking every
+  frame to skip drawing, and resumes when it scrolls back into view.
+- Dashboards spent their loading time recalculating styles. `Skeleton` pulsed
+  `background-color`, which only the main thread can animate, so every skeleton
+  cost a style recalc every frame; it now pulses `opacity` on the compositor,
+  with 40 pulses per animation iteration (React's root `animationiteration`
+  listener made Chromium tick animations around every boundary), and `Table`
+  animates its skeleton rows rather than each cell. `Flex` skips its breakpoint
+  pass when it has no breakpoint object and no longer writes its unset inline
+  styles as `""` on mount. Charts measure their plot and legend with a
+  ResizeObserver instead of forcing a layout from a layout effect, and keep
+  their size while they load. On a dashboard Overview at 4x CPU: style recalc
+  while loading 2,718 to 255 ms, range-switch INP 376 to 296 ms
+  (`benchmarks/dashboard-overview`).
+- The body keeps no browser margin: `body { margin: 0 }`, layered, for an app
+  whose body is not a Once UI `Column`.
 - **From 2.x main, carried into 3.0:** `SegmentedControl`'s rail takes its options'
   radius plus its 4px padding (`s-4`, `m-4`, `l-4`) instead of a fixed `l`; a
   Dropdown's panel clips its content to its rounded corners; `DatePicker` shows its

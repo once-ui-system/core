@@ -13,10 +13,18 @@ import { animationStyle, CartesianPlot } from "./CartesianPlot.js";
 import { ChartHeader } from "./ChartHeader.js";
 import { ChartPlot } from "./ChartPlot.js";
 import { ChartStatus } from "./ChartStatus.js";
-import type { ChartProps, ChartVariant, CurveType, DataPoint } from "./interfaces.js";
+import type {
+  ChartMarksProps,
+  ChartProps,
+  ChartVariant,
+  CurveType,
+  DataPoint,
+} from "./interfaces.js";
 import { chartFormatters, chartSeries, valueAxisWidth } from "./utils/chartSeries.js";
 
-export interface LineChartProps<T extends object = DataPoint> extends ChartProps<T> {
+export interface LineChartProps<T extends object = DataPoint>
+  extends ChartProps<T>,
+    ChartMarksProps {
   curve?: CurveType;
   /**
    * Stack the series on each other: `true` sums them, `"percent"` shows each
@@ -69,6 +77,9 @@ const LineChart = ({
   locale,
   stack = false,
   "data-viz-style": dataVizStyle,
+  thresholds,
+  annotations,
+  yDomain,
   ...flex
 }: LineChartProps) => {
   // `data` takes interface-typed rows too; each row is read by key all the same.
@@ -196,6 +207,9 @@ const LineChart = ({
         />
         {!loading && !error && filteredData && filteredData.length > 0 && (
           <CartesianPlot
+            thresholds={thresholds}
+            yDomain={yDomain}
+            annotations={annotations}
             id={chartId}
             rows={filteredData}
             xKey={xAxisKey}

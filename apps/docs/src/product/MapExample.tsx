@@ -10,9 +10,10 @@ import {
   MapMarkers,
   MapPin,
   MapPopup,
+  MapRoute,
   type MapViewport,
 } from "@once-ui-system/core/map";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const BUDAPEST: LngLat = [19.0402, 47.4979];
 
@@ -129,6 +130,28 @@ export function MapAreaExample() {
   );
 }
 
+const ROUTE: LngLat[] = [
+  [19.0402, 47.4979],
+  [19.0457, 47.5005],
+  [19.0512, 47.5021],
+  [19.0545, 47.5065],
+  [19.0611, 47.5089],
+];
+
+export function MapRouteExample() {
+  const [progress, setProgress] = useState(0.4);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setInterval(() => setProgress((p) => (p >= 1 ? 0 : p + 0.01)), 120);
+    return () => window.clearInterval(timer);
+  }, []);
+  return (
+    <Map height={384} defaultViewport={{ center: [19.0506, 47.5034], zoom: 14 }}>
+      <MapRoute path={ROUTE} progress={progress} />
+    </Map>
+  );
+}
+
 const CITIES: { label: string; viewport: MapViewport }[] = [
   {
     label: "Budapest",
@@ -203,5 +226,67 @@ export function MapControlledExample() {
         {viewport.zoom.toFixed(1)}
       </Text>
     </Column>
+  );
+}
+
+const UNITS = [
+  {
+    id: "m12",
+    call: "M12",
+    kind: "heart",
+    status: "danger",
+    label: "Responding",
+    position: [19.0559, 47.5068],
+  },
+  {
+    id: "e4",
+    call: "E4",
+    kind: "bolt",
+    status: "warning",
+    label: "En route",
+    position: [19.0368, 47.4925],
+  },
+  {
+    id: "p7",
+    call: "P7",
+    kind: "security",
+    status: "success",
+    label: "Available",
+    position: [19.0703, 47.4893],
+  },
+  {
+    id: "m3",
+    call: "M3",
+    kind: "heart",
+    status: "success",
+    label: "Available",
+    position: [19.022, 47.507],
+  },
+] as const;
+
+export function MapStatusExample() {
+  const [active, setActive] = useState<string>("e4");
+  return (
+    <Map
+      height={400}
+      bounds={UNITS.map((unit) => [...unit.position] as LngLat)}
+      labels={{ map: "Units" }}
+    >
+      <MapMarkers
+        items={UNITS.map((unit) => ({ ...unit, position: [...unit.position] as LngLat }))}
+        activeId={active}
+        renderItem={(unit) => (
+          <MapPin
+            icon={unit.kind}
+            tone={unit.status}
+            active={unit.id === active}
+            onClick={() => setActive(unit.id)}
+            aria-label={`${unit.call}, ${unit.label}`}
+          >
+            {unit.id === active ? `${unit.call} · ${unit.label}` : undefined}
+          </MapPin>
+        )}
+      />
+    </Map>
   );
 }

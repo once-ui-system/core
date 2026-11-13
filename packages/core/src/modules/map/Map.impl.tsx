@@ -167,12 +167,52 @@ function ensureWorker(workerUrl?: string) {
   );
 }
 
-/** Paints the style's background layers with the page background token. */
-function tintStyle(map: MapLibreMap) {
+/**
+ * Land use, land cover, parks and buildings: the fills that patch a dark
+ * basemap. Names from the OpenMapTiles schema (OpenFreeMap, MapTiler) and the
+ * Protomaps one (CARTO's GL styles).
+ */
+const LAND_LAYERS = new Set(["landuse", "landcover", "park", "natural", "buildings"]);
+/** Roads and rails: bright lines on a dark basemap that outshine the data. */
+const ROAD_LAYERS = new Set(["transportation", "roads"]);
+
+const sourceLayer = (layer: { "source-layer"?: unknown }) =>
+  "source-layer" in layer ? String(layer["source-layer"]) : "";
+
+/**
+ * Paints the style's background layers with the page background token. On a
+ * dark page it also re-tints the rest from the theme, so any basemap reads as
+ * a quiet ground for the data, a light one included (an app handed a single
+ * light style URL still gets a dark map): land-use fills fade, water takes a
+ * neutral step, roads take the border colour, and labels the weak text colour
+ * with a halo in the page colour.
+ */
+function tintStyle(map: MapLibreMap, dark: boolean) {
   const background = tokenColor("--page-background");
+  const colors = dark
+    ? {
+        water: tokenColor("--neutral-background-medium"),
+        road: tokenColor("--neutral-border-medium"),
+        label: tokenColor("--neutral-on-background-weak"),
+      }
+    : null;
   for (const layer of map.getStyle()?.layers ?? []) {
     if (layer.type === "background") {
       map.setPaintProperty(layer.id, "background-color", background);
+      continue;
+    }
+    if (!colors) continue;
+    const source = sourceLayer(layer as { "source-layer"?: unknown });
+    if (layer.type === "fill" && LAND_LAYERS.has(source)) {
+      map.setPaintProperty(layer.id, "fill-opacity", 0.12);
+    } else if (layer.type === "fill" && source === "water") {
+      map.setPaintProperty(layer.id, "fill-color", colors.water);
+    } else if (layer.type === "line" && ROAD_LAYERS.has(source)) {
+      map.setPaintProperty(layer.id, "line-color", colors.road);
+      map.setPaintProperty(layer.id, "line-opacity", 0.7);
+    } else if (layer.type === "symbol" && layer.layout && "text-field" in layer.layout) {
+      map.setPaintProperty(layer.id, "text-color", colors.label);
+      map.setPaintProperty(layer.id, "text-halo-color", background);
     }
   }
 }
@@ -215,8 +255,15 @@ const MapImpl = ({
   const [failed, setFailed] = useState(false);
 
   // Callbacks and options the long-lived listeners read without re-binding.
-  const latest = useRef({ onViewportChange, onMapClick, onMapLoad, tint, reducedMotion });
-  latest.current = { onViewportChange, onMapClick, onMapLoad, tint, reducedMotion };
+  const latest = useRef({
+    onViewportChange,
+    onMapClick,
+    onMapLoad,
+    tint,
+    reducedMotion,
+    resolvedTheme,
+  });
+  latest.current = { onViewportChange, onMapClick, onMapLoad, tint, reducedMotion, resolvedTheme };
   const appliedStyle = useRef<MapStyleSource | null>(null);
   const boundsKey = bounds && bounds.length > 0 ? JSON.stringify(bounds) : "";
   const framedKey = useRef("");
@@ -281,7 +328,7 @@ const MapImpl = ({
     framedKey.current = boundsKey;
 
     instance.on("style.load", () => {
-      if (latest.current.tint) tintStyle(instance);
+      if (latest.current.tint) tintStyle(instance, latest.current.resolvedTheme === "dark");
       setStyleVersion((version) => version + 1);
     });
     instance.once("load", () => latest.current.onMapLoad?.(instance));
@@ -315,11 +362,11 @@ const MapImpl = ({
       // fires no style.load: re-tint and re-add shapes once it settles.
       map.setStyle(next);
       map.once("idle", () => {
-        if (latest.current.tint) tintStyle(map);
+        if (latest.current.tint) tintStyle(map, latest.current.resolvedTheme === "dark");
         setStyleVersion((version) => version + 1);
       });
     } else if (tint && map.isStyleLoaded()) {
-      tintStyle(map);
+      tintStyle(map, resolvedTheme === "dark");
       setStyleVersion((version) => version + 1);
     }
   }, [map, mapStyle, resolvedTheme, tint]);

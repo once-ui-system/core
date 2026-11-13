@@ -39,6 +39,22 @@ const PAGE_SECTIONS = [
   "testimonialsLayouts",
 ];
 
+/** The settings blocks (`settings/`): profile, sign-in and security, organization. */
+const SETTINGS = [
+  "AccountSettings",
+  "OrganizationSettings",
+  "SecuritySettings",
+  "SettingsLabelsProvider",
+  "SettingsLayout",
+  "createDemoAccountAdapter",
+  "createDemoOrganizationAdapter",
+  "defaultSettingsLabels",
+  "settingsLabelsHu",
+  "useAccount",
+  "useOrganization",
+  "useSettingsLabels",
+];
+
 /** 3.0, F11: StylePanel's sections are plain named exports, not statics on StylePanel. */
 const SECTIONS = [
   "Root",
@@ -65,19 +81,50 @@ const SECTIONS = [
   "Advanced",
 ].map((part) => `StylePanel${part}`);
 
+/** MascotPanel (after 3.0): the panel, its parts and hooks, and a random design. */
+const MASCOT_PANEL = [
+  "MascotPanel",
+  ...[
+    "Root",
+    "Preview",
+    "Actions",
+    "Body",
+    "Color",
+    "Eyes",
+    "Face",
+    "Accessories",
+    "Working",
+    "Motion",
+  ].map((part) => `MascotPanel${part}`),
+  "useMascotPanel",
+  "useMascotPanelLabels",
+  "randomMascotDesign",
+];
+
 describe("@once-ui-system/blocks", () => {
-  it("exports the six blocks, StylePanel's sections, its hook and the page sections", () => {
+  it("exports the six blocks, StylePanel's sections, its hook, MascotPanel, the page sections and the settings blocks", () => {
     expect(Object.keys(blocks).sort()).toEqual(
-      [...BLOCKS, ...SECTIONS, "useStylePanel", ...PAGE_SECTIONS].sort(),
+      [
+        ...BLOCKS,
+        ...SECTIONS,
+        "useStylePanel",
+        ...MASCOT_PANEL,
+        ...PAGE_SECTIONS,
+        ...SETTINGS,
+      ].sort(),
     );
   });
 
-  it.each([...BLOCKS, ...SECTIONS, ...PAGE_SECTIONS, "useStylePanel"])(
-    "%s is not on @once-ui-system/core",
-    (name) => {
-      expect(name in core).toBe(false);
-    },
-  );
+  it.each([
+    ...BLOCKS,
+    ...SECTIONS,
+    ...PAGE_SECTIONS,
+    ...SETTINGS,
+    ...MASCOT_PANEL,
+    "useStylePanel",
+  ])("%s is not on @once-ui-system/core", (name) => {
+    expect(name in core).toBe(false);
+  });
 
   it.each(SECTIONS)("exports %s as a component", (name) => {
     expect(typeof (blocks as Record<string, unknown>)[name]).toBe("function");

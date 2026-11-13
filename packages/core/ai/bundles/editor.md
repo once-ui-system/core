@@ -94,6 +94,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Keyboard shortcut | `useHotkeys("mod+k", fn)` + `Kbd keys="mod+k" label="Search"` + `aria-keyshortcuts` |
 | Screen-reader text, skip link | `VisuallyHidden` (skip link: `<VisuallyHidden as="a" href="#main" focusable>`) |
 | Native attributes | Every component also takes its element's own: `aria-*`, `id`, `role`, `onClick`; `type` on `Button`; `value`, `onChange`, `type` on `Input` |
+| Formatted text (notes, descriptions, replies) | `RichTextEditor` from `/richtext` (HTML value; works in a `Field`), never `contentEditable` or Markdown in a `Textarea` |
 | MDX content | `mdxComponents` / `createMdxComponents` from `/mdx` |
 | Multi-part component | List prop (`items`, `columns`, `options`) for same-shaped data, else plain named parts (`SortableItem`, `StylePanelBrand`); never `Sortable.Item` |
 
@@ -106,6 +107,7 @@ comes from when it is not the root:
 |--------|------|
 | charts, gauges, chart chrome | `@once-ui-system/core/data` |
 | `CodeBlock` | `@once-ui-system/core/code` (needs `prismjs`) |
+| `RichTextEditor` | `@once-ui-system/core/richtext` (needs `@tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extensions`) |
 | `MediaUpload` | `@once-ui-system/core/media` (needs `compressorjs`) |
 | `Map`, `MapMarker(s)`, `MapPin`, `MapPopup`, `MapCircle` | `@once-ui-system/core/map` (needs `maplibre-gl`) |
 | `mdxComponents`, `createMdxComponents`, `Mdx*` elements | `@once-ui-system/core/mdx` (needs `prismjs`) |
@@ -245,18 +247,26 @@ Avoid: Raw img elements
 - objectFit?: CSSProperties["objectFit"] = cover
 - className?: string
 
-### Grid
-Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProps.
-- as?: ElementType
-- position?: CSSProperties["position"] = relative
-- scrollbar?: "default" | "minimal" = minimal
-- masonry?: boolean
+### Skeleton
+Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+- width, height, minHeight, maxHeight?: number | StaticSpacingToken | CSSUnit
+- minWidth, maxWidth?: number | SpacingToken | CSSUnit
+- shape?: "line" | "circle" | "block" = line
+- size?: "xl" | "l" | "m" | "s" | "xs" = m
+- delay?: number
+- style?: React.CSSProperties
+- className?: string
 
-### Heading
-Mixins: CommonProps, LeafProps, TextProps.
-Avoid: Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd
-- wrap?: CSSProperties["textWrap"] = balance
-- opacity?: Opacity
+### Feedback
+Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+- tone?: Tone = info
+- showIcon?: boolean = true
+- icon?: IconName
+- title, description, className?: string
+- showCloseButton?: boolean = false
+- onClose?: () => void
+- style?: React.CSSProperties
+- children?: ReactNode
 
 ### Button
 Mixins: LeafProps.
@@ -272,6 +282,19 @@ Mixins: LeafProps.
 - horizontal?: "start" | "center" | "end" | "between" = center
 - children?: ReactNode
 - onClick?: React.MouseEventHandler<HTMLElement>
+
+### Grid
+Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProps.
+- as?: ElementType
+- position?: CSSProperties["position"] = relative
+- scrollbar?: "default" | "minimal" = minimal
+- masonry?: boolean
+
+### Heading
+Mixins: CommonProps, LeafProps, TextProps.
+Avoid: Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd
+- wrap?: CSSProperties["textWrap"] = balance
+- opacity?: Opacity
 
 ### Icon
 Mixins: LeafProps.
@@ -319,7 +342,7 @@ Mixins: LeafProps.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 Avoid: Passing the same text as label and children — the children are dropped
 - tone?: Tone
-- variant?: "default" | "gradient" | "announce" = default
+- variant?: "default" | "gradient" | "announce" | "solid" = default
 - size?: TShirtSizes
 - label?: string = ""
 - prefixIcon, suffixIcon?: IconName
@@ -354,16 +377,6 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - closeLabel?: string = Close
 - onHeightChange?: (height: number) => void
 - minHeight?: number
-
-### Skeleton
-Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-- width, height, minHeight, maxHeight?: number | StaticSpacingToken | CSSUnit
-- minWidth, maxWidth?: number | SpacingToken | CSSUnit
-- shape?: "line" | "circle" | "block" = line
-- size?: "xl" | "l" | "m" | "s" | "xs" = m
-- delay?: number
-- style?: React.CSSProperties
-- className?: string
 
 ### VisuallyHidden
 - children?: ReactNode
@@ -467,14 +480,14 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ```ts
 type BlendMode = "color" | "screen" | "normal" | "multiply" | "overlay" | "darken" | "lighten" | "difference" | "exclusion" | "hue" | "saturation" | "luminosity" | `color-${"dodge" | "burn"}` | "hard-light" | "soft-light" | "plus-lighter"
 type BlurSize = "s" | "xl" | "l" | "m" | "xs"
-type BorderStyle = "rounded" | "playful" | "conservative" | "sharp"
+type BorderStyle = "rounded" | "conservative" | "playful" | "sharp"
 type BreakpointKey = "s" | "xl" | "l" | "m" | "xs"
 // type ButtonVariant is one of these strings: link ghost subtle primary secondary tertiary
 type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}ch` | `${number}%` | `${number}vh` | `${number}vw` | `${number}dvh` | `${number}dvw` | `${number}svh` | `${number}svw` | `${number}lvh` | `${number}lvw` | `${number}vmin` | `${number}vmax` | `${number}cqw` | `${number}cqh` | `calc(${string})` | `min(${string})` | `max(${string})` | `clamp(${string})` | `var(${string})`
 // type ColorScheme is one of these strings: neutral brand accent info danger warning success
 type ColorWeight = "strong" | "medium" | "weak"
 type Colors = `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-${"strong" | "medium" | "weak"}` | `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-alpha-${"strong" | "medium" | "weak"}`
-type CursorPresetValue = "rounded" | "soft" | "dot" | "system"
+type CursorPresetValue = "rounded" | "dot" | "system" | "soft"
 // type FieldSize is one of these strings: s xl l m xs xxs
 // type FlexBreakpointProps: an object of these Flex props, all optional (padding* is padding, paddingX, paddingTop and the rest):
 // center style direction horizontal vertical wrap flex textVariant background solid border* radius shadow padding* margin* gap top right bottom left width height maxWidth minWidth minHeight maxHeight fit* fill* aspectRatio onBackground onSolid align hide pointerEvents position overflow* scrollbar transition opacity zIndex
@@ -497,12 +510,12 @@ type ShadowSize = "s" | "xl" | "l" | "m" | "xs"
 type SolidType = "color" | "contrast" | "inverse"
 // type SpacingToken is one of these strings: s xl l m xs 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
 // type StaticSpacingToken is one of these strings: 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
-// type StatusIndicatorScheme is one of these strings: blue indigo violet magenta pink red orange yellow moss green emerald aqua cyan sand gray slate rose mint dusk
+// type StatusIndicatorScheme is one of these strings: slate sand gray rose mint dusk cyan blue indigo violet magenta pink red orange yellow moss green emerald aqua
 type SurfaceStyle = "filled" | "translucent"
 type TShirtSizes = "s" | "xl" | "l" | "m" | "xs"
 type TextBreakpointHide = { hide?: boolean }
-type TextType = "body" | "code" | "label" | "heading" | "display"
-type TextVariant = `${"body" | "code" | "label" | "heading" | "display"}-${"strong" | "default" | "normal" | "medium"}-${"xl" | "xs" | "s" | "l" | "m"}`
+type TextType = "body" | "code" | "label" | "display" | "heading"
+type TextVariant = `${"body" | "code" | "label" | "display" | "heading"}-${"strong" | "default" | "normal" | "medium"}-${"xl" | "xs" | "s" | "l" | "m"}`
 type TextWeight = "strong" | "default" | "normal" | "medium"
 type ToastContextProps = { toasts: Toast[]; addToast: (toast: Omit<Toast, "id"> | LegacyToast) => string; removeToast: (id: string) => void }
 // type Tone is one of these strings: neutral brand accent info danger warning success
@@ -529,6 +542,8 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - overflowY="auto" on each SplitView panel, never on the SplitView; set labels so the tabs it collapses into below collapseBelow are named
 - Scrubber is a sibling of the SplitView, spanning both panes; onGestureStart pauses playback
 - IconButtons with tooltips in a Row with borderBottom; one primary action at most
+- Every view that loads data shows loading (Skeleton shaped like the content), empty (title, one line, the action that fills it), error (Feedback tone="danger" with Retry) and filled, through a typed lib/ data layer of async functions over mock data — even when the brief never mentions data
+- Writes are optimistic: loading on the pressed Button, rollback plus addToast({ tone: "danger" }) when the save fails
 
 ## Layout shell
 
@@ -582,41 +597,115 @@ around it: toolbar, layer list, canvas and a working timeline.
  * `ai/layouts.md` §3 says why each piece sits where it does: overflow on the
  * panels and not the SplitView, labels for the tabs it collapses into, the
  * timeline as a sibling of the split, playback paused while scrubbing.
+ *
+ * The project loads and saves through `project` (what would be
+ * `lib/project.ts`): async functions over mock data, so a real API replaces
+ * them. The shell covers loading, a failed load, an empty project with its
+ * way to start, and saving with a rollback when a save fails.
  */
-import { Column, IconButton, Row, SplitView, Text, ToggleButton } from "@once-ui-system/core";
+import {
+  Button,
+  Column,
+  Feedback,
+  IconButton,
+  Row,
+  Skeleton,
+  SplitView,
+  Text,
+  ToggleButton,
+  useToast,
+} from "@once-ui-system/core";
 import { Scrubber } from "@once-ui-system/core/media";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type Track = NonNullable<React.ComponentProps<typeof Scrubber>["tracks"]>[number];
 
-const DURATION = 30;
+// Scrubber times are milliseconds: its ruler and clock read them as m:ss.
+const DURATION = 30_000;
 
-const initialTracks: Track[] = [
+const sampleTracks: Track[] = [
   {
     id: "video",
     tone: "brand",
     movable: true,
     resizable: true,
     blocks: [
-      { id: "intro", start: 0, end: 6, label: "Intro" },
-      { id: "demo", start: 6, end: 22, label: "Demo" },
-      { id: "outro", start: 22, end: 30, label: "Outro" },
+      { id: "intro", start: 0, end: 6000, label: "Intro" },
+      { id: "demo", start: 6000, end: 22000, label: "Demo" },
+      { id: "outro", start: 22000, end: 30000, label: "Outro" },
     ],
   },
   {
     id: "audio",
     tone: "accent",
-    blocks: [{ id: "music", start: 0, end: 30, label: "Music", locked: true }],
+    blocks: [{ id: "music", start: 0, end: 30000, label: "Music", locked: true }],
   },
 ];
 
+// ── lib/project.ts ──
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+export const project = {
+  async load(): Promise<Track[]> {
+    await wait(500);
+    return sampleTracks;
+  },
+  /** Rejects when the save fails, so the editor can roll back. */
+  async save(tracks: Track[]): Promise<void> {
+    await wait(300);
+    if (!tracks) throw new Error("Nothing to save");
+  },
+};
+
 export function EditorExample() {
-  const [tracks, setTracks] = useState(initialTracks);
+  const { addToast } = useToast();
+  const [status, setStatus] = useState<"loading" | "error" | "ready">("loading");
+  const [tracks, setTracks] = useState<Track[]>([]);
   const [time, setTime] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [selected, setSelected] = useState<string | null>("intro");
 
+  const load = useCallback(() => {
+    setStatus("loading");
+    project
+      .load()
+      .then((loaded) => {
+        setTracks(loaded);
+        setStatus("ready");
+      })
+      .catch(() => setStatus("error"));
+  }, []);
+  useEffect(load, [load]);
+
+  // Optimistic: the change shows at once and goes back if the save fails.
+  const change = (next: Track[]) => {
+    const before = tracks;
+    setTracks(next);
+    project.save(next).catch(() => {
+      setTracks(before);
+      addToast({ tone: "danger", message: "Couldn't save that change." });
+    });
+  };
+
   const blocks = tracks.flatMap((track) => track.blocks);
+
+  if (status === "loading") {
+    return (
+      <Column fillWidth height="100dvh" padding="12" gap="12">
+        <Skeleton shape="block" height={40} />
+        <Skeleton shape="block" fill />
+        <Skeleton shape="block" height={96} />
+      </Column>
+    );
+  }
+  if (status === "error") {
+    return (
+      <Column fillWidth height="100dvh" center padding="24">
+        <Feedback tone="danger" title="The project didn't open">
+          <Button size="s" variant="secondary" label="Retry" onClick={load} />
+        </Feedback>
+      </Column>
+    );
+  }
   const current = blocks.find((block) => block.id === selected);
 
   return (
@@ -653,6 +742,14 @@ export function EditorExample() {
         labels={{ left: "Layers", right: "Canvas" }}
         leftPanel={
           <Column fill overflowY="auto" padding="8" gap="4">
+            {blocks.length === 0 && (
+              <Column padding="16" gap="8">
+                <Text textVariant="label-strong-s">No clips yet</Text>
+                <Text textVariant="body-default-s" onBackground="neutral-weak">
+                  Add a clip to start the timeline.
+                </Text>
+              </Column>
+            )}
             {blocks.map((block) => (
               <ToggleButton
                 key={block.id}
@@ -687,8 +784,8 @@ export function EditorExample() {
           onSelectedChange={setSelected}
           onGestureStart={() => setPlaying(false)}
           onBlockChange={(trackId, blockId, next) =>
-            setTracks((all) =>
-              all.map((track) =>
+            change(
+              tracks.map((track) =>
                 track.id !== trackId
                   ? track
                   : {

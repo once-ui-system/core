@@ -73,9 +73,21 @@
       "types": "./dist/components/AccordionGroup.d.ts",
       "default": "./dist/components/AccordionGroup.js"
     },
+    "./components/AlarmList": {
+      "types": "./dist/components/AlarmList.d.ts",
+      "default": "./dist/components/AlarmList.js"
+    },
+    "./components/AlarmMark": {
+      "types": "./dist/components/AlarmMark.d.ts",
+      "default": "./dist/components/AlarmMark.js"
+    },
     "./components/Animation": {
       "types": "./dist/components/Animation.d.ts",
       "default": "./dist/components/Animation.js"
+    },
+    "./components/Annunciator": {
+      "types": "./dist/components/Annunciator.d.ts",
+      "default": "./dist/components/Annunciator.js"
     },
     "./components/Arrow": {
       "types": "./dist/components/Arrow.d.ts",
@@ -124,6 +136,14 @@
     "./components/Column": {
       "types": "./dist/components/Column.d.ts",
       "default": "./dist/components/Column.js"
+    },
+    "./components/Combobox": {
+      "types": "./dist/components/Combobox.d.ts",
+      "default": "./dist/components/Combobox.js"
+    },
+    "./components/ConfirmButton": {
+      "types": "./dist/components/ConfirmButton.d.ts",
+      "default": "./dist/components/ConfirmButton.js"
     },
     "./components/DateInput": {
       "types": "./dist/components/DateInput.d.ts",
@@ -289,6 +309,10 @@
       "types": "./dist/components/Pagination.d.ts",
       "default": "./dist/components/Pagination.js"
     },
+    "./components/PeerCursor": {
+      "types": "./dist/components/PeerCursor.d.ts",
+      "default": "./dist/components/PeerCursor.js"
+    },
     "./components/PhotoViewer": {
       "types": "./dist/components/PhotoViewer.d.ts",
       "default": "./dist/components/PhotoViewer.js"
@@ -309,6 +333,10 @@
       "types": "./dist/components/Row.d.ts",
       "default": "./dist/components/Row.js"
     },
+    "./components/Schematic": {
+      "types": "./dist/components/Schematic.d.ts",
+      "default": "./dist/components/Schematic.js"
+    },
     "./components/Scroller": {
       "types": "./dist/components/Scroller.d.ts",
       "default": "./dist/components/Scroller.js"
@@ -324,6 +352,10 @@
     "./components/Setting": {
       "types": "./dist/components/Setting.d.ts",
       "default": "./dist/components/Setting.js"
+    },
+    "./components/Sidebar": {
+      "types": "./dist/components/Sidebar.d.ts",
+      "default": "./dist/components/Sidebar.js"
     },
     "./components/Skeleton": {
       "types": "./dist/components/Skeleton.d.ts",
@@ -348,6 +380,10 @@
     "./components/SplitView": {
       "types": "./dist/components/SplitView.d.ts",
       "default": "./dist/components/SplitView.js"
+    },
+    "./components/StatTile": {
+      "types": "./dist/components/StatTile.d.ts",
+      "default": "./dist/components/StatTile.js"
     },
     "./components/StatusIndicator": {
       "types": "./dist/components/StatusIndicator.d.ts",
@@ -461,6 +497,14 @@
       "types": "./dist/modules/data/index.d.ts",
       "default": "./dist/modules/data/index.js"
     },
+    "./calendar": {
+      "types": "./dist/modules/calendar/index.d.ts",
+      "default": "./dist/modules/calendar/index.js"
+    },
+    "./canvas": {
+      "types": "./dist/modules/canvas/index.d.ts",
+      "default": "./dist/modules/canvas/index.js"
+    },
     "./code": {
       "types": "./dist/modules/code/index.d.ts",
       "default": "./dist/modules/code/index.js"
@@ -477,9 +521,17 @@
       "types": "./dist/modules/map/index.d.ts",
       "default": "./dist/modules/map/index.js"
     },
+    "./scene": {
+      "types": "./dist/modules/scene/index.d.ts",
+      "default": "./dist/modules/scene/index.js"
+    },
     "./mdx": {
       "types": "./dist/modules/mdx/index.d.ts",
       "default": "./dist/modules/mdx/index.js"
+    },
+    "./richtext": {
+      "types": "./dist/modules/richtext/index.d.ts",
+      "default": "./dist/modules/richtext/index.js"
     },
     "./package.json": "./package.json"
   },
@@ -515,12 +567,17 @@
     "date-fns": "^4.4.0"
   },
   "peerDependencies": {
+    "@tiptap/extensions": "^3.0.0",
+    "@tiptap/pm": "^3.0.0",
+    "@tiptap/react": "^3.0.0",
+    "@tiptap/starter-kit": "^3.0.0",
     "compressorjs": "^1.3.0",
     "maplibre-gl": "^5.0.0 || ^6.0.0",
     "next": ">=15.5",
     "prismjs": "^1.30.0",
     "react": ">=19",
-    "react-dom": ">=19"
+    "react-dom": ">=19",
+    "three": ">=0.160.0"
   },
   "peerDependenciesMeta": {
     "next": {
@@ -534,6 +591,21 @@
     },
     "compressorjs": {
       "optional": true
+    },
+    "@tiptap/extensions": {
+      "optional": true
+    },
+    "@tiptap/pm": {
+      "optional": true
+    },
+    "@tiptap/react": {
+      "optional": true
+    },
+    "@tiptap/starter-kit": {
+      "optional": true
+    },
+    "three": {
+      "optional": true
     }
   },
   "devDependencies": {
@@ -543,9 +615,15 @@
     "@testing-library/jest-dom": "^7.0.0",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
+    "@tiptap/core": "^3.33.1",
+    "@tiptap/extensions": "^3.33.1",
+    "@tiptap/pm": "^3.33.1",
+    "@tiptap/react": "^3.33.1",
+    "@tiptap/starter-kit": "^3.33.1",
     "@types/node": "26.1.2",
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
+    "@types/three": "0.186.0",
     "@vitest/ui": "^4.1.12",
     "axe-core": "^4.10.3",
     "esbuild": "0.27.7",
@@ -555,6 +633,7 @@
     "react-icons": "^5.7.0",
     "rimraf": "^6.1.3",
     "sass": "^1.77.6",
+    "three": "0.186.1",
     "typescript": "6.0.3",
     "vite": "^7.3.7",
     "vitest": "^4.1.12"

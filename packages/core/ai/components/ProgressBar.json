@@ -75,8 +75,8 @@
   ],
   "BorderStyle": [
    "rounded",
-   "playful",
    "conservative",
+   "playful",
    "sharp"
   ],
   "CSSUnit": [
@@ -149,9 +149,9 @@
   ],
   "CursorPresetValue": [
    "rounded",
-   "soft",
    "dot",
-   "system"
+   "system",
+   "soft"
   ],
   "RadiusNest": [
    "4",
@@ -276,26 +276,6 @@
    "label-medium-s",
    "label-medium-l",
    "label-medium-m",
-   "heading-strong-xl",
-   "heading-strong-xs",
-   "heading-strong-s",
-   "heading-strong-l",
-   "heading-strong-m",
-   "heading-default-xl",
-   "heading-default-xs",
-   "heading-default-s",
-   "heading-default-l",
-   "heading-default-m",
-   "heading-normal-xl",
-   "heading-normal-xs",
-   "heading-normal-s",
-   "heading-normal-l",
-   "heading-normal-m",
-   "heading-medium-xl",
-   "heading-medium-xs",
-   "heading-medium-s",
-   "heading-medium-l",
-   "heading-medium-m",
    "display-strong-xl",
    "display-strong-xs",
    "display-strong-s",
@@ -315,7 +295,27 @@
    "display-medium-xs",
    "display-medium-s",
    "display-medium-l",
-   "display-medium-m"
+   "display-medium-m",
+   "heading-strong-xl",
+   "heading-strong-xs",
+   "heading-strong-s",
+   "heading-strong-l",
+   "heading-strong-m",
+   "heading-default-xl",
+   "heading-default-xs",
+   "heading-default-s",
+   "heading-default-l",
+   "heading-default-m",
+   "heading-normal-xl",
+   "heading-normal-xs",
+   "heading-normal-s",
+   "heading-normal-l",
+   "heading-normal-m",
+   "heading-medium-xl",
+   "heading-medium-xs",
+   "heading-medium-s",
+   "heading-medium-l",
+   "heading-medium-m"
   ]
  }
 }

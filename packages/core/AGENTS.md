@@ -41,17 +41,27 @@ Never open `ai/spec.json`: it is the full machine spec, for tooling.
 | `ai/bundles/pricing.md` | Pricing page: Three tiers, highlighted middle tier, feature comparison table, FAQ accordion | Background, MatrixFx, BlobFx, RevealFx, CountFx, SegmentedControl, Table, AccordionGroup |
 | `ai/bundles/settings.md` | Settings page: Vertical section tabs, profile form, settings rows with one control each, grouped sub-settings, danger zone | Tabs, TabList, Tab, TabPanel, Form, Select, Setting, Tooltip, Switch, Slider, NumberInput, Checkbox, MediaUpload, Table, NavItem |
 | `ai/bundles/dashboard.md` | Analytics dashboard: KPI stat cards, charts area, recent-activity list | Background, CountFx, StatusIndicator, Table, SegmentedControl, LineChart, BarChart, ChartHeader, RevealFx, Line, Drawer, NavItem |
-| `ai/bundles/chat.md` | Chat UI: Message list with avatars, typing indicator, composer with send and attach, conversation list | ChatMessageList, ChatMessage, ChatComposer, TypingIndicator, ConversationItem, SplitView, EmojiPicker, Fade, Kbd, User, Line |
+| `ai/bundles/chat.md` | Chat UI: An assistant or team chat: conversation list, thread with a typing or working state, composer with send and attach, the assistant's Mascot, every loading, empty and error state | ChatMessageList, ChatMessage, ChatComposer, TypingIndicator, ConversationItem, SplitView, EmojiPicker, Fade, Kbd, User, Line, Mascot, Logo, WorkingIndicator, Feedback |
 | `ai/bundles/auth.md` | Auth flow: Sign-up / login with social auth, email form, stacked dialog for OTP | OTPInput, Media, SmartLink, Line |
 | `ai/bundles/roadmap.md` | Product roadmap: Kanban-style roadmap with status columns and task cards | Card, StatusIndicator, User, Scroller |
 | `ai/bundles/list-page.md` | List / table page: A page of records: title with the primary action, a status filter, a searchable, sortable, paginated Table with status tags and row actions, and an empty state | SegmentedControl, Select, Table, Dropdown, Option, Map, MapMarkers, MapPin, MapPopup |
-| `ai/bundles/editor.md` | Editor shell: A toolbar, a resizable two-pane split (layers and canvas) and a timeline spanning both — video editor, page builder, diff view | SplitView, Scrubber, ToggleButton, Media, MediaVideoPlayer |
+| `ai/bundles/editor.md` | Editor shell: A toolbar, a resizable two-pane split (layers and canvas) and a timeline spanning both — video editor, page builder, diff view | SplitView, Scrubber, ToggleButton, Media, MediaVideoPlayer, Feedback |
 | `ai/bundles/docs-page.md` | Docs or blog article: An MDX article: breadcrumb trail, title and summary, Markdown rendered through the /mdx component map, and an on-page heading nav | Breadcrumbs, HeadingNav, MdxHeading, Feedback, CodeBlock |
 | `ai/bundles/app-shell.md` | App shell: Signed-in app frame shared by several routes: sidebar with nested nav groups and the current route highlighted, header with breadcrumb, account or workspace menu and command palette, phone drawer | Nav, NavGroup, NavItem, Drawer, Breadcrumbs, User, Dropdown, Option, Kbar, Kbd, Line, Table |
+| `ai/bundles/map-app.md` | Map app: A map-first app: full-bleed Map with floating panels for the list and the selected item, markers that cluster, areas, filters, and every loading, empty and error state | Map, MapMarkers, MapPin, MapPopup, MapCircle, Card, SegmentedControl, Timeline, Logo, Feedback, Drawer |
 | `ai/bundles/page.md` | Any other page: The rules and the components nearly every page uses, with their types and gotchas. Read it with the `components/<Name>.json` slices your page adds, in one step | Column, Row, Grid, Heading, Text, Button, IconButton, Icon, Input, Textarea, Tag, Badge, Avatar, Dialog, Skeleton, VisuallyHidden; this bundle alone also has Switch, SegmentedControl, Select, Checkbox, Card |
 <!-- tasks:end -->
 
 Validate generated code: `npx once-ui-validate-ai-code path/to/file.tsx`. Without a bundle, app shells, sidebars and editors are in `ai/layouts.md`, and Pro blocks to compose from are listed in `ai/examples/blocks/manifest.json`.
+
+## Build it to ship, even when the brief doesn't ask
+
+Most briefs never mention data, states or a brand; every one expects them. Every bundle's rules spell this out, and the validator checks it:
+
+- **Use what ships.** Before writing a component of your own, check `ai/catalog.json`. A brand mark is `Logo`. An assistant or character is `Mascot`, never a hand-drawn SVG. Uploads go through `MediaUpload` or `ChatComposer attach`. Places go on `Map`, and steps or history go in `Timeline`.
+- **Backend-ready.** Write a `lib/` data layer of typed async functions over mock data with a short delay. Screens call those functions, never the mock array.
+- **Every state.** A screen that loads data shows loading (Skeleton), empty, error (Feedback with Retry) and filled. A write is optimistic, and rolls back with a danger toast when it fails.
+- **Designed, not stock.** One idea carries the screen: a map app is the map with panels floating over it, and an assistant chat has the Mascot's face. The brand is identity (Logo, Mascot colour, Nav tone), not a fill on every button.
 
 ## Phone apps
 

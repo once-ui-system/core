@@ -24,6 +24,11 @@ type AnyComponent = React.ComponentType<Record<string, unknown>>;
 /** Props for components whose required props make an empty render meaningless. */
 const fixtures: Record<string, Record<string, unknown>> = {
   LogoCloud: { logos: [{ wordmark: "/logo.svg" }] },
+  AccountSettings: { adapter: Blocks.createDemoAccountAdapter({ latency: 0 }) },
+  SecuritySettings: { adapter: Blocks.createDemoAccountAdapter({ latency: 0 }) },
+  OrganizationSettings: { adapter: Blocks.createDemoOrganizationAdapter({ latency: 0 }) },
+  SettingsLayout: { sections: [{ value: "a", label: "A", content: "Section A" }] },
+  SettingsLabelsProvider: { children: "Labelled" },
 };
 
 const isComponent = (value: unknown) => {
@@ -53,12 +58,20 @@ function Providers({ children }: { children: React.ReactNode }) {
 
 /** StylePanel's sections read the state StylePanelRoot holds, so they render inside one. */
 const needsRoot = (name: string) => /^StylePanel(?!Root$)./.test(name);
+/** MascotPanel's likewise read MascotPanelRoot's. */
+const needsMascotRoot = (name: string) => /^MascotPanel(?!Root$)./.test(name);
 
 function element(name: string, Component: AnyComponent) {
   const child = createElement(Component, fixtures[name] ?? {});
   return (
     <Providers>
-      {needsRoot(name) ? <Blocks.StylePanelRoot>{child}</Blocks.StylePanelRoot> : child}
+      {needsRoot(name) ? (
+        <Blocks.StylePanelRoot>{child}</Blocks.StylePanelRoot>
+      ) : needsMascotRoot(name) ? (
+        <Blocks.MascotPanelRoot>{child}</Blocks.MascotPanelRoot>
+      ) : (
+        child
+      )}
     </Providers>
   );
 }

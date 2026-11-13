@@ -45,6 +45,7 @@
     "collapse": "A collapsed sidebar keeps every item reachable: icons with a tooltip or aria-label, the group label as the icon's name",
     "phone": "At s the sidebar hides and a header button opens the same nav in a left Drawer; following a link closes it",
     "header": "Breadcrumbs from the route, and the account or workspace switcher as a Dropdown or a User with a dropdown of Option rows",
-    "palette": "A header Search button opens Kbar with `open` and `onOpenChange` (no children); ⌘K still toggles it"
+    "palette": "A header Search button opens Kbar with `open` and `onOpenChange` (no children); ⌘K still toggles it",
+    "states": "Every view that loads data shows loading (Skeleton shaped like the content), empty (title, one line, the action that fills it), error (Feedback tone=\"danger\" with Retry) and filled, through a typed lib/ data layer of async functions over mock data — even when the brief never mentions data"
   }
 }

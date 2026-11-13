@@ -102,7 +102,7 @@ describe("harness entry points", () => {
     expect(imports[NEXT].exports).toEqual(
       expect.arrayContaining(["LayoutProvider", "createOgFetchRoute", "createOgProxyRoute"]),
     );
-    expect(imports[CONFIG].exports).toEqual(["defineConfig"]);
+    expect(imports[CONFIG].exports).toEqual(["defineConfig", "themePreset", "themePresets"]);
     expect(imports[CONFIG].types).toContain("OnceUIConfig");
     // 3.0 (B2, F9): no `./components/*` subpath; the players live on `./media`
     // beside Scrubber, CompareImage and MediaUpload, and EmojiPicker on `./emoji`.

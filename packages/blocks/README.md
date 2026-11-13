@@ -14,6 +14,27 @@ npm install @once-ui-system/core @once-ui-system/blocks
 import { StylePanel } from "@once-ui-system/blocks";
 ```
 
+## Settings
+
+`AccountSettings`, `SecuritySettings` and `OrganizationSettings` are the
+profile, sign-in and organization settings every app grows, in one flow, and
+`SettingsLayout` puts them in vertical tabs. They know nothing about auth: each
+reads and writes through an adapter the app supplies, and a row shows only
+when the adapter can do what it needs. `createDemoAccountAdapter()` and
+`createDemoOrganizationAdapter()` keep everything in memory, for docs, tests
+and demo mode; `settingsLabelsHu` is the Hungarian label set.
+
+```tsx
+import { AccountSettings, SecuritySettings, SettingsLayout } from "@once-ui-system/blocks";
+
+<SettingsLayout
+  sections={[
+    { value: "profile", label: "Profile", icon: "person", content: <AccountSettings adapter={account} /> },
+    { value: "security", label: "Sign-in & security", icon: "security", content: <SecuritySettings adapter={account} /> },
+  ]}
+/>
+```
+
 ## Page sections
 
 Eleven sections for site builders and landing pages: `HeroSection`,

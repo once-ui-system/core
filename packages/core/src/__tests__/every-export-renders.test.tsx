@@ -4,6 +4,8 @@ import { createElement } from "react";
 import { renderToString } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import * as Core from "../index";
+import * as CalendarModule from "../modules/calendar/index";
+import * as CanvasModule from "../modules/canvas/index";
 import * as Code from "../modules/code/index";
 import * as Data from "../modules/data/index";
 import * as Emoji from "../modules/emoji/index";
@@ -29,6 +31,8 @@ const exportsUnderTest: Record<string, unknown> = {
   ...MediaModule,
   ...Emoji,
   ...MapModule,
+  ...CanvasModule,
+  ...CalendarModule,
 };
 
 const noop = () => {};
@@ -36,6 +40,11 @@ const avatar = { src: "/avatar.jpg" };
 
 /** Props for components whose required props make an empty render meaningless. */
 const fixtures: Record<string, Record<string, unknown>> = {
+  CanvasAnchor: { x: 10, y: 10 },
+  CanvasItem: { x: 0, y: 0, width: 100, height: 60 },
+  SnapGuides: { guides: [{ axis: "x", at: 10, start: 0, end: 100, gap: 20 }] },
+  TransformHandles: { rect: { x: 0, y: 0, width: 100, height: 60 }, onTransform: noop },
+  Calendar: { events: [], defaultDate: new Date(2026, 10, 11) },
   AvatarGroup: { avatars: [avatar, avatar, { value: "AB" }] },
   Breadcrumbs: { items: [{ label: "Home", href: "/" }, { label: "Docs" }] },
   ColorInput: { id: "color", label: "Colour", value: "#ff0000", onValueChange: noop },
@@ -50,6 +59,8 @@ const fixtures: Record<string, Record<string, unknown>> = {
     renderItem: (item: string) => item,
     loadMore: async () => false,
   },
+  PeerCursor: { name: "Mira Holt", x: 10, y: 10 },
+  PeerCursors: { peers: [{ id: "1", name: "Mira Holt", x: 0.5, y: 0.5 }] },
   PhotoViewer: { items: [{ src: "/photo.jpg", alt: "A photo" }], onClose: noop },
   Reaction: { value: "❤️" },
   Reactions: { options: [{ value: "❤️" }], counts: { "❤️": 1 } },
@@ -60,6 +71,12 @@ const fixtures: Record<string, Record<string, unknown>> = {
       { value: "a", label: "A" },
       { value: "b", label: "B" },
     ],
+  },
+  StatTile: { label: "Open jobs", value: "128" },
+  Combobox: {
+    id: "combobox",
+    label: "City",
+    options: [{ label: "Oslo", value: "osl" }],
   },
   Select: {
     id: "select",
@@ -108,9 +125,20 @@ const inSvg = (child: React.ReactElement) => (
     <defs>{child}</defs>
   </svg>
 );
+const inCanvas = (child: React.ReactElement) => (
+  <CanvasModule.Canvas height={400}>{child}</CanvasModule.Canvas>
+);
+
 const parents: Record<string, (child: React.ReactElement) => React.ReactElement> = {
   LinearGradient: inSvg,
   RadialGradient: inSvg,
+  CanvasAnchor: inCanvas,
+  CanvasItem: inCanvas,
+  CanvasOverlay: inCanvas,
+  SelectionBox: inCanvas,
+  SnapGuides: inCanvas,
+  TransformHandles: inCanvas,
+  SidebarTrigger: (child) => <Core.SidebarProvider>{child}</Core.SidebarProvider>,
   SortableHandle: (child) => <Core.Sortable items={["a"]}>{child}</Core.Sortable>,
   SortableItem: (child) => <Core.Sortable items={["a"]}>{child}</Core.Sortable>,
   Tab: (child) => <Core.Tabs defaultValue="a">{child}</Core.Tabs>,
@@ -127,12 +155,15 @@ const notRendered = new Set([
   "ToastProvider",
   "IconProvider",
   // The map components need WebGL and a MapLibre instance; map.test.tsx
-  // renders them against a stand-in maplibre-gl, on the client and server.
+  // renders them against a stand-in maplibre-gl, on the client and server
+  // (map-route.test.tsx for MapRoute).
   "Map",
+  "MapArea",
   "MapCircle",
   "MapMarker",
   "MapMarkers",
   "MapPopup",
+  "MapRoute",
 ]);
 
 const isComponent = (value: unknown) => {

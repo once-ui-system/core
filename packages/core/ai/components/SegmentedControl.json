@@ -176,17 +176,17 @@
    "left": "SpacingToken | number | CSSUnit",
    "fillWidth": "boolean",
    "position": "CSSProperties[\"position\"]",
-   "disabled": "boolean",
    "href": "string",
+   "disabled": "boolean",
    "size": "TShirtSizes",
    "corners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
    "variant": "\"ghost\" | \"outline\" | \"subtle\"",
    "tone": "Tone",
    "weight": "\"default\" | \"strong\"",
-   "truncate": "boolean",
    "rounded": "boolean",
    "prefixIcon": "IconName",
-   "suffixIcon": "IconName"
+   "suffixIcon": "IconName",
+   "truncate": "boolean"
   },
   "CSSUnit": [
    "`${number}px`",

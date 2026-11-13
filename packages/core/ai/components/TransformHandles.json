@@ -1,0 +1,63 @@
+{
+ "name": "TransformHandles",
+ "group": "canvas",
+ "importFrom": "@once-ui-system/core/canvas",
+ "props": {
+  "rect": "!CanvasRect",
+  "onTransform": "!(next: CanvasRect, info: CanvasTransformInfo) => void",
+  "resizable": "boolean = true",
+  "rotatable": "boolean = true",
+  "keepRatio": "boolean = false",
+  "minSize": "number = 1",
+  "rotationStep": "number = 15",
+  "handles": "ResizeHandle[]",
+  "snap": "(rect: CanvasRect, handle: ResizeHandle) => CanvasRect",
+  "sizeLabel": "ReactNode | false",
+  "labels": "Partial<TransformHandlesLabels>",
+  "className": "string"
+ },
+ "tags": [
+  "canvas"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "CanvasHandle": [
+   "s",
+   "rotate",
+   "n",
+   "ne",
+   "e",
+   "se",
+   "sw",
+   "w",
+   "nw"
+  ],
+  "CanvasRect": {
+   "x": "!number",
+   "y": "!number",
+   "width": "!number",
+   "height": "!number",
+   "rotation": "number"
+  },
+  "CanvasTransformInfo": {
+   "handle": "!CanvasHandle",
+   "phase": "!\"start\" | \"move\" | \"end\"",
+   "start": "!CanvasRect"
+  },
+  "ResizeHandle": [
+   "s",
+   "n",
+   "ne",
+   "e",
+   "se",
+   "sw",
+   "w",
+   "nw"
+  ],
+  "TransformHandlesLabels": {
+   "resize": "!string",
+   "rotate": "!string",
+   "handles": "!Record<ResizeHandle, string>"
+  }
+ }
+}

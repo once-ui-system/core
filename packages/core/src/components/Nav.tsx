@@ -2,19 +2,10 @@
 
 import classNames from "clsx";
 import type React from "react";
-import {
-  createContext,
-  type FocusEvent,
-  type KeyboardEvent,
-  type PointerEvent,
-  type ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { createContext, type ReactNode, useContext } from "react";
 import { useStyle } from "../contexts/ThemeProvider.js";
+import { SidebarRailContext } from "../internal/sidebarRail.js";
+import { useHoverExpand } from "../internal/useHoverExpand.js";
 import type { SpacingToken, Tone } from "../types.js";
 import type { Density } from "../utils/density.js";
 import { tokenLength } from "../utils/layoutClasses.js";
@@ -102,11 +93,6 @@ const OUTSIDE: NavStyle = {
   collapsed: false,
 };
 
-/** Hover intent: a pointer crossing the rail on its way to the page does not open it. */
-const OPEN_DELAY = 150;
-/** Grace period, so overshooting the open edge by a few pixels does not snap it shut. */
-const CLOSE_DELAY = 200;
-
 const NavContext = createContext<NavStyle>(OUTSIDE);
 
 /**
@@ -143,8 +129,9 @@ interface NavProps extends React.ComponentProps<typeof Column> {
   rail?: boolean;
   /**
    * Icons only. Labels, badges and section headings fade out but stay each
-   * row's accessible name, and NavGroups close. The Nav narrows to one icon
-   * column plus its own padding.
+   * row's accessible name, and a NavGroup opens its rows in a menu beside its
+   * icon. The Nav narrows to one icon column plus its own padding. Inside a
+   * Sidebar this follows the Sidebar's rail, and the Sidebar sets the width.
    */
   collapsed?: boolean;
   /**
@@ -180,26 +167,33 @@ const Nav = ({
   const theme = useStyle().density;
   // One scale for the theme and the Nav: an unknown value falls back to normal.
   const density: NavDensity = own ?? (theme in DENSITY ? theme : "normal");
-  const { expanded, handlers } = useHoverExpand(collapsed && expandOnHover, column);
-  const iconsOnly = collapsed && !expanded;
+  // Inside a Sidebar, the Sidebar owns the width, the collapse and the peek:
+  // the Nav only follows it into icons and back.
+  const sidebar = useContext(SidebarRailContext);
+  const standalone = sidebar === null;
+  const ownCollapse = standalone && collapsed;
+  const { expanded, handlers } = useHoverExpand(ownCollapse && expandOnHover, column);
+  const iconsOnly = sidebar ? collapsed || sidebar.iconsOnly : collapsed && !expanded;
   return (
     <NavContext.Provider value={{ density, variant, rail, tone, collapsed: iconsOnly }}>
       <Column
         ref={ref}
         as="nav"
-        fillWidth={!collapsed}
+        fillWidth={!ownCollapse}
         gap={DENSITY[density].gap}
         data-density={density}
         data-variant={variant}
-        data-collapsed={collapsed ? (expanded ? "expanded" : "collapsed") : undefined}
+        data-collapsed={
+          ownCollapse ? (expanded ? "expanded" : "collapsed") : iconsOnly ? "collapsed" : undefined
+        }
         className={classNames(
-          collapsed && styles.collapsed,
-          collapsed && expandOnHover && styles.expandable,
+          ownCollapse && styles.collapsed,
+          ownCollapse && expandOnHover && styles.expandable,
           expanded && styles.expanded,
           className,
         )}
         style={
-          collapsed && expandOnHover
+          ownCollapse && expandOnHover
             ? ({
                 "--nav-expanded-width":
                   typeof expandedWidth === "number"
@@ -217,79 +211,6 @@ const Nav = ({
     </NavContext.Provider>
   );
 };
-
-type HoverHandlers = Pick<
-  React.ComponentProps<typeof Column>,
-  "onPointerEnter" | "onPointerLeave" | "onFocus" | "onBlur" | "onKeyDown"
->;
-
-/** `:focus-visible` is the keyboard's focus; a click focuses a row too, and must not pin the Nav open. */
-const isKeyboardFocus = (el: Element) => {
-  try {
-    return el.matches(":focus-visible");
-  } catch {
-    return true;
-  }
-};
-
-/**
- * Open on a resting mouse or on keyboard focus, close on leave, blur or
- * Escape. The host's own handlers still run.
- */
-function useHoverExpand(enabled: boolean, own: HoverHandlers) {
-  const [expanded, setExpanded] = useState(false);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const cancel = useCallback(() => {
-    if (timer.current) clearTimeout(timer.current);
-    timer.current = null;
-  }, []);
-  const schedule = (next: boolean, delay: number) => {
-    cancel();
-    timer.current = setTimeout(() => setExpanded(next), delay);
-  };
-  useEffect(() => cancel, [cancel]);
-  useEffect(() => {
-    if (!enabled) {
-      cancel();
-      setExpanded(false);
-    }
-  }, [enabled, cancel]);
-
-  if (!enabled) return { expanded: false, handlers: {} as HoverHandlers };
-
-  const handlers: HoverHandlers = {
-    onPointerEnter: (event: PointerEvent<HTMLDivElement>) => {
-      own.onPointerEnter?.(event);
-      if (event.pointerType === "mouse") schedule(true, OPEN_DELAY);
-    },
-    onPointerLeave: (event: PointerEvent<HTMLDivElement>) => {
-      own.onPointerLeave?.(event);
-      if (event.pointerType === "mouse") schedule(false, CLOSE_DELAY);
-    },
-    onFocus: (event: FocusEvent<HTMLDivElement>) => {
-      own.onFocus?.(event);
-      if (isKeyboardFocus(event.target)) {
-        cancel();
-        setExpanded(true);
-      }
-    },
-    onBlur: (event: FocusEvent<HTMLDivElement>) => {
-      own.onBlur?.(event);
-      if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-        cancel();
-        setExpanded(false);
-      }
-    },
-    onKeyDown: (event: KeyboardEvent<HTMLDivElement>) => {
-      own.onKeyDown?.(event);
-      if (event.key === "Escape") {
-        cancel();
-        setExpanded(false);
-      }
-    },
-  };
-  return { expanded, handlers };
-}
 
 Nav.displayName = "Nav";
 

@@ -1118,3 +1118,131 @@ describe("Select as a form value", () => {
     expect(rules(src)).toContain("Select.chevron");
   });
 });
+
+describe("ship, not screenshot", () => {
+  it("wants a caught load rendered, not only caught", () => {
+    const src = `export function Zones() {
+      const [zones, setZones] = useState([]);
+      useEffect(() => { load().then(setZones).catch((e) => console.error(e)); }, []);
+      return (<Column>{zones.length === 0 && <Text>None</Text>}{zones.map((z) => <Text key={z.id}>{z.name}</Text>)}{loading && <Skeleton />}</Column>);
+    }`;
+    expect(rules(src)).toContain("states.error");
+    expect(
+      rules(
+        src.replace("<Column>", '<Column>{error && <Feedback tone="danger" title="Failed" />}'),
+      ),
+    ).not.toContain("states.error");
+  });
+
+  it("asks a bare monogram for the brand's initial", () => {
+    expect(rules(`export const H = () => { return <Logo text="Sprig" monogram />; };`)).toContain(
+      "components.logo",
+    );
+    expect(
+      rules(`export const H = () => { return <Logo text="Sprig" monogram="S" />; };`),
+    ).not.toContain("components.logo");
+  });
+
+  it("stops a map app replacing the style by hand", () => {
+    const src = `import { Map, useMap } from "@once-ui-system/core/map";
+      export function Layers() { const { map } = useMap(); useEffect(() => { map.setStyle(style, { diff: false }); }, [map]); return <Map />; }`;
+    expect(rules(src)).toContain("map.raw");
+  });
+
+  it("points a hand-set app theme at a preset", () => {
+    expect(
+      rules(
+        `export const { style } = defineConfig({ style: { brand: "cyan", neutral: "gray" } });`,
+      ),
+    ).toContain("theme.preset");
+    expect(
+      rules(
+        `const p = themePreset("care", { style: { brandSeed: "#c2410c" } });\nexport const { style } = defineConfig({ style: p.style });`,
+      ),
+    ).not.toContain("theme.preset");
+    expect(
+      rules(
+        `export function Providers({ children }) { return <ThemeProvider brand="cyan" neutral="gray">{children}</ThemeProvider>; }`,
+      ),
+    ).toContain("theme.preset");
+    expect(
+      rules(
+        `const p = themePreset("ops");\nexport function Providers({ children }) { return <ThemeProvider {...p.style} brand="cyan">{children}</ThemeProvider>; }`,
+      ),
+    ).not.toContain("theme.preset");
+    // A config that sets its own page and surface already chose a look.
+    expect(
+      rules(
+        `export const { style } = defineConfig({ style: { brand: "violet", pageBackground: { light: "#f8f7fb", dark: "#0d0b12" } } });`,
+      ),
+    ).not.toContain("theme.preset");
+  });
+
+  it("flags maplibre-gl.css, which overrides Map's own styles", () => {
+    expect(
+      rules(
+        `import "maplibre-gl/dist/maplibre-gl.css";\nexport default function Layout() { return null; }`,
+      ),
+    ).toContain("map.css");
+  });
+
+  it("points a hand-drawn character at Mascot", () => {
+    const src = `export function SprigMascot() {
+      return (<svg viewBox="0 0 10 10"><circle cx="1" cy="1" r="1" /><circle cx="2" cy="1" r="1" /><ellipse cx="5" cy="5" rx="2" ry="1" /><path d="M0 0" /><path d="M1 1" /><path d="M2 2" /></svg>);
+    }`;
+    expect(rules(src)).toContain("components.mascot");
+    expect(rules(`${src}\nconst x = <Mascot />;`)).not.toContain("components.mascot");
+  });
+
+  it("points a hand-built brand mark at Logo and a file input at MediaUpload", () => {
+    expect(
+      rules(`function AppLogo() { return <Row><Icon name="leaf" /><Text>Sprig</Text></Row>; }`),
+    ).toContain("components.logo");
+    expect(rules(`function Attach() { return <input type="file" />; }`)).toContain(
+      "components.upload",
+    );
+  });
+
+  it("asks loaded data for loading and error states", () => {
+    const src = `export function Plants() {
+      const [plants, setPlants] = useState([]);
+      useEffect(() => { fetch("/api/plants").then((r) => r.json()).then(setPlants); }, []);
+      return (<Column>{plants.map((p) => <Text key={p.id}>{p.name}</Text>)}</Column>);
+    }`;
+    expect(rules(src)).toEqual(
+      expect.arrayContaining(["states.loading", "states.error", "states.empty"]),
+    );
+    const handled = src
+      .replace(
+        "<Column>",
+        '<Column>{loading && <Skeleton />}{error && <Feedback tone="danger" />}{plants.length === 0 && <Text>None yet</Text>}',
+      )
+      .replace("then(setPlants)", "then(setPlants).catch(setError)");
+    expect(rules(handled)).not.toEqual(expect.arrayContaining(["states.loading"]));
+    expect(rules(handled)).not.toContain("states.error");
+    expect(rules(handled)).not.toContain("states.empty");
+  });
+
+  it("leaves a fixed list alone and asks inline records for a data layer", () => {
+    expect(
+      rules(
+        `const links = [1, 2]; export const Nav = () => { return (<Row>{links.map((l) => <Text key={l}>{l}</Text>)}</Row>); };`,
+      ),
+    ).not.toContain("states.empty");
+    const records = Array.from({ length: 6 }, (_, i) => `{ id: "${i}", name: "N${i}" }`).join(", ");
+    expect(
+      rules(`const items = [${records}]; export const L = () => { return (<Column />); };`),
+    ).toContain("data.layer");
+  });
+
+  it("finds nothing in the gold examples", () => {
+    for (const file of ["chat", "map-app", "editor", "list-page", "dashboard"]) {
+      const src = fs.readFileSync(
+        path.join(__dirname, "..", "..", "ai", "examples", `${file}.tsx`),
+        "utf8",
+      );
+      const found = rules(src).filter((r) => /^(components|states|data)\./.test(r));
+      expect({ file, found }).toEqual({ file, found: [] });
+    }
+  });
+});
