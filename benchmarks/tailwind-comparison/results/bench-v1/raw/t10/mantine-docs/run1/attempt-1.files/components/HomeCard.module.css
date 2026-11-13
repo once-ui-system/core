@@ -1,0 +1,74 @@
+.card {
+  position: relative;
+  transition:
+    box-shadow 150ms ease,
+    border-color 150ms ease;
+  border: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  scroll-margin: 12px;
+}
+
+.card[data-active] {
+  border-color: var(--mantine-color-teal-6);
+  box-shadow: var(--mantine-shadow-md);
+}
+
+.card:focus-within {
+  outline: 2px solid var(--mantine-color-teal-6);
+  outline-offset: 2px;
+}
+
+.photo {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+
+.badges {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  gap: 6px;
+}
+
+.save {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 2;
+  background: light-dark(rgba(255, 255, 255, 0.92), rgba(0, 0, 0, 0.6));
+}
+
+.titleLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* The whole card is clickable through the title link. */
+.titleLink::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.titleLink:focus-visible {
+  outline: none;
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin-top: 10px;
+}
+
+.fact {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.body {
+  padding: var(--mantine-spacing-md);
+}

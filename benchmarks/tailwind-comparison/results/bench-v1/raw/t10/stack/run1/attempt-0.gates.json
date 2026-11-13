@@ -1,0 +1,28 @@
+{
+  "arm": "S",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "src/app/page.tsx(2,28): error TS2307: Cannot find module '@/components/haven/SearchPage' or its corresponding type declarations.\nsrc/components/haven/HomeDetail.tsx(13,31): error TS2307: Cannot find module './MiniMapLoader' or its corresponding type declarations.\nsrc/components/haven/HomeDetail.tsx(14,29): error TS2307: Cannot find module './Placeholder' or its corresponding type declarations.\nsrc/components/haven/SearchMap.tsx(17,29): error TS2307: Cannot find module './Placeholder' or its corresponding type declarations.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 10776
+    }
+  },
+  "files": [
+    "src/components/haven/SearchMap.tsx",
+    "src/components/haven/ContactForm.tsx",
+    "src/components/haven/HomeDetail.tsx",
+    "src/app/page.tsx",
+    "src/app/homes/[id]/page.tsx",
+    "src/lib/data.ts"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ src/components/haven/SearchMap.tsx: 2 issue(s)\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ src/components/haven/ContactForm.tsx: no mechanical issues\n✗ src/components/haven/HomeDetail.tsx: 2 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ src/app/page.tsx: no mechanical issues\n✓ src/app/homes/[id]/page.tsx: no mechanical issues\n✓ src/lib/data.ts: no mechanical issues",
+    "validator": {
+      "package_version": "2.6.0",
+      "script_sha256": "ab274b3e6be15eb6"
+    }
+  }
+}

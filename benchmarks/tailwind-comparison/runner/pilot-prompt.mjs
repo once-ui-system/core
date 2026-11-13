@@ -10,7 +10,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { RESULTS, WORK, armByLetter, buildPrompt, buildRepairPrompt } from "./lib.mjs";
+import { RESULTS, WORK, armByLetter, buildPrompt, buildRepairPrompt, isMulti, taskById } from "./lib.mjs";
 
 export function runDir(resultsDir, letter, task, run) {
   return path.join(resultsDir, "raw", `t${String(task).padStart(2, "0")}`, armByLetter(letter).id, `run${run}`);
@@ -30,8 +30,8 @@ export function initialPrompt(letter, task, outFile) {
   return `${preamble(letter, outFile)}\n${system}\n\n${user}`;
 }
 
-export function repairPrompt(gate, output, outFile) {
-  return `${buildRepairPrompt(gate, output)}\n\nAs before: write the complete corrected file to ${outFile} with the Write tool (no shell commands), then reply with the single word: done.`;
+export function repairPrompt(gate, output, outFile, multi = false) {
+  return `${buildRepairPrompt(gate, output, multi)}\n\nAs before: write the complete corrected file to ${outFile} with the Write tool (no shell commands), then reply with the single word: done.`;
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
@@ -48,7 +48,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const repair = arg("repair");
   if (repair) {
     const prev = JSON.parse(fs.readFileSync(path.join(dir, `attempt-${repair - 1}.gates.json`), "utf8"));
-    process.stdout.write(repairPrompt(prev.failed_gate, prev.failure_output, path.join(dir, `attempt-${repair}.tsx`)));
+    process.stdout.write(repairPrompt(prev.failed_gate, prev.failure_output, path.join(dir, `attempt-${repair}.tsx`), isMulti(taskById(task))));
   } else {
     const p = initialPrompt(letter, task, path.join(dir, "attempt-0.tsx"));
     fs.writeFileSync(path.join(dir, "prompt.txt"), p);

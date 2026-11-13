@@ -1,0 +1,16 @@
+{
+  "files": [
+    "lib/theme.ts",
+    "components/ui/provider.tsx",
+    "components/ui/color-mode.tsx",
+    "lib/data.ts",
+    "components/site-header.tsx",
+    "components/site-footer.tsx",
+    "components/site-shell.tsx",
+    "app/page.tsx",
+    "components/pricing-view.tsx",
+    "app/pricing/page.tsx",
+    "app/layout.tsx"
+  ],
+  "rejected": []
+}

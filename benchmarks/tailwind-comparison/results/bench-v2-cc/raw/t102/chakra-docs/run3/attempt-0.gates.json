@@ -1,0 +1,274 @@
+{
+  "arm": "K",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 8769
+    },
+    "build": {
+      "ok": true,
+      "ms": 14565
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 546,
+          "height": 1439,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 567,
+          "height": 1110,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 628,
+          "height": 957,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 546,
+              "height": 1439,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 567,
+              "height": 1110,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 628,
+              "height": 957,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 4,
+            "serious_or_critical": 1,
+            "ids": [
+              "definition-list:serious:4"
+            ]
+          }
+        },
+        "/projects": {
+          "viewports": {
+            "phone": {
+              "text": 411,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 432,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 493,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/settings": {
+          "viewports": {
+            "phone": {
+              "text": 359,
+              "height": 1242,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 380,
+              "height": 1229,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 441,
+              "height": 1229,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 1,
+        "nodes": 4,
+        "serious_or_critical": 1,
+        "ids": [
+          "definition-list:serious:4"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "click > click",
+          "found": true,
+          "steps": 2,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/projects phone": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/projects tablet": {
+          "ms": 1763,
+          "settled": true
+        },
+        "/projects desktop": {
+          "ms": 1776,
+          "settled": true
+        },
+        "/settings phone": {
+          "ms": 18895,
+          "settled": false
+        },
+        "/settings tablet": {
+          "ms": 11407,
+          "settled": false
+        },
+        "/settings desktop": {
+          "ms": 1758,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 164,
+          "distinct_fontSize": 7,
+          "distinct_color": 7,
+          "distinct_background": 7,
+          "distinct_radius": 3,
+          "distinct_shadow": 1,
+          "distinct_spacing": 11,
+          "spacing_on_4px_grid": 0.867
+        },
+        "/projects": {
+          "elements": 141,
+          "distinct_fontSize": 6,
+          "distinct_color": 7,
+          "distinct_background": 7,
+          "distinct_radius": 3,
+          "distinct_shadow": 0,
+          "distinct_spacing": 9,
+          "spacing_on_4px_grid": 0.981
+        },
+        "/settings": {
+          "elements": 138,
+          "distinct_fontSize": 6,
+          "distinct_color": 5,
+          "distinct_background": 6,
+          "distinct_radius": 3,
+          "distinct_shadow": 1,
+          "distinct_spacing": 11,
+          "spacing_on_4px_grid": 0.836
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 275.3,
+          "css_kb": 0,
+          "fcp_ms": 104,
+          "cls": 0,
+          "long_task_ms": 27
+        },
+        "/projects": {
+          "js_kb": 275.3,
+          "css_kb": 0,
+          "fcp_ms": 112,
+          "cls": 0,
+          "long_task_ms": 31
+        },
+        "/settings": {
+          "js_kb": 275.3,
+          "css_kb": 0,
+          "fcp_ms": 224,
+          "cls": 0,
+          "long_task_ms": 340
+        }
+      },
+      "brand": {
+        "filled_buttons": 1,
+        "brand_text_elements": 0,
+        "brand_fill_elements": 7,
+        "brand_filled_buttons": 0,
+        "button_radius_matches": 1,
+        "button_radius": 16,
+        "heading_font": "ui-rounded, \"SF Pro Rounded\", system-ui, sans-serif",
+        "heading_serif": false,
+        "body_font": "ui-sans-serif, system-ui, sans-serif",
+        "page_background": "rgb(245, 239, 229)",
+        "dark_first_paint": false
+      }
+    }
+  },
+  "files": [
+    "lib/theme.ts",
+    "components/ui/provider.tsx",
+    "app/layout.tsx",
+    "lib/data.ts",
+    "components/nav-config.tsx",
+    "components/sidebar-nav.tsx",
+    "components/app-shell.tsx",
+    "app/page.tsx",
+    "app/projects/page.tsx",
+    "app/settings/page.tsx"
+  ]
+}

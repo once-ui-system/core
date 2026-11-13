@@ -1,0 +1,278 @@
+{
+  "arm": "A",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 1762
+    },
+    "build": {
+      "ok": true,
+      "ms": 6890
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 404,
+          "height": 812,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 404,
+          "height": 1024,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 488,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 404,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 404,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 488,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/projects": {
+          "viewports": {
+            "phone": {
+              "text": 343,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 343,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 427,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/settings": {
+          "viewports": {
+            "phone": {
+              "text": 294,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 294,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 378,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      },
+      "interaction": {
+        "phone": {
+          "action": "click > click",
+          "found": true,
+          "steps": 2,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1842,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1767,
+          "settled": true
+        },
+        "/projects phone": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/projects tablet": {
+          "ms": 1756,
+          "settled": true
+        },
+        "/projects desktop": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/settings phone": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/settings tablet": {
+          "ms": 16765,
+          "settled": false
+        },
+        "/settings desktop": {
+          "ms": 11062,
+          "settled": false
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 151,
+          "distinct_fontSize": 8,
+          "distinct_color": 3,
+          "distinct_background": 4,
+          "distinct_radius": 2,
+          "distinct_shadow": 1,
+          "distinct_spacing": 6,
+          "spacing_on_4px_grid": 0
+        },
+        "/projects": {
+          "elements": 214,
+          "distinct_fontSize": 7,
+          "distinct_color": 4,
+          "distinct_background": 7,
+          "distinct_radius": 2,
+          "distinct_shadow": 1,
+          "distinct_spacing": 6,
+          "spacing_on_4px_grid": 0
+        },
+        "/settings": {
+          "elements": 159,
+          "distinct_fontSize": 7,
+          "distinct_color": 5,
+          "distinct_background": 5,
+          "distinct_radius": 2,
+          "distinct_shadow": 2,
+          "distinct_spacing": 8,
+          "spacing_on_4px_grid": 0
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 228.2,
+          "css_kb": 48.7,
+          "fcp_ms": 312,
+          "cls": 0,
+          "long_task_ms": 0
+        },
+        "/projects": {
+          "js_kb": 242.8,
+          "css_kb": 48.7,
+          "fcp_ms": 220,
+          "cls": 0,
+          "long_task_ms": 0
+        },
+        "/settings": {
+          "js_kb": 242.8,
+          "css_kb": 48.7,
+          "fcp_ms": 108,
+          "cls": 0,
+          "long_task_ms": 0
+        }
+      },
+      "brand": {
+        "filled_buttons": 2,
+        "brand_text_elements": 2,
+        "brand_fill_elements": 0,
+        "brand_filled_buttons": 0,
+        "button_radius_matches": 2,
+        "button_radius": 2,
+        "heading_font": "Georgia, \"Times New Roman\", serif",
+        "heading_serif": true,
+        "body_font": "ui-sans-serif, system-ui, sans-serif",
+        "page_background": "lab(98.3063 0.320911 -2.51933)",
+        "dark_first_paint": false
+      }
+    }
+  },
+  "files": [
+    "app/fonts.css",
+    "lib/theme.ts",
+    "lib/data.ts",
+    "app/providers.tsx",
+    "app/layout.tsx",
+    "components/AppShell.tsx",
+    "app/page.tsx",
+    "app/reports/page.tsx",
+    "app/projects/page.tsx",
+    "app/settings/page.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ lib/theme.ts: no mechanical issues\n✓ lib/data.ts: no mechanical issues\n✓ app/providers.tsx: no mechanical issues\n✗ app/layout.tsx: 1 issue(s)\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint\n✗ components/AppShell.tsx: 1 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n✓ app/page.tsx: no mechanical issues\n✓ app/reports/page.tsx: no mechanical issues\n✓ app/projects/page.tsx: no mechanical issues\n✓ app/settings/page.tsx: no mechanical issues",
+    "validator": {
+      "package_version": "3.0.0-beta.1",
+      "script_sha256": "8b6fb92b077251ad"
+    }
+  }
+}

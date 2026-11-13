@@ -1,0 +1,20 @@
+:root {
+  --default-border: var(--neutral-alpha-weak);
+}
+
+/* Lumen fonts: rounded headings, plain system body. */
+:root:root {
+  --font-heading: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  --font-body: ui-sans-serif, system-ui, sans-serif;
+  --font-label: ui-sans-serif, system-ui, sans-serif;
+  --font-code: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* Lumen corner radius: 16px on buttons, inputs, cards and menus. */
+:root:root,
+html[data-border] {
+  --radius-s: 0.75rem;
+  --radius-m: 1rem;
+  --radius-l: 1rem;
+  --radius-xl: 1.5rem;
+}

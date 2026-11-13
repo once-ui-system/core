@@ -1,0 +1,10 @@
+{
+  "files": [
+    "src/components/lumen/ProjectsView.tsx",
+    "src/app/page.tsx",
+    "src/app/(lumen)/layout.tsx",
+    "src/app/(lumen)/projects/page.tsx",
+    "src/app/(lumen)/members/page.tsx"
+  ],
+  "rejected": []
+}

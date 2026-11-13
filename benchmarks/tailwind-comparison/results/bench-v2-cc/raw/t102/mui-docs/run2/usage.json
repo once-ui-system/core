@@ -1,0 +1,127 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 6,
+      "input_total": 445884,
+      "input_uncached": 12,
+      "cache_creation": 63180,
+      "cache_read": 382692,
+      "visible_output_tokens_o200k": 11227,
+      "visible_output_tokens_claudeLegacy": 12269,
+      "thinking_blocks": 3
+    },
+    {
+      "attempt": 1,
+      "calls": 3,
+      "input_total": 315395,
+      "input_uncached": 6,
+      "cache_creation": 115632,
+      "cache_read": 199757,
+      "visible_output_tokens_o200k": 10990,
+      "visible_output_tokens_claudeLegacy": 11970,
+      "thinking_blocks": 1
+    },
+    {
+      "attempt": 2,
+      "calls": 3,
+      "input_total": 365783,
+      "input_uncached": 6,
+      "cache_creation": 96311,
+      "cache_read": 269466,
+      "visible_output_tokens_o200k": 10975,
+      "visible_output_tokens_claudeLegacy": 11954,
+      "thinking_blocks": 1
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t102/mui-docs/run2/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "."
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/README.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/theme.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/material-ui/react-grid.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/material-ui/customization/dark-mode.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v2-cc/raw/t102/mui-docs/run2/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    },
+    {
+      "attempt": 1,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t102/mui-docs/run2/repair-1.txt"
+    },
+    {
+      "attempt": 1,
+      "name": "Write",
+      "path": "../../../results/bench-v2-cc/raw/t102/mui-docs/run2/attempt-1.tsx"
+    },
+    {
+      "attempt": 1,
+      "name": "SubagentHandback",
+      "path": null
+    },
+    {
+      "attempt": 2,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t102/mui-docs/run2/repair-2.txt"
+    },
+    {
+      "attempt": 2,
+      "name": "Write",
+      "path": "../../../results/bench-v2-cc/raw/t102/mui-docs/run2/attempt-2.tsx"
+    },
+    {
+      "attempt": 2,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "M"
+}

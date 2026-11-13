@@ -1,0 +1,25 @@
+{
+  "arm": "C",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(16,44): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\napp/page.tsx(22,35): error TS7006: Parameter 'p' implicitly has an 'any' type.\napp/page.tsx(23,39): error TS7006: Parameter 'sum' implicitly has an 'any' type.\napp/page.tsx(23,44): error TS7006: Parameter 'p' implicitly has an 'any' type.\napp/page.tsx(24,35): error TS7006: Parameter 'p' implicitly has an 'any' type.\napp/projects/page.tsx(14,58): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\napp/projects/page.tsx(25,40): error TS7006: Parameter 'sum' implicitly has an 'any' type.\napp/projects/page.tsx(25,45): error TS7006: Parameter 'p' implicitly has an 'any' type.\napp/projects/page.tsx(50,28): error TS7006: Parameter 'p' implicitly has an 'any' type.\napp/reports/page.tsx(5,26): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\ncomponents/app-shell.tsx(8,28): error TS2307: Cannot find module '@/components/app-sidebar' or its corresponding type declarations.\ncomponents/settings-form.tsx(25,22): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 13692
+    }
+  },
+  "files": [
+    "components/app-shell.tsx",
+    "components/page-header.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/projects/layout.tsx",
+    "app/projects/page.tsx",
+    "app/settings/layout.tsx",
+    "components/settings-form.tsx",
+    "app/settings/page.tsx",
+    "app/reports/layout.tsx",
+    "app/reports/page.tsx"
+  ]
+}

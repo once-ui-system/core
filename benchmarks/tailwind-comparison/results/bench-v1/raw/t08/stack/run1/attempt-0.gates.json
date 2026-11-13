@@ -1,0 +1,206 @@
+{
+  "arm": "S",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 5086
+    },
+    "build": {
+      "ok": true,
+      "ms": 26848
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 534,
+          "height": 1041,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 534,
+          "height": 1024,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 563,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 534,
+              "height": 1041,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 534,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 563,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/welcome": {
+          "viewports": {
+            "phone": {
+              "text": 545,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 545,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 545,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      },
+      "interaction": {
+        "phone": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        },
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/welcome phone": {
+          "ms": 1764,
+          "settled": true
+        },
+        "/welcome tablet": {
+          "ms": 1769,
+          "settled": true
+        },
+        "/welcome desktop": {
+          "ms": 1760,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 102,
+          "distinct_fontSize": 8,
+          "distinct_color": 6,
+          "distinct_background": 8,
+          "distinct_radius": 4,
+          "distinct_shadow": 1,
+          "distinct_spacing": 7,
+          "spacing_on_4px_grid": 1
+        },
+        "/welcome": {
+          "elements": 64,
+          "distinct_fontSize": 6,
+          "distinct_color": 4,
+          "distinct_background": 4,
+          "distinct_radius": 4,
+          "distinct_shadow": 1,
+          "distinct_spacing": 9,
+          "spacing_on_4px_grid": 0.966
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 392.7,
+          "css_kb": 49.7,
+          "fcp_ms": 188,
+          "cls": 0,
+          "long_task_ms": 5
+        },
+        "/welcome": {
+          "js_kb": 394.8,
+          "css_kb": 49.7,
+          "fcp_ms": 236,
+          "cls": 0,
+          "long_task_ms": 2
+        }
+      }
+    }
+  },
+  "files": [
+    "src/lib/data.ts",
+    "src/components/onboarding/OnboardingWizard.tsx",
+    "src/components/onboarding/WelcomeView.tsx",
+    "src/app/page.tsx",
+    "src/app/welcome/page.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ src/lib/data.ts: no mechanical issues\n✗ src/components/onboarding/OnboardingWizard.tsx: 1 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n✗ src/components/onboarding/WelcomeView.tsx: 1 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n✓ src/app/page.tsx: no mechanical issues\n✓ src/app/welcome/page.tsx: no mechanical issues",
+    "validator": {
+      "package_version": "2.6.0",
+      "script_sha256": "ab274b3e6be15eb6"
+    }
+  }
+}

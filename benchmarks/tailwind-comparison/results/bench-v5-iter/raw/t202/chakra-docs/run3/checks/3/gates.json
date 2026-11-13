@@ -1,0 +1,31 @@
+{
+  "arm": "K",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/plan/TableView.tsx(227,32): error TS2322: Type '{ content: string; } | undefined' is not assignable to type 'ReactNode'.\n  Object literal may only specify known properties, and 'content' does not exist in type 'ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<...>'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 11775
+    }
+  },
+  "files": [
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "components/AppShell.tsx",
+    "components/PageHeader.tsx",
+    "components/guests/GuestsView.tsx",
+    "components/plan/GuestRow.tsx",
+    "components/plan/PlanBoard.tsx",
+    "components/plan/RoomMap.tsx",
+    "components/plan/RulesList.tsx",
+    "components/plan/SidePanel.tsx",
+    "components/plan/StatsBar.tsx",
+    "components/plan/TableView.tsx",
+    "components/ui/provider.tsx",
+    "lib/data.ts",
+    "lib/plan.ts",
+    "lib/store.tsx"
+  ]
+}

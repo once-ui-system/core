@@ -3045,6 +3045,7 @@
     "optionsCount": "number",
     "dropdownId": "string",
     "disableTriggerClick": "boolean",
+    "alignSelected": "boolean",
     "onFocusCapture": "React.FocusEventHandler<HTMLDivElement>",
     "onBlurCapture": "React.FocusEventHandler<HTMLDivElement>"
    }
@@ -3903,6 +3904,7 @@
     "onOpenChange": "(open: boolean) => void",
     "emptyState": "ReactNode = No results",
     "placement": "Placement",
+    "alignSelected": "boolean = false",
     "searchable": "boolean = false",
     "multiple": "boolean = false",
     "labels": "SelectLabels",

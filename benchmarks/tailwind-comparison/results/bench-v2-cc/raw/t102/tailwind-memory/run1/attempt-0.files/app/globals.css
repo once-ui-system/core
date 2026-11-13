@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+/*
+ * Lumen design tokens. Everything below is the theme: components only use
+ * these tokens (bg-primary, text-ink, rounded-brand, font-heading ...).
+ */
+@theme {
+  /* Brand: #DB2777 */
+  --color-brand-50: #fdf2f8;
+  --color-brand-100: #fce7f3;
+  --color-brand-200: #fbcfe8;
+  --color-brand-300: #f9a8d4;
+  --color-brand-400: #f472b6;
+  --color-brand-500: #ec4899;
+  --color-brand-600: #db2777;
+  --color-brand-700: #be185d;
+  --color-brand-800: #9d174d;
+  --color-brand-900: #831843;
+
+  /* Warm sand neutrals */
+  --color-sand-50: #fcfaf6;
+  --color-sand-100: #f7f2ea;
+  --color-sand-200: #ede4d4;
+  --color-sand-300: #ddd0b9;
+  --color-sand-400: #bfae91;
+  --color-sand-500: #9a8a6e;
+  --color-sand-600: #766850;
+  --color-sand-700: #5a4f3d;
+  --color-sand-800: #3d3528;
+  --color-sand-900: #28221a;
+
+  /* Semantic tokens */
+  --color-primary: var(--color-brand-600);
+  --color-primary-hover: var(--color-brand-700);
+  --color-primary-soft: var(--color-brand-50);
+  --color-link: var(--color-brand-700);
+  --color-ring: var(--color-brand-600);
+  --color-canvas: var(--color-sand-50);
+  --color-surface: #ffffff;
+  --color-sunken: var(--color-sand-100);
+  --color-line: var(--color-sand-200);
+  --color-ink: var(--color-sand-900);
+  --color-muted: var(--color-sand-700);
+
+  /* Shape: 16px on buttons, inputs, cards and menus */
+  --radius-brand: 16px;
+
+  /* Type */
+  --font-heading: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-soft: 0 1px 2px rgb(61 53 40 / 0.06), 0 8px 24px -8px rgb(61 53 40 / 0.12);
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.01em;
+  }
+  a {
+    text-underline-offset: 3px;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    min-height: 3rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: var(--radius-brand);
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    transition: background-color 150ms, color 150ms, border-color 150ms;
+  }
+  .btn-primary {
+    background-color: var(--color-primary);
+    color: #ffffff;
+  }
+  .btn-primary:hover {
+    background-color: var(--color-primary-hover);
+  }
+  .btn-secondary {
+    border: 1px solid var(--color-sand-300);
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+  }
+  .btn-secondary:hover {
+    background-color: var(--color-sunken);
+  }
+  .field {
+    min-height: 3rem;
+    width: 100%;
+    border-radius: var(--radius-brand);
+    border: 1px solid var(--color-sand-400);
+    background-color: var(--color-surface);
+    padding: 0.5rem 1rem;
+    color: var(--color-ink);
+  }
+  .card {
+    border-radius: var(--radius-brand);
+    border: 1px solid var(--color-line);
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-soft);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

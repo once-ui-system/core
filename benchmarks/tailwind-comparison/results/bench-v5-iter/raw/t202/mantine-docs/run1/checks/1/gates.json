@@ -1,0 +1,29 @@
+{
+  "arm": "T",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/AppFrame.tsx(23,59): error TS2322: Type '{ children: Element[]; gap: number; wrap: \"nowrap\"; component: ForwardRefExoticComponent<Omit<AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps<any>> & LinkProps<...> & { ...; } & RefAttributes<...>>; href: string; \"aria-label\": string; td: string; c: \"dark.9\"; }' is not assignable to type 'IntrinsicAttributes & GroupProps & RefAttributes<HTMLDivElement> & { component?: any; renderRoot?: ((props: Record<string, any>) => ReactNode) | undefined; }'.\n  Property 'href' does not exist on type 'IntrinsicAttributes & GroupProps & RefAttributes<HTMLDivElement> & { component?: any; renderRoot?: ((props: Record<string, any>) => ReactNode) | undefined; }'. Did you mean 'ref'?",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 5703
+    }
+  },
+  "files": [
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/theme.ts",
+    "components/AppFrame.tsx",
+    "components/GuestChip.tsx",
+    "components/GuestsView.tsx",
+    "components/PlanProvider.tsx",
+    "components/PlanView.tsx",
+    "components/RoomPlan.tsx",
+    "components/SidePanel.tsx",
+    "components/room.module.css",
+    "lib/cx.ts",
+    "lib/data.ts",
+    "lib/rules.ts"
+  ]
+}
