@@ -4,6 +4,7 @@ import { ContactSection } from "./ContactSection.js";
 import { CtaSection } from "./CtaSection.js";
 import { FaqSection } from "./FaqSection.js";
 import { FeaturesSection } from "./FeaturesSection.js";
+import { GallerySection } from "./GallerySection.js";
 import { HeroSection } from "./HeroSection.js";
 import { LogosSection } from "./LogosSection.js";
 import { PricingSection } from "./PricingSection.js";
@@ -22,6 +23,7 @@ export const sectionComponents: Record<SectionType, AnySection> = {
   features: FeaturesSection,
   about: AboutSection,
   stats: StatsSection,
+  gallery: GallerySection,
   testimonials: TestimonialsSection,
   team: TeamSection,
   pricing: PricingSection,

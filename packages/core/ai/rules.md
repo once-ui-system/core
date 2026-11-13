@@ -14,6 +14,8 @@ When the request doesn't specify design intent, ask these five questions first (
 
 If you can't ask (or the user says "you decide"), default to: restrained, centered with `maxWidth="m"` content, single brand accent, one subtle gradient (recipes.md #1), no placeholder images (use `Avatar`, `Logo`, `Icon`).
 
+That default is for a landing page. For an app (signed-in, records, forms), the first build step is the theme, not a page: in `once-ui.config` `style` set `brand` (a named scheme, or `"custom"` with `brandSeed: "#hex"`), `neutral`, and `solid: "color"` so primary buttons carry the brand (`"contrast"` draws them black or white), and give `--font-heading` a family of its own in the root layout. One brand accent, no ambient layers or effects. Shipping the starter's gray/blue/contrast unchanged reads as unbranded.
+
 ## Layout primitives
 
 1. Use `Row` and `Column` for layout. `Flex` with `direction` is only for dynamic direction. A `Flex` with no direction at all is a `Row` (`Flex` defaults to row).
@@ -85,6 +87,32 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 <Column background="surface" border radius="l" padding="24" gap="16">
 ```
 
+8b. Same-shaped records (members, bookings, tickets) go on **one** surface with row dividers and aligned columns, or in a `Table`, which is already a surface. Never a bordered card per row, and never a surface inside a surface: no `Table` or filled tile inside a bordered panel. Put the section heading above the surface, not in it.
+
+```tsx
+<Column as="ul" background="surface" border radius="l">
+  {rows.map((r, i) => (
+    <Row as="li" key={r.id} borderTop={i > 0} paddingX="16" paddingY="12" gap="16" vertical="center">
+      <Column flex={1} gap="4">{/* name, then metadata at body-default-s */}</Column>
+      <Row width={128}>{/* status Tag: fixed width keeps the column aligned */}</Row>
+      <IconButton icon="moreHorizontal" variant="tertiary" tooltip="Actions" />
+    </Row>
+  ))}
+</Column>
+```
+
+8c. Critical is louder than status. A routine state (confirmed, active) is a plain `Tag` with a `tone`; a critical one (an allergy, a failed payment, an overdue check) adds weight: a `Tag` with `prefixIcon="warning"`, or a `Feedback tone="danger"` with `icon` and `title` at the top of the record. Urgency is always `danger` or `warning`, and the same state takes the same tone everywhere; `info` is never urgent.
+
+8d. Surface hierarchy is deliberate. In an app the `page` background sits behind the frame (sidebar, header) and the content gets **one** raised `surface` panel; inside it, sections are separated by spacing and `borderTop`, with headings, not by more grey-filled cards. Grey on grey (surface cards on a surface page, `neutral-alpha-weak` tiles in a panel) reads as unfinished. Reserve fills for one thing: an input well, a selected row, a callout.
+
+8e. Use the system's parts for brand, alerts and charts; hand-built versions read as off-brand:
+- The product mark is a `Logo`: `<Logo text="Seatwise" monogram href="/" />` without a designed mark, or `icon`/`wordmark` sources when there are files. Never an `Icon` beside a `Text`.
+- An inline alert or notice is a `Feedback` (`tone`, `icon`, `title`, children), never a `Column role="alert"` with a tinted background.
+- A chart is `LineChart`, `BarChart`, `LineBarChart`, `PieChart` or `Sparkline` from `@once-ui-system/core/data`, never hand-drawn SVG. They take the theme's data palette, tooltips and axes.
+- Give a single-series chart the brand: series `color: "brand"` (not `"brand-strong"`, a text colour: white in dark). Its `height` is a string (`height="16rem"`): `height={16}` is the 1rem token and collapses the chart to a line.
+
+8f. Work apps are dense and quiet. An app people use all day (a front desk, a planner, an admin) sets `density: "compact"` and `border: "conservative"` in the config `style`; spacious and rounded oversize every control and corner. Key numbers are one bordered strip of divided cells (label, then value, a `StatusIndicator` for state), not a row of grey tiles. One screen has one primary action: the same "Book appointment" in the header and on the page is one too many.
+
 ## Text
 
 9. Use `Text` and `Heading` with `textVariant="{type}-{weight}-{size}"` (the same prop as on Flex; `variant` was 2.x): type = `body | heading | display | label | code`, weight = `default | strong`, size = `xs | s | m | l | xl`. Examples: `body-default-m`, `heading-strong-s`, `label-default-s`, `display-strong-m`.
@@ -97,6 +125,8 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 // Bad
 <Row><Text textVariant="label-default-s" onBackground="neutral-weak">Updated today</Text></Row>
 ```
+
+10b. App type floor: anything a user must read in an app (metadata, labels, table cells, timestamps) is `body-default-s` or larger, or `label-default-s`. `xs` text in `neutral-weak` is for what nobody needs to read.
 
 ## Responsive
 
@@ -120,7 +150,8 @@ Breakpoints, padding, background, border, radius, sizes and `hide` exist only on
     - Tabs → `Tabs` > `TabList` > `Tab` with a `TabPanel` per value (`orientation="vertical"` for a settings nav). `SegmentedControl` picks a value; it is not a tab set
     - Mobile nav, filters, a side sheet → `Drawer` (`side`, `size`); it brings the focus trap, scroll lock and Escape a hand-made overlay misses
     - Where-am-I trail → `Breadcrumbs items={[{ label, href }, ...]}`; the last item is the current page
-    - Keyboard shortcuts → `useHotkeys("mod+k", fn)` (it skips while the user types), shown with `Kbd keys="mod+k" label="Search"`
+    - Keyboard shortcuts → `useHotkeys("mod+k", fn)` (it skips while the user types), shown with `Kbd keys="mod+k" label="Search"`. Put `aria-keyshortcuts` on the control the shortcut presses (`<Button aria-keyshortcuts="Control+K Meta+K">Search</Button>`), so screen readers announce it too
+    - A `Table` row that opens something → a link or `Button` in one of its cells (`cell: row => <SmartLink href={row.href}>{row.name}</SmartLink>`). `onRowClick` alone is a pointer shortcut: a row is not a tab stop and Enter does nothing on it
     - Text for screen readers only, skip links → `VisuallyHidden` (`focusable` for a skip link)
     - Markdown/MDX content → `mdxComponents` or `createMdxComponents({...})` from `/mdx` (rule 30), never a hand-written element map
 
@@ -131,6 +162,8 @@ Breakpoints, padding, background, border, radius, sizes and `hide` exist only on
     - Forms: `Input` (`type="password"` has a show/hide toggle), `OTPInput`, `NumberInput`, `TagInput`, `Select`, `DatePicker` (`range` for a date range), `DateInput` (`range`), `ColorInput`, `Slider` (`range` for a `[min, max]` pair), `Switch`, `Checkbox`, `Tag selected`
 
 14. Buttons: `variant` is the appearance, `primary | secondary | tertiary | ghost | link | subtle` (`primary` is the default), and `tone` the palette, `brand | accent | neutral | info | success | warning | danger`: a destructive button is `<Button tone="danger">`; pair with `prefixIcon`/`suffixIcon` (icon names, not elements). `IconButton` for icon-only actions with `tooltip`.
+
+14a. Select or a Button with a Dropdown: `Select` is a form value. It has a `label`, sits in a `Form` or a settings row, and is submitted (timezone, country, a member's role). Sort, filter, view and action pickers on a toolbar or page header are a secondary `Button` with `suffixIcon="chevronDown"` as a `Dropdown` trigger, holding `Option`s, with the button's label naming the current choice ("Sort: Newest", "Role: Admin"). Select already draws its chevron; do not pass one. A toolbar filter over a long list someone searches is the exception: `Select size="xxs"` with a `label` and `searchable`. Two to four choices that should stay visible are a `SegmentedControl`.
 
 14b. Icon names must come from `iconNames` in catalog.json (spec.json carries the same list). In 2.0 `IconName` is a real union, so an unregistered name is a type error rather than a blank space — do not guess a plausible one, and never reach for `as IconName` to silence the check. If no registered icon fits, omit the icon. The registry is 99 icons; brand marks (github, discord, google) are deliberately not among them, so an app registers its own.
 
@@ -250,7 +283,7 @@ Siblings holding content get `zIndex={1}`. That layer and its content sibling ar
 25. `LogoCloud` extends `Grid` — always set `columns` (and responsive overrides), or logos stack in one column: `columns="4" m={{ columns: 3 }} s={{ columns: 2 }}`.
    A logo that changes with the theme is one `Logo` with a source per theme — `<Logo wordmark={{ light: "/logo-light.svg", dark: "/logo-dark.svg" }} />`, and `icon` takes the same pair — not a `<Logo showIn="dark">` beside a `<Logo showIn="light">`. Keep `showIn` for a logo that should only appear in one theme.
 
-26. Use decoration recipes from `recipes.md` verbatim, then adjust. Application shells — a dashboard with a sidebar, a data-driven nav, a two-pane editor — come from `layouts.md` the same way. Budget: at most one ambient background layer per section, ambient motion in at most the hero and final CTA, one accent color family per page.
+26. Use decoration recipes from `recipes.md` verbatim, then adjust. Application shells — a dashboard with a sidebar, a data-driven nav, a two-pane editor, a phone header, a plan or map canvas, a selection with a details panel — come from `layouts.md` the same way. Budget: at most one ambient background layer per section, ambient motion in at most the hero and final CTA, one accent color family per page.
 
 ## Motion
 
@@ -376,7 +409,9 @@ paints it and `ThemeProvider` lets the visitor change it. `theme: "light"` or
 so leave `theme` out (or `"system"`) for a switchable site. An exact brand
 colour is `brand: "custom", brandSeed: "#0F766E"`: the hex is step 500, which
 every brand solid uses in both themes, and the other steps are generated
-around it (`accentSeed`, `neutralSeed` likewise). Only a brand book that fixes
+around it (`accentSeed`, `neutralSeed` likewise). With a brand colour, mark
+the page you are on in it: `<Nav tone="brand">` tints the current NavItem and
+colours its label and icon (the default `neutral` is a grey fill). Only a brand book that fixes
 every shade needs `brandScale`, `accentScale` or `neutralScale`, one colour per
 step (`{ 100: "#…", …, 1200: "#…" }`), numbered dark to light in both themes:
 100 is the darkest, 1200 the lightest (the reverse of Tailwind). A seed fills

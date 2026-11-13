@@ -16,6 +16,7 @@
   "label": "string = \"\"",
   "prefixIcon": "IconName",
   "suffixIcon": "IconName",
+  "dot": "boolean",
   "href": "string",
   "arrow": "boolean",
   "effect": "boolean = variant === \"announce\"",

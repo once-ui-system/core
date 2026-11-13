@@ -1,0 +1,75 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 7,
+      "input_total": 528141,
+      "input_uncached": 14,
+      "cache_creation": 49736,
+      "cache_read": 478391,
+      "visible_output_tokens_o200k": 8203,
+      "visible_output_tokens_claudeLegacy": 8976,
+      "thinking_blocks": 3
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t102/tailwind-memory/run2/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "."
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/globals.css"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/package.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v2-cc/raw/t102/tailwind-memory/run2/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/tsconfig.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v2-cc/raw/t102/tailwind-memory/run2/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "D"
+}

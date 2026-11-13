@@ -27,13 +27,38 @@ describe("Tag, static", () => {
     expect(screen.queryByRole("button")).toBeNull();
   });
 
-  it("draws in its tone, neutral by default", () => {
+  it("is a neutral hairline, with its tone in a dot", () => {
     const { container, rerender } = render(<Tag label="Live" />, { wrapper });
     const box = () => container.querySelector('[class*="_tag_"]');
-    expect(box()?.className).toMatch(/neutral-background-weak/);
+    const dot = () => container.querySelector('[class*="_dot_"]');
+    expect(box()?.className).toMatch(/_hairline_/);
+    expect(box()?.className).toMatch(/neutral-border-alpha-medium|border-neutral-alpha-medium/);
+    expect(dot()).toBeNull();
     rerender(<Tag label="Live" tone="danger" />);
-    expect(box()?.className).toMatch(/danger-background-weak/);
-    expect(box()?.className).toMatch(/danger-on-background-medium/);
+    expect(box()?.className).toMatch(/_tone-danger_/);
+    expect(box()?.className).not.toMatch(/danger-background-weak/);
+    expect(dot()).toHaveAttribute("aria-hidden", "true");
+    rerender(<Tag label="Live" tone="danger" dot={false} />);
+    expect(dot()).toBeNull();
+    rerender(<Tag label="Live" dot />);
+    expect(dot()).not.toBeNull();
+  });
+
+  it("lets a prefix icon carry the tone instead of the dot", () => {
+    const { container } = render(<Tag label="Live" tone="success" prefixIcon="check" />, {
+      wrapper,
+    });
+    expect(container.querySelector('[class*="_dot_"]')).toBeNull();
+    expect(container.querySelector('[class*="_toneIcon_"]')).not.toBeNull();
+  });
+
+  it("draws no dot on the gradient or announce looks", () => {
+    const { container, rerender } = render(<Tag label="New" tone="brand" variant="gradient" />, {
+      wrapper,
+    });
+    expect(container.querySelector('[class*="_dot_"]')).toBeNull();
+    rerender(<Tag label="New" tone="brand" variant="announce" />);
+    expect(container.querySelector('[class*="_dot_"]')).toBeNull();
   });
 
   it("takes the gradient look as a variant", () => {
@@ -137,7 +162,8 @@ describe("Tag, as a toggle (2.x Chip)", () => {
     expect(tag).not.toHaveAttribute("aria-pressed");
     expect(tag).toHaveAttribute("tabindex", "0");
     expect(container.querySelector('[class*="_toggle_"]')).toBeNull();
-    expect(tag.className).toMatch(/brand-background-weak/);
+    expect(tag.className).toMatch(/_hairline_/);
+    expect(tag.className).toMatch(/_tone-brand_/);
     tag.focus();
     await user.keyboard("{Enter}");
     expect(onClick).toHaveBeenCalledTimes(1);
@@ -149,11 +175,11 @@ describe("Tag, as a toggle (2.x Chip)", () => {
     expect(screen.getByRole("button", { name: "Design" })).toHaveAttribute("aria-pressed", "true");
   });
 
-  it("draws selected in its tone, brand by default", () => {
+  it("draws selected as solid ink, or solid in a tone given", () => {
     const { container, rerender } = render(<Tag label="Design" selected />, { wrapper });
     const box = () => container.querySelector('[class*="_toggle_"]');
     expect(box()?.className).toMatch(/_selected_/);
-    expect(box()?.className).toMatch(/_tone-brand_/);
+    expect(box()?.className).not.toMatch(/_tone-/);
     rerender(<Tag label="Design" selected tone="success" />);
     expect(box()?.className).toMatch(/_tone-success_/);
   });

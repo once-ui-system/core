@@ -5,6 +5,7 @@ import {
   capsuleOutline,
   circleOutline,
   flatShape,
+  icosaGrid,
   type MeshData,
   pillowShape,
   quad,
@@ -26,6 +27,7 @@ import {
   quatFromZ,
   quatIdentity,
   quatMultiply,
+  smooth,
   type Vec3,
 } from "./math.js";
 import { type GpuMesh, type Material, Renderer, type RGB } from "./renderer.js";
@@ -59,6 +61,12 @@ const FACE_SIDE: CubeSide[] = ["right", "left", "top", "bottom", "front", "back"
 const BEVEL = 0.1;
 const GAP = 0.006;
 const BLOB_R = 1.12;
+/** The d20's circumradius, so it stands about as large as the cube. */
+const DIE_R = 1.4;
+/** How far each of the d20's faces draws in once it is firm, which leaves a dark seam on every edge. */
+const DIE_SEAM = 0.018;
+/** How wide the d20's rounded edges are, in barycentric units of a face. */
+const DIE_BEVEL = 0.08;
 const DARK: RGB = [0.067, 0.071, 0.086];
 const WHITE: RGB = [1, 1, 1];
 /** Points round the mouth's outline, from its left corner; the tube closes the loop. */
@@ -163,6 +171,22 @@ export class CubeView {
   private quad: GpuMesh;
   private disc: GpuMesh;
   private mouth: { mesh: GpuMesh; data: MeshData };
+  private die: {
+    mesh: GpuMesh;
+    data: MeshData;
+    /** Per vertex: the blob's position and normal, then the die's position, for the current look. */
+    blob: Float32Array;
+    flat: Float32Array;
+    face: Uint8Array;
+    edge: Float32Array;
+    normals: Float32Array;
+    centers: Float32Array;
+    /** Each face's shade at rest: lighter facing up, darker facing down, neighbors apart. */
+    shades: number[];
+    /** The die without seams, a hair smaller, in the dark body color, behind the faces. */
+    core: GpuMesh;
+  } | null = null;
+  private dieDeformed = { morph: -1, key: "" };
   private vp: Mat4 = new Float32Array(16);
   /**
    * Where the face is on the canvas after a render, from 0 to 1 across it: each eye's center and
@@ -283,6 +307,80 @@ export class CubeView {
     }
   }
 
+  /** The d20's meshes, built the first time it is needed. */
+  private dieMeshes() {
+    if (this.die) return this.die;
+    const data = icosaGrid(18);
+    const flat = data.positions.map((v) => v * DIE_R);
+    const core = icosaGrid(1);
+    for (let i = 0; i < core.positions.length; i++) core.positions[i] *= DIE_R * 0.985;
+    this.die = {
+      data,
+      mesh: this.renderer.mesh(data, true),
+      blob: new Float32Array(data.positions.length * 2),
+      flat,
+      face: data.face,
+      edge: data.edge,
+      normals: data.faceNormals,
+      shades: Array.from({ length: 20 }, (_, f) => {
+        const n = data.faceNormals;
+        return 0.16 * n[f * 3 + 1] - 0.08 * n[f * 3] + (f % 3) * 0.035 - 0.035;
+      }),
+      centers: data.faceCenters.map((v) => v * DIE_R),
+      core: this.renderer.mesh(core),
+    };
+    return this.die;
+  }
+
+  /**
+   * Bends the d20 between the blob and the die. Every vertex has a twin on the blob in its own
+   * direction, so at rest the faces close up into one smooth pebble, and the seams open as it firms.
+   */
+  private deformDie(morph: number, look: CubeLook) {
+    const die = this.dieMeshes();
+    const key = `${look.roundness}|${look.aspect}`;
+    const t = this.t;
+    if (key !== this.dieDeformed.key) {
+      const F = die.flat;
+      for (let v = 0; v < F.length / 3; v++) {
+        const x = F[v * 3];
+        const y = F[v * 3 + 1];
+        const z = F[v * 3 + 2];
+        // The blob is a bent box, so find where this direction meets the box first.
+        const m = Math.max(Math.abs(x), Math.abs(y), Math.abs(z)) || 1;
+        blobAt(x / m, y / m, z / m, look, t);
+        die.blob.set(t, v * 6);
+      }
+    } else if (morph === this.dieDeformed.morph) {
+      return;
+    }
+    this.dieDeformed = { morph, key };
+    const { positions: P, normals: N } = die.data;
+    const seam = 1 - DIE_SEAM * smooth(0.85, 1, morph);
+    for (let v = 0; v < P.length / 3; v++) {
+      const f = die.face[v] * 3;
+      const b = v * 6;
+      // Near an edge the face rounds over: it sinks a little and its normal turns outward, so
+      // every edge catches the light the way the cube's bevels do.
+      const round = (1 - smooth(0, DIE_BEVEL, die.edge[v])) ** 2;
+      const sink = 1 - 0.012 * round;
+      const F = die.flat;
+      const r = Math.hypot(F[v * 3], F[v * 3 + 1], F[v * 3 + 2]) || 1;
+      for (let n = 0; n < 3; n++) {
+        const c = die.centers[f + n];
+        const flatAt = (c + (F[v * 3 + n] - c) * seam) * sink;
+        const normal = mix(die.normals[f + n], F[v * 3 + n] / r, round * 0.75);
+        P[v * 3 + n] = mix(die.blob[b + n], flatAt, morph);
+        N[v * 3 + n] = mix(die.blob[b + 3 + n], normal, morph);
+      }
+      const l = Math.hypot(N[v * 3], N[v * 3 + 1], N[v * 3 + 2]) || 1;
+      N[v * 3] /= l;
+      N[v * 3 + 1] /= l;
+      N[v * 3 + 2] /= l;
+    }
+    die.mesh.update(die.data);
+  }
+
   /**
    * One outline for every mouth: the mood's line along the top and back along the bottom. Shut,
    * the two lips lie on each other; opening parts them into an oval round the line, so a talking
@@ -309,7 +407,10 @@ export class CubeView {
   render(motion: CubeMotion, look: CubeLook, input: CubeInput, width: number, height: number) {
     const r = this.renderer;
     const m = motion.morph;
-    this.deform(m, look);
+    const d20 = input.shape === "d20";
+    // The blob is shared; the cube's pieces only bend when the cube is the shape.
+    this.deform(d20 ? 0 : m, look);
+    if (d20) this.deformDie(m, look);
 
     const aspect = width / Math.max(1, height);
     const eye: Vec3 = [0, 0.25, 6.6];
@@ -360,6 +461,24 @@ export class CubeView {
     const body = mixRGB(look.color, DARK, clamp((m - 0.15) / 0.5, 0, 1));
     if (m < 0.002) {
       r.draw(this.blob.mesh, spin, lit(look.color));
+    } else if (d20) {
+      const die = this.dieMeshes();
+      const model = multiply(spin, compose([0, 0, 0], motion.die, [1, 1, 1]), this.m2);
+      // The dark core grows in behind the seams as they open, and never pokes through the blob.
+      const open = smooth(0.85, 1, m);
+      if (open > 0) {
+        const s = mix(0.75, 1, open);
+        r.draw(
+          die.core,
+          multiply(model, compose([0, 0, 0], quatIdentity(), [s, s, s]), this.m3),
+          lit(body),
+        );
+      }
+      // Each face its own shade of the color, so the facets read as cut, not painted on.
+      die.shades.forEach((shade, g) => {
+        const tint = mixRGB(look.color, shade > 0 ? WHITE : DARK, Math.abs(shade) * k);
+        r.draw(die.mesh, model, lit(tint), die.mesh.groups?.[g]);
+      });
     } else {
       if (m > 0.6) {
         const s = clamp((m - 0.6) / 0.4, 0.01, 1);

@@ -55,6 +55,15 @@ interface SelectProps
   onOpenChange?: (open: boolean) => void;
   emptyState?: ReactNode;
   placement?: Placement;
+  /**
+   * Opens the list with the selected option sitting on the field and the
+   * others above and below it in their own order, as macOS draws a pop-up
+   * button. Suits short, settings-style lists. A searchable or multiple
+   * Select, and a field too close to the viewport's edge, open as a dropdown
+   * either way. (2.x main called this `position="aligned"`; in 3.0 `position`
+   * is the CSS position every layout component takes.)
+   */
+  alignSelected?: boolean;
   searchable?: boolean;
   multiple?: boolean;
   /** The search field's name and its clear button's, for a translated interface. */
@@ -194,6 +203,7 @@ const Select = ({
   minWidth,
   maxWidth,
   placement,
+  alignSelected = false,
   className,
   fillWidth = true,
   style,
@@ -263,6 +273,8 @@ const Select = ({
   isOpenRef.current = isDropdownOpen;
   /** Whether the list was open when the current press on the field began. */
   const openOnPressRef = useRef(false);
+  /** Where the pointer last moved over the list: see the list's onMouseMove. */
+  const pointerRef = useRef<{ x: number; y: number } | null>(null);
 
   const expectReturningFocus = useCallback(() => {
     stopExpectingFocusRef.current?.();
@@ -514,6 +526,37 @@ const Select = ({
     }
   };
 
+  /**
+   * The chevron that marks the field as a list, turned up while it is open.
+   * Without it a closed Select read as a text field. A `suffix` the caller
+   * passes takes its place. The field does not reach under the suffix, so a
+   * press on the chevron does what a press on the field does: it focuses
+   * the field (which opens the list) or, already focused, toggles it.
+   */
+  const chevron = (
+    <Flex
+      aria-hidden="true"
+      cursor={rest.disabled ? undefined : "interactive"}
+      onMouseDown={(event: React.MouseEvent) => event.preventDefault()}
+      onClick={() => {
+        const field = fieldRef.current;
+        if (!field || rest.disabled) return;
+        if (document.activeElement !== field) field.focus();
+        else setOpen(!isOpenRef.current);
+      }}
+    >
+      <Icon
+        name="chevronDown"
+        size="s"
+        onBackground="neutral-medium"
+        style={{
+          transition: "transform var(--transition-duration-micro-medium) var(--transition-eased)",
+          transform: isDropdownOpen ? "rotate(180deg)" : undefined,
+        }}
+      />
+    </Flex>
+  );
+
   /** The listbox's name: the field's own. */
   const listboxLabel = rest["aria-label"] || rest.label || rest.placeholder || "Options";
 
@@ -534,6 +577,9 @@ const Select = ({
         open={isDropdownOpen}
         onOpenChange={setOpen}
         placement={placement}
+        // A search field would sit over the field, and a multiple Select has
+        // no one option to put there.
+        alignSelected={alignSelected && !searchable && !multiple}
         closeAfterClick={false}
         disableTriggerClick={true}
         style={{
@@ -544,6 +590,7 @@ const Select = ({
             {...rest}
             ref={fieldRef}
             activeIndex={currentActive}
+            suffix={rest.suffix === undefined ? chevron : rest.suffix}
             style={{
               textOverflow: "ellipsis",
               ...style,
@@ -615,8 +662,16 @@ const Select = ({
             paddingTop={searchable ? "4" : undefined}
             gap="2"
             // The highlight follows the pointer, as it did when the options
-            // took focus, so the active option is the one under it.
-            onMouseOver={(event: React.MouseEvent<HTMLDivElement>) => {
+            // took focus, so the active option is the one under it. Only
+            // when the pointer moves: the list scrolling under a resting
+            // pointer (the arrow keys bringing an option into view) fired
+            // mouseover, which pulled the highlight back under it. An
+            // aligned list opens right under the pointer that opened it,
+            // so there the arrow keys barely moved at all.
+            onMouseMove={(event: React.MouseEvent<HTMLDivElement>) => {
+              const last = pointerRef.current;
+              pointerRef.current = { x: event.clientX, y: event.clientY };
+              if (last && last.x === event.clientX && last.y === event.clientY) return;
               const option = (event.target as Element).closest('[role="option"]');
               if (!option?.id.startsWith(optionIdPrefix)) return;
               const index = Number(option.id.slice(optionIdPrefix.length));

@@ -1,0 +1,1220 @@
+[
+  {
+    "task": 202,
+    "arm": "S",
+    "run": 2,
+    "id": "R001",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Polished, coherent plan and guest list with working rules and meal counts, but the clicked-table screenshot shows no table detail panel, the phone floor plan is cropped and needs sideways scroll, the phone guest table hides RSVP/diet/table columns, and the visual identity is clean but fairly generic.",
+    "usage": {
+      "input_tokens": 23982,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 165,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 201,
+    "arm": "T",
+    "run": 1,
+    "id": "R002",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, well-organized clinic software with prominent medical alerts, color-coded statuses and a solid booking modal; the interaction shot shows Pepper checked in with a toast, though the toast overlaps a row, and the look is competent but fairly conventional.",
+    "usage": {
+      "input_tokens": 21958,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 148,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 201,
+    "arm": "K",
+    "run": 2,
+    "id": "R003",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "Polished, cohesive clinic desk app with strong alert/urgent treatment and responsive layouts; the booking modal and check-in toast work, but the nav lacks an explicit current-location indicator and the schedule is a flat list rather than grouped by vet.",
+    "usage": {
+      "input_tokens": 22126,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 149,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 202,
+    "arm": "S",
+    "run": 3,
+    "id": "R004",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 2,
+    "restraint": 4,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Polished, coherent planner with scaled floor plan, rule flags, table detail and a full guest list with caterer counts. The weak point is that the floor plan is clipped at phone width (band, dance floor and right-hand tables cut off) and at tablet width (Table 3 detail drops below the plan), so the plan is hard to use on a phone.",
+    "usage": {
+      "input_tokens": 21934,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 176,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 202,
+    "arm": "S",
+    "run": 1,
+    "id": "R005",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 2,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "Solid, restrained planner UI with a scaled room plan, rules and meal counts; however, the floor plan is cropped on phone (Top table and right-hand tables cut off) and the guest table's Table column is truncated, and the desktop table-detail panel sits far down the page while the right-column rules and tables lists stay beside it.",
+    "usage": {
+      "input_tokens": 22718,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 164,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 201,
+    "arm": "C",
+    "run": 3,
+    "id": "R006",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "Polished, coherent clinic app with strong alert, urgent and status treatment, a waiting room panel, and a full patient record. The booking modal is shown only empty, and the post-check-in state is not clearly shown in the interaction screenshot, so full completeness is not demonstrated.",
+    "usage": {
+      "input_tokens": 21986,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 156,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 202,
+    "arm": "T",
+    "run": 1,
+    "id": "R007",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Polished, coherent planner with a to-scale floor plan, rule flags, caterer counts and diet breakdowns; the phone floor plan is clipped (only a sideways-scrolling slice), and the Table 3 selection screenshot shows almost no visible change in the panel.",
+    "usage": {
+      "input_tokens": 21052,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 155,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 202,
+    "arm": "K",
+    "run": 1,
+    "id": "R008",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "Polished, coherent planner with an accurate scaled floor plan, rule flags, table detail panel and a meal-count table; on phone the floor plan is cropped (Table 4/5/bar cut off, band and dance floor clipped) and table-select isn't visible at tablet, but the overall design is clean and purposeful.",
+    "usage": {
+      "input_tokens": 20628,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 162,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 202,
+    "arm": "T",
+    "run": 2,
+    "id": "R009",
+    "polish": 3,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 3,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Solid, complete planner with a to-scale floor plan, rule flags and a caterer meal table, but the red rules banner has near-invisible dark-on-red heading and footer text, the phone floor plan is cropped, and the table-selection interaction showed no visible change in the screenshot.",
+    "usage": {
+      "input_tokens": 21314,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 150,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 202,
+    "arm": "K",
+    "run": 3,
+    "id": "R010",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "A polished, cohesive planner with a to-scale room, clear rule-break flags and a thorough guest list with a caterer meal table. The floor plan is clipped at tablet and phone widths (side scroll), and the Table 3 selection screenshot shows no visible change, so table details are unconfirmed.",
+    "usage": {
+      "input_tokens": 21490,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 163,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 201,
+    "arm": "C",
+    "run": 1,
+    "id": "R011",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "Polished, cohesive clinic app with strong alert chips, status variety and a booking dialog that disables taken times, but at 375px the patient record and the schedule header cards are clipped on the right, and the interaction shot left Pepper in 'checked in' without moving it out of the booked list.",
+    "usage": {
+      "input_tokens": 21268,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 157,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 202,
+    "arm": "A",
+    "run": 2,
+    "id": "R012",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, coherent planner with a scaled room plan, rule flags and a caterer meals table, but the phone and tablet plans are clipped and cropped, and the table-selected interaction screenshot shows no visible change in Table details.",
+    "usage": {
+      "input_tokens": 22828,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 132,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 202,
+    "arm": "T",
+    "run": 3,
+    "id": "R013",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Polished, cohesive planner with a scaled room plan, rule flags and caterer counts, but on phone the plan is cropped and the guest table clips sideways, while at tablet the table-detail panel is not shown and the plan sits far above the lists on the page.",
+    "usage": {
+      "input_tokens": 21842,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 148,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 201,
+    "arm": "A",
+    "run": 3,
+    "id": "R014",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, consistent clinic app with strong alerts, urgent highlighting, working check-in and booking modal; minor issues like a desktop search bar that stops short of the right edge, a visually undifferentiated vet filter, and a generic overall look.",
+    "usage": {
+      "input_tokens": 21978,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 145,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 202,
+    "arm": "A",
+    "run": 3,
+    "id": "R015",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 5,
+    "intentionality": 3,
+    "note": "Clean, coherent planner with a scaled floor plan, table detail, unseated list, rule flags and a caterer meal count; on phones the plan is cramped and the guest table clips its columns, and the look stays fairly generic.",
+    "usage": {
+      "input_tokens": 23968,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 138,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 201,
+    "arm": "K",
+    "run": 1,
+    "id": "R016",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "A polished, purpose-built front-desk app with strong alert visibility, a clear waiting room, urgent row highlighting and a working booking modal and check-in toast; the main gaps are that clash prevention and search results are not visibly shown, and the schedule has no per-vet column view.",
+    "usage": {
+      "input_tokens": 20198,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 155,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 202,
+    "arm": "C",
+    "run": 1,
+    "id": "R017",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Polished, cohesive wedding-planner tool with a to-scale floor plan, rule flags and caterer meal counts. On phone the floor plan is cropped at the page edge (Band, Table 4/5, Bar are cut off) and no table-selection state appears in the screenshots, which weakens completeness and responsiveness.",
+    "usage": {
+      "input_tokens": 18190,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 171,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 201,
+    "arm": "K",
+    "run": 3,
+    "id": "R018",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "A polished, purpose-built clinic desk app with clear status colours, urgent highlighting, prominent medical alerts, a weight chart and overdue vaccination flags; the layout adapts well across widths, though the waiting room card and the tablet and phone patient layouts are slightly generic and the shown interaction (a 'Check in' toast) leaves the waiting-list update unseen.",
+    "usage": {
+      "input_tokens": 21566,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 189,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 201,
+    "arm": "S",
+    "run": 1,
+    "id": "R019",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Clean, restrained clinic UI with strong alert banners and a consistent shell; the schedule and record cover nearly everything, the booking modal is unfinished in the capture, and the phone/tablet layouts leave the waiting list at the page bottom.",
+    "usage": {
+      "input_tokens": 21022,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 146,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 201,
+    "arm": "D",
+    "run": 1,
+    "id": "R020",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "Polished, cohesive vet front-desk UI with strong red alert badges, clear status chips, a highlighted urgent row, a waiting-room panel and a booking modal; weak spots are a search field with no visible results, no shown clash-prevention case, and an unclear nav/location indicator.",
+    "usage": {
+      "input_tokens": 22660,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 159,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 201,
+    "arm": "M",
+    "run": 3,
+    "id": "R021",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, well-organised clinic app with strong alert treatment, status colour coding, and a sensible desktop sidebar that stacks on tablet and phone. The booking modal shows a free-slot message with a disabled submit, and the desktop check-in interaction updates the waiting list. Visually it is a competent teal-and-white template look with little distinctive identity, and there is no clear active nav state.",
+    "usage": {
+      "input_tokens": 20632,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 192,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 201,
+    "arm": "A",
+    "run": 1,
+    "id": "R022",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "Well-organized clinic app with a teal brand, strong red alert treatment, a clear waiting-room panel and a booking modal that offers only free times. The patient record screenshots show only the top of the page (weight trend, vaccinations, medications and visits are not visible), and the post-check-in desktop view is slightly ambiguous.",
+    "usage": {
+      "input_tokens": 14614,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 171,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 202,
+    "arm": "D",
+    "run": 2,
+    "id": "R023",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "A polished, cohesive planner with a scaled floor plan, rules summary, table details and a caterer meal table; the phone plan is cropped in its scroll container and tables overlap labels there, and the header drops the event name and venue on phone.",
+    "usage": {
+      "input_tokens": 21814,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 141,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 202,
+    "arm": "K",
+    "run": 2,
+    "id": "R024",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Polished, coherent planner with a scaled floor plan, rule flags and a useful guest list and caterer summary; the phone floor plan is cropped and sits mid-page, and the table-selected interaction shot looks unchanged, so the table detail panel isn't visible.",
+    "usage": {
+      "input_tokens": 21316,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 152,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 201,
+    "arm": "S",
+    "run": 2,
+    "id": "R025",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "Polished, calm clinic-software look with strong alert and urgent treatment, working check-in, clash-blocking booking modal and a full patient record; the phone header drops the name and role, and the check-in and booking flows are only partly visible in the screenshots.",
+    "usage": {
+      "input_tokens": 23362,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 146,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 201,
+    "arm": "S",
+    "run": 3,
+    "id": "R026",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, coherent front-desk UI with strong alert visibility, a clear waiting list, status badges and a well-structured patient record; booking modal and check-in toast work, but the look is fairly standard and the weight chart is a flat area graph with truncated axis labels on phone.",
+    "usage": {
+      "input_tokens": 20014,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 154,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 201,
+    "arm": "T",
+    "run": 3,
+    "id": "R027",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, well-structured clinic UI with strong alert visibility, clear status differentiation and good responsive layouts; minor issues like truncated 'CHECKED ...' badges at tablet/desktop, a clipped vaccination status column on phone, and a fairly generic green-accent template look.",
+    "usage": {
+      "input_tokens": 22130,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 153,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 201,
+    "arm": "T",
+    "run": 2,
+    "id": "R028",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, well-organised front-desk app with strong alert and status treatment and a working check-in and booking dialog, but a fairly standard green-and-white dashboard look; on mobile the vet filter tabs are cut off and the patient page has no visible nav back to the schedule beyond a link.",
+    "usage": {
+      "input_tokens": 21476,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 158,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 202,
+    "arm": "D",
+    "run": 3,
+    "id": "R029",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Polished, cohesive planner with a to-scale room, rule flags, per-table details and caterer meal counts; the phone plan is cropped and needs a sideways swipe, and the desktop table-details panel sits below the fold and shows an empty state when no table is selected.",
+    "usage": {
+      "input_tokens": 21974,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 144,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 201,
+    "arm": "A",
+    "run": 2,
+    "id": "R030",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, well-organised front-desk UI with prominent alerts, an urgent row, a waiting list and a patient record; the check-in toast works and the booking dialog is present, but the clash-prevention and booking result aren't shown and the 'By vet' view is missing. The look is tidy but fairly generic.",
+    "usage": {
+      "input_tokens": 21902,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 164,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 202,
+    "arm": "C",
+    "run": 3,
+    "id": "R031",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Polished, coherent planner with a to-scale floor plan, rule summary, table detail and caterer meal counts; weaknesses are the phone floor plan being cropped inside a scroll container, the mid-width tablet layout leaving the plan small, and the Top table's seats sitting awkwardly outside the table.",
+    "usage": {
+      "input_tokens": 20630,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 166,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 202,
+    "arm": "C",
+    "run": 2,
+    "id": "R032",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 2,
+    "restraint": 4,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Polished, coherent planner with a scaled floor plan, clear rule flags and a working guest list, but the floor plan is cropped and clipped on phone and tablet (tables 4/5, bar and band cut off), and on desktop the Table details panel only surfaces below the fold after selecting a table.",
+    "usage": {
+      "input_tokens": 23218,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 154,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 202,
+    "arm": "M",
+    "run": 1,
+    "id": "R033",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Polished, coherent app with a to-scale room plan, clear rule flags and a useful caterer summary; the phone room plan is cropped at the right edge (only a scroll hint helps), and the post-click table-selection state barely shows a change in the viewport.",
+    "usage": {
+      "input_tokens": 20864,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 140,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 201,
+    "arm": "M",
+    "run": 1,
+    "id": "R034",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "A polished, clinical-teal front-desk app with strong status chips, red alert badges, a waiting-room panel, a booking dialog and a rich patient record that reflows cleanly across all three widths; minor gaps are no visible patient-search results or clash-prevention demo, and the 'since 09:20' waiting times in the check-in shot are slightly ambiguous.",
+    "usage": {
+      "input_tokens": 20462,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 184,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 201,
+    "arm": "D",
+    "run": 3,
+    "id": "R035",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "A well-organized clinic desk app: strong red alert treatment, clear status coloring, a working check-in flow with toast and waiting-list update, and a booking modal that shows vet availability. Minor gaps are the modal showing no visible clash error, the phone weight chart and vaccination cards being clipped sideways, and the search having no visible results state.",
+    "usage": {
+      "input_tokens": 22722,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 176,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 202,
+    "arm": "A",
+    "run": 1,
+    "id": "R036",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 2,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Solid, coherent planner with a scaled floor plan, rule flags, table detail and a caterer meal count, but the plan is clipped at tablet width and cropped on phone, with the right-hand tables and the bar off-screen; the visual identity is clean but generic.",
+    "usage": {
+      "input_tokens": 24132,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 151,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 202,
+    "arm": "D",
+    "run": 1,
+    "id": "R037",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "A cohesive, well-structured app with a scaled floor plan, clear rule flags, a useful needs-a-seat list and a caterer meal table, but the phone floor plan is clipped (Table 3 cut off, band and bar missing) and the table-selection panel isn't visible in the interaction shot.",
+    "usage": {
+      "input_tokens": 22146,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 156,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 202,
+    "arm": "M",
+    "run": 2,
+    "id": "R038",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Polished, coherent planner with a scaled floor plan, rules summary and a caterer meal table; the plan is clipped on phone and tablet (band, dance floor, Table 4 and the bar are cut off), and on desktop the table-select interaction isn't visible at the top of the page.",
+    "usage": {
+      "input_tokens": 22086,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 157,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 201,
+    "arm": "M",
+    "run": 2,
+    "id": "R039",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "Polished, coherent clinic app with strong alert treatment, status distinction and waiting-list update; the phone/tablet schedule and desktop layouts adapt well, and the patient record is thorough, though the check-in toast/undo is the only visible interaction feedback and the booking modal is shown only empty.",
+    "usage": {
+      "input_tokens": 21158,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 163,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 202,
+    "arm": "M",
+    "run": 3,
+    "id": "R040",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "A polished, coherent planner with a scaled floor plan, clear rule flags and a useful caterer meal table; the plan is cropped at phone and tablet widths so some tables, the bar and the dance floor are only reachable by horizontal scroll, and the table details panel sits far below the plan on narrow screens.",
+    "usage": {
+      "input_tokens": 21962,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 158,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 201,
+    "arm": "D",
+    "run": 2,
+    "id": "R041",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "A cohesive, well-built clinic desk app with clear status colours, prominent medical alerts, a working check-in and a booking modal that greys out taken slots. Minor gaps: the booking modal only shows the desktop state, and the phone alerts are cramped.",
+    "usage": {
+      "input_tokens": 23166,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 149,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 201,
+    "arm": "C",
+    "run": 2,
+    "id": "R042",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Polished, coherent front-desk app with strong status and alert treatment and good responsive layouts; the clash-prevention flow and search results weren't visible in the screenshots, and the phone schedule is very long.",
+    "usage": {
+      "input_tokens": 22198,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 131,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  }
+]

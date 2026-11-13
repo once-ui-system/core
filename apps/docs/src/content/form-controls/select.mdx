@@ -1,14 +1,22 @@
 ---
 title: "Select"
 summary: "Select provides a dropdown menu for choosing from a list of options with optional search functionality."
-updatedAt: "2025-06-15"
+updatedAt: "2026-11-10"
 docs: "once-ui/form-controls/select.mdx"
 github: "components/Select.tsx"
 navLabel: "Select"
 navIcon: "switch"
+navTag: "Update"
+navTagVariant: "success"
 ---
 
-The `Select` component offers a dropdown menu for selecting from a list of options. It's built on top of the `DropdownWrapper` and `Input` components, providing a consistent user experience with other form controls.
+The `Select` component offers a dropdown menu for selecting from a list of options. It's built on top of the `Dropdown` and `Input` components, providing a consistent user experience with other form controls. It draws a chevron that turns up while the list is open; a `suffix` you pass takes its place.
+
+## When to use Select
+
+Use `Select` for a form value: a field with a label that sits in a form or a settings row and is submitted, such as a timezone, a country or a member's role.
+
+For a sort, filter, view or action picker on a toolbar or page header, use a secondary `Button` with `suffixIcon="chevronDown"` as the trigger of a `Dropdown` of `Option`s, and let the button's label name the current choice ("Sort: Newest"). It reads as a control, not as a field. A toolbar filter over a long list that people search is the exception: use the [toolbar size](#toolbar-size) below. Two to four choices that should stay visible fit a `SegmentedControl`.
 
 <CodeBlock
     marginTop="16"
@@ -187,6 +195,51 @@ Set `multiple` to allow selecting more than one option. `value`, `defaultValue` 
   ]}
 />
 
+## Aligned
+
+`alignSelected` opens the list with the selected option sitting on the field, and the others above and below it in their own order, as macOS draws a pop-up button. With nothing picked, the first option sits there. A long list shows a few rows on each side and scrolls the rest. It suits short, settings-style choices. Near the top or bottom of the screen, and on a searchable or multiple Select, it opens as a dropdown instead.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<Select
+            id="aligned-select"
+            label="Density"
+            alignSelected
+            value="comfortable"
+            options={[
+                { label: "Compact", value: "compact" },
+                { label: "Cozy", value: "cozy" },
+                { label: "Comfortable", value: "comfortable" },
+                { label: "Spacious", value: "spacious" },
+                { label: "Roomy", value: "roomy" }
+            ]}
+        />}
+  codes={[
+    {
+      code:
+`const [density, setDensity] = useState("comfortable");
+
+<Select
+    id="aligned-select"
+    label="Density"
+    alignSelected
+    value={density}
+    options={[
+      { label: "Compact", value: "compact" },
+      { label: "Cozy", value: "cozy" },
+      { label: "Comfortable", value: "comfortable" },
+      { label: "Spacious", value: "spacious" },
+      { label: "Roomy", value: "roomy" }
+    ]}
+    onValueChange={(next) => setDensity(next as string)}
+/>`,
+      language: "tsx",
+      label: "Aligned"
+    }
+  ]}
+/>
+
 ## Toolbar size
 
 `size="xxs"` draws a 32px field, the height of a `size="s"` Button, for a filter in a toolbar. The label shows as the placeholder, and a searchable Select opens an `xxs` search field to match. Every other size keeps the `s` search field it had.
@@ -245,6 +298,7 @@ Set `multiple` to allow selecting more than one option. `value`, `defaultValue` 
     searchable: "Add a filter field above the options.",
     emptyState: "Shown when a search matches nothing.",
     placement: "Which side the list opens on.",
+    alignSelected: "Open the list with the selected option sitting on the field, the others above and below it.",
     fillWidth: "Match the parent's width.",
     labels: "The search field's name and its clear button's, { search, clear }, for a translated interface. Omitted fields stay English.",
   }}

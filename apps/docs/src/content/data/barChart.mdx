@@ -1,14 +1,16 @@
 ---
 title: "BarChart"
-summary: "A bar chart component for displaying categorical data with interactive hover, click events, and flexible styling."
-updatedAt: "2025-05-14"
+summary: "Compare categories with bars: one or many series, grouped or stacked, vertical or horizontal, with band highlighting and adjustable bar width."
+updatedAt: "2026-11-12"
 docs: "once-ui/data/barChart.mdx"
 github: "modules/data/BarChart.tsx"
 navLabel: "BarChart"
 navIcon: "barChart"
 ---
 
-The `BarChart` component provides a way to display bar charts with interactive features, including hover effects, click events, and custom styling options. It supports various customization options including different chart types, color schemes, and interactive features.
+`BarChart` draws a bar per series for each row of `data`, side by side, stacked, or laid along the x axis. Use it when the reader asks which is bigger: lengths from a shared baseline are the easiest thing to compare. For change over many periods, a [`LineChart`](/data/lineChart) reads better. It takes the [props every chart shares](/data/setup#props-every-chart-shares) and the ones on this page.
+
+One series is a plain bar chart; give it one colour, ideally the brand (`color: "brand"`), rather than a hue per bar. Several series are grouped in each band, in `series` order.
 
 <BarChart
   marginTop="16"

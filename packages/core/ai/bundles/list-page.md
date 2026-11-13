@@ -21,13 +21,13 @@ This file is complete for this task: the rules (all of `rules.compact.md`), the 
 | `border` | `border="neutral-alpha-weak"` |
 | `<Logo wordmark={{ light, dark }} />` | a `<Logo showIn="dark">` and a `<Logo showIn="light">` |
 
-- Units: a number is on the **token scale** on every size, spacing and offset prop: `16` = `"16"` = 1rem, scaled by `data-scaling` (`width={320}`, `padding={24}`, `top={8}`), in breakpoint objects too; a digit string is the spacing token (`"16"`); any CSS length string passes through (`"320px"` never scales, `"50%"`, `"100dvh"`). `Mask`/`Background` percentages are strings (`x="50%"`)
+- Units: a number is on the **token scale** on every size, spacing and offset prop: `16` = `"16"` = 1rem, scaled by `data-scaling`; a digit string is the spacing token (`"16"`); any CSS length string passes through (`"320px"` never scales, `"50%"`, `"100dvh"`). `Mask`/`Background` percentages are strings (`x="50%"`)
 - Control size for a whole app: `density: "compact" | "normal" | "spacious"` in the config `style` (`data-density`), not `size="s"` on every Button; it also picks scaling 95/100/105 unless `scaling` is set. Give `size` only where one control differs
 - `Flex` only when direction changes at breakpoints: `<Row s={{ direction: "column" }}>`
 - Subtree theme: `theme`, `themeBorder`, `themeSolid`, `themeSurface` on Flex/Row/Column/Grid and components built on them (`Background`, `Tag`, effects) — not raw `data-theme`/`data-border`/`data-solid`. `Button`/`IconButton` have no typed prop: keep `data-border="rounded"`
-- App theme in `once-ui.config` `style`: `defaultTheme: "light"` = starts light, visitor can switch (`theme: "light"` forces it and `setTheme` does nothing). Exact brand colour: `brand: "custom", brandSeed: "#hex"` (the hex is step 500, every brand solid in both themes). Only a full brand book needs `brandScale` `{ 100: "#…", …, 1200: "#…" }`, numbered dark to light (100 darkest, the reverse of Tailwind; per theme `{ light: {…}, dark: {…} }`), page/card colour: `pageBackground`/`surfaceBackground` (token or colour, or `{ light, dark }`), not overrides of semantic CSS variables
+- App theme in `once-ui.config` `style`: `defaultTheme: "light"` = starts light, visitor can switch (`theme: "light"` forces it and `setTheme` does nothing). Exact brand colour: `brand: "custom", brandSeed: "#hex"` (the hex is step 500, every brand solid in both themes); show it on the current page with `<Nav tone="brand">`. `brandScale` only for a full brand book, 100 darkest to 1200 lightest. Page/card colour: `pageBackground`/`surfaceBackground` (token or colour, or `{ light, dark }`), not overrides of semantic CSS variables
 - Page skeleton: `Column as="main" fillWidth horizontal="center"` → content `Column maxWidth="l"` → sections
-- Section gaps: `"104"` between sections, `"24"`–`"40"` inside. Never `"48"` between major sections.
+- Section gaps: `"104"` between sections, `"24"`–`"40"` inside.
 - Responsive: breakpoint props `xl l m s xs` — never media queries for layout
 
 ### Surfaces
@@ -38,10 +38,16 @@ Static panel recipe (pricing tiers, stats, settings sections):
 <Column background="surface" border radius="l" padding="24" gap="16">
 ```
 
-- Bare `border` (and `borderTop`, `borderBottom`, …) = the default border. Name a colour only to deviate: `border="brand-alpha-medium"`.
+- Bare `border`/`borderTop` = the default border. Name a colour only to deviate: `border="brand-alpha-medium"`.
 - `Card` = interactive only (`href` or `onClick`). Static panels = Column + surface recipe.
 - Colors: `{tone}-{weight}` or `{tone}-alpha-{weight}`. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`.
 - `background` also: `surface | overlay | page | transparent`
+- Same-shaped records: one surface, divided rows (`borderTop={i > 0}`), or a `Table` (row link: a link in a `cell`, not `onRowClick`); never a card per row
+- One raised `surface` for content on `page`; sections inside are spacing + `borderTop`, not grey cards
+- Alerts: `Feedback`, never a hand-built `role="alert"` box
+- Charts: `@once-ui-system/core/data` (`LineChart`, `BarChart`…), never hand-drawn SVG; `height="16rem"` (a string), series `color: "brand"`
+- Brand mark: `<Logo text="Name" monogram />`, never `Icon` + `Text`
+- Critical outranks status: `Feedback tone="danger"` or `Tag prefixIcon`; urgent is `danger`/`warning`, never `info`
 
 ### Typography
 
@@ -49,6 +55,7 @@ Static panel recipe (pricing tiers, stats, settings sections):
 - Section titles: `display-strong-xs` or `display-strong-s` — not `heading-*`
 - Eyebrow: `<Text textVariant="label-default-s" onBackground="brand-medium">`
 - Text on layout: `textVariant` + `onBackground` on Row/Column instead of nesting Text
+- App text a user must read (metadata, cells): `body-default-s` minimum, never `xs` `neutral-weak`
 
 ### Decoration
 
@@ -81,9 +88,10 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Icons | `IconName` (the IconName type below) only |
 | Logos grid | `LogoCloud` with `columns` set |
 | Tabs | `Tabs` > `TabList` > `Tab`, `TabPanel` (`orientation="vertical"` for a settings nav) |
+| Pick one of a few | A form value with a label (timezone, country, role on a form): `Select`. A toolbar view control or action (sort, filter, export): `Dropdown` with `Option`s and `trigger={<Button variant="secondary" suffixIcon="chevronDown">Role: Admin</Button>}`, the label naming the current choice (a long, searchable filter list: `Select size="xxs" searchable` with a `label`). Two to four choices always shown: `SegmentedControl` |
 | Mobile nav, side sheet | `Drawer`, not a hand-made overlay |
 | Page trail | `Breadcrumbs items={[...]}` |
-| Keyboard shortcut | `useHotkeys("mod+k", fn)` + `Kbd keys="mod+k" label="Search"` |
+| Keyboard shortcut | `useHotkeys("mod+k", fn)` + `Kbd keys="mod+k" label="Search"` + `aria-keyshortcuts` |
 | Screen-reader text, skip link | `VisuallyHidden` (skip link: `<VisuallyHidden as="a" href="#main" focusable>`) |
 | Native attributes | Every component also takes its element's own: `aria-*`, `id`, `role`, `onClick`; `type` on `Button`; `value`, `onChange`, `type` on `Input` |
 | MDX content | `mdxComponents` / `createMdxComponents` from `/mdx` |
@@ -134,6 +142,8 @@ Every type a prop names is defined in the slice's (or bundle's) `types`.
 ### Before building
 
 If design intent unclear, ask: content style, layout width, color approach, decoration level, imagery. Default: restrained, centered `maxWidth="m"`, single brand accent, one subtle gradient, no placeholder images.
+
+An app: set the theme first: `brand` or `brandSeed`, `neutral`, `solid: "color"`, a `--font-heading` family; no ambient decoration. Phone header, plan canvas, selection: `ai/layouts.md`.
 
 ## Components
 
@@ -207,7 +217,7 @@ Mixins: LeafProps.
 - value, defaultValue?: string | string[]
 - onValueChange?: (value: string | string[]) => void
 - open?: boolean
-- defaultOpen, searchable, multiple?: boolean = false
+- defaultOpen, alignSelected, searchable, multiple?: boolean = false
 - onOpenChange?: (open: boolean) => void
 - emptyState?: ReactNode = No results
 - placement?: Placement
@@ -231,19 +241,19 @@ Mixins: LeafProps.
 - span?: number
 
 ### Dropdown
-- fillWidth, disabled, contents, closeAfterClick, handleArrowNavigation, open, nested, disableTriggerClick?: boolean
+- fillWidth, disabled, contents, closeAfterClick, handleArrowNavigation, open, nested, disableTriggerClick, alignSelected?: boolean
 - minWidth, maxWidth, minHeight?: number | CSSUnit
 - placement?: Placement
 - trigger: ReactNode
 - children?: ReactNode
-- openOn?: "click" | "contextmenu" = click
+- openOn?: "click" | "hover" | "contextmenu" = click
+- openDelay, closeDelay, optionsCount?: number
 - selectedOption, className, dropdownId?: string
 - style?: React.CSSProperties
 - onSelect?: (value: string) => void
 - onOpenChange?: (open: boolean) => void
 - navigationLayout?: NavigationLayout
 - columns?: number | string
-- optionsCount?: number
 - onFocusCapture, onBlurCapture?: React.FocusEventHandler<HTMLDivElement>
 
 ### Table
@@ -290,8 +300,8 @@ Avoid: Passing the same text as label and children — the children are dropped
 - size?: TShirtSizes
 - label?: string = ""
 - prefixIcon, suffixIcon?: IconName
+- dot, arrow, selected, interactive?: boolean
 - href?: string
-- arrow, selected, interactive?: boolean
 - effect?: boolean = variant === "announce"
 - onClick?: MouseEventHandler<HTMLDivElement>
 - onRemove?: () => void
@@ -315,6 +325,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - href?: string
 - value: string
 - danger, selected, highlighted?: boolean
+- tone?: Tone = neutral
 - disabled?: boolean = false
 - tabIndex?: number
 - onClick?: (value: string) => void
@@ -535,7 +546,7 @@ type BlendMode = "color" | "screen" | "normal" | "multiply" | "overlay" | "darke
 type BlurSize = "s" | "xl" | "l" | "m" | "xs"
 type BorderStyle = "rounded" | "playful" | "conservative" | "sharp"
 type BreakpointKey = "s" | "xl" | "l" | "m" | "xs"
-type ButtonOption = LeafProps & { value: string; description?: ReactNode; label?: ReactNode; children?: ReactNode; horizontal?: "start" | "center" | "end" | "between"; radius?: RadiusSize; disabled?: boolean; href?: string; size?: TShirtSizes; corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"; variant?: "ghost" | "outline" | "subtle"; weight?: "default" | "strong"; truncate?: boolean; rounded?: boolean; prefixIcon?: IconName; suffixIcon?: IconName }
+type ButtonOption = LeafProps & { value: string; description?: ReactNode; label?: ReactNode; children?: ReactNode; horizontal?: "start" | "center" | "end" | "between"; radius?: RadiusSize; disabled?: boolean; href?: string; size?: TShirtSizes; corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"; variant?: "ghost" | "outline" | "subtle"; tone?: Tone; weight?: "default" | "strong"; truncate?: boolean; rounded?: boolean; prefixIcon?: IconName; suffixIcon?: IconName }
 // type ButtonVariant is one of these strings: link ghost subtle primary secondary tertiary
 type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}ch` | `${number}%` | `${number}vh` | `${number}vw` | `${number}dvh` | `${number}dvw` | `${number}svh` | `${number}svw` | `${number}lvh` | `${number}lvw` | `${number}vmin` | `${number}vmax` | `${number}cqw` | `${number}cqh` | `calc(${string})` | `min(${string})` | `max(${string})` | `clamp(${string})` | `var(${string})`
 // type ColorScheme is one of these strings: neutral brand accent info danger warning success
@@ -601,7 +612,7 @@ type UserSelect = "text" | "auto" | "none" | "all"
 
 ## Gotchas
 
-- Fixed in 2.1: Select closes on pick and stays closed — focus returning to the field no longer reopens it — and a multiple Select stays open while picking. Use Select with value and onValueChange; do not build a local picker from Dropdown and Options to get this.
+- Fixed in 2.1: Select closes on pick and stays closed — focus returning to the field no longer reopens it — and a multiple Select stays open while picking. For a form value, use Select with label, value and onValueChange; do not rebuild it from Dropdown and Options to get this. Select draws its own chevron (a suffix you pass replaces it). A toolbar sort, filter or action picker is not a form value: use a Dropdown with Options behind a secondary Button with suffixIcon="chevronDown" that names the current choice.
 - Positions are [longitude, latitude], not [lat, lng]. Map needs a height (or fill inside a sized parent); it shadows the global Map, so import it as another name in a file that also uses new Map().
 - Never cast an icon name with `as IconName`: the cast compiles a name the registry does not have, and it renders nothing. Use a name from iconNames; in data, type the field as IconName ({ icon: IconName }[]) or write the literal `as const`, so the type check still runs.
 - Field heights run a step above Button's: Input size xs is 40px, s 48px, m 56px (the default). A field beside a size="s" Button (32px), as in a toolbar or filter row, takes size="xxs", which is 32px too; Form size="xxs" sets it for every field inside. An xxs field has no floating label: label shows as the placeholder, so keep label for the accessible name.
@@ -613,6 +624,7 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - overflow="hidden" on full-bleed sections clips glows into hard bands — only use when parent has radius.
 - Leaf components (Button, IconButton, ToggleButton, the fields, Switch, Checkbox, RadioButton, Text, Heading, Icon, Avatar, Spinner, StatusIndicator, Kbd, InlineCode, ProgressBar, Logo, SmartLink, NavIcon) take only margins, flex, fillWidth, position, top/right/bottom/left, className and style besides their own props. Padding, background, border, radius, sizes, hide and breakpoints go on a Row around it (a Column around Text or Heading; <Row fit> for an Icon's box).
 - A Button in a form that should submit it needs type="submit": with neither onClick, href nor type it renders a div, unlike a native <button>.
+- Show a field's error after it is blurred or the form is submitted, never on open: keep a touched flag per field and pass errorMessage={touched.email ? errors.email : undefined}. A form or Dialog that opens with red required-field errors reads as broken.
 
 ## Quality bar
 
@@ -634,6 +646,10 @@ type UserSelect = "text" | "auto" | "none" | "all"
  * filter, a searchable, sortable, paginated Table with status tags and row
  * actions, and an empty state that offers a way back.
  *
+ * The role filter is a toolbar picker: a secondary Button that opens a
+ * Dropdown of Options and names the current choice. Select is for a form
+ * value with a label (a timezone, a country), not for a view control.
+ *
  * Table searches and sorts by the text inside each cell, so a cell that is a
  * component (the name with its email, the status Tag) should carry its text as
  * children, not only in a prop.
@@ -641,7 +657,9 @@ type UserSelect = "text" | "auto" | "none" | "all"
 import {
   Button,
   Column,
+  Dropdown,
   Heading,
+  Option,
   Row,
   SegmentedControl,
   Table,
@@ -705,7 +723,12 @@ export function ListPageExample({
   onRemove?: (member: Member) => void;
 }) {
   const [filter, setFilter] = useState<Filter>("all");
-  const visible = members.filter((member) => filter === "all" || member.status === filter);
+  const [role, setRole] = useState("all");
+  const roles = [...new Set(members.map((member) => member.role))];
+  const visible = members.filter(
+    (member) =>
+      (filter === "all" || member.status === filter) && (role === "all" || member.role === role),
+  );
 
   return (
     <Column as="main" fillWidth horizontal="center" paddingY="48" paddingX="24">
@@ -730,17 +753,35 @@ export function ListPageExample({
           </Button>
         </Row>
 
-        <SegmentedControl
-          fillWidth={false}
-          value={filter}
-          onValueChange={(value) => setFilter(value as Filter)}
-          buttons={[
-            { value: "all", label: "All" },
-            { value: "active", label: "Active" },
-            { value: "invited", label: "Invited" },
-            { value: "suspended", label: "Suspended" },
-          ]}
-        />
+        <Row gap="8" vertical="center" wrap>
+          <SegmentedControl
+            fillWidth={false}
+            value={filter}
+            onValueChange={(value) => setFilter(value as Filter)}
+            buttons={[
+              { value: "all", label: "All" },
+              { value: "active", label: "Active" },
+              { value: "invited", label: "Invited" },
+              { value: "suspended", label: "Suspended" },
+            ]}
+          />
+          <Dropdown
+            selectedOption={role}
+            onSelect={setRole}
+            trigger={
+              <Button variant="secondary" suffixIcon="chevronDown">
+                {role === "all" ? "All roles" : role}
+              </Button>
+            }
+          >
+            <Column padding="4" gap="2">
+              <Option value="all" label="All roles" />
+              {roles.map((name) => (
+                <Option key={name} value={name} label={name} />
+              ))}
+            </Column>
+          </Dropdown>
+        </Row>
 
         <Table
           searchable
@@ -752,7 +793,14 @@ export function ListPageExample({
               <Text textVariant="body-default-s" onBackground="neutral-weak">
                 No members match this filter.
               </Text>
-              <Button size="s" variant="secondary" onClick={() => setFilter("all")}>
+              <Button
+                size="s"
+                variant="secondary"
+                onClick={() => {
+                  setFilter("all");
+                  setRole("all");
+                }}
+              >
                 Show everyone
               </Button>
             </Column>
@@ -766,7 +814,7 @@ export function ListPageExample({
           rows={visible.map((member) => [
             <Column key="name" gap="4">
               <Text textVariant="label-default-s">{member.name}</Text>
-              <Text textVariant="body-default-xs" onBackground="neutral-weak">
+              <Text textVariant="body-default-s" onBackground="neutral-weak">
                 {member.email}
               </Text>
             </Column>,

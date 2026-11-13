@@ -2,9 +2,9 @@
 
 import { autoUpdate, flip, offset, shift, size, useFloating } from "@floating-ui/react-dom";
 import React, {
-  FocusEvent,
-  KeyboardEvent,
-  ReactNode,
+  type FocusEvent,
+  type KeyboardEvent,
+  type ReactNode,
   useCallback,
   useContext,
   useEffect,
@@ -16,9 +16,17 @@ import React, {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import { NavigationLayout } from "../hooks/useArrowNavigation.js";
+import type { NavigationLayout } from "../hooks/useArrowNavigation.js";
+import { type AlignSelectedData, alignSelected, unlessAligned } from "../internal/alignSelected.js";
 import { ContextMenuImpl } from "../internal/ContextMenuImpl.js";
 import { DropdownPanel } from "../internal/DropdownPanel.js";
+import {
+  MenuLevelContext,
+  type MenuRoot,
+  MenuRootContext,
+  useMenuLevel,
+  useTypeahead,
+} from "../internal/menuTree.js";
 import type { CSSUnit, Placement } from "../types.js";
 import {
   clearLastOpenedDropdown,
@@ -26,7 +34,7 @@ import {
   setLastOpenedDropdown,
 } from "../utils/dropdownState.js";
 import { cssLength, declareTokenLengths } from "../utils/layoutClasses.js";
-import { ArrowNavigation } from "./ArrowNavigationContext.js";
+import { ArrowNavigation, useArrowNavigationContext } from "./ArrowNavigationContext.js";
 import { Button } from "./Button.js";
 import { Column } from "./Column.js";
 import styles from "./Dropdown.module.scss";
@@ -40,6 +48,7 @@ import { Flex } from "./Flex.js";
 import { FocusTrap } from "./FocusTrap.js";
 import { IconButton } from "./IconButton.js";
 import { Option } from "./Option.js";
+import { OptionRoleContext } from "./OptionRoleContext.js";
 import { Row } from "./Row.js";
 import { ScrollLock } from "./ScrollLock.js";
 
@@ -60,10 +69,22 @@ export interface DropdownProps {
   children?: ReactNode;
   /**
    * What opens it. `"click"` (the default) toggles it from the trigger and
-   * anchors it there. `"contextmenu"` opens it on right-click (or the context
-   * menu key) at the pointer, as a `menu` of `menuitem`s: 2.x `ContextMenu`.
+   * anchors it there. `"hover"` also opens it when the pointer rests on the
+   * trigger and closes it once the pointer has left both trigger and panel
+   * (see `openDelay`, `closeDelay`); a click pins it open, and the keyboard
+   * opens it as a click does. Touch has no hover, so a tap opens it there.
+   * `"contextmenu"` opens it on right-click (or the context menu key) at the
+   * pointer, as a `menu` of `menuitem`s: 2.x `ContextMenu`.
    */
-  openOn?: "click" | "contextmenu";
+  openOn?: "click" | "hover" | "contextmenu";
+  /** `openOn="hover"`: how long, in ms, the pointer rests on the trigger before the panel opens. Defaults to 100. */
+  openDelay?: number;
+  /**
+   * `openOn="hover"`: how long, in ms, the pointer may be away from the
+   * trigger and its panels before the panel closes. Defaults to 300, enough to
+   * cross the gap between them or overshoot an edge without losing the menu.
+   */
+  closeDelay?: number;
   /** `openOn="contextmenu"`: the trigger region does not open the menu, and is dimmed. */
   disabled?: boolean;
   /**
@@ -85,6 +106,13 @@ export interface DropdownProps {
   optionsCount?: number;
   dropdownId?: string;
   disableTriggerClick?: boolean;
+  /**
+   * Open with the selected option (else the first enabled one) sitting on the
+   * trigger, the rest above and below it in their own order, as macOS draws a
+   * pop-up button. Falls back to `placement` when the trigger is too close to
+   * a viewport edge. Select's `position="aligned"` sets it.
+   */
+  alignSelected?: boolean;
   /** Capture-phase focus on the whole control, trigger and dropdown alike —
    *  the only place a consumer can see focus enter and leave the widget,
    *  since it moves between the two during a normal interaction. */
@@ -95,8 +123,49 @@ export interface DropdownProps {
 // Global state to track the last opened dropdown
 let dropdownCounter = 0;
 
+/** The items of the list, in the order the arrow keys move through them. */
+const ITEM_SELECTOR =
+  '.option, [role="option"], [role="menuitem"], [data-value], [data-submenu-trigger]';
+
 const isEnabledOption = (el: Element) =>
   !el.hasAttribute("disabled") && el.getAttribute("aria-disabled") !== "true";
+
+/**
+ * Typeahead for the list ArrowNavigation drives: a printable key moves to the
+ * next item whose text starts with what was typed. Inside ArrowNavigation, so
+ * it moves the list's own focused index and the arrow keys carry on from
+ * there. Listens on the panel natively, so keys from a Submenu's panel (in the
+ * React tree, not the DOM) stay with that panel.
+ */
+const RootTypeahead = ({
+  containerRef,
+}: {
+  containerRef: React.RefObject<HTMLDivElement | null>;
+}) => {
+  const navigation = useArrowNavigationContext();
+  const navigationRef = useRef(navigation);
+  navigationRef.current = navigation;
+  const typeahead = useTypeahead();
+
+  useEffect(() => {
+    const panel = containerRef.current;
+    const list = panel?.parentElement;
+    if (!panel || !list) return;
+    const onKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.defaultPrevented) return;
+      // ArrowNavigation indexes the items of its own element, the panel's parent.
+      const items = Array.from(list.querySelectorAll(ITEM_SELECTOR)) as HTMLElement[];
+      const match = typeahead(event, items);
+      if (!match) return;
+      event.preventDefault();
+      navigationRef.current.setFocusedIndex(items.indexOf(match));
+    };
+    panel.addEventListener("keydown", onKeyDown);
+    return () => panel.removeEventListener("keydown", onKeyDown);
+  }, [containerRef, typeahead]);
+
+  return null;
+};
 
 const DropdownMenu = ({
   ref,
@@ -123,8 +192,14 @@ const DropdownMenu = ({
   optionsCount: propOptionsCount,
   dropdownId: propDropdownId,
   disableTriggerClick = false,
+  alignSelected: alignToSelected = false,
+  hover = false,
+  openDelay = 100,
+  closeDelay = 300,
 }: (Omit<DropdownProps, "openOn" | "children" | "disabled" | "contents"> & {
   dropdown: ReactNode;
+  /** `openOn="hover"`. */
+  hover?: boolean;
 }) & { ref?: React.Ref<HTMLDivElement> }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -160,6 +235,52 @@ const DropdownMenu = ({
 
   const isControlled = controlledIsOpen !== undefined;
   const isOpen = isControlled ? controlledIsOpen : internalIsOpen;
+
+  /**
+   * Whether the pointer opened the panel (`openOn="hover"`) and nothing has
+   * pinned it since. Such a panel is a preview: it leaves focus where it
+   * was and page scroll free, and closes when the pointer moves away. A
+   * click on the trigger or an arrow key turns it into an ordinary open
+   * panel. Mirrored in a ref for the open effect, which must not re-run on it.
+   */
+  const [hoverOpened, setHoverOpenedState] = useState(false);
+  const hoverOpenedRef = useRef(false);
+  const setHoverOpened = useCallback((value: boolean) => {
+    hoverOpenedRef.current = value;
+    setHoverOpenedState(value);
+  }, []);
+  const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const clearHoverTimer = useCallback(() => {
+    if (hoverTimer.current) clearTimeout(hoverTimer.current);
+    hoverTimer.current = null;
+  }, []);
+  useEffect(() => clearHoverTimer, [clearHoverTimer]);
+
+  /**
+   * How many Submenus the panel holds. With any, the panel is a `menu` of
+   * `menuitem`s rather than a `listbox` of options: a listbox cannot own a
+   * popup, and screen readers announce a menu's items as having submenus.
+   */
+  const [submenus, setSubmenus] = useState(0);
+  const registerSubmenu = useCallback(() => {
+    setSubmenus((count) => count + 1);
+    return () => setSubmenus((count) => count - 1);
+  }, []);
+  const isMenu = submenus > 0;
+  const outerOptionRole = useContext(OptionRoleContext);
+  const scrollLocked = isOpen && !hoverOpened;
+  const menuRoot = useMemo<MenuRoot>(
+    () => ({ treeId: dropdownId.current, registerSubmenu, scrollLocked }),
+    [registerSubmenu, scrollLocked],
+  );
+  const { level: rootLevel, onPointerMove: onRootPointerMove } = useMenuLevel();
+  const closeRootSubmenu = rootLevel.setOpenId;
+  useEffect(() => {
+    if (!isOpen) {
+      closeRootSubmenu(null);
+      setHoverOpened(false);
+    }
+  }, [isOpen, closeRootSubmenu, setHoverOpened]);
 
   /**
    * How many Buttons in the trigger render as real buttons (see
@@ -249,6 +370,25 @@ const DropdownMenu = ({
 
   // We'll measure the width directly in the floating UI middleware
 
+  /** The panel's width, on both the aligned and the normal path. */
+  const applyWidth = (floatingStyle: CSSStyleDeclaration, availableWidth: number) => {
+    if (fillWidth && triggerRef.current) {
+      // fillWidth means exactly the trigger's width — no hidden floor.
+      // A wider floor pushes the panel past the trigger on "-end"
+      // placements, which reads as broken positioning.
+      const w = `${triggerRef.current.getBoundingClientRect().width}px`;
+      floatingStyle.width = w;
+      floatingStyle.minWidth = minWidth ? cssLength(minWidth) : w;
+    } else {
+      // Let content determine width; only apply an explicit minWidth
+      floatingStyle.width = "";
+      floatingStyle.minWidth = minWidth ? cssLength(minWidth) : "";
+    }
+
+    floatingStyle.maxWidth = maxWidth ? cssLength(maxWidth) : `${availableWidth}px`;
+    declareTokenLengths(floatingStyle, floatingStyle.minWidth, floatingStyle.maxWidth);
+  };
+
   const {
     x,
     y,
@@ -257,41 +397,37 @@ const DropdownMenu = ({
     update,
     isPositioned,
     placement: resolvedPlacement,
+    middlewareData,
   } = useFloating({
     placement: placement,
     open: isOpen,
     middleware: [
-      offset(4),
-      flip(),
-      shift(),
-      size({
-        apply({ availableWidth, availableHeight, elements }) {
-          const floatingStyle = elements.floating.style;
-
-          if (fillWidth && triggerRef.current) {
-            // fillWidth means exactly the trigger's width — no hidden floor.
-            // A wider floor pushes the panel past the trigger on "-end"
-            // placements, which reads as broken positioning.
-            const w = `${triggerRef.current.getBoundingClientRect().width}px`;
-            floatingStyle.width = w;
-            floatingStyle.minWidth = minWidth ? cssLength(minWidth) : w;
-          } else {
-            // Let content determine width; only apply an explicit minWidth
-            floatingStyle.width = "";
-            floatingStyle.minWidth = minWidth ? cssLength(minWidth) : "";
-          }
-
-          floatingStyle.maxWidth = maxWidth ? cssLength(maxWidth) : `${availableWidth}px`;
-          floatingStyle.minHeight = minHeight ? cssLength(minHeight) : "0px";
-          floatingStyle.maxHeight = `${availableHeight}px`;
-          declareTokenLengths(
-            floatingStyle,
-            floatingStyle.minWidth,
-            floatingStyle.maxWidth,
-            floatingStyle.minHeight,
-          );
+      // First, and the rest step aside when it places the panel.
+      alignSelected({
+        enabled: alignToSelected,
+        // What the option lands on: the control in the trigger (a
+        // combobox's field, a button), not a label or hint around it.
+        anchor: () => {
+          const trigger = triggerRef.current;
+          if (!trigger) return null;
+          return trigger.querySelector<HTMLElement>("[aria-expanded]") ?? trigger;
         },
+        applyWidth,
       }),
+      unlessAligned(offset(4)),
+      unlessAligned(flip()),
+      unlessAligned(shift()),
+      unlessAligned(
+        size({
+          apply({ availableWidth, availableHeight, elements }) {
+            const floatingStyle = elements.floating.style;
+            applyWidth(floatingStyle, availableWidth);
+            floatingStyle.minHeight = minHeight ? cssLength(minHeight) : "0px";
+            floatingStyle.maxHeight = `${availableHeight}px`;
+            declareTokenLengths(floatingStyle, floatingStyle.minHeight);
+          },
+        }),
+      ),
     ],
     whileElementsMounted: autoUpdate,
   });
@@ -308,7 +444,10 @@ const DropdownMenu = ({
    * `flip()` is in the middleware — a panel that flips above its trigger has
    * to scale from its bottom edge instead.
    */
+  const aligned = middlewareData.alignSelected as AlignSelectedData | undefined;
   const transformOrigin = (() => {
+    // Aligned: from the option on the trigger, so it stays put as it grows.
+    if (aligned?.applied) return `center ${aligned.originY ?? 0}px`;
     const [side, align] = (resolvedPlacement || "bottom").split("-");
     if (side === "top" || side === "bottom") {
       const y = side === "bottom" ? "top" : "bottom";
@@ -368,6 +507,13 @@ const DropdownMenu = ({
 
   // Store the previously focused element to restore focus when dropdown closes
   const previouslyFocusedElement = useRef<Element | null>(null);
+  /**
+   * Set when a click outside closed the panel. Focus then stays where that
+   * click put it, as it would after any other click: handing it back to the
+   * trigger refocused an empty DateInput, whose label floated on and on over
+   * nothing after the user had clicked away.
+   */
+  const closedByOutsideClickRef = useRef(false);
 
   // Force update when dropdown opens
   useEffect(() => {
@@ -445,8 +591,12 @@ const DropdownMenu = ({
 
   useEffect(() => {
     if (isOpen && mounted) {
-      // Store the currently focused element before focusing the dropdown
-      previouslyFocusedElement.current = document.activeElement;
+      // The handler marks every click outside, open or not; only one made
+      // while this panel is open counts.
+      closedByOutsideClickRef.current = false;
+      // Store the currently focused element before focusing the dropdown.
+      // A panel the pointer opened leaves focus alone, so has none to restore.
+      previouslyFocusedElement.current = hoverOpenedRef.current ? null : document.activeElement;
 
       requestAnimationFrame(() => {
         if (dropdownRef.current) {
@@ -456,6 +606,7 @@ const DropdownMenu = ({
           // A combobox keeps focus in its field and reports its own active
           // option (setActiveIndex), which resetting here would overwrite.
           if (isComboboxRef.current) return;
+          if (hoverOpenedRef.current) return;
 
           // Reset focus index when opening
           setFocusedIndex(-1);
@@ -467,7 +618,7 @@ const DropdownMenu = ({
           ) as HTMLElement[];
 
           const optionElements = Array.from(
-            dropdownRef.current.querySelectorAll('.option, [role="option"], [data-value]'),
+            dropdownRef.current.querySelectorAll(ITEM_SELECTOR),
           ) as HTMLElement[];
 
           const openIndex = resolveOpenIndex(optionElements);
@@ -502,7 +653,11 @@ const DropdownMenu = ({
       setFocusedIndex(-1);
       setOpensOn(null);
 
-      if (previouslyFocusedElement.current) {
+      const closedByOutsideClick = closedByOutsideClickRef.current;
+      closedByOutsideClickRef.current = false;
+      if (closedByOutsideClick) {
+        previouslyFocusedElement.current = null;
+      } else if (previouslyFocusedElement.current) {
         // A combobox's field had focus all along, so focus that is now
         // somewhere else was put there by the user — Tab out of the field,
         // a click on another control — and stays. Only focus lost with the
@@ -520,6 +675,52 @@ const DropdownMenu = ({
       }
     }
   }, [isOpen, mounted, refs, update, resolveOpenIndex]);
+
+  /**
+   * `openOn="hover"`: a panel the pointer opened closes once the pointer has
+   * been away from the trigger and every panel of the menu, its Submenus'
+   * included, for `closeDelay`. Read from the document rather than from leave
+   * events on each element, because the Submenus' panels are portals of
+   * their own: moving into one leaves the root panel without leaving the menu.
+   */
+  useEffect(() => {
+    if (!hover || !isOpen || !hoverOpened) return;
+    const treeId = dropdownId.current;
+    let closeTimer: ReturnType<typeof setTimeout> | null = null;
+    const cancel = () => {
+      if (closeTimer) clearTimeout(closeTimer);
+      closeTimer = null;
+    };
+    const schedule = () => {
+      if (closeTimer) return;
+      closeTimer = setTimeout(() => {
+        closeTimer = null;
+        if (hoverOpenedRef.current) handleOpenChange(false);
+      }, closeDelay);
+    };
+    const onPointerMove = (event: PointerEvent) => {
+      if (event.pointerType === "touch") return;
+      const target = event.target as Element | null;
+      const inside =
+        !!target &&
+        (wrapperRef.current?.contains(target) ||
+          portalRef.current?.contains(target) ||
+          !!target.closest?.(`[data-menu-tree="${treeId}"]`));
+      if (inside) cancel();
+      else schedule();
+    };
+    // Leaving the window sends no more moves.
+    const onMouseOut = (event: MouseEvent) => {
+      if (!event.relatedTarget) schedule();
+    };
+    document.addEventListener("pointermove", onPointerMove);
+    document.addEventListener("mouseout", onMouseOut);
+    return () => {
+      cancel();
+      document.removeEventListener("pointermove", onPointerMove);
+      document.removeEventListener("mouseout", onMouseOut);
+    };
+  }, [hover, isOpen, hoverOpened, closeDelay, handleOpenChange]);
 
   const handleClickOutside = useCallback(
     (event: MouseEvent) => {
@@ -550,6 +751,7 @@ const DropdownMenu = ({
         !isClickOnDropdownPortal &&
         !isClickOnDropdownElement
       ) {
+        closedByOutsideClickRef.current = true;
         handleOpenChange(false);
         setFocusedIndex(-1);
       } else {
@@ -660,9 +862,7 @@ const DropdownMenu = ({
   const getOptions = useCallback(() => {
     if (!dropdownRef.current) return [];
 
-    return Array.from(
-      dropdownRef.current.querySelectorAll('.option, [role="option"], [data-value]'),
-    ) as HTMLElement[];
+    return Array.from(dropdownRef.current.querySelectorAll(ITEM_SELECTOR)) as HTMLElement[];
   }, []);
 
   /**
@@ -712,7 +912,7 @@ const DropdownMenu = ({
 
     const handleOptionHover = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      const option = target.closest('[role="option"], [data-value]') as HTMLElement;
+      const option = target.closest(ITEM_SELECTOR) as HTMLElement;
 
       if (option && dropdownRef.current?.contains(option)) {
         const options = getOptions();
@@ -766,11 +966,13 @@ const DropdownMenu = ({
         ? "dialog"
         : navigationLayout === "grid"
           ? "grid"
-          : "listbox",
+          : isMenu
+            ? "menu"
+            : "listbox",
       register: registerButtonTrigger,
       setActiveIndex: setFocusedIndex,
     }),
-    [isOpen, handleArrowNavigation, navigationLayout, registerButtonTrigger],
+    [isOpen, handleArrowNavigation, navigationLayout, isMenu, registerButtonTrigger],
   );
 
   // Update options count when dropdown opens or content changes
@@ -830,6 +1032,19 @@ const DropdownMenu = ({
         return;
       }
 
+      // A panel the pointer opened has left focus on the trigger: an arrow
+      // key there moves into it, as it would have if a click had opened it.
+      if (
+        hoverOpenedRef.current &&
+        (e.key === "ArrowDown" || e.key === "ArrowUp") &&
+        !portalRef.current?.contains(document.activeElement)
+      ) {
+        e.preventDefault();
+        previouslyFocusedElement.current = document.activeElement;
+        setHoverOpened(false);
+        return;
+      }
+
       // Handle tab key for focus trapping. The panel's FocusTrap sees Tab
       // first and has already moved focus; wrapping again from there sent
       // Tab from the last-but-one control back to the first.
@@ -875,7 +1090,7 @@ const DropdownMenu = ({
       // Arrow key navigation will be handled by ArrowNavigation component
       // Enter/Space key selection will be handled by ArrowNavigation component
     },
-    [isOpen, handleOpenChange, handleArrowNavigation],
+    [isOpen, handleOpenChange, handleArrowNavigation, setHoverOpened],
   );
 
   /** For content that closes the panel itself: see DropdownCloseContext. */
@@ -884,11 +1099,11 @@ const DropdownMenu = ({
     setFocusedIndex(-1);
   }, [handleOpenChange]);
 
-  return (
+  const tree = (
     // The combobox flag is this wrapper's alone: a dropdown inside it is not one.
     <DropdownComboboxContext.Provider value={false}>
       <DropdownCloseContext.Provider value={closeFromContent}>
-        <ScrollLock enabled={isOpen} allowScrollInElement={dropdownRef} />
+        <ScrollLock enabled={scrollLocked} allowScrollInElement={dropdownRef} />
         <Column
           fillWidth={fillWidth}
           fitWidth={!fillWidth}
@@ -927,6 +1142,13 @@ const DropdownMenu = ({
               disableTriggerClick
                 ? undefined
                 : (e) => {
+                    clearHoverTimer();
+                    // A click on a panel the pointer opened pins it open.
+                    if (isOpen && hoverOpenedRef.current) {
+                      previouslyFocusedElement.current = document.activeElement;
+                      setHoverOpened(false);
+                      return;
+                    }
                     // If already open, close on trigger click
                     if (isOpen) {
                       handleOpenChange(false);
@@ -934,6 +1156,30 @@ const DropdownMenu = ({
                     }
                     handleOpenChange(true);
                   }
+            }
+            onPointerEnter={
+              hover
+                ? (e) => {
+                    if (e.pointerType === "touch") return;
+                    clearHoverTimer();
+                    if (isOpen) return;
+                    hoverTimer.current = setTimeout(() => {
+                      hoverTimer.current = null;
+                      setHoverOpened(true);
+                      handleOpenChange(true);
+                    }, openDelay);
+                  }
+                : undefined
+            }
+            onPointerLeave={
+              hover
+                ? () => {
+                    // Not there long enough to open. Closing an open panel
+                    // is the document listener's: the pointer may be on
+                    // its way into it.
+                    if (!isOpen) clearHoverTimer();
+                  }
+                : undefined
             }
             onKeyDown={isCombobox ? undefined : handleKeyDown}
             // With a trigger that is not a control of its own (a span, an
@@ -964,8 +1210,8 @@ const DropdownMenu = ({
                 // A combobox keeps focus in its field; the trap only holds Tab
                 // inside the panel once the combobox has put focus there (a
                 // searchable Select's query field).
-                autoFocus={!isCombobox}
-                restoreFocus={!isCombobox}
+                autoFocus={!isCombobox && !hoverOpened}
+                restoreFocus={!isCombobox && !hoverOpened}
               >
                 {handleArrowNavigation && !isCombobox ? (
                   <ArrowNavigation
@@ -976,10 +1222,10 @@ const DropdownMenu = ({
                     onFocusChange={handleFocusChange}
                     wrap
                     // A leading field keeps focus; the list is one ArrowDown away.
-                    autoFocus={isPositioned && opensOn === "options"}
+                    autoFocus={isPositioned && opensOn === "options" && !hoverOpened}
                     initialFocusedIndex={focusedIndex}
-                    itemSelector='.option, [role="option"], [data-value]'
-                    role={navigationLayout === "grid" ? "grid" : "listbox"}
+                    itemSelector={ITEM_SELECTOR}
+                    role={navigationLayout === "grid" ? "grid" : isMenu ? "menu" : "listbox"}
                     // Named after the trigger: see `triggerId`.
                     disabled={getLastOpenedDropdown() !== dropdownId.current}
                   >
@@ -1004,6 +1250,8 @@ const DropdownMenu = ({
                       data-is-dropdown="true"
                       data-dropdown-id={dropdownId.current}
                       data-is-active={getLastOpenedDropdown() === dropdownId.current}
+                      data-menu-tree={dropdownId.current}
+                      onPointerMove={onRootPointerMove}
                       onKeyDown={(e) => {
                         // If handleArrowNavigation is false, let all keyboard events pass through
                         if (!handleArrowNavigation) {
@@ -1074,6 +1322,7 @@ const DropdownMenu = ({
                           }
                         }}
                       >
+                        <RootTypeahead containerRef={dropdownRef} />
                         {React.Children.map(dropdown, (child) => {
                           if (React.isValidElement(child)) {
                             // Only add onClick handler to elements that have data-value or are interactive
@@ -1143,6 +1392,8 @@ const DropdownMenu = ({
                     data-is-dropdown="true"
                     data-dropdown-id={dropdownId.current}
                     data-is-active={getLastOpenedDropdown() === dropdownId.current}
+                    data-menu-tree={dropdownId.current}
+                    onPointerMove={onRootPointerMove}
                     onKeyDown={(e) => {
                       // If handleArrowNavigation is false, let all keyboard events pass through.
                       // So does a combobox's panel: the combobox handles its keys.
@@ -1216,6 +1467,18 @@ const DropdownMenu = ({
       </DropdownCloseContext.Provider>
     </DropdownComboboxContext.Provider>
   );
+
+  // The menu tree a Submenu inside joins (see menuTree). With one, the items
+  // are menu items.
+  return (
+    <MenuRootContext.Provider value={menuRoot}>
+      <MenuLevelContext.Provider value={rootLevel}>
+        <OptionRoleContext.Provider value={isMenu ? "menuitem" : outerOptionRole}>
+          {tree}
+        </OptionRoleContext.Provider>
+      </MenuLevelContext.Provider>
+    </MenuRootContext.Provider>
+  );
 };
 
 DropdownMenu.displayName = "DropdownMenu";
@@ -1275,7 +1538,7 @@ const Dropdown = ({
       </ContextMenuImpl>
     );
   }
-  return <DropdownMenu ref={ref} dropdown={content} {...props} />;
+  return <DropdownMenu ref={ref} dropdown={content} hover={openOn === "hover"} {...props} />;
 };
 
 Dropdown.displayName = "Dropdown";

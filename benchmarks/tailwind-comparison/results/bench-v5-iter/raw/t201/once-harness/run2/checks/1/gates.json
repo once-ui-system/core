@@ -1,0 +1,31 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/AppHeader.tsx(106,78): error TS2769: No overload matches this call.\n  Overload 1 of 2, '(props: TextProps<\"span\"> & CommonProps & LeafProps & Pick<DisplayProps, \"opacity\"> & Omit<DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>, \"ref\"> & { ...; }): ReactNode', gave the following error.\n    Type '{ children: string[]; onBackground: \"neutral-weak\"; textVariant: \"body-default-s\"; padding: string; }' is not assignable to type 'IntrinsicAttributes & TextProps<\"span\"> & CommonProps & LeafProps & Pick<DisplayProps, \"opacity\"> & Omit<...> & { ...; }'.\n      Property 'padding' does not exist on type 'IntrinsicAttributes & TextProps<\"span\"> & CommonProps & LeafProps & Pick<DisplayProps, \"opacity\"> & Omit<...> & { ...; }'.\n  Overload 2 of 2, '(props: Omit<TypeProps<\"span\">, \"as\"> & { as?: TextElement | undefined; ref?: undefined; }): ReactNode', gave the following error.\n    Type '{ children: string[]; onBackground: \"neutral-weak\"; textVariant: \"body-default-s\"; padding: string; }' is not assignable to type 'IntrinsicAttributes & Omit<TypeProps<\"span\">, \"as\"> & { as?: TextElement | undefined; ref?: undefined; }'.\n      Property 'padding' does not exist on type 'IntrinsicAttributes & Omit<TypeProps<\"span\">, \"as\"> & { as?: TextElement | undefined; ref?: undefined; }'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 4030
+    }
+  },
+  "files": [
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "components/AlertTags.tsx",
+    "components/AppHeader.tsx",
+    "components/BookDialog.tsx",
+    "components/Schedule.tsx",
+    "components/WeightTrend.tsx",
+    "lib/data.ts"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/layout.tsx: 1 issue(s)\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint\n✓ app/page.tsx: no mechanical issues\n✗ app/patients/[id]/page.tsx: 3 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ components/AlertTags.tsx: no mechanical issues\n✗ components/AppHeader.tsx: 3 issue(s)\n  [layout.leafProps] Text is a leaf in 3.0 and does not take padding: put it on a <Column> around it (a leaf keeps margins, flex, fillWidth, position and the offsets, className and style)\n  [layout.defaults] position=\"relative\" is the default — omit it\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ components/BookDialog.tsx: no mechanical issues\n✗ components/Schedule.tsx: 2 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ components/WeightTrend.tsx: no mechanical issues\n✓ lib/data.ts: no mechanical issues",
+    "validator": {
+      "package_version": "3.0.0-beta.1",
+      "script_sha256": "8b6fb92b077251ad"
+    }
+  }
+}

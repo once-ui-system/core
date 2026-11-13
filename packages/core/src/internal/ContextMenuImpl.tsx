@@ -1,9 +1,9 @@
 "use client";
 
 import React, {
-  KeyboardEvent,
-  MouseEvent as ReactMouseEvent,
-  ReactNode,
+  type KeyboardEvent,
+  type MouseEvent as ReactMouseEvent,
+  type ReactNode,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -17,6 +17,13 @@ import { ScrollLock } from "../components/ScrollLock.js";
 import type { CSSUnit, Placement } from "../types.js";
 import styles from "./ContextMenuImpl.module.scss";
 import { DropdownPanel } from "./DropdownPanel.js";
+import {
+  MenuLevelContext,
+  type MenuRoot,
+  MenuRootContext,
+  useMenuLevel,
+  useTypeahead,
+} from "./menuTree.js";
 
 export interface ContextMenuImplProps {
   children: ReactNode;
@@ -58,7 +65,8 @@ export interface ContextMenuImplProps {
 }
 
 /** The menu's items, in the order the arrow keys move through them. */
-const ITEM_SELECTOR = '[role="menuitem"], [role="option"], .option, [data-value]';
+const ITEM_SELECTOR =
+  '[role="menuitem"], [role="option"], .option, [data-value], [data-submenu-trigger]';
 
 const isEnabled = (item: Element) =>
   !item.hasAttribute("disabled") && item.getAttribute("aria-disabled") !== "true";
@@ -133,6 +141,19 @@ const ContextMenuImpl = ({
   // Control open state internally if not provided
   const isControlled = open !== undefined;
   const isDropdownOpen = isControlled ? open : internalIsOpen;
+
+  /** For Submenus inside: see menuTree. */
+  const treeId = `context-menu-${React.useId()}`;
+  const menuRoot = React.useMemo<MenuRoot>(
+    () => ({ treeId, registerSubmenu: () => () => {}, scrollLocked: true }),
+    [treeId],
+  );
+  const { level, onPointerMove } = useMenuLevel();
+  const closeSubmenu = level.setOpenId;
+  useEffect(() => {
+    if (!isDropdownOpen) closeSubmenu(null);
+  }, [isDropdownOpen, closeSubmenu]);
+  const typeahead = useTypeahead();
 
   // Handle open state changes
   const handleOpenChange = useCallback(
@@ -224,7 +245,9 @@ const ContextMenuImpl = ({
       if (
         isDropdownOpen &&
         dropdownRef.current &&
-        !dropdownRef.current.contains(e.target as Node)
+        !dropdownRef.current.contains(e.target as Node) &&
+        // A Submenu's panel is a portal of its own, and part of this menu.
+        !(e.target as Element).closest?.(`[data-menu-tree="${treeId}"]`)
       ) {
         handleOpenChange(false);
       }
@@ -234,7 +257,7 @@ const ContextMenuImpl = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isDropdownOpen, handleOpenChange]);
+  }, [isDropdownOpen, handleOpenChange, treeId]);
 
   /** The items the arrow keys can land on: every item that is not disabled. */
   const enabledItems = useCallback(
@@ -366,6 +389,13 @@ const ContextMenuImpl = ({
         return;
       }
 
+      const match = typeahead(e, enabledItems());
+      if (match) {
+        e.preventDefault();
+        focusItem(enabledItems(), enabledItems().indexOf(match));
+        return;
+      }
+
       if (["ArrowDown", "ArrowUp", "Home", "End"].includes(e.key)) {
         e.preventDefault();
 
@@ -405,7 +435,15 @@ const ContextMenuImpl = ({
         }
       }
     },
-    [isDropdownOpen, focusedIndex, handleOpenChange, closeAfterClick, enabledItems, focusItem],
+    [
+      isDropdownOpen,
+      focusedIndex,
+      handleOpenChange,
+      closeAfterClick,
+      enabledItems,
+      focusItem,
+      typeahead,
+    ],
   );
 
   const menu =
@@ -430,6 +468,8 @@ const ContextMenuImpl = ({
           left: menuPosition.x,
         }}
         role="menu"
+        data-menu-tree={treeId}
+        onPointerMove={onPointerMove}
         onKeyDown={handleKeyDown}
         onClick={(e) => {
           const el = e.target as HTMLElement;
@@ -448,24 +488,28 @@ const ContextMenuImpl = ({
       >
         {/* The menu's items are menu items, and the panel around them is a
               group in the menu, not a listbox of its own. */}
-        <OptionRoleContext.Provider value="menuitem">
-          <DropdownPanel
-            minWidth={minWidth}
-            maxWidth={maxWidth}
-            minHeight={minHeight}
-            radius="l"
-            role="group"
-            onSelect={(value) => {
-              onSelect?.(value);
-              if (closeAfterClick) {
-                handleOpenChange(false);
-              }
-            }}
-            {...rest}
-          >
-            {dropdown}
-          </DropdownPanel>
-        </OptionRoleContext.Provider>
+        <MenuRootContext.Provider value={menuRoot}>
+          <MenuLevelContext.Provider value={level}>
+            <OptionRoleContext.Provider value="menuitem">
+              <DropdownPanel
+                minWidth={minWidth}
+                maxWidth={maxWidth}
+                minHeight={minHeight}
+                radius="l"
+                role="group"
+                onSelect={(value) => {
+                  onSelect?.(value);
+                  if (closeAfterClick) {
+                    handleOpenChange(false);
+                  }
+                }}
+                {...rest}
+              >
+                {dropdown}
+              </DropdownPanel>
+            </OptionRoleContext.Provider>
+          </MenuLevelContext.Provider>
+        </MenuRootContext.Provider>
       </Flex>,
       document.body,
     );

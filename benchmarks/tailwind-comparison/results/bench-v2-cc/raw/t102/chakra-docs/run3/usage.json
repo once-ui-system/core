@@ -1,0 +1,170 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 12,
+      "input_total": 1003822,
+      "input_uncached": 24,
+      "cache_creation": 73515,
+      "cache_read": 930283,
+      "visible_output_tokens_o200k": 8970,
+      "visible_output_tokens_claudeLegacy": 9905,
+      "thinking_blocks": 7
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t102/chakra-docs/run3/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/README.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/provider.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/color-mode.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/drawer.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/breadcrumb.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/package.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/theming"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/llms.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/theming/customization.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/theming/colors-2.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/theming"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/theming/global-css.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/theming"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/theming/radii.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/components/drawer.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "."
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/components"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/components/stat.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/switch.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/field.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/tsconfig.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/tooltip.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/avatar.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/toaster.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v2-cc/raw/t102/chakra-docs/run3/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "K"
+}

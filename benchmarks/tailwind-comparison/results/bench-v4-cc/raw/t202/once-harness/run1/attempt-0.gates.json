@@ -1,0 +1,236 @@
+{
+  "arm": "A",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2538
+    },
+    "build": {
+      "ok": true,
+      "ms": 15950
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 2319,
+          "height": 2878,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 2319,
+          "height": 2404,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 2411,
+          "height": 2010,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 2319,
+              "height": 2878,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 2319,
+              "height": 2404,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 2411,
+              "height": 2010,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 48,
+            "serious_or_critical": 1,
+            "ids": [
+              "label-content-name-mismatch:serious:48"
+            ]
+          }
+        },
+        "/guests": {
+          "viewports": {
+            "phone": {
+              "text": 3056,
+              "height": 2740,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 3056,
+              "height": 2444,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 3148,
+              "height": 2479,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 1,
+        "nodes": 48,
+        "serious_or_critical": 1,
+        "ids": [
+          "label-content-name-mismatch:serious:48"
+        ]
+      },
+      "interaction": {
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1774,
+          "settled": true
+        },
+        "/guests phone": {
+          "ms": 1764,
+          "settled": true
+        },
+        "/guests tablet": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/guests desktop": {
+          "ms": 1780,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 484,
+          "distinct_fontSize": 6,
+          "distinct_color": 4,
+          "distinct_background": 18,
+          "distinct_radius": 5,
+          "distinct_shadow": 1,
+          "distinct_spacing": 6,
+          "spacing_on_4px_grid": 0.871
+        },
+        "/guests": {
+          "elements": 846,
+          "distinct_fontSize": 7,
+          "distinct_color": 4,
+          "distinct_background": 12,
+          "distinct_radius": 4,
+          "distinct_shadow": 1,
+          "distinct_spacing": 9,
+          "spacing_on_4px_grid": 0.639
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 236.8,
+          "css_kb": 46.2,
+          "fcp_ms": 256,
+          "cls": 0,
+          "long_task_ms": 13
+        },
+        "/guests": {
+          "js_kb": 236.8,
+          "css_kb": 46.2,
+          "fcp_ms": 140,
+          "cls": 0,
+          "long_task_ms": 0
+        }
+      },
+      "views": {
+        "table-selected phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-phone.jpg"
+        },
+        "table-selected tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-tablet.jpg"
+        },
+        "table-selected desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "lib/theme.ts",
+    "lib/geometry.ts",
+    "lib/seating.ts",
+    "lib/useMinWidth.ts",
+    "components/PlanProvider.tsx",
+    "components/Shell.tsx",
+    "components/Panel.tsx",
+    "components/RoomPlan.tsx",
+    "components/UnseatedPanel.tsx",
+    "components/TablePanel.tsx",
+    "components/RulesPanel.tsx",
+    "components/PlanView.tsx",
+    "components/GuestsView.tsx",
+    "app/page.tsx",
+    "app/guests/page.tsx",
+    "app/layout.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ lib/data.ts: no mechanical issues\n✓ lib/theme.ts: no mechanical issues\n✓ lib/geometry.ts: no mechanical issues\n✓ lib/seating.ts: no mechanical issues\n✓ lib/useMinWidth.ts: no mechanical issues\n✓ components/PlanProvider.tsx: no mechanical issues\n✗ components/Shell.tsx: 1 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n✓ components/Panel.tsx: no mechanical issues\n✗ components/RoomPlan.tsx: 2 issue(s)\n  [layout.primitiveProps] <Row as=\"button\" type> — a layout primitive has no type. Use <Card onClick> (it renders a button; selected sets aria-pressed), Button or ToggleButton\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✗ components/UnseatedPanel.tsx: 1 issue(s)\n  [layout.primitiveProps] <Row as=\"button\" type> — a layout primitive has no type. Use <Card onClick> (it renders a button; selected sets aria-pressed), Button or ToggleButton\n✗ components/TablePanel.tsx: 1 issue(s)\n  [layout.primitiveProps] <Row as=\"button\" type> — a layout primitive has no type. Use <Card onClick> (it renders a button; selected sets aria-pressed), Button or ToggleButton\n✗ components/RulesPanel.tsx: 1 issue(s)\n  [layout.primitiveProps] <Row as=\"button\" type> — a layout primitive has no type. Use <Card onClick> (it renders a button; selected sets aria-pressed), Button or ToggleButton\n✓ components/PlanView.tsx: no mechanical issues\n✓ components/GuestsView.tsx: no mechanical issues\n✓ app/page.tsx: no mechanical issues\n✓ app/guests/page.tsx: no mechanical issues\n✗ app/layout.tsx: 1 issue(s)\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint",
+    "validator": {
+      "package_version": "3.0.0-beta.1",
+      "script_sha256": "8b6fb92b077251ad"
+    }
+  }
+}

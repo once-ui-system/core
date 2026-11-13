@@ -1,0 +1,24 @@
+{
+  "arm": "M",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/BookDialog.tsx(81,39): error TS2367: This comparison appears to be unintentional because the types 'number' and 'string' have no overlap.\ncomponents/BookDialog.tsx(101,66): error TS2353: Object literal may only specify known properties, and 'noValidate' does not exist in type 'SlotProps<ElementType<PaperProps, keyof IntrinsicElements>, DialogPaperSlotPropsOverrides, DialogOwnerState>'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 4666
+    }
+  },
+  "files": [
+    "app/theme.ts",
+    "lib/data.ts",
+    "components/ui.tsx",
+    "components/AppShell.tsx",
+    "components/BookDialog.tsx",
+    "components/ScheduleView.tsx",
+    "components/WeightChart.tsx",
+    "components/PatientRecord.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx"
+  ]
+}

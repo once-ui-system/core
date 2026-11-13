@@ -9,7 +9,9 @@
   "placement": "Placement",
   "trigger": "!ReactNode",
   "children": "ReactNode",
-  "openOn": "\"click\" | \"contextmenu\" = click",
+  "openOn": "\"click\" | \"hover\" | \"contextmenu\" = click",
+  "openDelay": "number",
+  "closeDelay": "number",
   "disabled": "boolean",
   "contents": "boolean",
   "selectedOption": "string",
@@ -26,6 +28,7 @@
   "optionsCount": "number",
   "dropdownId": "string",
   "disableTriggerClick": "boolean",
+  "alignSelected": "boolean",
   "onFocusCapture": "React.FocusEventHandler<HTMLDivElement>",
   "onBlurCapture": "React.FocusEventHandler<HTMLDivElement>"
  },
@@ -36,6 +39,7 @@
  ],
  "pairsWith": [
   "Option",
+  "Submenu",
   "Button",
   "Column"
  ],

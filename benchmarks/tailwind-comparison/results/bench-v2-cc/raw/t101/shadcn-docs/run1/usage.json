@@ -1,0 +1,115 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 7,
+      "input_total": 596614,
+      "input_uncached": 14,
+      "cache_creation": 113672,
+      "cache_read": 482928,
+      "visible_output_tokens_o200k": 9514,
+      "visible_output_tokens_claudeLegacy": 10290,
+      "thinking_blocks": 4
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t101/shadcn-docs/run1/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/README.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/globals.css"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/sidebar.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/button.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/card.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/breadcrumb.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/table.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/input.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/switch.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "project/package.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/badge.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/hooks/use-mobile.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v2-cc/raw/t101/shadcn-docs/run1/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "C"
+}

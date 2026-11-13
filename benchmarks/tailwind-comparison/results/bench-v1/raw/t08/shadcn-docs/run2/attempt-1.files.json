@@ -1,0 +1,14 @@
+{
+  "files": [
+    "lib/data.ts",
+    "lib/onboarding.ts",
+    "components/onboarding/step-indicator.tsx",
+    "components/onboarding/summary-card.tsx",
+    "components/onboarding/steps.tsx",
+    "components/onboarding/wizard.tsx",
+    "components/onboarding/welcome-content.tsx",
+    "app/page.tsx",
+    "app/welcome/page.tsx"
+  ],
+  "rejected": []
+}

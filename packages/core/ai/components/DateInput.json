@@ -19,6 +19,7 @@
   "defaultOpen": "boolean",
   "onOpenChange": "(open: boolean) => void",
   "minHeight": "number",
+  "fillWidth": "boolean",
   "timePicker": "boolean",
   "minDate": "Date",
   "maxDate": "Date",
