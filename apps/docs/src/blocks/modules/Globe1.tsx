@@ -2,6 +2,7 @@
 
 import { dev, Row } from "@once-ui-system/core";
 import {
+  Component,
   forwardRef,
   type ReactNode,
   useEffect,
@@ -100,13 +101,71 @@ const locations = [
   },
 ];
 
+/**
+ * Whether this browser can draw WebGL at all. Firefox with hardware
+ * acceleration off, a blocked GPU or a locked-down profile has none, and
+ * three.js then throws "Error creating WebGL context" from inside the globe.
+ */
+function hasWebGL(): boolean {
+  try {
+    const canvas = document.createElement("canvas");
+    const gl = canvas.getContext("webgl2") ?? canvas.getContext("webgl");
+    // Hand the context back at once: browsers allow only a few at a time.
+    gl?.getExtension("WEBGL_lose_context")?.loseContext();
+    return gl != null;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Catches a WebGL failure that the check above cannot predict (the browser
+ * ran out of contexts, the GPU process crashed), so the globe falls back
+ * instead of taking the page down with it.
+ */
+class GlobeBoundary extends Component<{ children: ReactNode; fallback: ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  render() {
+    return this.state.failed ? this.props.fallback : this.props.children;
+  }
+}
+
+/** A flat stand-in where the globe cannot be drawn: an outlined sphere. */
+function GlobeFallback() {
+  return (
+    <Row fill center>
+      <Row
+        aria-hidden="true"
+        radius="full"
+        border="neutral-alpha-medium"
+        style={{
+          width: "min(60%, 60vh)",
+          aspectRatio: "1",
+          background:
+            "radial-gradient(circle at 35% 30%, rgba(127, 116, 201, 0.25), rgba(127, 116, 201, 0.04) 70%)",
+        }}
+      />
+    </Row>
+  );
+}
+
 export const Globe1 = forwardRef<Globe1Handle, WorldMapProps>(
   ({ height = "100%", width = "100%", activePointId = null }, ref) => {
     const globeEl = useRef<GlobeMethods | undefined>(undefined);
     // react-globe.gl reaches for `window` as soon as it is imported, so it
     // loads in the browser only: importing it at the top breaks server rendering.
     const [Globe, setGlobe] = useState<typeof GlobeComponent | null>(null);
+    const [webgl, setWebgl] = useState(true);
     useEffect(() => {
+      if (!hasWebGL()) {
+        setWebgl(false);
+        return;
+      }
       let live = true;
       import("react-globe.gl").then((mod) => live && setGlobe(() => mod.default));
       return () => {
@@ -259,27 +318,33 @@ export const Globe1 = forwardRef<Globe1Handle, WorldMapProps>(
 
     return (
       <Row fill style={{ width, height }}>
-        {Globe && (
-          <Globe
-            ref={globeEl}
-            htmlElementsData={points}
-            htmlElement={htmlElementRenderer}
-            htmlTransitionDuration={200}
-            onGlobeReady={() => {
-              if (globeEl.current && points.length > 0) {
-                globeEl.current.pointOfView(
-                  { lat: points[0].lat, lng: points[0].lng, altitude: 2.5 },
-                  1000,
-                );
-              }
-            }}
-            polygonsData={landPolygons}
-            polygonCapColor={() => "rgba(127, 116, 201, 0.1)"} // fill
-            polygonSideColor={() => "rgba(127, 116, 201, 0)"} // sides
-            polygonStrokeColor={() => "rgb(128, 140, 194)"} // outlines
-            polygonAltitude={0.008} // elevation
-            atmosphereColor="#000000" // atmosphere (alpha not supported by THREE.Color)
-          />
+        {!webgl ? (
+          <GlobeFallback />
+        ) : (
+          Globe && (
+            <GlobeBoundary fallback={<GlobeFallback />}>
+              <Globe
+                ref={globeEl}
+                htmlElementsData={points}
+                htmlElement={htmlElementRenderer}
+                htmlTransitionDuration={200}
+                onGlobeReady={() => {
+                  if (globeEl.current && points.length > 0) {
+                    globeEl.current.pointOfView(
+                      { lat: points[0].lat, lng: points[0].lng, altitude: 2.5 },
+                      1000,
+                    );
+                  }
+                }}
+                polygonsData={landPolygons}
+                polygonCapColor={() => "rgba(127, 116, 201, 0.1)"} // fill
+                polygonSideColor={() => "rgba(127, 116, 201, 0)"} // sides
+                polygonStrokeColor={() => "rgb(128, 140, 194)"} // outlines
+                polygonAltitude={0.008} // elevation
+                atmosphereColor="#000000" // atmosphere (alpha not supported by THREE.Color)
+              />
+            </GlobeBoundary>
+          )
         )}
 
         {useMemo(() => {

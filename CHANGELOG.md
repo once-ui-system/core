@@ -24,6 +24,19 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **`Pulse` keeps pulsing for visitors who ask for reduced motion.** The global reduced-motion
+  rule cut its halo to a single 0.01ms run, which left a flat full-size disc where the live dot
+  should be. With reduced motion the halo now stays at a fixed size and fades in and out.
+
+- **A CodeBlock's file tabs slide.** The row of files above the code is now a `SegmentedControl`,
+  so the selected background slides from one file to the next instead of jumping, and the files are
+  real tabs (arrow keys move between them). The rail draws no border of its own inside the block's.
+
+- **Menu items no longer draw a border inside the menu.** The highlighted, hovered and focused
+  states of `Option` (Dropdown, ContextMenu, Select, UserMenu) kept a 1px border, so the first item,
+  highlighted as soon as a menu opened, read as a box nested inside the panel's border. They now
+  show only the fill; keyboard focus keeps its brand ring.
+
 - **A Select's highlight stays where the arrow keys put it.** The list scrolling under a
   resting pointer fired `mouseover`, which moved the highlight back under the pointer, so the
   keys seemed to skip or stick. The highlight now follows the pointer only when it moves.
