@@ -103,7 +103,9 @@ describe("ai task bundles as one Markdown read", () => {
       expect(md).toContain("## Layout");
       if (task.example) expect(md).toContain(`## Gold example (\`${task.example}\`)`);
       expect(md).not.toMatch(/see spec\.json/);
-      expect(md.length).toBeLessThan(50_000);
+      // Table's virtual rows and editable cells put the dashboard bundle just
+      // over 50k; core#480 raises this cap to 57k with the agent guidance.
+      expect(md.length).toBeLessThan(51_000);
     },
   );
 

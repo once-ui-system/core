@@ -317,7 +317,7 @@ const DEFAULT_LABELS: ResolvedLabels = {
   },
   options: {
     solid: { color: "Color", inverse: "Inverse", contrast: "Contrast" },
-    effect: { flat: "Flat", plastic: "Plastic" },
+    effect: { flat: "Flat", plastic: "Plastic", glow: "Glow" },
     surface: { filled: "Filled", translucent: "Translucent" },
     transition: { all: "All", micro: "Micro", macro: "Macro", none: "None" },
     dataStyle: { categorical: "Categorical", divergent: "Divergent", sequential: "Sequential" },
@@ -1011,6 +1011,7 @@ const EffectRow = segmentedRow(
   ({ options: { effect } }) => [
     { label: solidSwatch("", "brand-weak", effect.flat), value: "flat" },
     { label: solidSwatch("", "brand-weak", effect.plastic), value: "plastic" },
+    { label: solidSwatch("", "brand-weak", effect.glow), value: "glow" },
   ],
   "flat",
 );

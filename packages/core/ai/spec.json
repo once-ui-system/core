@@ -1500,6 +1500,32 @@
    "speaking",
    "sleeping"
   ],
+  "MascotSvgOptions": {
+   "seed": "string | number",
+   "mood": "MascotMood",
+   "accessory": "string",
+   "schemes": "Partial<Record<\"brand\" | \"accent\" | \"neutral\", string>>",
+   "lookAt": "{ x: number; y: number }",
+   "shadow": "boolean",
+   "size": "number",
+   "title": "string",
+   "color": "\"brand\" | \"accent\" | \"neutral\" | (string & {})",
+   "roundness": "number",
+   "aspect": "number",
+   "bodyPath": "string",
+   "surface": "\"glossy\" | \"matte\" | \"flat\" | \"glass\"",
+   "eyes": "\"tile\" | \"pill\" | \"round\" | \"wide\" | \"dot\" | { path: string }",
+   "eyeSize": "number",
+   "eyeSpacing": "number",
+   "eyeHeight": "number",
+   "eyeColor": "string",
+   "mouth": "\"none\" | \"smile\" | \"dot\" | \"line\"",
+   "brows": "boolean",
+   "cheeks": "boolean",
+   "personality": "\"calm\" | \"default\" | \"bouncy\"",
+   "sides": "\"classic\" | \"tints\" | \"mono\" | Partial<Record<\"top\" | \"front\" | \"right\" | \"bottom\" | \"back\" | \"left\", string>>",
+   "face": "\"3d\" | \"flat\""
+  },
   "MaskOptions": {
    "maskPosition": "string"
   },
@@ -1564,6 +1590,7 @@
    "dusk"
   ],
   "NumericKeys": "Array<Extract<keyof T, string>>",
+  "OgCardProps": "OgCard props",
   "OgData": {
    "title": "!string",
    "description": "!string",
@@ -1585,6 +1612,45 @@
    "allowHttp": "boolean",
    "isAllowed": "(url: URL) => boolean | Promise<boolean>"
   },
+  "OgFont": {
+   "name": "!string",
+   "weight": "400 | 500 | 600 | 700 | 800 | 900",
+   "style": "\"normal\" | \"italic\"",
+   "data": "ArrayBuffer | Uint8Array",
+   "path": "string",
+   "google": "string"
+  },
+  "OgImageRouteOptions": {
+   "skin": "!OgSkin",
+   "fallbackTitle": "string",
+   "headers": "Record<string, string>"
+  },
+  "OgLayout": [
+   "page",
+   "photo",
+   "hero"
+  ],
+  "OgMascot": [
+   "Omit<MascotSvgOptions, \"title\" | \"size\" | \"accessory\" | \"mood\" | \"lookAt\"> & { accessory?: string | ReactElement<unknown, string | JSXElementConstructor<any>> | undefined; }",
+   "{ svg: string; }"
+  ],
+  "OgMood": [
+   "neutral",
+   "happy",
+   "surprised",
+   "sad",
+   "skeptical",
+   "wink",
+   "focused",
+   "determined",
+   "love",
+   "excited",
+   "laughing",
+   "embarrassed",
+   "crying",
+   "angry",
+   "confused"
+  ],
   "OgProxyRouteOptions": {
    "timeout": "number",
    "maxBytes": "number",
@@ -1607,11 +1673,49 @@
    "proxy": "!string",
    "generate": "!string"
   },
+  "OgSchemeName": [
+   "blue",
+   "indigo",
+   "violet",
+   "magenta",
+   "pink",
+   "red",
+   "orange",
+   "yellow",
+   "moss",
+   "green",
+   "emerald",
+   "aqua",
+   "cyan",
+   "sand",
+   "gray",
+   "slate",
+   "rose",
+   "mint",
+   "dusk"
+  ],
   "OgServiceConfig": {
    "proxyImageUrl": "(url: string) => string",
    "proxyFaviconUrl": "(url: string) => string",
    "fetchOgUrl": "string",
    "proxyOgUrl": "string"
+  },
+  "OgSkin": {
+   "name": "!string",
+   "domain": "string",
+   "brand": "OgSchemeName | (string & {})",
+   "accent": "OgSchemeName | (string & {})",
+   "background": "string",
+   "logo": "string",
+   "mark": "string",
+   "mascot": "OgMascot | false",
+   "fonts": "OgFont[]",
+   "headingFont": "string",
+   "bodyFont": "string",
+   "monoFont": "string",
+   "emphasisFont": "string",
+   "mood": "OgMood",
+   "imageHosts": "string[]"
   },
   "OnceUIAdapters": {
    "Link": "!React.ComponentType<AdapterLinkProps & React.RefAttributes<HTMLAnchorElement>>",
@@ -1811,6 +1915,7 @@
   ],
   "SchemeRampWeight": [
    "100",
+   "1200",
    "200",
    "300",
    "400",
@@ -1820,8 +1925,7 @@
    "800",
    "900",
    "1000",
-   "1100",
-   "1200"
+   "1100"
   ],
   "Schemes": [
    "blue",
@@ -1979,7 +2083,8 @@
   },
   "SolidStyle": [
    "flat",
-   "plastic"
+   "plastic",
+   "glow"
   ],
   "SolidType": [
    "color",
@@ -2355,7 +2460,14 @@
    "width": "string",
    "label": "string",
    "filter": "TableColumnFilter<T>",
-   "hide": "ColumnHide"
+   "hide": "ColumnHide",
+   "edit": "TableColumnEdit<T>"
+  },
+  "TableColumnEdit": {
+   "onCommit": "!(row: T, value: string, index: number) => void",
+   "value": "(row: T) => string",
+   "type": "\"text\" | \"number\"",
+   "disabled": "(row: T, index: number) => boolean"
   },
   "TableColumnFilter": {
    "options": "!{ value: string; label: ReactNode }[]",
@@ -2381,6 +2493,7 @@
    "noResultsHint": "!string",
    "clearFilters": "!string",
    "results": "!(count: number) => string",
+   "edit": "!string",
    "previous": "!string",
    "next": "!string",
    "first": "!string",
@@ -4289,6 +4402,8 @@
     "emptyState": "ReactNode",
     "noResultsState": "ReactNode",
     "stickyHeader": "boolean = false",
+    "virtualize": "boolean = false",
+    "rowHeight": "number = 49",
     "striped": "boolean = false",
     "hoverable": "boolean = true",
     "compact": "boolean = false",
@@ -7014,6 +7129,18 @@
    "signature": "(seed: string | number) => MascotLook",
    "doc": "A whole look from a seed: a user id, a product name, any string or number."
   },
+  "mascotDataUrl": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(options?: MascotSvgOptions) => string",
+   "doc": "The SVG as a `data:` URL, ready for an `<img src>`, including inside `ImageResponse`."
+  },
+  "mascotSvg": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(options?: MascotSvgOptions) => string",
+   "doc": "The mascot as a standalone SVG string: same look options as `Mascot`, one still expression."
+  },
   "workingVerbs": {
    "group": "modules",
    "kind": "value",
@@ -7232,6 +7359,74 @@
    "kind": "value",
    "type": "readonly string[]",
    "doc": "Raster image types the proxy passes through by default."
+  },
+  "createOgImageRoute": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "function",
+   "signature": "(options: OgImageRouteOptions) => { GET: (request: Request) => Promise<Response>; }",
+   "doc": "`GET /api/og/generate?title=…&eyebrow=…&description=…&mood=…&layout=…&image=…` → a 1200 × 630 PNG in the skin's look."
+  },
+  "defineOgSkin": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "function",
+   "signature": "(skin: OgSkin) => OgSkin",
+   "doc": "Type-checks a skin."
+  },
+  "OG_IMAGE_HEIGHT": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "value",
+   "type": "630"
+  },
+  "OG_IMAGE_WIDTH": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "value",
+   "type": "1200"
+  },
+  "ogImageUrl": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "function",
+   "signature": "(route: string, card: Partial<OgCardProps> & { title: string; v?: string | number }) => string",
+   "doc": "The URL of a page's card, for `Meta.generate({ image })` or `openGraph.images`."
+  },
+  "ogTitleSize": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "function",
+   "signature": "(title: string, layout: OgLayout) => number",
+   "doc": "The title's size in pixels, so short titles land big and long ones still fit."
+  },
+  "parseOgTitle": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "function",
+   "signature": "(title: string) => { text: string; em: boolean }[]",
+   "doc": "Splits `*emphasis*` out of a title, so it can be drawn in the brand color."
+  },
+  "readOgCard": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "function",
+   "signature": "(url: URL, skin: OgSkin, fallbackTitle?: string) => { title: string; eyebrow: string | undefined; description: string | undefined; mood: OgMood; layout: OgLayout; image: string | undefined; }",
+   "doc": "Reads a card from the query string: `title`, `eyebrow`, `description`, `mood`, `layout`, `image`."
+  },
+  "renderOgCard": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "function",
+   "signature": "(skin: OgSkin, card: OgCardProps, options?: { origin?: string }) => Promise<ReactElement>",
+   "doc": "The card as an element, for your own `ImageResponse` or a test."
+  },
+  "OG_SCHEMES": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "value",
+   "type": "{ readonly aqua: { readonly 200: \"#081719\"; readonly 500: \"#0b8184\"; readonly 700: \"#01c7c3\"; readonly 900: \"#78f6e4\"; }; readonly blue: { readonly 200: \"#0d0b44\"; readonly 500: \"#2d69fa\"; readonly 700: \"#84b5fd\"; readonly 900: \"#cbe3fb\"; }; ... 16 more ...; readonly yellow: { ...; }; }",
+   "doc": "The color schemes as sRGB hex, for Open Graph images: the image renderer reads neither CSS variables nor `oklch()`."
   },
   "defineConfig": {
    "group": "config",

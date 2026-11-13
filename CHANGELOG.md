@@ -30,6 +30,7 @@ item (see `ROADMAP.md`, Week 4).
   `parseMascotDesign` (reads stored or AI-written values safely, never throws),
   `mascotDesignProps`, `MASCOT_DESIGN_DEFAULTS` and `MASCOT_DESIGN_RANGES`. The Mascot
   reads its defaults from the same constant.
+- **Glow solid style.** `solidStyle: "glow"` (`data-solid-style="glow"`) joins flat and plastic: a solid lights its own colour into a soft two-layer halo with a light edge along the top. It applies to primary buttons and icon buttons in every tone, checked switches, checkboxes and radios, and selected Tag toggles with a tone; secondary and neutral controls never glow. Put the attribute on any element to light up one area only. The halo is static (no filter, no animation), brightens on hover, is tighter and paler in the light theme, and goes away under `prefers-contrast: more` and forced colours. New tokens `--solid-glow-near`, `--solid-glow-far`, `--solid-glow-near-mix`, `--solid-glow-far-mix` and `--solid-glow-rim`; the shared `glow.scss` mixin in foundations draws it. The Style panel's Effect row gets a Glow option.
 
 ## [3.0.0] - Unreleased
 
@@ -58,6 +59,20 @@ entry below that had landed by then:
   and sit behind the body, on it or in front of the face as each needs (the
   helmet's glass goes over the face). `accessoryColor` tints them all. Your
   own SVG still works. `MASCOT_ACCESSORIES` lists the names.
+- **Open Graph images: `createOgImageRoute` and `defineOgSkin`** in `@once-ui-system/core/next`.
+  One route draws a 1200 × 630 card for every page in the product's skin: the title set
+  large in the heading font (`*words*` in the brand color, optionally in an italic
+  `emphasisFont`), an eyebrow, a description, the domain and the product's mascot looking
+  at the title. Layouts `page`, `hero` and `photo`; `image=` only loads from the app's own
+  origin or the skin's `imageHosts`. Fonts come from disk, data or a Google family fetched
+  once, and a font that fails to load never fails the card. `Meta.generate` already points
+  pages at `/api/og/generate`, so a site gets per-page cards by adding the route.
+  `ogImageUrl`, `readOgCard`, `renderOgCard` and `OG_SCHEMES` (the color schemes as hex)
+  come with it. Docs: Utils › OG images.
+- **`mascotSvg` and `mascotDataUrl`**: the mascot as a still SVG string, with the same look
+  options as `Mascot` and a mood, every color written out, for places without React or
+  CSS (Open Graph images, emails, favicons). `Mascot` and `mascotSvg` share their geometry
+  from `mascotShape.ts`.
 - **`Select alignSelected`** (2.x main's `position="aligned"`, renamed: `position` is the CSS position in 3.0): the list opens with the selected
   option sitting on the field and the others above and below it, as macOS draws a
   pop-up button. Near a viewport edge, and on a searchable or multiple Select, it opens

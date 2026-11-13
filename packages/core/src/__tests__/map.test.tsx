@@ -123,6 +123,10 @@ vi.mock("maplibre-gl", () => {
       return { lng: this.lngLat[0], lat: this.lngLat[1] };
     }
     addTo(map: FakeMap) {
+      // As MapLibre 5 does to every marker element.
+      this.options.element.setAttribute("role", "button");
+      this.options.element.setAttribute("aria-label", "Map marker");
+      this.options.element.setAttribute("tabindex", "0");
       map.container.appendChild(this.options.element);
       return this;
     }
@@ -218,6 +222,14 @@ describe("Map", () => {
     expect(calls.maps[0].getCanvas().getAttribute("aria-label")).toBe("Budapest");
   });
 
+  it("pins the canvas container inline, so an app's maplibre-gl.css cannot collapse it", async () => {
+    renderMap(<MapView />);
+    await settle();
+    const container = calls.maps[0].container as HTMLElement;
+    expect(container.style.position).toBe("absolute");
+    expect(container.style.inset).toBe("0px");
+  });
+
   it("frames bounds on first render and again when they change", async () => {
     const view = renderMap(
       <MapView
@@ -282,6 +294,12 @@ describe("Map", () => {
     await settle();
     expect(calls.markers[0].lngLat).toEqual([19.05, 47.51]);
     expect(screen.getByRole("link", { name: "45M Ft" })).toBeTruthy();
+    // The wrapper MapLibre made a button is a plain box again: one control, one name.
+    const box = calls.markers[0].options.element as HTMLElement;
+    expect(box.contains(screen.getByRole("link", { name: "45M Ft" }))).toBe(true);
+    expect(box.hasAttribute("role")).toBe(false);
+    expect(box.hasAttribute("aria-label")).toBe(false);
+    expect(box.hasAttribute("tabindex")).toBe(false);
   });
 
   it("clusters items into a pill that zooms in", async () => {

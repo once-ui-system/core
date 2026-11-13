@@ -70,6 +70,7 @@
 [data-scaling="90"]
 [data-scaling="95"]
 [data-scaling]
+[data-solid-style="glow"]
 [data-solid-style="plastic"]
 [data-solid="color"]
 [data-solid="contrast"]

@@ -43,6 +43,15 @@ describe("Mascot", () => {
     expect(container.querySelectorAll("text")).toHaveLength(2);
   });
 
+  it("shows a trail of thought only while thinking, so the state reads at a glance", () => {
+    const { container, rerender } = render(<Mascot />);
+    expect(container.querySelector('[class*="thought"]')).toBeNull();
+    rerender(<Mascot state="thinking" />);
+    expect(container.querySelectorAll('[class*="thought"] circle')).toHaveLength(3);
+    rerender(<Mascot state="speaking" />);
+    expect(container.querySelector('[class*="thought"]')).toBeNull();
+  });
+
   it("adds a mouth, brows, cheeks and an accessory when asked", () => {
     const { container } = render(
       <Mascot mouth="smile" brows cheeks accessory={<circle data-testid="hat" r={4} />} />,

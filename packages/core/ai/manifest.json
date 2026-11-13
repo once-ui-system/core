@@ -180,13 +180,31 @@
     "nextAdapters",
     "createOgFetchRoute",
     "createOgProxyRoute",
-    "DEFAULT_OG_IMAGE_TYPES"
+    "DEFAULT_OG_IMAGE_TYPES",
+    "createOgImageRoute",
+    "defineOgSkin",
+    "OG_IMAGE_HEIGHT",
+    "OG_IMAGE_WIDTH",
+    "ogImageUrl",
+    "ogTitleSize",
+    "parseOgTitle",
+    "readOgCard",
+    "renderOgCard",
+    "OG_SCHEMES"
    ],
    "types": [
     "NextAdapterProviderProps",
+    "OgCardProps",
     "OgFetchRouteOptions",
+    "OgFont",
+    "OgImageRouteOptions",
+    "OgLayout",
+    "OgMascot",
+    "OgMood",
     "OgProxyRouteOptions",
-    "OgRouteHandlers"
+    "OgRouteHandlers",
+    "OgSchemeName",
+    "OgSkin"
    ]
   },
   "@once-ui-system/core/config": {

@@ -261,7 +261,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - columns: TableColumn<T>[]
 - rows: T[]
 - onRowClick?: (row: T, index: number) => void
-- searchable, columnsMenu, selectable, paginated, showFirstLast, loading, keepRowsWhileLoading, stickyHeader, striped, compact?: boolean = false
+- searchable, columnsMenu, selectable, paginated, showFirstLast, loading, keepRowsWhileLoading, stickyHeader, virtualize, striped, compact?: boolean = false
 - searchPlaceholder?: string = Search...
 - search, aria-label, aria-labelledby?: string
 - defaultSearch?: string = ""
@@ -289,6 +289,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - defaultPerPage?: number = 10
 - perPageOptions?: number[]
 - onPerPageChange?: (perPage: number) => void
+- rowHeight?: number = 49
 - hoverable?: boolean = true
 - labels?: Partial<TableLabels>
 
@@ -594,11 +595,12 @@ type Speed = "number" | "medium" | "slow" | "fast"
 type SurfaceStyle = "filled" | "translucent"
 type TShirtSizes = "s" | "xl" | "l" | "m" | "xs"
 type TableAction = { icon: string; label?: string; tooltip?: string; variant?: "primary" | "secondary" | "tertiary" | "ghost"; tone?: Tone; onClick: (row: unknown, index: number) => void; disabled?: (row: unknown, index: number) => boolean }
-type TableColumn = { key: string; header: ReactNode; cell?: (row: T, index: number) => ReactNode; sortable?: boolean; sort?: (a: T, b: T) => number; align?: "left" | "center" | "right"; width?: string; label?: string; filter?: TableColumnFilter<T>; hide?: ColumnHide }
+type TableColumn = { key: string; header: ReactNode; cell?: (row: T, index: number) => ReactNode; sortable?: boolean; sort?: (a: T, b: T) => number; align?: "left" | "center" | "right"; width?: string; label?: string; filter?: TableColumnFilter<T>; hide?: ColumnHide; edit?: TableColumnEdit<T> }
+type TableColumnEdit = { onCommit: (row: T, value: string, index: number) => void; value?: (row: T) => string; type?: "text" | "number"; disabled?: (row: T, index: number) => boolean }
 type TableColumnFilter = { options: { value: string; label: ReactNode }[]; multiple?: boolean; match?: (row: T, value: TableFilterValue) => boolean }
 type TableFilterValue = "string" | "string[]"
 type TableFilters = { [key: string]?: TableFilterValue }
-type TableLabels = { selectAll: string; selectRow: string; pagination: string; search: string; actions: string; filterAll: string; columns: string; noResults: string; noResultsHint: string; clearFilters: string; results: (count: number) => string; previous: string; next: string; first: string; last: string; perPage: string }
+type TableLabels = { selectAll: string; selectRow: string; pagination: string; search: string; actions: string; filterAll: string; columns: string; noResults: string; noResultsHint: string; clearFilters: string; results: (count: number) => string; edit: string; previous: string; next: string; first: string; last: string; perPage: string }
 type TableQuery = { page: number; perPage: number; sort: TableSort | null; search: string; filters: TableFilters }
 type TableSort = { key: string; direction: "asc" | "desc" }
 type TextBreakpointHide = { hide?: boolean }
