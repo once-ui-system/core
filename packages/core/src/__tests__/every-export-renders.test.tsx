@@ -129,6 +129,7 @@ const parents: Record<string, (child: React.ReactElement) => React.ReactElement>
   SelectionBox: inCanvas,
   SnapGuides: inCanvas,
   TransformHandles: inCanvas,
+  SidebarTrigger: (child) => <Core.SidebarProvider>{child}</Core.SidebarProvider>,
   SortableHandle: (child) => <Core.Sortable items={["a"]}>{child}</Core.Sortable>,
   SortableItem: (child) => <Core.Sortable items={["a"]}>{child}</Core.Sortable>,
   Tab: (child) => <Core.Tabs defaultValue="a">{child}</Core.Tabs>,

@@ -7,6 +7,7 @@ import type { IconName } from "../icons.js";
 import type { LeafProps } from "../interfaces.js";
 import type { RadiusSize, Tone, TShirtSizes } from "../types.js";
 import { leafLayout, takeLeafProps } from "../utils/leafLayout.js";
+import { dropdownTriggerProps, useDropdownTrigger } from "./DropdownTriggerContext.js";
 import { ElementType } from "./ElementType.js";
 import { Flex } from "./Flex.js";
 import { Icon } from "./Icon.js";
@@ -82,11 +83,16 @@ const ToggleButton = ({
   ...rest
 }: ToggleButtonProps & { ref?: React.Ref<HTMLElement> }) => {
   const [leaf, props] = takeLeafProps(rest);
+  // As a Dropdown's trigger it is the control: it says what it opens, and the
+  // Dropdown's wrapper stops claiming role="button" around it.
+  const trigger = useDropdownTrigger();
+  const triggerProps = dropdownTriggerProps(trigger, href, props.onClick);
   // Without an href it is a button even with no handler yet: as a div it
   // was skipped by Tab. A plain toggle says whether it is on with
   // aria-pressed; one that carries its own state role (tab, menuitemradio)
   // or aria-expanded/-selected/-checked keeps that instead.
   const ownsState =
+    triggerProps !== undefined ||
     props.role !== undefined ||
     props["aria-selected"] !== undefined ||
     props["aria-checked"] !== undefined ||
@@ -102,6 +108,7 @@ const ToggleButton = ({
   return (
     <ElementType
       ref={ref}
+      {...triggerProps}
       href={href}
       type={href ? undefined : (props.type ?? "button")}
       aria-pressed={href || ownsState ? undefined : selected}

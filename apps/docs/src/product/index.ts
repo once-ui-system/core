@@ -31,6 +31,7 @@ export * from "./MatrixFxExample";
 export * from "./ModalExamples";
 export * from "./NavIconExample";
 export * from "./NavItemExamples";
+export * from "./SidebarExamples";
 export * from "./PageList";
 export * from "./PaginationExamples";
 export * from "./PeerCursorExample";

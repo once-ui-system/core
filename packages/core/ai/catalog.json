@@ -72,6 +72,7 @@
   "SegmentedControl": {"purpose":"Pick one of 2–5 options from a row of buttons (billing period, view mode)"},
   "Select": {"purpose":"Dropdown select for one or many options, with optional search"},
   "Setting": {"purpose":"Settings row: label and description left, one control right; `axes` for X/Y pairs, `control` and `open` for a group"},
+  "Sidebar": {"purpose":"Resizable app sidebar that folds to an icon rail and is a drawer on phones"},
   "Skeleton": {"purpose":"Loading placeholder shape (line, block, circle) with a staggerable delay in ms"},
   "Slider": {"purpose":"Slider for a number, or with `range` a [start, end] pair; label, readout, error and size"},
   "SmartLink": {"purpose":"Styled link with prefix/suffix icons and a selected state; routes through the framework adapter","avoid":"Raw a elements"},

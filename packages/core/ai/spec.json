@@ -2014,6 +2014,25 @@
    "m",
    "xs"
   ],
+  "SidebarCollapsible": [
+   "false",
+   "rail",
+   "offcanvas"
+  ],
+  "SidebarContextValue": {
+   "collapsed": "!boolean",
+   "setCollapsed": "!(next: boolean) => void",
+   "toggle": "!() => void",
+   "width": "!number",
+   "setWidth": "!(next: number) => void",
+   "reset": "!() => void",
+   "minWidth": "!number",
+   "maxWidth": "!number",
+   "mobile": "!boolean",
+   "mobileOpen": "!boolean",
+   "setMobileOpen": "!(next: boolean) => void",
+   "shortcut": "!string | false"
+  },
   "SideContent": {
    "src": "!string | React.ReactNode",
    "alt": "string"
@@ -4089,6 +4108,98 @@
     "control": "ReactNode",
     "open": "boolean",
     "axisWidth": "number | CSSUnit"
+   }
+  },
+  "Sidebar": {
+   "group": "components",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "collapsible": "SidebarCollapsible",
+    "resizable": "boolean",
+    "expandOnHover": "boolean",
+    "railWidth": "number",
+    "labels": "{ resize?: string; menu?: string }",
+    "defaultWidth": "number",
+    "width": "number",
+    "onWidthChange": "(width: number) => void",
+    "defaultCollapsed": "boolean",
+    "collapsed": "boolean",
+    "onCollapsedChange": "(collapsed: boolean) => void",
+    "minWidth": "number",
+    "maxWidth": "number",
+    "persist": "string",
+    "shortcut": "string | false",
+    "mobileBelow": "\"xs\" | \"s\" | \"m\" | \"l\" | false"
+   }
+  },
+  "SidebarContent": {
+   "group": "components",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ]
+  },
+  "SidebarFooter": {
+   "group": "components",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ]
+  },
+  "SidebarHeader": {
+   "group": "components",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ]
+  },
+  "SidebarProvider": {
+   "group": "components",
+   "props": {
+    "children": "ReactNode",
+    "defaultWidth": "number = 256",
+    "width": "number",
+    "onWidthChange": "(width: number) => void",
+    "defaultCollapsed": "boolean = false",
+    "collapsed": "boolean",
+    "onCollapsedChange": "(collapsed: boolean) => void",
+    "minWidth": "number = 200",
+    "maxWidth": "number = 400",
+    "persist": "string",
+    "shortcut": "string | false = mod+b",
+    "mobileBelow": "\"xs\" | \"s\" | \"m\" | \"l\" | false = s"
+   }
+  },
+  "SidebarTrigger": {
+   "group": "components",
+   "props": {
+    "icon": "IconName",
+    "tooltip": "ReactNode",
+    "size": "React.ComponentProps<typeof IconButton>[\"size\"]",
+    "variant": "React.ComponentProps<typeof IconButton>[\"variant\"] = tertiary",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "onClick": "React.MouseEventHandler<HTMLElement>",
+    "labels": "{ collapse?: string; expand?: string; menu?: string }"
    }
   },
   "Skeleton": {
@@ -6883,6 +6994,12 @@
    "kind": "function",
    "signature": "(src: string) => string",
    "doc": "The value a photo has in a deep link: its file name, which stays put as photos are added or reordered."
+  },
+  "useSidebar": {
+   "group": "components",
+   "kind": "hook",
+   "signature": "() => SidebarContextValue",
+   "doc": "The sidebar's state, for a control outside it: a toggle in the top bar, a page that wants more room."
   },
   "arrayMove": {
    "group": "components",

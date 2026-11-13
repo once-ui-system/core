@@ -65,6 +65,7 @@ export { ScrollLock } from "./ScrollLock.js";
 export * from "./SegmentedControl.js";
 export * from "./Select.js";
 export * from "./Setting.js";
+export * from "./Sidebar.js";
 export * from "./Skeleton.js";
 export * from "./Slider.js";
 export * from "./SmartLink.js";

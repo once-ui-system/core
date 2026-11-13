@@ -810,6 +810,41 @@
     "tags": ["effect", "marketing"],
     "pairsWith": ["Heading", "Text"]
   },
+  "Sidebar": {
+    "purpose": "Resizable app sidebar that folds to an icon rail and is a drawer on phones",
+    "tags": ["navigation", "layout"],
+    "pairsWith": ["SidebarContent", "SidebarHeader", "SidebarFooter", "SidebarTrigger", "Nav"]
+  },
+  "SidebarContent": {
+    "partOf": "Sidebar",
+    "purpose": "Scrolling middle of a Sidebar, usually holding a Nav",
+    "tags": ["navigation", "layout"],
+    "pairsWith": ["Sidebar", "Nav"]
+  },
+  "SidebarFooter": {
+    "partOf": "Sidebar",
+    "purpose": "Bottom of a Sidebar that does not scroll: the account, help or feedback",
+    "tags": ["navigation", "layout"],
+    "pairsWith": ["Sidebar", "User"]
+  },
+  "SidebarHeader": {
+    "partOf": "Sidebar",
+    "purpose": "Top of a Sidebar that does not scroll: a workspace switcher or logo",
+    "tags": ["navigation", "layout"],
+    "pairsWith": ["Sidebar", "SidebarContent"]
+  },
+  "SidebarProvider": {
+    "partOf": "Sidebar",
+    "purpose": "Holds a Sidebar's width and collapse for triggers and useSidebar outside it; persists them in a cookie",
+    "tags": ["navigation", "layout"],
+    "pairsWith": ["Sidebar", "SidebarTrigger"]
+  },
+  "SidebarTrigger": {
+    "partOf": "Sidebar",
+    "purpose": "Button that folds the Sidebar, or opens its drawer on phones",
+    "tags": ["navigation"],
+    "pairsWith": ["SidebarProvider", "Sidebar"]
+  },
   "Skeleton": {
     "purpose": "Loading placeholder shape (line, block, circle) with a staggerable delay in ms",
     "tags": ["feedback", "ecommerce"],
