@@ -1615,6 +1615,31 @@
    "last": "!string",
    "perPage": "!string"
   },
+  "PeerCursorData": {
+   "id": "!string",
+   "name": "!string",
+   "x": "!number",
+   "y": "!number",
+   "scheme": "PeerCursorScheme",
+   "message": "string",
+   "avatar": "string",
+   "idle": "boolean"
+  },
+  "PeerCursorScheme": [
+   "blue",
+   "indigo",
+   "violet",
+   "magenta",
+   "pink",
+   "red",
+   "orange",
+   "yellow",
+   "moss",
+   "green",
+   "emerald",
+   "aqua",
+   "cyan"
+  ],
   "PhotoViewerItem": {
    "src": "!string",
    "alt": "!string",
@@ -2522,6 +2547,12 @@
    "target": "RefObject<HTMLElement | null>",
    "preventDefault": "boolean",
    "sequenceTimeout": "number"
+  },
+  "UsePeerPointerOptions": {
+   "interval": "number",
+   "units": "\"fraction\" | \"px\"",
+   "unproject": "(x: number, y: number) => { x: number; y: number }",
+   "disabled": "boolean"
   },
   "UserSelect": [
    "text",
@@ -3713,6 +3744,36 @@
     "disabled": "boolean = false",
     "labels": "Partial<PaginationLabels>",
     "aria-label": "string"
+   }
+  },
+  "PeerCursor": {
+   "group": "components",
+   "mixins": [
+    "LeafProps"
+   ],
+   "props": {
+    "id": "string",
+    "x": "!number",
+    "y": "!number",
+    "smooth": "boolean = true",
+    "name": "!string",
+    "scheme": "PeerCursorScheme",
+    "message": "string",
+    "avatar": "string",
+    "idle": "boolean = false"
+   }
+  },
+  "PeerCursors": {
+   "group": "components",
+   "mixins": [
+    "LeafProps"
+   ],
+   "props": {
+    "peers": "!PeerCursorData[]",
+    "units": "\"fraction\" | \"px\" = fraction",
+    "project": "(x: number, y: number) => { x: number; y: number }",
+    "scale": "number",
+    "smooth": "boolean = true"
    }
   },
   "PhotoViewer": {
@@ -6656,6 +6717,18 @@
    "kind": "hook",
    "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly rail: \"8\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; ... 4 more...",
    "doc": "The look the nearest Nav set, or the defaults outside one."
+  },
+  "peerColor": {
+   "group": "components",
+   "kind": "function",
+   "signature": "(id: string) => PeerCursorScheme",
+   "doc": "The same hue for the same id on every screen, so a collaborator keeps their colour wherever they show up."
+  },
+  "usePeerPointer": {
+   "group": "components",
+   "kind": "hook",
+   "signature": "(ref: React.RefObject<HTMLElement | null>, onMove: (position: { x: number; y: number } | null) => void, options?: UsePeerPointerOptions) => void",
+   "doc": "Reports your pointer over `ref`'s element, throttled, ready to send to others: `{ x, y }` in `units`, or `null` when it leaves."
   },
   "photoViewerIndexFromUrl": {
    "group": "components",
