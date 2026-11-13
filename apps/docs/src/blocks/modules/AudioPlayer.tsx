@@ -2,7 +2,6 @@
 
 import { Button, Column, Icon, IconButton, Line, Row, Text } from "@once-ui-system/core";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { dev } from "@/utils/dev-logger";
 import styles from "./AudioPlayer.module.css";
 
 interface Chapter {
@@ -105,7 +104,7 @@ export const AudioPlayer: React.FC<
           setIsAudioPlaying(true);
         })
         .catch((error) => {
-          dev.log("Audio play failed:", error);
+          console.warn("Audio play failed:", error);
         });
     } else {
       audio.pause();
@@ -143,7 +142,7 @@ export const AudioPlayer: React.FC<
           setIsAudioPlaying(true);
         })
         .catch((error) => {
-          dev.log("Audio play failed:", error);
+          console.warn("Audio play failed:", error);
         });
     }
   };
