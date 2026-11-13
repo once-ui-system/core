@@ -297,7 +297,7 @@ Mixins: LeafProps.
 - tooltipPosition?: "top" | "bottom" | "left" | "right" = top
 
 ### LineChart (from `@once-ui-system/core/data`)
-Mixins: ChartProps, CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+Mixins: ChartMarksProps, ChartProps, CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 - curve?: CurveType = natural
 - stack?: boolean | "percent" = false
 - reverseY, reverseX, error, loading?: boolean = false
@@ -312,7 +312,7 @@ Mixins: ChartProps, CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProp
 - border?: Colors | "surface" | "transparent" | boolean = neutral-alpha-weak
 
 ### BarChart (from `@once-ui-system/core/data`)
-Mixins: ChartProps, CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+Mixins: ChartMarksProps, ChartProps, CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 - barWidth?: BarWidth = l
 - hover, reverseY, reverseX, error, loading?: boolean = false
 - orientation?: "vertical" | "horizontal" = vertical
@@ -575,6 +575,11 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - truncate?: boolean
 - xl, l, m, s, xs?: TextBreakpointHide
 
+### ChartMarksProps
+- thresholds?: readonly ChartThreshold[]
+- annotations?: readonly ChartAnnotation[]
+- yDomain?: [number, number]
+
 ### ChartProps
 - title, description, emptyState, errorState?: React.ReactNode
 - series: SeriesConfig<DataPoint> | SeriesConfig<DataPoint>[]
@@ -597,9 +602,12 @@ type BlendMode = "color" | "screen" | "normal" | "multiply" | "overlay" | "darke
 type BlurSize = "s" | "xl" | "l" | "m" | "xs"
 type BorderStyle = "rounded" | "playful" | "conservative" | "sharp"
 type BreakpointKey = "s" | "xl" | "l" | "m" | "xs"
-type ButtonOption = LeafProps & { value: string; description?: ReactNode; label?: ReactNode; children?: ReactNode; horizontal?: "start" | "center" | "end" | "between"; radius?: RadiusSize; disabled?: boolean; href?: string; size?: TShirtSizes; corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"; variant?: "ghost" | "outline" | "subtle"; tone?: Tone; weight?: "default" | "strong"; truncate?: boolean; rounded?: boolean; prefixIcon?: IconName; suffixIcon?: IconName }
+type ButtonOption = LeafProps & { value: string; description?: ReactNode; label?: ReactNode; children?: ReactNode; horizontal?: "start" | "center" | "end" | "between"; radius?: RadiusSize; href?: string; disabled?: boolean; size?: TShirtSizes; corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"; variant?: "ghost" | "outline" | "subtle"; tone?: Tone; weight?: "default" | "strong"; rounded?: boolean; prefixIcon?: IconName; suffixIcon?: IconName; truncate?: boolean }
 // type ButtonVariant is one of these strings: link ghost subtle primary secondary tertiary
 type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}ch` | `${number}%` | `${number}vh` | `${number}vw` | `${number}dvh` | `${number}dvw` | `${number}svh` | `${number}svw` | `${number}lvh` | `${number}lvw` | `${number}vmin` | `${number}vmax` | `${number}cqw` | `${number}cqh` | `calc(${string})` | `min(${string})` | `max(${string})` | `clamp(${string})` | `var(${string})`
+type ChartAnnotation = { x: string | number | Date; label: string; tone?: ChartMarkTone }
+type ChartMarkTone = "neutral" | "info" | "danger" | "warning" | "success"
+type ChartThreshold = { value?: number; from?: number; to?: number; label: string; tone?: ChartMarkTone; direction?: "above" | "below" | "none" }
 type ChartVariant = "flat" | "outline" | "gradient"
 // type ColorScheme is one of these strings: neutral brand accent info danger warning success
 type ColorValue = Exclude<BaseColor, "page" | "surface" | "overlay" | "transparent"> | string & {}
@@ -654,8 +662,8 @@ type TableLabels = { selectAll: string; selectRow: string; pagination: string; s
 type TableQuery = { page: number; perPage: number; sort: TableSort | null; search: string; filters: TableFilters }
 type TableSort = { key: string; direction: "asc" | "desc" }
 type TextBreakpointHide = { hide?: boolean }
-type TextType = "body" | "code" | "label" | "heading" | "display"
-type TextVariant = `${"body" | "code" | "label" | "heading" | "display"}-${"strong" | "default" | "normal" | "medium"}-${"xl" | "xs" | "s" | "l" | "m"}`
+type TextType = "body" | "code" | "label" | "display" | "heading"
+type TextVariant = `${"body" | "code" | "label" | "display" | "heading"}-${"strong" | "default" | "normal" | "medium"}-${"xl" | "xs" | "s" | "l" | "m"}`
 type TextWeight = "strong" | "default" | "normal" | "medium"
 type ToastContextProps = { toasts: Toast[]; addToast: (toast: Omit<Toast, "id"> | LegacyToast) => string; removeToast: (id: string) => void }
 // type Tone is one of these strings: neutral brand accent info danger warning success

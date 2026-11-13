@@ -6934,6 +6934,46 @@
    "type": "{ readonly light: \"https://tiles.openfreemap.org/styles/positron\"; readonly dark: \"https://tiles.openfreemap.org/styles/dark\"; }",
    "doc": "OpenFreeMap: OpenStreetMap vector tiles with no key, no account and no view limit, commercial use included."
   },
+  "alarmState": {
+   "group": "hooks",
+   "kind": "function",
+   "signature": "(alarm: Alarm) => AlarmState"
+  },
+  "needsAcknowledge": {
+   "group": "hooks",
+   "kind": "function",
+   "signature": "(alarm: Alarm) => boolean",
+   "doc": "An alarm still waits for an operator: unacknowledged, or cleared without being seen."
+  },
+  "sortAlarms": {
+   "group": "hooks",
+   "kind": "function",
+   "signature": "(alarms: readonly Alarm[]) => Alarm[]",
+   "doc": "Alarms in the order an operator works them: unacknowledged first, then standing, then cleared; within each, the most urgent, then the newest."
+  },
+  "countAlarms": {
+   "group": "hooks",
+   "kind": "function",
+   "signature": "(alarms: readonly Alarm[]) => AlarmCounts"
+  },
+  "alarmsReducer": {
+   "group": "hooks",
+   "kind": "function",
+   "signature": "(alarms: readonly Alarm[], action: AlarmAction) => Alarm[]",
+   "doc": "The alarm rules as a pure function, for a reducer, a server or a test: `alarmsReducer(alarms, { type: \"acknowledge\", ids: [\"rcp-b\"] })`."
+  },
+  "useAlarms": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "(options?: UseAlarmsOptions) => { alarms: Alarm[]; counts: AlarmCounts; dispatch: (action: AlarmAction) => void; raise: (id: string, options?: { at?: string | number | Date | undefined; detail?: string | undefined; }) => void; clear: (id: string, at?: string | ... 2 more ... | undefined) => void; acknowledge: (ids: string | readonly string[]) => v...",
+   "doc": "A set of alarms and the actions an operator and the plant take on them."
+  },
+  "ALARM_PRIORITIES": {
+   "group": "hooks",
+   "kind": "value",
+   "type": "readonly AlarmPriority[]",
+   "doc": "The priorities from most to least urgent."
+  },
   "useArrowNavigation": {
    "group": "hooks",
    "kind": "hook",
@@ -6997,46 +7037,6 @@
    "group": "hooks",
    "kind": "hook",
    "signature": "<T extends Record<string, any>>(options: StreamingViewportOptions<T>) => StreamingViewportResult<T>"
-  },
-  "alarmState": {
-   "group": "hooks",
-   "kind": "function",
-   "signature": "(alarm: Alarm) => AlarmState"
-  },
-  "needsAcknowledge": {
-   "group": "hooks",
-   "kind": "function",
-   "signature": "(alarm: Alarm) => boolean",
-   "doc": "An alarm still waits for an operator: unacknowledged, or cleared without being seen."
-  },
-  "sortAlarms": {
-   "group": "hooks",
-   "kind": "function",
-   "signature": "(alarms: readonly Alarm[]) => Alarm[]",
-   "doc": "Alarms in the order an operator works them: unacknowledged first, then standing, then cleared; within each, the most urgent, then the newest."
-  },
-  "countAlarms": {
-   "group": "hooks",
-   "kind": "function",
-   "signature": "(alarms: readonly Alarm[]) => AlarmCounts"
-  },
-  "alarmsReducer": {
-   "group": "hooks",
-   "kind": "function",
-   "signature": "(alarms: readonly Alarm[], action: AlarmAction) => Alarm[]",
-   "doc": "The alarm rules as a pure function, for a reducer, a server or a test: `alarmsReducer(alarms, { type: \"acknowledge\", ids: [\"rcp-b\"] })`."
-  },
-  "useAlarms": {
-   "group": "hooks",
-   "kind": "hook",
-   "signature": "(options?: UseAlarmsOptions) => { alarms: Alarm[]; counts: AlarmCounts; dispatch: (action: AlarmAction) => void; raise: (id: string, options?: { at?: string | number | Date | undefined; detail?: string | undefined; }) => void; clear: (id: string, at?: string | ... 2 more ... | undefined) => void; acknowledge: (ids: string | readonly string[]) => v...",
-   "doc": "A set of alarms and the actions an operator and the plant take on them."
-  },
-  "ALARM_PRIORITIES": {
-   "group": "hooks",
-   "kind": "value",
-   "type": "readonly AlarmPriority[]",
-   "doc": "The priorities from most to least urgent."
   },
   "selectNavHref": {
    "group": "utils",
