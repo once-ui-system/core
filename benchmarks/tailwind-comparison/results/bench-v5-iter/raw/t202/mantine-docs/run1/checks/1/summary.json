@@ -1,0 +1,37 @@
+{
+  "check": "1",
+  "at": "2026-11-10T23:49:18.199Z",
+  "ms": 5779,
+  "files": [
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/theme.ts",
+    "components/AppFrame.tsx",
+    "components/GuestChip.tsx",
+    "components/GuestsView.tsx",
+    "components/PlanProvider.tsx",
+    "components/PlanView.tsx",
+    "components/RoomPlan.tsx",
+    "components/SidePanel.tsx",
+    "components/room.module.css",
+    "lib/cx.ts",
+    "lib/data.ts",
+    "lib/rules.ts"
+  ],
+  "passed": false,
+  "gates_passed": false,
+  "failed_gate": "typecheck",
+  "adherence": {
+    "system": 263,
+    "raw": 1,
+    "share": 0.996,
+    "colours": 28,
+    "cssLines": 172,
+    "ok": false,
+    "reasons": [
+      "28 raw colour literals (#hex, rgb(), hsl(), oklch()); at most 12. Use the stack's colour tokens or theme instead",
+      "172 lines of custom stylesheet; at most 150. Style through the stack instead"
+    ]
+  }
+}

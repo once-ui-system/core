@@ -1,0 +1,16 @@
+Your app failed the typecheck check. Output (truncated to 4,000 characters):
+
+```
+components/AppHeader.tsx(85,23): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: TextProps<"span"> & CommonProps & LeafProps & Pick<DisplayProps, "opacity"> & Omit<DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>, "ref"> & { ...; }): ReactNode', gave the following error.
+    Type '{ children: string[]; padding: string; onBackground: "neutral-weak"; }' is not assignable to type 'IntrinsicAttributes & TextProps<"span"> & CommonProps & LeafProps & Pick<DisplayProps, "opacity"> & Omit<...> & { ...; }'.
+      Property 'padding' does not exist on type 'IntrinsicAttributes & TextProps<"span"> & CommonProps & LeafProps & Pick<DisplayProps, "opacity"> & Omit<...> & { ...; }'.
+  Overload 2 of 2, '(props: Omit<TypeProps<"span">, "as"> & { as?: TextElement | undefined; ref?: undefined; }): ReactNode', gave the following error.
+    Type '{ children: string[]; padding: string; onBackground: "neutral-weak"; }' is not assignable to type 'IntrinsicAttributes & Omit<TypeProps<"span">, "as"> & { as?: TextElement | undefined; ref?: undefined; }'.
+      Property 'padding' does not exist on type 'IntrinsicAttributes & Omit<TypeProps<"span">, "as"> & { as?: TextElement | undefined; ref?: undefined; }'.
+```
+
+Fix the problem and reply with every file of the app again, each complete in its own fenced code block whose opening line names the file's path, and nothing else.
+
+
+As before: write the complete corrected file to /home/user/core/benchmarks/tailwind-comparison/results/bench-v4-cc/raw/t201/once-harness/run1/attempt-1.tsx with the Write tool (no shell commands), then reply with the single word: done.

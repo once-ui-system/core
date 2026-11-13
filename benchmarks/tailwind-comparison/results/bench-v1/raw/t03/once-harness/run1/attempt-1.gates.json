@@ -1,0 +1,280 @@
+{
+  "arm": "A",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2794
+    },
+    "build": {
+      "ok": true,
+      "ms": 8939
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 532,
+          "height": 812,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 532,
+          "height": 1024,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 628,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 532,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 532,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 628,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 1,
+            "serious_or_critical": 1,
+            "ids": [
+              "label-content-name-mismatch:serious:1"
+            ]
+          }
+        },
+        "/projects": {
+          "viewports": {
+            "phone": {
+              "text": 278,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 278,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 447,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 1,
+            "serious_or_critical": 1,
+            "ids": [
+              "label-content-name-mismatch:serious:1"
+            ]
+          }
+        },
+        "/members": {
+          "viewports": {
+            "phone": {
+              "text": 526,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 526,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 722,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 1,
+            "serious_or_critical": 1,
+            "ids": [
+              "label-content-name-mismatch:serious:1"
+            ]
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 1,
+        "nodes": 1,
+        "serious_or_critical": 1,
+        "ids": [
+          "label-content-name-mismatch:serious:1"
+        ]
+      },
+      "interaction": {
+        "desktop": {
+          "action": "press > type > press",
+          "found": true,
+          "steps": 3,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1767,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/projects phone": {
+          "ms": 35620,
+          "settled": false
+        },
+        "/projects tablet": {
+          "ms": 1767,
+          "settled": true
+        },
+        "/projects desktop": {
+          "ms": 1774,
+          "settled": true
+        },
+        "/members phone": {
+          "ms": 1815,
+          "settled": true
+        },
+        "/members tablet": {
+          "ms": 1775,
+          "settled": true
+        },
+        "/members desktop": {
+          "ms": 1762,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 120,
+          "distinct_fontSize": 8,
+          "distinct_color": 5,
+          "distinct_background": 3,
+          "distinct_radius": 4,
+          "distinct_shadow": 1,
+          "distinct_spacing": 11,
+          "spacing_on_4px_grid": 0.67
+        },
+        "/projects": {
+          "elements": 160,
+          "distinct_fontSize": 6,
+          "distinct_color": 6,
+          "distinct_background": 3,
+          "distinct_radius": 4,
+          "distinct_shadow": 1,
+          "distinct_spacing": 11,
+          "spacing_on_4px_grid": 0.791
+        },
+        "/members": {
+          "elements": 216,
+          "distinct_fontSize": 7,
+          "distinct_color": 6,
+          "distinct_background": 3,
+          "distinct_radius": 4,
+          "distinct_shadow": 1,
+          "distinct_spacing": 11,
+          "spacing_on_4px_grid": 0.809
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 245.5,
+          "css_kb": 42.5,
+          "fcp_ms": 368,
+          "cls": 0,
+          "long_task_ms": 26
+        },
+        "/projects": {
+          "js_kb": 245.5,
+          "css_kb": 42.5,
+          "fcp_ms": 352,
+          "cls": 0.003,
+          "long_task_ms": 0
+        },
+        "/members": {
+          "js_kb": 245.5,
+          "css_kb": 42.5,
+          "fcp_ms": 180,
+          "cls": 0.01,
+          "long_task_ms": 0
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/PaletteProvider.tsx",
+    "components/CommandPalette.tsx",
+    "components/InviteDialog.tsx",
+    "components/AppShell.tsx",
+    "components/PageHeader.tsx",
+    "components/StatusTag.tsx",
+    "components/DashboardView.tsx",
+    "components/ProjectsTable.tsx",
+    "components/MembersTable.tsx",
+    "app/page.tsx",
+    "app/projects/layout.tsx",
+    "app/projects/page.tsx",
+    "components/ProjectsView.tsx",
+    "app/members/layout.tsx",
+    "app/members/page.tsx",
+    "components/MembersView.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ lib/data.ts: no mechanical issues\n✓ components/PaletteProvider.tsx: no mechanical issues\n✗ components/CommandPalette.tsx: 1 issue(s)\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✗ components/InviteDialog.tsx: 1 issue(s)\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✗ components/AppShell.tsx: 1 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n✓ components/PageHeader.tsx: no mechanical issues\n✓ components/StatusTag.tsx: no mechanical issues\n✓ components/DashboardView.tsx: no mechanical issues\n✓ components/ProjectsTable.tsx: no mechanical issues\n✓ components/MembersTable.tsx: no mechanical issues\n✓ app/page.tsx: no mechanical issues\n✓ app/projects/layout.tsx: no mechanical issues\n✓ app/projects/page.tsx: no mechanical issues\n✓ components/ProjectsView.tsx: no mechanical issues\n✓ app/members/layout.tsx: no mechanical issues\n✓ app/members/page.tsx: no mechanical issues\n✓ components/MembersView.tsx: no mechanical issues",
+    "validator": {
+      "package_version": "3.0.0-beta.1",
+      "script_sha256": "d8f443844780a521"
+    }
+  }
+}

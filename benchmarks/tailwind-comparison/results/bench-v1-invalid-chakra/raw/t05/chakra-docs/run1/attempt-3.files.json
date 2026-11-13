@@ -1,0 +1,17 @@
+{
+  "files": [
+    "lib/data.ts",
+    "components/members/member-avatar.tsx",
+    "components/site-header.tsx",
+    "components/members/member-badges.tsx",
+    "components/members/invite-dialog.tsx",
+    "components/members/change-role-dialog.tsx",
+    "components/members/remove-dialog.tsx",
+    "components/members/member-actions.tsx",
+    "components/members/team-page.tsx",
+    "app/page.tsx",
+    "app/members/[id]/page.tsx",
+    "app/members/[id]/not-found.tsx"
+  ],
+  "rejected": []
+}

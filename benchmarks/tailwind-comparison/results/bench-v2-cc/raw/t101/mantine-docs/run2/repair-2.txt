@@ -1,0 +1,28 @@
+Your app failed the build check. Output (truncated to 4,000 characters):
+
+```
+Error: Failed to collect configuration for /_not-found
+    at ignore-listed frames {
+  [cause]: TypeError: j.Button.extend is not a function
+      at module evaluation (.next/server/chunks/ssr/benchmarks_tailwind-comparison_work_gate_mantine-docs_0m1793s._.js:1:21238)
+      at instantiateModule (.next/server/chunks/ssr/[turbopack]_runtime.js:853:9)
+      at getOrInstantiateModuleFromParent (.next/server/chunks/ssr/[turbopack]_runtime.js:877:12)
+      at Context.esmImport [as i] (.next/server/chunks/ssr/[turbopack]_runtime.js:281:20)
+      at module evaluation (.next/server/chunks/ssr/benchmarks_tailwind-comparison_work_gate_mantine-docs_0m1793s._.js:1:22516)
+      at instantiateModule (.next/server/chunks/ssr/[turbopack]_runtime.js:853:9)
+      at getOrInstantiateModuleFromParent (.next/server/chunks/ssr/[turbopack]_runtime.js:877:12)
+      at Context.commonJsRequire [as r] (.next/server/chunks/ssr/[turbopack]_runtime.js:302:12)
+      at K.layout (.next/server/chunks/ssr/1g7e_next_dist_esm_build_templates_app-page_0sq-kt0.js:1:791)
+}
+
+> Build error occurred
+Error: Failed to collect page data for /_not-found
+    at ignore-listed frames {
+  type: 'Error'
+}
+```
+
+Fix the problem and reply with every file of the app again, each complete in its own fenced code block whose opening line names the file's path, and nothing else.
+
+
+As before: write the complete corrected file to /home/user/core/benchmarks/tailwind-comparison/results/bench-v2-cc/raw/t101/mantine-docs/run2/attempt-2.tsx with the Write tool (no shell commands), then reply with the single word: done.

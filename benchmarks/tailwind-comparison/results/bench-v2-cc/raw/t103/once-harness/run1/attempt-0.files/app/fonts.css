@@ -1,0 +1,7 @@
+/* Lumen type: monospace headings, system sans body. No network font fetch. */
+:root {
+  --font-heading: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-body: ui-sans-serif, system-ui, sans-serif;
+  --font-label: ui-sans-serif, system-ui, sans-serif;
+  --font-code: ui-monospace, "SFMono-Regular", Menlo, monospace;
+}

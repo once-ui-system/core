@@ -1,0 +1,28 @@
+{
+  "arm": "K",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/site/site-shell.tsx(10,9): error TS2322: Type '{ children: string; as: \"a\"; href: string; position: \"absolute\"; left: \"2\"; top: \"2\"; zIndex: \"skipLink\"; px: \"4\"; py: \"2\"; bg: \"brand.solid\"; color: \"brand.contrast\"; borderRadius: \"l2\"; fontWeight: \"medium\"; transform: \"translateY(-200%)\"; _focusVisible: { ...; }; }' is not assignable to type 'IntrinsicAttributes & Omit<PatchHtmlProps<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, \"ref\">>, \"page\" | ... 836 more ... | keyof PolymorphicProps> & Omit<...> & PolymorphicProps & { ...; }'.\n  Property 'href' does not exist on type 'IntrinsicAttributes & Omit<PatchHtmlProps<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, \"ref\">>, \"page\" | ... 836 more ... | keyof PolymorphicProps> & Omit<...> & PolymorphicProps & { ...; }'. Did you mean 'ref'?",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 11135
+    }
+  },
+  "files": [
+    "components/site/site-shell.tsx",
+    "components/site/site-header.tsx",
+    "components/ui/color-mode.tsx",
+    "components/ui/provider.tsx",
+    "app/layout.tsx",
+    "lib/data.ts",
+    "lib/theme.ts",
+    "components/site/site-footer.tsx",
+    "components/site/hero.tsx",
+    "components/site/logo-row.tsx",
+    "components/site/feature-sections.tsx",
+    "app/page.tsx",
+    "components/pricing/pricing-view.tsx",
+    "app/pricing/page.tsx"
+  ]
+}

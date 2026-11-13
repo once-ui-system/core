@@ -1,0 +1,188 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 8,
+      "input_total": 657294,
+      "input_uncached": 16,
+      "cache_creation": 74855,
+      "cache_read": 582423,
+      "visible_output_tokens_o200k": 10128,
+      "visible_output_tokens_claudeLegacy": 10996,
+      "thinking_blocks": 4
+    },
+    {
+      "attempt": 1,
+      "calls": 4,
+      "input_total": 450253,
+      "input_uncached": 8,
+      "cache_creation": 77636,
+      "cache_read": 372609,
+      "visible_output_tokens_o200k": 748,
+      "visible_output_tokens_claudeLegacy": 795,
+      "thinking_blocks": 2
+    },
+    {
+      "attempt": 2,
+      "calls": 3,
+      "input_total": 347069,
+      "input_uncached": 6,
+      "cache_creation": 3352,
+      "cache_read": 343711,
+      "visible_output_tokens_o200k": 576,
+      "visible_output_tokens_claudeLegacy": 620,
+      "thinking_blocks": 2
+    },
+    {
+      "attempt": 3,
+      "calls": 3,
+      "input_total": 353936,
+      "input_uncached": 8,
+      "cache_creation": 1717,
+      "cache_read": 352211,
+      "visible_output_tokens_o200k": 448,
+      "visible_output_tokens_claudeLegacy": 488,
+      "thinking_blocks": 1
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t102/mantine-docs/run3/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/README.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/theme.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/package.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "docs"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "docs"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/pages/core-nav-link.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/pages/core-app-shell.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/pages/theming-colors.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v2-cc/raw/t102/mantine-docs/run3/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "project/tsconfig.json"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    },
+    {
+      "attempt": 1,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t102/mantine-docs/run3/repair-1.txt"
+    },
+    {
+      "attempt": 1,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 1,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 1,
+      "name": "SubagentHandback",
+      "path": null
+    },
+    {
+      "attempt": 2,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t102/mantine-docs/run3/repair-2.txt"
+    },
+    {
+      "attempt": 2,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 2,
+      "name": "SubagentHandback",
+      "path": null
+    },
+    {
+      "attempt": 3,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t102/mantine-docs/run3/repair-3.txt"
+    },
+    {
+      "attempt": 3,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 3,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": false,
+    "violations": [
+      "disallowed tool: Bash",
+      "disallowed tool: Bash",
+      "disallowed tool: Bash",
+      "disallowed tool: Bash"
+    ]
+  },
+  "arm": "T"
+}

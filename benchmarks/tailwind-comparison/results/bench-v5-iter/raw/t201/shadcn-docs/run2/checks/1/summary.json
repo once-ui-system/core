@@ -1,0 +1,33 @@
+{
+  "check": "1",
+  "at": "2026-11-10T23:29:56.170Z",
+  "ms": 58505,
+  "files": [
+    "app/globals.css",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "components/pawpoint/alert-chips.tsx",
+    "components/pawpoint/app-shell.tsx",
+    "components/pawpoint/booking-dialog.tsx",
+    "components/pawpoint/patient-search.tsx",
+    "components/pawpoint/schedule-view.tsx",
+    "components/pawpoint/status-badge.tsx",
+    "components/pawpoint/weight-chart.tsx",
+    "lib/data.ts",
+    "lib/schedule.ts",
+    "lib/use-clock.ts"
+  ],
+  "passed": true,
+  "gates_passed": true,
+  "failed_gate": null,
+  "adherence": {
+    "system": 85,
+    "raw": 1,
+    "share": 0.988,
+    "colours": 0,
+    "cssLines": 3,
+    "ok": true,
+    "reasons": []
+  }
+}

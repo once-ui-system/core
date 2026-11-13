@@ -42,10 +42,10 @@ Static panel recipe (pricing tiers, stats, settings sections):
 - `Card` = interactive only (`href` or `onClick`). Static panels = Column + surface recipe.
 - Colors: `{tone}-{weight}` or `{tone}-alpha-{weight}`. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`.
 - `background` also: `surface | overlay | page | transparent`
-- Same-shaped records: one surface, divided rows (`borderTop={i > 0}`), or a `Table`; never a card per row
+- Same-shaped records: one surface, divided rows (`borderTop={i > 0}`), or a `Table` (row link: a link in a `cell`, not `onRowClick`); never a card per row
 - One raised `surface` for content on `page`; sections inside are spacing + `borderTop`, not grey cards
 - Alerts: `Feedback`, never a hand-built `role="alert"` box
-- Charts: `@once-ui-system/core/data` (`LineChart`, `BarChart`…), never hand-drawn SVG; `height="16rem"` (a string), series `color: "brand-strong"`
+- Charts: `@once-ui-system/core/data` (`LineChart`, `BarChart`…), never hand-drawn SVG; `height="16rem"` (a string), series `color: "brand"`
 - Brand mark: `<Logo text="Name" monogram />`, never `Icon` + `Text`
 - Critical outranks status: `Feedback tone="danger"` or `Tag prefixIcon`; urgent is `danger`/`warning`, never `info`
 
@@ -91,7 +91,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Pick one of a few | A form value with a label (timezone, country, role on a form): `Select`. A toolbar view control or action (sort, filter, export): `Dropdown` with `Option`s and `trigger={<Button variant="secondary" suffixIcon="chevronDown">Role: Admin</Button>}`, the label naming the current choice (a long, searchable filter list: `Select size="xxs" searchable` with a `label`). Two to four choices always shown: `SegmentedControl` |
 | Mobile nav, side sheet | `Drawer`, not a hand-made overlay |
 | Page trail | `Breadcrumbs items={[...]}` |
-| Keyboard shortcut | `useHotkeys("mod+k", fn)` + `Kbd keys="mod+k" label="Search"` |
+| Keyboard shortcut | `useHotkeys("mod+k", fn)` + `Kbd keys="mod+k" label="Search"` + `aria-keyshortcuts` |
 | Screen-reader text, skip link | `VisuallyHidden` (skip link: `<VisuallyHidden as="a" href="#main" focusable>`) |
 | Native attributes | Every component also takes its element's own: `aria-*`, `id`, `role`, `onClick`; `type` on `Button`; `value`, `onChange`, `type` on `Input` |
 | MDX content | `mdxComponents` / `createMdxComponents` from `/mdx` |
@@ -178,7 +178,17 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - onBlockContextMenu?: (event: React.MouseEvent, trackId: string, blockId: string) => void
 - showTime?: boolean = true
 - formatTime?: (time: number) => string = defaultFormatTime
-- step?: number
+- step, zoom?: number
+- ruler?: boolean = false
+- labelWidth?: string = 8rem
+- markers?: ScrubberMarker[] = []
+- snap?: boolean | number = false
+- defaultZoom?: number = 1
+- onZoomChange?: (zoom: number) => void
+- maxZoom?: number = 40
+- range?: ScrubberRange | null = null
+- onRangeChange?: (range: ScrubberRange | null) => void
+- renderPreview?: (time: number) => React.ReactNode
 
 ### ToggleButton
 Mixins: LeafProps.
@@ -479,8 +489,10 @@ type LegacyToast = { variant?: Tone; tone?: Tone; children?: ReactNode; message?
 // type Opacity is one of these strings: 0 10 20 30 40 50 60 70 80 90 100
 type RadiusNest = "4" | "8"
 // type RadiusSize is one of these strings: s xl l m xs none full
-type ScrubberBlock = { id: string; start: number; end: number; label?: React.ReactNode; tone?: Tone; locked?: boolean }
-type ScrubberTrack = { id: string; blocks: ScrubberBlock[]; height?: SpacingToken; tone?: Tone; movable?: boolean; resizable?: boolean; onAdd?: (time: number) => void }
+type ScrubberBlock = { id: string; start: number; end: number; label?: React.ReactNode; tone?: Tone; locked?: boolean; variant?: "solid" | "gap"; badge?: React.ReactNode; content?: React.ReactNode; highlight?: boolean; description?: string }
+type ScrubberMarker = { id: string; time: number; label?: string; tone?: Tone }
+type ScrubberRange = { start: number; end: number }
+type ScrubberTrack = { id: string; blocks: ScrubberBlock[]; height?: SpacingToken; tone?: Tone; movable?: boolean; resizable?: boolean; onAdd?: (time: number) => void; label?: React.ReactNode }
 type ShadowSize = "s" | "xl" | "l" | "m" | "xs"
 type SolidType = "color" | "contrast" | "inverse"
 // type SpacingToken is one of these strings: s xl l m xs 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128

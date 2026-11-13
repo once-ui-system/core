@@ -1,0 +1,133 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 9,
+      "input_total": 812934,
+      "input_uncached": 18,
+      "cache_creation": 108433,
+      "cache_read": 704483,
+      "visible_output_tokens_o200k": 16856,
+      "visible_output_tokens_claudeLegacy": 17781,
+      "thinking_blocks": 6
+    },
+    {
+      "attempt": 1,
+      "calls": 3,
+      "input_total": 440042,
+      "input_uncached": 6,
+      "cache_creation": 132477,
+      "cache_read": 307559,
+      "visible_output_tokens_o200k": 16350,
+      "visible_output_tokens_claudeLegacy": 17166,
+      "thinking_blocks": 2
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v4-cc/raw/t201/once-harness/run2/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "."
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/AGENTS.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/providers.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/fonts.css"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/bundles/page.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/package.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/components/SmartLink.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/components/Option.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../../../../../../tmp/claude-0/-home-user/4c827640-87d8-5312-9539-2f80e180acb1/scratchpad/notes.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/tsconfig.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/next.config.mjs"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v4-cc/raw/t201/once-harness/run2/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    },
+    {
+      "attempt": 1,
+      "name": "Read",
+      "path": "../../../results/bench-v4-cc/raw/t201/once-harness/run2/repair-1.txt"
+    },
+    {
+      "attempt": 1,
+      "name": "Write",
+      "path": "../../../results/bench-v4-cc/raw/t201/once-harness/run2/attempt-1.tsx"
+    },
+    {
+      "attempt": 1,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": false,
+    "violations": [
+      "Write outside run folder: /tmp/claude-0/-home-user/4c827640-87d8-5312-9539-2f80e180acb1/scratchpad/notes.txt"
+    ]
+  },
+  "arm": "A"
+}
