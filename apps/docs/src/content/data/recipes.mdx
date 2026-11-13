@@ -1,0 +1,342 @@
+---
+title: "Recipes"
+export: false
+summary: "Copy-ready patterns for Once UI charts: a dashboard grid, KPI tiles, fetching in a server component, this period against the last, top N and other, targets, live data and switching chart types."
+updatedAt: "2026-11-12"
+docs: "once-ui/data/recipes.mdx"
+github: "packages/core/src/modules/data"
+navLabel: "Recipes"
+navIcon: "bolt"
+---
+
+Each recipe is a pattern you can paste and adapt. They use only `@once-ui-system/core` and `@once-ui-system/core/data`.
+
+## Dashboard grid
+
+Charts fill their container, so a dashboard is a `Grid` of them. Give every chart in a row the same `height` so their plots line up, and let the grid collapse to one column on small screens.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="l"
+  preview={
+    <Grid fillWidth columns="2" s={{ columns: 1 }} gap="16">
+      <LineChart
+        title="Revenue"
+        height="18rem"
+        axis="x"
+        legend={{ display: false }}
+        valueFormat={{ style: "currency", currency: "USD", notation: "compact" }}
+        xKey="month"
+        series={{ key: "revenue", label: "Revenue", color: "brand" }}
+        data={[
+          { month: "Jan", revenue: 32000 },
+          { month: "Feb", revenue: 35000 },
+          { month: "Mar", revenue: 34000 },
+          { month: "Apr", revenue: 41000 },
+          { month: "May", revenue: 44000 },
+          { month: "Jun", revenue: 48000 }
+        ]}
+      />
+      <BarChart
+        title="Orders by channel"
+        height="18rem"
+        axis="x"
+        stack
+        legend={{ position: "top-right" }}
+        xKey="month"
+        series={[{ key: "web", label: "Web" }, { key: "store", label: "Store" }]}
+        data={[
+          { month: "Jan", web: 124, store: 88 },
+          { month: "Feb", web: 131, store: 91 },
+          { month: "Mar", web: 158, store: 86 },
+          { month: "Apr", web: 172, store: 94 },
+          { month: "May", web: 195, store: 99 },
+          { month: "Jun", web: 204, store: 97 }
+        ]}
+      />
+    </Grid>
+  }
+  codes={[
+    {
+      code:
+`<Grid fillWidth columns="2" s={{ columns: 1 }} gap="16">
+  <LineChart
+    title="Revenue"
+    height="18rem"
+    axis="x"
+    legend={{ display: false }}
+    valueFormat={{ style: "currency", currency: "USD", notation: "compact" }}
+    xKey="month"
+    series={{ key: "revenue", label: "Revenue", color: "brand" }}
+    data={revenue}
+  />
+  <BarChart
+    title="Orders by channel"
+    height="18rem"
+    axis="x"
+    stack
+    legend={{ position: "top-right" }}
+    xKey="month"
+    series={[
+      { key: "web", label: "Web" },
+      { key: "store", label: "Store" },
+    ]}
+    data={orders}
+  />
+</Grid>`,
+      language: "tsx",
+      label: "Dashboard"
+    }
+  ]}
+/>
+
+## KPI tiles
+
+A tile is a number, its change and the shape behind it: a [`Sparkline`](/data/sparkline), not a full chart. Keep full charts for the questions a reader explores; tiles are for glancing.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="l"
+  preview={
+    <Grid fillWidth columns="3" s={{ columns: 1 }} gap="16">
+      <Column padding="20" gap="8" radius="l" border="neutral-alpha-weak" background="surface">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">Revenue</Text>
+        <Row vertical="end" gap="8">
+          <Text textVariant="heading-strong-l">$48.2K</Text>
+          <Text textVariant="label-default-s" onBackground="success-weak">+12%</Text>
+        </Row>
+        <Sparkline data={[32, 35, 34, 38, 41, 39, 44, 48]} variant="area" color="emerald" height={40} showLast />
+      </Column>
+      <Column padding="20" gap="8" radius="l" border="neutral-alpha-weak" background="surface">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">Orders</Text>
+        <Row vertical="end" gap="8">
+          <Text textVariant="heading-strong-l">1,204</Text>
+          <Text textVariant="label-default-s" onBackground="success-weak">+4%</Text>
+        </Row>
+        <Sparkline data={[180, 172, 190, 201, 196, 210, 207, 222]} variant="bar" color="blue" height={40} showLast />
+      </Column>
+      <Column padding="20" gap="8" radius="l" border="neutral-alpha-weak" background="surface">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">Refunds</Text>
+        <Row vertical="end" gap="8">
+          <Text textVariant="heading-strong-l">2.1%</Text>
+          <Text textVariant="label-default-s" onBackground="danger-weak">+0.4 pt</Text>
+        </Row>
+        <Sparkline data={[1.6, 1.7, 1.5, 1.8, 1.9, 1.8, 2.0, 2.1]} color="red" height={40} showLast />
+      </Column>
+    </Grid>
+  }
+  codes={[
+    {
+      code:
+`<Column padding="20" gap="8" radius="l" border="neutral-alpha-weak" background="surface">
+  <Text textVariant="label-default-s" onBackground="neutral-weak">Revenue</Text>
+  <Row vertical="end" gap="8">
+    <Text textVariant="heading-strong-l">$48.2K</Text>
+    <Text textVariant="label-default-s" onBackground="success-weak">+12%</Text>
+  </Row>
+  <Sparkline data={[32, 35, 34, 38, 41, 39, 44, 48]} variant="area" color="emerald" height={40} showLast />
+</Column>`,
+      language: "tsx",
+      label: "Tile"
+    }
+  ]}
+/>
+
+Colour the change by what it means for the business, not by its sign: more refunds is up and bad.
+
+## Fetch in a server component
+
+The charts render on the server, so the page can query and pass the rows straight in. The first HTML holds the drawn chart, with no loading spinner and no client fetch.
+
+```tsx
+// app/(dashboard)/revenue/page.tsx
+import { LineChart } from "@once-ui-system/core/data";
+import { getMonthlyRevenue } from "@/lib/reports";
+
+export default async function RevenuePage() {
+  const rows = await getMonthlyRevenue(); // [{ month: "2026-01-01", revenue: 32000 }, …]
+
+  return (
+    <LineChart
+      title="Revenue"
+      xKey="month"
+      date={{ format: "MMM yyyy" }}
+      valueFormat={{ style: "currency", currency: "EUR", maximumFractionDigits: 0 }}
+      series={{ key: "revenue", label: "Revenue" }}
+      data={rows}
+    />
+  );
+}
+```
+
+Rows cross to the client as JSON, so send what the chart draws, not whole database records. `Date` values arrive as `Date`s; numbers stored as strings (Postgres `numeric`) need a `Number()` first. Keep function props out of server components: see [Numbers and dates](/data/formatting#from-a-server-component).
+
+## This period against the last
+
+Draw the comparison as a quiet reference: last period in `gray`, this period in a colour.
+
+<LineChart
+  marginTop="16"
+  marginBottom="24"
+  title="Signups, this month against last"
+  height="20rem"
+  axis="both"
+  legend={{ position: "top-right" }}
+  curve="linear"
+  xKey="day"
+  series={[
+    { key: "previous", label: "Last month", color: "gray" },
+    { key: "current", label: "This month", color: "brand" }
+  ]}
+  data={[
+    { day: "1", previous: 40, current: 48 },
+    { day: "5", previous: 46, current: 55 },
+    { day: "10", previous: 52, current: 61 },
+    { day: "15", previous: 49, current: 70 },
+    { day: "20", previous: 58, current: 74 },
+    { day: "25", previous: 61 },
+    { day: "30", previous: 64 }
+  ]}
+/>
+
+Align the two periods by position (day 1, day 2…), not by date, so they share the axis. The current period stops where today is: leave its later values out instead of writing `0`, and the line ends there.
+
+```ts
+const data = lastMonth.map((row, i) => ({
+  day: String(i + 1),
+  previous: row.signups,
+  current: thisMonth[i]?.signups, // undefined after today: a gap, not a zero
+}));
+```
+
+## Top N and other
+
+A pie past five slices stops being readable. Keep the biggest and add up the rest:
+
+```ts
+function topN<T extends { name: string; value: number }>(rows: T[], n = 4) {
+  const sorted = [...rows].sort((a, b) => b.value - a.value);
+  const rest = sorted.slice(n).reduce((sum, row) => sum + row.value, 0);
+  return rest > 0
+    ? [...sorted.slice(0, n), { name: "Other", value: rest, color: "gray" }]
+    : sorted;
+}
+```
+
+<PieChart
+  marginTop="16"
+  marginBottom="24"
+  title="Traffic by source"
+  height="20rem"
+  ring={{ inner: 55, outer: 70 }}
+  legend={{ display: true, position: "top-left", direction: "column" }}
+  valueFormat="compact"
+  series={{ key: "value", label: "Sessions" }}
+  data={[
+    { name: "Search", value: 42100 },
+    { name: "Direct", value: 31800 },
+    { name: "Social", value: 12400 },
+    { name: "Email", value: 8300 },
+    { name: "Other", value: 5900, color: "gray" }
+  ]}
+/>
+
+`gray` marks "Other" as the leftovers, not a fifth source to compare.
+
+## Target and actual
+
+[`LineBarChart`](/data/lineBarChart) draws its first series as a line and its second as bars, on one axis: the target as the line, the actuals as bars.
+
+```tsx
+<LineBarChart
+  title="Spend against budget"
+  xKey="month"
+  valueFormat={{ style: "currency", currency: "EUR", notation: "compact" }}
+  series={[
+    { key: "budget", label: "Budget", color: "gray" },
+    { key: "spend", label: "Spend", color: "brand" },
+  ]}
+  data={rows}
+/>
+```
+
+## Live data
+
+For a chart that updates every second, keep the x range fixed so the axis doesn't rescale on each sample. [`useStreamingViewport`](/hooks/useStreamingViewport) buffers the samples and pans the visible window; the live examples on [LineChart](/data/lineChart#live-data) show it with the animation tuned to glide, and turned off to snap.
+
+```tsx
+<LineChart
+  animation={false}
+  xAxisType="number"
+  xDomain={[now - 60_000, now]}
+  xKey="t"
+  series={{ key: "rps", label: "Requests/s" }}
+  data={samples}
+/>
+```
+
+## Let the reader switch views
+
+`LineChart` and `BarChart` take the same props, so one set of props can draw either. A `SegmentedControl` picks which.
+
+```tsx
+"use client";
+
+import { useState } from "react";
+import { Column, SegmentedControl } from "@once-ui-system/core";
+import { BarChart, LineChart } from "@once-ui-system/core/data";
+
+export function OrdersChart({ data }: { data: { month: string; web: number; store: number }[] }) {
+  const [view, setView] = useState("line");
+  const props = {
+    title: "Orders",
+    xKey: "month" as const,
+    series: [
+      { key: "web" as const, label: "Web" },
+      { key: "store" as const, label: "Store" },
+    ],
+    data,
+  };
+
+  return (
+    <Column gap="12">
+      <SegmentedControl
+        buttons={[
+          { value: "line", label: "Trend" },
+          { value: "bar", label: "Compare" },
+        ]}
+        value={view}
+        onValueChange={setView}
+      />
+      {view === "line" ? <LineChart {...props} /> : <BarChart {...props} />}
+    </Column>
+  );
+}
+```
+
+## Theme switch for charts
+
+`useDataTheme()` reads the chart settings and `setChartOptions` changes them for every chart under the provider. A new `mode` is also remembered in the browser.
+
+```tsx
+"use client";
+
+import { SegmentedControl, useDataTheme } from "@once-ui-system/core";
+
+export function ChartModeSwitch() {
+  const { mode, setChartOptions } = useDataTheme();
+  return (
+    <SegmentedControl
+      buttons={[
+        { value: "categorical", label: "Categorical" },
+        { value: "divergent", label: "Divergent" },
+        { value: "sequential", label: "Sequential" },
+      ]}
+      value={mode}
+      onValueChange={(value) => setChartOptions({ mode: value as typeof mode })}
+    />
+  );
+}
+```

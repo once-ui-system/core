@@ -1,0 +1,24 @@
+{
+  "status": "accepted",
+  "attempts": 1,
+  "accepted_attempt": 0,
+  "repair_rounds": 0,
+  "gates": [
+    {
+      "attempt": 0,
+      "passed": true,
+      "failed_gate": null
+    }
+  ],
+  "track": "iterative",
+  "checks_used": 1,
+  "first_check_passed": true,
+  "checks": [
+    {
+      "check": 1,
+      "at": "2026-11-10T23:14:59.361Z",
+      "passed": true,
+      "failed_gate": null
+    }
+  ]
+}

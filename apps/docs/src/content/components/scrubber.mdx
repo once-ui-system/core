@@ -1,7 +1,7 @@
 ---
 title: "Scrubber"
 summary: "A playhead over time: a seek bar on its own, an editor timeline once you give it tracks."
-updatedAt: "2026-08-30"
+updatedAt: "2026-11-13"
 docs: "once-ui/components/scrubber.mdx"
 github: "components/Scrubber.tsx"
 navLabel: "Scrubber"
@@ -70,6 +70,78 @@ so layers stay distinguishable.
   ]}
 />
 
+## Editor grade
+
+The same component carries a full editor timeline. Turn on `ruler` for round
+time ticks with a grabbable playhead, give tracks a `label` for a header column,
+and the rest is per block or per timeline:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={<ScrubberEditorExample />}
+  codes={[
+    {
+      code:
+`<Scrubber
+  duration={24000}
+  value={time}
+  onValueChange={setTime}
+  ruler
+  snap
+  range={range}
+  onRangeChange={setRange}
+  markers={[{ id: "c1", time: 2600, label: "Click: Checkout" }]}
+  renderPreview={(at) => <img src={frameAt(at)} alt="" width={128} />}
+  tracks={[
+    {
+      id: "take",
+      label: "Take",
+      resizable: true,
+      blocks: [
+        { id: "cart", start: 0, end: 5000, label: "Cart" },
+        { id: "idle", start: 5000, end: 8000, label: "idle 3 s", variant: "gap",
+          description: "Cut: nothing moved on screen for 3 s" },
+        { id: "load", start: 14000, end: 17000, label: "Loading", badge: "4×" },
+      ],
+    },
+    {
+      id: "audio",
+      label: "Audio",
+      tone: "info",
+      blocks: [{ id: "music", start: 0, end: 24000,
+        content: <ScrubberWaveform peaks={peaks} tone="info" /> }],
+    },
+  ]}
+/>`,
+      language: "tsx",
+      label: "Editor timeline"
+    }
+  ]}
+/>
+
+- **`variant: "gap"`** draws a range that is not in the output: hatched,
+  dashed and neutral. Put the reason in `label` and `description`; the
+  description is the block's tooltip and what a screen reader announces.
+- **`badge`** pins a small pill to the block's corner, such as a speed.
+- **`content`** fills the block behind its label. `ScrubberFilmstrip` draws
+  thumbnails from frame URLs; `ScrubberWaveform` draws loudness peaks (0 to 1).
+- **`highlight`** sweeps a shimmer across the block once. Set it on the blocks
+  that just changed under the user, after an AI rewrite or an undo, so the eye
+  finds them. Blocks also glide to their new place when their times change.
+- **`markers`** put dots on the ruler (clicks, keyframes, chapters).
+- **`snap`** makes dragged edges stick to other edges, markers and the
+  playhead within 8 px (or the number you pass), with a guide line.
+- **`zoom`**, `defaultZoom` and `onZoomChange` magnify the timeline. <Kbd>Ctrl</Kbd>
+  or <Kbd>Cmd</Kbd> with the wheel, or a pinch, zooms around the pointer;
+  <Kbd>+</Kbd> and <Kbd>-</Kbd> work on the focused timeline. The view follows
+  the playhead while it plays.
+- **`range`** and `onRangeChange`: <Kbd>Shift</Kbd>-drag on the ruler or an
+  empty track selects a span, and a plain click clears it.
+- **`renderPreview`** shows what you return above the pointer while it hovers,
+  with the time under it. A frame of the video is the usual answer.
+
 ## Editing is yours to accept
 
 `onBlockChange` hands back **absolute** times, already clamped to
@@ -119,6 +191,17 @@ what belongs in it is entirely your application's business.
     showTime: "Show the current time next to the playhead.",
     formatTime: "Turn seconds into the label shown. Defaults to m:ss.",
     step: "Snap the playhead to this interval, in seconds.",
+    ruler: "A time ruler above the tracks; pressing it seeks.",
+    labelWidth: "Width of the track header column.",
+    markers: "Dots on the ruler for clicks, keyframes or chapters.",
+    snap: "Dragged edges stick to edges, markers and the playhead within this many pixels (true = 8).",
+    zoom: "Horizontal magnification, 1 and up. Controlled.",
+    defaultZoom: "Starting zoom when uncontrolled.",
+    onZoomChange: "Called when Ctrl/Cmd + wheel, a pinch, or + and - change the zoom.",
+    maxZoom: "The most the timeline may zoom. Default 40.",
+    range: "A selected span. Controlled.",
+    onRangeChange: "Called as Shift-drag draws a span, and with null when a click clears it.",
+    renderPreview: "What to show above the pointer while it hovers, given the time there.",
   }}
   content={[
     ["aria-label", "string", "-", "Label for the playhead handle."]
@@ -135,7 +218,8 @@ what belongs in it is entirely your application's business.
     ["tone", ["neutral", "brand", "accent", "info", "danger", "warning", "success"]],
     ["movable", "boolean", "false"],
     ["resizable", "boolean", "false"],
-    ["onAdd", "(time: number) => void"]
+    ["onAdd", "(time: number) => void"],
+    ["label", "ReactNode"]
   ]}
 />
 
@@ -148,6 +232,22 @@ what belongs in it is entirely your application's business.
     ["end", "number"],
     ["label", "ReactNode"],
     ["tone", ["neutral", "brand", "accent", "info", "danger", "warning", "success"]],
-    ["locked", "boolean", "false"]
+    ["locked", "boolean", "false"],
+    ["variant", ["solid", "gap"], "solid"],
+    ["badge", "ReactNode"],
+    ["content", "ReactNode"],
+    ["highlight", "boolean", "false"],
+    ["description", "string"]
+  ]}
+/>
+
+### ScrubberMarker
+
+<PropsTable
+  content={[
+    ["id", "string"],
+    ["time", "number"],
+    ["label", "string"],
+    ["tone", ["neutral", "brand", "accent", "info", "danger", "warning", "success"], "neutral"]
   ]}
 />

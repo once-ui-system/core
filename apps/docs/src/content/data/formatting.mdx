@@ -1,0 +1,143 @@
+---
+title: "Numbers and dates"
+export: false
+summary: "How Once UI charts write values and dates: valueFormat, per-series formats, locales, currencies and units, date patterns, and what works from a server component."
+updatedAt: "2026-11-12"
+docs: "once-ui/data/formatting.mdx"
+github: "packages/core/src/modules/data/utils/chartSeries.ts"
+navLabel: "Numbers and dates"
+navIcon: "ruler"
+---
+
+A chart writes each number in three places: the value axis, the tooltip and the summary a screen reader hears. `valueFormat` and `locale` set all three at once, so the axis never says `1240000` while the tooltip says `1.24M`.
+
+## valueFormat
+
+- `"number"` writes `1240000` as `1,240,000`, for counts.
+- `"compact"` writes `1240000` as `1.2M`, for big numbers on a small chart.
+- `"percent"` writes `1240000` as `124,000,000%`, for fractions (`0.42` is `42%`).
+- `{ style: "currency", currency: "EUR" }` writes `1240000` as `€1,240,000.00`, for money.
+- `{ style: "unit", unit: "kilogram" }` writes `1240000` as `1,240,000 kg`, for measurements.
+- `(v) => v + " pts"` writes `1240000` as `1240000 pts`, for anything Intl can't write.
+
+With no `valueFormat`, `locale` or series `format` at all, the axis prints plain digits (`1240000`) and the tooltip groups them (`1,240,000`). Set `valueFormat="number"` to group both.
+
+Anything `Intl.NumberFormat` takes is an option: `maximumFractionDigits`, `notation`, `signDisplay` and the rest.
+
+`"percent"` expects fractions. If your data already holds `42` for 42%, write `{ style: "unit", unit: "percent" }` instead, which prints `42%` without multiplying.
+
+<LineChart
+  marginTop="16"
+  marginBottom="24"
+  title="Conversion rate"
+  height="18rem"
+  axis="both"
+  legend={{ display: false }}
+  valueFormat="percent"
+  xKey="week"
+  series={{ key: "rate", label: "Conversion", color: "green" }}
+  data={[
+    { week: "W1", rate: 0.021 },
+    { week: "W2", rate: 0.024 },
+    { week: "W3", rate: 0.023 },
+    { week: "W4", rate: 0.031 },
+    { week: "W5", rate: 0.034 }
+  ]}
+/>
+
+## Locale
+
+`locale` is the language the numbers are written in, as a BCP 47 tag. It defaults to `en-US` on the server and in every browser, so the first HTML and the hydrated chart agree. Pass the reader's locale when you know it:
+
+<LineChart
+  marginTop="16"
+  marginBottom="24"
+  title="Bevétel"
+  description="locale: hu-HU, currency: HUF"
+  height="18rem"
+  xKey="month"
+  locale="hu-HU"
+  valueFormat={{ style: "currency", currency: "HUF", maximumFractionDigits: 0 }}
+  series={[
+    { key: "web", label: "Webshop", color: "blue" },
+    { key: "store", label: "Bolt", color: "orange" }
+  ]}
+  data={[
+    { month: "jan.", web: 1240000, store: 880000 },
+    { month: "febr.", web: 1310000, store: 910000 },
+    { month: "márc.", web: 1580000, store: 860000 },
+    { month: "ápr.", web: 1720000, store: 940000 }
+  ]}
+/>
+
+The value axis widens to fit the longest label, so `1 950 000 Ft` is not cut at the edge.
+
+A locale the runtime doesn't know falls back to `en-US` instead of throwing.
+
+## A format per series
+
+`series[].format` overrides `valueFormat` for one series in the tooltip. Use it when one chart shows two kinds of number, such as orders and their average value. The axis keeps the chart's `valueFormat`, because there is only one axis.
+
+```tsx
+<LineBarChart
+  valueFormat="number"
+  series={[
+    { key: "orders", label: "Orders" },
+    { key: "aov", label: "Average order", format: { style: "currency", currency: "EUR" } },
+  ]}
+  data={rows}
+/>
+```
+
+Mixing units on one axis is usually a sign the chart wants to be two charts: see [Choosing a chart](/data/choosing#things-to-avoid).
+
+## Stacks in percent
+
+`stack="percent"` writes the axis from 0% to 100% whatever `valueFormat` says, because the axis is a share. The tooltip keeps the real values in `valueFormat`, so the reader sees both "42%" on the axis and "1,240 orders" on hover.
+
+## Dates
+
+Dates are written with `date.format`, a [date-fns pattern](https://date-fns.org/docs/format):
+
+| Pattern | Writes |
+| --- | --- |
+| `"yyyy"` | `2026` |
+| `"MMM yyyy"` | `Mar 2026` |
+| `"MMM d"` | `Mar 1` |
+| `"d MMM"` | `1 Mar` |
+| `"HH:mm"` | `14:30` |
+| `"QQQ yyyy"` | `Q1 2026` |
+
+The pattern is applied to ISO strings and `Date` objects on the axis, in the tooltip and in the summary. Month and day names are in English. For another language, write the text yourself in the row's `label` key, which every place that prints the x value uses as it is:
+
+```ts
+const data = rows.map((row) => ({
+  ...row,
+  label: new Intl.DateTimeFormat("hu-HU", { month: "short" }).format(new Date(row.date)),
+}));
+```
+
+## From a server component
+
+The charts are client components that render on the server, so you can fetch in a server component and pass the rows straight in. Props cross from the server to the client as data, and a function is not data: `valueFormat={(v) => …}` from a server component fails to render.
+
+From a server component, use the string and `Intl` forms, which cover nearly everything. When you need a function, wrap the chart in a small client component and pass it the rows:
+
+```tsx
+"use client";
+
+import { LineChart, type DataPoint } from "@once-ui-system/core/data";
+
+export function ScoreChart({ data }: { data: DataPoint[] }) {
+  return (
+    <LineChart
+      xKey="week"
+      series={{ key: "score" }}
+      valueFormat={(v) => `${v.toFixed(1)} / 10`}
+      data={data}
+    />
+  );
+}
+```
+
+The same goes for `date.onRangeChange`.

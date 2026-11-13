@@ -1,0 +1,17 @@
+{
+  "files": [
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "components/Alerts.tsx",
+    "components/AppShell.tsx",
+    "components/BookingDialog.tsx",
+    "components/PatientRecordView.tsx",
+    "components/PatientSearch.tsx",
+    "components/Schedule.tsx",
+    "components/StatusBadge.tsx",
+    "lib/clinic.tsx",
+    "lib/data.ts"
+  ],
+  "rejected": []
+}

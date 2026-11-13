@@ -1,0 +1,136 @@
+---
+title: "Building blocks"
+export: false
+summary: "The pieces Once UI charts are made of, exported for your own visuals: ChartHeader, ChartStatus, ChartSummary, Swatch and useDataTheme."
+updatedAt: "2026-11-12"
+docs: "once-ui/data/parts.mdx"
+github: "packages/core/src/modules/data/index.ts"
+navLabel: "Building blocks"
+navIcon: "package"
+---
+
+When none of the charts fits, such as a calendar heatmap, a funnel or a map with values, build the visual yourself and give it the same frame as the charts. These parts are what every chart uses, so a custom visual next to a `LineChart` reads as one system.
+
+```tsx
+import { ChartHeader, ChartStatus, ChartSummary, Swatch } from "@once-ui-system/core/data";
+import { useDataTheme } from "@once-ui-system/core";
+```
+
+## ChartHeader
+
+The title, description and date-range picker on top of every chart. It renders nothing when it has neither a title, a description nor a selector.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="l"
+  preview={
+    <Column fillWidth radius="l" border="neutral-alpha-weak">
+      <ChartHeader title="Opening hours used" description="Bookings per hour, last 4 weeks" />
+      <Column fillWidth padding="24" borderTop="neutral-alpha-weak" center>
+        <Text onBackground="neutral-weak" textVariant="label-default-s">Your visual</Text>
+      </Column>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Column fillWidth radius="l" border="neutral-alpha-weak">
+  <ChartHeader title="Opening hours used" description="Bookings per hour, last 4 weeks" />
+  <Column fillWidth padding="24" borderTop="neutral-alpha-weak">
+    {/* your visual */}
+  </Column>
+</Column>`,
+      language: "tsx",
+      label: "ChartHeader"
+    }
+  ]}
+/>
+
+<PropsTable
+  content={[
+    ["title", "ReactNode", "-", "The heading."],
+    ["description", "ReactNode", "-", "The line under it."],
+    ["date", "DateConfig", "-", "The same date config a chart takes; date.selector shows the picker."],
+    ["dateRange", "DateRange", "-", "The range the picker shows as picked."],
+    ["onDateRangeChange", "(range: DateRange) => void", "-", "Called with the range the reader picks."],
+    ["presets", "PresetsConfig", "{ display: true, granularity: \"week\" }", "Quick ranges beside the calendar."],
+  ]}
+/>
+
+It takes the `Column` props too, for padding and borders.
+
+## ChartStatus
+
+The loading spinner, the error message or the empty message, centred in whatever box it sits in. Loading wins over an error, and an error over empty. It renders nothing when none is set.
+
+```tsx
+<Column fillWidth height="16rem">
+  <ChartStatus loading={isLoading} error={Boolean(error)} empty={rows.length === 0} />
+  {!isLoading && !error && rows.length > 0 && <Heatmap rows={rows} />}
+</Column>
+```
+
+<PropsTable
+  content={[
+    ["loading", "boolean", "false", "Show the spinner."],
+    ["error", "boolean", "false", "Show errorState."],
+    ["empty", "boolean", "false", "Show emptyState."],
+    ["errorState", "ReactNode", "\"An error occurred while fetching data\"", "The error message."],
+    ["emptyState", "ReactNode", "\"No data available for the selected period\"", "The empty message."],
+  ]}
+/>
+
+## ChartSummary
+
+The hidden table every chart carries for screen readers: the x values as rows, a column per series, every value in the chart's format. Give a custom visual the same, from the same rows, so its numbers are reachable without sight.
+
+```tsx
+<figure aria-label="Bookings per hour">
+  <Heatmap rows={rows} />
+  <ChartSummary
+    title="Bookings per hour"
+    data={rows}
+    xKey="hour"
+    series={[{ key: "mon", label: "Monday" }, { key: "tue", label: "Tuesday" }]}
+    valueFormat="number"
+  />
+</figure>
+```
+
+<PropsTable
+  content={[
+    ["data", "DataPoint[]", "-", "The rows, as a chart takes them."],
+    ["series", "SeriesConfig | SeriesConfig[]", "-", "The columns. Without it, every key but the x key."],
+    ["xKey", "string", "-", "The row key for the first column."],
+    ["kind", "\"cartesian\" | \"pie\"", "cartesian", "pie adds each row's share of the total."],
+    ["valueFormat", "ValueFormat", "-", "How values are written."],
+    ["locale", "string", "en-US", "The locale they are written in."],
+    ["date", "DateConfig", "-", "Writes date x values with date.format."],
+    ["title", "string", "-", "Used for the caption: \"Title: data\"."],
+    ["caption", "ReactNode", "-", "The table's caption, in place of the one from the title."],
+  ]}
+/>
+
+## Swatch
+
+The colour sample in legends and tooltips, in the chart variant's fill.
+
+```tsx
+<Row vertical="center" gap="8">
+  <Swatch color="var(--data-emerald)" />
+  <Text textVariant="label-default-s">Booked</Text>
+</Row>
+```
+
+`color` is a CSS colour as written: use `var(--data-emerald)` for a palette hue, since a bare `"emerald"` is the CSS named colour here. `size` is `"s"` or `"m"`, and `variant` defaults to the app's chart variant.
+
+## useDataTheme
+
+The chart settings from `DataThemeProvider`, the `dataStyle` section of your config, and a setter:
+
+```tsx
+const { variant, mode, height, axis, tick, setChartOptions } = useDataTheme();
+```
+
+Read `axis.stroke` and `tick.fill` to draw your own axes in the charts' colours, and `height` to match their size. `setChartOptions({ mode: "divergent" })` changes every chart under the provider; see [Recipes](/data/recipes#theme-switch-for-charts).

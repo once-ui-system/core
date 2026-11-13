@@ -1,0 +1,241 @@
+{
+  "arm": "K",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 11379
+    },
+    "build": {
+      "ok": true,
+      "ms": 17739
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 1628,
+          "height": 3123,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 1654,
+          "height": 2842,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 1654,
+          "height": 2652,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 1628,
+              "height": 3123,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1654,
+              "height": 2842,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1654,
+              "height": 2652,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 1,
+            "serious_or_critical": 1,
+            "ids": [
+              "color-contrast:serious:1"
+            ]
+          }
+        },
+        "/pricing": {
+          "viewports": {
+            "phone": {
+              "text": 1457,
+              "height": 2951,
+              "width": 522,
+              "horizontal_overflow": true,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1483,
+              "height": 2168,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1483,
+              "height": 2130,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 2,
+            "serious_or_critical": 2,
+            "ids": [
+              "aria-valid-attr-value:critical:1",
+              "color-contrast:serious:1"
+            ]
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 1,
+        "nodes": 1,
+        "serious_or_critical": 1,
+        "ids": [
+          "color-contrast:serious:1"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        },
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/pricing phone": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/pricing tablet": {
+          "ms": 1765,
+          "settled": true
+        },
+        "/pricing desktop": {
+          "ms": 1762,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 113,
+          "distinct_fontSize": 9,
+          "distinct_color": 6,
+          "distinct_background": 3,
+          "distinct_radius": 2,
+          "distinct_shadow": 0,
+          "distinct_spacing": 16,
+          "spacing_on_4px_grid": 0.846
+        },
+        "/pricing": {
+          "elements": 247,
+          "distinct_fontSize": 8,
+          "distinct_color": 6,
+          "distinct_background": 6,
+          "distinct_radius": 3,
+          "distinct_shadow": 1,
+          "distinct_spacing": 13,
+          "spacing_on_4px_grid": 0.907
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 246.9,
+          "css_kb": 0,
+          "fcp_ms": 116,
+          "cls": 0,
+          "long_task_ms": 54
+        },
+        "/pricing": {
+          "js_kb": 246.9,
+          "css_kb": 0,
+          "fcp_ms": 120,
+          "cls": 0,
+          "long_task_ms": 54
+        }
+      },
+      "brand": {
+        "filled_buttons": 2,
+        "brand_filled_buttons": 0,
+        "button_radius_matches": 2,
+        "heading_font": "Georgia, \"Times New Roman\", serif",
+        "heading_serif": true,
+        "body_font": "ui-sans-serif, system-ui, sans-serif",
+        "page_background": "rgb(9, 9, 11)",
+        "dark_first_paint": true
+      },
+      "views": {
+        "pricing-yearly phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-pricing-yearly-phone.jpg"
+        },
+        "pricing-yearly tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-pricing-yearly-tablet.jpg"
+        },
+        "pricing-yearly desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-pricing-yearly-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/theme.ts",
+    "components/ui/provider.tsx",
+    "components/ui/color-mode.tsx",
+    "lib/data.ts",
+    "components/site-header.tsx",
+    "components/site-footer.tsx",
+    "components/site-shell.tsx",
+    "app/page.tsx",
+    "components/pricing-view.tsx",
+    "app/pricing/page.tsx",
+    "app/layout.tsx"
+  ]
+}

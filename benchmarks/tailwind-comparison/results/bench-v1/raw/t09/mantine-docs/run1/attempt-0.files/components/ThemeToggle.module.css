@@ -1,0 +1,16 @@
+/* Show the sun in dark mode (click to go light) and the moon in light mode. */
+.sun {
+  display: none;
+
+  @mixin dark {
+    display: block;
+  }
+}
+
+.moon {
+  display: block;
+
+  @mixin dark {
+    display: none;
+  }
+}

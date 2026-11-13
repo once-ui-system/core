@@ -109,7 +109,7 @@ That default is for a landing page. For an app (signed-in, records, forms), the 
 - The product mark is a `Logo`: `<Logo text="Seatwise" monogram href="/" />` without a designed mark, or `icon`/`wordmark` sources when there are files. Never an `Icon` beside a `Text`.
 - An inline alert or notice is a `Feedback` (`tone`, `icon`, `title`, children), never a `Column role="alert"` with a tinted background.
 - A chart is `LineChart`, `BarChart`, `LineBarChart`, `PieChart` or `Sparkline` from `@once-ui-system/core/data`, never hand-drawn SVG. They take the theme's data palette, tooltips and axes.
-- Give a single-series chart the brand: series `color: "brand-strong"` (a bare `"brand"` is not a data hue and draws nothing). Its `height` is a string (`height="16rem"`): `height={16}` is the 1rem token and collapses the chart to a line.
+- Give a single-series chart the brand: series `color: "brand"` (not `"brand-strong"`, a text colour: white in dark). Its `height` is a string (`height="16rem"`): `height={16}` is the 1rem token and collapses the chart to a line.
 
 8f. Work apps are dense and quiet. An app people use all day (a front desk, a planner, an admin) sets `density: "compact"` and `border: "conservative"` in the config `style`; spacious and rounded oversize every control and corner. Key numbers are one bordered strip of divided cells (label, then value, a `StatusIndicator` for state), not a row of grey tiles. One screen has one primary action: the same "Book appointment" in the header and on the page is one too many.
 
@@ -150,7 +150,8 @@ Breakpoints, padding, background, border, radius, sizes and `hide` exist only on
     - Tabs → `Tabs` > `TabList` > `Tab` with a `TabPanel` per value (`orientation="vertical"` for a settings nav). `SegmentedControl` picks a value; it is not a tab set
     - Mobile nav, filters, a side sheet → `Drawer` (`side`, `size`); it brings the focus trap, scroll lock and Escape a hand-made overlay misses
     - Where-am-I trail → `Breadcrumbs items={[{ label, href }, ...]}`; the last item is the current page
-    - Keyboard shortcuts → `useHotkeys("mod+k", fn)` (it skips while the user types), shown with `Kbd keys="mod+k" label="Search"`
+    - Keyboard shortcuts → `useHotkeys("mod+k", fn)` (it skips while the user types), shown with `Kbd keys="mod+k" label="Search"`. Put `aria-keyshortcuts` on the control the shortcut presses (`<Button aria-keyshortcuts="Control+K Meta+K">Search</Button>`), so screen readers announce it too
+    - A `Table` row that opens something → a link or `Button` in one of its cells (`cell: row => <SmartLink href={row.href}>{row.name}</SmartLink>`). `onRowClick` alone is a pointer shortcut: a row is not a tab stop and Enter does nothing on it
     - Text for screen readers only, skip links → `VisuallyHidden` (`focusable` for a skip link)
     - Markdown/MDX content → `mdxComponents` or `createMdxComponents({...})` from `/mdx` (rule 30), never a hand-written element map
 

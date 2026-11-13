@@ -13,10 +13,20 @@ import type { Availability } from "./availability";
  * marked only while the name it documents is missing from the package a reader
  * would install today, so the mark clears itself when the release lands.
  *
- * The pages that use this revalidate hourly, so a release shows up within the
- * hour without a redeploy.
+ * The pages that use this revalidate hourly. The registry read refreshes on a
+ * shorter clock so its cache does not stack on the page's: both are
+ * stale-while-revalidate, and at the same interval a release could take two
+ * hours to show. A release now shows within about an hour, without a redeploy.
  */
 export const RELEASE_REVALIDATE_SECONDS = 3600;
+const REGISTRY_REVALIDATE_SECONDS = 300;
+
+/**
+ * How long a server instance reuses one lookup. It only shares the read
+ * across the pages of one build or render pass; kept forever, a warm instance
+ * would answer with the package from before a release on every regeneration.
+ */
+const LOOKUP_TTL_MS = 60_000;
 
 /**
  * Folders whose pages each document one export, named by the page title (or
@@ -42,7 +52,7 @@ interface PublishedPackage {
 /** `null`: npm could not be read, so nothing is marked rather than everything. */
 type Lookup = PublishedPackage | "unpublished" | null;
 
-const lookups = new Map<string, Promise<Lookup>>();
+const lookups = new Map<string, { at: number; pending: Promise<Lookup> }>();
 
 function distTag(platform: Platform): string {
   // The web docs follow the docs version (the 3.0 beta build reads `next`);
@@ -52,15 +62,14 @@ function distTag(platform: Platform): string {
 
 function lookup(platform: Platform): Promise<Lookup> {
   const key = `${platform.packageName}@${distTag(platform)}`;
-  let pending = lookups.get(key);
-  if (!pending) {
-    pending = readPublished(platform.packageName, distTag(platform)).catch((error) => {
-      console.warn(`Could not read ${key} from npm; no page is marked unreleased.`, error);
-      lookups.delete(key);
-      return null;
-    });
-    lookups.set(key, pending);
-  }
+  const cached = lookups.get(key);
+  if (cached && Date.now() - cached.at < LOOKUP_TTL_MS) return cached.pending;
+  const pending = readPublished(platform.packageName, distTag(platform)).catch((error) => {
+    console.warn(`Could not read ${key} from npm; no page is marked unreleased.`, error);
+    lookups.delete(key);
+    return null;
+  });
+  lookups.set(key, { at: Date.now(), pending });
   return pending;
 }
 
@@ -68,7 +77,7 @@ async function readPublished(name: string, tag: string): Promise<Lookup> {
   const registry = `https://registry.npmjs.org/${name.replace("/", "%2f")}`;
   const meta = await fetch(registry, {
     headers: { accept: "application/vnd.npm.install-v1+json" },
-    next: { revalidate: RELEASE_REVALIDATE_SECONDS },
+    next: { revalidate: REGISTRY_REVALIDATE_SECONDS },
   });
   if (meta.status === 404) return "unpublished";
   if (!meta.ok) throw new Error(`registry answered ${meta.status}`);

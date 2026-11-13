@@ -42,11 +42,11 @@ Static panel recipe (pricing tiers, stats, settings sections):
 - `Card` = interactive only (`href` or `onClick`). Static panels = Column + surface recipe.
 - Colors: `{tone}-{weight}` or `{tone}-alpha-{weight}`. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`.
 - `background` also: `surface | overlay | page | transparent`
-- Same-shaped records: one surface, divided rows (`borderTop={i > 0}`), or a `Table`; never a card per row
+- Same-shaped records: one surface, divided rows (`borderTop={i > 0}`), or a `Table` (row link: a link in a `cell`, not `onRowClick`); never a card per row
 - One raised `surface` for content on `page`; sections inside are spacing + `borderTop`, not grey cards
 - Alerts: `Feedback`, never a hand-built `role="alert"` box
-- Charts: `@once-ui-system/core/data` (`LineChart`, `BarChart`…), never hand-drawn SVG; `height="16rem"` (a string), series `color: "brand-strong"`
-- Brand mark: `<Logo text="Name" monogram="N" />` (its initial, or an `icon`; beside a `Mascot`, only `text`; never a letter tile), never `Icon` + `Text`; a bare `monogram` is a placeholder shape
+- Charts: `@once-ui-system/core/data` (`LineChart`, `BarChart`…), never hand-drawn SVG; `height="16rem"` (a string), series `color: "brand"`
+- Brand mark: `<Logo text="Name" monogram />`, never `Icon` + `Text`
 - Critical outranks status: `Feedback tone="danger"` or `Tag prefixIcon`; urgent is `danger`/`warning`, never `info`
 
 ### Typography
@@ -91,38 +91,11 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Pick one of a few | A form value with a label (timezone, country, role on a form): `Select`. A toolbar view control or action (sort, filter, export): `Dropdown` with `Option`s and `trigger={<Button variant="secondary" suffixIcon="chevronDown">Role: Admin</Button>}`, the label naming the current choice (a long, searchable filter list: `Select size="xxs" searchable` with a `label`). Two to four choices always shown: `SegmentedControl` |
 | Mobile nav, side sheet | `Drawer`, not a hand-made overlay |
 | Page trail | `Breadcrumbs items={[...]}` |
-| Keyboard shortcut | `useHotkeys("mod+k", fn)` + `Kbd keys="mod+k" label="Search"` |
+| Keyboard shortcut | `useHotkeys("mod+k", fn)` + `Kbd keys="mod+k" label="Search"` + `aria-keyshortcuts` |
 | Screen-reader text, skip link | `VisuallyHidden` (skip link: `<VisuallyHidden as="a" href="#main" focusable>`) |
 | Native attributes | Every component also takes its element's own: `aria-*`, `id`, `role`, `onClick`; `type` on `Button`; `value`, `onChange`, `type` on `Input` |
 | MDX content | `mdxComponents` / `createMdxComponents` from `/mdx` |
 | Multi-part component | List prop (`items`, `columns`, `options`) for same-shaped data, else plain named parts (`SortableItem`, `StylePanelBrand`); never `Sortable.Item` |
-| Brand mark (header, sidebar, splash, favicon-sized) | `Logo text="Name" monogram="N"` (the initial; or `icon`/`wordmark`), never a drawn SVG or Icon + Text |
-| An assistant, guide or character | `Mascot` (`state` idle/listening/thinking/speaking, `mood`, `accessory`, `color`, `eyes`) — never a hand-drawn SVG creature |
-| AI or long work in progress | `WorkingIndicator` (its verbs, or yours); `Mascot state="thinking"` beside it in a chat |
-| File or photo upload | `MediaUpload` from `/media` (drop, paste, preview, loading, error) or `ChatComposer attach`, never `<input type="file">` |
-| Places, routes, areas | `Map` from `/map` with `MapMarkers`/`MapPin`/`MapPopup`/`MapCircle`, never a static image or a list of addresses. Never `setStyle`, fetch the style JSON, `new maplibregl.Map` or import `maplibre-gl/dist/maplibre-gl.css` (Map brings its own styles): the basemap goes blank. Your own layers (zones, heat): `const { map, styleVersion } = useMap()` and `addSource`/`addLayer` in an effect keyed on `styleVersion`, removed on cleanup |
-| A clickable map point | `MapPin onClick` (it is the button; never wrap it in `Button`/`Link`), its `aria-label` starting with its visible text |
-| Steps, history, a run's progress | `Timeline` |
-
-Before writing a component of your own, check `catalog.json`: if one of its purposes fits, use it and give it your content.
-
-### Build it to ship, not to screenshot
-
-Even when the brief says nothing about data, build the app as if a backend were coming tomorrow. 90% of briefs won't ask; every one expects it.
-
-- **Data layer:** a `lib/data.ts` (or `lib/api.ts`) of typed async functions, `getX()`, `createX()`, `updateX()`, returning typed records. Behind them, mock data with a short delay (`await wait(400)`). Screens call these functions, never import the mock array, so a real API replaces the functions and no screen changes.
-- **Four states on every screen that loads data:** loading (`Skeleton` shaped like the content, never a lone spinner on a whole page), empty (a title, one line of help and the action that fills it), error, filled. **Error is rendered, not just caught:** keep it in state (`const [error, setError] = useState<Error | null>(null)`, set in `catch`) and render `Feedback tone="danger"` with a Retry `Button` in place of the content; a `catch` that only logs or toasts a read is a blank screen.
-  ```tsx
-  const [state, setState] = useState<{ status: "loading" | "error" | "ready"; data: Job[] }>({ status: "loading", data: [] });
-  const load = useCallback(() => {
-    setState((s) => ({ ...s, status: "loading" }));
-    getJobs().then((data) => setState({ status: "ready", data })).catch(() => setState((s) => ({ ...s, status: "error" })));
-  }, []);
-  useEffect(load, [load]);
-  if (state.status === "error") return <Feedback tone="danger" title="Jobs didn't load"><Button size="s" variant="secondary" label="Retry" onClick={load} /></Feedback>;
-  ```
-- **Writes:** optimistic update, `loading` on the pressed `Button`, rollback plus `addToast({ tone: "danger" })` on failure; a sent chat message gets `status` and `onRetry`.
-- **Forms:** `Form` with field errors and `FormErrorSummary`, disabled submit while saving.
 
 ### Imports
 
@@ -170,22 +143,7 @@ Every type a prop names is defined in the slice's (or bundle's) `types`.
 
 If design intent unclear, ask: content style, layout width, color approach, decoration level, imagery. Default: restrained, centered `maxWidth="m"`, single brand accent, one subtle gradient, no placeholder images.
 
-An app: set the theme first: `const p = themePreset("ops")` from `@once-ui-system/core/config` (`ops`: operations, dispatch, maps; `care`: consumer, health, home; `creative`: editors, media; `commerce`: stores, bookings), its own colour as `themePreset("care", { style: { brandSeed: "#…" } })`. Wherever the theme lives: `once-ui.config` (`defineConfig({ style: p.style, dataStyle: p.dataStyle })`) or the providers (`<ThemeInit config={p.style} />`, `<ThemeProvider {...p.style}>`, `<DataThemeProvider {...p.dataStyle}>`). Fonts: `p.fonts` via `next/font` where the network allows. No ambient decoration. One shell (header, nav, panels) for every route of the app, in its `layout.tsx`. Phone header, plan canvas, selection: `ai/layouts.md`.
-
-Make it look designed, not stock:
-
-- One idea carries the screen. A map app is the map, full-bleed, its lists and details on floating `surface` panels (`border`, `radius="l"`, `shadow="l"`, `position="absolute"`), never a map in a card beside a table; the selected place's panel acts on it (a write through the data hook, optimistic with rollback). An area gets one small label at its centre, none below zoom 11. A chat with an assistant gives it a face, and the face is the hero: a `Mascot` shaped into the product with `bodyPath` (a pot, a leaf: a path in 200 × 200) and an `accessory` (a sprout, a hat: SVG, same box), not the default blob; big in the welcome (`size="xl"`, `poke`), then `size={64}` in the header with its `state` following the reply, not just a small avatar per reply; one `Mascot` per view: in the header on the chat route only; beside an `EmptyState`, only its own; a photo is `MediaUpload` or `ChatComposer attach`; the empty chat is a welcome over a brand `Background` (`gradient`) with suggestion `Tag`s.
-- The brand is identity, not paint: `Logo` in the header, the `Mascot`'s `color`, `Nav tone="brand"`, one brand action per view, and the brand on what is selected (a `selected` Card or row, the active tab, the active pin). Never tint every surface.
-- No empty panes: every region has content, an empty state, or collapses away; text over an image or map sits in a panel and wraps or `truncate`s.
-- Hierarchy from type and spacing, not nested grey cards.
-- Say what matters at a glance: a strip of the 3–4 numbers the user acts on (label, `heading-strong` value, status `Tag`), colour that means a status, labels, not decoration.
-- Map labels stay readable: `MapMarkers cluster`; a pin shows its text (`MapPin` with children) only when it is active or there are few, a dot otherwise; status as the pin's `tone`, never a text pill; kinds never overlap; a legend panel (collapsed below `l`) names tones and areas.
-- Every action shows its result where it happened (a split block becomes two, an assigned pin changes colour); one that cannot apply does the nearest useful thing or is disabled with a reason; never a toast alone. No empty bands: a timeline takes its content's height.
-- Data colours carry through: a status or category is the block's, pin's or `Tag`'s `tone`.
-- Secondary pages keep the shell and brand; items are Cards with status and actions. One preview per thing.
-- Tablet keeps the desktop structure, narrower (`SplitView collapseBelow="s"`, side panels in a `Drawer`), never the phone layout.
-- Headers keep their nav at every width (below `m`: a menu `IconButton` opening a `Drawer`). The chat composer keeps its own height; never `fill` it.
-- Tablet and phone keep the main canvas (map, preview, timeline, chat) on screen: side lists become a `Drawer`, a bottom sheet or a `SegmentedControl` tab below `m`; never the canvas pushed off screen.
+An app: set the theme first: `brand` or `brandSeed`, `neutral`, `solid: "color"`, a `--font-heading` family; no ambient decoration. Phone header, plan canvas, selection: `ai/layouts.md`.
 
 ## Components
 
@@ -285,7 +243,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - style?: React.CSSProperties
 
 ### Dropdown
-- fillWidth, disabled, contents, closeAfterClick, handleArrowNavigation, open, nested, disableTriggerClick?: boolean
+- fillWidth, disabled, contents, closeAfterClick, handleArrowNavigation, open, nested, disableTriggerClick, alignSelected?: boolean
 - minWidth, maxWidth, minHeight?: number | CSSUnit
 - placement?: Placement
 - trigger: ReactNode
@@ -602,7 +560,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 type AvatarProps = Avatar props
 type BlendMode = "color" | "screen" | "normal" | "multiply" | "overlay" | "darken" | "lighten" | "difference" | "exclusion" | "hue" | "saturation" | "luminosity" | `color-${"dodge" | "burn"}` | "hard-light" | "soft-light" | "plus-lighter"
 type BlurSize = "s" | "xl" | "l" | "m" | "xs"
-type BorderStyle = "rounded" | "conservative" | "playful" | "sharp"
+type BorderStyle = "rounded" | "playful" | "conservative" | "sharp"
 type BreadcrumbItem = { label: ReactNode; href?: string; prefixIcon?: IconName }
 type BreakpointKey = "s" | "xl" | "l" | "m" | "xs"
 // type ButtonVariant is one of these strings: link ghost subtle primary secondary tertiary
@@ -611,7 +569,7 @@ type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}ch` | 
 type ColorWeight = "strong" | "medium" | "weak"
 type Colors = `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-${"strong" | "medium" | "weak"}` | `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-alpha-${"strong" | "medium" | "weak"}`
 type ColumnHide = Partial<Record<BreakpointKey, boolean>>
-type CursorPresetValue = "rounded" | "system" | "soft" | "dot"
+type CursorPresetValue = "rounded" | "soft" | "dot" | "system"
 type DropdownProps = Dropdown props
 // type FieldSize is one of these strings: s xl l m xs xxs
 // type FlexBreakpointProps: an object of these Flex props, all optional (padding* is padding, paddingX, paddingTop and the rest):
@@ -638,7 +596,7 @@ type ShadowSize = "s" | "xl" | "l" | "m" | "xs"
 type SolidType = "color" | "contrast" | "inverse"
 // type SpacingToken is one of these strings: s xl l m xs 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
 // type StaticSpacingToken is one of these strings: 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
-// type StatusIndicatorScheme is one of these strings: slate sand gray rose mint dusk cyan blue indigo violet magenta pink red orange yellow moss green emerald aqua
+// type StatusIndicatorScheme is one of these strings: blue indigo violet magenta pink red orange yellow moss green emerald aqua cyan sand gray slate rose mint dusk
 type SurfaceStyle = "filled" | "translucent"
 type TShirtSizes = "s" | "xl" | "l" | "m" | "xs"
 type TableAction = { icon: string; label?: string; tooltip?: string; variant?: "primary" | "secondary" | "tertiary" | "ghost"; tone?: Tone; onClick: (row: unknown, index: number) => void; disabled?: (row: unknown, index: number) => boolean }
@@ -683,7 +641,6 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - At s the sidebar hides and a header button opens the same nav in a left Drawer; following a link closes it
 - Breadcrumbs from the route, and the account or workspace switcher as a Dropdown or a User with a dropdown of Option rows
 - A header Search button opens Kbar with `open` and `onOpenChange` (no children); ⌘K still toggles it
-- Every view that loads data shows loading (Skeleton shaped like the content), empty (title, one line, the action that fills it), error (Feedback tone="danger" with Retry) and filled, through a typed lib/ data layer of async functions over mock data — even when the brief never mentions data
 
 ## Layout shell
 

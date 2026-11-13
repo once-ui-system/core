@@ -1,0 +1,23 @@
+{
+  "files": [
+    "lib/theme.ts",
+    "components/ui/provider.tsx",
+    "app/layout.tsx",
+    "lib/data.ts",
+    "lib/format.ts",
+    "lib/nav.ts",
+    "components/shell/sidebar-nav.tsx",
+    "components/shell/app-shell.tsx",
+    "components/page-header.tsx",
+    "components/text-link.tsx",
+    "components/dashboard/dashboard-view.tsx",
+    "app/page.tsx",
+    "components/projects/projects-view.tsx",
+    "app/projects/page.tsx",
+    "components/reports/reports-view.tsx",
+    "app/reports/page.tsx",
+    "components/settings/settings-view.tsx",
+    "app/settings/page.tsx"
+  ],
+  "rejected": []
+}

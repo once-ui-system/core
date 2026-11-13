@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+/*
+ * Lumen design tokens. Every screen reads these through utilities
+ * (bg-brand, text-muted, rounded-ui, font-mono ...), so the brand lives here only.
+ * Dark is the default theme.
+ */
+@theme {
+  /* Brand: #E8590C */
+  --color-brand: #e8590c;
+  --color-brand-hover: #ff6f26;
+  --color-brand-strong: #c2480a;
+  --color-on-brand: #1c1917;
+
+  /* Warm stone neutrals */
+  --color-canvas: #0c0a09;
+  --color-surface: #1c1917;
+  --color-raised: #292524;
+  --color-line: #44403c;
+  --color-line-strong: #78716c;
+  --color-fg: #fafaf9;
+  --color-muted: #a8a29e;
+
+  /* Type */
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  /* 4px corners on buttons, inputs, cards and menus */
+  --radius-ui: 4px;
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    background-color: var(--color-canvas);
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-fg);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-mono);
+    letter-spacing: -0.01em;
+  }
+
+  a {
+    text-underline-offset: 3px;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-brand);
+    color: var(--color-on-brand);
+  }
+}

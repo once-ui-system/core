@@ -1,0 +1,237 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the app described below in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: The signed-in shell of Lumen. Three screens share one layout: a dashboard at `/` (a welcome line and a few summary cards), a projects list at `/projects`, and a settings page at `/settings`. On desktop a left sidebar holds the navigation and can be collapsed to icons. The navigation has nested groups: an \"Analytics\" group containing \"Overview\" and \"Reports\", and a \"Workspace\" group containing \"Projects\" and \"Settings\". The current route is highlighted in the navigation. A header shows a breadcrumb for the current screen. On phones the sidebar is replaced by a menu button that opens the navigation in a drawer.\n\nUse this data for the content (define it in the code; you may put it in `lib/data.ts`):\n\n```json\n{\n  \"product\": \"Lumen, a product-analytics and issue-tracking app for small software teams\",\n  \"user\": {\n    \"name\": \"Maya Okafor\",\n    \"email\": \"maya@acmelabs.io\",\n    \"role\": \"Owner\"\n  },\n  \"projects\": [\n    {\n      \"key\": \"WEB\",\n      \"name\": \"Marketing site\",\n      \"status\": \"Active\",\n      \"issues\": 12,\n      \"updated\": \"2026-10-12\"\n    },\n    {\n      \"key\": \"APP\",\n      \"name\": \"Customer app\",\n      \"status\": \"Active\",\n      \"issues\": 31,\n      \"updated\": \"2026-10-14\"\n    },\n    {\n      \"key\": \"API\",\n      \"name\": \"Public API\",\n      \"status\": \"Active\",\n      \"issues\": 9,\n      \"updated\": \"2026-10-09\"\n    },\n    {\n      \"key\": \"MOB\",\n      \"name\": \"Mobile beta\",\n      \"status\": \"Paused\",\n      \"issues\": 4,\n      \"updated\": \"2026-09-28\"\n    },\n    {\n      \"key\": \"OPS\",\n      \"name\": \"Internal tools\",\n      \"status\": \"Archived\",\n      \"issues\": 0,\n      \"updated\": \"2026-08-30\"\n    }\n  ]\n}\n```\n\nRequirements:\n- The app must serve these routes: `/`, `/projects`, `/settings`. Each route default-exports its page from its `page.tsx`; nested layouts are allowed.\n- Write as many files as the app needs, under `app/`, `components/` or `lib/`. Do not change any file that already exists in the project except `app/page.tsx`. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Put \"use client\" at the top of every file that uses state, effects or event handlers.\n- Use realistic placeholder content defined in the files (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The app must type-check under strict TypeScript, pass `next build`, and render every route without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with every file, each in its own fenced code block whose opening line names the file's path, like ```tsx app/settings/page.tsx, and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project structure."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01BPQK2ghsTzBxGRnDzxusQ5",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011ooU5TrTRNwq1gE3gn6bSD",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01BPQK2ghsTzBxGRnDzxusQ5",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011ooU5TrTRNwq1gE3gn6bSD",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01R63K2qyoWAdzuFMTzguW6m",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011oUgdkewwK9UDtkwom4qNi",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01LU2Xcgjcz3b6K6cx2Emfdb",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Tn1AEKUBBGVxGeDcpuLypi",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01R63K2qyoWAdzuFMTzguW6m",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011oUgdkewwK9UDtkwom4qNi",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"maplibre-gl\": \"5.24.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"react-map-gl\": \"8.1.3\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LU2Xcgjcz3b6K6cx2Emfdb",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Tn1AEKUBBGVxGeDcpuLypi",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_0169K66QzrYEhWF4N2jEFMAL",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01GFn45vyqdfQQjxLKHd453q",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01XrrWurDG6cvea15hzLry6h",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0169K66QzrYEhWF4N2jEFMAL",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GFn45vyqdfQQjxLKHd453q",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01XrrWurDG6cvea15hzLry6h",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'm using a route group with a shared shell layout, since the root layout is fixed; each page will wrap itself in an AppShell client component, with the dashboard staying at app/page.tsx.\n\n",
+          "signature": "CAQS7goKEQgTGAI4AUIJbmFycmF0aW9uEgydn6eEahFJug9p7l8aDDUHEno76oypG7CYPyIwLPJjPA9WQbBpwGPGXBqhiO4LTdOv/h0hBouJ6SosauQ4Xja52M5D82GheqkHJh6oKooKx+92mqTO0m9VWH476yvkvBO+exbclnBsS8PkcQJBSJusFbIBMcHtwqadhAXel4BCUvtHMd6O4shv0ZSEbRqJ3JDvsirzs89D/9oCUxDsYYxjvohT/CQRl03hvpiCbKoRQkGT+4HKULE6NrwEm2nAJ3Quq8nGbHRYRt1DQaaMa0To9sxfxQaaywum04M/M66pm4s5T3LofoGg6pBEic6YMCBkB9fmunVjXHjJdzT6CnIqnPna77zIsj3v65PcvVhTpyb7xLbRxK208oJpj51kpLZMfuXBhYhedki44U2Wlfs6KnDsQN6kUQZIt/LgZPIhnvBTToNihVN7ZGmTFq7DJlmxvp7b7RT57pYKF4RexcSy3QDE5OFDiZGQ6fcoPnGlr8iXRf6oKzn2ZTxkFhN6ztuhxGvCESV24mPZ0Vip1zlH2So1GDEb8WznAon2C7cn5jpeLPvyo97MuFDSuwPt57djYIomF6Xoe6CQc/+4cewfi6Cblb4HGn65X/AAZYPsaBloLMEexEZjg8LLpAqaAe4jbraw14/VLdMkkzjcdKkMyY/wL6IcKcu2qyvoMUffBlU4PzI00/nDtYFqMlmQ7zLIpM4IAkfIVuuQGg5Oqnl4k9k2M7m/IIwxvEm5BKz6Pc0pQl7JRWWbSTMvdJsBfdPjowhMu4c5nDznZt2K+mao8Hq8YNrYMo+DR9rPJgvGKkTsbwZfLjABtQfUFnsq5LPQ+gg5PneTR/HTMLIHxFgUWcJM9XuVoaLU57wlErBU63a/2apW1izRvaO8W1AwKLx4y2upHSrOYF+8YWIGWRDUa9T+121JSgl6HPS4GprL6eJ+UE7LcjK3E2INV2zAmGbsXwCHyw0UVW9t+P1Ygovnou2kZp/LdYHaWv0VMPA0bQxhks1hPofiCFu8xAx0YO3pXcARxG4ID3r5tWuy6TpNgKMLKKPNpJlcmwzQjgUhxod1PB7+tZNJFImwAsme6srWi3070DQtFkcoxgIj+n5nZotEDrZUIXBB/udolgQ8UNk0wZk5PolKPNWct7foZ8AOTSNYWijLF0GA20E8+oZ93NsO8Q/Wl9IRArKU9SOYYw14G4j0F2ej/9oVHc8nvbXb/xN7gTyLR3hvPmGUgRL6fIVAJX9DTqdKD0jftJwsHpAtof6J7451NqGHzHDOrzzj/1XP8k9HB5wndbcqsnCkOCaMDb19DWc+5XG1TOF7AsObCtqXF5W9JaFs0rnrR9pnPJ8k7cLCROh+/wUrAXIW92YJfBdFv3/pAS5u03BmUE94t/0nyvwdyWKZmRct8Lo21sLLCV3eZcKTnSqyoJ6wjHk1kJVbZ5sNo6Eig0nl7F9EhfJSKXYQJw5+bF289u0MMFDtji4w1aKSd0FQ4Hhv3uj8sjy7q11jBMdBEHtyvr7bWFCOXQGgQZfyEjULV+5NpGZRNEe5rM21Nxxrew5/apNWdd2vlxJ2S1mDpBRCONyr7N8T+l9vUmGb5KrsNyQ+ZfHoRXHz4AhDoQLb0WePS5aNf6oTaEUHEOIcdVpl1vByx2yMeaN/ZeCddbiAmULwf/ldBjGb6qo1eMRwTO8GaBM2mOQfWs174RJoxpeDTOvvaEtcUO7vM40ZX0KHKe3P9slTIQ4XRC7sJeIMwIUtwGmkzMWYlCKtHhZe8if2meP9WCutPD6o7jEWjKO19dIuRV5T4r4PdOIy9RENO6beijVeOapsX16lGAE="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0183fayRUowBxrFLUmsoJnvh",
+          "name": "read_file",
+          "input": {
+            "path": "project/postcss.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0183fayRUowBxrFLUmsoJnvh",
+          "content": "const config = {\n  plugins: [\"@tailwindcss/postcss\"],\n};\n\nexport default config;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```ts lib/data.ts\nexport const product = \"Lumen\";\n\nexport const user = {\n  name: \"Maya Okafor\",\n  email: \"maya@acmelabs.io\",\n  role: \"Owner\",\n};\n\nexport type ProjectStatus = \"Active\" | \"Paused\" | \"Archived\";\n\nexport interface Project {\n  key: string;\n  name: string;\n  status: ProjectStatus;\n  issues: number;\n  updated: string;\n}\n\nexport const projects: Project[] = [\n  { key: \"WEB\", name: \"Marketing site\", status: \"Active\", issues: 12, updated: \"2026-10-12\" },\n  { key: \"APP\", name: \"Customer app\", status: \"Active\", issues: 31, updated: \"2026-10-14\" },\n  { key: \"API\", name: \"Public API\", status: \"Active\", issues: 9, updated: \"2026-10-09\" },\n  { key: \"MOB\", name: \"Mobile beta\", status: \"Paused\", issues: 4, updated: \"2026-09-28\" },\n  { key: \"OPS\", name: \"Internal tools\", status: \"Archived\", issues: 0, updated: \"2026-08-30\" },\n];\n\nexport type NavIconName = \"overview\" | \"reports\" | \"projects\" | \"settings\";\n\nexport interface NavItem {\n  label: string;\n  href: string;\n  icon: NavIconName;\n}\n\nexport interface NavGroup {\n  label: string;\n  items: NavItem[];\n}\n\nexport const navGroups: NavGroup[] = [\n  {\n    label: \"Analytics\",\n    items: [\n      { label: \"Overview\", href: \"/\", icon: \"overview\" },\n      { label: \"Reports\", href: \"/reports\", icon: \"reports\" },\n    ],\n  },\n  {\n    label: \"Workspace\",\n    items: [\n      { label: \"Projects\", href: \"/projects\", icon: \"projects\" },\n      { label: \"Settings\", href: \"/settings\", icon: \"settings\" },\n    ],\n  },\n];\n\nexport function formatDate(iso: string): string {\n  const [y, m, d] = iso.split(\"-\").map(Number);\n  const months = [\"Jan\", \"Feb\", \"Mar\", \"Apr\", \"May\", \"Jun\", \"Jul\", \"Aug\", \"Sep\", \"Oct\", \"Nov\", \"Dec\"];\n  return `${months[m - 1]} ${d}, ${y}`;\n}\n```\n\nThe \"Reports\" link points to `/reports`, which isn't a required route. I'll add a small `/reports` page so the link doesn't 404.\n\n```tsx components/app-shell.tsx\n\"use client\";\n\nimport Link from \"next/link\";\nimport { usePathname } from \"next/navigation\";\nimport { useCallback, useEffect, useRef, useState } from \"react\";\nimport {\n  BarChart3,\n  ChevronRight,\n  FileText,\n  FolderKanban,\n  Menu,\n  PanelLeftClose,\n  PanelLeftOpen,\n  Settings,\n  Sparkles,\n  X,\n} from \"lucide-react\";\nimport type { ReactNode } from \"react\";\nimport { navGroups, product, user } from \"@/lib/data\";\nimport type { NavIconName } from \"@/lib/data\";\n\nconst icons: Record<NavIconName, typeof BarChart3> = {\n  overview: BarChart3,\n  reports: FileText,\n  projects: FolderKanban,\n  settings: Settings,\n};\n\nfunction isActive(pathname: string, href: string): boolean {\n  if (href === \"/\") return pathname === \"/\";\n  return pathname === href || pathname.startsWith(href + \"/\");\n}\n\nfunction findCurrent(pathname: string) {\n  for (const group of navGroups) {\n    for (const item of group.items) {\n      if (isActive(pathname, item.href)) return { group, item };\n    }\n  }\n  return null;\n}\n\nfunction initials(name: string): string {\n  return name\n    .split(\" \")\n    .map((p) => p[0])\n    .join(\"\")\n    .slice(0, 2)\n    .toUpperCase();\n}\n\nfunction NavList({\n  pathname,\n  collapsed,\n  onNavigate,\n}: {\n  pathname: string;\n  collapsed: boolean;\n  onNavigate?: () => void;\n}) {\n  return (\n    <nav aria-label=\"Main\" className=\"flex-1 overflow-y-auto px-3 py-4\">\n      <ul className=\"space-y-5\">\n        {navGroups.map((group) => {\n          const headingId = `nav-group-${group.label.toLowerCase()}`;\n          return (\n            <li key={group.label}>\n              <h2\n                id={headingId}\n                className={\n                  collapsed\n                    ? \"sr-only\"\n                    : \"px-3 pb-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500\"\n                }\n              >\n                {group.label}\n              </h2>\n              {collapsed && <div aria-hidden=\"true\" className=\"mx-2 mb-2 h-px bg-slate-200\" />}\n              <ul aria-labelledby={headingId} className=\"space-y-1\">\n                {group.items.map((item) => {\n                  const Icon = icons[item.icon];\n                  const active = isActive(pathname, item.href);\n                  return (\n                    <li key={item.href}>\n                      <Link\n                        href={item.href}\n                        onClick={onNavigate}\n                        aria-current={active ? \"page\" : undefined}\n                        title={collapsed ? item.label : undefined}\n                        className={[\n                          \"group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium outline-none transition-colors\",\n                          \"focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-1\",\n                          collapsed ? \"justify-center\" : \"\",\n                          active\n                            ? \"bg-indigo-50 text-indigo-700\"\n                            : \"text-slate-700 hover:bg-slate-100 hover:text-slate-900\",\n                        ].join(\" \")}\n                      >\n                        <Icon aria-hidden=\"true\" className=\"size-5 shrink-0\" />\n                        <span className={collapsed ? \"sr-only\" : \"\"}>{item.label}</span>\n                      </Link>\n                    </li>\n                  );\n                })}\n              </ul>\n            </li>\n          );\n        })}\n      </ul>\n    </nav>\n  );\n}\n\nfunction Brand({ collapsed }: { collapsed: boolean }) {\n  return (\n    <div className={`flex h-16 items-center gap-2.5 border-b border-slate-200 px-4 ${collapsed ? \"justify-center\" : \"\"}`}>\n      <span className=\"flex size-8 shrink-0 items-center justify-center rounded-lg bg-indigo-600 text-white\">\n        <Sparkles aria-hidden=\"true\" className=\"size-4\" />\n      </span>\n      <span className={collapsed ? \"sr-only\" : \"text-lg font-semibold tracking-tight text-slate-900\"}>\n        {product}\n      </span>\n    </div>\n  );\n}\n\nfunction UserCard({ collapsed }: { collapsed: boolean }) {\n  return (\n    <div className={`flex items-center gap-3 border-t border-slate-200 p-4 ${collapsed ? \"justify-center\" : \"\"}`}>\n      <span\n        aria-hidden=\"true\"\n        className=\"flex size-9 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-sm font-semibold text-indigo-700\"\n      >\n        {initials(user.name)}\n      </span>\n      <div className={collapsed ? \"sr-only\" : \"min-w-0\"}>\n        <p className=\"truncate text-sm font-medium text-slate-900\">{user.name}</p>\n        <p className=\"truncate text-xs text-slate-500\">{user.email}</p>\n      </div>\n    </div>\n  );\n}\n\nexport function AppShell({ children }: { children: ReactNode }) {\n  const pathname = usePathname();\n  const [collapsed, setCollapsed] = useState(false);\n  const [drawerOpen, setDrawerOpen] = useState(false);\n  const menuButtonRef = useRef<HTMLButtonElement>(null);\n  const closeButtonRef = useRef<HTMLButtonElement>(null);\n  const drawerRef = useRef<HTMLDivElement>(null);\n\n  const current = findCurrent(pathname);\n\n  const closeDrawer = useCallback(() => {\n    setDrawerOpen(false);\n    menuButtonRef.current?.focus();\n  }, []);\n\n  // Drawer: Escape to close, focus management, focus trap, scroll lock.\n  useEffect(() => {\n    if (!drawerOpen) return;\n    closeButtonRef.current?.focus();\n    const previousOverflow = document.body.style.overflow;\n    document.body.style.overflow = \"hidden\";\n\n    function onKeyDown(e: KeyboardEvent) {\n      if (e.key === \"Escape\") {\n        closeDrawer();\n        return;\n      }\n      if (e.key === \"Tab\" && drawerRef.current) {\n        const focusable = drawerRef.current.querySelectorAll<HTMLElement>(\n          'a[href], button:not([disabled]), [tabindex]:not([tabindex=\"-1\"])',\n        );\n        if (focusable.length === 0) return;\n        const first = focusable[0];\n        const last = focusable[focusable.length - 1];\n        if (e.shiftKey && document.activeElement === first) {\n          e.preventDefault();\n          last.focus();\n        } else if (!e.shiftKey && document.activeElement === last) {\n          e.preventDefault();\n          first.focus();\n        }\n      }\n    }\n    document.addEventListener(\"keydown\", onKeyDown);\n    return () => {\n      document.body.style.overflow = previousOverflow;\n      document.removeEventListener(\"keydown\", onKeyDown);\n    };\n  }, [drawerOpen, closeDrawer]);\n\n  // Close drawer if viewport grows to desktop.\n  useEffect(() => {\n    const mq = window.matchMedia(\"(min-width: 768px)\");\n    function onChange(e: MediaQueryListEvent) {\n      if (e.matches) setDrawerOpen(false);\n    }\n    mq.addEventListener(\"change\", onChange);\n    return () => mq.removeEventListener(\"change\", onChange);\n  }, []);\n\n  return (\n    <div className=\"min-h-dvh bg-slate-50 text-slate-900\">\n      <a\n        href=\"#main-content\"\n        className=\"sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:shadow-lg focus:ring-2 focus:ring-indigo-600\"\n      >\n        Skip to content\n      </a>\n\n      {/* Desktop sidebar */}\n      <aside\n        className={[\n          \"fixed inset-y-0 left-0 z-30 hidden flex-col border-r border-slate-200 bg-white transition-[width] duration-200 md:flex\",\n          collapsed ? \"w-[4.5rem]\" : \"w-64\",\n        ].join(\" \")}\n      >\n        <Brand collapsed={collapsed} />\n        <NavList pathname={pathname} collapsed={collapsed} />\n        <div className=\"border-t border-slate-200 p-3\">\n          <button\n            type=\"button\"\n            onClick={() => setCollapsed((c) => !c)}\n            aria-pressed={collapsed}\n            aria-label={collapsed ? \"Expand sidebar\" : \"Collapse sidebar\"}\n            className={[\n              \"flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 outline-none transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-indigo-600\",\n              collapsed ? \"justify-center\" : \"\",\n            ].join(\" \")}\n          >\n            {collapsed ? (\n              <PanelLeftOpen aria-hidden=\"true\" className=\"size-5 shrink-0\" />\n            ) : (\n              <PanelLeftClose aria-hidden=\"true\" className=\"size-5 shrink-0\" />\n            )}\n            {!collapsed && <span>Collapse</span>}\n          </button>\n        </div>\n        <UserCard collapsed={collapsed} />\n      </aside>\n\n      {/* Mobile drawer */}\n      {drawerOpen && (\n        <div className=\"fixed inset-0 z-40 md:hidden\">\n          <div\n            aria-hidden=\"true\"\n            className=\"absolute inset-0 bg-slate-900/50\"\n            onClick={closeDrawer}\n          />\n          <div\n            ref={drawerRef}\n            role=\"dialog\"\n            aria-modal=\"true\"\n            aria-label=\"Navigation menu\"\n            className=\"absolute inset-y-0 left-0 flex w-72 max-w-[85vw] flex-col bg-white shadow-xl\"\n          >\n            <div className=\"flex h-16 items-center justify-between border-b border-slate-200 pl-4 pr-2\">\n              <div className=\"flex items-center gap-2.5\">\n                <span className=\"flex size-8 items-center justify-center rounded-lg bg-indigo-600 text-white\">\n                  <Sparkles aria-hidden=\"true\" className=\"size-4\" />\n                </span>\n                <span className=\"text-lg font-semibold tracking-tight\">{product}</span>\n              </div>\n              <button\n                ref={closeButtonRef}\n                type=\"button\"\n                onClick={closeDrawer}\n                aria-label=\"Close menu\"\n                className=\"flex size-10 items-center justify-center rounded-lg text-slate-600 outline-none hover:bg-slate-100 focus-visible:ring-2 focus-visible:ring-indigo-600\"\n              >\n                <X aria-hidden=\"true\" className=\"size-5\" />\n              </button>\n            </div>\n            <NavList pathname={pathname} collapsed={false} onNavigate={() => setDrawerOpen(false)} />\n            <UserCard collapsed={false} />\n          </div>\n        </div>\n      )}\n\n      <div className={`transition-[padding] duration-200 ${collapsed ? \"md:pl-[4.5rem]\" : \"md:pl-64\"}`}>\n        <header className=\"sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-slate-200 bg-white/90 px-4 backdrop-blur sm:px-6\">\n          <button\n            ref={menuButtonRef}\n            type=\"button\"\n            onClick={() => setDrawerOpen(true)}\n            aria-label=\"Open menu\"\n            aria-haspopup=\"dialog\"\n            aria-expanded={drawerOpen}\n            className=\"-ml-2 flex size-10 items-center justify-center rounded-lg text-slate-700 outline-none hover:bg-slate-100 focus-visible:ring-2 focus-visible:ring-indigo-600 md:hidden\"\n          >\n            <Menu aria-hidden=\"true\" className=\"size-5\" />\n          </button>\n\n          <nav aria-label=\"Breadcrumb\" className=\"min-w-0\">\n            <ol className=\"flex items-center gap-1.5 text-sm\">\n              <li className=\"hidden text-slate-500 sm:block\">{product}</li>\n              {current && (\n                <>\n                  <li aria-hidden=\"true\" className=\"hidden text-slate-400 sm:block\">\n                    <ChevronRight className=\"size-4\" />\n                  </li>\n                  <li className=\"truncate text-slate-500\">{current.group.label}</li>\n                  <li aria-hidden=\"true\" className=\"text-slate-400\">\n                    <ChevronRight className=\"size-4\" />\n                  </li>\n                  <li aria-current=\"page\" className=\"truncate font-medium text-slate-900\">\n                    {current.item.label}\n                  </li>\n                </>\n              )}\n            </ol>\n          </nav>\n        </header>\n\n        <main id=\"main-content\" tabIndex={-1} className=\"mx-auto w-full max-w-6xl px-4 py-8 outline-none sm:px-6\">\n          {children}\n        </main>\n      </div>\n    </div>\n  );\n}\n```\n\n```tsx components/page-heading.tsx\nimport type { ReactNode } from \"react\";\n\nexport function PageHeading({\n  title,\n  description,\n  children,\n}: {\n  title: string;\n  description?: string;\n  children?: ReactNode;\n}) {\n  return (\n    <div className=\"mb-6 flex flex-wrap items-end justify-between gap-3\">\n      <div>\n        <h1 className=\"text-2xl font-semibold tracking-tight text-slate-900\">{title}</h1>\n        {description && <p className=\"mt-1 text-sm text-slate-600\">{description}</p>}\n      </div>\n      {children}\n    </div>\n  );\n}\n```\n\n```tsx components/status-badge.tsx\nimport type { ProjectStatus } from \"@/lib/data\";\n\nconst styles: Record<ProjectStatus, string> = {\n  Active: \"bg-emerald-50 text-emerald-800 ring-emerald-600/20\",\n  Paused: \"bg-amber-50 text-amber-800 ring-amber-600/20\",\n  Archived: \"bg-slate-100 text-slate-700 ring-slate-500/20\",\n};\n\nconst dots: Record<ProjectStatus, string> = {\n  Active: \"bg-emerald-500\",\n  Paused: \"bg-amber-500\",\n  Archived: \"bg-slate-400\",\n};\n\nexport function StatusBadge({ status }: { status: ProjectStatus }) {\n  return (\n    <span\n      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ${styles[status]}`}\n    >\n      <span aria-hidden=\"true\" className={`size-1.5 rounded-full ${dots[status]}`} />\n      {status}\n    </span>\n  );\n}\n```\n\n```tsx app/page.tsx\nimport { Activity, AlertCircle, FolderKanban, PauseCircle } from \"lucide-react\";\nimport { AppShell } from \"@/components/app-shell\";\nimport { PageHeading } from \"@/components/page-heading\";\nimport { StatusBadge } from \"@/components/status-badge\";\nimport { formatDate, projects, user } from \"@/lib/data\";\nimport Link from \"next/link\";\n\nexport default function DashboardPage() {\n  const active = projects.filter((p) => p.status === \"Active\").length;\n  const paused = projects.filter((p) => p.status === \"Paused\").length;\n  const openIssues = projects.reduce((sum, p) => sum + p.issues, 0);\n  const busiest = [...projects].sort((a, b) => b.issues - a.issues)[0];\n  const recent = [...projects].sort((a, b) => b.updated.localeCompare(a.updated)).slice(0, 3);\n\n  const cards = [\n    { label: \"Open issues\", value: openIssues, hint: `Across ${projects.length} projects`, Icon: AlertCircle },\n    { label: \"Active projects\", value: active, hint: \"Currently in development\", Icon: FolderKanban },\n    { label: \"Paused projects\", value: paused, hint: \"Waiting on a decision\", Icon: PauseCircle },\n    { label: \"Busiest project\", value: busiest.key, hint: `${busiest.name}, ${busiest.issues} open`, Icon: Activity },\n  ];\n\n  return (\n    <AppShell>\n      <PageHeading\n        title={`Welcome back, ${user.name.split(\" \")[0]}`}\n        description=\"Here's what's happening across your workspace today.\"\n      />\n\n      <section aria-label=\"Summary\">\n        <ul className=\"grid gap-4 sm:grid-cols-2 xl:grid-cols-4\">\n          {cards.map(({ label, value, hint, Icon }) => (\n            <li key={label} className=\"rounded-xl border border-slate-200 bg-white p-5 shadow-sm\">\n              <div className=\"flex items-center justify-between\">\n                <h2 className=\"text-sm font-medium text-slate-600\">{label}</h2>\n                <span className=\"flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600\">\n                  <Icon aria-hidden=\"true\" className=\"size-4\" />\n                </span>\n              </div>\n              <p className=\"mt-3 text-3xl font-semibold tracking-tight text-slate-900\">{value}</p>\n              <p className=\"mt-1 text-sm text-slate-500\">{hint}</p>\n            </li>\n          ))}\n        </ul>\n      </section>\n\n      <section aria-labelledby=\"recent-heading\" className=\"mt-8 rounded-xl border border-slate-200 bg-white shadow-sm\">\n        <div className=\"flex items-center justify-between border-b border-slate-200 px-5 py-4\">\n          <h2 id=\"recent-heading\" className=\"text-base font-semibold text-slate-900\">\n            Recently updated\n          </h2>\n          <Link\n            href=\"/projects\"\n            className=\"rounded text-sm font-medium text-indigo-700 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-indigo-600\"\n          >\n            View all projects\n          </Link>\n        </div>\n        <ul className=\"divide-y divide-slate-100\">\n          {recent.map((p) => (\n            <li key={p.key} className=\"flex flex-wrap items-center justify-between gap-2 px-5 py-3\">\n              <div className=\"min-w-0\">\n                <p className=\"truncate text-sm font-medium text-slate-900\">\n                  <span className=\"mr-2 font-mono text-xs text-slate-500\">{p.key}</span>\n                  {p.name}\n                </p>\n                <p className=\"text-xs text-slate-500\">\n                  Updated <time dateTime={p.updated}>{formatDate(p.updated)}</time> · {p.issues} open issues\n                </p>\n              </div>\n              <StatusBadge status={p.status} />\n            </li>\n          ))}\n        </ul>\n      </section>\n    </AppShell>\n  );\n}\n```\n\n```tsx app/projects/page.tsx\nimport type { Metadata } from \"next\";\nimport { AppShell } from \"@/components/app-shell\";\nimport { PageHeading } from \"@/components/page-heading\";\nimport { StatusBadge } from \"@/components/status-badge\";\nimport { formatDate, projects } from \"@/lib/data\";\n\nexport const metadata: Metadata = { title: \"Projects · Lumen\" };\n\nexport default function ProjectsPage() {\n  return (\n    <AppShell>\n      <PageHeading\n        title=\"Projects\"\n        description={`${projects.length} projects in the Acme Labs workspace.`}\n      />\n\n      {/* Table on larger screens */}\n      <div className=\"hidden overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm sm:block\">\n        <table className=\"w-full text-left text-sm\">\n          <caption className=\"sr-only\">Projects in your workspace</caption>\n          <thead className=\"bg-slate-50 text-xs uppercase tracking-wider text-slate-500\">\n            <tr>\n              <th scope=\"col\" className=\"px-5 py-3 font-semibold\">Project</th>\n              <th scope=\"col\" className=\"px-5 py-3 font-semibold\">Status</th>\n              <th scope=\"col\" className=\"px-5 py-3 text-right font-semibold\">Open issues</th>\n              <th scope=\"col\" className=\"px-5 py-3 font-semibold\">Last updated</th>\n            </tr>\n          </thead>\n          <tbody className=\"divide-y divide-slate-100\">\n            {projects.map((p) => (\n              <tr key={p.key} className=\"hover:bg-slate-50\">\n                <th scope=\"row\" className=\"px-5 py-3 font-medium text-slate-900\">\n                  <span className=\"mr-2 inline-block w-10 font-mono text-xs text-slate-500\">{p.key}</span>\n                  {p.name}\n                </th>\n                <td className=\"px-5 py-3\"><StatusBadge status={p.status} /></td>\n                <td className=\"px-5 py-3 text-right tabular-nums text-slate-700\">{p.issues}</td>\n                <td className=\"px-5 py-3 text-slate-600\">\n                  <time dateTime={p.updated}>{formatDate(p.updated)}</time>\n                </td>\n              </tr>\n            ))}\n          </tbody>\n        </table>\n      </div>\n\n      {/* Cards on phones */}\n      <ul className=\"space-y-3 sm:hidden\">\n        {projects.map((p) => (\n          <li key={p.key} className=\"rounded-xl border border-slate-200 bg-white p-4 shadow-sm\">\n            <div className=\"flex items-start justify-between gap-3\">\n              <div className=\"min-w-0\">\n                <p className=\"font-mono text-xs text-slate-500\">{p.key}</p>\n                <h2 className=\"truncate text-base font-medium text-slate-900\">{p.name}</h2>\n              </div>\n              <StatusBadge status={p.status} />\n            </div>\n            <dl className=\"mt-3 flex gap-6 text-sm\">\n              <div>\n                <dt className=\"text-xs text-slate-500\">Open issues</dt>\n                <dd className=\"tabular-nums text-slate-800\">{p.issues}</dd>\n              </div>\n              <div>\n                <dt className=\"text-xs text-slate-500\">Updated</dt>\n                <dd className=\"text-slate-800\">\n                  <time dateTime={p.updated}>{formatDate(p.updated)}</time>\n                </dd>\n              </div>\n            </dl>\n          </li>\n        ))}\n      </ul>\n    </AppShell>\n  );\n}\n```\n\n```tsx app/reports/page.tsx\nimport type { Metadata } from \"next\";\nimport { AppShell } from \"@/components/app-shell\";\nimport { PageHeading } from \"@/components/page-heading\";\nimport { formatDate, projects } from \"@/lib/data\";\n\nexport const metadata: Metadata = { title: \"Reports · Lumen\" };\n\nexport default function ReportsPage() {\n  const total = projects.reduce((s, p) => s + p.issues, 0);\n  const max = Math.max(...projects.map((p) => p.issues), 1);\n\n  return (\n    <AppShell>\n      <PageHeading title=\"Reports\" description=\"Open issues by project.\" />\n      <section\n        aria-labelledby=\"issues-heading\"\n        className=\"rounded-xl border border-slate-200 bg-white p-5 shadow-sm\"\n      >\n        <h2 id=\"issues-heading\" className=\"text-base font-semibold text-slate-900\">\n          Open issues ({total} total)\n        </h2>\n        <ul className=\"mt-4 space-y-4\">\n          {projects.map((p) => (\n            <li key={p.key}>\n              <div className=\"flex items-baseline justify-between text-sm\">\n                <span className=\"font-medium text-slate-800\">\n                  <span className=\"mr-2 font-mono text-xs text-slate-500\">{p.key}</span>\n                  {p.name}\n                </span>\n                <span className=\"tabular-nums text-slate-600\">{p.issues}</span>\n              </div>\n              <div className=\"mt-1.5 h-2 overflow-hidden rounded-full bg-slate-100\" aria-hidden=\"true\">\n                <div\n                  className=\"h-full rounded-full bg-indigo-500\"\n                  style={{ width: `${(p.issues / max) * 100}%` }}\n                />\n              </div>\n              <p className=\"sr-only\">Last updated {formatDate(p.updated)}</p>\n            </li>\n          ))}\n        </ul>\n      </section>\n    </AppShell>\n  );\n}\n```\n\n```tsx app/settings/page.tsx\nimport type { Metadata } from \"next\";\nimport { AppShell } from \"@/components/app-shell\";\nimport { PageHeading } from \"@/components/page-heading\";\nimport { SettingsForm } from \"@/components/settings-form\";\nimport { user } from \"@/lib/data\";\n\nexport const metadata: Metadata = { title: \"Settings · Lumen\" };\n\nexport default function SettingsPage() {\n  return (\n    <AppShell>\n      <PageHeading title=\"Settings\" description=\"Manage your profile and notification preferences.\" />\n      <SettingsForm name={user.name} email={user.email} role={user.role} />\n    </AppShell>\n  );\n}\n```\n\n```tsx components/settings-form.tsx\n\"use client\";\n\nimport { useId, useState } from \"react\";\nimport type { FormEvent } from \"react\";\n\ninterface Props {\n  name: string;\n  email: string;\n  role: string;\n}\n\nexport function SettingsForm({ name, email, role }: Props) {\n  const uid = useId();\n  const [fullName, setFullName] = useState(name);\n  const [emailValue, setEmailValue] = useState(email);\n  const [weekly, setWeekly] = useState(true);\n  const [mentions, setMentions] = useState(true);\n  const [saved, setSaved] = useState(false);\n\n  function onSubmit(e: FormEvent<HTMLFormElement>) {\n    e.preventDefault();\n    setSaved(true);\n  }\n\n  const inputClass =\n    \"mt-1.5 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/30\";\n\n  return (\n    <form onSubmit={onSubmit} className=\"max-w-2xl space-y-6\">\n      <section\n        aria-labelledby={`${uid}-profile`}\n        className=\"rounded-xl border border-slate-200 bg-white p-5 shadow-sm\"\n      >\n        <h2 id={`${uid}-profile`} className=\"text-base font-semibold text-slate-900\">\n          Profile\n        </h2>\n        <div className=\"mt-4 grid gap-4 sm:grid-cols-2\">\n          <div>\n            <label htmlFor={`${uid}-name`} className=\"text-sm font-medium text-slate-700\">\n              Full name\n            </label>\n            <input\n              id={`${uid}-name`}\n              type=\"text\"\n              autoComplete=\"name\"\n              value={fullName}\n              onChange={(e) => {\n                setFullName(e.target.value);\n                setSaved(false);\n              }}\n              className={inputClass}\n            />\n          </div>\n          <div>\n            <label htmlFor={`${uid}-email`} className=\"text-sm font-medium text-slate-700\">\n              Email\n            </label>\n            <input\n              id={`${uid}-email`}\n              type=\"email\"\n              autoComplete=\"email\"\n              value={emailValue}\n              onChange={(e) => {\n                setEmailValue(e.target.value);\n                setSaved(false);\n              }}\n              className={inputClass}\n            />\n          </div>\n          <div className=\"sm:col-span-2\">\n            <label htmlFor={`${uid}-role`} className=\"text-sm font-medium text-slate-700\">\n              Role\n            </label>\n            <input\n              id={`${uid}-role`}\n              type=\"text\"\n              value={role}\n              readOnly\n              aria-describedby={`${uid}-role-help`}\n              className={`${inputClass} bg-slate-50 text-slate-600`}\n            />\n            <p id={`${uid}-role-help`} className=\"mt-1 text-xs text-slate-500\">\n              Only workspace owners can change roles.\n            </p>\n          </div>\n        </div>\n      </section>\n\n      <fieldset className=\"rounded-xl border border-slate-200 bg-white p-5 shadow-sm\">\n        <legend className=\"px-1 text-base font-semibold text-slate-900\">Notifications</legend>\n        <div className=\"mt-2 space-y-3\">\n          <label className=\"flex items-start gap-3\">\n            <input\n              type=\"checkbox\"\n              checked={weekly}\n              onChange={(e) => {\n                setWeekly(e.target.checked);\n                setSaved(false);\n              }}\n              className=\"mt-0.5 size-4 rounded border-slate-300 accent-indigo-600\"\n            />\n            <span>\n              <span className=\"block text-sm font-medium text-slate-800\">Weekly summary</span>\n              <span className=\"block text-sm text-slate-500\">\n                A Monday email with issue activity across your projects.\n              </span>\n            </span>\n          </label>\n          <label className=\"flex items-start gap-3\">\n            <input\n              type=\"checkbox\"\n              checked={mentions}\n              onChange={(e) => {\n                setMentions(e.target.checked);\n                setSaved(false);\n              }}\n              className=\"mt-0.5 size-4 rounded border-slate-300 accent-indigo-600\"\n            />\n            <span>\n              <span className=\"block text-sm font-medium text-slate-800\">Mentions and assignments</span>\n              <span className=\"block text-sm text-slate-500\">\n                Get notified when someone mentions you or assigns you an issue.\n              </span>\n            </span>\n          </label>\n        </div>\n      </fieldset>\n\n      <div className=\"flex items-center gap-4\">\n        <button\n          type=\"submit\"\n          className=\"rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white outline-none hover:bg-indigo-700 focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2\"\n        >\n          Save changes\n        </button>\n        <p role=\"status\" aria-live=\"polite\" className=\"text-sm text-emerald-700\">\n          {saved ? \"Settings saved.\" : \"\"}\n        </p>\n      </div>\n    </form>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}
