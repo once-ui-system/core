@@ -1,6 +1,5 @@
 @mixin active {
     background: var(--neutral-alpha-weak);
-    border-color: var(--neutral-alpha-medium);
     outline: none;
 
     &:disabled {
@@ -14,7 +13,6 @@
 @mixin danger-active {
     background: var(--danger-alpha-weak);
     color: var(--danger-on-background-weak);
-    border-color: var(--danger-alpha-medium);
 }
 
 // An option sits in a panel of radius l with 4px of padding (Dropdown,
@@ -33,9 +31,14 @@
     // Keyboard navigation highlight (lowest priority). It is the only cue
     // when focus stays in a combobox field, so it takes the hover fill: a
     // faint border alone read at about 1.3:1.
+    //
+    // No state draws a border. The option sits inside the panel's own
+    // border, so a bordered item read as a box nested in a box, most of all
+    // on the first item, which is highlighted the moment a menu opens. The
+    // border stays transparent and keeps its width so nothing shifts; a
+    // keyboard focus still gets the brand ring below.
     &.highlighted:not(:hover):not(:focus) {
         background: var(--neutral-alpha-weak);
-        border-color: var(--neutral-alpha-strong);
     }
     
     // Selected state (medium priority): a quiet fill with no border, so it
