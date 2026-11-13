@@ -1,0 +1,42 @@
+{
+  "status": "accepted",
+  "attempts": 1,
+  "accepted_attempt": 0,
+  "repair_rounds": 0,
+  "gates": [
+    {
+      "attempt": 0,
+      "passed": true,
+      "failed_gate": null
+    }
+  ],
+  "track": "iterative",
+  "checks_used": 4,
+  "first_check_passed": true,
+  "checks": [
+    {
+      "check": 1,
+      "at": "2026-11-10T23:16:44.870Z",
+      "passed": true,
+      "failed_gate": null
+    },
+    {
+      "check": 2,
+      "at": "2026-11-10T23:18:52.508Z",
+      "passed": true,
+      "failed_gate": null
+    },
+    {
+      "check": 3,
+      "at": "2026-11-10T23:20:06.244Z",
+      "passed": true,
+      "failed_gate": null
+    },
+    {
+      "check": 4,
+      "at": "2026-11-10T23:21:09.483Z",
+      "passed": true,
+      "failed_gate": null
+    }
+  ]
+}

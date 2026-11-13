@@ -1,0 +1,269 @@
+{
+  "arm": "A",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 6309
+    },
+    "build": {
+      "ok": true,
+      "ms": 19772
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 1517,
+          "height": 4623,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 1517,
+          "height": 1449,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 1619,
+          "height": 2396,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 1517,
+              "height": 4623,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1517,
+              "height": 1449,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1619,
+              "height": 2396,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 3,
+            "nodes": 37,
+            "serious_or_critical": 2,
+            "ids": [
+              "heading-order:moderate:1",
+              "label-content-name-mismatch:serious:24",
+              "nested-interactive:serious:12"
+            ]
+          }
+        },
+        "/homes/h-104": {
+          "viewports": {
+            "phone": {
+              "text": 588,
+              "height": 1963,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 605,
+              "height": 1785,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 605,
+              "height": 1404,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 2,
+            "serious_or_critical": 2,
+            "ids": [
+              "color-contrast:serious:1",
+              "label-content-name-mismatch:serious:1"
+            ]
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 3,
+        "nodes": 37,
+        "serious_or_critical": 2,
+        "ids": [
+          "heading-order:moderate:1",
+          "label-content-name-mismatch:serious:24",
+          "nested-interactive:serious:12"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "hover",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        },
+        "desktop": {
+          "action": "hover",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1896,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1789,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 2031,
+          "settled": true
+        },
+        "/homes/h-104 phone": {
+          "ms": 1945,
+          "settled": true
+        },
+        "/homes/h-104 tablet": {
+          "ms": 2285,
+          "settled": true
+        },
+        "/homes/h-104 desktop": {
+          "ms": 2279,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 256,
+          "distinct_fontSize": 8,
+          "distinct_color": 7,
+          "distinct_background": 5,
+          "distinct_radius": 5,
+          "distinct_shadow": 3,
+          "distinct_spacing": 12,
+          "spacing_on_4px_grid": 0.423
+        },
+        "/homes/h-104": {
+          "elements": 126,
+          "distinct_fontSize": 11,
+          "distinct_color": 8,
+          "distinct_background": 12,
+          "distinct_radius": 6,
+          "distinct_shadow": 2,
+          "distinct_spacing": 12,
+          "spacing_on_4px_grid": 0.694
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 479.6,
+          "css_kb": 48.8,
+          "fcp_ms": 512,
+          "cls": 0,
+          "long_task_ms": 829
+        },
+        "/homes/h-104": {
+          "js_kb": 478.8,
+          "css_kb": 48.8,
+          "fcp_ms": 232,
+          "cls": 0,
+          "long_task_ms": 559
+        }
+      },
+      "views": {
+        "filters phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-filters-phone.jpg"
+        },
+        "filters tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-filters-tablet.jpg"
+        },
+        "filters desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-filters-desktop.jpg"
+        },
+        "contact-errors phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-contact-errors-phone.jpg"
+        },
+        "contact-errors tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-contact-errors-tablet.jpg"
+        },
+        "contact-errors desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-contact-errors-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "components/SearchMap.tsx",
+    "components/SearchMapLoader.tsx",
+    "components/DetailMap.tsx",
+    "components/DetailMapLoader.tsx",
+    "components/FilterBar.tsx",
+    "components/HomeCard.tsx",
+    "components/SearchApp.tsx",
+    "app/page.tsx",
+    "components/SiteHeader.tsx",
+    "components/ContactForm.tsx",
+    "components/DetailSave.tsx",
+    "app/homes/[id]/page.tsx",
+    "lib/data.ts",
+    "lib/placeholder.ts",
+    "lib/useSaved.ts",
+    "components/haven.module.css",
+    "components/map.css",
+    "components/Photo.tsx",
+    "components/SaveButton.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ components/SearchMap.tsx: 3 issue(s)\n  [color.tokens] Use semantic color tokens, not hex/rgb\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ components/SearchMapLoader.tsx: no mechanical issues\n✓ components/DetailMap.tsx: no mechanical issues\n✓ components/DetailMapLoader.tsx: no mechanical issues\n✗ components/FilterBar.tsx: 1 issue(s)\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n✗ components/HomeCard.tsx: 1 issue(s)\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✗ components/SearchApp.tsx: 1 issue(s)\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n✓ app/page.tsx: no mechanical issues\n✓ components/SiteHeader.tsx: no mechanical issues\n✗ components/ContactForm.tsx: 1 issue(s)\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n✓ components/DetailSave.tsx: no mechanical issues\n✗ app/homes/[id]/page.tsx: 1 issue(s)\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ lib/data.ts: no mechanical issues\n✓ lib/placeholder.ts: no mechanical issues\n✓ lib/useSaved.ts: no mechanical issues\n✓ components/Photo.tsx: no mechanical issues\n✗ components/SaveButton.tsx: 1 issue(s)\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML",
+    "validator": {
+      "package_version": "3.0.0-beta.1",
+      "script_sha256": "d8f443844780a521"
+    }
+  }
+}

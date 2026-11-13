@@ -1,0 +1,90 @@
+You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.
+
+Build the app described below in an existing Next.js 16 project (App Router, React 19, strict TypeScript).
+
+Stack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.
+
+Task: Lumen's team page. At `/`, a members table shows each person's avatar or initials, name, email, role and status, with role and status as badges. A search field and a role filter narrow the table. Each row has an actions menu ("Change role", "Resend invite" for invited people, "Remove"). An "Invite member" button opens a dialog with a form: email (required, must be valid), role (required) and an optional message; submitting shows inline errors when the fields are invalid. Each member links to a detail page at `/members/[id]` showing their profile, role, status, join date and recent activity; `/members/m-02` is Daniel Reyes.
+
+Use this data for the content (define it in the code; you may put it in `lib/data.ts`):
+
+```json
+{
+  "product": "Lumen, a product-analytics and issue-tracking app for small software teams",
+  "members": [
+    {
+      "id": "m-01",
+      "name": "Maya Okafor",
+      "email": "maya@acmelabs.io",
+      "role": "Owner",
+      "status": "Active",
+      "joined": "2024-03-02"
+    },
+    {
+      "id": "m-02",
+      "name": "Daniel Reyes",
+      "email": "daniel@acmelabs.io",
+      "role": "Admin",
+      "status": "Active",
+      "joined": "2024-05-19"
+    },
+    {
+      "id": "m-03",
+      "name": "Priya Natarajan",
+      "email": "priya@acmelabs.io",
+      "role": "Member",
+      "status": "Active",
+      "joined": "2024-11-07"
+    },
+    {
+      "id": "m-04",
+      "name": "Tomás Lindqvist",
+      "email": "tomas@acmelabs.io",
+      "role": "Member",
+      "status": "Active",
+      "joined": "2025-02-14"
+    },
+    {
+      "id": "m-05",
+      "name": "Hana Sato",
+      "email": "hana@acmelabs.io",
+      "role": "Member",
+      "status": "Invited",
+      "joined": null
+    },
+    {
+      "id": "m-06",
+      "name": "Grace Mensah",
+      "email": "grace@acmelabs.io",
+      "role": "Viewer",
+      "status": "Active",
+      "joined": "2025-06-30"
+    },
+    {
+      "id": "m-07",
+      "name": "Leo Brandt",
+      "email": "leo@acmelabs.io",
+      "role": "Member",
+      "status": "Suspended",
+      "joined": "2025-01-21"
+    },
+    {
+      "id": "m-08",
+      "name": "Ines Duarte",
+      "email": "ines@acmelabs.io",
+      "role": "Viewer",
+      "status": "Invited",
+      "joined": null
+    }
+  ]
+}
+```
+
+Requirements:
+- The app must serve these routes: `/`, `/members/m-02`. Each route default-exports its page from its `page.tsx`; nested layouts are allowed.
+- Write as many files as the app needs, under `app/`, `components/` or `lib/`. Do not change any file that already exists in the project except `app/page.tsx`. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.
+- Put "use client" at the top of every file that uses state, effects or event handlers.
+- Use realistic placeholder content defined in the files (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.
+- The app must type-check under strict TypeScript, pass `next build`, and render every route without console errors.
+- Make it responsive from phone to desktop, and accessible.
+- Reply with every file, each in its own fenced code block whose opening line names the file's path, like ```tsx app/settings/page.tsx, and nothing else.

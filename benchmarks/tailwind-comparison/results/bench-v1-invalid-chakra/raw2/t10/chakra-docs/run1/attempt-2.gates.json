@@ -1,0 +1,7 @@
+{
+  "arm": "K",
+  "passed": false,
+  "failed_gate": "extract",
+  "failure_output": "These files already exist in the project and must not be changed: components/ui/emotion-registry.tsx",
+  "gates": {}
+}

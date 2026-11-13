@@ -1,0 +1,15 @@
+/* System font stacks, no network font fetch. */
+:root {
+  --font-heading: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  --font-body: ui-sans-serif, system-ui, sans-serif;
+  --font-label: ui-sans-serif, system-ui, sans-serif;
+  --font-code: ui-monospace, monospace;
+}
+
+/* Lumen corner radius: 16px on buttons, inputs, cards and menus. */
+:root:root:root {
+  --radius-s: 1rem;
+  --radius-m: 1rem;
+  --radius-l: 1rem;
+  --radius-xl: 1.25rem;
+}

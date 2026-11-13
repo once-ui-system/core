@@ -1,0 +1,25 @@
+{
+  "arm": "M",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/theme.ts(90,5): error TS1117: An object literal cannot have multiple properties with the same name.\ncomponents/Sidebar.tsx(161,78): error TS2353: Object literal may only specify known properties, and 'lineHeight' does not exist in type 'TypographyProps<\"span\", { component?: \"span\" | undefined; }> | ((ownerState: ListItemTextOwnerState) => TypographyProps<\"span\", { component?: \"span\" | undefined; }>)'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2969
+    }
+  },
+  "files": [
+    "app/theme.ts",
+    "app/layout.tsx",
+    "lib/data.ts",
+    "lib/nav.ts",
+    "components/Sidebar.tsx",
+    "components/AppShell.tsx",
+    "components/PageHeader.tsx",
+    "app/page.tsx",
+    "app/projects/page.tsx",
+    "app/reports/page.tsx",
+    "app/settings/page.tsx"
+  ]
+}

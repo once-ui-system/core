@@ -1,0 +1,272 @@
+{
+  "arm": "D",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2116
+    },
+    "build": {
+      "ok": true,
+      "ms": 8067
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 344,
+          "height": 1160,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 365,
+          "height": 1024,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 443,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 344,
+              "height": 1160,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 365,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 443,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/projects": {
+          "viewports": {
+            "phone": {
+              "text": 433,
+              "height": 1154,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 424,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 502,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/settings": {
+          "viewports": {
+            "phone": {
+              "text": 327,
+              "height": 960,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 348,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 426,
+              "height": 992,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      },
+      "interaction": {
+        "phone": {
+          "action": "click > click",
+          "found": true,
+          "steps": 2,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 9349,
+          "settled": false
+        },
+        "/ tablet": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/projects phone": {
+          "ms": 1757,
+          "settled": true
+        },
+        "/projects tablet": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/projects desktop": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/settings phone": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/settings tablet": {
+          "ms": 1769,
+          "settled": true
+        },
+        "/settings desktop": {
+          "ms": 18586,
+          "settled": false
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 109,
+          "distinct_fontSize": 6,
+          "distinct_color": 7,
+          "distinct_background": 5,
+          "distinct_radius": 2,
+          "distinct_shadow": 1,
+          "distinct_spacing": 8,
+          "spacing_on_4px_grid": 1
+        },
+        "/projects": {
+          "elements": 120,
+          "distinct_fontSize": 6,
+          "distinct_color": 9,
+          "distinct_background": 8,
+          "distinct_radius": 2,
+          "distinct_shadow": 1,
+          "distinct_spacing": 10,
+          "spacing_on_4px_grid": 0.949
+        },
+        "/settings": {
+          "elements": 98,
+          "distinct_fontSize": 6,
+          "distinct_color": 7,
+          "distinct_background": 4,
+          "distinct_radius": 2,
+          "distinct_shadow": 2,
+          "distinct_spacing": 8,
+          "spacing_on_4px_grid": 1
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 151,
+          "css_kb": 14.3,
+          "fcp_ms": 84,
+          "cls": 0,
+          "long_task_ms": 0
+        },
+        "/projects": {
+          "js_kb": 151,
+          "css_kb": 14.3,
+          "fcp_ms": 148,
+          "cls": 0,
+          "long_task_ms": 0
+        },
+        "/settings": {
+          "js_kb": 151,
+          "css_kb": 14.3,
+          "fcp_ms": 156,
+          "cls": 0,
+          "long_task_ms": 0
+        }
+      },
+      "brand": {
+        "filled_buttons": 0,
+        "brand_text_elements": 0,
+        "brand_fill_elements": 2,
+        "brand_filled_buttons": 0,
+        "button_radius_matches": 0,
+        "button_radius": null,
+        "heading_font": "ui-rounded, \"SF Pro Rounded\", system-ui, sans-serif",
+        "heading_serif": false,
+        "body_font": "ui-sans-serif, system-ui, sans-serif",
+        "page_background": "rgb(250, 247, 242)",
+        "dark_first_paint": false
+      }
+    }
+  },
+  "files": [
+    "app/globals.css",
+    "lib/data.ts",
+    "lib/nav.ts",
+    "components/Nav.tsx",
+    "components/AppShell.tsx",
+    "components/ui.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/projects/page.tsx",
+    "app/reports/page.tsx",
+    "app/settings/page.tsx",
+    "components/SettingsForm.tsx"
+  ]
+}

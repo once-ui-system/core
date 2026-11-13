@@ -1,0 +1,48 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "render",
+  "failure_output": "server did not start:\n",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 5447
+    },
+    "build": {
+      "ok": true,
+      "ms": 16112
+    },
+    "render": {
+      "ok": false,
+      "viewports": {},
+      "routes": {},
+      "errors": [
+        "server did not start:\n"
+      ],
+      "axe": null,
+      "interaction": {},
+      "settle": {}
+    }
+  },
+  "files": [
+    "lib/once-ui.config.ts",
+    "app/fonts.css",
+    "lib/data.ts",
+    "components/AppShell.tsx",
+    "app/providers.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "components/ProjectsTable.tsx",
+    "app/projects/page.tsx",
+    "components/SettingsForm.tsx",
+    "app/settings/page.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ lib/once-ui.config.ts: no mechanical issues\n✓ lib/data.ts: no mechanical issues\n✗ components/AppShell.tsx: 1 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n✓ app/providers.tsx: no mechanical issues\n✗ app/layout.tsx: 1 issue(s)\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint\n✓ app/page.tsx: no mechanical issues\n✓ components/ProjectsTable.tsx: no mechanical issues\n✓ app/projects/page.tsx: no mechanical issues\n✓ components/SettingsForm.tsx: no mechanical issues\n✓ app/settings/page.tsx: no mechanical issues",
+    "validator": {
+      "package_version": "3.0.0-beta.1",
+      "script_sha256": "d8f443844780a521"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "files": [
+    "app/globals.css",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "components/alert-badges.tsx",
+    "components/patient-search.tsx",
+    "components/patient/weight-chart.tsx",
+    "components/schedule/appointment-row.tsx",
+    "components/schedule/booking-dialog.tsx",
+    "components/schedule/schedule-view.tsx",
+    "components/schedule/side-panels.tsx",
+    "components/site-header.tsx",
+    "components/status-badge.tsx",
+    "lib/data.ts"
+  ],
+  "rejected": []
+}

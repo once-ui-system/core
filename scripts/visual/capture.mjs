@@ -118,11 +118,11 @@ async function waitForStable(page, probe, arg, { quietMs = 600, timeoutMs = 15_0
   return last;
 }
 
-async function openPage(context, route, width) {
+async function openPage(context, route, width, query = "") {
   const page = await context.newPage();
   log("open", route, width);
   await page.setViewportSize({ width, height: 900 });
-  await page.goto(`${BASE_URL}${route}`, { waitUntil: "networkidle", timeout: 60_000 });
+  await page.goto(`${BASE_URL}${route}${query}`, { waitUntil: "networkidle", timeout: 60_000 });
   await page.addStyleTag({ content: FREEZE_CSS });
   await settle(page);
   return page;
@@ -169,7 +169,9 @@ async function captureDemos(context, route, shots) {
 
 async function captureTiles(context, route, shots) {
   for (const width of BLOCK_WIDTHS) {
-    const page = await openPage(context, route, width);
+    // Block pages open on one block at a time; `?view=all` lists every block so
+    // each one is still shot (pages that predate the switch ignore it).
+    const page = await openPage(context, route, width, "?view=all");
     // Scroll through once so lazy and reveal-on-scroll sections render.
     await page.evaluate(async () => {
       for (const img of document.querySelectorAll('img[loading="lazy"]')) img.loading = "eager";
