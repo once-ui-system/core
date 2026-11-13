@@ -107,8 +107,9 @@ describe("tone on the other components", () => {
       <Timeline items={[{ label: "Done", tone: "success" }, { label: "Next" }]} />,
       { wrapper },
     );
-    expect(container.innerHTML).toMatch(/success-solid-strong/);
-    expect(container.innerHTML).toMatch(/neutral-background-weak/);
+    const nodes = container.querySelectorAll('[class*="node"]');
+    expect(nodes[0].getAttribute("data-tone")).toBe("success");
+    expect(nodes[1].hasAttribute("data-tone")).toBe(false);
   });
 
   it("StatusIndicator pulse takes tone", () => {

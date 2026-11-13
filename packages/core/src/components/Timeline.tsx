@@ -1,19 +1,22 @@
-import React from "react";
-import { Tone, TShirtSizes } from "../types.js";
+import classNames from "clsx";
+import type React from "react";
+import type { Tone, TShirtSizes } from "../types.js";
 import { Column } from "./Column.js";
 import { Flex } from "./Flex.js";
-import { Line } from "./Line.js";
 import { Text } from "./Text.js";
+import styles from "./Timeline.module.scss";
 
 export interface TimelineItem {
   label?: React.ReactNode;
   description?: React.ReactNode;
   /**
-   * The step's palette: its dot, the line into it and, for `danger`, its
-   * text. Leave it out for a step not reached yet. 2.x's `state: "active"`
-   * is `tone: "brand"`.
+   * A step reached, in its palette: a vivid dot off centre in the step's node
+   * (or its marker in the tone) and, for `danger`, its text. `brand` is the
+   * current step: its dot orbits the node (it stays put under reduced motion). Leave it out for a step not reached yet: an
+   * empty node on a dashed rail. 2.x's `state: "active"` is `tone: "brand"`.
    */
   tone?: Tone;
+  /** A number, letter or icon in the node instead of the dot. */
   marker?: React.ReactNode;
   children?: React.ReactNode;
 }
@@ -24,164 +27,184 @@ interface TimelineProps extends Omit<React.ComponentProps<typeof Flex>, "childre
   size?: TShirtSizes;
 }
 
-const Timeline = ({ ref, items, alignment = "left", size = "m", ...flex }: TimelineProps) => {
-  // The line between two steps fades from one's colour to the next.
-  const toneColor = (tone?: Tone) =>
-    tone ? `var(--${tone}-solid-strong)` : "var(--neutral-solid-strong)";
+const labelVariant = {
+  xs: "label-default-s",
+  s: "label-default-s",
+  m: "label-default-m",
+  l: "label-default-m",
+  xl: "label-default-l",
+} as const;
 
-  const dotSize =
-    size === "xs" ? "8" : size === "s" ? "24" : size === "m" ? "32" : size === "l" ? "40" : "48";
+const descriptionVariant = {
+  xs: "body-default-xs",
+  s: "body-default-xs",
+  m: "body-default-s",
+  l: "body-default-s",
+  xl: "body-default-m",
+} as const;
+
+const Timeline = ({
+  ref,
+  items,
+  alignment = "left",
+  size = "m",
+  className,
+  ...flex
+}: TimelineProps) => {
   const isHorizontal = flex.direction === "row";
+  const hasMarker = items.some((item) => item.marker !== undefined && item.marker !== null);
+  // The rail is solid up to the last step reached and dashed after it.
+  const lastReached = items.reduce((last, item, index) => (item.tone ? index : last), -1);
 
-  const renderDot = (item: TimelineItem, tone?: Tone) => (
-    <Flex
-      center
-      radius="full"
-      solid={tone ? `${tone}-strong` : undefined}
-      background={tone ? undefined : "neutral-weak"}
-      border={tone ? `${tone}-strong` : "neutral-strong"}
-      minHeight={dotSize}
-      maxHeight={dotSize}
-      minWidth={dotSize}
-      maxWidth={dotSize}
-    >
-      {item.marker && (
-        <Flex
-          center
-          onSolid={tone ? `${tone}-strong` : undefined}
-          onBackground={tone ? undefined : "neutral-weak"}
-          textVariant="label-default-m"
-        >
-          {item.marker}
-        </Flex>
+  const renderNode = (item: TimelineItem) => {
+    const current = item.tone === "brand";
+    return (
+      <span
+        className={classNames(
+          styles.node,
+          item.tone ? styles.reached : styles.upcoming,
+          item.tone && styles[`tone-${item.tone}`],
+          current && styles.current,
+        )}
+        data-tone={item.tone}
+      >
+        {hasMarker ? (
+          item.marker !== undefined && item.marker !== null ? (
+            <Text as="span" textVariant={labelVariant[size]} style={{ color: "inherit" }}>
+              {item.marker}
+            </Text>
+          ) : null
+        ) : (
+          // The dot sits off centre on purpose, so a step never reads as a
+          // radio button; on the current step it orbits the node.
+          item.tone && (
+            <span className={styles.orbit} aria-hidden>
+              <span className={styles.dot} />
+            </span>
+          )
+        )}
+      </span>
+    );
+  };
+
+  const rail = (reached: boolean, hidden = false) => (
+    <span
+      aria-hidden
+      data-rail={hidden ? undefined : reached ? "reached" : "upcoming"}
+      className={classNames(
+        styles.rail,
+        !reached && styles.railUpcoming,
+        hidden && styles.railNone,
       )}
-    </Flex>
+    />
   );
 
-  const markerWidth = isHorizontal ? undefined : dotSize;
+  const renderText = (item: TimelineItem, align?: "left" | "center" | "right") => {
+    const danger = item.tone === "danger";
+    return (
+      <>
+        {item.label && (
+          <div className={styles.labelRow} style={{ justifyContent: flexAlign(align) }}>
+            <Text
+              textVariant={labelVariant[size]}
+              onBackground={danger ? "danger-weak" : item.tone ? "neutral-strong" : undefined}
+              className={item.tone ? undefined : styles.upcomingLabel}
+            >
+              {item.label}
+            </Text>
+          </div>
+        )}
+        {item.description && (
+          <Text
+            textVariant={descriptionVariant[size]}
+            onBackground={danger ? "danger-weak" : "neutral-weak"}
+          >
+            {item.description}
+          </Text>
+        )}
+        {item.children}
+      </>
+    );
+  };
 
   return (
     // A list of steps: a screen reader says how many there are and which
     // one the reader is on. The `brand` step is the current one.
-    // (The ref was taken but never attached.)
-    <Column ref={ref} role="list" {...flex}>
+    <Column
+      ref={ref}
+      role="list"
+      className={classNames(
+        styles.timeline,
+        size !== "m" && styles[`size-${size}`],
+        hasMarker && styles.hasMarker,
+        isHorizontal && styles.row,
+        className,
+      )}
+      {...flex}
+    >
       {items.map((item, index) => {
-        const tone = item.tone;
-        const nextTone = index < items.length - 1 ? items[index + 1].tone : tone;
-
-        const currentColor = toneColor(tone);
-        const nextColor = toneColor(nextTone);
-
-        const gradientToNext = isHorizontal
-          ? `linear-gradient(to right, ${currentColor}, ${nextColor})`
-          : `linear-gradient(to bottom, ${currentColor}, ${nextColor})`;
+        const first = index === 0;
+        const last = index === items.length - 1;
+        // The rail into this step is reached when this step is; the rail out
+        // of it when the next one is.
+        const railIn = index <= lastReached;
+        const railOut = index + 1 <= lastReached;
 
         if (isHorizontal) {
+          const align = first ? "left" : last ? "right" : "center";
           return (
             <Flex
+              // biome-ignore lint/suspicious/noArrayIndexKey: steps have no id; a step is its position in the list.
               key={index}
               direction="column"
               fillWidth
               role="listitem"
-              aria-current={tone === "brand" ? "step" : undefined}
+              aria-current={item.tone === "brand" ? "step" : undefined}
             >
-              <Column fillWidth horizontal="center" vertical="center" direction="row">
-                {index !== 0 && (
-                  <Line background={undefined} solid={tone ? `${tone}-strong` : "neutral-strong"} />
-                )}
-                {renderDot(item, tone)}
-                {index !== items.length - 1 && (
-                  <Line background={undefined} style={{ background: gradientToNext }} />
-                )}
-              </Column>
+              <div className={styles.track}>
+                {rail(railIn, first)}
+                <span className={styles.anchor}>{renderNode(item)}</span>
+                {rail(railOut, last)}
+              </div>
               <Column
                 fillWidth
-                paddingX="20"
-                paddingTop="12"
-                paddingBottom="24"
-                horizontal={index === 0 ? "start" : index === items.length - 1 ? "end" : "center"}
-                align={index === 0 ? "left" : index === items.length - 1 ? "right" : "center"}
+                className={styles.content}
+                paddingTop="8"
+                paddingBottom="16"
+                paddingX="8"
+                horizontal={first ? "start" : last ? "end" : "center"}
+                align={align}
                 gap="2"
               >
-                {item.label && (
-                  <Text
-                    textVariant="label-default-m"
-                    onBackground={tone === "danger" ? "danger-weak" : undefined}
-                  >
-                    {item.label}
-                  </Text>
-                )}
-                {item.description && (
-                  <Text
-                    textVariant="body-default-s"
-                    onBackground={tone === "danger" ? "danger-weak" : "neutral-weak"}
-                  >
-                    {item.description}
-                  </Text>
-                )}
-                {item.children}
+                {renderText(item, align)}
               </Column>
             </Flex>
           );
         }
 
-        const rowDirection = alignment === "right" ? "row-reverse" : undefined;
-        const hasContent = item.description || item.children;
-
         return (
           <Flex
+            // biome-ignore lint/suspicious/noArrayIndexKey: steps have no id; a step is its position in the list.
             key={index}
             fillWidth
-            direction={rowDirection}
+            direction={alignment === "right" ? "row-reverse" : undefined}
             role="listitem"
-            aria-current={tone === "brand" ? "step" : undefined}
+            aria-current={item.tone === "brand" ? "step" : undefined}
           >
-            <Column horizontal="center" minWidth={markerWidth} maxWidth={markerWidth}>
-              {index !== 0 && (
-                <Line
-                  vert
-                  fillHeight
-                  background={undefined}
-                  solid={tone ? `${tone}-strong` : "neutral-strong"}
-                  minHeight="8"
-                />
-              )}
-              {renderDot(item, tone)}
-              {index !== items.length - 1 && (
-                <Line
-                  vert
-                  fillHeight
-                  background={undefined}
-                  style={{ background: gradientToNext }}
-                  minHeight="8"
-                />
-              )}
-            </Column>
+            <div className={styles.track}>
+              <span className={styles.anchor}>{renderNode(item)}</span>
+              {!last && rail(railOut)}
+            </div>
             <Column
               fillWidth
-              paddingX="20"
-              paddingBottom={index !== items.length - 1 ? "24" : undefined}
-              vertical="center"
+              className={styles.content}
+              paddingX="12"
+              paddingBottom={last ? undefined : "20"}
               gap="2"
               align={alignment === "right" ? "right" : undefined}
+              horizontal={alignment === "right" ? "end" : undefined}
             >
-              {item.label && (
-                <Text
-                  textVariant="label-default-m"
-                  onBackground={tone === "danger" ? "danger-weak" : undefined}
-                >
-                  {item.label}
-                </Text>
-              )}
-              {item.description && (
-                <Text
-                  textVariant="body-default-s"
-                  onBackground={tone === "danger" ? "danger-weak" : "neutral-weak"}
-                >
-                  {item.description}
-                </Text>
-              )}
-              {item.children}
+              {renderText(item, alignment === "right" ? "right" : undefined)}
             </Column>
           </Flex>
         );
@@ -189,6 +212,9 @@ const Timeline = ({ ref, items, alignment = "left", size = "m", ...flex }: Timel
     </Column>
   );
 };
+
+const flexAlign = (align?: "left" | "center" | "right") =>
+  align === "right" ? "flex-end" : align === "center" ? "center" : undefined;
 
 Timeline.displayName = "Timeline";
 

@@ -392,6 +392,11 @@ entry below that had landed by then:
   tall at m, `label-default-s` on the surface colour with a hairline neutral border, the
   icon in brand, and `effect` is a short brand-to-accent beam round the edge (faster on
   hover, still under reduced motion) instead of the sweeping shine.
+- **`Timeline` is drawn in hairlines.** Each step is a hairline node on a 1px rail, and a
+  reached step's tone is a vivid dot inside it (the Tag's dot), not a filled disc. A marker
+  sits in the node in the tone's ink. The current step (`brand`) has a soft halo, and steps
+  not reached yet are empty nodes on a dashed rail with a muted label. The node centres on
+  the label's first line, and there are no colour gradients between steps any more.
 
 - **Spacing, offset and grid-column classes are spelled out** (MIGRATING.md §
   14). `p-16` is `padding-16`, `mt-8` `margin-top-8`, `top-16`
