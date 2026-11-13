@@ -1,0 +1,21 @@
+Your app failed the render check. Output (truncated to 4,000 characters):
+
+```
+[/ 375px] empty page: text=0 height=812
+[/ 768px] empty page: text=0 height=1024
+[/ 1440px] empty page: text=0 height=900
+[/patients/p-104 375px] HTTP 404 /patients/p-104
+[/patients/p-104 375px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)
+[/patients/p-104 375px] empty page: text=33 height=812
+[/patients/p-104 768px] HTTP 404 /patients/p-104
+[/patients/p-104 768px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)
+[/patients/p-104 768px] empty page: text=33 height=1024
+[/patients/p-104 1440px] HTTP 404 /patients/p-104
+[/patients/p-104 1440px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)
+[/patients/p-104 1440px] empty page: text=33 height=900
+```
+
+Fix the problem and reply with every file of the app again, each complete in its own fenced code block whose opening line names the file's path, and nothing else.
+
+
+As before: write the complete corrected file to /home/user/core/benchmarks/tailwind-comparison/results/bench-v4-cc/raw/t201/chakra-docs/run1/attempt-1.tsx with the Write tool (no shell commands), then reply with the single word: done.

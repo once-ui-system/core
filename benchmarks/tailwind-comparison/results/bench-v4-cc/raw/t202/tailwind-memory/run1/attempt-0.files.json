@@ -1,0 +1,19 @@
+{
+  "files": [
+    "lib/data.ts",
+    "lib/geometry.ts",
+    "lib/rules.ts",
+    "lib/plan.tsx",
+    "components/ui.tsx",
+    "components/AppHeader.tsx",
+    "components/FloorPlan.tsx",
+    "components/RulesPanel.tsx",
+    "components/TablePanel.tsx",
+    "components/UnseatedPanel.tsx",
+    "app/page.tsx",
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/globals.css"
+  ],
+  "rejected": []
+}

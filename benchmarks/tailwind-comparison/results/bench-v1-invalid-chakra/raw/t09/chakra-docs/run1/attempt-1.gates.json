@@ -1,0 +1,269 @@
+{
+  "arm": "K",
+  "passed": false,
+  "failed_gate": "render",
+  "failure_output": "[/ 375px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\n[/ 768px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\n[/ 1440px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\n[/pricing 375px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\n[/pricing 768px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\n[/pricing 1440px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 11594
+    },
+    "build": {
+      "ok": true,
+      "ms": 19652
+    },
+    "render": {
+      "ok": false,
+      "viewports": {
+        "phone": {
+          "text": 1662,
+          "height": 2965,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": [
+            "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+          ]
+        },
+        "tablet": {
+          "text": 1693,
+          "height": 2326,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": [
+            "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+          ]
+        },
+        "desktop": {
+          "text": 1693,
+          "height": 2152,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": [
+            "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+          ]
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 1662,
+              "height": 2965,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            },
+            "tablet": {
+              "text": 1693,
+              "height": 2326,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            },
+            "desktop": {
+              "text": 1693,
+              "height": 2152,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 3,
+            "serious_or_critical": 1,
+            "ids": [
+              "color-contrast:serious:3"
+            ]
+          }
+        },
+        "/pricing": {
+          "viewports": {
+            "phone": {
+              "text": 1482,
+              "height": 2933,
+              "width": 486,
+              "horizontal_overflow": true,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            },
+            "tablet": {
+              "text": 1513,
+              "height": 2113,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            },
+            "desktop": {
+              "text": 1513,
+              "height": 2074,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 5,
+            "serious_or_critical": 2,
+            "ids": [
+              "aria-valid-attr-value:critical:1",
+              "color-contrast:serious:4"
+            ]
+          }
+        }
+      },
+      "errors": [
+        "[/ 375px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+        "[/ 768px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+        "[/ 1440px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+        "[/pricing 375px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+        "[/pricing 768px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+        "[/pricing 1440px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+      ],
+      "axe": {
+        "rules": 1,
+        "nodes": 3,
+        "serious_or_critical": 1,
+        "ids": [
+          "color-contrast:serious:3"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        },
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1763,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1764,
+          "settled": true
+        },
+        "/pricing phone": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/pricing tablet": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/pricing desktop": {
+          "ms": 1759,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 101,
+          "distinct_fontSize": 9,
+          "distinct_color": 7,
+          "distinct_background": 5,
+          "distinct_radius": 1,
+          "distinct_shadow": 0,
+          "distinct_spacing": 16,
+          "spacing_on_4px_grid": 0.81
+        },
+        "/pricing": {
+          "elements": 226,
+          "distinct_fontSize": 8,
+          "distinct_color": 7,
+          "distinct_background": 7,
+          "distinct_radius": 2,
+          "distinct_shadow": 1,
+          "distinct_spacing": 14,
+          "spacing_on_4px_grid": 0.897
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 291.6,
+          "css_kb": 0,
+          "fcp_ms": 140,
+          "cls": 0.001,
+          "long_task_ms": 117
+        },
+        "/pricing": {
+          "js_kb": 291.6,
+          "css_kb": 0,
+          "fcp_ms": 144,
+          "cls": 0,
+          "long_task_ms": 160
+        }
+      },
+      "brand": {
+        "filled_buttons": 2,
+        "brand_filled_buttons": 2,
+        "button_radius_matches": 2,
+        "heading_font": "Georgia, \"Times New Roman\", serif",
+        "heading_serif": true,
+        "body_font": "ui-sans-serif, system-ui, sans-serif",
+        "page_background": "rgb(12, 10, 9)",
+        "dark_first_paint": true
+      },
+      "views": {
+        "pricing-yearly phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-pricing-yearly-phone.jpg"
+        },
+        "pricing-yearly tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-pricing-yearly-tablet.jpg"
+        },
+        "pricing-yearly desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-pricing-yearly-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "app/layout.tsx",
+    "components/ui/color-mode.tsx",
+    "components/site/site-header.tsx",
+    "lib/data.ts",
+    "lib/theme.ts",
+    "components/ui/provider.tsx",
+    "components/site/site-shell.tsx",
+    "components/site/site-footer.tsx",
+    "components/site/hero.tsx",
+    "components/site/logo-row.tsx",
+    "components/site/feature-sections.tsx",
+    "app/page.tsx",
+    "components/pricing/pricing-view.tsx",
+    "app/pricing/page.tsx"
+  ]
+}

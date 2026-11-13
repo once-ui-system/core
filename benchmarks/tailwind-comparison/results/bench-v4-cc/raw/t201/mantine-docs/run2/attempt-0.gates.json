@@ -1,0 +1,39 @@
+{
+  "arm": "T",
+  "passed": false,
+  "failed_gate": "render",
+  "failure_output": "server did not start:\n▲ Next.js 16.2.12\n- Local:         http://127.0.0.1:3107\n- Network:       http://127.0.0.1:3107\n✓ Ready in 203ms\n",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 3154
+    },
+    "build": {
+      "ok": true,
+      "ms": 11591
+    },
+    "render": {
+      "ok": false,
+      "viewports": {},
+      "routes": {},
+      "errors": [
+        "server did not start:\n▲ Next.js 16.2.12\n- Local:         http://127.0.0.1:3107\n- Network:       http://127.0.0.1:3107\n✓ Ready in 203ms\n"
+      ],
+      "axe": null,
+      "interaction": {},
+      "settle": {}
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/Alerts.tsx",
+    "components/PatientSearch.tsx",
+    "components/Frame.tsx",
+    "components/Schedule.tsx",
+    "components/WeightChart.tsx",
+    "components/PatientRecord.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "app/theme.ts"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "files": [
+    "src/components/haven/SearchMap.tsx",
+    "src/components/haven/ContactForm.tsx",
+    "src/components/haven/HomeDetail.tsx",
+    "src/app/page.tsx",
+    "src/app/homes/[id]/page.tsx",
+    "src/lib/data.ts"
+  ],
+  "rejected": []
+}

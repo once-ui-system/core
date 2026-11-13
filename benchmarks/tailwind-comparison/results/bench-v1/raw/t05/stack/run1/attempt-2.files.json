@@ -1,0 +1,13 @@
+{
+  "files": [
+    "src/resources/once-ui.config.js",
+    "src/resources/custom.css",
+    "src/resources/seo.js",
+    "src/lib/team.ts",
+    "src/components/MemberBadges.tsx",
+    "src/components/TeamClient.tsx",
+    "src/app/page.tsx",
+    "src/app/members/[id]/page.tsx"
+  ],
+  "rejected": []
+}

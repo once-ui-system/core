@@ -1,0 +1,202 @@
+{
+  "arm": "C",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 5055
+    },
+    "build": {
+      "ok": true,
+      "ms": 12540
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 457,
+          "height": 1326,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 487,
+          "height": 1217,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 487,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 457,
+              "height": 1326,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 487,
+              "height": 1217,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 487,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/welcome": {
+          "viewports": {
+            "phone": {
+              "text": 660,
+              "height": 1061,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 660,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 660,
+              "height": 941,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      },
+      "interaction": {
+        "phone": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        },
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1757,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/welcome phone": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/welcome tablet": {
+          "ms": 1757,
+          "settled": true
+        },
+        "/welcome desktop": {
+          "ms": 1758,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 93,
+          "distinct_fontSize": 5,
+          "distinct_color": 3,
+          "distinct_background": 4,
+          "distinct_radius": 3,
+          "distinct_shadow": 3,
+          "distinct_spacing": 9,
+          "spacing_on_4px_grid": 0.849
+        },
+        "/welcome": {
+          "elements": 80,
+          "distinct_fontSize": 5,
+          "distinct_color": 3,
+          "distinct_background": 5,
+          "distinct_radius": 5,
+          "distinct_shadow": 2,
+          "distinct_spacing": 8,
+          "spacing_on_4px_grid": 0.928
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 207.3,
+          "css_kb": 42.9,
+          "fcp_ms": 92,
+          "cls": 0,
+          "long_task_ms": 0
+        },
+        "/welcome": {
+          "js_kb": 229.8,
+          "css_kb": 42.9,
+          "fcp_ms": 140,
+          "cls": 0,
+          "long_task_ms": 0
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "lib/onboarding.ts",
+    "components/onboarding/stepper.tsx",
+    "components/onboarding/steps.tsx",
+    "components/onboarding/summary-card.tsx",
+    "components/onboarding/wizard.tsx",
+    "app/page.tsx",
+    "components/onboarding/welcome-content.tsx",
+    "app/welcome/page.tsx"
+  ]
+}

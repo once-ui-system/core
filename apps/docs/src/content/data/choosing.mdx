@@ -1,0 +1,98 @@
+---
+title: "Choosing a chart"
+export: false
+summary: "Which Once UI chart fits your data: a question to start from, a table of shapes, and the charts to avoid for each job."
+updatedAt: "2026-11-12"
+docs: "once-ui/data/choosing.mdx"
+github: "packages/core/src/modules/data"
+navLabel: "Choosing a chart"
+navIcon: "lightbulb"
+---
+
+Start from the question the reader brings, not from the data. "How did revenue move this year?" is a line. "Which team has the most open tickets?" is a bar. "What share of sessions came from search?" is a pie, if there are only a few parts. The same rows can answer all three, and each question wants a different chart.
+
+## By question
+
+- **How did it change over time?** [`LineChart`](/data/lineChart). A line says the value moved continuously between readings.
+- **Which is bigger?** [`BarChart`](/data/barChart). Lengths from a shared baseline are the easiest thing to compare.
+- **Which is bigger, with long names?** `BarChart orientation="horizontal"`. Category names read along the row instead of being cut under the bar.
+- **What adds up to the total?** `BarChart stack` or `LineChart stack`. Each part sits on the one before it, so the top is the total.
+- **What is each part's share, over time?** `stack="percent"`. Every bar or column runs to 100%, so shares compare across rows.
+- **What is each part's share, once?** [`PieChart`](/data/pieChart). Two to five slices. Past that, use a horizontal bar chart.
+- **How do a budget and its spend compare?** [`LineBarChart`](/data/lineBarChart). A line for the target, bars for the actuals, on one scale.
+- **How is it trending, in a tile or a table cell?** [`Sparkline`](/data/sparkline). The shape only: no axes, legend or card.
+- **How close is it to a limit?** [`RadialGauge`](/data/radialGauge) or [`LinearGauge`](/data/linearGauge). One value against a range, such as a quota or a score.
+
+## By data shape
+
+- A date and one or more numbers per row: `LineChart`, or `BarChart` for a handful of periods.
+- A category and one number per row: `BarChart`, or `PieChart` for a few parts of a whole.
+- A category and several numbers per row: `BarChart` (grouped), or `stack` when the numbers add up.
+- A target and an actual per row: `LineBarChart`.
+- Readings at uneven intervals: `LineChart xAxisType="number"`.
+- A plain array of numbers: `Sparkline`.
+- One number: a gauge, or a stat tile with a `Sparkline`.
+
+Every chart but `Sparkline` and the gauges takes the same `data` and `series`, so moving between `LineChart`, `BarChart` and `LineBarChart` is a change of the tag name. See [Data and series](/data/data) for the shape.
+
+## Things to avoid
+
+- **A pie with many slices.** Past five, the small slices are slivers nobody can compare. Keep the top four and group the rest as "Other", or use a horizontal bar chart. The recipe is in [Recipes](/data/recipes#top-n-and-other).
+- **A smooth line through jumps.** The default `curve="natural"` claims the value moved between readings. A price tier or a seat count changed in steps: use `curve="step"`.
+- **Two scales on one axis.** `LineBarChart` has one y axis. A rate (4%) next to a count (8,000) sits flat on the baseline. Use two charts.
+- **Stacking things that don't add up.** Stack revenue by channel, not revenue and margin. The top of a stack should mean "total".
+- **A bar chart for a long time series.** Fifty bars become a comb. Use a line, or `barWidth="fill"` if it has to be bars.
+- **Colour that only decorates.** A single series doesn't need a hue per bar. Give it the brand (`color: "brand"`) and let the length do the work.
+
+## One example, three charts
+
+The same rows, asked three questions.
+
+<Grid fillWidth columns="3" s={{ columns: 1 }} gap="16" marginTop="16" marginBottom="24">
+  <LineChart
+    title="How did it move?"
+    height="16rem"
+    axis="x"
+    legend={{ display: false }}
+    xKey="month"
+    series={[{ key: "web", label: "Web" }, { key: "store", label: "Store" }]}
+    data={[
+      { month: "Jan", web: 124, store: 88 },
+      { month: "Feb", web: 131, store: 91 },
+      { month: "Mar", web: 158, store: 86 },
+      { month: "Apr", web: 172, store: 94 },
+      { month: "May", web: 195, store: 99 }
+    ]}
+  />
+  <BarChart
+    title="Which is bigger?"
+    height="16rem"
+    axis="x"
+    legend={{ display: false }}
+    xKey="month"
+    series={[{ key: "web", label: "Web" }, { key: "store", label: "Store" }]}
+    data={[
+      { month: "Jan", web: 124, store: 88 },
+      { month: "Feb", web: 131, store: 91 },
+      { month: "Mar", web: 158, store: 86 },
+      { month: "Apr", web: 172, store: 94 },
+      { month: "May", web: 195, store: 99 }
+    ]}
+  />
+  <BarChart
+    title="What is the total?"
+    height="16rem"
+    axis="x"
+    stack
+    legend={{ display: false }}
+    xKey="month"
+    series={[{ key: "web", label: "Web" }, { key: "store", label: "Store" }]}
+    data={[
+      { month: "Jan", web: 124, store: 88 },
+      { month: "Feb", web: 131, store: 91 },
+      { month: "Mar", web: 158, store: 86 },
+      { month: "Apr", web: 172, store: 94 },
+      { month: "May", web: 195, store: 99 }
+    ]}
+  />
+</Grid>

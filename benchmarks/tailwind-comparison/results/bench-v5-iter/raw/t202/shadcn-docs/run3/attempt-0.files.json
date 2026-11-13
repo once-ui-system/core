@@ -1,0 +1,21 @@
+{
+  "files": [
+    "app/globals.css",
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "components/seatwise/app-header.tsx",
+    "components/seatwise/floor-plan.tsx",
+    "components/seatwise/guest-bits.tsx",
+    "components/seatwise/guest-list.tsx",
+    "components/seatwise/plan-provider.tsx",
+    "components/seatwise/rules-view.tsx",
+    "components/seatwise/side-panel.tsx",
+    "components/seatwise/stats.tsx",
+    "components/seatwise/table-panel.tsx",
+    "lib/data.ts",
+    "lib/seating.ts",
+    "lib/use-media.ts"
+  ],
+  "rejected": []
+}
