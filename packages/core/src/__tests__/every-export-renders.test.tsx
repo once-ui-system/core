@@ -130,6 +130,7 @@ const notRendered = new Set([
   // renders them against a stand-in maplibre-gl, on the client and server
   // (map-route.test.tsx for MapRoute).
   "Map",
+  "MapArea",
   "MapCircle",
   "MapMarker",
   "MapMarkers",

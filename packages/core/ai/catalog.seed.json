@@ -459,6 +459,11 @@
     "tags": ["map", "location", "list"],
     "pairsWith": ["MapMarkers", "MapPin", "MapPopup"]
   },
+  "MapArea": {
+    "purpose": "Polygon or GeoJSON zones",
+    "tags": ["map"],
+    "pairsWith": ["Map"]
+  },
   "MapCircle": {
     "purpose": "Area in metres, e.g. a rough address",
     "tags": ["map", "location"],
