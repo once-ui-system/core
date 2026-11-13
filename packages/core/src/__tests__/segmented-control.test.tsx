@@ -295,13 +295,42 @@ describe("SegmentedControl's sliding background", () => {
     expect(screen.getByRole("tab", { name: "Yearly" })).toHaveClass(styles.onPill);
   });
 
-  it("stays out of compact and sliding={false}, where the option keeps its own background", () => {
-    for (const props of [{ compact: true }, { sliding: false }]) {
-      const { container, unmount } = render(<SegmentedControl buttons={buttons} {...props} />, {
-        wrapper: wrap,
-      });
-      expect(pillOf(container)).toBeNull();
-      expect(screen.getByRole("tab", { name: "Monthly" })).not.toHaveClass(styles.onPill);
+  it("stays out of sliding={false}, where the option keeps its own background", () => {
+    const { container } = render(<SegmentedControl buttons={buttons} sliding={false} />, {
+      wrapper: wrap,
+    });
+    expect(pillOf(container)).toBeNull();
+    expect(screen.getByRole("tab", { name: "Monthly" })).not.toHaveClass(styles.onPill);
+  });
+
+  it("slides in compact too, inside a bordered track", () => {
+    const { container } = render(<SegmentedControl buttons={buttons} compact />, { wrapper: wrap });
+    expect(pillOf(container)).not.toBeNull();
+    expect(screen.getByRole("tablist")).toHaveClass("neutral-border-alpha-weak", "padding-2");
+  });
+
+  it("takes the pill's corners from a radius token, not a computed style", () => {
+    const { container } = render(
+      <SegmentedControl buttons={buttons.map((b) => ({ ...b, radius: "s" as const }))} />,
+      { wrapper: wrap },
+    );
+    expect((pillOf(container) as HTMLElement).style.borderRadius).toBe("var(--radius-s)");
+  });
+});
+
+describe("SegmentedControl rail radius", () => {
+  it("follows the options' size plus its 4px padding", () => {
+    for (const size of ["s", "m", "l"] as const) {
+      const { container, unmount } = render(
+        <SegmentedControl
+          buttons={[
+            { value: "a", label: "A", size },
+            { value: "b", label: "B", size },
+          ]}
+        />,
+        { wrapper: wrap },
+      );
+      expect(container.querySelector(`.radius-${size}-4`)).not.toBeNull();
       unmount();
     }
   });

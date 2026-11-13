@@ -13,6 +13,7 @@ import { Button } from "./Button.js";
 import { Checkbox } from "./Checkbox.js";
 import { Column } from "./Column.js";
 import { Dropdown } from "./Dropdown.js";
+import { EmptyState } from "./EmptyState.js";
 import { Flex } from "./Flex.js";
 import { Icon } from "./Icon.js";
 import { IconButton } from "./IconButton.js";
@@ -176,7 +177,11 @@ interface TableProps<T>
   columns: TableColumn<T>[];
   /** The rows: every row, or with `count` or `total` only the current page's. */
   rows: T[];
-  /** Called with the row the reader clicks, and its index in `rows`. */
+  /**
+   * Called with the row the reader clicks, and its index in `rows`. A pointer
+   * shortcut only: a row is not a tab stop, so also put a link or `Button` in
+   * one of its cells for keyboard users.
+   */
   onRowClick?: (row: T, index: number) => void;
   /**
    * Add a search field to the toolbar above the table: rows whose cells'
@@ -946,29 +951,27 @@ function Table<T>({
       <td colSpan={columnCount} className={tableStyles.empty}>
         {noResults
           ? (noResultsState ?? (
-              <Column center padding="xl" gap="m">
-                <Icon name="search" size="l" onBackground="neutral-weak" />
-                <Column center gap="4">
-                  <Text textVariant="heading-strong-s">{text.noResults}</Text>
-                  <Text textVariant="body-default-s" onBackground="neutral-weak">
-                    {text.noResultsHint}
-                  </Text>
-                </Column>
-                <Button size="s" variant="secondary" onClick={clearQuery}>
-                  {text.clearFilters}
-                </Button>
-              </Column>
+              <EmptyState
+                size="s"
+                icon="search"
+                titleAs="h3"
+                title={text.noResults}
+                description={text.noResultsHint}
+                action={
+                  <Button size="s" variant="secondary" onClick={clearQuery}>
+                    {text.clearFilters}
+                  </Button>
+                }
+              />
             ))
           : (emptyState ?? (
-              <Column center padding="xl" gap="m">
-                <Icon name="inbox" size="l" onBackground="neutral-weak" />
-                <Column center gap="4">
-                  <Text textVariant="heading-strong-s">No data available</Text>
-                  <Text textVariant="body-default-s" onBackground="neutral-weak">
-                    There are no items to display
-                  </Text>
-                </Column>
-              </Column>
+              <EmptyState
+                size="s"
+                icon="inbox"
+                titleAs="h3"
+                title="No data available"
+                description="There are no items to display"
+              />
             ))}
       </td>
     </tr>

@@ -149,12 +149,10 @@ const Avatar = ({
 
     if (value) {
       return (
-        <Text
-          as="span"
-          onBackground="neutral-weak"
-          textVariant={`body-default-${scale ?? "m"}`}
-          className={styles.value}
-        >
+        // Sized from the circle in CSS (two fifths of it), not from a body
+        // text size: body-m filled the 32px circle edge to edge and sat
+        // low on its line height, and a custom size kept body-m whatever it was.
+        <Text as="span" onBackground="neutral-medium" weight="medium" className={styles.value}>
           {value}
         </Text>
       );
@@ -177,8 +175,8 @@ const Avatar = ({
       horizontal="center"
       vertical="center"
       radius="full"
-      border="neutral-strong"
-      background="surface"
+      border={value && !src ? "neutral-alpha-weak" : "neutral-strong"}
+      background={value && !src ? "neutral-alpha-weak" : "surface"}
       style={sizeStyle}
       className={`${styles.avatar} ${scale ? styles[scale] : ""} ${className || ""}`}
       {...rest}

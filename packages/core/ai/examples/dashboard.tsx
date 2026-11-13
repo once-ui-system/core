@@ -6,7 +6,6 @@ import {
   Grid,
   Heading,
   Icon,
-  Line,
   Row,
   SegmentedControl,
   StatusIndicator,
@@ -41,7 +40,7 @@ const activity = {
     [
       "Plan upgraded to Pro",
       "jane@acme.co",
-      <Tag size="s" tone="success">
+      <Tag key="s" size="s" tone="success">
         Completed
       </Tag>,
       "2m ago",
@@ -49,7 +48,7 @@ const activity = {
     [
       "New signup",
       "alex@studio.io",
-      <Tag size="s" tone="brand">
+      <Tag key="s" size="s" tone="brand">
         New
       </Tag>,
       "14m ago",
@@ -57,7 +56,7 @@ const activity = {
     [
       "Payment failed",
       "ops@build.dev",
-      <Tag size="s" tone="danger">
+      <Tag key="s" size="s" tone="danger">
         Action
       </Tag>,
       "1h ago",
@@ -159,14 +158,14 @@ export function DashboardExample() {
           </Column>
         </Grid>
 
-        <Column background="surface" border radius="l" padding="24" gap="24">
+        {/* Table is a surface itself: no panel around it. */}
+        <Column gap="16">
           <Row fillWidth horizontal="between" vertical="center">
             <Heading as="h2" textVariant="heading-strong-s">
               Recent activity
             </Heading>
             <Button variant="tertiary" size="s" label="View all" />
           </Row>
-          <Line />
           <Table
             fillWidth
             aria-label="Recent activity"

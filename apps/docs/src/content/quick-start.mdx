@@ -53,18 +53,7 @@ export default nextConfig;`,
   }
 ]} />
 
-That setting only works with webpack. Next.js 16 builds with Turbopack by default, and Turbopack ignores it: a server component that imports a client component (such as `Button`) from the package root ships every Once UI client component to the browser. On a page with a Button and a few layout components that came to about 150 kB gzip; importing each component from its own path brought it down to about 26 kB. Under Turbopack, import client components from their own path:
-
-<CodeBlock compact marginBottom="32" marginTop="8"
- codes={[
-  {
-    code: `import { Button } from "@once-ui-system/core/components/Button";
-import { Column, Heading, Text } from "@once-ui-system/core";`,
-    language: "tsx"
-  }
-]} />
-
-Every component has one, named after the component. Imports from the package root still work everywhere; only the bundle size differs.
+That setting only works with webpack. Next.js 16 builds with Turbopack by default, which ignores it and does not need it: Once UI lists every export by name in its entry points, so a page ships only the components it imports, from the package root, under either bundler. On a page with a Button and a Column that is about 11 kB of component CSS instead of 108 kB. Each component also has its own path, such as `@once-ui-system/core/components/Button`, if you prefer one import per component.
 
 Upgrading an app from 1.8? Follow the [migration guide](https://github.com/once-ui-system/core/blob/main/MIGRATING.md): a codemod does most of it, and it lists what is left in the order that keeps your app building.
 

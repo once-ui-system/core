@@ -1,0 +1,29 @@
+.section {
+  padding: var(--mantine-spacing-xl) 0;
+  border-bottom: 1px solid var(--mantine-color-default-border);
+  scroll-margin-top: 4rem;
+}
+
+.label {
+  text-align: center;
+  font-size: var(--mantine-font-size-sm);
+  color: var(--mantine-color-dimmed);
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--mantine-spacing-md) var(--mantine-spacing-xl);
+  margin: var(--mantine-spacing-lg) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  font-family: var(--mantine-font-family-headings);
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--mantine-color-dimmed);
+}
