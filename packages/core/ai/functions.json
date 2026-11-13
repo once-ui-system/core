@@ -54,6 +54,11 @@
    "signature": "() => boolean",
    "doc": "Whether the enclosing `Form` is submitting."
   },
+  "MASCOT_ACCESSORIES": {
+   "group": "modules",
+   "kind": "value",
+   "type": "readonly MascotAccessory[]"
+  },
   "useAudioLevel": {
    "group": "modules",
    "kind": "hook",
@@ -790,6 +795,17 @@
    "fitTo": "!(positions: readonly LngLat[], options?: { padding?: number; maxZoom?: number }) => void"
   },
   "MapLibre": "typeof import(\"maplibre-gl\")",
+  "MascotAccessory": [
+   "antenna",
+   "bow",
+   "beanie",
+   "headphones",
+   "sprout",
+   "helmet",
+   "crown",
+   "catEars",
+   "partyHat"
+  ],
   "MascotLook": {
    "color": "\"brand\" | \"accent\" | \"neutral\" | (string & {})",
    "roundness": "number",

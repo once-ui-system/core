@@ -1363,6 +1363,17 @@
    "bearing": "number",
    "pitch": "number"
   },
+  "MascotAccessory": [
+   "antenna",
+   "bow",
+   "beanie",
+   "headphones",
+   "sprout",
+   "helmet",
+   "crown",
+   "catEars",
+   "partyHat"
+  ],
   "MascotEffect": [
    "heartEyes",
    "starEyes",
@@ -4868,7 +4879,8 @@
     "state": "MascotState = idle",
     "mood": "MascotMood = neutral",
     "seed": "string | number",
-    "accessory": "React.ReactNode",
+    "accessory": "MascotAccessory | MascotAccessory[] | React.ReactNode",
+    "accessoryColor": "string",
     "lookAt": "\"pointer\" | \"center\" | { x: number; y: number } = pointer",
     "level": "number",
     "source": "AudioLevelSource | null",
@@ -7012,6 +7024,11 @@
    "kind": "hook",
    "signature": "() => boolean",
    "doc": "Whether the enclosing `Form` is submitting."
+  },
+  "MASCOT_ACCESSORIES": {
+   "group": "modules",
+   "kind": "value",
+   "type": "readonly MascotAccessory[]"
   },
   "useAudioLevel": {
    "group": "modules",

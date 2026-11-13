@@ -1,3 +1,5 @@
+export type { MascotAccessory } from "./accessories.js";
+export { MASCOT_ACCESSORIES } from "./accessories.js";
 export type { AudioLevelSource } from "./audioLevel.js";
 export { useAudioLevel } from "./audioLevel.js";
 export type { MascotEffect, MascotLook, MascotMood, MascotProps, MascotState } from "./Mascot.js";

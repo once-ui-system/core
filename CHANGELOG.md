@@ -55,6 +55,12 @@ entry below that had landed by then:
   options as `Mascot` and a mood, every color written out, for places without React or
   CSS (Open Graph images, emails, favicons). `Mascot` and `mascotSvg` share their geometry
   from `mascotShape.ts`.
+- **Mascot accessories.** `accessory` takes a built-in one: `antenna`, `bow`,
+  `beanie`, `headphones`, `sprout`, `helmet`, `crown`, `catEars` or
+  `partyHat`, or a list of them. They are flat and chunky, fit any body shape,
+  and sit behind the body, on it or in front of the face as each needs (the
+  helmet's glass goes over the face). `accessoryColor` tints them all. Your
+  own SVG still works. `MASCOT_ACCESSORIES` lists the names.
 - **`Select alignSelected`** (2.x main's `position="aligned"`, renamed: `position` is the CSS position in 3.0): the list opens with the selected
   option sitting on the field and the others above and below it, as macOS draws a
   pop-up button. Near a viewport edge, and on a searchable or multiple Select, it opens

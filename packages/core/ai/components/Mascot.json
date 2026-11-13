@@ -11,7 +11,8 @@
   "state": "MascotState = idle",
   "mood": "MascotMood = neutral",
   "seed": "string | number",
-  "accessory": "React.ReactNode",
+  "accessory": "MascotAccessory | MascotAccessory[] | React.ReactNode",
+  "accessoryColor": "string",
   "lookAt": "\"pointer\" | \"center\" | { x: number; y: number } = pointer",
   "level": "number",
   "source": "AudioLevelSource | null",
@@ -96,6 +97,17 @@
    "`max(${string})`",
    "`clamp(${string})`",
    "`var(${string})`"
+  ],
+  "MascotAccessory": [
+   "antenna",
+   "bow",
+   "beanie",
+   "headphones",
+   "sprout",
+   "helmet",
+   "crown",
+   "catEars",
+   "partyHat"
   ],
   "MascotEffect": [
    "heartEyes",
