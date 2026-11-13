@@ -16,6 +16,7 @@ export * from "./Carousel.js";
 export * from "./Checkbox.js";
 export * from "./ColorInput.js";
 export * from "./Column.js";
+export * from "./Combobox.js";
 export * from "./ConfirmButton.js";
 export * from "./DateInput.js";
 export * from "./DatePicker.js";

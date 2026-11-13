@@ -137,6 +137,10 @@
       "types": "./dist/components/Column.d.ts",
       "default": "./dist/components/Column.js"
     },
+    "./components/Combobox": {
+      "types": "./dist/components/Combobox.d.ts",
+      "default": "./dist/components/Combobox.js"
+    },
     "./components/ConfirmButton": {
       "types": "./dist/components/ConfirmButton.d.ts",
       "default": "./dist/components/ConfirmButton.js"

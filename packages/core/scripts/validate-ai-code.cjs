@@ -969,6 +969,7 @@ const LEAF_COMPONENTS = [
   "TagInput",
   "OTPInput",
   "Select",
+  "Combobox",
   "Slider",
   "Switch",
   "Checkbox",

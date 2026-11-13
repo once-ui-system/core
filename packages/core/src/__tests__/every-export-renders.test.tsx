@@ -70,6 +70,11 @@ const fixtures: Record<string, Record<string, unknown>> = {
     ],
   },
   StatTile: { label: "Open jobs", value: "128" },
+  Combobox: {
+    id: "combobox",
+    label: "City",
+    options: [{ label: "Oslo", value: "osl" }],
+  },
   Select: {
     id: "select",
     label: "Fruit",
