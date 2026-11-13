@@ -3,12 +3,23 @@
  * (a client component) and `mascotSvg`, which draws a still on the server.
  * No React here, and no "use client", so server code can import it.
  */
-import { MASCOT_DESIGN_DEFAULTS } from "./design.js";
 import type { MascotLook } from "./Mascot.js";
 
-// One source for the defaults, shared with stored designs (design.ts).
 export const DEFAULT_LOOK: Required<Omit<MascotLook, "bodyPath" | "eyeColor" | "sides" | "face">> =
-  MASCOT_DESIGN_DEFAULTS;
+  {
+    color: "brand",
+    roundness: 0.7,
+    aspect: 1,
+    surface: "glossy",
+    eyes: "tile",
+    eyeSize: 1,
+    eyeSpacing: 1,
+    eyeHeight: 0,
+    mouth: "none",
+    brows: false,
+    cheeks: false,
+    personality: "default",
+  };
 
 /* The top tile of the Once UI mark (590 box), centered on 0,0 below. */
 export const TILE =
