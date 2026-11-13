@@ -266,3 +266,28 @@
     display: table-cell;
   }
 }
+
+// Virtual rows: the spacers that stand in for the rows out of view.
+.spacer td {
+  padding: 0 !important;
+  border: none !important;
+}
+
+// An editable cell: the whole cell content is the button that opens its field.
+.editCell {
+  display: block;
+  width: 100%;
+  min-height: var(--static-space-24);
+  text-align: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-radius: var(--radius-xs);
+  cursor: text;
+
+  @media (hover: hover) {
+    &:hover {
+      box-shadow: 0 0 0 var(--static-space-4) var(--neutral-alpha-weak);
+      background: var(--neutral-alpha-weak);
+    }
+  }
+}
