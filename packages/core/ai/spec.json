@@ -3428,6 +3428,8 @@
     "wordmark": "LogoSource",
     "text": "string",
     "monogram": "boolean | string",
+    "symbol": "IconName",
+    "tone": "Tone",
     "href": "string",
     "showIn": "\"dark\" | \"light\"",
     "brand": "{ copy?: boolean; url?: string }"
