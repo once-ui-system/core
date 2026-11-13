@@ -1,0 +1,414 @@
+{
+  "exact": true,
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 11,
+      "input_tokens": 229780,
+      "output_tokens": 10507
+    }
+  ],
+  "calls": [
+    {
+      "attempt": 0,
+      "id": "msg_011Cgfx8MAHde8DbsoC7qcwA",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 1351,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 123,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cgfx8UEShVBfybCzwdaQm",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 3096,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 150,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cgfx8bcwFwxF2ed4wQDqV",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 5998,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 258,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cgfx8o1JUFyanWrPgL865",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 7321,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 231,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cgfx8xwLVD2zKDErDAUAx",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 7796,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 222,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cgfx97rNhNYER4BTejvgM",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 24061,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 233,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cgfx9KAFv96bb8D3AprRa",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 26453,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 146,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cgfx9VS9eewyKKrqCpxv7",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 28443,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 147,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cgfx9e35958ZrYKdt7MbR",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 40296,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 289,
+        "output_tokens_details": {
+          "thinking_tokens": 232
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cgfx9vMM8nKL6Gvkw1yFt",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 41053,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 131,
+        "output_tokens_details": {
+          "thinking_tokens": 74
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgfxAssJFLcVrRaUuvmrx",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "end_turn",
+      "usage": {
+        "input_tokens": 43912,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 8577,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/AGENTS.md",
+      "chars": 3539
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": ".",
+      "chars": 14
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/AGENTS.md",
+      "chars": 6328
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project",
+      "chars": 141
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/src/app",
+      "chars": 75
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/node_modules/@once-ui-system/core/ai/bundles/page.md",
+      "chars": 0,
+      "error": "no such file or directory: project/node_modules/@once-ui-system/core/ai/bundles/page.md"
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/src/app/layout.tsx",
+      "chars": 2404
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/src/app/page.tsx",
+      "chars": 124
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/src",
+      "chars": 57
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "docs",
+      "chars": 13
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/src/resources",
+      "chars": 67
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/src/components",
+      "chars": 91
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/src/lib",
+      "chars": 52
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/bundles/page.md",
+      "chars": 26662
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/src/resources/index.ts",
+      "chars": 87
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/src/resources/seo.js",
+      "chars": 5137
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/src/resources/icons.ts",
+      "chars": 3673
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/src/components/Providers.tsx",
+      "chars": 2041
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/src/components/index.ts",
+      "chars": 149
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/src/resources/once-ui.config.js",
+      "chars": 3005
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "docs/ai",
+      "chars": 190
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/src/components/UserProvider.tsx",
+      "chars": 4554
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/components/Input.json",
+      "chars": 956
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/functions.json",
+      "chars": 23141
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/components/Select.json",
+      "chars": 969
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/components/Option.json",
+      "chars": 5295
+    }
+  ]
+}

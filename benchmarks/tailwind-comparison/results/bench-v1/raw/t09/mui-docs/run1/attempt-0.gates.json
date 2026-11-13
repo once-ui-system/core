@@ -1,0 +1,15 @@
+{
+  "arm": "M",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/pricing/page.tsx(2,29): error TS2307: Cannot find module '@/components/ComparisonTable' or its corresponding type declarations.\napp/pricing/page.tsx(3,26): error TS2307: Cannot find module '@/components/FaqAccordion' or its corresponding type declarations.\napp/pricing/page.tsx(4,26): error TS2307: Cannot find module '@/components/PricingPlans' or its corresponding type declarations.\napp/pricing/page.tsx(5,23): error TS2307: Cannot find module '@/components/SiteShell' or its corresponding type declarations.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2030
+    }
+  },
+  "files": [
+    "app/pricing/page.tsx"
+  ]
+}

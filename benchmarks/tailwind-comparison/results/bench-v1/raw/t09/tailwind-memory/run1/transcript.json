@@ -1,0 +1,222 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the app described below in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: Lumen has a new visual identity, and its marketing site must carry it through the design system's own theming, not one-off styles on each element. Apply the brand from the data: the brand colour for primary buttons, links and focus rings; a warm stone-grey neutral palette; a 4px corner radius on buttons, inputs, cards and menus; the serif heading font and the sans body font given (both are system fonts, so load nothing); and a dark theme by default with a light/dark toggle in the header that switches the whole site. Build the home page at `/` (a header with the logo text, navigation and the theme toggle; a hero with the tagline and two calls to action; a row of customer logos as text; three feature sections; a footer) and a pricing page at `/pricing` (a monthly/yearly switch that shows yearly prices at two months free, three plan cards with the Team plan highlighted, a feature comparison table, and the FAQ as an accordion), sharing the header and footer.\n\nUse this data for the content (define it in the code; you may put it in `lib/data.ts`):\n\n```json\n{\n  \"product\": \"Lumen, a product-analytics and issue-tracking app for small software teams\",\n  \"brand\": {\n    \"name\": \"Lumen\",\n    \"tagline\": \"Product analytics and issue tracking that small teams actually read\",\n    \"brand_color\": \"#E8590C\",\n    \"neutral\": \"warm stone grey\",\n    \"radius\": \"4px on buttons, inputs, cards and menus\",\n    \"heading_font\": \"Georgia, \\\"Times New Roman\\\", serif\",\n    \"body_font\": \"ui-sans-serif, system-ui, sans-serif\",\n    \"default_theme\": \"dark\",\n    \"plans\": [\n      {\n        \"name\": \"Free\",\n        \"price_month\": 0,\n        \"seats\": \"1\",\n        \"features\": [\n          \"1 project\",\n          \"7-day history\",\n          \"Community support\"\n        ]\n      },\n      {\n        \"name\": \"Team\",\n        \"price_month\": 12,\n        \"seats\": \"per seat\",\n        \"features\": [\n          \"Unlimited projects\",\n          \"1-year history\",\n          \"Issue tracker\",\n          \"Email support\"\n        ],\n        \"highlight\": true\n      },\n      {\n        \"name\": \"Business\",\n        \"price_month\": 29,\n        \"seats\": \"per seat\",\n        \"features\": [\n          \"Everything in Team\",\n          \"SSO and audit log\",\n          \"Unlimited history\",\n          \"Priority support\"\n        ]\n      }\n    ],\n    \"faq\": [\n      {\n        \"q\": \"Can I switch plans later?\",\n        \"a\": \"Yes. Upgrades apply at once; downgrades at the end of the billing period.\"\n      },\n      {\n        \"q\": \"Do you offer a discount for non-profits?\",\n        \"a\": \"Yes, 50% off Team and Business for registered non-profits.\"\n      },\n      {\n        \"q\": \"Where is my data stored?\",\n        \"a\": \"In the EU, encrypted at rest.\"\n      }\n    ],\n    \"logos\": [\n      \"Acme Labs\",\n      \"Northwind Studio\",\n      \"Hooli\",\n      \"Globex\",\n      \"Initech\"\n    ]\n  }\n}\n```\n\nRequirements:\n- The app must serve these routes: `/`, `/pricing`. Each route default-exports its page from its `page.tsx`; nested layouts are allowed.\n- Write as many files as the app needs, under `app/`, `components/` or `lib/`. Do not change any file that already exists in the project except `app/page.tsx`, `app/globals.css`, `app/layout.tsx` (send the whole new file). The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Put \"use client\" at the top of every file that uses state, effects or event handlers.\n- Use realistic placeholder content defined in the files (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The app must type-check under strict TypeScript, pass `next build`, and render every route without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with every file, each in its own fenced code block whose opening line names the file's path, like ```tsx app/settings/page.tsx, and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01B132Qnr4qnxAnDEC2MF1PG",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011crGYABXjpUeCR1J3gUn3w",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01B132Qnr4qnxAnDEC2MF1PG",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011crGYABXjpUeCR1J3gUn3w",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_017mce3Ht9mLJFpR4HbiHNAa",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01FBui5z1eiuRboEQhenti5j",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01RRRrt2sB7Ay5W38WUYXRiW",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01MwvNX99ZC7CF6yGBnercp1",
+          "name": "read_file",
+          "input": {
+            "path": "project/postcss.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_014kEgLZn3Cb1qiVC8km5EjJ",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017mce3Ht9mLJFpR4HbiHNAa",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01FBui5z1eiuRboEQhenti5j",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"maplibre-gl\": \"5.24.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"react-map-gl\": \"8.1.3\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RRRrt2sB7Ay5W38WUYXRiW",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01MwvNX99ZC7CF6yGBnercp1",
+          "content": "const config = {\n  plugins: [\"@tailwindcss/postcss\"],\n};\n\nexport default config;\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014kEgLZn3Cb1qiVC8km5EjJ",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_017shqjFm8QytdoX3ehE1STf",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01BDwzP3UqdUYG6qAPE8GuvP",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01HMCAx9bcUoSVNMUy8f3sKA",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017shqjFm8QytdoX3ehE1STf",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01BDwzP3UqdUYG6qAPE8GuvP",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01HMCAx9bcUoSVNMUy8f3sKA",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "The design is built on Tailwind v4 theme tokens. `@theme` defines the semantic colour, radius and font tokens, and the dark and light values are swapped through CSS variables keyed on a `data-theme` attribute on `<html>`. An inline script sets the theme before paint, so there is no flash and no hydration mismatch.\n\nBecause the theme is applied to `<html>` before React hydrates, the `<html>` element gets `suppressHydrationWarning`.\n\nI'm leaving out `lib/theme`. The toggle reads the attribute from the DOM, and the mounted state is handled with `useSyncExternalStore`.\n\n```css app/globals.css\n@import \"tailwindcss\";\n\n/*\n * Lumen design tokens.\n * Semantic tokens are CSS variables swapped per theme; Tailwind utilities\n * (bg-surface, text-fg, border-line, bg-brand, rounded-lumen ...) read them.\n */\n\n@custom-variant dark (&:where([data-theme=\"dark\"], [data-theme=\"dark\"] *));\n\n:root,\n[data-theme=\"dark\"] {\n  color-scheme: dark;\n  --bg: #1c1917; /* stone-900 */\n  --surface: #292524; /* stone-800 */\n  --surface-2: #34302d;\n  --line: #44403c; /* stone-700 */\n  --fg: #fafaf9; /* stone-50 */\n  --fg-muted: #a8a29e; /* stone-400 */\n  --brand: #e8590c;\n  --brand-hover: #f76707;\n  --brand-fg: #1c1917;\n  --link: #ff8a4c;\n}\n\n[data-theme=\"light\"] {\n  color-scheme: light;\n  --bg: #fafaf9; /* stone-50 */\n  --surface: #ffffff;\n  --surface-2: #f5f5f4; /* stone-100 */\n  --line: #d6d3d1; /* stone-300 */\n  --fg: #1c1917; /* stone-900 */\n  --fg-muted: #57534e; /* stone-600 */\n  --brand: #e8590c;\n  --brand-hover: #c2410c;\n  --brand-fg: #ffffff;\n  --link: #c2410c;\n}\n\n@theme inline {\n  --color-bg: var(--bg);\n  --color-surface: var(--surface);\n  --color-surface-2: var(--surface-2);\n  --color-line: var(--line);\n  --color-fg: var(--fg);\n  --color-muted: var(--fg-muted);\n  --color-brand: var(--brand);\n  --color-brand-hover: var(--brand-hover);\n  --color-brand-fg: var(--brand-fg);\n  --color-link: var(--link);\n\n  --radius-lumen: 4px;\n\n  --font-sans: ui-sans-serif, system-ui, sans-serif;\n  --font-serif: Georgia, \"Times New Roman\", serif;\n}\n\n@layer base {\n  html {\n    background-color: var(--bg);\n    color: var(--fg);\n  }\n\n  body {\n    background-color: var(--bg);\n    color: var(--fg);\n    font-family: var(--font-sans);\n    min-height: 100vh;\n  }\n\n  h1,\n  h2,\n  h3,\n  h4 {\n    font-family: var(--font-serif);\n    letter-spacing: -0.01em;\n  }\n\n  :focus-visible {\n    outline: 2px solid var(--brand);\n    outline-offset: 2px;\n    border-radius: 4px;\n  }\n\n  a:not([class]) {\n    color: var(--link);\n    text-decoration: underline;\n    text-underline-offset: 3px;\n  }\n}\n\n@layer components {\n  .btn {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    gap: 0.5rem;\n    border-radius: var(--radius-lumen);\n    padding: 0.625rem 1.125rem;\n    font-size: 0.9375rem;\n    font-weight: 600;\n    line-height: 1.25rem;\n    border: 1px solid transparent;\n    cursor: pointer;\n    transition: background-color 0.15s, border-color 0.15s, color 0.15s;\n  }\n\n  .btn-primary {\n    background-color: var(--brand);\n    color: var(--brand-fg);\n  }\n  .btn-primary:hover {\n    background-color: var(--brand-hover);\n  }\n\n  .btn-secondary {\n    background-color: transparent;\n    color: var(--fg);\n    border-color: var(--line);\n  }\n  .btn-secondary:hover {\n    background-color: var(--surface-2);\n  }\n\n  .card {\n    background-color: var(--surface);\n    border: 1px solid var(--line);\n    border-radius: var(--radius-lumen);\n  }\n\n  .input {\n    background-color: var(--bg);\n    color: var(--fg);\n    border: 1px solid var(--line);\n    border-radius: var(--radius-lumen);\n    padding: 0.5rem 0.75rem;\n  }\n}\n\n@media (prefers-reduced-motion: reduce) {\n  * {\n    transition-duration: 0.01ms !important;\n    animation-duration: 0.01ms !important;\n  }\n}\n```\n\n```tsx app/layout.tsx\nimport \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nimport { SiteFooter } from \"@/components/site-footer\";\nimport { SiteHeader } from \"@/components/site-header\";\n\nexport const metadata: Metadata = {\n  title: \"Lumen — Product analytics and issue tracking\",\n  description:\n    \"Product analytics and issue tracking that small teams actually read.\",\n};\n\n// Runs before first paint: dark by default, honour a saved choice.\nconst themeScript = `(function(){try{var t=localStorage.getItem(\"lumen-theme\");document.documentElement.setAttribute(\"data-theme\",t===\"light\"?\"light\":\"dark\");}catch(e){document.documentElement.setAttribute(\"data-theme\",\"dark\");}})();`;\n\nexport default function RootLayout({\n  children,\n}: {\n  children: React.ReactNode;\n}) {\n  return (\n    <html lang=\"en\" data-theme=\"dark\" suppressHydrationWarning>\n      <head>\n        <script dangerouslySetInnerHTML={{ __html: themeScript }} />\n      </head>\n      <body className=\"font-sans antialiased\">\n        <a\n          href=\"#main\"\n          className=\"sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lumen focus:bg-brand focus:px-4 focus:py-2 focus:text-brand-fg\"\n        >\n          Skip to content\n        </a>\n        <SiteHeader />\n        <main id=\"main\">{children}</main>\n        <SiteFooter />\n      </body>\n    </html>\n  );\n}\n```\n\n```ts lib/data.ts\nexport type Plan = {\n  name: string;\n  priceMonth: number;\n  seats: string;\n  features: string[];\n  highlight?: boolean;\n};\n\nexport const brand = {\n  name: \"Lumen\",\n  tagline: \"Product analytics and issue tracking that small teams actually read\",\n  description:\n    \"Lumen is a product-analytics and issue-tracking app for small software teams.\",\n};\n\nexport const nav = [\n  { label: \"Features\", href: \"/#features\" },\n  { label: \"Pricing\", href: \"/pricing\" },\n];\n\nexport const plans: Plan[] = [\n  {\n    name: \"Free\",\n    priceMonth: 0,\n    seats: \"1 seat\",\n    features: [\"1 project\", \"7-day history\", \"Community support\"],\n  },\n  {\n    name: \"Team\",\n    priceMonth: 12,\n    seats: \"per seat\",\n    features: [\n      \"Unlimited projects\",\n      \"1-year history\",\n      \"Issue tracker\",\n      \"Email support\",\n    ],\n    highlight: true,\n  },\n  {\n    name: \"Business\",\n    priceMonth: 29,\n    seats: \"per seat\",\n    features: [\n      \"Everything in Team\",\n      \"SSO and audit log\",\n      \"Unlimited history\",\n      \"Priority support\",\n    ],\n  },\n];\n\nexport const faq = [\n  {\n    q: \"Can I switch plans later?\",\n    a: \"Yes. Upgrades apply at once; downgrades at the end of the billing period.\",\n  },\n  {\n    q: \"Do you offer a discount for non-profits?\",\n    a: \"Yes, 50% off Team and Business for registered non-profits.\",\n  },\n  {\n    q: \"Where is my data stored?\",\n    a: \"In the EU, encrypted at rest.\",\n  },\n];\n\nexport const logos = [\n  \"Acme Labs\",\n  \"Northwind Studio\",\n  \"Hooli\",\n  \"Globex\",\n  \"Initech\",\n];\n\nexport const features = [\n  {\n    title: \"Analytics you can read in a minute\",\n    body: \"One dashboard shows what shipped, what people used and what broke. No query language, no twenty-tab report builder, just the numbers a small team needs on Monday morning.\",\n    points: [\"Weekly digest by email\", \"Funnels and retention\", \"Shareable links\"],\n    icon: \"chart\",\n  },\n  {\n    title: \"Issues that live next to the data\",\n    body: \"Open an issue straight from a drop in a funnel. The chart, the affected sessions and the discussion stay attached, so nobody has to reconstruct the context later.\",\n    points: [\"Issue from any chart\", \"Sessions attached\", \"Keyboard-first triage\"],\n    icon: \"issue\",\n  },\n  {\n    title: \"Built for teams of two to twenty\",\n    body: \"Simple per-seat pricing, EU data storage and sensible defaults. Invite the whole team without a procurement meeting, and grow into SSO and audit logs when you need them.\",\n    points: [\"EU data, encrypted at rest\", \"Per-seat pricing\", \"SSO on Business\"],\n    icon: \"team\",\n  },\n] as const;\n\nexport const comparison: { feature: string; values: [string, string, string] }[] =\n  [\n    { feature: \"Projects\", values: [\"1\", \"Unlimited\", \"Unlimited\"] },\n    { feature: \"History\", values: [\"7 days\", \"1 year\", \"Unlimited\"] },\n    { feature: \"Issue tracker\", values: [\"No\", \"Yes\", \"Yes\"] },\n    { feature: \"SSO and audit log\", values: [\"No\", \"No\", \"Yes\"] },\n    {\n      feature: \"Support\",\n      values: [\"Community\", \"Email\", \"Priority\"],\n    },\n  ];\n\n/** Yearly billing = two months free: pay for 10 months, shown per month. */\nexport function planPrice(priceMonth: number, yearly: boolean): number {\n  if (!yearly) return priceMonth;\n  return Math.round(((priceMonth * 10) / 12) * 100) / 100;\n}\n\nexport function yearlyTotal(priceMonth: number): number {\n  return priceMonth * 10;\n}\n```\n\n```tsx components/theme-toggle.tsx\n\"use client\";\n\nimport { Moon, Sun } from \"lucide-react\";\nimport { useSyncExternalStore } from \"react\";\n\nfunction subscribe(callback: () => void) {\n  const observer = new MutationObserver(callback);\n  observer.observe(document.documentElement, {\n    attributes: true,\n    attributeFilter: [\"data-theme\"],\n  });\n  return () => observer.disconnect();\n}\n\nfunction getSnapshot(): \"dark\" | \"light\" {\n  return document.documentElement.getAttribute(\"data-theme\") === \"light\"\n    ? \"light\"\n    : \"dark\";\n}\n\nfunction getServerSnapshot(): \"dark\" | \"light\" {\n  return \"dark\";\n}\n\nexport function ThemeToggle() {\n  const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);\n  const isDark = theme === \"dark\";\n\n  function toggle() {\n    const next = isDark ? \"light\" : \"dark\";\n    document.documentElement.setAttribute(\"data-theme\", next);\n    try {\n      localStorage.setItem(\"lumen-theme\", next);\n    } catch {\n      // storage unavailable; theme still applies for this session\n    }\n  }\n\n  return (\n    <button\n      type=\"button\"\n      onClick={toggle}\n      aria-label={isDark ? \"Switch to light theme\" : \"Switch to dark theme\"}\n      className=\"inline-flex size-10 items-center justify-center rounded-lumen border border-line text-fg transition-colors hover:bg-surface-2\"\n    >\n      {isDark ? (\n        <Sun className=\"size-5\" aria-hidden=\"true\" />\n      ) : (\n        <Moon className=\"size-5\" aria-hidden=\"true\" />\n      )}\n    </button>\n  );\n}\n```\n\n```tsx components/site-header.tsx\nimport Link from \"next/link\";\n\nimport { brand, nav } from \"@/lib/data\";\nimport { ThemeToggle } from \"./theme-toggle\";\n\nexport function SiteHeader() {\n  return (\n    <header className=\"sticky top-0 z-40 border-b border-line bg-bg/90 backdrop-blur\">\n      <div className=\"mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6\">\n        <Link\n          href=\"/\"\n          className=\"font-serif text-2xl font-bold tracking-tight text-fg\"\n        >\n          {brand.name}\n          <span className=\"text-brand\" aria-hidden=\"true\">\n            .\n          </span>\n        </Link>\n        <div className=\"flex items-center gap-2 sm:gap-6\">\n          <nav aria-label=\"Main\">\n            <ul className=\"flex items-center gap-1 sm:gap-2\">\n              {nav.map((item) => (\n                <li key={item.href}>\n                  <Link\n                    href={item.href}\n                    className=\"rounded-lumen px-2 py-2 text-sm font-medium text-muted transition-colors hover:text-fg sm:px-3\"\n                  >\n                    {item.label}\n                  </Link>\n                </li>\n              ))}\n            </ul>\n          </nav>\n          <ThemeToggle />\n        </div>\n      </div>\n    </header>\n  );\n}\n```\n\n```tsx components/site-footer.tsx\nimport Link from \"next/link\";\n\nimport { brand, nav } from \"@/lib/data\";\n\nexport function SiteFooter() {\n  return (\n    <footer className=\"mt-24 border-t border-line\">\n      <div className=\"mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-6\">\n        <div>\n          <p className=\"font-serif text-xl font-bold\">{brand.name}</p>\n          <p className=\"mt-1 max-w-sm text-sm text-muted\">\n            Analytics and issue tracking for small software teams.\n          </p>\n        </div>\n        <nav aria-label=\"Footer\">\n          <ul className=\"flex flex-wrap gap-x-6 gap-y-2 text-sm\">\n            {nav.map((item) => (\n              <li key={item.href}>\n                <Link\n                  href={item.href}\n                  className=\"text-muted transition-colors hover:text-link\"\n                >\n                  {item.label}\n                </Link>\n              </li>\n            ))}\n          </ul>\n        </nav>\n        <p className=\"text-sm text-muted\">\n          © 2025 {brand.name}. Data stored in the EU.\n        </p>\n      </div>\n    </footer>\n  );\n}\n```\n\n```tsx app/page.tsx\nimport Link from \"next/link\";\nimport { BarChart3, Bug, Users } from \"lucide-react\";\n\nimport { brand, features, logos } from \"@/lib/data\";\n\nconst icons = {\n  chart: BarChart3,\n  issue: Bug,\n  team: Users,\n} as const;\n\nexport default function HomePage() {\n  return (\n    <>\n      <section className=\"mx-auto max-w-6xl px-4 pb-16 pt-16 sm:px-6 sm:pt-24\">\n        <p className=\"text-sm font-semibold uppercase tracking-widest text-link\">\n          {brand.name} for small software teams\n        </p>\n        <h1 className=\"mt-4 max-w-3xl text-4xl font-bold leading-tight sm:text-6xl\">\n          {brand.tagline}\n        </h1>\n        <p className=\"mt-6 max-w-2xl text-lg text-muted\">\n          See what your users do, turn the surprises into issues, and keep both\n          in one place your whole team opens every day.\n        </p>\n        <div className=\"mt-8 flex flex-col gap-3 sm:flex-row\">\n          <Link href=\"/pricing\" className=\"btn btn-primary\">\n            Start free\n          </Link>\n          <Link href=\"/pricing\" className=\"btn btn-secondary\">\n            See pricing\n          </Link>\n        </div>\n      </section>\n\n      <section\n        aria-labelledby=\"logos-heading\"\n        className=\"border-y border-line bg-surface\"\n      >\n        <div className=\"mx-auto max-w-6xl px-4 py-10 sm:px-6\">\n          <h2\n            id=\"logos-heading\"\n            className=\"text-center text-sm font-medium text-muted\"\n          >\n            Trusted by small teams shipping every week\n          </h2>\n          <ul className=\"mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-4\">\n            {logos.map((logo) => (\n              <li\n                key={logo}\n                className=\"font-serif text-xl font-bold text-muted\"\n              >\n                {logo}\n              </li>\n            ))}\n          </ul>\n        </div>\n      </section>\n\n      <div id=\"features\" className=\"mx-auto max-w-6xl scroll-mt-20 px-4 sm:px-6\">\n        {features.map((f, i) => {\n          const Icon = icons[f.icon];\n          return (\n            <section\n              key={f.title}\n              aria-labelledby={`feature-${i}`}\n              className=\"grid items-center gap-8 border-b border-line py-16 last:border-b-0 md:grid-cols-2 md:gap-14\"\n            >\n              <div className={i % 2 === 1 ? \"md:order-2\" : undefined}>\n                <span className=\"inline-flex size-11 items-center justify-center rounded-lumen bg-brand text-brand-fg\">\n                  <Icon className=\"size-6\" aria-hidden=\"true\" />\n                </span>\n                <h2 id={`feature-${i}`} className=\"mt-5 text-3xl font-bold\">\n                  {f.title}\n                </h2>\n                <p className=\"mt-4 text-muted\">{f.body}</p>\n              </div>\n              <ul className=\"card divide-y divide-line\">\n                {f.points.map((p) => (\n                  <li key={p} className=\"flex items-center gap-3 px-5 py-4\">\n                    <span\n                      className=\"size-2 shrink-0 rounded-full bg-brand\"\n                      aria-hidden=\"true\"\n                    />\n                    {p}\n                  </li>\n                ))}\n              </ul>\n            </section>\n          );\n        })}\n      </div>\n\n      <section className=\"mx-auto max-w-6xl px-4 sm:px-6\">\n        <div className=\"card flex flex-col items-start gap-4 p-8 sm:flex-row sm:items-center sm:justify-between\">\n          <h2 className=\"text-2xl font-bold\">Ready to read your product?</h2>\n          <Link href=\"/pricing\" className=\"btn btn-primary\">\n            Compare plans\n          </Link>\n        </div>\n      </section>\n    </>\n  );\n}\n```\n\n```tsx components/pricing-view.tsx\n\"use client\";\n\nimport { Check, Minus, Plus } from \"lucide-react\";\nimport { useId, useState } from \"react\";\n\nimport {\n  comparison,\n  faq,\n  planPrice,\n  plans,\n  yearlyTotal,\n} from \"@/lib/data\";\n\nfunction formatPrice(n: number): string {\n  return Number.isInteger(n) ? `$${n}` : `$${n.toFixed(2)}`;\n}\n\nexport function PricingView() {\n  const [yearly, setYearly] = useState(false);\n  const [open, setOpen] = useState<number | null>(0);\n  const baseId = useId();\n\n  return (\n    <>\n      <section className=\"mx-auto max-w-6xl px-4 pb-8 pt-16 text-center sm:px-6 sm:pt-20\">\n        <h1 className=\"text-4xl font-bold sm:text-5xl\">\n          Simple pricing for small teams\n        </h1>\n        <p className=\"mx-auto mt-4 max-w-xl text-muted\">\n          Start free. Pay per seat when your team grows. Choose yearly billing\n          and get two months free.\n        </p>\n\n        <div className=\"mt-8 inline-flex items-center gap-3\">\n          <span\n            className={yearly ? \"text-muted\" : \"font-semibold\"}\n            id={`${baseId}-monthly`}\n          >\n            Monthly\n          </span>\n          <button\n            type=\"button\"\n            role=\"switch\"\n            aria-checked={yearly}\n            aria-labelledby={`${baseId}-yearly`}\n            onClick={() => setYearly((v) => !v)}\n            className=\"relative h-7 w-12 rounded-lumen border border-line bg-surface-2 transition-colors aria-checked:bg-brand\"\n          >\n            <span\n              className={`absolute left-0.5 top-0.5 size-5 rounded-[3px] bg-fg transition-transform ${\n                yearly ? \"translate-x-5\" : \"\"\n              }`}\n              aria-hidden=\"true\"\n            />\n          </button>\n          <span\n            className={yearly ? \"font-semibold\" : \"text-muted\"}\n            id={`${baseId}-yearly`}\n          >\n            Yearly{\" \"}\n            <span className=\"ml-1 rounded-lumen bg-brand px-2 py-0.5 text-xs font-semibold text-brand-fg\">\n              2 months free\n            </span>\n          </span>\n        </div>\n      </section>\n\n      <section\n        aria-label=\"Plans\"\n        className=\"mx-auto grid max-w-6xl gap-6 px-4 py-8 sm:px-6 md:grid-cols-3\"\n      >\n        {plans.map((plan) => {\n          const price = planPrice(plan.priceMonth, yearly);\n          return (\n            <article\n              key={plan.name}\n              className={`card relative flex flex-col p-6 ${\n                plan.highlight ? \"border-2 !border-brand\" : \"\"\n              }`}\n            >\n              {plan.highlight && (\n                <span className=\"absolute -top-3 left-6 rounded-lumen bg-brand px-3 py-0.5 text-xs font-semibold text-brand-fg\">\n                  Most popular\n                </span>\n              )}\n              <h2 className=\"text-2xl font-bold\">{plan.name}</h2>\n              <p className=\"mt-4 flex items-baseline gap-1\">\n                <span className=\"font-serif text-5xl font-bold\">\n                  {formatPrice(price)}\n                </span>\n                <span className=\"text-sm text-muted\">\n                  / month · {plan.seats}\n                </span>\n              </p>\n              <p className=\"mt-1 min-h-5 text-sm text-muted\" aria-live=\"polite\">\n                {plan.priceMonth === 0\n                  ? \"Free forever\"\n                  : yearly\n                    ? `Billed ${formatPrice(yearlyTotal(plan.priceMonth))} per seat yearly`\n                    : \"Billed monthly\"}\n              </p>\n              <ul className=\"mt-6 flex-1 space-y-3\">\n                {plan.features.map((f) => (\n                  <li key={f} className=\"flex items-start gap-2 text-sm\">\n                    <Check\n                      className=\"mt-0.5 size-4 shrink-0 text-link\"\n                      aria-hidden=\"true\"\n                    />\n                    {f}\n                  </li>\n                ))}\n              </ul>\n              <button\n                type=\"button\"\n                className={`btn mt-8 ${\n                  plan.highlight ? \"btn-primary\" : \"btn-secondary\"\n                }`}\n              >\n                {plan.priceMonth === 0 ? \"Start free\" : `Choose ${plan.name}`}\n              </button>\n            </article>\n          );\n        })}\n      </section>\n\n      <section\n        aria-labelledby=\"compare-heading\"\n        className=\"mx-auto max-w-6xl px-4 py-12 sm:px-6\"\n      >\n        <h2 id=\"compare-heading\" className=\"text-3xl font-bold\">\n          Compare plans\n        </h2>\n        <div className=\"card mt-6 overflow-x-auto\">\n          <table className=\"w-full min-w-[34rem] border-collapse text-left text-sm\">\n            <caption className=\"sr-only\">Feature comparison by plan</caption>\n            <thead>\n              <tr className=\"border-b border-line bg-surface-2\">\n                <th scope=\"col\" className=\"px-4 py-3 font-semibold\">\n                  Feature\n                </th>\n                {plans.map((p) => (\n                  <th\n                    key={p.name}\n                    scope=\"col\"\n                    className={`px-4 py-3 font-semibold ${\n                      p.highlight ? \"text-link\" : \"\"\n                    }`}\n                  >\n                    {p.name}\n                  </th>\n                ))}\n              </tr>\n            </thead>\n            <tbody>\n              {comparison.map((row) => (\n                <tr key={row.feature} className=\"border-b border-line last:border-b-0\">\n                  <th scope=\"row\" className=\"px-4 py-3 font-medium\">\n                    {row.feature}\n                  </th>\n                  {row.values.map((v, i) => (\n                    <td\n                      key={i}\n                      className={`px-4 py-3 ${\n                        v === \"No\" ? \"text-muted\" : \"\"\n                      }`}\n                    >\n                      {v === \"No\" ? (\n                        <>\n                          <Minus className=\"size-4\" aria-hidden=\"true\" />\n                          <span className=\"sr-only\">No</span>\n                        </>\n                      ) : (\n                        v\n                      )}\n                    </td>\n                  ))}\n                </tr>\n              ))}\n            </tbody>\n          </table>\n        </div>\n      </section>\n\n      <section\n        aria-labelledby=\"faq-heading\"\n        className=\"mx-auto max-w-3xl px-4 py-12 sm:px-6\"\n      >\n        <h2 id=\"faq-heading\" className=\"text-3xl font-bold\">\n          Frequently asked questions\n        </h2>\n        <div className=\"card mt-6 divide-y divide-line\">\n          {faq.map((item, i) => {\n            const isOpen = open === i;\n            const panelId = `${baseId}-panel-${i}`;\n            const buttonId = `${baseId}-button-${i}`;\n            return (\n              <div key={item.q}>\n                <h3>\n                  <button\n                    type=\"button\"\n                    id={buttonId}\n                    aria-expanded={isOpen}\n                    aria-controls={panelId}\n                    onClick={() => setOpen(isOpen ? null : i)}\n                    className=\"flex w-full items-center justify-between gap-4 px-5 py-4 text-left font-sans text-base font-semibold hover:bg-surface-2\"\n                  >\n                    {item.q}\n                    {isOpen ? (\n                      <Minus className=\"size-5 shrink-0 text-link\" aria-hidden=\"true\" />\n                    ) : (\n                      <Plus className=\"size-5 shrink-0 text-link\" aria-hidden=\"true\" />\n                    )}\n                  </button>\n                </h3>\n                <div\n                  id={panelId}\n                  role=\"region\"\n                  aria-labelledby={buttonId}\n                  hidden={!isOpen}\n                  className=\"px-5 pb-4 text-muted\"\n                >\n                  {item.a}\n                </div>\n              </div>\n            );\n          })}\n        </div>\n      </section>\n    </>\n  );\n}\n```\n\n```tsx app/pricing/page.tsx\nimport type { Metadata } from \"next\";\n\nimport { PricingView } from \"@/components/pricing-view\";\n\nexport const metadata: Metadata = {\n  title: \"Pricing — Lumen\",\n  description: \"Free, Team and Business plans. Yearly billing includes two months free.\",\n};\n\nexport default function PricingPage() {\n  return <PricingView />;\n}\n```"
+        }
+      ]
+    }
+  ]
+}

@@ -26,18 +26,18 @@ export const ChartStatus = ({
 
   return (
     <Column fill center>
+      {/* An error wins over empty: a failed request usually leaves `data` empty
+          too (`data ?? []`), and "No data" would hide that it failed. */}
       {loading ? (
         <Spinner size="m" />
-      ) : empty ? (
+      ) : error ? (
+        <Text align="center" textVariant="label-default-s" onBackground="danger-weak">
+          {errorState}
+        </Text>
+      ) : (
         <Text align="center" textVariant="label-default-s" onBackground="neutral-weak">
           {emptyState}
         </Text>
-      ) : (
-        error && (
-          <Text align="center" textVariant="label-default-s" onBackground="danger-weak">
-            {errorState}
-          </Text>
-        )
       )}
     </Column>
   );

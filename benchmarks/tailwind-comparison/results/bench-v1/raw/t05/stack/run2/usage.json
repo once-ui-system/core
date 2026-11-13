@@ -1,0 +1,437 @@
+{
+  "exact": true,
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 11,
+      "input_tokens": 284550,
+      "output_tokens": 16960
+    }
+  ],
+  "calls": [
+    {
+      "attempt": 0,
+      "id": "msg_011CggrWkm2MEBRkyX5eNQt2",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 1965,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 119,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CggrWvnHkiUyKNTyLSVz2",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 3706,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 150,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CggrX51sycfc56WXqPTQC",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 6608,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 241,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CggrXFCYy5P8G8KfnTDJY",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 7881,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 255,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CggrXSQzWeiKjnQGtGSMh",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 23763,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 301,
+        "output_tokens_details": {
+          "thinking_tokens": 77
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CggrXfgTVxnPmBsVEgrhj",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 28190,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 278,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CggrXtLDzDoQVyyPLL22r",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 33781,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 191,
+        "output_tokens_details": {
+          "thinking_tokens": 70
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CggrY66Q736AngMXDEYZn",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 35784,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 347,
+        "output_tokens_details": {
+          "thinking_tokens": 118
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CggrYL8WDLjwZXAFzriZv",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 44670,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 368,
+        "output_tokens_details": {
+          "thinking_tokens": 256
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CggrYeHQA8Qnp9rEFB51k",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 48790,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 137,
+        "output_tokens_details": {
+          "thinking_tokens": 80
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CggrYqtug1XNn9uXaf9pG",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "end_turn",
+      "usage": {
+        "input_tokens": 49412,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 14573,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/AGENTS.md",
+      "chars": 3539
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": ".",
+      "chars": 14
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/AGENTS.md",
+      "chars": 6328
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project",
+      "chars": 141
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/src/app",
+      "chars": 75
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "docs",
+      "chars": 13
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/src/app/layout.tsx",
+      "chars": 2404
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/src/app/page.tsx",
+      "chars": 124
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/src/app/(product)",
+      "chars": 36
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/bundles/list-page.md",
+      "chars": 34988
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/src/app/(product)/layout.tsx",
+      "chars": 1047
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/src/components",
+      "chars": 91
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/src/resources",
+      "chars": 67
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/src/components/Providers.tsx",
+      "chars": 2041
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/src/resources/index.ts",
+      "chars": 87
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/components/Dialog.json",
+      "chars": 5321
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/components/Select.json",
+      "chars": 969
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/src/resources/once-ui.config.js",
+      "chars": 3005
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/next.config.mjs",
+      "chars": 1109
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/src/components/UserProvider.tsx",
+      "chars": 4554
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/src/components/OrgProvider.tsx",
+      "chars": 4984
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/src/app/(product)/components",
+      "chars": 136
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/src/app/(product)/components/Sidebar.tsx",
+      "chars": 4271
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/src/resources/icons.ts",
+      "chars": 3673
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/components/Breadcrumbs.json",
+      "chars": 6633
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/components/Option.json",
+      "chars": 5295
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/src/app/not-found.tsx",
+      "chars": 1259
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/components/Avatar.json",
+      "chars": 7082
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/src/components/index.ts",
+      "chars": 149
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/ai/components/Input.json",
+      "chars": 956
+    }
+  ]
+}

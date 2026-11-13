@@ -1,0 +1,37 @@
+{
+  "arm": "T",
+  "passed": false,
+  "failed_gate": "build",
+  "failure_output": "Error: Failed to collect configuration for /_not-found\n    at ignore-listed frames {\n  [cause]: TypeError: z.Button.extend is not a function\n      at module evaluation (.next/server/chunks/ssr/benchmarks_tailwind-comparison_work_gate_mantine-docs_1t1jfce._.js:1:25899)\n      at instantiateModule (.next/server/chunks/ssr/[turbopack]_runtime.js:853:9)\n      at getOrInstantiateModuleFromParent (.next/server/chunks/ssr/[turbopack]_runtime.js:877:12)\n      at Context.esmImport [as i] (.next/server/chunks/ssr/[turbopack]_runtime.js:281:20)\n      at module evaluation (.next/server/chunks/ssr/benchmarks_tailwind-comparison_work_gate_mantine-docs_1t1jfce._.js:1:27437)\n      at instantiateModule (.next/server/chunks/ssr/[turbopack]_runtime.js:853:9)\n      at getOrInstantiateModuleFromParent (.next/server/chunks/ssr/[turbopack]_runtime.js:877:12)\n      at Context.commonJsRequire [as r] (.next/server/chunks/ssr/[turbopack]_runtime.js:302:12)\n      at K.layout (.next/server/chunks/ssr/1g7e_next_dist_esm_build_templates_app-page_0sq-kt0.js:1:791)\n}\n\n> Build error occurred\nError: Failed to collect page data for /_not-found\n    at ignore-listed frames {\n  type: 'Error'\n}",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 3592
+    },
+    "build": {
+      "ok": false,
+      "ms": 10158
+    }
+  },
+  "files": [
+    "components/home/Home.module.css",
+    "components/home/FeatureSection.tsx",
+    "app/page.tsx",
+    "components/pricing/Pricing.module.css",
+    "components/pricing/PricingPlans.tsx",
+    "components/pricing/ComparisonTable.tsx",
+    "components/pricing/FaqAccordion.tsx",
+    "app/pricing/page.tsx",
+    "app/theme.ts",
+    "app/layout.tsx",
+    "lib/data.ts",
+    "components/ThemeToggle.tsx",
+    "components/SiteShell.module.css",
+    "components/SiteShell.tsx",
+    "components/SiteHeader.module.css",
+    "components/SiteHeader.tsx",
+    "components/SiteFooter.module.css",
+    "components/SiteFooter.tsx",
+    "components/home/FeaturePanel.tsx"
+  ]
+}

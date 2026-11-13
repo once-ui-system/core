@@ -1,0 +1,30 @@
+{
+  "check": "3",
+  "at": "2026-11-11T00:01:46.268Z",
+  "ms": 40438,
+  "files": [
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "components/AppFrame.tsx",
+    "components/FloorPlan.tsx",
+    "components/GuestsView.tsx",
+    "components/PageHeader.tsx",
+    "components/PlanView.tsx",
+    "lib/PlanContext.tsx",
+    "lib/data.ts",
+    "lib/plan.ts"
+  ],
+  "passed": true,
+  "gates_passed": true,
+  "failed_gate": null,
+  "adherence": {
+    "system": 157,
+    "raw": 0,
+    "share": 1,
+    "colours": 0,
+    "cssLines": 0,
+    "ok": true,
+    "reasons": []
+  }
+}

@@ -22,7 +22,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { armById, config, listFiles, median } from "./lib.mjs";
+import { armById, config, listFiles, median, taskById } from "./lib.mjs";
 
 const all = (k) => process.argv.flatMap((a, i) => (a === `--${k}` ? [process.argv[i + 1]] : []));
 const arg = (k, d) => all(k)[0] ?? d;
@@ -39,6 +39,32 @@ const AXES = ["polish", "completeness", "responsiveness", "restraint", "coherenc
 const round = (x, d = 2) => (x == null || Number.isNaN(x) ? null : Math.round(x * 10 ** d) / 10 ** d);
 const mean = (xs) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : null);
 
+// Brand adherence, 0-1: the share of the sheet's checkable points the app's
+// home page follows (brand colour on a fill, brand colour on text, button
+// radius, heading font, default theme). Recorded, never gated.
+const firstFamily = (f) => (f ?? "").split(",")[0].replace(/["']/g, "").trim().toLowerCase();
+function brandAdherence(b, sheet) {
+  const points = [
+    b.brand_filled_buttons + (b.brand_fill_elements ?? 0) > 0,
+    (b.brand_text_elements ?? 0) > 0,
+    b.filled_buttons ? b.button_radius_matches / b.filled_buttons >= 0.5 : null,
+    b.heading_font ? firstFamily(b.heading_font) === firstFamily(sheet.heading_font) : null,
+    b.dark_first_paint === (sheet.default_theme === "dark"),
+  ].filter((x) => x != null);
+  return points.length ? points.filter(Boolean).length / points.length : null;
+}
+// Range: how far apart one system's apps for the same base task in different
+// brands look, as the share of distinct (page background, heading font, button
+// radius) signatures among them. 1 = every brand looks different.
+function brandRange(rows) {
+  const byBase = {};
+  for (const r of rows.filter((r) => r.brand && r.task >= 100)) (byBase[Math.floor(r.task / 100)] ??= []).push(r);
+  const shares = Object.values(byBase)
+    .filter((rs) => rs.length > 1)
+    .map((rs) => new Set(rs.map((r) => [r.brand.page_background, firstFamily(r.brand.heading_font), Math.round(r.brand.button_radius ?? -1)].join("|"))).size / rs.length);
+  return shares.length ? mean(shares) : null;
+}
+
 const runs = [];
 for (const dir of resultDirs) {
   const ratings = fs.existsSync(path.join(dir, "ratings.json")) ? JSON.parse(fs.readFileSync(path.join(dir, "ratings.json"), "utf8")) : [];
@@ -50,6 +76,10 @@ for (const dir of resultDirs) {
     const state = JSON.parse(fs.readFileSync(path.join(runDir, "run.json"), "utf8"));
     const usagePath = path.join(runDir, "usage.json");
     const usage = fs.existsSync(usagePath) ? JSON.parse(fs.readFileSync(usagePath, "utf8")) : { calls: [] };
+    // Claude Code track (pilot-usage.mjs format): token counts include Claude Code's own
+    // overhead and aren't comparable with API runs, so cost and tokens are left out.
+    const ccTrack = Array.isArray(usage.attempts) && !usage.calls;
+    usage.calls ??= [];
     let input = 0;
     let output = 0;
     for (const c of usage.calls.filter((c) => c.usage)) {
@@ -66,8 +96,8 @@ for (const dir of resultDirs) {
       status: state.status,
       pass1: state.status === "accepted" && state.accepted_attempt === 0,
       accepted: state.status === "accepted",
-      cost: (input * P.input + output * P.output) / 1e6,
-      tokens: input + output,
+      cost: ccTrack ? null : (input * P.input + output * P.output) / 1e6,
+      tokens: ccTrack ? null : input + output,
       calls: usage.calls.filter((c) => c.usage).length,
     };
     if (row.accepted) {
@@ -86,7 +116,11 @@ for (const dir of resultDirs) {
       if (weights.length) row.weight = Object.fromEntries(["js_kb", "css_kb", "fcp_ms", "cls", "long_task_ms"].map((k) => [k, mean(weights.map((w) => w[k]).filter((x) => x != null))]));
       const axes = [render.axe, ...Object.values(render.routes ?? {}).map((x) => x.axe)].filter(Boolean);
       row.axe_serious = mean(axes.map((a) => a.serious_or_critical));
-      if (render.brand) row.brand = render.brand;
+      if (render.brand) {
+        row.brand = render.brand;
+        const sheet = taskById(task)?.brand_check;
+        if (sheet && !render.brand.error) row.brand_adherence = brandAdherence(render.brand, sheet);
+      }
       const files = JSON.parse(fs.readFileSync(path.join(runDir, `attempt-${state.accepted_attempt}.files.json`), "utf8")).files;
       row.code_lines = files.reduce((s, f) => s + fs.readFileSync(path.join(runDir, `attempt-${state.accepted_attempt}.files`, f), "utf8").split("\n").length, 0);
       const rating = ratings.find((x) => x.task === task && x.arm === letter && x.run === run);
@@ -134,6 +168,7 @@ for (const arm of arms) {
       css_kb: median(acc.map((r) => r.weight?.css_kb).filter((v) => v != null)),
       cls: median(acc.map((r) => r.weight?.cls).filter((v) => v != null)),
       long_task_ms: median(acc.map((r) => r.weight?.long_task_ms).filter((v) => v != null)),
+      brand_adherence: median(acc.map((r) => r.brand_adherence).filter((v) => v != null)),
     });
   }
 }
@@ -169,6 +204,8 @@ const board = arms
       css_kb_gzip: round(m("css_kb"), 1),
       cls: round(m("cls"), 3),
       long_task_ms: round(m("long_task_ms"), 0),
+      brand_adherence: round(m("brand_adherence"), 2),
+      brand_range: round(brandRange(rs.filter((r) => r.accepted)), 2),
     };
   })
   .sort((x, y) => (y.arena_elo ?? -1) - (x.arena_elo ?? -1) || (y.quality ?? -1) - (x.quality ?? -1));
@@ -185,11 +222,11 @@ const lines = [
   "",
   `Tasks ${taskIds.join(", ")} · ${runs.length} runs · generation spend $${round(spend, 2)} (list price, uncached) · internal, not for public claims`,
   "",
-  "| System | Arena Elo | Quality | Intentionality | Pass@1 | Accepted | Cost/run | Quality per $ | Tokens/run | Font sizes | Colours | Spacing values | 4px grid | axe serious/route | JS KB gz | CSS KB gz | CLS |",
-  "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+  "| System | Arena Elo | Quality | Intentionality | Pass@1 | Accepted | Cost/run | Quality per $ | Tokens/run | Font sizes | Colours | Spacing values | 4px grid | axe serious/route | JS KB gz | CSS KB gz | CLS | Brand adherence | Brand range |",
+  "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
   ...board.map(
     (b) =>
-      `| ${b.system} | ${b.arena_elo != null ? `${b.arena_elo} (${b.arena_range.join("–")})` : "–"} | ${v(b.quality)} | ${v(b.intentionality)} | ${pct(b.pass1)} | ${pct(b.accepted)} | ${b.cost_usd != null ? `$${b.cost_usd.toFixed(2)}` : "–"} | ${v(b.quality_per_usd)} | ${b.tokens ? `${Math.round(b.tokens / 1000)}k` : "–"} | ${v(b.distinct_font_sizes)} | ${v(b.distinct_colors)} | ${v(b.distinct_spacing)} | ${pct(b.spacing_on_4px_grid)} | ${v(b.axe_serious_per_route)} | ${v(b.js_kb_gzip)} | ${v(b.css_kb_gzip)} | ${v(b.cls)} |`,
+      `| ${b.system} | ${b.arena_elo != null ? `${b.arena_elo} (${b.arena_range.join("–")})` : "–"} | ${v(b.quality)} | ${v(b.intentionality)} | ${pct(b.pass1)} | ${pct(b.accepted)} | ${b.cost_usd != null ? `$${b.cost_usd.toFixed(2)}` : "–"} | ${v(b.quality_per_usd)} | ${b.tokens ? `${Math.round(b.tokens / 1000)}k` : "–"} | ${v(b.distinct_font_sizes)} | ${v(b.distinct_colors)} | ${v(b.distinct_spacing)} | ${pct(b.spacing_on_4px_grid)} | ${v(b.axe_serious_per_route)} | ${v(b.js_kb_gzip)} | ${v(b.css_kb_gzip)} | ${v(b.cls)} | ${pct(b.brand_adherence)} | ${pct(b.brand_range)} |`,
   ),
 ];
 fs.writeFileSync(`${outBase}.md`, `${lines.join("\n")}\n`);

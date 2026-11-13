@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: oklch(0.97 0.02 185);
+  --color-brand-100: oklch(0.94 0.04 185);
+  --color-brand-200: oklch(0.88 0.07 185);
+  --color-brand-300: oklch(0.8 0.09 185);
+  --color-brand-500: oklch(0.6 0.1 185);
+  --color-brand-600: oklch(0.52 0.1 185);
+  --color-brand-700: oklch(0.45 0.09 185);
+  --color-brand-800: oklch(0.38 0.07 185);
+  --color-brand-900: oklch(0.3 0.05 185);
+}
+
+html {
+  background: var(--color-stone-50);
+  color: var(--color-stone-900);
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--color-stone-50);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand-600);
+  outline-offset: 2px;
+}
+
+button,
+select,
+input,
+a {
+  touch-action: manipulation;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  html,
+  body {
+    background: white;
+  }
+}

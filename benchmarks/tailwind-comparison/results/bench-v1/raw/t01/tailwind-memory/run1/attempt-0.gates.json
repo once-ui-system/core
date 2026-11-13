@@ -1,0 +1,256 @@
+{
+  "arm": "D",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2828
+    },
+    "build": {
+      "ok": true,
+      "ms": 10859
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 503,
+          "height": 1133,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 614,
+          "height": 1024,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 614,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 503,
+              "height": 1133,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 614,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 614,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/projects": {
+          "viewports": {
+            "phone": {
+              "text": 392,
+              "height": 866,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 461,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 461,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/settings": {
+          "viewports": {
+            "phone": {
+              "text": 354,
+              "height": 835,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 465,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 465,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      },
+      "interaction": {
+        "phone": {
+          "action": "click > click",
+          "found": false,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1763,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/projects phone": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/projects tablet": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/projects desktop": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/settings phone": {
+          "ms": 1766,
+          "settled": true
+        },
+        "/settings tablet": {
+          "ms": 1766,
+          "settled": true
+        },
+        "/settings desktop": {
+          "ms": 1816,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 131,
+          "distinct_fontSize": 6,
+          "distinct_color": 6,
+          "distinct_background": 8,
+          "distinct_radius": 4,
+          "distinct_shadow": 2,
+          "distinct_spacing": 11,
+          "spacing_on_4px_grid": 0.827
+        },
+        "/projects": {
+          "elements": 123,
+          "distinct_fontSize": 5,
+          "distinct_color": 7,
+          "distinct_background": 12,
+          "distinct_radius": 3,
+          "distinct_shadow": 4,
+          "distinct_spacing": 11,
+          "spacing_on_4px_grid": 0.818
+        },
+        "/settings": {
+          "elements": 97,
+          "distinct_fontSize": 5,
+          "distinct_color": 7,
+          "distinct_background": 6,
+          "distinct_radius": 3,
+          "distinct_shadow": 1,
+          "distinct_spacing": 11,
+          "spacing_on_4px_grid": 0.906
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 164.2,
+          "css_kb": 14.6,
+          "fcp_ms": 124,
+          "cls": 0,
+          "long_task_ms": 16
+        },
+        "/projects": {
+          "js_kb": 164.2,
+          "css_kb": 14.6,
+          "fcp_ms": 200,
+          "cls": 0,
+          "long_task_ms": 18
+        },
+        "/settings": {
+          "js_kb": 164.2,
+          "css_kb": 14.6,
+          "fcp_ms": 196,
+          "cls": 0,
+          "long_task_ms": 13
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/app-shell.tsx",
+    "components/page-heading.tsx",
+    "components/status-badge.tsx",
+    "app/page.tsx",
+    "app/projects/page.tsx",
+    "app/reports/page.tsx",
+    "app/settings/page.tsx",
+    "components/settings-form.tsx"
+  ]
+}

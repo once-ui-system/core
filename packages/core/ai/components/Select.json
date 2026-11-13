@@ -18,6 +18,7 @@
   "onOpenChange": "(open: boolean) => void",
   "emptyState": "ReactNode = No results",
   "placement": "Placement",
+  "alignSelected": "boolean = false",
   "searchable": "boolean = false",
   "multiple": "boolean = false",
   "labels": "SelectLabels",

@@ -1,6 +1,6 @@
 {
  "version": "3.0.0-beta.1",
- "generated": "2026-11-12",
+ "generated": "2026-11-13",
  "iconNames": ["adjustments","arrowDown","arrowLeft","arrowRight","arrowUp","arrowUpRight","ball","banknotes","barChart","bell","bolt","book","bookmark","calendar","cart","chat","check","checkbox","chevronDoubleLeft","chevronDoubleRight","chevronDown","chevronLeft","chevronRight","chevronUp","chevronsLeftRight","clipboard","close","code","computer","copy","cube","danger","dark","dislike","document","download","edit","enter","eye","eyeDropper","eyeOff","file","filter","flag","folder","food","forward","gift","globe","grid","grip","heart","help","home","image","inbox","info","light","like","linearGauge","link","lock","logout","mail","mapPin","maximize","menu","minimize","minus","moreHorizontal","newspaper","opacity","organization","pause","paw","payment","people","person","personRemove","phone","play","plus","radialGauge","refresh","return","screen","search","security","send","settings","smiley","sparkle","star","starFill","store","symbol","tag","time","trash","trend","trendDown","trendUp","upload","video","volume","volumeOff","warning","wordmark","world"],
  "components": {
   "ScrollLock": {"purpose":"Freezes page scroll while enabled, keeping one referenced region scrollable"},
@@ -61,8 +61,6 @@
   "Option": {"purpose":"Selectable row in a menu, dropdown or select: label, description, prefix/suffix, link or click"},
   "OTPInput": {"purpose":"One box per digit for a verification code, with paste and a completion callback"},
   "Pagination": {"purpose":"Page buttons in a nav landmark with previous/next, ellipses and an optional per-page select"},
-  "PeerCursor": {"purpose":"Collaborator's live pointer with name label, gliding"},
-  "PeerCursors": {"purpose":"Collaborators' pointers from any realtime source; usePeerPointer sends yours"},
   "PhotoViewer": {"purpose":"Full-screen viewer for photo sets: swipe, zoom, deep links"},
   "ProgressBar": {"purpose":"Linear progress bar for a value between min and max, with optional label"},
   "RadioButton": {"purpose":"Radio button with label and description for one-of-many choices"},

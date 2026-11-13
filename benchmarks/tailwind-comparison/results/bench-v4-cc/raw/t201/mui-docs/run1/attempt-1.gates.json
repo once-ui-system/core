@@ -1,0 +1,239 @@
+{
+  "arm": "M",
+  "passed": false,
+  "failed_gate": "render",
+  "failure_output": "[/ 375px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\n[/ 768px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\n[/ 1440px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 4200
+    },
+    "build": {
+      "ok": true,
+      "ms": 12861
+    },
+    "render": {
+      "ok": false,
+      "viewports": {
+        "phone": {
+          "text": 2497,
+          "height": 4932,
+          "width": 532,
+          "horizontal_overflow": true,
+          "errors": [
+            "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+          ]
+        },
+        "tablet": {
+          "text": 2524,
+          "height": 4531,
+          "width": 1068,
+          "horizontal_overflow": true,
+          "errors": [
+            "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+          ]
+        },
+        "desktop": {
+          "text": 2554,
+          "height": 2935,
+          "width": 1692,
+          "horizontal_overflow": true,
+          "errors": [
+            "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+          ]
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 2497,
+              "height": 4932,
+              "width": 532,
+              "horizontal_overflow": true,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            },
+            "tablet": {
+              "text": 2524,
+              "height": 4531,
+              "width": 1068,
+              "horizontal_overflow": true,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            },
+            "desktop": {
+              "text": 2554,
+              "height": 2935,
+              "width": 1692,
+              "horizontal_overflow": true,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 5,
+            "serious_or_critical": 1,
+            "ids": [
+              "label-content-name-mismatch:serious:5"
+            ]
+          }
+        },
+        "/patients/p-104": {
+          "viewports": {
+            "phone": {
+              "text": 1653,
+              "height": 2943,
+              "width": 435,
+              "horizontal_overflow": true,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1680,
+              "height": 2236,
+              "width": 997,
+              "horizontal_overflow": true,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1710,
+              "height": 1607,
+              "width": 1749,
+              "horizontal_overflow": true,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 1,
+            "serious_or_critical": 1,
+            "ids": [
+              "label-content-name-mismatch:serious:1"
+            ]
+          }
+        }
+      },
+      "errors": [
+        "[/ 375px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+        "[/ 768px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+        "[/ 1440px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+      ],
+      "axe": {
+        "rules": 1,
+        "nodes": 5,
+        "serious_or_critical": 1,
+        "ids": [
+          "label-content-name-mismatch:serious:5"
+        ]
+      },
+      "interaction": {
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1862,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1757,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/patients/p-104 phone": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/patients/p-104 tablet": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/patients/p-104 desktop": {
+          "ms": 1759,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 484,
+          "distinct_fontSize": 9,
+          "distinct_color": 6,
+          "distinct_background": 13,
+          "distinct_radius": 4,
+          "distinct_shadow": 0,
+          "distinct_spacing": 18,
+          "spacing_on_4px_grid": 0.583
+        },
+        "/patients/p-104": {
+          "elements": 296,
+          "distinct_fontSize": 9,
+          "distinct_color": 5,
+          "distinct_background": 8,
+          "distinct_radius": 4,
+          "distinct_shadow": 0,
+          "distinct_spacing": 17,
+          "spacing_on_4px_grid": 0.65
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 432.2,
+          "css_kb": 0,
+          "fcp_ms": 276,
+          "cls": 0,
+          "long_task_ms": 299
+        },
+        "/patients/p-104": {
+          "js_kb": 432.2,
+          "css_kb": 0,
+          "fcp_ms": 132,
+          "cls": 0.001,
+          "long_task_ms": 8
+        }
+      },
+      "views": {
+        "new-appointment phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-phone.jpg"
+        },
+        "new-appointment tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-tablet.jpg"
+        },
+        "new-appointment desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "app/theme.ts",
+    "lib/data.ts",
+    "components/ui.tsx",
+    "components/AppShell.tsx",
+    "components/BookDialog.tsx",
+    "components/ScheduleView.tsx",
+    "components/WeightChart.tsx",
+    "components/PatientRecord.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx"
+  ]
+}

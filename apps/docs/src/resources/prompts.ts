@@ -24,7 +24,7 @@ export interface PromptSection {
 }
 
 /** Every prompt opens with this, so an agent loads the rules before writing. */
-const harness = `Use @once-ui-system/core for all UI. Read these first:
+export const harness = `Use @once-ui-system/core for all UI. Read these first:
 
   docs.once-ui.com/ai/rules.compact.md   - the rules
   docs.once-ui.com/ai/catalog.json       - components by purpose`;

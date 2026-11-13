@@ -1,0 +1,288 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+  Lumen theme
+  -----------
+  Brand:      #DB2777 (pink) -> primary, ring, current nav item, links
+  Neutrals:   warm sand
+  Radius:     16px on buttons, inputs, cards, menus
+  Typography: rounded headings, system body
+  Density:    airy (generous spacing, large touch targets)
+*/
+
+@theme inline {
+  /*
+    The shadcn components pick rounded-md / rounded-lg / rounded-xl for
+    buttons, inputs, selects, cards, menus and popovers. Pin all of them to
+    the 16px brand radius; rounded-sm (menu items, inner details) steps down
+    one notch and rounded-full stays a pill.
+  */
+  --radius-xs: calc(var(--radius) * 0.5);
+  --radius-sm: calc(var(--radius) * 0.75);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-xl: var(--radius);
+  --radius-2xl: calc(var(--radius) * 1.5);
+  --radius-3xl: calc(var(--radius) * 2);
+  --radius-4xl: calc(var(--radius) * 2.5);
+
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-heading: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 1rem;
+
+  /* Warm sand neutrals */
+  --background: #fbf8f3;
+  --foreground: #2e2418;
+  --card: #fffdfa;
+  --card-foreground: #2e2418;
+  --popover: #fffdfa;
+  --popover-foreground: #2e2418;
+
+  /* Brand */
+  --primary: #db2777;
+  --primary-foreground: #ffffff;
+
+  --secondary: #f1eadf;
+  --secondary-foreground: #3d3022;
+  --muted: #f4eee4;
+  --muted-foreground: #6b5d4c;
+  --accent: #fbe4ee;
+  --accent-foreground: #9d174d;
+  --destructive: #c62828;
+  --border: #e6dccb;
+  --input: #d9ccb6;
+  --ring: #db2777;
+
+  --chart-1: #db2777;
+  --chart-2: #d97706;
+  --chart-3: #0d9488;
+  --chart-4: #7c3aed;
+  --chart-5: #65a30d;
+
+  --sidebar: #f5efe4;
+  --sidebar-foreground: #2e2418;
+  --sidebar-primary: #db2777;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #db2777;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #e6dccb;
+  --sidebar-ring: #db2777;
+
+  /* Airy density: shared control sizing, consumed in the base layer below */
+  --control-height: 3rem;
+  --control-height-sm: 2.5rem;
+  --control-height-lg: 3.5rem;
+  --nav-item-height: 2.75rem;
+}
+
+.dark {
+  --background: #1e1812;
+  --foreground: #f6efe4;
+  --card: #29211a;
+  --card-foreground: #f6efe4;
+  --popover: #29211a;
+  --popover-foreground: #f6efe4;
+  --primary: #ec4899;
+  --primary-foreground: #2a0a18;
+  --secondary: #382e24;
+  --secondary-foreground: #f6efe4;
+  --muted: #382e24;
+  --muted-foreground: #bfae96;
+  --accent: #4a1d33;
+  --accent-foreground: #fbcfe3;
+  --destructive: #ef6b6b;
+  --border: #433729;
+  --input: #54463a;
+  --ring: #ec4899;
+  --sidebar: #241d16;
+  --sidebar-foreground: #f6efe4;
+  --sidebar-primary: #ec4899;
+  --sidebar-primary-foreground: #2a0a18;
+  --sidebar-accent: #ec4899;
+  --sidebar-accent-foreground: #2a0a18;
+  --sidebar-border: #433729;
+  --sidebar-ring: #ec4899;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground;
+  }
+
+  /* Headings and card titles use the rounded display face */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  [data-slot="card-title"],
+  [data-slot="sheet-title"],
+  [data-slot="dialog-title"] {
+    font-family: var(--font-heading);
+    letter-spacing: -0.01em;
+  }
+
+  /* Links carry the brand colour */
+  a:not([data-slot]):not([data-sidebar]):not([class]) {
+    @apply text-primary underline underline-offset-4 hover:opacity-80;
+  }
+
+  /* Visible, brand-coloured focus ring for every focusable thing */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  /*
+    Airy density: larger touch targets for the shared controls. Applied here
+    so every screen inherits it from the theme.
+  */
+  [data-slot="button"][data-size="default"] {
+    min-height: var(--control-height);
+    padding-inline: 1.5rem;
+  }
+  [data-slot="button"][data-size="sm"] {
+    min-height: var(--control-height-sm);
+    padding-inline: 1.125rem;
+  }
+  [data-slot="button"][data-size="lg"] {
+    min-height: var(--control-height-lg);
+    padding-inline: 2rem;
+    font-size: 1rem;
+  }
+  [data-slot="button"][data-size="icon"] {
+    width: var(--control-height);
+    height: var(--control-height);
+  }
+  [data-slot="button"][data-size="icon-sm"] {
+    width: var(--control-height-sm);
+    height: var(--control-height-sm);
+  }
+  [data-slot="button"][data-size="icon-lg"] {
+    width: var(--control-height-lg);
+    height: var(--control-height-lg);
+  }
+  [data-slot="input"],
+  [data-slot="select-trigger"][data-size="default"] {
+    min-height: var(--control-height);
+    padding-inline: 1rem;
+  }
+  [data-slot="select-item"],
+  [data-slot="dropdown-menu-item"] {
+    min-height: 2.75rem;
+    padding-block: 0.625rem;
+  }
+  [data-slot="switch"][data-size="default"] {
+    height: 1.75rem;
+    width: 3rem;
+  }
+  [data-slot="switch"][data-size="default"] [data-slot="switch-thumb"] {
+    width: 1.375rem;
+    height: 1.375rem;
+  }
+  [data-slot="switch"][data-state="checked"] [data-slot="switch-thumb"] {
+    transform: translateX(1.375rem);
+  }
+  [data-slot="switch"][data-state="unchecked"] [data-slot="switch-thumb"] {
+    transform: translateX(0.125rem);
+  }
+  [data-slot="card"] {
+    gap: 1.5rem;
+    padding-block: 1.75rem;
+  }
+  [data-slot="card-header"],
+  [data-slot="card-content"],
+  [data-slot="card-footer"] {
+    padding-inline: 1.75rem;
+  }
+  [data-slot="table-head"] {
+    height: 3rem;
+    padding-inline: 1rem;
+  }
+  [data-slot="table-cell"] {
+    padding: 1rem;
+  }
+  [data-slot="badge"] {
+    padding-inline: 0.75rem;
+    padding-block: 0.25rem;
+  }
+
+  /* Sidebar navigation: roomy rows, 16px radius, brand-filled current item */
+  [data-sidebar="menu-button"] {
+    min-height: var(--nav-item-height);
+    padding-inline: 0.875rem;
+    font-size: 0.9375rem;
+  }
+  [data-sidebar="menu-button"][data-size="lg"] {
+    min-height: 3.5rem;
+  }
+  [data-sidebar="menu-sub-button"] {
+    min-height: 2.5rem;
+    height: auto;
+    padding-inline: 0.875rem;
+    font-size: 0.9375rem;
+  }
+  [data-sidebar="group-label"] {
+    height: 2.25rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  [data-sidebar="menu-button"]:hover:not([data-active="true"]),
+  [data-sidebar="menu-sub-button"]:hover:not([data-active="true"]) {
+    background-color: var(--accent);
+    color: var(--accent-foreground);
+  }
+  [data-sidebar="menu-button"][data-active="true"],
+  [data-sidebar="menu-sub-button"][data-active="true"] {
+    background-color: var(--sidebar-primary);
+    color: var(--sidebar-primary-foreground);
+    font-weight: 600;
+  }
+  [data-sidebar="menu-sub-button"][data-active="true"] > svg {
+    color: var(--sidebar-primary-foreground);
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 11,
+      "input_total": 1028295,
+      "input_uncached": 22,
+      "cache_creation": 109333,
+      "cache_read": 918940,
+      "visible_output_tokens_o200k": 12673,
+      "visible_output_tokens_claudeLegacy": 13830,
+      "thinking_blocks": 6
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t102/mui-docs/run1/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/README.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/theme.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/package.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/material-ui/migration"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "docs"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/material-ui/migration/upgrade-to-v9.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/material-ui"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/material-ui"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/material-ui/integrations/routing.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/tsconfig.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/material-ui/customization/css-theme-variables/usage.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v2-cc/raw/t102/mui-docs/run1/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "M"
+}

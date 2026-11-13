@@ -1,0 +1,19 @@
+{
+  "files": [
+    "components/site/site-shell.tsx",
+    "components/site/site-header.tsx",
+    "components/ui/color-mode.tsx",
+    "components/ui/provider.tsx",
+    "app/layout.tsx",
+    "lib/data.ts",
+    "lib/theme.ts",
+    "components/site/site-footer.tsx",
+    "components/site/hero.tsx",
+    "components/site/logo-row.tsx",
+    "components/site/feature-sections.tsx",
+    "app/page.tsx",
+    "components/pricing/pricing-view.tsx",
+    "app/pricing/page.tsx"
+  ],
+  "rejected": []
+}

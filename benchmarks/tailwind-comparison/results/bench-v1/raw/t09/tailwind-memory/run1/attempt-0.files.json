@@ -1,0 +1,14 @@
+{
+  "files": [
+    "app/globals.css",
+    "app/layout.tsx",
+    "lib/data.ts",
+    "components/theme-toggle.tsx",
+    "components/site-header.tsx",
+    "components/site-footer.tsx",
+    "app/page.tsx",
+    "components/pricing-view.tsx",
+    "app/pricing/page.tsx"
+  ],
+  "rejected": []
+}

@@ -746,6 +746,16 @@
     "tags": ["media", "control"],
     "pairsWith": ["MediaVideoPlayer", "MediaAudioPlayer"]
   },
+  "ScrubberFilmstrip": {
+    "purpose": "Thumbnails across a Scrubber block (block.content)",
+    "tags": ["media"],
+    "partOf": "Scrubber"
+  },
+  "ScrubberWaveform": {
+    "purpose": "Mirrored audio waveform across a Scrubber block (block.content)",
+    "tags": ["media"],
+    "partOf": "Scrubber"
+  },
   "Sections": {
     "purpose": "Renders stored sections [{ type, props }]; fields in sectionSchemas",
     "tags": ["marketing"],
