@@ -536,6 +536,80 @@
    "secondary",
    "tertiary"
   ],
+  "CanvasApi": {
+   "getView": "!() => CanvasView",
+   "setView": "!(next: CanvasView | ((prev: CanvasView) => CanvasView)) => void",
+   "getSize": "!() => { width: number; height: number }",
+   "screenToWorld": "!(p: CanvasPoint) => CanvasPoint",
+   "worldToScreen": "!(p: CanvasPoint) => CanvasPoint",
+   "clientToWorld": "!(clientX: number, clientY: number) => CanvasPoint",
+   "zoomBy": "!(factor: number, at?: CanvasPoint) => void",
+   "zoomTo": "!(zoom: number, at?: CanvasPoint) => void",
+   "fitTo": "!(rect?: CanvasRect | null, options?: { padding?: number; maxZoom?: number }) => void",
+   "overlay": "!HTMLElement | null"
+  },
+  "CanvasDragOptions": {
+   "onStart": "(state: CanvasDragState) => void",
+   "onMove": "(state: CanvasDragState) => void",
+   "onEnd": "(state: CanvasDragState & { moved: boolean }) => void",
+   "threshold": "number"
+  },
+  "CanvasDragState": {
+   "origin": "!CanvasPoint",
+   "point": "!CanvasPoint",
+   "delta": "!CanvasPoint",
+   "event": "!PointerEvent"
+  },
+  "CanvasGuide": {
+   "axis": "!\"x\" | \"y\"",
+   "at": "!number",
+   "start": "!number",
+   "end": "!number",
+   "gap": "number"
+  },
+  "CanvasHandle": [
+   "s",
+   "n",
+   "ne",
+   "e",
+   "se",
+   "sw",
+   "w",
+   "nw",
+   "rotate"
+  ],
+  "CanvasLabels": {
+   "canvas": "!string",
+   "zoomIn": "!string",
+   "zoomOut": "!string",
+   "resetZoom": "!string",
+   "fit": "!string"
+  },
+  "CanvasPoint": {
+   "x": "!number",
+   "y": "!number"
+  },
+  "CanvasRect": {
+   "x": "!number",
+   "y": "!number",
+   "width": "!number",
+   "height": "!number",
+   "rotation": "number"
+  },
+  "CanvasSelectionBoxInfo": {
+   "phase": "!\"start\" | \"move\" | \"end\"",
+   "additive": "!boolean"
+  },
+  "CanvasTransformInfo": {
+   "handle": "!CanvasHandle",
+   "phase": "!\"start\" | \"move\" | \"end\"",
+   "start": "!CanvasRect"
+  },
+  "CanvasView": {
+   "x": "!number",
+   "y": "!number",
+   "zoom": "!number"
+  },
   "CarouselItem": {
    "slide": "!string | React.ReactNode",
    "alt": "string"
@@ -1709,6 +1783,21 @@
    "string",
    "string[]"
   ],
+  "ResizeHandle": [
+   "s",
+   "n",
+   "ne",
+   "e",
+   "se",
+   "sw",
+   "w",
+   "nw"
+  ],
+  "ResizeOptions": {
+   "keepRatio": "boolean",
+   "fromCenter": "boolean",
+   "minSize": "number"
+  },
   "ResolvedTheme": [
    "dark",
    "light"
@@ -1887,6 +1976,12 @@
   "SideContent": {
    "src": "!string | React.ReactNode",
    "alt": "string"
+  },
+  "SnapResult": {
+   "rect": "!CanvasRect",
+   "dx": "!number",
+   "dy": "!number",
+   "guides": "!CanvasGuide[]"
   },
   "SolidStyle": [
    "flat",
@@ -2498,6 +2593,11 @@
    "warning",
    "success"
   ],
+  "TransformHandlesLabels": {
+   "resize": "!string",
+   "rotate": "!string",
+   "handles": "!Record<ResizeHandle, string>"
+  },
   "TransitionStyle": [
    "none",
    "all",
@@ -5412,6 +5512,103 @@
     "closeLabel": "string = Close"
    }
   },
+  "Canvas": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "props": {
+    "children": "ReactNode",
+    "view": "CanvasView",
+    "defaultView": "CanvasView",
+    "onViewChange": "(view: CanvasView) => void",
+    "minZoom": "number = 0.05",
+    "maxZoom": "number = 8",
+    "wheel": "\"pan\" | \"zoom\" = pan",
+    "panOnDrag": "boolean = false",
+    "grid": "\"dots\" | \"lines\" | \"none\" = dots",
+    "gridSize": "number = 16",
+    "controls": "boolean = true",
+    "controlsStart": "ReactNode",
+    "fit": "CanvasRect | null",
+    "fitKey": "string | number",
+    "fitPadding": "number = 64",
+    "fitMaxZoom": "number = 1",
+    "onSelectionBox": "(rect: CanvasRect | null, info: CanvasSelectionBoxInfo) => void",
+    "onBackgroundPointerDown": "( event: React.PointerEvent<HTMLDivElement>, point: CanvasPoint, // biome-ignore lint/suspicious/noConfusingVoidType: a handler that returns nothing declines the gesture ) => boolean | void",
+    "onBackgroundClick": "(event: React.PointerEvent<HTMLDivElement>, point: CanvasPoint) => void",
+    "overlay": "ReactNode",
+    "shortcuts": "boolean = true",
+    "labels": "Partial<CanvasLabels>",
+    "height": "CSSProperties[\"height\"] = 100%",
+    "className": "string",
+    "style": "CSSProperties"
+   }
+  },
+  "CanvasAnchor": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "props": {
+    "x": "!number",
+    "y": "!number",
+    "align": "\"top-left\" | \"center\" | \"top\" | \"bottom\" | \"left\" | \"right\" = top-left",
+    "children": "ReactNode",
+    "className": "string",
+    "style": "CSSProperties"
+   }
+  },
+  "CanvasOverlay": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "props": {
+    "children": "ReactNode"
+   }
+  },
+  "SelectionBox": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "props": {
+    "rect": "!CanvasRect | null"
+   }
+  },
+  "CanvasItem": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "props": {
+    "x": "!number",
+    "y": "!number",
+    "width": "!number",
+    "height": "!number",
+    "rotation": "number",
+    "zIndex": "number",
+    "children": "ReactNode"
+   }
+  },
+  "SnapGuides": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "props": {
+    "guides": "!CanvasGuide[]",
+    "showGaps": "boolean = true",
+    "formatGap": "(gap: number) => string"
+   }
+  },
+  "TransformHandles": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "props": {
+    "rect": "!CanvasRect",
+    "onTransform": "!(next: CanvasRect, info: CanvasTransformInfo) => void",
+    "resizable": "boolean = true",
+    "rotatable": "boolean = true",
+    "keepRatio": "boolean = false",
+    "minSize": "number = 1",
+    "rotationStep": "number = 15",
+    "handles": "ResizeHandle[]",
+    "snap": "(rect: CanvasRect, handle: ResizeHandle) => CanvasRect",
+    "sizeLabel": "ReactNode | false",
+    "labels": "Partial<TransformHandlesLabels>",
+    "className": "string"
+   }
+  },
   "AdapterProvider": {
    "group": "contexts",
    "props": {
@@ -6725,6 +6922,155 @@
    "kind": "value",
    "type": "{ readonly light: \"https://tiles.openfreemap.org/styles/positron\"; readonly dark: \"https://tiles.openfreemap.org/styles/dark\"; }",
    "doc": "OpenFreeMap: OpenStreetMap vector tiles with no key, no account and no view limit, commercial use included."
+  },
+  "useCanvas": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "hook",
+   "signature": "() => CanvasApi & { view: CanvasView }",
+   "doc": "The canvas's camera and its controls."
+  },
+  "useCanvasApi": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "hook",
+   "signature": "() => CanvasApi",
+   "doc": "The canvas's camera controls, without re-rendering when the camera moves."
+  },
+  "fitView": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(rect: CanvasRect, size: { width: number; height: number }, options?: { padding?: number; minZoom?: number; maxZoom?: number }) => CanvasView",
+   "doc": "The camera that centres `rect` in a `width` × `height` screen with `padding` px around it."
+  },
+  "mapRect": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(child: CanvasRect, from: CanvasRect, to: CanvasRect) => CanvasRect",
+   "doc": "Where `child` lands when its group's box goes from `from` to `to`: the move and scale of a multi-selection's handles, applied to each thing in it."
+  },
+  "pointsBounds": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(points: CanvasPoint[]) => CanvasRect"
+  },
+  "rectAABB": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(r: CanvasRect) => CanvasRect",
+   "doc": "The upright box around a turned one."
+  },
+  "rectCenter": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(r: CanvasRect) => CanvasPoint"
+  },
+  "rectContains": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(outer: CanvasRect, inner: CanvasRect) => boolean",
+   "doc": "`inner` lies wholly inside `outer` (by their upright bounds)."
+  },
+  "rectContainsPoint": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(r: CanvasRect, p: CanvasPoint) => boolean",
+   "doc": "The point lies inside the box, turned or not."
+  },
+  "rectCorners": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(r: CanvasRect) => CanvasPoint[]",
+   "doc": "The four corners in world units, turned with the box: nw, ne, se, sw."
+  },
+  "rectFromPoints": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(a: CanvasPoint, b: CanvasPoint) => CanvasRect",
+   "doc": "The box spanned by two points, whichever way round they are."
+  },
+  "rectsBounds": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(rects: CanvasRect[]) => CanvasRect | null",
+   "doc": "The upright box around every box given, turned ones included."
+  },
+  "rectsIntersect": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(a: CanvasRect, b: CanvasRect) => boolean",
+   "doc": "Two upright boxes overlap (touching edges count)."
+  },
+  "resizeRect": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(start: CanvasRect, handle: Exclude<CanvasHandle, \"rotate\">, pointer: CanvasPoint, options?: ResizeOptions) => CanvasRect",
+   "doc": "The box after dragging `handle` of `start` to the world point `pointer`."
+  },
+  "rotatePoint": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(p: CanvasPoint, degrees: number, around?: CanvasPoint) => { x: number; y: number; }"
+  },
+  "rotateRect": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(start: CanvasRect, from: CanvasPoint, to: CanvasPoint, options?: { step?: number }) => CanvasRect",
+   "doc": "The box's rotation after the rotate handle is dragged from `from` to `to`, both world points."
+  },
+  "screenToWorld": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(p: CanvasPoint, view: CanvasView) => CanvasPoint"
+  },
+  "snapRect": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(rect: CanvasRect, targets: CanvasRect[], options?: { threshold?: number; axes?: Array<\"x\" | \"y\"> }) => SnapResult",
+   "doc": "Moves `rect` so one of its edges or its centre lines up with an edge or centre of one of `targets`, when one is within `threshold` world units, and returns the guides that show it."
+  },
+  "snapToGrid": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(value: number, step: number) => number",
+   "doc": "Rounds a value to a grid of `step` world units."
+  },
+  "worldToScreen": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(p: CanvasPoint, view: CanvasView) => CanvasPoint"
+  },
+  "zoomAt": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(view: CanvasView, zoom: number, at: CanvasPoint) => CanvasView",
+   "doc": "The camera zoomed to `zoom`, keeping the screen point `at` over the same world point."
+  },
+  "useCanvasDrag": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "hook",
+   "signature": "() => (event: React.PointerEvent<Element> | PointerEvent, options: CanvasDragOptions) => void",
+   "doc": "Turns a press on something in the canvas into a drag measured in world units, whatever the zoom, and keeps measuring if the view moves mid-drag."
   },
   "useArrowNavigation": {
    "group": "hooks",
