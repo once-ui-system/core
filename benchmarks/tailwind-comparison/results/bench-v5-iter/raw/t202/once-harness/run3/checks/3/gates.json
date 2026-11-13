@@ -1,0 +1,226 @@
+{
+  "arm": "A",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2763
+    },
+    "build": {
+      "ok": true,
+      "ms": 10760
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 3895,
+          "height": 2789,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 3895,
+          "height": 2733,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 3922,
+          "height": 2212,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 3895,
+              "height": 2789,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 3895,
+              "height": 2733,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 3922,
+              "height": 2212,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/guests": {
+          "viewports": {
+            "phone": {
+              "text": 2142,
+              "height": 2354,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 2142,
+              "height": 2354,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 2758,
+              "height": 2078,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      },
+      "interaction": {
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1765,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1763,
+          "settled": true
+        },
+        "/guests phone": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/guests tablet": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/guests desktop": {
+          "ms": 1759,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 582,
+          "distinct_fontSize": 12,
+          "distinct_color": 7,
+          "distinct_background": 15,
+          "distinct_radius": 4,
+          "distinct_shadow": 1,
+          "distinct_spacing": 7,
+          "spacing_on_4px_grid": 0.86
+        },
+        "/guests": {
+          "elements": 806,
+          "distinct_fontSize": 7,
+          "distinct_color": 5,
+          "distinct_background": 8,
+          "distinct_radius": 4,
+          "distinct_shadow": 1,
+          "distinct_spacing": 9,
+          "spacing_on_4px_grid": 0.991
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 244.9,
+          "css_kb": 46.2,
+          "fcp_ms": 212,
+          "cls": 0,
+          "long_task_ms": 0
+        },
+        "/guests": {
+          "js_kb": 244.9,
+          "css_kb": 46.2,
+          "fcp_ms": 112,
+          "cls": 0.023,
+          "long_task_ms": 18
+        }
+      },
+      "views": {
+        "table-selected phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-phone.jpg"
+        },
+        "table-selected tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-tablet.jpg"
+        },
+        "table-selected desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "components/AppFrame.tsx",
+    "components/FloorPlan.tsx",
+    "components/GuestsView.tsx",
+    "components/PageHeader.tsx",
+    "components/PlanView.tsx",
+    "lib/PlanContext.tsx",
+    "lib/data.ts",
+    "lib/plan.ts"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ app/guests/page.tsx: no mechanical issues\n✗ app/layout.tsx: 1 issue(s)\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint\n✓ app/page.tsx: no mechanical issues\n✓ components/AppFrame.tsx: no mechanical issues\n✗ components/FloorPlan.tsx: 2 issue(s)\n  [layout.primitiveProps] <Row as=\"button\" type> — a layout primitive has no type. Use <Card onClick> (it renders a button; selected sets aria-pressed), Button or ToggleButton\n  [layout.defaults] position=\"relative\" is the default — omit it\n✗ components/GuestsView.tsx: 1 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n✓ components/PageHeader.tsx: no mechanical issues\n✗ components/PlanView.tsx: 2 issue(s)\n  [layout.primitiveProps] <Row as=\"button\" type> — a layout primitive has no type. Use <Card onClick> (it renders a button; selected sets aria-pressed), Button or ToggleButton\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n✓ lib/PlanContext.tsx: no mechanical issues\n✓ lib/data.ts: no mechanical issues\n✓ lib/plan.ts: no mechanical issues",
+    "validator": {
+      "package_version": "3.0.0-beta.1",
+      "script_sha256": "8b6fb92b077251ad"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+:root {
+  --default-border: var(--neutral-alpha-weak);
+}
+
+/* Lumen typography: mono headings, system sans body. */
+:root,
+html {
+  --font-heading: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-display: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-body: ui-sans-serif, system-ui, sans-serif;
+  --font-label: ui-sans-serif, system-ui, sans-serif;
+  --font-code: ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
+/* Lumen corner radius: 4px on buttons, inputs, cards and menus. */
+:root,
+html,
+html[data-border],
+[data-border] {
+  --radius-xs: 4px;
+  --radius-s: 4px;
+  --radius-m: 4px;
+  --radius-l: 4px;
+  --radius-xl: 4px;
+  --static-radius-xs: 4px;
+  --static-radius-s: 4px;
+  --static-radius-m: 4px;
+  --static-radius-l: 4px;
+  --static-radius-xl: 4px;
+}

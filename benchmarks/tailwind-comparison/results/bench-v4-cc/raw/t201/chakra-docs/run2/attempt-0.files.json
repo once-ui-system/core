@@ -1,0 +1,16 @@
+{
+  "files": [
+    "lib/data.ts",
+    "lib/schedule-context.tsx",
+    "components/alert-chips.tsx",
+    "components/patient-search.tsx",
+    "components/app-shell.tsx",
+    "components/book-appointment.tsx",
+    "components/schedule-view.tsx",
+    "components/patient-record.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx"
+  ],
+  "rejected": []
+}

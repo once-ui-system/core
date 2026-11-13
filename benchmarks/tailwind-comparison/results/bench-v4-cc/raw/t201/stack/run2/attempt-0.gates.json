@@ -1,0 +1,230 @@
+{
+  "arm": "S",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 3525
+    },
+    "build": {
+      "ok": true,
+      "ms": 22284
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 2497,
+          "height": 4497,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 2497,
+          "height": 2679,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 2552,
+          "height": 2477,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 2497,
+              "height": 4497,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 2497,
+              "height": 2679,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 2552,
+              "height": 2477,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 6,
+            "serious_or_critical": 2,
+            "ids": [
+              "color-contrast:serious:5",
+              "label-content-name-mismatch:serious:1"
+            ]
+          }
+        },
+        "/patients/p-104": {
+          "viewports": {
+            "phone": {
+              "text": 1656,
+              "height": 2971,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1656,
+              "height": 2463,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1711,
+              "height": 2676,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 1,
+            "serious_or_critical": 1,
+            "ids": [
+              "label-content-name-mismatch:serious:1"
+            ]
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 2,
+        "nodes": 6,
+        "serious_or_critical": 2,
+        "ids": [
+          "color-contrast:serious:5",
+          "label-content-name-mismatch:serious:1"
+        ]
+      },
+      "interaction": {
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1779,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/patients/p-104 phone": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/patients/p-104 tablet": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/patients/p-104 desktop": {
+          "ms": 1830,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 474,
+          "distinct_fontSize": 8,
+          "distinct_color": 8,
+          "distinct_background": 5,
+          "distinct_radius": 4,
+          "distinct_shadow": 1,
+          "distinct_spacing": 8,
+          "spacing_on_4px_grid": 0.847
+        },
+        "/patients/p-104": {
+          "elements": 259,
+          "distinct_fontSize": 9,
+          "distinct_color": 8,
+          "distinct_background": 4,
+          "distinct_radius": 4,
+          "distinct_shadow": 0,
+          "distinct_spacing": 9,
+          "spacing_on_4px_grid": 0.797
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 394.5,
+          "css_kb": 49.8,
+          "fcp_ms": 316,
+          "cls": 0,
+          "long_task_ms": 96
+        },
+        "/patients/p-104": {
+          "js_kb": 394.5,
+          "css_kb": 49.8,
+          "fcp_ms": 256,
+          "cls": 0,
+          "long_task_ms": 0
+        }
+      },
+      "views": {
+        "new-appointment phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-phone.jpg"
+        },
+        "new-appointment tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-tablet.jpg"
+        },
+        "new-appointment desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "src/lib/data.ts",
+    "src/components/pawpoint/Alerts.tsx",
+    "src/components/pawpoint/AppHeader.tsx",
+    "src/components/pawpoint/WeightChart.tsx",
+    "src/components/pawpoint/ScheduleClient.tsx",
+    "src/app/page.tsx",
+    "src/app/patients/[id]/page.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ src/lib/data.ts: no mechanical issues\n✗ src/components/pawpoint/Alerts.tsx: 1 issue(s)\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✗ src/components/pawpoint/AppHeader.tsx: 1 issue(s)\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ src/components/pawpoint/WeightChart.tsx: no mechanical issues\n✗ src/components/pawpoint/ScheduleClient.tsx: 2 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ src/app/page.tsx: no mechanical issues\n✗ src/app/patients/[id]/page.tsx: 3 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "2.6.0",
+      "script_sha256": "ab274b3e6be15eb6"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "arm": "M",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/LinkButton.tsx(13,6): error TS2769: No overload matches this call.\n  Overload 1 of 3, '(props: { href: string; } & ButtonOwnProps & Omit<ButtonBaseOwnProps, keyof ButtonOwnProps> & Omit<ButtonBaseOwnProps, \"nativeButton\" | ... 12 more ... | keyof ButtonOwnProps> & CommonProps & Omit<...>): Element', gave the following error.\n    Type '{ children: ReactNode; ref?: Ref<HTMLButtonElement> | undefined; lang?: string | undefined; suppressHydrationWarning?: boolean | undefined; ... 311 more ...; href: string; }' is not assignable to type 'IntrinsicAttributes & { href: string; } & ButtonOwnProps & Omit<ButtonBaseOwnProps, keyof ButtonOwnProps> & Omit<...> & CommonProps & Omit<...>'.\n      Property 'component' does not exist on type 'IntrinsicAttributes & { href: string; } & ButtonOwnProps & Omit<ButtonBaseOwnProps, keyof ButtonOwnProps> & Omit<...> & CommonProps & Omit<...>'.\n  Overload 2 of 3, '(props: { component: ForwardRefExoticComponent<Omit<AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps<any>> & LinkProps<any> & { ...; } & RefAttributes<...>>; } & ... 4 more ... & Omit<...>): Element | null', gave the following error.\n    Type '{ children: ReactNode; ref?: Ref<HTMLButtonElement> | undefined; lang?: string | undefined; suppressHydrationWarning?: boolean | undefined; ... 311 more ...; href: string; }' is not assignable to type 'Omit<Omit<AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps<any>> & LinkProps<any> & { children?: ReactNode; } & RefAttributes<...>, \"children\" | ... 29 more ... | \"startIcon\">'.\n      Types of property 'ref' are incompatible.\n        Type 'Ref<HTMLButtonElement> | undefined' is not assignable to type 'Ref<HTMLAnchorElement> | undefined'.\n          Type '(instance: HTMLButtonElement | null) => void | (() => VoidOrUndefinedOnly)' is not assignable to type 'Ref<HTMLAnchorElement> | undefined'.\n            Type '(instance: HTMLButtonElement | null) => void | (() => VoidOrUndefinedOnly)' is not assignable to type '(instance: HTMLAnchorElement | null) => void | (() => VoidOrUndefinedOnly)'.\n              Types of parameters 'instance' and 'instance' are incompatible.\n                Type 'HTMLAnchorElement | null' is not assignable to type 'HTMLButtonElement | null'.\n                  Type 'HTMLAnchorElement' is missing the following properties from type 'HTMLButtonElement': command, commandForElement, disabled, form, and 15 more.\n  Overload 3 of 3, '(props: DefaultComponentProps<ExtendButtonBaseTypeMap<ButtonTypeMap<{}, \"button\">>>): Element | null', gave the following error.\n    Type '{ children: ReactNode; ref?: Ref<HTMLButtonElement> | undefined; lang?: string | undefined; suppressHydrationWarning?: boolean | undefined; ... 311 more ...; href: string; }' is not assignable to type 'IntrinsicAttributes & ButtonOwnProps & Omit<ButtonBaseOwnProps, keyof ButtonOwnProps> & Omit<...> & CommonProps & Omit<...>'.\n      Property 'component' does not exist on type 'IntrinsicAttributes & ButtonOwnProps & Omit<ButtonBaseOwnProps, keyof ButtonOwnProps> & Omit<...> & CommonProps & Omit<...>'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 3934
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/AppLink.tsx",
+    "components/LinkButton.tsx",
+    "components/badges.tsx",
+    "components/MemberAvatar.tsx",
+    "components/InviteDialog.tsx",
+    "components/MemberActionsMenu.tsx",
+    "components/ChangeRoleDialog.tsx",
+    "components/TeamPage.tsx",
+    "app/page.tsx",
+    "app/members/[id]/page.tsx",
+    "app/members/[id]/not-found.tsx"
+  ]
+}

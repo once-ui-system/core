@@ -1,0 +1,60 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--mantine-color-body);
+  border-bottom: 1px solid var(--mantine-color-default-border);
+}
+
+.inner {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mantine-spacing-md);
+}
+
+.logo {
+  font-family: var(--mantine-font-family-headings);
+  font-size: var(--mantine-font-size-xl);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--mantine-color-bright);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mark {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--mantine-primary-color-filled);
+}
+
+.link {
+  display: block;
+  padding: 8px 12px;
+  border-radius: var(--mantine-radius-default);
+  color: var(--mantine-color-dimmed);
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 600;
+  text-decoration: none;
+
+  @mixin hover {
+    background: var(--mantine-color-default-hover);
+    color: var(--mantine-color-bright);
+  }
+
+  &[data-active] {
+    color: var(--mantine-color-bright);
+    box-shadow: inset 0 -2px 0 var(--mantine-primary-color-filled);
+    border-radius: 0;
+  }
+}
+
+.mobileNav {
+  border-top: 1px solid var(--mantine-color-default-border);
+  padding: var(--mantine-spacing-sm) 0 var(--mantine-spacing-md);
+}

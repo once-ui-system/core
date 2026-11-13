@@ -1,0 +1,33 @@
+{
+  "check": "1",
+  "at": "2026-11-10T23:33:06.008Z",
+  "ms": 41880,
+  "files": [
+    "app/globals.css",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "components/Alerts.tsx",
+    "components/BookingDialog.tsx",
+    "components/Header.tsx",
+    "components/Schedule.tsx",
+    "components/SearchBox.tsx",
+    "components/StatusBadge.tsx",
+    "components/WeightChart.tsx",
+    "lib/data.ts"
+  ],
+  "passed": false,
+  "gates_passed": true,
+  "failed_gate": "adherence",
+  "adherence": {
+    "system": 0,
+    "raw": 21,
+    "share": null,
+    "colours": 15,
+    "cssLines": 15,
+    "ok": false,
+    "reasons": [
+      "15 raw colour literals (#hex, rgb(), hsl(), oklch()); at most 12. Use the stack's colour tokens or theme instead"
+    ]
+  }
+}

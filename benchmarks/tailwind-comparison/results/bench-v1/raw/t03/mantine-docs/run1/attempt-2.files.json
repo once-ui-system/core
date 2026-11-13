@@ -1,0 +1,19 @@
+{
+  "files": [
+    "lib/data.ts",
+    "components/frame-actions.tsx",
+    "components/AppFrame.tsx",
+    "components/CommandPalette.tsx",
+    "components/InviteMemberModal.tsx",
+    "components/CreateProjectModal.tsx",
+    "components/DashboardScreen.tsx",
+    "components/ProjectsScreen.tsx",
+    "components/MembersScreen.tsx",
+    "app/page.tsx",
+    "app/projects/layout.tsx",
+    "app/projects/page.tsx",
+    "app/members/layout.tsx",
+    "app/members/page.tsx"
+  ],
+  "rejected": []
+}

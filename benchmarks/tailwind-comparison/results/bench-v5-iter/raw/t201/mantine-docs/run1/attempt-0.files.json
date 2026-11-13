@@ -1,0 +1,15 @@
+{
+  "files": [
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "app/theme.ts",
+    "components/AlertBadges.tsx",
+    "components/AppFrame.tsx",
+    "components/BookingModal.tsx",
+    "components/PatientRecord.tsx",
+    "components/Schedule.tsx",
+    "lib/data.ts"
+  ],
+  "rejected": []
+}

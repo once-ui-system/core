@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand: Lumen pink, #DB2777 at 600 */
+  --color-brand-50: #fdf2f8;
+  --color-brand-100: #fce7f3;
+  --color-brand-200: #fbcfe8;
+  --color-brand-300: #f9a8d4;
+  --color-brand-400: #f472b6;
+  --color-brand-500: #ec4899;
+  --color-brand-600: #db2777;
+  --color-brand-700: #be185d;
+  --color-brand-800: #9d174d;
+  --color-brand-900: #831843;
+
+  /* Neutrals: warm sand */
+  --color-sand-50: #faf7f2;
+  --color-sand-100: #f4efe6;
+  --color-sand-200: #e9e1d2;
+  --color-sand-300: #d9cdb8;
+  --color-sand-400: #b8a98d;
+  --color-sand-500: #94846a;
+  --color-sand-600: #756753;
+  --color-sand-700: #5c5142;
+  --color-sand-800: #403830;
+  --color-sand-900: #2b2621;
+  --color-sand-950: #1c1815;
+
+  /* Corner radius: 16px on buttons, inputs, cards and menus */
+  --radius-ui: 16px;
+
+  /* Typography */
+  --font-heading: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    background-color: var(--color-sand-50);
+  }
+
+  body {
+    background-color: var(--color-sand-50);
+    color: var(--color-sand-900);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.01em;
+  }
+
+  a {
+    text-underline-offset: 3px;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-brand-600);
+    outline-offset: 3px;
+    border-radius: var(--radius-ui);
+  }
+
+  ::selection {
+    background-color: var(--color-brand-200);
+    color: var(--color-sand-950);
+  }
+}

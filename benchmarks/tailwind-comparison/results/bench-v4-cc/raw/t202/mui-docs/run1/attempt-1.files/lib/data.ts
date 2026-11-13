@@ -1,0 +1,202 @@
+export type Rsvp = "yes" | "maybe" | "pending" | "no";
+
+export interface Guest {
+  id: string;
+  name: string;
+  party: string;
+  rsvp: Rsvp;
+  diet: string | null;
+  table: string | null;
+}
+
+export interface Fixture {
+  id: string;
+  kind: "stage" | "dancefloor" | "bar" | "door";
+  label: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+export interface TableDef {
+  id: string;
+  name: string;
+  shape: "long" | "round";
+  seats: number;
+  x: number;
+  y: number;
+  rotation?: number;
+}
+
+export type RuleKind = "together" | "apart" | "near";
+
+export interface Rule {
+  id: string;
+  kind: RuleKind;
+  guests: string[];
+  note: string;
+  /** near rules: the fixture to be close to, and one to keep away from */
+  nearFixture?: string;
+  awayFrom?: string;
+  maxDistance?: number;
+  minAwayDistance?: number;
+}
+
+export const APP = "Seatwise, a seating planner for wedding and event planners";
+
+export const EVENT = {
+  name: "Ines & Mateo's wedding dinner",
+  date: "2027-06-19",
+  venue: "The Orangery, Hollin Hall",
+  room: { width: 24, depth: 14 },
+};
+
+export const PLANNER = { name: "Hannah Brook" };
+
+const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+// Hand-formatted so the server and the browser always print the same text.
+function formatDate(iso: string): string {
+  const d = new Date(`${iso}T12:00:00Z`);
+  return `${DAYS[d.getUTCDay()]} ${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+}
+
+export const EVENT_DATE_LABEL = formatDate(EVENT.date);
+
+export const FIXTURES: Fixture[] = [
+  { id: "f-1", kind: "stage", label: "Band", x: 10, y: 0.5, w: 4, h: 2 },
+  { id: "f-2", kind: "dancefloor", label: "Dance floor", x: 8.5, y: 3, w: 7, h: 4 },
+  { id: "f-3", kind: "bar", label: "Bar", x: 21, y: 10, w: 2.5, h: 3.5 },
+  { id: "f-4", kind: "door", label: "Garden doors", x: 0, y: 6, w: 0.5, h: 2.5 },
+];
+
+export const TABLES: TableDef[] = [
+  { id: "t-head", name: "Top table", shape: "long", seats: 8, x: 8, y: 8.2, rotation: 0 },
+  { id: "t-1", name: "Table 1", shape: "round", seats: 8, x: 3, y: 2.5 },
+  { id: "t-2", name: "Table 2", shape: "round", seats: 8, x: 3, y: 7 },
+  { id: "t-3", name: "Table 3", shape: "round", seats: 8, x: 3, y: 11.5 },
+  { id: "t-4", name: "Table 4", shape: "round", seats: 8, x: 19, y: 2.5 },
+  { id: "t-5", name: "Table 5", shape: "round", seats: 8, x: 19, y: 7 },
+  { id: "t-6", name: "Table 6", shape: "round", seats: 6, x: 12, y: 12 },
+];
+
+export const GUESTS: Guest[] = [
+  { id: "g-01", name: "Ines Carvalho", party: "Couple", rsvp: "yes", diet: null, table: "t-head" },
+  { id: "g-02", name: "Mateo Alvarez", party: "Couple", rsvp: "yes", diet: "Vegetarian", table: "t-head" },
+  { id: "g-03", name: "Rui Carvalho", party: "Bride's family", rsvp: "yes", diet: null, table: "t-head" },
+  { id: "g-04", name: "Marta Carvalho", party: "Bride's family", rsvp: "yes", diet: "Gluten free", table: "t-head" },
+  { id: "g-05", name: "Javier Alvarez", party: "Groom's family", rsvp: "yes", diet: null, table: "t-head" },
+  { id: "g-06", name: "Lucia Alvarez", party: "Groom's family", rsvp: "yes", diet: null, table: "t-head" },
+  { id: "g-07", name: "Sofia Carvalho", party: "Bride's family", rsvp: "yes", diet: null, table: "t-1" },
+  { id: "g-08", name: "Tiago Carvalho", party: "Bride's family", rsvp: "yes", diet: null, table: "t-1" },
+  { id: "g-09", name: "Avó Rosa Carvalho", party: "Bride's family", rsvp: "yes", diet: "Soft food", table: "t-1" },
+  { id: "g-10", name: "Pedro Nunes", party: "Bride's family", rsvp: "yes", diet: null, table: "t-1" },
+  { id: "g-11", name: "Ana Nunes", party: "Bride's family", rsvp: "yes", diet: "Vegan", table: "t-1" },
+  { id: "g-12", name: "Carmen Alvarez", party: "Groom's family", rsvp: "yes", diet: null, table: "t-4" },
+  { id: "g-13", name: "Diego Alvarez", party: "Groom's family", rsvp: "yes", diet: null, table: "t-4" },
+  { id: "g-14", name: "Elena Ruiz", party: "Groom's family", rsvp: "yes", diet: "Nut allergy", table: "t-4" },
+  { id: "g-15", name: "Pablo Ruiz", party: "Groom's family", rsvp: "yes", diet: null, table: "t-4" },
+  { id: "g-16", name: "Isabel Ruiz", party: "Groom's family", rsvp: "maybe", diet: null, table: null },
+  { id: "g-17", name: "Chloe Martin", party: "University friends", rsvp: "yes", diet: null, table: "t-2" },
+  { id: "g-18", name: "Ben Okafor", party: "University friends", rsvp: "yes", diet: null, table: "t-2" },
+  { id: "g-19", name: "Leila Haddad", party: "University friends", rsvp: "yes", diet: "Halal", table: "t-2" },
+  { id: "g-20", name: "Omar Haddad", party: "University friends", rsvp: "yes", diet: "Halal", table: "t-2" },
+  { id: "g-21", name: "Freya Lund", party: "University friends", rsvp: "yes", diet: "Vegetarian", table: null },
+  { id: "g-22", name: "Jonas Lund", party: "University friends", rsvp: "yes", diet: null, table: null },
+  { id: "g-23", name: "Grace Lee", party: "Work friends", rsvp: "yes", diet: null, table: "t-5" },
+  { id: "g-24", name: "Marcus Webb", party: "Work friends", rsvp: "yes", diet: null, table: "t-5" },
+  { id: "g-25", name: "Nadia Petrova", party: "Work friends", rsvp: "yes", diet: "Pescatarian", table: "t-5" },
+  { id: "g-26", name: "Tom Fisher", party: "Work friends", rsvp: "no", diet: null, table: null },
+  { id: "g-27", name: "Hana Sato", party: "Work friends", rsvp: "yes", diet: null, table: null },
+  { id: "g-28", name: "Luis Ortega", party: "Groom's football club", rsvp: "yes", diet: null, table: "t-3" },
+  { id: "g-29", name: "Kai Brennan", party: "Groom's football club", rsvp: "yes", diet: null, table: "t-3" },
+  { id: "g-30", name: "Sean Doyle", party: "Groom's football club", rsvp: "yes", diet: null, table: "t-3" },
+  { id: "g-31", name: "Ryan Doyle", party: "Groom's football club", rsvp: "yes", diet: null, table: null },
+  { id: "g-32", name: "Hugo Carvalho", party: "Bride's family", rsvp: "yes", diet: "Children's menu", table: "t-1" },
+  { id: "g-33", name: "Mia Carvalho", party: "Bride's family", rsvp: "yes", diet: "Children's menu", table: null },
+  { id: "g-34", name: "Paula Mendes", party: "Bride's family", rsvp: "pending", diet: null, table: null },
+  { id: "g-35", name: "Victor Mendes", party: "Bride's family", rsvp: "pending", diet: null, table: null },
+  { id: "g-36", name: "Zoe Bennett", party: "Plus-ones", rsvp: "yes", diet: null, table: "t-2" },
+  { id: "g-37", name: "Arjun Mehta", party: "Plus-ones", rsvp: "yes", diet: "Vegetarian", table: "t-5" },
+  { id: "g-38", name: "Laura Svensson", party: "Plus-ones", rsvp: "yes", diet: null, table: null },
+];
+
+export const RULES: Rule[] = [
+  { id: "r-1", kind: "together", guests: ["g-21", "g-22"], note: "Couple" },
+  { id: "r-2", kind: "together", guests: ["g-32", "g-33"], note: "Siblings, under 10" },
+  // The note names Sean and Ryan Doyle (g-30 and g-31), so the rule follows the names.
+  {
+    id: "r-3",
+    kind: "apart",
+    guests: ["g-30", "g-31"],
+    note: "Brothers Sean and Ryan Doyle are not speaking",
+  },
+  { id: "r-4", kind: "apart", guests: ["g-12", "g-34"], note: "Ask the couple: old family dispute" },
+  {
+    id: "r-5",
+    kind: "near",
+    guests: ["g-09"],
+    note: "Avó Rosa uses a wheelchair: seat near the garden doors, away from the band",
+    nearFixture: "f-4",
+    awayFrom: "f-1",
+    maxDistance: 4,
+    minAwayDistance: 6,
+  },
+];
+
+export const guestById: Record<string, Guest> = GUESTS.reduce<Record<string, Guest>>((acc, g) => {
+  acc[g.id] = g;
+  return acc;
+}, {});
+
+export const tableById: Record<string, TableDef> = TABLES.reduce<Record<string, TableDef>>((acc, t) => {
+  acc[t.id] = t;
+  return acc;
+}, {});
+
+export const fixtureById: Record<string, Fixture> = FIXTURES.reduce<Record<string, Fixture>>((acc, f) => {
+  acc[f.id] = f;
+  return acc;
+}, {});
+
+export const PARTIES: string[] = GUESTS.reduce<string[]>(
+  (acc, g) => (acc.includes(g.party) ? acc : [...acc, g.party]),
+  [],
+);
+
+export const DIETS: string[] = GUESTS.reduce<string[]>(
+  (acc, g) => (g.diet && !acc.includes(g.diet) ? [...acc, g.diet] : acc),
+  [],
+).sort((a, b) => a.localeCompare(b));
+
+export const RSVP_LABEL: Record<Rsvp, string> = {
+  yes: "Attending",
+  maybe: "Maybe",
+  pending: "Awaiting reply",
+  no: "Declined",
+};
+
+export function initials(name: string): string {
+  const parts = name.split(" ").filter(Boolean);
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+export function firstName(name: string): string {
+  return name.split(" ")[0];
+}

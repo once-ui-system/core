@@ -1,0 +1,12 @@
+{
+  "files": [
+    "src/app/page.tsx",
+    "src/app/patients/[id]/page.tsx",
+    "src/components/pawpoint/Alerts.tsx",
+    "src/components/pawpoint/PatientRecord.tsx",
+    "src/components/pawpoint/Schedule.tsx",
+    "src/components/pawpoint/Shell.tsx",
+    "src/lib/data.ts"
+  ],
+  "rejected": []
+}

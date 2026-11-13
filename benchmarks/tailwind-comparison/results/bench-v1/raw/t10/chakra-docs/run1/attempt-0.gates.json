@@ -1,0 +1,7 @@
+{
+  "arm": "K",
+  "passed": false,
+  "failed_gate": "extract",
+  "failure_output": "No fenced code block found in the reply (for a multi-file task: none that names its file path).",
+  "gates": {}
+}

@@ -1,0 +1,93 @@
+.hero {
+  padding: calc(var(--mantine-spacing-xl) * 2.5) 0 calc(var(--mantine-spacing-xl) * 2);
+  border-bottom: 1px solid var(--mantine-color-default-border);
+}
+
+.kicker {
+  color: var(--mantine-color-dimmed);
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.heroTitle {
+  font-size: clamp(2.25rem, 6vw, 3.75rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+.logos {
+  border-bottom: 1px solid var(--mantine-color-default-border);
+  padding: var(--mantine-spacing-xl) 0;
+}
+
+.logoList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--mantine-spacing-md) calc(var(--mantine-spacing-xl) * 1.5);
+}
+
+.logo {
+  font-family: var(--mantine-font-family-headings);
+  font-size: var(--mantine-font-size-lg);
+  font-weight: 700;
+  color: var(--mantine-color-dimmed);
+  letter-spacing: 0.01em;
+}
+
+.feature {
+  padding: calc(var(--mantine-spacing-xl) * 2) 0;
+  border-bottom: 1px solid var(--mantine-color-default-border);
+}
+
+.featureTitle {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+}
+
+/* On wide screens, every second feature puts its panel on the left. */
+.copy {
+  order: 1;
+}
+
+.visual {
+  order: 2;
+}
+
+@media (min-width: 62em) {
+  .reverse .copy {
+    order: 2;
+  }
+
+  .reverse .visual {
+    order: 1;
+  }
+}
+
+.panel {
+  border: 1px solid var(--mantine-color-default-border);
+  background: var(--mantine-color-default);
+  border-radius: var(--mantine-radius-default);
+  padding: var(--mantine-spacing-lg);
+}
+
+.bar {
+  height: 10px;
+  border-radius: var(--mantine-radius-default);
+  background: var(--mantine-color-default-border);
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  background: var(--mantine-primary-color-filled);
+}
+
+.cta {
+  padding: calc(var(--mantine-spacing-xl) * 2) 0;
+  text-align: center;
+}

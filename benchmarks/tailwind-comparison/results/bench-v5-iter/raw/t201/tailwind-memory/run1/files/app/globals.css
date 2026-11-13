@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #eefaf8;
+  --color-brand-100: #d3f3ee;
+  --color-brand-600: #0f766e;
+  --color-brand-700: #0b5f59;
+  --color-brand-800: #0a4b47;
+  --color-ink: #16212b;
+  --color-canvas: #f3f5f7;
+}
+
+html {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--color-canvas);
+}
+
+:focus-visible {
+  outline: 3px solid #0f766e;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+dialog::backdrop {
+  background: rgb(15 23 42 / 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
