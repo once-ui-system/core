@@ -50,9 +50,12 @@ describe("ai harness without spec.json", () => {
   // brought the catalog to 26,132. EmptyState brought it to 26,197. The
   // components pulled forward from 3.1 (Sidebar, Combobox, Calendar,
   // StatTile, PeerCursor, canvas, RichTextEditor and the Map additions)
-  // get 2,300 more, about 575 tokens, so each keeps a purpose line.
+  // get 2,300 more, about 575 tokens, so each keeps a purpose line. The
+  // held 3.0 work (MascotPanel and its parts, the settings blocks, Scene,
+  // the control-room primitives, theme presets) brought it to 29,645; the
+  // cap moves to 30,500, about 125 tokens of headroom.
   it("keeps the catalog small enough to load on every task", () => {
-    expect(statSync(path.join(AI, "catalog.json")).size).toBeLessThan(28_500);
+    expect(statSync(path.join(AI, "catalog.json")).size).toBeLessThan(30_500);
   });
 });
 

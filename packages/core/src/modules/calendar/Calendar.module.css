@@ -322,14 +322,20 @@ button.columnHeader:hover {
 .timedEvent .event {
   /* Opaque, so a cascaded event hides the one under it. */
   background:
-    linear-gradient(var(--event-fill, var(--brand-alpha-weak)), var(--event-fill, var(--brand-alpha-weak))),
+    linear-gradient(
+      var(--event-fill, var(--brand-alpha-weak)),
+      var(--event-fill, var(--brand-alpha-weak))
+    ),
     var(--calendar-backdrop, var(--page-background));
   box-shadow: 0 0 0 1px var(--calendar-backdrop, var(--page-background));
 }
 
 .timedEvent .event:hover {
   background:
-    linear-gradient(var(--event-fill-hover, var(--brand-alpha-medium)), var(--event-fill-hover, var(--brand-alpha-medium))),
+    linear-gradient(
+      var(--event-fill-hover, var(--brand-alpha-medium)),
+      var(--event-fill-hover, var(--brand-alpha-medium))
+    ),
     var(--calendar-backdrop, var(--page-background));
 }
 

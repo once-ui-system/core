@@ -315,12 +315,12 @@ Mixins: LeafProps.
 - state?: MascotState = idle
 - mood?: MascotMood = neutral
 - seed?: string | number
-- accessory?: React.ReactNode
+- accessory?: MascotAccessory | MascotAccessory[] | React.ReactNode
+- accessoryColor, aria-label, bodyPath, eyeColor?: string
 - lookAt?: "pointer" | "center" | { x: number; y: number } = pointer
 - level, roundness, aspect, eyeSize, eyeSpacing, eyeHeight?: number
 - source?: AudioLevelSource | null
 - size?: "s" | "m" | "l" | "xl" | number | CSSUnit = l
-- aria-label, bodyPath, eyeColor?: string
 - color?: "brand" | "accent" | "neutral" | (string & {})
 - surface?: "glossy" | "matte" | "flat" | "glass"
 - eyes?: "tile" | "pill" | "round" | "wide" | "dot" | { path: string }
@@ -335,6 +335,8 @@ Mixins: LeafProps.
 - icon, wordmark?: LogoSource
 - text, href?: string
 - monogram?: boolean | string
+- symbol?: IconName
+- tone?: Tone
 - showIn?: "dark" | "light"
 - brand?: { copy?: boolean; url?: string }
 
@@ -375,7 +377,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 Avoid: Passing the same text as label and children — the children are dropped
 - tone?: Tone
-- variant?: "default" | "gradient" | "announce" = default
+- variant?: "default" | "gradient" | "announce" | "solid" = default
 - size?: TShirtSizes
 - label?: string = ""
 - prefixIcon, suffixIcon?: IconName
@@ -589,7 +591,7 @@ type ChatTimeFormat = "relative" | "clock"
 // type ColorScheme is one of these strings: neutral brand accent info danger warning success
 type ColorWeight = "strong" | "medium" | "weak"
 type Colors = Exclude<BaseColor, "page" | "surface" | "overlay" | "transparent">
-type CursorPresetValue = "rounded" | "system" | "soft" | "dot"
+type CursorPresetValue = "rounded" | "dot" | "system" | "soft"
 type DropdownProps = Dropdown props
 // type FieldSize is one of these strings: s xl l m xs xxs
 // type FlexBreakpointProps: an object of these Flex props, all optional (padding* is padding, paddingX, paddingTop and the rest):
@@ -603,6 +605,7 @@ type IconButtonProps = IconButton props
 // symbol code link menu search time video filter image security opacity download info danger warning adjustments arrowDown arrowLeft arrowRight arrowUp arrowUpRight ball banknotes barChart bell bolt book bookmark calendar cart chat check checkbox chevronDoubleLeft chevronDoubleRight chevronDown chevronLeft chevronRight chevronUp chevronsLeftRight clipboard close computer copy cube dark dislike document edit enter eye eyeDropper eyeOff file flag folder food forward gift globe grid grip heart help home inbox light like linearGauge lock logout mail mapPin maximize minimize minus moreHorizontal newspaper organization pause paw payment people person personRemove phone play plus radialGauge refresh return screen send settings smiley sparkle star starFill store tag trash trend trendDown trendUp upload volume volumeOff wordmark world
 type LegacyToast = { variant?: Tone; tone?: Tone; children?: ReactNode; message?: ReactNode; action?: ReactNode; duration?: number }
 type LogoSource = "string" | { light: string; dark: string; }
+// type MascotAccessory is one of these strings: antenna bow beanie headphones sprout helmet crown catEars partyHat
 // type MascotEffect is one of these strings: heartEyes starEyes laughEyes blush sweat tears anger hearts sparkles question
 // type MascotMood is one of these strings: neutral happy surprised sad skeptical wink focused determined love excited laughing embarrassed crying angry confused
 type MascotState = "idle" | "listening" | "thinking" | "speaking" | "sleeping"

@@ -21,14 +21,14 @@
  "mixinsRef": [],
  "types": {
   "SchematicKind": [
+   "box",
    "vessel",
    "tank",
    "pump",
    "valve",
    "exchanger",
    "turbine",
-   "sensor",
-   "box"
+   "sensor"
   ],
   "SchematicLabels": {
    "state": "!Record<SchematicState, string>",

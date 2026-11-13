@@ -71,7 +71,9 @@ describe("splitPath", () => {
 describe("MapRoute", () => {
   it("adds a casing, a dashed part ahead and a solid part behind, and removes them", () => {
     const fake = fakeMap();
-    const { unmount } = render(wrap(fake.map, <MapRoute path={path} progress={0.75} tone="success" />));
+    const { unmount } = render(
+      wrap(fake.map, <MapRoute path={path} progress={0.75} tone="success" />),
+    );
     const ids = [...fake.layers.keys()];
     expect(ids).toHaveLength(3);
     expect(ids.map((id) => id.split("-").pop())).toEqual(["casing", "ahead", "behind"]);

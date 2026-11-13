@@ -100,6 +100,11 @@
     "tags": ["action", "basics"],
     "pairsWith": ["Icon", "SmartLink", "Row"]
   },
+  "Calendar": {
+    "purpose": "Month/week/day of events, drag to book",
+    "tags": ["calendar", "schedule"],
+    "pairsWith": ["Dialog"]
+  },
   "Card": {
     "purpose": "Interactive surface — a clickable or linked panel with hover feedback; requires href or onClick",
     "tags": ["surface", "action"],
@@ -485,6 +490,71 @@
     "pairsWith": ["SplitView", "ToggleButton"]
   },
   "CanvasItem": { "purpose": "Places content on a Canvas in world units", "tags": ["canvas"] },
+  "MascotPanel": {
+    "purpose": "Character designer for Mascot, editing a stored MascotDesign; or compose MascotPanelRoot and its parts",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["Mascot", "MascotPanelRoot"]
+  },
+  "MascotPanelAccessories": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel group: accessory tiles (several at once) and one accessory color; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelActions": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel buttons: randomize, reset, copy JSON or JSX, SVG and PNG; `exports` adds more; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelBody": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel group: color, roundness, width and surface; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelColor": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel row: brand, accent, neutral or custom body color; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelEyes": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel group: eye shape, size, spacing, height and color; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelFace": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel group: mouth, brows and cheeks; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelMotion": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel group: personality (calm, default, bouncy); inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelPreview": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel group: live Mascot with state and mood to try, and the actions; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelRoot": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel state, labels and layout; holds the MascotDesign its parts edit",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanel", "Mascot"]
+  },
+  "MascotPanelWorking": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel group: none, cube or d20 while thinking, with sides and face; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
   "TransformHandles": {
     "purpose": "Resize and rotate handles for a canvas selection",
     "tags": ["canvas"]

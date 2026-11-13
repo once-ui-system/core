@@ -477,6 +477,9 @@ describe("MapArea", () => {
 
     view.rerender(<MapView defaultViewport={{ center: [19, 47.5], zoom: 10 }} />);
     expect(map.removeSource).toHaveBeenCalledWith(id);
+  });
+});
+
 describe("MapPin", () => {
   it("draws a type icon on a status disc as a round marker", () => {
     const { container } = render(<MapPin icon="check" tone="danger" aria-label="Unit 12" />);

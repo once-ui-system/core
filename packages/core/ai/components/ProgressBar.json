@@ -149,9 +149,9 @@
   ],
   "CursorPresetValue": [
    "rounded",
+   "dot",
    "system",
-   "soft",
-   "dot"
+   "soft"
   ],
   "RadiusNest": [
    "4",

@@ -54,6 +54,7 @@
    "idle": "boolean"
   },
   "PeerCursorScheme": [
+   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -65,8 +66,7 @@
    "moss",
    "green",
    "emerald",
-   "aqua",
-   "cyan"
+   "aqua"
   ]
  }
 }

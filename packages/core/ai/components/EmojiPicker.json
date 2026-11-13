@@ -256,9 +256,9 @@
   ],
   "CursorPresetValue": [
    "rounded",
+   "dot",
    "system",
-   "soft",
-   "dot"
+   "soft"
   ],
   "DropdownProps": "Dropdown props",
   "GridSize": [

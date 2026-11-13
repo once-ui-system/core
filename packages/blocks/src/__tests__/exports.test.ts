@@ -104,16 +104,27 @@ const MASCOT_PANEL = [
 describe("@once-ui-system/blocks", () => {
   it("exports the six blocks, StylePanel's sections, its hook, MascotPanel, the page sections and the settings blocks", () => {
     expect(Object.keys(blocks).sort()).toEqual(
-      [...BLOCKS, ...SECTIONS, "useStylePanel", ...MASCOT_PANEL, ...PAGE_SECTIONS, ...SETTINGS].sort(),
+      [
+        ...BLOCKS,
+        ...SECTIONS,
+        "useStylePanel",
+        ...MASCOT_PANEL,
+        ...PAGE_SECTIONS,
+        ...SETTINGS,
+      ].sort(),
     );
   });
 
-  it.each([...BLOCKS, ...SECTIONS, ...PAGE_SECTIONS, ...SETTINGS, ...MASCOT_PANEL, "useStylePanel"])(
-    "%s is not on @once-ui-system/core",
-    (name) => {
-      expect(name in core).toBe(false);
-    },
-  );
+  it.each([
+    ...BLOCKS,
+    ...SECTIONS,
+    ...PAGE_SECTIONS,
+    ...SETTINGS,
+    ...MASCOT_PANEL,
+    "useStylePanel",
+  ])("%s is not on @once-ui-system/core", (name) => {
+    expect(name in core).toBe(false);
+  });
 
   it.each(SECTIONS)("exports %s as a component", (name) => {
     expect(typeof (blocks as Record<string, unknown>)[name]).toBe("function");

@@ -23,14 +23,14 @@
  "types": {
   "CanvasHandle": [
    "s",
+   "rotate",
    "n",
    "ne",
    "e",
    "se",
    "sw",
    "w",
-   "nw",
-   "rotate"
+   "nw"
   ],
   "CanvasRect": {
    "x": "!number",

@@ -603,7 +603,8 @@ function MonthView<E extends CalendarEvent>({
   );
 }
 
-const formatStart = (formats: Formats, event: CalendarEvent) => formats.shortTime.format(event.start);
+const formatStart = (formats: Formats, event: CalendarEvent) =>
+  formats.shortTime.format(event.start);
 
 function TimeView<E extends CalendarEvent>({
   days,
@@ -813,7 +814,11 @@ function TimeView<E extends CalendarEvent>({
       </div>
       {allDaySegments.length > 0 && (
         <div className={styles.allDayRow}>
-          <Text textVariant="label-default-xs" className={styles.allDayLabel} style={{ gridColumn: 1 }}>
+          <Text
+            textVariant="label-default-xs"
+            className={styles.allDayLabel}
+            style={{ gridColumn: 1 }}
+          >
             {labels.allDay}
           </Text>
           {allDaySegments.map((segment) => (
@@ -906,7 +911,10 @@ function TimeView<E extends CalendarEvent>({
                           width: `${
                             block.lane === block.lanes - 1
                               ? 100 / block.lanes
-                              : Math.min((100 / block.lanes) * 1.7, 100 - (block.lane / block.lanes) * 100)
+                              : Math.min(
+                                  (100 / block.lanes) * 1.7,
+                                  100 - (block.lane / block.lanes) * 100,
+                                )
                           }%`,
                           zIndex: block.lane + 1,
                         }}
