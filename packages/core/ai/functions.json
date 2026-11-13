@@ -41,6 +41,12 @@
    "kind": "value",
    "type": "readonly MascotAccessory[]"
   },
+  "useAudioLevel": {
+   "group": "modules",
+   "kind": "hook",
+   "signature": "(source: AudioLevelSource | null | undefined) => number",
+   "doc": "The loudness of `source` from 0 to 1, updated every animation frame while there is a source."
+  },
   "MASCOT_DESIGN_DEFAULTS": {
    "group": "modules",
    "kind": "value",
@@ -64,12 +70,6 @@
    "kind": "function",
    "signature": "(input: unknown) => MascotDesign",
    "doc": "Reads a stored, posted or AI-written design and returns one that is safe to render."
-  },
-  "useAudioLevel": {
-   "group": "modules",
-   "kind": "hook",
-   "signature": "(source: AudioLevelSource | null | undefined) => number",
-   "doc": "The loudness of `source` from 0 to 1, updated every animation frame while there is a source."
   },
   "mascotLook": {
    "group": "modules",
@@ -830,7 +830,7 @@
    "groups": "Partial<Record<GroupKey, MascotPanelHeading>>",
    "rows": "Partial< Record< | \"color\" | \"roundness\" | \"aspect\" | \"surface\" | \"eyes\" | \"eyeSize\" | \"eyeSpacing\" | \"eyeHeight\" | \"eyeColor\" | \"mouth\" | \"brows\" | \"cheeks\" | \"accessories\" | \"accessoryColor\" | \"working\" | \"sides\" | \"face\" | \"personality\" | \"state\" | \"mood\", string > >",
    "options": "{ colors?: Partial<Record<Scheme | \"custom\", string>>; surface?: Partial<Record<NonNullable<MascotDesign[\"surface\"]>, string>>; eyes?: Partial<Record<EyeShape, string>>; mouth?: Partial<Record<NonNullable<MascotDesign[\"mouth\"]>, string>>; personality?: Partial<Record<NonNullable<MascotDesign[\"personality\"]>, string>>; working?: Partial<Record<\"none\" | \"cube\" | \"d20\", string>>; sides?: Partial<Record<\"classic\" | \"tints\" | \"mono\", string>>; face?: Partial<Record<\"3d\" | \"flat\", string>>; state?: Partial<Record<MascotState, string>>; mood?: Partial<Record<MascotMood, string>>; accessories?: Partial<Record<MascotAccessory, string>>; }",
-   "actions": "Partial< Record< \"randomize\" | \"reset\" | \"copyJson\" | \"copyJsx\" | \"copied\" | \"downloadSvg\" | \"downloadPng\", string > >",
+   "actions": "Partial< Record< \"more\" | \"randomize\" | \"reset\" | \"copyJson\" | \"copyJsx\" | \"downloadSvg\" | \"downloadPng\", string > >",
    "preview": "string",
    "colorSwatch": "(name: string) => string"
   },

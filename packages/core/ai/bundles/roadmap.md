@@ -452,7 +452,7 @@ type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}ch` | 
 // type ColorScheme is one of these strings: neutral brand accent info danger warning success
 type ColorWeight = "strong" | "medium" | "weak"
 type Colors = Exclude<BaseColor, "page" | "surface" | "overlay" | "transparent">
-type CursorPresetValue = "rounded" | "soft" | "dot" | "system"
+type CursorPresetValue = "rounded" | "dot" | "soft" | "system"
 type DropdownProps = Dropdown props
 // type FieldSize is one of these strings: s xl l m xs xxs
 // type FlexBreakpointProps: an object of these Flex props, all optional (padding* is padding, paddingX, paddingTop and the rest):

@@ -449,7 +449,7 @@ type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}ch` | 
 type ColorValue = Colors | string & {}
 type ColorWeight = "strong" | "medium" | "weak"
 type Colors = Exclude<ColorValue, string & {}>
-type CursorPresetValue = "rounded" | "soft" | "dot" | "system"
+type CursorPresetValue = "rounded" | "dot" | "soft" | "system"
 type DotsProps = { display?: boolean; opacity?: DisplayProps["opacity"]; color?: ColorValue; size?: SpacingToken }
 // type FieldSize is one of these strings: s xl l m xs xxs
 // type FlexBreakpointProps: an object of these Flex props, all optional (padding* is padding, paddingX, paddingTop and the rest):

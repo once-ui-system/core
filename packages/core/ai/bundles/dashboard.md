@@ -606,7 +606,7 @@ type ColorValue = Exclude<BaseColor, "page" | "surface" | "overlay" | "transpare
 type ColorWeight = "strong" | "medium" | "weak"
 type Colors = Exclude<ColorValue, string & {}>
 type ColumnHide = Partial<Record<BreakpointKey, boolean>>
-type CursorPresetValue = "rounded" | "soft" | "dot" | "system"
+type CursorPresetValue = "rounded" | "dot" | "soft" | "system"
 // type CurveType is one of these strings: step linear basis basisClosed basisOpen bumpX bumpY bump linearClosed natural monotoneX monotoneY monotone stepBefore stepAfter
 type DataPoint = { [key: string]?: string | number | Date | undefined; label?: string }
 type DataStyle = "categorical" | "divergent" | "sequential"
