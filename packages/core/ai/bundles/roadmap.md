@@ -2,7 +2,7 @@
 
 Kanban-style roadmap with status columns and task cards
 
-This file is complete for this task: the rules (all of `rules.compact.md`), the props, mixins and types of every component below, every gotcha for these components and a gold example. Write the page from it; reading the rules, catalog, gotchas, manifest or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.
+This file is complete for this task: the rules (all of `rules.compact.md`), the props, mixins and types of every component below, every gotcha for these components, the quality bar and a gold example. Write the page from it; reading the rules, catalog, gotchas, manifest or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.
 
 ## Rules
 
@@ -503,6 +503,11 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - Leaf components (Button, IconButton, ToggleButton, the fields, Switch, Checkbox, RadioButton, Text, Heading, Icon, Avatar, Spinner, StatusIndicator, Kbd, InlineCode, ProgressBar, Logo, SmartLink, NavIcon) take only margins, flex, fillWidth, position, top/right/bottom/left, className and style besides their own props. Padding, background, border, radius, sizes, hide and breakpoints go on a Row around it (a Column around Text or Heading; <Row fit> for an Icon's box).
 - A Button in a form that should submit it needs type="submit": with neither onClick, href nor type it renders a div, unlike a native <button>.
 - Show a field's error after it is blurred or the form is submitted, never on open: keep a touched flag per field and pass errorMessage={touched.email ? errors.email : undefined}. A form or Dialog that opens with red required-field errors reads as broken.
+
+## Quality bar
+
+- Every view that loads data shows loading (Skeleton shaped like the content), empty (title, one line, the action that fills it), error (Feedback tone="danger" with Retry) and filled, through a typed lib/ data layer of async functions over mock data — even when the brief never mentions data
+- Writes are optimistic: loading on the pressed Button, rollback plus addToast({ tone: "danger" }) when the save fails
 
 ## Gold example (`examples/blocks/Roadmap1.tsx`)
 

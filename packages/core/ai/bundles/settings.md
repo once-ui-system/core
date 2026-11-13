@@ -685,6 +685,8 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - Profile fields in a Form (columns per breakpoint), not hand-spaced Columns
 - background="surface" border radius="l" padding="24"
 - border="danger-alpha-medium" on danger actions only
+- Every view that loads data shows loading (Skeleton shaped like the content), empty (title, one line, the action that fills it), error (Feedback tone="danger" with Retry) and filled, through a typed lib/ data layer of async functions over mock data — even when the brief never mentions data
+- Writes are optimistic: loading on the pressed Button, rollback plus addToast({ tone: "danger" }) when the save fails
 
 ## Gold example (`examples/settings.tsx`)
 
