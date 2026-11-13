@@ -9,6 +9,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { BlockErrorBoundary } from "./BlockErrorBoundary";
 import styles from "./BlockFilmstrip.module.scss";
 
 export interface FilmstripItem {
@@ -250,7 +251,7 @@ export function BlockFilmstrip({
                     aria-hidden="true"
                     inert
                   >
-                    {item.render()}
+                    <BlockErrorBoundary compact>{item.render()}</BlockErrorBoundary>
                   </Column>
                 )}
               </Column>
