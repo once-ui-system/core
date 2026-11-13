@@ -315,6 +315,45 @@ describe("Map", () => {
     expect(box.hasAttribute("tabindex")).toBe(false);
   });
 
+  it("fades a dark basemap's land-use fills under the page tint", async () => {
+    render(
+      <ThemeProvider theme="dark">
+        <LayoutProvider>
+          <MapView defaultViewport={{ center: [19, 47.5], zoom: 12 }} />
+        </LayoutProvider>
+      </ThemeProvider>,
+    );
+    await settle();
+    const map = calls.maps[0];
+    map.layers.push({ id: "landuse_park", type: "fill", "source-layer": "park" });
+    map.layers.push({ id: "road_minor", type: "line", "source-layer": "transportation" });
+    map.setPaintProperty.mockClear();
+    act(() => map.fire("style.load"));
+    expect(map.setPaintProperty).toHaveBeenCalledWith("landuse_park", "fill-opacity", 0.12);
+    expect(map.setPaintProperty).toHaveBeenCalledWith("road_minor", "line-opacity", 0.7);
+    expect(map.setPaintProperty).toHaveBeenCalledWith(
+      "road_minor",
+      "line-color",
+      expect.any(String),
+    );
+    expect(map.setPaintProperty).not.toHaveBeenCalledWith("building", "fill-opacity", 0.12);
+  });
+
+  it("keeps a light basemap's land-use fills as drawn", async () => {
+    render(
+      <ThemeProvider theme="light">
+        <LayoutProvider>
+          <MapView defaultViewport={{ center: [19, 47.5], zoom: 12 }} />
+        </LayoutProvider>
+      </ThemeProvider>,
+    );
+    await settle();
+    const map = calls.maps[0];
+    map.layers.push({ id: "landuse_park", type: "fill", "source-layer": "park" });
+    act(() => map.fire("style.load"));
+    expect(map.setPaintProperty).not.toHaveBeenCalledWith("landuse_park", "fill-opacity", 0.12);
+  });
+
   it("clusters items into a pill that zooms in", async () => {
     renderMap(
       <MapView defaultViewport={{ center: [19, 47.5], zoom: 10 }}>
@@ -438,5 +477,44 @@ describe("MapArea", () => {
 
     view.rerender(<MapView defaultViewport={{ center: [19, 47.5], zoom: 10 }} />);
     expect(map.removeSource).toHaveBeenCalledWith(id);
+describe("MapPin", () => {
+  it("draws a type icon on a status disc as a round marker", () => {
+    const { container } = render(<MapPin icon="check" tone="danger" aria-label="Unit 12" />);
+    const pin = container.firstElementChild as HTMLElement;
+    expect(pin.className).toMatch(/icon/);
+    expect(pin.style.getPropertyValue("--map-pin-solid")).toBe("var(--danger-solid-strong)");
+    expect(pin.querySelector("[class*='disc']")).toBeTruthy();
+  });
+
+  it("keeps the brand's colour when solids are contrast (ink, not colour)", () => {
+    const { container } = render(<MapPin icon="check" aria-label="Unit 3" />);
+    const pin = container.firstElementChild as HTMLElement;
+    expect(pin.style.getPropertyValue("--map-pin-solid")).toBe("var(--function-brand-500)");
+    expect(pin.style.getPropertyValue("--map-pin-on-solid")).toBe("var(--static-white)");
+  });
+
+  it("leads a pill with the icon disc", () => {
+    const { container } = render(
+      <MapPin icon="check" tone="success">
+        M12
+      </MapPin>,
+    );
+    const pin = container.firstElementChild as HTMLElement;
+    expect(pin.className).toMatch(/pill/);
+    expect(pin.querySelector("[class*='disc']")).toBeTruthy();
+    expect(pin.textContent).toBe("M12");
+  });
+
+  it("shows a set tone at rest as a mark before the label", () => {
+    const { container } = render(<MapPin tone="warning">En route</MapPin>);
+    expect(container.querySelector("[class*='status']")).toBeTruthy();
+    expect((container.firstElementChild as HTMLElement).className).toMatch(/toned/);
+  });
+
+  it("leaves a plain price pill as it was", () => {
+    const { container } = render(<MapPin>45M Ft</MapPin>);
+    expect(container.querySelector("[class*='status']")).toBeNull();
+    expect((container.firstElementChild as HTMLElement).className).not.toMatch(/toned/);
+    expect(container.querySelector("[class*='disc']")).toBeNull();
   });
 });

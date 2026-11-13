@@ -1603,7 +1603,146 @@ function validate(source, spec, iconNames, options = {}) {
     add("spacing.tokens", "Use token props (gap, padding, background) instead of style={{}}");
   }
 
+  for (const issue of shippedComponentIssues(source)) add(issue.rule, issue.message);
+  for (const issue of stateIssues(source)) add(issue.rule, issue.message);
+
   return issues;
+}
+
+/**
+ * What an agent drew or wired by hand that the package already ships. A
+ * benchmark app drew its assistant as a hundred-line CSS-animated SVG, used
+ * that drawing as its logo and built its own file picker, beside a Mascot, a
+ * Logo and a MediaUpload it never opened. These point at the shipped piece.
+ */
+function shippedComponentIssues(source) {
+  const found = [];
+  const uses = (name) => new RegExp(`<${name}[\\s>/]`).test(source);
+  const shapes = (source.match(/<(path|circle|ellipse|rect|polygon|polyline)[\s/>]/g) || []).length;
+  const character = /\b(mascot|character|buddy|sprite|creature|robot|critter|pet|face|eyes?)\b/i;
+  const declared = [...source.matchAll(/(?:function|const)\s+([A-Z][A-Za-z0-9]*)/g)].map(
+    (m) => m[1],
+  );
+  if (/<svg[\s>]/.test(source) && shapes >= 6 && !uses("Mascot")) {
+    if (
+      character.test(source) ||
+      declared.some((name) => character.test(name.replace(/([a-z])([A-Z])/g, "$1 $2")))
+    ) {
+      found.push({
+        rule: "components.mascot",
+        message:
+          'A hand-drawn character: use Mascot from "@once-ui-system/core" (mood, expression, accessories, colours, poke) — it already listens, thinks and reacts, follows the theme and respects reduced motion',
+      });
+    }
+  }
+  const brandMark = declared.find((name) => /(Logo|Brand|BrandMark|Wordmark|Monogram)$/.test(name));
+  if (brandMark && !uses("Logo")) {
+    found.push({
+      rule: "components.logo",
+      message: `<${brandMark}> builds a brand mark by hand: use <Logo text="Name" monogram /> (or icon / wordmark sources), which sizes, links and themes it`,
+    });
+  }
+  if (/<Logo\b[^>]*\bmonogram(?=[\s/>])/.test(source) && !/<Logo\b[^>]*\bicon=/.test(source)) {
+    found.push({
+      rule: "components.logo",
+      message:
+        'A bare `monogram` draws a placeholder shape: give the brand its initial, <Logo text="Name" monogram="N" />, or an icon',
+    });
+  }
+  if (
+    /\.setStyle\(|new\s+maplibre(gl)?\.Map\(|fetch\([^)]*style(\.json)?/i.test(source) &&
+    /@once-ui-system\/core\/map/.test(source)
+  ) {
+    found.push({
+      rule: "map.raw",
+      message:
+        "Replaces or fetches the map style by hand, which blanks the basemap: keep <Map> in charge of the style; add your own layers with useMap() (addSource/addLayer in an effect keyed on styleVersion, removed on cleanup)",
+    });
+  }
+  if (/maplibre-gl\/dist\/maplibre-gl\.css/.test(source)) {
+    found.push({
+      rule: "map.css",
+      message:
+        "Imports maplibre-gl.css, which is unlayered and overrides Map's own styles (controls, popups, the canvas): remove it, <Map> brings what it needs",
+    });
+  }
+  if (/<input[^>]*type=["']file["']/.test(source) && !uses("MediaUpload")) {
+    found.push({
+      rule: "components.upload",
+      message:
+        'A hand-built file input: use MediaUpload from "@once-ui-system/core/media" (drop, paste, preview, compression, loading and error states)',
+    });
+  }
+  return found;
+}
+
+/**
+ * An app that only shows the happy path is a mock-up. A screen that loads,
+ * lists or saves data handles waiting, nothing, failure and the filled
+ * result, and reads its data through functions a backend can replace.
+ */
+function stateIssues(source) {
+  const found = [];
+  if (!/return\s*\(?\s*</.test(source)) return found; // not a component file
+  const has = (re) => re.test(source);
+  const asyncData = has(
+    /\bfetch\(|\bawait\s|\.then\(|\buse(Query|SWR|Mutation)\b|\bset[A-Z]\w*Loading\b/,
+  );
+  if (asyncData) {
+    if (
+      !has(
+        /<(Skeleton|Spinner|WorkingIndicator|TypingIndicator|LogoLoader|LogoSpinner)[\s>/]|\bloading=\{|\bloading\b\s*[?&]/,
+      )
+    ) {
+      found.push({
+        rule: "states.loading",
+        message:
+          "Loads data with no loading state: show Skeleton shaped like the content (or Spinner on a control, loading on a Button) while it waits",
+      });
+    }
+    // Rendered, not just caught: a catch that only logs, or a toast for a
+    // failed read, leaves a blank screen. A file with no effect only writes,
+    // and a toast with a rollback is its error state.
+    const rendered = has(
+      /<Feedback[\s>]|<ChartStatus|\{\s*!?\s*\w*(error|Error|failed|Failed)\w*\s*(&&|\?)|===\s*["'`](error|failed)["'`]/,
+    );
+    const writesOnly = !has(/\buseEffect\(|\buse(Query|SWR)\b/) && has(/addToast\(/);
+    if (!rendered && !writesOnly) {
+      found.push({
+        rule: "states.error",
+        message: has(/\bcatch\b/)
+          ? 'Catches a failed load but never shows it: keep the error in state (setError in catch) and render <Feedback tone="danger"> with a Retry button in place of the content'
+          : 'Loads data with no error state: keep the error in state and render <Feedback tone="danger"> with a Retry button (a failed write: addToast with tone="danger" and roll the change back)',
+      });
+    }
+  }
+  // Only a list that can change: state, a hook's result or loaded data. A
+  // fixed array of nav links or pricing tiers is never empty.
+  const liveList =
+    asyncData ||
+    has(
+      /useState<[^>]*\[\]\s*>\(|useState\(\s*\[|useState\(\s*\w*(initial|seed|sample|mock|default)\w*\s*\)|\buse[A-Z]\w*(List|Items|Records)\(/i,
+    );
+  const lists = liveList && has(/\.map\(\s*\(?[\w{},\s]*\)?\s*=>\s*\(?\s*</);
+  const emptyHandled = has(
+    /<EmptyState[\s>]|\.length\s*(===|==|<|>|!==)\s*0|!\s*\w+(\?\.|\.)length|\.length\s*\?|\.length\s*&&|emptyState=|\bempty\b/i,
+  );
+  if (lists && !emptyHandled) {
+    found.push({
+      rule: "states.empty",
+      message:
+        "Renders a list with no empty state: when it has nothing, show EmptyState (or a short Column with a title, a line of help and the action that fills it), not a blank area",
+    });
+  }
+  const records = (source.match(/\{\s*id:\s*["'`\d]/g) || []).length;
+  if (records >= 6 && !asyncData) {
+    found.push({
+      rule: "data.layer",
+      message:
+        "Sample records inline in a component: move them behind a typed data layer (lib/data.ts: async getX/createX/updateX returning typed records, mock data with a short delay), so a backend replaces the functions and no screen changes",
+    });
+  }
+  return found;
 }
 
 /**

@@ -5701,9 +5701,10 @@
    "props": {
     "children": "React.ReactNode",
     "prefix": "React.ReactNode",
-    "variant": "\"pill\" | \"dot\"",
+    "icon": "IconName",
+    "variant": "\"pill\" | \"icon\" | \"dot\"",
     "active": "boolean = false",
-    "tone": "MapTone = brand",
+    "tone": "MapTone",
     "href": "string",
     "onClick": "(event: React.MouseEvent<HTMLElement>) => void"
    }

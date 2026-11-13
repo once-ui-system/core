@@ -361,9 +361,10 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 
 ### MapPin (from `@once-ui-system/core/map`)
 - children, prefix?: React.ReactNode
-- variant?: "pill" | "dot"
+- icon?: IconName
+- variant?: "pill" | "icon" | "dot"
 - active?: boolean = false
-- tone?: MapTone = brand
+- tone?: MapTone
 - href?: string
 - onClick?: (event: React.MouseEvent<HTMLElement>) => void
 
@@ -638,6 +639,8 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - Offer the way back (clear the filter), not only 'No results'
 - Icon actions with tooltips; destructive ones take tone="danger"
 - Records with a location: a Map beside the list (MapMarkers with cluster, activeId = the hovered row, bounds = the results' positions); it stacks under the list at s
+- Every view that loads data shows loading (Skeleton shaped like the content), empty (title, one line, the action that fills it), error (Feedback tone="danger" with Retry) and filled, through a typed lib/ data layer of async functions over mock data — even when the brief never mentions data
+- Writes are optimistic: loading on the pressed Button, rollback plus addToast({ tone: "danger" }) when the save fails
 
 ## Gold example (`examples/list-page.tsx`)
 

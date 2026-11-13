@@ -1,7 +1,7 @@
 {
   "id": "chat",
   "title": "Chat UI",
-  "description": "Message list with avatars, typing indicator, composer with send and attach, conversation list",
+  "description": "An assistant or team chat: conversation list, thread with a typing or working state, composer with send and attach, the assistant's Mascot, every loading, empty and error state",
   "components": [
     "ChatMessageList",
     "ChatMessage",
@@ -18,10 +18,16 @@
     "Fade",
     "Kbd",
     "User",
-    "Line"
+    "Line",
+    "Mascot",
+    "Logo",
+    "WorkingIndicator",
+    "Skeleton",
+    "Feedback",
+    "Tag"
   ],
   "recipes": [],
-  "example": "examples/blocks/Chat1.tsx",
+  "example": "examples/chat.tsx",
   "blocks": {
     "manifest": "examples/blocks/manifest.json",
     "primary": ["Chat1", "Feed3", "Sidebar4"],
@@ -35,5 +41,11 @@
     "size.rem",
     "spacing.tokens",
     "layout.noSpanOrType"
-  ]
+  ],
+  "quality": {
+    "identity": "An assistant has a face: Mascot in the header (state follows the work: thinking while it answers) and large in the empty state; the brand mark is Logo, never a drawn SVG",
+    "states": "Every view that loads data shows loading (Skeleton shaped like the content), empty (title, one line, the action that fills it), error (Feedback tone=\"danger\" with Retry) and filled, through a typed lib/ data layer of async functions over mock data — even when the brief never mentions data",
+    "sending": "A sent message shows status sending, then sent; a failed one shows status failed with onRetry; attachments go through ChatComposer attach",
+    "empty": "An empty thread is a welcome: the Mascot, one question, and two to four suggestion Tags that send themselves"
+  }
 }
