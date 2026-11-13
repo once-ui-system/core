@@ -56,6 +56,12 @@ const MapMarker = ({
     const instance = new lib.Marker({ element, anchor, offset, draggable })
       .setLngLat(latest.current.position)
       .addTo(map);
+    // MapLibre makes every marker element a button named "Map marker". The
+    // React content is the control (a MapPin is a button with its own name),
+    // so the wrapper stays a plain box: no nested controls, no stray name.
+    element.removeAttribute("role");
+    element.removeAttribute("aria-label");
+    if (element.getAttribute("tabindex") === "0") element.removeAttribute("tabindex");
     instance.on("dragend", () => {
       const { lng: x, lat: y } = instance.getLngLat();
       latest.current.onDragEnd?.([x, y]);

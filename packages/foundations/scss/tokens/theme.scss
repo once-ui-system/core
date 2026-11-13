@@ -29,6 +29,11 @@
     --solid-inset-distance:  0;
     --solid-inset-size:      0;
     --solid-border-width:    0;
+    --solid-glow-near:       0rem;
+    --solid-glow-far:        0rem;
+    --solid-glow-near-mix:   0%;
+    --solid-glow-far-mix:    0%;
+    --solid-glow-rim:        var(--static-transparent);
     --backdrop-filter:       none;
     --surface-border:        var(--static-transparent);
     --surface-background:    var(--neutral-background-medium);
@@ -645,6 +650,26 @@
     --solid-inset-distance: -1rem;
     --solid-inset-size:      1rem;
     --solid-border-width:    1px;
+}
+
+/* Glow: a solid lights its own colour into a soft halo, with a light edge
+   along the top. Static shadows only (no filter, no animation). The halo is
+   tighter and paler on light, where a wide one muddies the page. */
+[data-solid-style="glow"] {
+    --solid-border-width:    1px;
+    --solid-glow-near:       0.625rem;
+    --solid-glow-far:        1.75rem;
+    --solid-glow-near-mix:   55%;
+    --solid-glow-far-mix:    22%;
+    --solid-glow-rim:        var(--static-white-medium);
+}
+
+[data-solid-style="glow"][data-theme="light"],
+[data-solid-style="glow"] [data-theme="light"] {
+    --solid-glow-near:       0.5rem;
+    --solid-glow-far:        1.25rem;
+    --solid-glow-near-mix:   45%;
+    --solid-glow-far-mix:    14%;
 }
 
 [data-transition="all"],[data-transition="micro"] {

@@ -385,7 +385,14 @@ const MapImpl = ({
       className={[styles.map, className].filter(Boolean).join(" ")}
       {...flex}
     >
-      <div ref={container} className={styles.canvas} />
+      <div
+        ref={container}
+        className={styles.canvas}
+        // Inline, so an app that also imports maplibre-gl.css (unlayered, and
+        // so ahead of these layered styles) cannot turn this back into
+        // position: relative with no height: a blank map.
+        style={{ position: "absolute", inset: 0 }}
+      />
       {failed ? (
         <Column fill center gap="8" padding="24" className={styles.fallback}>
           <Icon name="world" onBackground="neutral-weak" />

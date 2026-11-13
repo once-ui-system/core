@@ -251,6 +251,10 @@
     animation-duration: calc(4.4s * var(--tempo));
   }
   &[data-eyes="tile"] {
+    .face {
+      --gx: 0.4;
+      --gy: -0.6;
+    }
     .tile {
       animation: mascot-turn calc(4.8s * var(--tempo)) infinite;
     }
@@ -320,6 +324,23 @@
   }
   .lid {
     animation: none;
+  }
+}
+
+/* Thinking: a rising trail of thought, one bead at a time, so the state reads at a glance. */
+.thought {
+  fill: color-mix(in srgb, var(--mascot-color) 70%, transparent);
+
+  circle {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: mascot-thought calc(1.5s * var(--tempo)) ease-in-out infinite;
+  }
+  circle:nth-child(2) {
+    animation-delay: calc(0.2s * var(--tempo));
+  }
+  circle:nth-child(3) {
+    animation-delay: calc(0.4s * var(--tempo));
   }
 }
 
@@ -757,6 +778,18 @@
   }
   75% {
     transform: translateY(0) scale(1, 1);
+  }
+}
+
+@keyframes mascot-thought {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
