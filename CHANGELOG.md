@@ -24,6 +24,10 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **`Pulse` keeps pulsing for visitors who ask for reduced motion.** The global reduced-motion
+  rule cut its halo to a single 0.01ms run, which left a flat full-size disc where the live dot
+  should be. With reduced motion the halo now stays at a fixed size and fades in and out.
+
 - **Menu items no longer draw a border inside the menu.** The highlighted, hovered and focused
   states of `Option` (Dropdown, ContextMenu, Select, UserMenu) kept a 1px border, so the first item,
   highlighted as soon as a menu opened, read as a box nested inside the panel's border. They now

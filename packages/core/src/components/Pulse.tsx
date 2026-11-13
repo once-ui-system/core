@@ -26,6 +26,10 @@ const Pulse = forwardRef<HTMLDivElement, PulseProps>(
         minHeight={size === "s" ? "16" : size === "m" ? "24" : "32"}
         center
         data-solid="color"
+        // A live signal, not decoration: the global reduced-motion rule would
+        // cut the halo's animation to one 0.01ms run and leave it as a flat
+        // full-size disc. The stylesheet gives it a still fade instead.
+        data-motion="essential"
         className={className}
         style={style}
         {...flex}
