@@ -5,8 +5,9 @@ import type React from "react";
 import { useEffect } from "react";
 import { useAdapters } from "../contexts/AdapterProvider.js";
 import { useToast } from "../contexts/ToastProvider.js";
+import type { IconName } from "../icons.js";
 import type { LeafProps } from "../interfaces.js";
-import type { SpacingToken, TShirtSizes } from "../types.js";
+import type { SpacingToken, Tone, TShirtSizes } from "../types.js";
 import { leafLayout, takeLeafProps } from "../utils/leafLayout.js";
 import { Column } from "./Column.js";
 import { Dropdown } from "./Dropdown.js";
@@ -90,6 +91,24 @@ interface LogoProps
    * @example <Logo text="Acme" monogram href="/" />
    */
   monogram?: boolean | string;
+  /**
+   * A symbol from the icon set as the mark, in the monogram's place: a paw
+   * for a vet app, a bolt for an energy one. Says more about the product
+   * than a letter, and on a `tone` tile reads as an app icon. `icon` still
+   * wins, as the brand's real mark.
+   *
+   * @example <Logo text="Pawly" symbol="paw" tone="brand" />
+   */
+  symbol?: IconName;
+  /**
+   * Draws the monogram as an app-icon tile in this palette: the tone's
+   * strongest solid behind, its on-solid colour for the mark. The brand's
+   * colour in the header without an icon file. Without it the monogram is
+   * a bare mark in the text colour.
+   *
+   * @example <Logo text="Acme" monogram="A" tone="brand" />
+   */
+  tone?: Tone;
   href?: string;
   /**
    * Show this logo only in one theme. For a logo that changes with the
@@ -107,6 +126,8 @@ const Logo = ({
   wordmark,
   text,
   monogram,
+  symbol,
+  tone,
   className,
   style,
   showIn,
@@ -119,7 +140,8 @@ const Logo = ({
   // An icon is the brand's real mark, so it replaces the monogram.
   const mark = icon || !monogram ? undefined : monogram;
   const letters = typeof mark === "string" ? mark.trim() : "";
-  const hasMark = mark === true || letters !== "";
+  const symbolMark = icon ? undefined : symbol;
+  const hasMark = mark === true || letters !== "" || Boolean(symbolMark);
 
   useEffect(() => {
     if (!icon && !wordmark && !text && !hasMark) {
@@ -184,7 +206,21 @@ const Logo = ({
       height,
       minWidth: height,
       color: "var(--neutral-on-background-strong)",
+      ...(tone && {
+        color: `var(--${tone}-on-solid-strong)`,
+        background: `var(--${tone}-solid-strong)`,
+        borderRadius: `calc(${height} * 0.28)`,
+      }),
     };
+    // On a tile the mark sits inside it, so it is drawn smaller.
+    const inset = tone ? 0.62 : 1;
+    if (symbolMark) {
+      return (
+        <span {...a11y} data-monogram="symbol" style={box}>
+          <Icon name={symbolMark} decorative style={{ fontSize: `calc(${height} * ${inset})` }} />
+        </span>
+      );
+    }
     if (!letters) {
       return (
         <span {...a11y} data-monogram="shape" style={box}>
@@ -193,7 +229,7 @@ const Logo = ({
             fill="currentColor"
             focusable="false"
             aria-hidden="true"
-            style={{ width: height, height }}
+            style={{ width: `calc(${height} * ${inset})`, height: `calc(${height} * ${inset})` }}
           >
             <path fillRule="evenodd" d={monogramShape(text)} />
           </svg>
@@ -211,7 +247,7 @@ const Logo = ({
         className="font-heading"
         style={{
           ...box,
-          fontSize: `calc(${height} * ${fontScale})`,
+          fontSize: `calc(${height} * ${fontScale * inset})`,
           fontWeight: 800,
           lineHeight: 1,
           letterSpacing: "-0.04em",
@@ -230,19 +266,31 @@ const Logo = ({
   const renderText = () => {
     if (!text) return null;
     const height = `var(--static-space-${sizeMap[size]})`;
+    // The outer span is the slot (font-size = the logo's height), the inner
+    // one the name at three quarters of it: em, not calc(var()), which jsdom
+    // cannot resolve when a test asks for the link's accessible name.
     return (
       <span
-        className="font-heading neutral-on-background-strong"
         style={{
-          fontSize: `calc(${height} * 0.75)`,
+          // inline-flex makes the name a flex item, so its line box is the
+          // slot's line-height alone and the logo keeps its height.
+          display: "inline-flex",
+          fontSize: height,
           lineHeight: height,
-          fontWeight: "var(--font-weight-heading-strong)",
-          letterSpacing: "-0.02em",
           whiteSpace: "nowrap",
-          marginLeft: icon || hasMark ? `calc(${height} / 4)` : undefined,
+          marginLeft: icon || hasMark ? "0.25em" : undefined,
         }}
       >
-        {text}
+        <span
+          className="font-heading neutral-on-background-strong"
+          style={{
+            fontSize: "0.75em",
+            fontWeight: "var(--font-weight-heading-strong)",
+            letterSpacing: "-0.02em",
+          }}
+        >
+          {text}
+        </span>
       </span>
     );
   };
@@ -369,7 +417,11 @@ const Logo = ({
           )}
           style={{ ...layout.style, ...style }}
           href={href}
-          aria-label={text || "Trademark"}
+          // With text, the visible name names the link (the mark beside it is
+          // aria-hidden). A label would have to contain every visible
+          // character, the monogram's letter included, or axe 4.14 reports
+          // label-content-name-mismatch.
+          aria-label={text ? undefined : "Trademark"}
           {...props}
         >
           {content}

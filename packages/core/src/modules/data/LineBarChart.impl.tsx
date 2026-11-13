@@ -13,10 +13,19 @@ import { CartesianPlot } from "./CartesianPlot.js";
 import { ChartHeader } from "./ChartHeader.js";
 import { ChartPlot } from "./ChartPlot.js";
 import { ChartStatus } from "./ChartStatus.js";
-import type { BarWidth, ChartProps, ChartVariant, CurveType, DataPoint } from "./interfaces.js";
+import type {
+  BarWidth,
+  ChartMarksProps,
+  ChartProps,
+  ChartVariant,
+  CurveType,
+  DataPoint,
+} from "./interfaces.js";
 import { chartFormatters, chartSeries, valueAxisWidth } from "./utils/chartSeries.js";
 
-export interface LineBarChartProps<T extends object = DataPoint> extends ChartProps<T> {
+export interface LineBarChartProps<T extends object = DataPoint>
+  extends ChartProps<T>,
+    ChartMarksProps {
   barWidth?: BarWidth;
   curve?: CurveType;
   reverseY?: boolean;
@@ -53,6 +62,9 @@ const LineBarChart = ({
   valueFormat,
   locale,
   "data-viz-style": dataVizStyle,
+  thresholds,
+  annotations,
+  yDomain,
   ...flex
 }: LineBarChartProps) => {
   // `data` takes interface-typed rows too; each row is read by key all the same.
@@ -195,6 +207,9 @@ const LineBarChart = ({
         />
         {!loading && !error && filteredData && filteredData.length > 0 && (
           <CartesianPlot
+            thresholds={thresholds}
+            yDomain={yDomain}
+            annotations={annotations}
             id={chartId}
             rows={filteredData}
             xKey={xAxisKey}

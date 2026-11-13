@@ -57,6 +57,8 @@
   "emptyState": "ReactNode",
   "noResultsState": "ReactNode",
   "stickyHeader": "boolean = false",
+  "virtualize": "boolean = false",
+  "rowHeight": "number = 49",
   "striped": "boolean = false",
   "hoverable": "boolean = true",
   "compact": "boolean = false",
@@ -219,7 +221,14 @@
    "width": "string",
    "label": "string",
    "filter": "TableColumnFilter<T>",
-   "hide": "ColumnHide"
+   "hide": "ColumnHide",
+   "edit": "TableColumnEdit<T>"
+  },
+  "TableColumnEdit": {
+   "onCommit": "!(row: T, value: string, index: number) => void",
+   "value": "(row: T) => string",
+   "type": "\"text\" | \"number\"",
+   "disabled": "(row: T, index: number) => boolean"
   },
   "TableColumnFilter": {
    "options": "!{ value: string; label: ReactNode }[]",
@@ -245,6 +254,7 @@
    "noResultsHint": "!string",
    "clearFilters": "!string",
    "results": "!(count: number) => string",
+   "edit": "!string",
    "previous": "!string",
    "next": "!string",
    "first": "!string",

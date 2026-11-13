@@ -2,7 +2,17 @@
 
 import classNames from "clsx";
 import type React from "react";
-import { isValidElement, type ReactNode, useEffect, useId, useMemo, useRef, useState } from "react";
+import {
+  isValidElement,
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { type ColumnHide, columnHideClasses } from "../internal/columnHide.js";
 import { pageCount, withDefaultLabels } from "../internal/pagination.js";
 import { useScrollableTabStop } from "../internal/scrollableTabStop.js";
@@ -22,6 +32,7 @@ import { Pagination, type PaginationLabels } from "./Pagination.js";
 import { Row } from "./Row.js";
 import { Select } from "./Select.js";
 import { Skeleton } from "./Skeleton.js";
+import skeletonStyles from "./Skeleton.module.scss";
 import tableStyles from "./Table.module.scss";
 import { Text } from "./Text.js";
 import { VisuallyHidden } from "./VisuallyHidden.js";
@@ -44,6 +55,21 @@ interface TableColumnFilter<T> {
    * is the value (or one of them), or, for an array field, contains it.
    */
   match?: (row: T, value: TableFilterValue) => boolean;
+}
+
+/** Makes a column's cells editable in place. */
+interface TableColumnEdit<T> {
+  /**
+   * Saves the new value. The table shows the row as `rows` holds it, so update
+   * the row here (or after the server answers) for the change to show.
+   */
+  onCommit: (row: T, value: string, index: number) => void;
+  /** The text the field starts with. Defaults to `row[key]` as text. */
+  value?: (row: T) => string;
+  /** The field's type. Default `"text"`. */
+  type?: "text" | "number";
+  /** Keeps a row's cell read-only. */
+  disabled?: (row: T, index: number) => boolean;
 }
 
 interface TableColumn<T> {
@@ -84,6 +110,12 @@ interface TableColumn<T> {
    * it again under a wider breakpoint's hide.
    */
   hide?: ColumnHide;
+  /**
+   * Edit the cell in place: a click (or Enter on the focused cell) opens a
+   * field, Enter or leaving it saves, Escape cancels. The cell keeps showing
+   * `cell` while it is not being edited.
+   */
+  edit?: TableColumnEdit<T>;
 }
 
 /** A button in the actions column at the end of every row. */
@@ -141,6 +173,8 @@ interface TableLabels extends PaginationLabels {
   clearFilters: string;
   /** What a screen reader hears after the search or a filter changes. */
   results: (count: number) => string;
+  /** Added to an editable cell's name, and names its field. Default "Edit". */
+  edit: string;
 }
 
 const DEFAULT_LABELS: Pick<
@@ -156,6 +190,7 @@ const DEFAULT_LABELS: Pick<
   | "noResultsHint"
   | "clearFilters"
   | "results"
+  | "edit"
 > = {
   selectRow: "Select row",
   pagination: "Pagination",
@@ -168,6 +203,7 @@ const DEFAULT_LABELS: Pick<
   noResultsHint: "Try a different search or filter",
   clearFilters: "Clear filters",
   results: (count) => (count === 1 ? "1 result" : `${count} results`),
+  edit: "Edit",
 };
 
 interface TableProps<T>
@@ -309,6 +345,15 @@ interface TableProps<T>
    * component.
    */
   stickyHeader?: boolean;
+  /**
+   * Render only the rows in view, for thousands of rows in one scroll area.
+   * Needs `maxHeight`; rows are taken to be one height (`rowHeight`, measured
+   * from the first row once it renders). Screen readers still hear each row's
+   * place in the whole table.
+   */
+  virtualize?: boolean;
+  /** The height of a row in pixels, for `virtualize`, until one is measured. Default 49. */
+  rowHeight?: number;
   /** Alternate row backgrounds. */
   striped?: boolean;
   /** Highlight the row under the pointer. */
@@ -422,7 +467,10 @@ const ALIGN = {
   right: { th: tableStyles.thAlignRight, td: tableStyles.tdAlignRight, row: "end" },
 } as const;
 
-const SKELETON_WIDTHS = ["8rem", "6rem", "10rem", "5rem", "7rem"] as const;
+// Shares of the cell, not lengths: a percentage adds nothing to an auto table's
+// column widths, so the headers size the columns while rows load, as the data
+// will, and the columns don't jump sideways when it arrives.
+const SKELETON_WIDTHS = ["80%", "60%", "90%", "50%", "70%"] as const;
 
 /**
  * A table of typed rows: column definitions instead of pre-rendered cells,
@@ -487,6 +535,8 @@ function Table<T>({
   noResultsState,
   stickyHeader = false,
   maxHeight,
+  virtualize = false,
+  rowHeight = 49,
   striped = false,
   hoverable = true,
   compact = false,
@@ -769,6 +819,42 @@ function Table<T>({
   const showPagination = paged && rowTotal > 0 && (pages > 1 || (perPageOptions?.length ?? 0) > 0);
   // Rows kept on screen while the next ones load; without rows yet, skeletons.
   const dimmed = loading && keepRowsWhileLoading && visible.length > 0;
+
+  // Virtual rows: only the slice in view, between two spacers that keep the
+  // scroll height. The window follows the scroll position and the box height.
+  const virtual = virtualize && maxHeight !== undefined;
+  const scrollNode = useRef<HTMLDivElement | null>(null);
+  const [viewport, setViewport] = useState({ top: 0, height: 0 });
+  const [measuredHeight, setMeasuredHeight] = useState<number | null>(null);
+  const setScrollNode = useCallback(
+    (node: HTMLDivElement | null) => {
+      scrollNode.current = node;
+      scrollRef(node);
+      if (node) setViewport({ top: node.scrollTop, height: node.clientHeight });
+    },
+    [scrollRef],
+  );
+  const onScroll = virtual
+    ? (event: React.UIEvent<HTMLDivElement>) => {
+        const node = event.currentTarget;
+        setViewport({ top: node.scrollTop, height: node.clientHeight });
+      }
+    : undefined;
+  const firstRowRef = useRef<HTMLTableRowElement | null>(null);
+  useLayoutEffect(() => {
+    if (!virtual) return;
+    const height = firstRowRef.current?.getBoundingClientRect().height;
+    if (height && Math.abs(height - (measuredHeight ?? 0)) > 0.5) setMeasuredHeight(height);
+  });
+  const lineHeight = measuredHeight ?? rowHeight;
+  const overscan = 6;
+  // Before the box has a height (the server render, a test), a screenful.
+  const inView = viewport.height > 0 ? Math.ceil(viewport.height / lineHeight) : 20;
+  const windowStart = virtual ? Math.max(0, Math.floor(viewport.top / lineHeight) - overscan) : 0;
+  const windowEnd = virtual
+    ? Math.min(visible.length, windowStart + inView + overscan * 2)
+    : visible.length;
+  const rowsToRender = virtual ? visible.slice(windowStart, windowEnd) : visible;
   // "No results" is for rows the search or filters left out. On a server
   // page there is no telling, so an empty page under a query counts as one.
   const noResults = filtering && visible.length === 0 && (server || entries.length > 0);
@@ -842,7 +928,85 @@ function Table<T>({
   const cellClass = (column: TableColumn<T>) =>
     classNames(tableStyles.td, ALIGN[column.align ?? "left"].td, columnHideClasses(column.hide));
 
-  const renderRow = (entry: Entry<T>) => {
+  const [editing, setEditing] = useState<{ id: string; key: string; draft: string } | null>(null);
+  const editCellId = (entryId: string, key: string) => `${controlsId}-edit-${entryId}-${key}`;
+  const focusCell = (entryId: string, key: string) => {
+    const id = editCellId(entryId, key);
+    requestAnimationFrame(() => document.getElementById(id)?.focus());
+  };
+  const startEdit = (entry: Entry<T>, column: TableColumn<T>, position: number) => {
+    const field = column.edit?.value
+      ? column.edit.value(entry.row)
+      : fieldText(fieldOf(entry.row, column.key, position));
+    setEditing({ id: entry.id, key: column.key, draft: field });
+  };
+  // The open edit as of the last event, so the blur that follows Enter or
+  // Escape (when the field leaves the page) does not save a second time.
+  const editingRef = useRef(editing);
+  editingRef.current = editing;
+  const finishEdit = (entry: Entry<T>, column: TableColumn<T>, save: boolean) => {
+    const open = editingRef.current;
+    if (!open || open.id !== entry.id || open.key !== column.key) return;
+    editingRef.current = null;
+    const { draft } = open;
+    setEditing(null);
+    if (save) column.edit?.onCommit(entry.row, draft, entry.index);
+  };
+
+  const renderCell = (entry: Entry<T>, column: TableColumn<T>, position: number) => {
+    const content = column.cell
+      ? column.cell(entry.row, entry.index)
+      : renderField(fieldOf(entry.row, column.key, position));
+    const edit = column.edit;
+    if (!edit || dimmed || edit.disabled?.(entry.row, entry.index)) return content;
+    const name = `${text.edit} ${columnName(column)}`;
+    if (editing?.id === entry.id && editing.key === column.key) {
+      return (
+        // biome-ignore lint/a11y/noStaticElementInteractions: stops a row click, it handles none itself
+        // biome-ignore lint/a11y/useKeyWithClickEvents: as above
+        <div onClick={(event) => event.stopPropagation()}>
+          <Input
+            id={`${editCellId(entry.id, column.key)}-field`}
+            aria-label={name}
+            type={edit.type ?? "text"}
+            size="xxs"
+            value={editing.draft}
+            autoFocus
+            onChange={(event) => setEditing({ ...editing, draft: event.target.value })}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                finishEdit(entry, column, true);
+                focusCell(entry.id, column.key);
+              } else if (event.key === "Escape") {
+                event.preventDefault();
+                event.stopPropagation();
+                finishEdit(entry, column, false);
+                focusCell(entry.id, column.key);
+              }
+            }}
+            onBlur={() => finishEdit(entry, column, true)}
+          />
+        </div>
+      );
+    }
+    return (
+      <button
+        type="button"
+        id={editCellId(entry.id, column.key)}
+        className={classNames("reset-button-styles", "focus-ring", styles.editCell)}
+        onClick={(event) => {
+          event.stopPropagation();
+          startEdit(entry, column, position);
+        }}
+      >
+        {content}
+        <VisuallyHidden>{`, ${name}`}</VisuallyHidden>
+      </button>
+    );
+  };
+
+  const renderRow = (entry: Entry<T>, slot = 0) => {
     const isSelected = selectable && selectedSet.has(entry.id);
     return (
       <tr
@@ -853,6 +1017,8 @@ function Table<T>({
           rowClassName?.(entry.row, entry.index),
         )}
         data-selected={isSelected ? "true" : undefined}
+        ref={virtual && slot === 0 ? firstRowRef : undefined}
+        aria-rowindex={virtual ? windowStart + slot + 2 : undefined}
         onClick={onRowClick ? () => onRowClick(entry.row, entry.index) : undefined}
       >
         {selectable && (
@@ -873,9 +1039,7 @@ function Table<T>({
               cellClassName?.(entry.row, entry.index, position),
             )}
           >
-            {column.cell
-              ? column.cell(entry.row, entry.index)
-              : renderField(fieldOf(entry.row, column.key, position))}
+            {renderCell(entry, column, position)}
           </td>
         ))}
         {hasActions && (
@@ -914,12 +1078,34 @@ function Table<T>({
     );
   };
 
+  const spacer = (key: string, rowsHigh: number) =>
+    rowsHigh > 0 ? (
+      // biome-ignore lint/a11y/noAriaHiddenOnFocusable: a table row is not focusable, and a spacer holds nothing
+      <tr key={key} aria-hidden="true" className={styles.spacer}>
+        <td colSpan={columnCount} style={{ height: rowsHigh * lineHeight }} />
+      </tr>
+    ) : null;
+  const renderRows = () =>
+    virtual
+      ? [
+          spacer("spacer-top", windowStart),
+          ...rowsToRender.map((entry, slot) => renderRow(entry, slot)),
+          spacer("spacer-bottom", visible.length - windowEnd),
+        ]
+      : visible.map((entry) => renderRow(entry));
+
   // Placeholders with nothing to read: the table says it is busy, and the
   // rows stay out of the accessibility tree rather than reading as empty.
   const skeletonRows = Array.from({ length: paged ? currentPerPage : 5 }, (_, n) => n).map(
     (rowNumber) => (
+      // The row pulses, not each cell: one animation per row instead of one per cell.
       // biome-ignore lint/a11y/noAriaHiddenOnFocusable: a table row is not focusable, and these hold no controls
-      <tr key={`skeleton-${rowNumber}`} className={tableStyles.row} aria-hidden="true">
+      <tr
+        key={`skeleton-${rowNumber}`}
+        className={classNames(tableStyles.row, skeletonStyles.group)}
+        style={{ animationDelay: `${rowNumber * 80}ms` }}
+        aria-hidden="true"
+      >
         {selectable && <td className={classNames(tableStyles.td, styles.selectCell)} />}
         {shownColumns.map(({ column, position }, columnIndex) => (
           <td key={column.key || position} className={cellClass(column)}>
@@ -928,7 +1114,6 @@ function Table<T>({
               size="s"
               width={SKELETON_WIDTHS[(rowNumber + columnIndex) % SKELETON_WIDTHS.length]}
               maxWidth="100%"
-              delay={rowNumber * 80}
             />
           </td>
         ))}
@@ -1063,7 +1248,8 @@ function Table<T>({
       <Flex
         // A table wider than its box scrolls, and a keyboard can only scroll
         // what it can focus: a tab stop while it overflows.
-        ref={scrollRef}
+        ref={setScrollNode}
+        onScroll={onScroll}
         fillWidth
         radius="l"
         border="neutral-alpha-medium"
@@ -1084,6 +1270,7 @@ function Table<T>({
           aria-label={ariaLabel}
           aria-labelledby={ariaLabelledBy}
           aria-busy={loading || undefined}
+          aria-rowcount={virtual ? visible.length + 1 : undefined}
         >
           <thead className={tableStyles.thead}>
             <tr>
@@ -1112,14 +1299,14 @@ function Table<T>({
           </thead>
           <tbody className={classNames(tableStyles.tbody, { [styles.dimmedBody]: dimmed })}>
             {dimmed
-              ? visible.map(renderRow)
+              ? renderRows()
               : loading
                 ? loadingState !== undefined
                   ? loadingRow
                   : skeletonRows
                 : visible.length === 0
                   ? emptyRow
-                  : visible.map(renderRow)}
+                  : renderRows()}
           </tbody>
         </table>
       </Flex>

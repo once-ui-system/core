@@ -11,6 +11,8 @@ import { VersionNotice } from "@/product/VersionNotice";
 import { platformOfSlug } from "@/resources/platforms";
 import { currentVersion } from "@/resources/versions";
 import { Metadata } from "next";
+import { ogImageUrl } from "@once-ui-system/core/next";
+import { ogSection } from "@/resources/og";
 
 // Release marks come from npm; see product/published.ts.
 export const revalidate = 3600;
@@ -67,7 +69,13 @@ export async function generateMetadata({
     path: `/${doc.slug}`,
     type: "article",
     publishedTime: doc.metadata.updatedAt,
-    image: doc.metadata.image || `/api/og/generate?title=${encodeURIComponent(doc.metadata.title)}${slug.length > 1 ? `&section=${encodeURIComponent(slug[0])}` : ""}`,
+    image:
+      doc.metadata.image ||
+      ogImageUrl("/api/og/generate", {
+        title: doc.metadata.title,
+        eyebrow: ogSection(slug.length > 1 ? slug[0] : undefined),
+        description: doc.metadata.summary,
+      }),
   });
 
   // Meta.generate writes a canonical only alongside language alternates.

@@ -3,6 +3,7 @@ import type { ReactElement, ReactNode } from "react";
 import { renderToString } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import { MASCOT_ACCESSORIES } from "../modules/ai/accessories";
 import { Mascot, mascotLook } from "../modules/ai/Mascot";
 import { expectNoAxeViolations } from "../test/axe";
 
@@ -42,6 +43,15 @@ describe("Mascot", () => {
     expect(container.querySelectorAll("text")).toHaveLength(2);
   });
 
+  it("shows a trail of thought only while thinking, so the state reads at a glance", () => {
+    const { container, rerender } = render(<Mascot />);
+    expect(container.querySelector('[class*="thought"]')).toBeNull();
+    rerender(<Mascot state="thinking" />);
+    expect(container.querySelectorAll('[class*="thought"] circle')).toHaveLength(3);
+    rerender(<Mascot state="speaking" />);
+    expect(container.querySelector('[class*="thought"]')).toBeNull();
+  });
+
   it("adds a mouth, brows, cheeks and an accessory when asked", () => {
     const { container } = render(
       <Mascot mouth="smile" brows cheeks accessory={<circle data-testid="hat" r={4} />} />,
@@ -49,6 +59,36 @@ describe("Mascot", () => {
     expect(container.querySelectorAll("path[class*='brow']")).toHaveLength(2);
     expect(container.querySelectorAll("ellipse[class*='cheek']")).toHaveLength(2);
     expect(container.querySelector("[data-testid='hat']")).toBeTruthy();
+  });
+
+  it("draws built-in accessories in their layers, alone or several at once", () => {
+    const { container } = render(<Mascot surface="flat" accessory={["helmet", "catEars"]} />);
+    const layers = container.querySelectorAll("g[class*='accessory']");
+    // Cat ears and the helmet's glass behind the body, the helmet's rim in front of the face.
+    expect(layers).toHaveLength(2);
+    const svg = container.querySelector("svg") as SVGSVGElement;
+    const order = Array.from(svg.querySelectorAll("g[class*='accessory'], g[class*='face']"));
+    expect(order[0].getAttribute("class")).toMatch(/accessory/);
+    expect(order[order.length - 1].getAttribute("class")).toMatch(/accessory/);
+  });
+
+  it("fits every built-in accessory to any body and tints them with accessoryColor", () => {
+    for (const kind of MASCOT_ACCESSORIES) {
+      for (const roundness of [0, 1]) {
+        const { container, unmount } = render(
+          <Mascot accessory={kind} roundness={roundness} aspect={1.3} accessoryColor="#123456" />,
+        );
+        expect(container.querySelector("g[class*='accessory']")).toBeTruthy();
+        for (const el of Array.from(container.querySelectorAll("[d], [cx], [x]"))) {
+          for (const attr of ["d", "cx", "cy", "x", "y"]) {
+            expect(el.getAttribute(attr) ?? "").not.toMatch(/NaN|Infinity/);
+          }
+        }
+        unmount();
+      }
+    }
+    const { container } = render(<Mascot accessory="crown" accessoryColor="#123456" />);
+    expect(container.querySelector("[fill='#123456']")).toBeTruthy();
   });
 
   it("gives the same seed the same look, and lets props win over it", () => {

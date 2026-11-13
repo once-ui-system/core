@@ -2,14 +2,24 @@
 
 import type React from "react";
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { useDataTheme } from "../../contexts/DataThemeProvider.js";
 import styles from "./Chart.module.css";
 import { DataTooltip } from "./DataTooltip.js";
 import { LinearGradient } from "./Gradient.js";
-import type { ChartProps, ChartVariant, CurveType, DataPoint, DateConfig } from "./interfaces.js";
+import type {
+  ChartAnnotation,
+  ChartProps,
+  ChartThreshold,
+  ChartVariant,
+  CurveType,
+  DataPoint,
+  DateConfig,
+} from "./interfaces.js";
 import { Legend } from "./Legend.js";
 import { rowsByX } from "./utils/chartSeries.js";
 import { formatDate } from "./utils/formatDate.js";
+import { annotationIndex, markStroke, thresholdValues } from "./utils/marks.js";
 import { placeTooltip } from "./utils/placeTooltip.js";
 import {
   areaPath,
@@ -33,26 +43,91 @@ import {
  */
 export const DEFAULT_PLOT_SIZE = { width: 640, height: 320 };
 
-/** Measures `ref`'s box, starting from `fallback`, and follows it as it resizes. */
-export function usePlotSize(ref: React.RefObject<HTMLElement | null>) {
-  const [size, setSize] = useState(DEFAULT_PLOT_SIZE);
+type PlotSize = { width: number; height: number };
+
+/**
+ * The last size each chart measured, by its id. A chart's plot unmounts while
+ * it loads, so without it every load drew the plot twice: once at
+ * `DEFAULT_PLOT_SIZE`, then again at the measured size. Bounded, oldest out.
+ */
+const plotSizes = new Map<string, PlotSize>();
+
+function rememberPlotSize(key: string, size: PlotSize) {
+  plotSizes.delete(key);
+  plotSizes.set(key, size);
+  if (plotSizes.size > 200) plotSizes.delete(plotSizes.keys().next().value as string);
+}
+
+/**
+ * Measures `ref`'s box and follows it as it resizes, starting from the size
+ * the chart `key` measured last (or `DEFAULT_PLOT_SIZE`).
+ *
+ * A ResizeObserver does the measuring: it reports after the browser's own
+ * layout, so mounting a chart no longer forces a layout of the whole page
+ * from inside React's commit. Its first report is applied synchronously, so
+ * the plot is never painted at the wrong size.
+ */
+export function usePlotSize(ref: React.RefObject<HTMLElement | null>, key?: string) {
+  const [size, setSize] = useState<PlotSize>(
+    () => (key && plotSizes.get(key)) || DEFAULT_PLOT_SIZE,
+  );
   useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const read = () => {
-      // Fractional, as the box really is: rounding moved the scale by a pixel.
-      const { width, height } = el.getBoundingClientRect();
-      if (width > 0 && height > 0) {
+    // Fractional, as the box really is: rounding moved the scale by a pixel.
+    const apply = (width: number, height: number, sync: boolean) => {
+      if (!(width > 0 && height > 0)) return;
+      if (key) rememberPlotSize(key, { width, height });
+      const update = () =>
         setSize((s) => (s.width === width && s.height === height ? s : { width, height }));
-      }
+      if (sync) flushSync(update);
+      else update();
     };
-    read();
-    if (typeof ResizeObserver === "undefined") return;
-    const observer = new ResizeObserver(read);
+    if (typeof ResizeObserver === "undefined") {
+      const { width, height } = el.getBoundingClientRect();
+      apply(width, height, false);
+      return;
+    }
+    let first = true;
+    const observer = new ResizeObserver((entries) => {
+      const box = entries[entries.length - 1]?.borderBoxSize?.[0];
+      const { width, height } = box
+        ? { width: box.inlineSize, height: box.blockSize }
+        : el.getBoundingClientRect();
+      apply(width, height, first);
+      first = false;
+    });
     observer.observe(el);
     return () => observer.disconnect();
-  }, [ref]);
+  }, [ref, key]);
   return size;
+}
+
+/**
+ * An element's border-box height, followed with a ResizeObserver instead of
+ * read on every render (which forced a layout each time the chart rendered,
+ * a hover included): `fallback` until it is laid out. `on` is whether the
+ * element is rendered.
+ */
+function useElementHeight(ref: React.RefObject<HTMLElement | null>, fallback: number, on: boolean) {
+  const [height, setHeight] = useState(fallback);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!on || !el || typeof ResizeObserver === "undefined") return;
+    let first = true;
+    const observer = new ResizeObserver((entries) => {
+      const box = entries[entries.length - 1]?.borderBoxSize?.[0];
+      const next = box ? box.blockSize : el.getBoundingClientRect().height;
+      const update = () => setHeight((h) => (next > 0 && h !== next ? next : h));
+      // The first report lands before the first paint, as the old read did.
+      if (first) flushSync(update);
+      else update();
+      first = false;
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [ref, on]);
+  return height;
 }
 
 /** The CSS custom properties that time a chart's entry animation. */
@@ -121,6 +196,10 @@ export interface CartesianPlotProps {
   animationStyle?: React.CSSProperties;
   /** The key DataTooltip reads a label from when it has none. */
   tooltipDataKey?: string;
+  thresholds?: readonly ChartThreshold[];
+  annotations?: readonly ChartAnnotation[];
+  /** The value axis' range, in place of one from zero to the data's top. */
+  yDomain?: [number, number];
 }
 
 const isNum = (v: unknown): v is number => typeof v === "number" && Number.isFinite(v);
@@ -163,6 +242,9 @@ export function CartesianPlot({
   animation = true,
   animationStyle: timing,
   tooltipDataKey,
+  thresholds = [],
+  annotations = [],
+  yDomain,
 }: CartesianPlotProps) {
   const {
     tick: { fill: tickFill, fontSize, line: tickLine },
@@ -170,7 +252,7 @@ export function CartesianPlot({
   } = useDataTheme();
   const ref = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
-  const { width: W, height: H } = usePlotSize(ref);
+  const { width: W, height: H } = usePlotSize(ref, id);
   const [hidden, setHidden] = useState<string[]>([]);
   const [active, setActive] = useState<{ index: number; y?: number } | null>(null);
 
@@ -191,11 +273,7 @@ export function CartesianPlot({
   // A bottom legend keeps its wrapper's height clear: 40px of static space,
   // measured once laid out, as that space scales with the density.
   const legendRef = useRef<HTMLDivElement>(null);
-  const [legendRoom, setLegendRoom] = useState(40);
-  useLayoutEffect(() => {
-    const room = legendRef.current?.getBoundingClientRect().height;
-    if (room && room !== legendRoom) setLegendRoom(room);
-  });
+  const legendRoom = useElementHeight(legendRef, 40, legend.display);
   const legendBottom = legend.display && legend.position.startsWith("bottom") ? legendRoom : 0;
   const left = reverseY ? 0 : yAxisRoom;
   const top = reverseX ? xAxisRoom : 0;
@@ -226,10 +304,13 @@ export function CartesianPlot({
           ),
     [rows, series, stack, percent],
   );
+  // The value axis reaches every threshold too, so a limit is never off the plot.
+  const limits = useMemo(() => thresholdValues(thresholds), [thresholds]);
   const ticks = useMemo(() => {
     if (percent) return niceTicks(0, 1);
-    return niceTicks(...extent(bands.flat(2)));
-  }, [bands, percent]);
+    if (yDomain) return fixedTicks(yDomain[0], yDomain[1]);
+    return niceTicks(...extent([...bands.flat(2), ...limits]));
+  }, [bands, percent, limits, yDomain]);
   const domain: [number, number] = [ticks[0], ticks[ticks.length - 1]];
   const valueRange: [number, number] = horizontal
     ? [plot.x, plot.x + plot.w]
@@ -424,6 +505,92 @@ export function CartesianPlot({
   const gridV = horizontal ? ticks.map(valueTickAt) : catTicks.map((t) => t.line);
   const valueLabel = (t: number) => (format.axis ? format.axis(t) : String(t));
 
+  // Thresholds: bands behind the data, lines over it, each labelled in the plot.
+  const valueLo = horizontal ? plot.x : plot.y + plot.h;
+  const valueHi = horizontal ? plot.x + plot.w : plot.y + padTop;
+  const clampValue = (v: number) => value(Math.min(domain[1], Math.max(domain[0], v)));
+  type Mark = {
+    i: number;
+    t: ChartThreshold;
+    stroke: ReturnType<typeof markStroke>;
+    kind: "line" | "band";
+    at: number;
+    a: number;
+    b: number;
+  };
+  const marks = thresholds.flatMap((t, i): Mark[] => {
+    const stroke = markStroke(t.tone);
+    if (isNum(t.value)) {
+      return [{ i, t, stroke, kind: "line", at: value(t.value), a: 0, b: 0 }];
+    }
+    if (!isNum(t.from) && !isNum(t.to)) return [];
+    const a = isNum(t.from) ? clampValue(t.from) : valueLo;
+    const b = isNum(t.to) ? clampValue(t.to) : valueHi;
+    return [{ i, t, stroke, kind: "band", at: b, a, b }];
+  });
+  const hatchId = (i: number) => `hatch${id}${i}`;
+  const bandLayer = marks
+    .filter((m) => m.kind === "band")
+    .map((m) => {
+      const lo = Math.min(m.a, m.b);
+      const size = Math.abs(m.b - m.a);
+      const rect = horizontal
+        ? { x: lo, y: catStart, width: size, height: catLength }
+        : { x: plot.x, y: lo, width: plot.w, height: size };
+      return (
+        <g key={`band${m.i}`} data-threshold={m.t.tone ?? "warning"}>
+          <rect {...rect} fill={m.stroke.fill} />
+          {m.stroke.hatch && <rect {...rect} fill={`url(#${hatchId(m.i)})`} />}
+          {/* The band's edges, drawn as its tone's line. */}
+          {[m.a, m.b].map((edge, k) =>
+            (k === 0 ? isNum(m.t.from) : isNum(m.t.to)) ? (
+              <line
+                // biome-ignore lint/suspicious/noArrayIndexKey: the two edges are the lower and the upper.
+                key={k}
+                {...(horizontal
+                  ? { x1: edge, x2: edge, y1: catStart, y2: catStart + catLength }
+                  : { x1: plot.x, x2: plotRight, y1: edge, y2: edge })}
+                stroke={m.stroke.color}
+                strokeWidth={m.stroke.width}
+                strokeDasharray={m.stroke.dash}
+              />
+            ) : null,
+          )}
+        </g>
+      );
+    });
+  const lineLayer = marks
+    .filter((m) => m.kind === "line")
+    .map((m) => (
+      <line
+        key={`line${m.i}`}
+        data-threshold={m.t.tone ?? "warning"}
+        {...(horizontal
+          ? { x1: m.at, x2: m.at, y1: catStart, y2: catStart + catLength }
+          : { x1: plot.x, x2: plotRight, y1: m.at, y2: m.at })}
+        stroke={m.stroke.color}
+        strokeWidth={m.stroke.width}
+        strokeDasharray={m.stroke.dash}
+      />
+    ));
+  const notes = annotations.flatMap((a, i) => {
+    const index = annotationIndex(rows, xKey, a);
+    if (index < 0) return [];
+    return [{ i, a, at: centres[index], stroke: markStroke(a.tone ?? "neutral") }];
+  });
+  const noteLayer = notes.map((n) => (
+    <line
+      key={`note${n.i}`}
+      data-annotation={n.a.tone ?? "neutral"}
+      {...(horizontal
+        ? { x1: plot.x, x2: plotRight, y1: n.at, y2: n.at }
+        : { x1: n.at, x2: n.at, y1: plot.y + padTop, y2: plotBottom })}
+      stroke={n.stroke.color}
+      strokeWidth={Math.max(1, n.stroke.width)}
+      strokeDasharray={n.stroke.dash ?? "4 3"}
+    />
+  ));
+
   const activeAt = activeRow ? centres[active?.index ?? 0] : undefined;
   const legendTop = legend.position.startsWith("top");
   const legendCenter = legend.position.endsWith("center");
@@ -450,6 +617,27 @@ export function CartesianPlot({
           {dataSeries.map((s) => (
             <LinearGradient key={s.key} id={gradient(s.i)} variant={variant} color={s.color} />
           ))}
+          {marks.map((m) =>
+            m.kind === "band" && m.stroke.hatch ? (
+              <pattern
+                key={m.i}
+                id={hatchId(m.i)}
+                width={m.stroke.hatch.gap}
+                height={m.stroke.hatch.gap}
+                patternUnits="userSpaceOnUse"
+                patternTransform="rotate(45)"
+              >
+                <line
+                  x1={0}
+                  x2={0}
+                  y1={0}
+                  y2={m.stroke.hatch.gap}
+                  stroke={m.stroke.hatch.color}
+                  strokeWidth={1.5}
+                />
+              </pattern>
+            ) : null,
+          )}
           <clipPath id={`plot${id}`}>
             <rect x={plot.x - 1} y={plot.y - 2} width={plot.w + 2} height={plot.h + 3} />
           </clipPath>
@@ -466,6 +654,7 @@ export function CartesianPlot({
               <line key={`v${i}`} x1={x} x2={x} y1={plot.y} y2={plotBottom} />
             ))}
         </g>
+        {bandLayer.length > 0 && <g clipPath={`url(#plot${id})`}>{bandLayer}</g>}
         {areaLayer.length > 0 && (
           <g clipPath={`url(#plot${id})`}>
             <g className={animation ? styles.reveal : undefined} style={timing}>
@@ -490,6 +679,12 @@ export function CartesianPlot({
             >
               {barLayer}
             </g>
+          </g>
+        )}
+        {(lineLayer.length > 0 || noteLayer.length > 0) && (
+          <g clipPath={`url(#plot${id})`}>
+            {lineLayer}
+            {noteLayer}
           </g>
         )}
         <g stroke={axisStroke} fill="none">
@@ -583,6 +778,46 @@ export function CartesianPlot({
         return (
           <span key={index} className={styles.tick} style={{ ...tickStyle, ...style }}>
             {text}
+          </span>
+        );
+      })}
+      {marks.map((m) => {
+        // Inside the plot, at the far end of the value axis' cross line: just
+        // over a line, just inside a band's upper edge.
+        const style: React.CSSProperties = horizontal
+          ? {
+              left: pct(m.at, W),
+              top: pct(catStart, H),
+              transform: m.kind === "band" ? "translateX(calc(-100% - 4px))" : "translateX(4px)",
+            }
+          : {
+              right: pct(W - plotRight + 4, W),
+              top: pct(m.at, H),
+              transform: m.kind === "band" ? "translateY(2px)" : "translateY(calc(-100% - 2px))",
+            };
+        return (
+          <span
+            key={`mark${m.i}`}
+            className={styles.markLabel}
+            data-tone={m.t.tone ?? "warning"}
+            style={{ ...style, fontSize, color: m.stroke.text }}
+          >
+            {m.t.label}
+          </span>
+        );
+      })}
+      {notes.map((n) => {
+        const style: React.CSSProperties = horizontal
+          ? { right: pct(W - plotRight + 4, W), top: pct(n.at, H), transform: "translateY(-100%)" }
+          : { left: pct(n.at + 4, W), top: pct(plot.y + padTop, H) };
+        return (
+          <span
+            key={`noteLabel${n.i}`}
+            className={styles.markLabel}
+            data-tone={n.a.tone ?? "neutral"}
+            style={{ ...style, fontSize, color: n.stroke.text }}
+          >
+            {n.a.label}
           </span>
         );
       })}

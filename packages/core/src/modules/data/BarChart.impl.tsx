@@ -12,7 +12,13 @@ import { CartesianPlot } from "./CartesianPlot.js";
 import { ChartHeader } from "./ChartHeader.js";
 import { ChartPlot } from "./ChartPlot.js";
 import { ChartStatus } from "./ChartStatus.js";
-import type { BarWidth, ChartProps, ChartVariant, DataPoint } from "./interfaces.js";
+import type {
+  BarWidth,
+  ChartMarksProps,
+  ChartProps,
+  ChartVariant,
+  DataPoint,
+} from "./interfaces.js";
 import { chartFormatters, chartSeries, valueAxisWidth } from "./utils/chartSeries.js";
 import { formatDate } from "./utils/formatDate.js";
 
@@ -22,7 +28,9 @@ const CATEGORY_INSET = 20;
 /** `barWidth` in px. */
 const BAR_SIZES = { xs: 12, s: 16, m: 24, l: 40, xl: 64 } as const;
 
-export interface BarChartProps<T extends object = DataPoint> extends ChartProps<T> {
+export interface BarChartProps<T extends object = DataPoint>
+  extends ChartProps<T>,
+    ChartMarksProps {
   barWidth?: BarWidth;
   hover?: boolean;
   reverseY?: boolean;
@@ -68,6 +76,9 @@ const BarChart = ({
   valueFormat,
   locale,
   "data-viz-style": dataVizStyle,
+  thresholds,
+  annotations,
+  yDomain,
   ...flex
 }: BarChartProps) => {
   // `data` takes interface-typed rows too; each row is read by key all the same.
@@ -203,6 +214,9 @@ const BarChart = ({
         />
         {!loading && !error && filteredData && filteredData.length > 0 && (
           <CartesianPlot
+            thresholds={thresholds}
+            yDomain={yDomain}
+            annotations={annotations}
             id={chartId}
             rows={filteredData}
             xKey={xAxisKey}

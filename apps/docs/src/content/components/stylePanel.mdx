@@ -38,7 +38,7 @@ Change brand, accent, and neutral palettes. These affect buttons, links, surface
 
 ## Solid style and effects
 
-Adjust the visual language of interactive elements (e.g., plastic vs flat button styling).
+Adjust the visual language of interactive elements (e.g., flat, plastic or glowing button styling).
 
 ## Advanced options
 
@@ -140,6 +140,16 @@ one with a [custom colour](#custom-colour), still takes the layout props of a
 `stacked`. Stacked, the option rows take the whole row and drop a button
 size, so that they fit a sidebar; whatever still overflows scrolls, and the chosen swatch or
 option is scrolled into view.
+
+## Size
+
+`size="s"` tightens the panel: less padding in each row and less room between
+groups, for an app where the default spacing is too much. `m` is the default.
+MascotPanel takes the same prop.
+
+```tsx
+<StylePanel size="s" />
+```
 
 ## Owning the state
 
@@ -352,6 +362,7 @@ generated from one colour.
     labels: "Every string the panel shows or announces, over the English defaults. Groups and rows read it; their own props still win.",
     customColors: "End the Brand and Accent swatches with a custom colour, reported as brandSeed and accentSeed. Controlled mode only.",
     stacked: "Put each row's label above its control, for a narrow sidebar.",
+    size: "How much room rows and groups take: m (default), or s for a denser panel.",
   }}
   content={[
     ["className"],

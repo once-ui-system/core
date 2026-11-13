@@ -1,5 +1,6 @@
 @use "../styles/density.scss" as density;
 @use "../styles/touch.scss" as touch;
+@use "../styles/glow.scss" as glow;
 
 .tag {
     white-space: nowrap;
@@ -19,6 +20,12 @@
         :global([data-theme="light"]) & {
             background: var(--static-white);
         }
+    }
+
+    // Filled in its tone, with the tone's own text colour on it.
+    &.solid {
+        background: var(--tag-tone-solid);
+        color: var(--tag-tone-on-solid);
     }
 
     &.clickable {
@@ -128,7 +135,8 @@
 // above the caps than below the baseline, which lifts the text. A browser
 // without text-box keeps the line box, as before.
 // Written out, not generated, so every class is a literal in the source.
-.hairline {
+.hairline,
+.solid {
     &.size-xs { height: var(--static-space-16); }
     &.size-s { height: var(--static-space-20); }
     &.size-m { height: var(--static-space-24); }
@@ -252,6 +260,7 @@
     &.selected[class*="tone-"] {
         --tag-solid: var(--tag-tone-solid);
         --tag-on-solid: var(--tag-tone-on-solid);
+        @include glow.solid-shadow(var(--tag-solid), var(--static-transparent), 0.7);
     }
 
     &:disabled {

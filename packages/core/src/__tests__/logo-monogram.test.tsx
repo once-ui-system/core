@@ -36,6 +36,9 @@ describe("Logo monogram", () => {
     expect(path).not.toBeNull();
     expect(mark.querySelector("svg")).toHaveAttribute("fill", "currentColor");
     expect(screen.getByRole("link")).toHaveAccessibleName("Acme");
+    // Named by its visible text, not a label: axe 4.14 counts the aria-hidden
+    // monogram as visible text a label would have to contain.
+    expect(screen.getByRole("link")).not.toHaveAttribute("aria-label");
     await expectNoAxeViolations(container);
   });
 
@@ -84,12 +87,43 @@ describe("Logo monogram", () => {
   it("changes nothing when not set", () => {
     const { container } = render(<Logo text="Acme" />, { wrapper });
     expect(markOf(container)).toBeNull();
-    expect(screen.getByText("Acme").style.marginLeft).toBe("");
-    expect(container.querySelectorAll("span")).toHaveLength(1);
+    expect(screen.getByText("Acme").parentElement?.style.marginLeft).toBe("");
+    // The name's slot and the name: no mark.
+    expect(container.querySelectorAll("span")).toHaveLength(2);
   });
 
   it("spaces the text from the mark like an icon", () => {
     render(<Logo text="Acme" monogram />, { wrapper });
-    expect(screen.getByText("Acme").style.marginLeft).toBe("calc(var(--static-space-32) / 4)");
+    expect(screen.getByText("Acme").parentElement?.style.marginLeft).toBe("0.25em");
+  });
+});
+
+describe("Logo tone", () => {
+  it("draws the monogram on a tile in the tone", () => {
+    const { container } = render(<Logo text="Acme" monogram="A" tone="brand" />, { wrapper });
+    const mark = container.querySelector('[data-monogram="letters"]') as HTMLElement;
+    expect(mark.style.background).toBe("var(--brand-solid-strong)");
+    expect(mark.style.color).toBe("var(--brand-on-solid-strong)");
+  });
+
+  it("keeps the bare mark in the text colour without a tone", () => {
+    const { container } = render(<Logo text="Acme" monogram />, { wrapper });
+    const mark = container.querySelector('[data-monogram="shape"]') as HTMLElement;
+    expect(mark.style.background).toBe("");
+    expect(mark.style.color).toBe("var(--neutral-on-background-strong)");
+  });
+
+  it("draws a symbol from the icon set as the mark, on the tile", () => {
+    const { container } = render(<Logo text="Pawly" symbol="paw" tone="brand" />, { wrapper });
+    const mark = container.querySelector('[data-monogram="symbol"]') as HTMLElement;
+    expect(mark.style.background).toBe("var(--brand-solid-strong)");
+    expect(mark.getAttribute("aria-hidden")).toBe("true");
+    expect(mark.querySelector("svg")).not.toBeNull();
+    expect(container.querySelector('[data-monogram="letters"]')).toBeNull();
+  });
+
+  it("lets a real icon win over the symbol", () => {
+    const { container } = render(<Logo text="Pawly" symbol="paw" icon="/logo.svg" />, { wrapper });
+    expect(container.querySelector("[data-monogram]")).toBeNull();
   });
 });

@@ -11,6 +11,8 @@
   "locale": "string",
   "date": "DateConfig",
   "title": "string",
+  "thresholds": "readonly ChartThreshold[]",
+  "annotations": "readonly ChartAnnotation[]",
   "caption": "ReactNode",
   "id": "string"
  },
@@ -26,6 +28,26 @@
  ],
  "mixinsRef": [],
  "types": {
+  "ChartAnnotation": {
+   "x": "!string | number | Date",
+   "label": "!string",
+   "tone": "ChartMarkTone"
+  },
+  "ChartMarkTone": [
+   "neutral",
+   "info",
+   "danger",
+   "warning",
+   "success"
+  ],
+  "ChartThreshold": {
+   "value": "number",
+   "from": "number",
+   "to": "number",
+   "label": "!string",
+   "tone": "ChartMarkTone",
+   "direction": "\"above\" | \"below\" | \"none\""
+  },
   "ColorValue": [
    "string & {}",
    "neutral-strong",

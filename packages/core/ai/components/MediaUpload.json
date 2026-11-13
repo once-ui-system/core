@@ -156,5 +156,11 @@
    "themeSurface": "SurfaceStyle",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`"
   }
+ },
+ "types": {
+  "Drag": [
+   "{ kind: \"create\"; dayIndex: number; anchor: number; current: number; }",
+   "{ kind: \"move\" | \"resize\"; event: E; startX: number; startY: number; grab: number; duration: number; dayIndex: number; top: number; bottom: number; moved: boolean; }"
+  ]
  }
 }

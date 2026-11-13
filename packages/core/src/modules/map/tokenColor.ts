@@ -18,3 +18,13 @@ export function tokenColor(variable: string, fallback = "rgb(128, 128, 128)"): s
   const [r, g, b, a] = context.getImageData(0, 0, 1, 1).data;
   return a === 255 ? `rgb(${r}, ${g}, ${b})` : `rgba(${r}, ${g}, ${b}, ${(a / 255).toFixed(3)})`;
 }
+
+/**
+ * The fill and ink variables of a map tone. The brand is its colour step, not
+ * `--brand-solid-strong`: with `solid="contrast"` that is the neutral ink
+ * (white on dark, grey on light), so brand pins and areas lost their colour.
+ */
+export function toneVars(tone: string): { solid: string; onSolid: string } {
+  if (tone === "brand") return { solid: "--function-brand-500", onSolid: "--static-white" };
+  return { solid: `--${tone}-solid-strong`, onSolid: `--${tone}-on-solid-strong` };
+}

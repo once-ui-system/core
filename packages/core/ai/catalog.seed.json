@@ -14,15 +14,35 @@
     "tags": ["content", "marketing", "disclosure"],
     "pairsWith": ["Column", "Text", "Heading"]
   },
+  "AccountSettings": {
+    "purpose": "Settings: photo, name, email via an AccountAdapter",
+    "tags": ["settings", "auth"],
+    "pairsWith": ["SettingsLayout", "SecuritySettings"]
+  },
   "AdapterProvider": {
     "purpose": "The app's link and image components for every Once UI link and image; core/next's LayoutProvider installs Next's",
     "tags": ["provider"],
     "pairsWith": ["LayoutProvider"]
   },
+  "AlarmList": {
+    "purpose": "Alarms in working order with priority, state in words and Acknowledge",
+    "tags": ["data", "feedback"],
+    "pairsWith": ["Annunciator", "Button"]
+  },
+  "AlarmMark": {
+    "purpose": "Alarm priority as a numbered shape that reads without colour",
+    "tags": ["data", "feedback"],
+    "pairsWith": ["AlarmList", "Annunciator"]
+  },
   "Animation": {
     "purpose": "Preset enter/exit animation (fade, scale, slide, blur) on hover, click or a controlled trigger",
     "tags": ["effect", "motion", "overlay"],
     "pairsWith": ["HoverCard", "Column"]
+  },
+  "Annunciator": {
+    "purpose": "Alarm panel: a tile per point, lit by state, press to acknowledge",
+    "tags": ["data", "feedback"],
+    "pairsWith": ["AlarmList", "AlarmMark"]
   },
   "Arrow": {
     "purpose": "Small arrow that slides in while its trigger element is hovered, on a card or link",
@@ -79,6 +99,11 @@
     "purpose": "Action or link button with variants, sizes, prefix/suffix icons and a loading state",
     "tags": ["action", "basics"],
     "pairsWith": ["Icon", "SmartLink", "Row"]
+  },
+  "Calendar": {
+    "purpose": "Month/week/day of events, drag to book",
+    "tags": ["calendar", "schedule"],
+    "pairsWith": ["Dialog"]
   },
   "Card": {
     "purpose": "Interactive surface — a clickable or linked panel with hover feedback; requires href or onClick",
@@ -151,6 +176,11 @@
     "purpose": "Before/after comparison: two images or panes split by a draggable divider",
     "tags": ["media", "marketing"],
     "pairsWith": ["Column", "Media"]
+  },
+  "ConfirmButton": {
+    "purpose": "Button for hard-to-undo actions: press twice or hold to confirm",
+    "tags": ["action", "form"],
+    "pairsWith": ["Button", "Dialog"]
   },
   "ContactSection": {
     "purpose": "Site section: contact details as links",
@@ -454,13 +484,102 @@
     "tags": ["ai", "chat", "decoration"],
     "pairsWith": ["VoiceVisualizer", "WorkingIndicator"]
   },
+  "Canvas": {
+    "purpose": "Infinite pan/zoom canvas for editors; CanvasItem, TransformHandles, SnapGuides",
+    "tags": ["canvas", "editor", "design"],
+    "pairsWith": ["SplitView", "ToggleButton"]
+  },
+  "CanvasItem": { "purpose": "Places content on a Canvas in world units", "tags": ["canvas"] },
+  "MascotPanel": {
+    "purpose": "Character designer for Mascot, editing a stored MascotDesign; or compose MascotPanelRoot and its parts",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["Mascot", "MascotPanelRoot"]
+  },
+  "MascotPanelAccessories": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel group: accessory tiles (several at once) and one accessory color; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelActions": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel buttons: randomize, reset, copy JSON or JSX, SVG and PNG; `exports` adds more; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelBody": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel group: color, roundness, width and surface; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelColor": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel row: brand, accent, neutral or custom body color; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelEyes": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel group: eye shape, size, spacing, height and color; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelFace": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel group: mouth, brows and cheeks; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelMotion": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel group: personality (calm, default, bouncy); inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelPreview": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel group: live Mascot with state and mood to try, and the actions; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "MascotPanelRoot": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel state, labels and layout; holds the MascotDesign its parts edit",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanel", "Mascot"]
+  },
+  "MascotPanelWorking": {
+    "partOf": "MascotPanel",
+    "purpose": "MascotPanel group: none, cube or d20 while thinking, with sides and face; inside a MascotPanelRoot",
+    "tags": ["ai", "settings"],
+    "pairsWith": ["MascotPanelRoot"]
+  },
+  "TransformHandles": {
+    "purpose": "Resize and rotate handles for a canvas selection",
+    "tags": ["canvas"]
+  },
+  "SnapGuides": { "purpose": "Alignment lines and gaps from snapRect", "tags": ["canvas"] },
+  "SelectionBox": { "purpose": "Drag-to-select box on a Canvas", "tags": ["canvas"] },
+  "CanvasAnchor": { "purpose": "Screen-sized content pinned to a world point", "tags": ["canvas"] },
+  "CanvasOverlay": { "purpose": "Screen-space layer over a Canvas", "tags": ["canvas"] },
   "Map": {
-    "purpose": "Themed map on free tiles with React markers and a controlled viewport (needs maplibre-gl)",
+    "purpose": "Themed map on free tiles, React markers (needs maplibre-gl)",
     "tags": ["map", "location", "list"],
     "pairsWith": ["MapMarkers", "MapPin", "MapPopup"]
   },
+  "MapArea": {
+    "purpose": "Polygon or GeoJSON zones",
+    "tags": ["map"],
+    "pairsWith": ["Map"]
+  },
   "MapCircle": {
-    "purpose": "Area in metres, e.g. an approximate address",
+    "purpose": "Area in metres, e.g. a rough address",
+    "tags": ["map", "location"],
+    "pairsWith": ["Map", "MapMarker"]
+  },
+  "MapRoute": {
+    "purpose": "Route line, solid up to progress",
     "tags": ["map", "location"],
     "pairsWith": ["Map", "MapMarker"]
   },
@@ -640,10 +759,25 @@
     "tags": ["form", "auth"],
     "pairsWith": ["Dialog", "Column", "Button"]
   },
+  "OrganizationSettings": {
+    "purpose": "Settings: org logo, name, leave or delete via an adapter",
+    "tags": ["settings"],
+    "pairsWith": ["SettingsLayout"]
+  },
   "Pagination": {
     "purpose": "Page buttons in a nav landmark with previous/next, ellipses and an optional per-page select",
     "tags": ["navigation", "data"],
     "pairsWith": ["Table", "Row"]
+  },
+  "PeerCursor": {
+    "purpose": "Collaborator's live pointer with name label, gliding",
+    "tags": ["collaboration", "feedback"],
+    "pairsWith": ["PeerCursors"]
+  },
+  "PeerCursors": {
+    "purpose": "Collaborators' pointers from any realtime source; usePeerPointer sends yours",
+    "tags": ["collaboration"],
+    "pairsWith": ["PeerCursor", "AvatarGroup"]
   },
   "ParticleFx": {
     "purpose": "Drifting particles that can react to the pointer, as an ambient layer",
@@ -705,11 +839,41 @@
     "tags": ["effect", "motion"],
     "pairsWith": ["useInViewport", "Grid", "Column"]
   },
+  "RichTextEditor": {
+    "purpose": "Formatted text field (bold, headings, lists, links) with an HTML value",
+    "tags": ["form"],
+    "pairsWith": ["Field", "Form", "Button"]
+  },
   "Row": {
     "purpose": "Horizontal flex layout — default direction row",
     "tags": ["layout", "basics"],
     "preferOver": "Flex with direction=\"row\"",
     "pairsWith": ["Column", "Grid", "Text", "Button"]
+  },
+  "Scene": {
+    "purpose": "Themed 3D viewport: orbit or turntable, studio lights, floor shadow (needs three)",
+    "tags": ["3d", "media", "decoration"],
+    "pairsWith": ["SceneMesh", "SceneGroup", "SceneLabel"]
+  },
+  "SceneGroup": {
+    "purpose": "3D children that move together; ref to animate",
+    "tags": ["3d"],
+    "pairsWith": ["Scene", "SceneMesh"]
+  },
+  "SceneLabel": {
+    "purpose": "HTML pinned to a 3D point",
+    "tags": ["3d", "overlay"],
+    "pairsWith": ["Scene", "Tag", "Card"]
+  },
+  "SceneMesh": {
+    "purpose": "3D shape in theme colours",
+    "tags": ["3d"],
+    "pairsWith": ["Scene", "SceneGroup"]
+  },
+  "SceneModel": {
+    "purpose": "glTF model, optionally in a theme colour",
+    "tags": ["3d", "media"],
+    "pairsWith": ["Scene", "SceneLabel"]
   },
   "Schema": {
     "purpose": "Schema.org JSON-LD script for a page, article or organization",
@@ -720,6 +884,11 @@
     "purpose": "Scrolling row with arrows and fades; track props make a carousel track, auto a marquee (2.x AutoScroll)",
     "tags": ["layout"],
     "pairsWith": ["Row", "Tag", "Logo", "Card"]
+  },
+  "Schematic": {
+    "purpose": "Process schematic from data: pumps, valves, vessels and flow lines",
+    "tags": ["data"],
+    "pairsWith": ["AlarmList", "LineChart"]
   },
   "ScrollLock": {
     "purpose": "Freezes page scroll while enabled, keeping one referenced region scrollable",
@@ -751,10 +920,20 @@
     "tags": ["marketing"],
     "pairsWith": ["HeroSection"]
   },
+  "SecuritySettings": {
+    "purpose": "Settings: password, 2FA, devices, deletion via an AccountAdapter",
+    "tags": ["settings", "auth"],
+    "pairsWith": ["SettingsLayout", "AccountSettings"]
+  },
   "SegmentedControl": {
     "purpose": "Pick one of 2–5 options from a row of buttons (billing period, view mode)",
     "tags": ["control", "dashboard"],
     "pairsWith": ["Row", "Grid"]
+  },
+  "Combobox": {
+    "purpose": "Free-text field with suggestions",
+    "tags": ["form"],
+    "pairsWith": ["Select"]
   },
   "Select": {
     "purpose": "Dropdown select for one or many options, with optional search",
@@ -766,10 +945,56 @@
     "tags": ["settings", "form"],
     "pairsWith": ["Switch", "Select", "Slider", "Tooltip"]
   },
+  "SettingsLabelsProvider": {
+    "partOf": "SettingsLayout",
+    "purpose": "One labels object for the settings blocks below it (settingsLabelsHu: Hungarian)",
+    "tags": ["settings"],
+    "pairsWith": ["SettingsLayout"]
+  },
+  "SettingsLayout": {
+    "purpose": "Settings page: section tabs around the settings blocks",
+    "tags": ["settings", "navigation"],
+    "pairsWith": ["AccountSettings", "SecuritySettings"]
+  },
   "ShineFx": {
     "purpose": "Shine sweeping across text; speed in ms",
     "tags": ["effect", "marketing"],
     "pairsWith": ["Heading", "Text"]
+  },
+  "Sidebar": {
+    "purpose": "Resizable app sidebar that folds to an icon rail and is a drawer on phones",
+    "tags": ["navigation", "layout"],
+    "pairsWith": ["SidebarContent", "SidebarHeader", "SidebarFooter", "SidebarTrigger", "Nav"]
+  },
+  "SidebarContent": {
+    "partOf": "Sidebar",
+    "purpose": "Scrolling middle of a Sidebar, usually holding a Nav",
+    "tags": ["navigation", "layout"],
+    "pairsWith": ["Sidebar", "Nav"]
+  },
+  "SidebarFooter": {
+    "partOf": "Sidebar",
+    "purpose": "Bottom of a Sidebar that does not scroll: the account, help or feedback",
+    "tags": ["navigation", "layout"],
+    "pairsWith": ["Sidebar", "User"]
+  },
+  "SidebarHeader": {
+    "partOf": "Sidebar",
+    "purpose": "Top of a Sidebar that does not scroll: a workspace switcher or logo",
+    "tags": ["navigation", "layout"],
+    "pairsWith": ["Sidebar", "SidebarContent"]
+  },
+  "SidebarProvider": {
+    "partOf": "Sidebar",
+    "purpose": "Holds a Sidebar's width and collapse for triggers and useSidebar outside it; persists them in a cookie",
+    "tags": ["navigation", "layout"],
+    "pairsWith": ["Sidebar", "SidebarTrigger"]
+  },
+  "SidebarTrigger": {
+    "partOf": "Sidebar",
+    "purpose": "Button that folds the Sidebar, or opens its drawer on phones",
+    "tags": ["navigation"],
+    "pairsWith": ["SidebarProvider", "Sidebar"]
   },
   "Skeleton": {
     "purpose": "Loading placeholder shape (line, block, circle) with a staggerable delay in ms",
@@ -822,6 +1047,11 @@
     "purpose": "Site section: a few large figures",
     "tags": ["marketing"],
     "pairsWith": ["Sections"]
+  },
+  "StatTile": {
+    "purpose": "Key number with its change",
+    "tags": ["dashboard"],
+    "pairsWith": ["Grid"]
   },
   "StatusIndicator": {
     "purpose": "Small status dot (online, error, warning) by palette hue; `pulse` adds a pulsing ring for a live state",

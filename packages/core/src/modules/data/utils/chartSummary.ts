@@ -1,6 +1,14 @@
-import type { DataPoint, DateConfig, SeriesConfig, ValueFormat } from "../interfaces.js";
+import type {
+  ChartAnnotation,
+  ChartThreshold,
+  DataPoint,
+  DateConfig,
+  SeriesConfig,
+  ValueFormat,
+} from "../interfaces.js";
 import { chartSeries, DEFAULT_CHART_LOCALE, makeValueFormatter } from "./chartSeries.js";
 import { formatDate } from "./formatDate.js";
+import { marksSummary } from "./marks.js";
 
 /**
  * What a chart's summary is written from: the same data, series, x key and
@@ -18,6 +26,10 @@ export interface ChartSummaryInput {
   date?: DateConfig;
   /** A plain-text title, put in front of the summary. */
   title?: string;
+  /** Limits: the summary says which series cross them, how often and first when. */
+  thresholds?: readonly ChartThreshold[];
+  /** Moments marked on the x axis, named at the end. */
+  annotations?: readonly ChartAnnotation[];
 }
 
 /** The hidden table a chart carries: the x values as rows, one column per series. */
@@ -120,6 +132,18 @@ export function chartSummary(input: ChartSummaryInput): string {
     );
   });
   if (series.length > MAX_SERIES) sentences.push(`and ${series.length - MAX_SERIES} more series`);
+  sentences.push(
+    ...marksSummary({
+      rows: input.data,
+      series,
+      thresholds: input.thresholds,
+      annotations: input.annotations,
+      xKey,
+      x,
+      write: formats[0] ?? makeValueFormatter(input.valueFormat, locale),
+      maxSeries: MAX_SERIES,
+    }),
+  );
 
   return `${lead ? `${lead}. ` : ""}${sentences.join(". ")}.`;
 }

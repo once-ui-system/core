@@ -3,12 +3,15 @@
 import type React from "react";
 import { type ReactNode, useEffect, useImperativeHandle, useRef } from "react";
 import type { IconName } from "../icons.js";
+import { SidebarRailContext } from "../internal/sidebarRail.js";
 import { useControllableState } from "../internal/useControllableState.js";
 import { Accordion } from "./Accordion.js";
 import { Column } from "./Column.js";
+import { Dropdown } from "./Dropdown.js";
 import { Icon } from "./Icon.js";
 import { Line } from "./Line.js";
-import { useNavStyle } from "./Nav.js";
+import { Nav, NavSection, useNavStyle } from "./Nav.js";
+import { NavItem } from "./NavItem.js";
 import { Row } from "./Row.js";
 
 interface NavGroupProps extends Omit<React.ComponentProps<typeof Row>, "title" | "onToggle"> {
@@ -43,6 +46,10 @@ interface NavGroupProps extends Omit<React.ComponentProps<typeof Row>, "title" |
  *
  * A closed group opens when a Sortable row is held over it, so a row can be
  * dragged into it.
+ *
+ * In a collapsed Nav (an icon rail) the group is its icon, and a click opens
+ * its rows in a menu beside it, so they stay one click away without the rail
+ * opening.
  */
 const NavGroup = ({
   ref,
@@ -55,7 +62,7 @@ const NavGroup = ({
   selected = false,
   ...row
 }: NavGroupProps) => {
-  const { variant, rail, sizes, collapsed } = useNavStyle();
+  const { variant, rail, sizes, collapsed, density, tone } = useNavStyle();
   const emphasis = variant !== "solid";
   const [openState, setOpen] = useControllableState({
     value: open,
@@ -78,6 +85,32 @@ const NavGroup = ({
     el.addEventListener("sortableopen", openForDrag);
     return () => el.removeEventListener("sortableopen", openForDrag);
   }, []);
+
+  if (collapsed) {
+    return (
+      <Row ref={rootRef} fillWidth data-sortable-open="" {...row}>
+        <Dropdown
+          placement="right-start"
+          minWidth={192}
+          style={{ width: "100%" }}
+          trigger={<NavItem icon={icon} label={label} selected={selected} />}
+        >
+          {/* The menu is a Nav of its own at full labels, whatever the rail is. */}
+          <SidebarRailContext.Provider value={null}>
+            <Nav
+              density={density}
+              variant={variant}
+              tone={tone}
+              padding="4"
+              aria-label={typeof label === "string" ? label : undefined}
+            >
+              <NavSection label={label}>{children}</NavSection>
+            </Nav>
+          </SidebarRailContext.Provider>
+        </Dropdown>
+      </Row>
+    );
+  }
 
   return (
     <Row

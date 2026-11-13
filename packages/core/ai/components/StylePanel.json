@@ -11,6 +11,7 @@
   "StyleProps"
  ],
  "props": {
+  "size": "StylePanelSize",
   "visibility": "StylePanelVisibility",
   "value": "StylePanelRootProps[\"value\"]",
   "onValueChange": "StylePanelRootProps[\"onValueChange\"]",
@@ -161,8 +162,8 @@
   ],
   "BorderStyle": [
    "rounded",
-   "playful",
    "conservative",
+   "playful",
    "sharp"
   ],
   "ChartMode": [
@@ -176,9 +177,9 @@
    "spacious"
   ],
   "NeutralColor": [
+   "slate",
    "sand",
    "gray",
-   "slate",
    "rose",
    "mint",
    "dusk"
@@ -191,6 +192,7 @@
    "105"
   ],
   "Schemes": [
+   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -202,8 +204,7 @@
    "moss",
    "green",
    "emerald",
-   "aqua",
-   "cyan"
+   "aqua"
   ],
   "ScrollerLabels": {
    "previous": "string",
@@ -211,7 +212,8 @@
   },
   "SolidStyle": [
    "flat",
-   "plastic"
+   "plastic",
+   "glow"
   ],
   "SolidType": [
    "color",
@@ -281,6 +283,10 @@
   "StylePanelSchemeRow": [
    "brand",
    "accent"
+  ],
+  "StylePanelSize": [
+   "s",
+   "m"
   ],
   "StylePanelSwatchLabels": {
    "shape": "(name: string) => string",

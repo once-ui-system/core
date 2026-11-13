@@ -3,6 +3,7 @@
  "group": "data",
  "importFrom": "@once-ui-system/core/data",
  "mixins": [
+  "ChartMarksProps",
   "ChartProps",
   "CommonProps",
   "DisplayProps",
@@ -35,6 +36,7 @@
   "Column"
  ],
  "mixinsRef": [
+  "ChartMarksProps",
   "ChartProps",
   "CommonProps",
   "DisplayProps",
@@ -45,6 +47,11 @@
  ],
  "tokensRef": "see tokens.json",
  "resolvedMixins": {
+  "ChartMarksProps": {
+   "thresholds": "readonly ChartThreshold[]",
+   "annotations": "readonly ChartAnnotation[]",
+   "yDomain": "[number, number]"
+  },
   "ChartProps": {
    "title": "React.ReactNode",
    "description": "React.ReactNode",

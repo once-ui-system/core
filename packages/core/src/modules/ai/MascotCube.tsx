@@ -159,6 +159,7 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
     sides,
     face,
     accessory: _accessory,
+    accessoryColor: _accessoryColor,
     lookAt = "pointer",
     level,
     source,

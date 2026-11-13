@@ -30,6 +30,23 @@ import { numericSpacingStyle } from "../utils/spacingStyle.js";
 export type ServerFlexProps = FlexLayoutProps &
   Omit<HTMLAttributes<HTMLElement>, keyof FlexLayoutProps> & { as?: ElementType };
 
+/**
+ * The style without its unset keys, or `undefined` when none is set. React
+ * writes every key of a style object on mount, an unset one as an empty
+ * string, so the ~25 keys a Flex resolves cost ~25 DOM style writes per
+ * element even when all of them are unset.
+ */
+function definedStyle(style: CSSProperties): CSSProperties | undefined {
+  let out: Record<string, unknown> | undefined;
+  for (const key in style) {
+    const value = (style as Record<string, unknown>)[key];
+    if (value === undefined || value === null) continue;
+    out ??= {};
+    out[key] = value;
+  }
+  return out as CSSProperties | undefined;
+}
+
 const ServerFlex = ({
   ref,
   as: Component = "div",
@@ -322,120 +339,125 @@ const ServerFlex = ({
     ...variantClasses,
   );
 
-  classes +=
-    " " +
-    classNames(
-      ...spacingClasses("xl", cascadedXl),
-      ...spacingClasses("l", cascadedL),
-      ...spacingClasses("m", cascadedM),
-      ...spacingClasses("s", cascadedS),
-      ...spacingClasses("xs", cascadedXs),
-      // Offsets cascade with the rest. Only a static step is a class
-      // (`.m-top-16`); a px number or a CSS length is inline, on ClientFlex.
-      ...offsetClasses("xl", cascadedXl),
-      ...offsetClasses("l", cascadedL),
-      ...offsetClasses("m", cascadedM),
-      ...offsetClasses("s", cascadedS),
-      ...offsetClasses("xs", cascadedXs),
-      cascadedXl?.position && `xl-position-${cascadedXl.position}`,
-      cascadedL?.position && `l-position-${cascadedL.position}`,
-      cascadedM?.position && `m-position-${cascadedM.position}`,
-      cascadedS?.position && `s-position-${cascadedS.position}`,
-      cascadedXs?.position && `xs-position-${cascadedXs.position}`,
-      cascadedXl?.hide === true && "xl-flex-hide",
-      cascadedXl?.hide === false && hiddenAbove.xl && "xl-flex-show",
-      cascadedL?.hide === true && "l-flex-hide",
-      cascadedL?.hide === false && hiddenAbove.l && "l-flex-show",
-      cascadedM?.hide === true && "m-flex-hide",
-      cascadedM?.hide === false && hiddenAbove.m && "m-flex-show",
-      cascadedS?.hide === true && "s-flex-hide",
-      cascadedS?.hide === false && hiddenAbove.s && "s-flex-show",
-      cascadedXs?.hide === true && "xs-flex-hide",
-      cascadedXs?.hide === false && hiddenAbove.xs && "xs-flex-show",
-      xl?.direction && `xl-flex-${xl.direction}`,
-      l?.direction && `l-flex-${l.direction}`,
-      m?.direction && `m-flex-${m.direction}`,
-      s?.direction && `s-flex-${s.direction}`,
-      xs?.direction && `xs-flex-${xs.direction}`,
-      cascadedL?.horizontal &&
-        (cascadedL?.direction === "row" ||
-        cascadedL?.direction === "row-reverse" ||
-        cascadedL?.direction === undefined
-          ? `l-justify-${cascadedL.horizontal}`
-          : `l-align-${cascadedL.horizontal}`),
-      cascadedL?.vertical && crossAxisClass("l-", cascadedL.vertical, cascadedL.direction),
-      cascadedM?.horizontal &&
-        (cascadedM?.direction === "row" ||
-        cascadedM?.direction === "row-reverse" ||
-        cascadedM?.direction === undefined
-          ? `m-justify-${cascadedM.horizontal}`
-          : `m-align-${cascadedM.horizontal}`),
-      cascadedM?.vertical && crossAxisClass("m-", cascadedM.vertical, cascadedM.direction),
-      cascadedS?.horizontal &&
-        (cascadedS?.direction === "row" ||
-        cascadedS?.direction === "row-reverse" ||
-        cascadedS?.direction === undefined
-          ? `s-justify-${cascadedS.horizontal}`
-          : `s-align-${cascadedS.horizontal}`),
-      cascadedS?.vertical && crossAxisClass("s-", cascadedS.vertical, cascadedS.direction),
-      cascadedXs?.horizontal &&
-        (cascadedXs?.direction === "row" ||
-        cascadedXs?.direction === "row-reverse" ||
-        cascadedXs?.direction === undefined
-          ? `xs-justify-${cascadedXs.horizontal}`
-          : `xs-align-${cascadedXs.horizontal}`),
-      cascadedXs?.vertical && crossAxisClass("xs-", cascadedXs.vertical, cascadedXs.direction),
-      // Additional class-based properties. `xl` leads, as it does for spacing:
-      // without it an `xl={{ overflow }}` reached every narrower step and
-      // missed its own.
-      cascadedXl?.overflow && `xl-overflow-${cascadedXl.overflow}`,
-      cascadedL?.overflow && `l-overflow-${cascadedL.overflow}`,
-      cascadedM?.overflow && `m-overflow-${cascadedM.overflow}`,
-      cascadedS?.overflow && `s-overflow-${cascadedS.overflow}`,
-      cascadedXs?.overflow && `xs-overflow-${cascadedXs.overflow}`,
-      cascadedXl?.overflowX && `xl-overflow-x-${cascadedXl.overflowX}`,
-      cascadedL?.overflowX && `l-overflow-x-${cascadedL.overflowX}`,
-      cascadedM?.overflowX && `m-overflow-x-${cascadedM.overflowX}`,
-      cascadedS?.overflowX && `s-overflow-x-${cascadedS.overflowX}`,
-      cascadedXs?.overflowX && `xs-overflow-x-${cascadedXs.overflowX}`,
-      cascadedXl?.overflowY && `xl-overflow-y-${cascadedXl.overflowY}`,
-      cascadedL?.overflowY && `l-overflow-y-${cascadedL.overflowY}`,
-      cascadedM?.overflowY && `m-overflow-y-${cascadedM.overflowY}`,
-      cascadedS?.overflowY && `s-overflow-y-${cascadedS.overflowY}`,
-      cascadedXs?.overflowY && `xs-overflow-y-${cascadedXs.overflowY}`,
-      cascadedL?.wrap && `l-flex-${cascadedL.wrap}`,
-      cascadedM?.wrap && `m-flex-${cascadedM.wrap}`,
-      cascadedS?.wrap && `s-flex-${cascadedS.wrap}`,
-      cascadedXs?.wrap && `xs-flex-${cascadedXs.wrap}`,
-      cascadedL?.flex && `l-flex-${cascadedL.flex}`,
-      cascadedM?.flex && `m-flex-${cascadedM.flex}`,
-      cascadedS?.flex && `s-flex-${cascadedS.flex}`,
-      cascadedXs?.flex && `xs-flex-${cascadedXs.flex}`,
-      cascadedL?.align && `l-align-${cascadedL.align}`,
-      cascadedM?.align && `m-align-${cascadedM.align}`,
-      cascadedS?.align && `s-align-${cascadedS.align}`,
-      cascadedXs?.align && `xs-align-${cascadedXs.align}`,
-      cascadedL?.scrollbar && `l-scrollbar-${cascadedL.scrollbar}`,
-      cascadedM?.scrollbar && `m-scrollbar-${cascadedM.scrollbar}`,
-      cascadedS?.scrollbar && `s-scrollbar-${cascadedS.scrollbar}`,
-      cascadedXs?.scrollbar && `xs-scrollbar-${cascadedXs.scrollbar}`,
-      cascadedL?.pointerEvents && `l-pointer-events-${cascadedL.pointerEvents}`,
-      cascadedM?.pointerEvents && `m-pointer-events-${cascadedM.pointerEvents}`,
-      cascadedS?.pointerEvents && `s-pointer-events-${cascadedS.pointerEvents}`,
-      cascadedXs?.pointerEvents && `xs-pointer-events-${cascadedXs.pointerEvents}`,
-      cascadedL?.opacity !== undefined && `l-opacity-${cascadedL.opacity}`,
-      cascadedM?.opacity !== undefined && `m-opacity-${cascadedM.opacity}`,
-      cascadedS?.opacity !== undefined && `s-opacity-${cascadedS.opacity}`,
-      cascadedXs?.opacity !== undefined && `xs-opacity-${cascadedXs.opacity}`,
-      cascadedL?.zIndex !== undefined && `l-z-index-${cascadedL.zIndex}`,
-      cascadedM?.zIndex !== undefined && `m-z-index-${cascadedM.zIndex}`,
-      cascadedS?.zIndex !== undefined && `s-z-index-${cascadedS.zIndex}`,
-      cascadedXs?.zIndex !== undefined && `xs-z-index-${cascadedXs.zIndex}`,
-      cascadedL?.transition && `l-transition-${cascadedL.transition}`,
-      cascadedM?.transition && `m-transition-${cascadedM.transition}`,
-      cascadedS?.transition && `s-transition-${cascadedS.transition}`,
-      cascadedXs?.transition && `xs-transition-${cascadedXs.transition}`,
-    );
+  // Without a breakpoint object every cascaded step holds only `direction`,
+  // which writes no class here, so the whole pass is skipped: it is most of a
+  // Flex's render cost, and most Flexes have no breakpoint object.
+  if (xl || l || m || s || xs) {
+    classes +=
+      " " +
+      classNames(
+        ...spacingClasses("xl", cascadedXl),
+        ...spacingClasses("l", cascadedL),
+        ...spacingClasses("m", cascadedM),
+        ...spacingClasses("s", cascadedS),
+        ...spacingClasses("xs", cascadedXs),
+        // Offsets cascade with the rest. Only a static step is a class
+        // (`.m-top-16`); a px number or a CSS length is inline, on ClientFlex.
+        ...offsetClasses("xl", cascadedXl),
+        ...offsetClasses("l", cascadedL),
+        ...offsetClasses("m", cascadedM),
+        ...offsetClasses("s", cascadedS),
+        ...offsetClasses("xs", cascadedXs),
+        cascadedXl?.position && `xl-position-${cascadedXl.position}`,
+        cascadedL?.position && `l-position-${cascadedL.position}`,
+        cascadedM?.position && `m-position-${cascadedM.position}`,
+        cascadedS?.position && `s-position-${cascadedS.position}`,
+        cascadedXs?.position && `xs-position-${cascadedXs.position}`,
+        cascadedXl?.hide === true && "xl-flex-hide",
+        cascadedXl?.hide === false && hiddenAbove.xl && "xl-flex-show",
+        cascadedL?.hide === true && "l-flex-hide",
+        cascadedL?.hide === false && hiddenAbove.l && "l-flex-show",
+        cascadedM?.hide === true && "m-flex-hide",
+        cascadedM?.hide === false && hiddenAbove.m && "m-flex-show",
+        cascadedS?.hide === true && "s-flex-hide",
+        cascadedS?.hide === false && hiddenAbove.s && "s-flex-show",
+        cascadedXs?.hide === true && "xs-flex-hide",
+        cascadedXs?.hide === false && hiddenAbove.xs && "xs-flex-show",
+        xl?.direction && `xl-flex-${xl.direction}`,
+        l?.direction && `l-flex-${l.direction}`,
+        m?.direction && `m-flex-${m.direction}`,
+        s?.direction && `s-flex-${s.direction}`,
+        xs?.direction && `xs-flex-${xs.direction}`,
+        cascadedL?.horizontal &&
+          (cascadedL?.direction === "row" ||
+          cascadedL?.direction === "row-reverse" ||
+          cascadedL?.direction === undefined
+            ? `l-justify-${cascadedL.horizontal}`
+            : `l-align-${cascadedL.horizontal}`),
+        cascadedL?.vertical && crossAxisClass("l-", cascadedL.vertical, cascadedL.direction),
+        cascadedM?.horizontal &&
+          (cascadedM?.direction === "row" ||
+          cascadedM?.direction === "row-reverse" ||
+          cascadedM?.direction === undefined
+            ? `m-justify-${cascadedM.horizontal}`
+            : `m-align-${cascadedM.horizontal}`),
+        cascadedM?.vertical && crossAxisClass("m-", cascadedM.vertical, cascadedM.direction),
+        cascadedS?.horizontal &&
+          (cascadedS?.direction === "row" ||
+          cascadedS?.direction === "row-reverse" ||
+          cascadedS?.direction === undefined
+            ? `s-justify-${cascadedS.horizontal}`
+            : `s-align-${cascadedS.horizontal}`),
+        cascadedS?.vertical && crossAxisClass("s-", cascadedS.vertical, cascadedS.direction),
+        cascadedXs?.horizontal &&
+          (cascadedXs?.direction === "row" ||
+          cascadedXs?.direction === "row-reverse" ||
+          cascadedXs?.direction === undefined
+            ? `xs-justify-${cascadedXs.horizontal}`
+            : `xs-align-${cascadedXs.horizontal}`),
+        cascadedXs?.vertical && crossAxisClass("xs-", cascadedXs.vertical, cascadedXs.direction),
+        // Additional class-based properties. `xl` leads, as it does for spacing:
+        // without it an `xl={{ overflow }}` reached every narrower step and
+        // missed its own.
+        cascadedXl?.overflow && `xl-overflow-${cascadedXl.overflow}`,
+        cascadedL?.overflow && `l-overflow-${cascadedL.overflow}`,
+        cascadedM?.overflow && `m-overflow-${cascadedM.overflow}`,
+        cascadedS?.overflow && `s-overflow-${cascadedS.overflow}`,
+        cascadedXs?.overflow && `xs-overflow-${cascadedXs.overflow}`,
+        cascadedXl?.overflowX && `xl-overflow-x-${cascadedXl.overflowX}`,
+        cascadedL?.overflowX && `l-overflow-x-${cascadedL.overflowX}`,
+        cascadedM?.overflowX && `m-overflow-x-${cascadedM.overflowX}`,
+        cascadedS?.overflowX && `s-overflow-x-${cascadedS.overflowX}`,
+        cascadedXs?.overflowX && `xs-overflow-x-${cascadedXs.overflowX}`,
+        cascadedXl?.overflowY && `xl-overflow-y-${cascadedXl.overflowY}`,
+        cascadedL?.overflowY && `l-overflow-y-${cascadedL.overflowY}`,
+        cascadedM?.overflowY && `m-overflow-y-${cascadedM.overflowY}`,
+        cascadedS?.overflowY && `s-overflow-y-${cascadedS.overflowY}`,
+        cascadedXs?.overflowY && `xs-overflow-y-${cascadedXs.overflowY}`,
+        cascadedL?.wrap && `l-flex-${cascadedL.wrap}`,
+        cascadedM?.wrap && `m-flex-${cascadedM.wrap}`,
+        cascadedS?.wrap && `s-flex-${cascadedS.wrap}`,
+        cascadedXs?.wrap && `xs-flex-${cascadedXs.wrap}`,
+        cascadedL?.flex && `l-flex-${cascadedL.flex}`,
+        cascadedM?.flex && `m-flex-${cascadedM.flex}`,
+        cascadedS?.flex && `s-flex-${cascadedS.flex}`,
+        cascadedXs?.flex && `xs-flex-${cascadedXs.flex}`,
+        cascadedL?.align && `l-align-${cascadedL.align}`,
+        cascadedM?.align && `m-align-${cascadedM.align}`,
+        cascadedS?.align && `s-align-${cascadedS.align}`,
+        cascadedXs?.align && `xs-align-${cascadedXs.align}`,
+        cascadedL?.scrollbar && `l-scrollbar-${cascadedL.scrollbar}`,
+        cascadedM?.scrollbar && `m-scrollbar-${cascadedM.scrollbar}`,
+        cascadedS?.scrollbar && `s-scrollbar-${cascadedS.scrollbar}`,
+        cascadedXs?.scrollbar && `xs-scrollbar-${cascadedXs.scrollbar}`,
+        cascadedL?.pointerEvents && `l-pointer-events-${cascadedL.pointerEvents}`,
+        cascadedM?.pointerEvents && `m-pointer-events-${cascadedM.pointerEvents}`,
+        cascadedS?.pointerEvents && `s-pointer-events-${cascadedS.pointerEvents}`,
+        cascadedXs?.pointerEvents && `xs-pointer-events-${cascadedXs.pointerEvents}`,
+        cascadedL?.opacity !== undefined && `l-opacity-${cascadedL.opacity}`,
+        cascadedM?.opacity !== undefined && `m-opacity-${cascadedM.opacity}`,
+        cascadedS?.opacity !== undefined && `s-opacity-${cascadedS.opacity}`,
+        cascadedXs?.opacity !== undefined && `xs-opacity-${cascadedXs.opacity}`,
+        cascadedL?.zIndex !== undefined && `l-z-index-${cascadedL.zIndex}`,
+        cascadedM?.zIndex !== undefined && `m-z-index-${cascadedM.zIndex}`,
+        cascadedS?.zIndex !== undefined && `s-z-index-${cascadedS.zIndex}`,
+        cascadedXs?.zIndex !== undefined && `xs-z-index-${cascadedXs.zIndex}`,
+        cascadedL?.transition && `l-transition-${cascadedL.transition}`,
+        cascadedM?.transition && `m-transition-${cascadedM.transition}`,
+        cascadedS?.transition && `s-transition-${cascadedS.transition}`,
+        cascadedXs?.transition && `xs-transition-${cascadedXs.transition}`,
+      );
+  }
 
   // A spacing token as well as a number or a CSS unit: `translateY="16"`
   // used to write no transform at all.
@@ -490,7 +512,7 @@ const ServerFlex = ({
       // A button that is a layout box is an action, not a form submit.
       {...(Component === "button" && { type: "button" })}
       className={classes}
-      style={withTokenLengths(combinedStyle)}
+      style={definedStyle(withTokenLengths(combinedStyle))}
       {...cursorProp.attributes}
       {...rest}
       {...themeAttributes({ theme, themeBorder, themeSolid, themeSurface })}

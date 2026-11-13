@@ -30,12 +30,27 @@ describe("Timeline", () => {
     await expectNoAxeViolations(container);
   });
 
-  it("draws a connector before every step but the first and after every step but the last", () => {
+  it("draws a rail between steps, solid up to the last step reached and dashed after it", () => {
     const { container } = render(<Timeline items={items} />, { wrapper });
     const steps = Array.from((container.firstElementChild as HTMLElement).children);
     expect(steps).toHaveLength(3);
-    const linesIn = (step: Element) => (step.firstElementChild as HTMLElement).children.length;
-    expect(steps.map(linesIn)).toEqual([2, 3, 2]);
+    const rails = Array.from(container.querySelectorAll("[data-rail]")).map((rail) =>
+      rail.getAttribute("data-rail"),
+    );
+    // Ordered (reached) -> Shipped (current) -> Delivered (not reached).
+    expect(rails).toEqual(["reached", "upcoming"]);
+  });
+
+  it("marks the current step and leaves a step not reached without a tone", () => {
+    const { container } = render(<Timeline items={items} />, { wrapper });
+    const current = screen.getByText("Shipped").closest('[role="listitem"]');
+    expect(current).toHaveAttribute("aria-current", "step");
+    const nodes = container.querySelectorAll("[class*='node']");
+    expect(Array.from(nodes).map((node) => node.getAttribute("data-tone"))).toEqual([
+      "success",
+      "brand",
+      null,
+    ]);
   });
 
   it("puts the content on the left with alignment=right", () => {

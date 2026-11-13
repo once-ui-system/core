@@ -94,6 +94,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Keyboard shortcut | `useHotkeys("mod+k", fn)` + `Kbd keys="mod+k" label="Search"` + `aria-keyshortcuts` |
 | Screen-reader text, skip link | `VisuallyHidden` (skip link: `<VisuallyHidden as="a" href="#main" focusable>`) |
 | Native attributes | Every component also takes its element's own: `aria-*`, `id`, `role`, `onClick`; `type` on `Button`; `value`, `onChange`, `type` on `Input` |
+| Formatted text (notes, descriptions, replies) | `RichTextEditor` from `/richtext` (HTML value; works in a `Field`), never `contentEditable` or Markdown in a `Textarea` |
 | MDX content | `mdxComponents` / `createMdxComponents` from `/mdx` |
 | Multi-part component | List prop (`items`, `columns`, `options`) for same-shaped data, else plain named parts (`SortableItem`, `StylePanelBrand`); never `Sortable.Item` |
 
@@ -106,6 +107,7 @@ comes from when it is not the root:
 |--------|------|
 | charts, gauges, chart chrome | `@once-ui-system/core/data` |
 | `CodeBlock` | `@once-ui-system/core/code` (needs `prismjs`) |
+| `RichTextEditor` | `@once-ui-system/core/richtext` (needs `@tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extensions`) |
 | `MediaUpload` | `@once-ui-system/core/media` (needs `compressorjs`) |
 | `Map`, `MapMarker(s)`, `MapPin`, `MapPopup`, `MapCircle` | `@once-ui-system/core/map` (needs `maplibre-gl`) |
 | `mdxComponents`, `createMdxComponents`, `Mdx*` elements | `@once-ui-system/core/mdx` (needs `prismjs`) |
@@ -297,7 +299,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - columns: TableColumn<T>[]
 - rows: T[]
 - onRowClick?: (row: T, index: number) => void
-- searchable, columnsMenu, selectable, paginated, showFirstLast, loading, keepRowsWhileLoading, stickyHeader, striped, compact?: boolean = false
+- searchable, columnsMenu, selectable, paginated, showFirstLast, loading, keepRowsWhileLoading, stickyHeader, virtualize, striped, compact?: boolean = false
 - searchPlaceholder?: string = Search...
 - search, aria-label, aria-labelledby?: string
 - defaultSearch?: string = ""
@@ -325,6 +327,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - defaultPerPage?: number = 10
 - perPageOptions?: number[]
 - onPerPageChange?: (perPage: number) => void
+- rowHeight?: number = 49
 - hoverable?: boolean = true
 - labels?: Partial<TableLabels>
 
@@ -332,7 +335,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 Avoid: Passing the same text as label and children — the children are dropped
 - tone?: Tone
-- variant?: "default" | "gradient" | "announce" = default
+- variant?: "default" | "gradient" | "announce" | "solid" = default
 - size?: TShirtSizes
 - label?: string = ""
 - prefixIcon, suffixIcon?: IconName
@@ -560,7 +563,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 type AvatarProps = Avatar props
 type BlendMode = "color" | "screen" | "normal" | "multiply" | "overlay" | "darken" | "lighten" | "difference" | "exclusion" | "hue" | "saturation" | "luminosity" | `color-${"dodge" | "burn"}` | "hard-light" | "soft-light" | "plus-lighter"
 type BlurSize = "s" | "xl" | "l" | "m" | "xs"
-type BorderStyle = "rounded" | "playful" | "conservative" | "sharp"
+type BorderStyle = "rounded" | "conservative" | "playful" | "sharp"
 type BreadcrumbItem = { label: ReactNode; href?: string; prefixIcon?: IconName }
 type BreakpointKey = "s" | "xl" | "l" | "m" | "xs"
 // type ButtonVariant is one of these strings: link ghost subtle primary secondary tertiary
@@ -569,7 +572,7 @@ type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}ch` | 
 type ColorWeight = "strong" | "medium" | "weak"
 type Colors = `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-${"strong" | "medium" | "weak"}` | `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-alpha-${"strong" | "medium" | "weak"}`
 type ColumnHide = Partial<Record<BreakpointKey, boolean>>
-type CursorPresetValue = "rounded" | "soft" | "dot" | "system"
+type CursorPresetValue = "rounded" | "dot" | "system" | "soft"
 type DropdownProps = Dropdown props
 // type FieldSize is one of these strings: s xl l m xs xxs
 // type FlexBreakpointProps: an object of these Flex props, all optional (padding* is padding, paddingX, paddingTop and the rest):
@@ -596,21 +599,22 @@ type ShadowSize = "s" | "xl" | "l" | "m" | "xs"
 type SolidType = "color" | "contrast" | "inverse"
 // type SpacingToken is one of these strings: s xl l m xs 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
 // type StaticSpacingToken is one of these strings: 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
-// type StatusIndicatorScheme is one of these strings: blue indigo violet magenta pink red orange yellow moss green emerald aqua cyan sand gray slate rose mint dusk
+// type StatusIndicatorScheme is one of these strings: slate sand gray rose mint dusk cyan blue indigo violet magenta pink red orange yellow moss green emerald aqua
 type SurfaceStyle = "filled" | "translucent"
 type TShirtSizes = "s" | "xl" | "l" | "m" | "xs"
 type TableAction = { icon: string; label?: string; tooltip?: string; variant?: "primary" | "secondary" | "tertiary" | "ghost"; tone?: Tone; onClick: (row: unknown, index: number) => void; disabled?: (row: unknown, index: number) => boolean }
-type TableColumn = { key: string; header: ReactNode; cell?: (row: T, index: number) => ReactNode; sortable?: boolean; sort?: (a: T, b: T) => number; align?: "left" | "center" | "right"; width?: string; label?: string; filter?: TableColumnFilter<T>; hide?: ColumnHide }
+type TableColumn = { key: string; header: ReactNode; cell?: (row: T, index: number) => ReactNode; sortable?: boolean; sort?: (a: T, b: T) => number; align?: "left" | "center" | "right"; width?: string; label?: string; filter?: TableColumnFilter<T>; hide?: ColumnHide; edit?: TableColumnEdit<T> }
+type TableColumnEdit = { onCommit: (row: T, value: string, index: number) => void; value?: (row: T) => string; type?: "text" | "number"; disabled?: (row: T, index: number) => boolean }
 type TableColumnFilter = { options: { value: string; label: ReactNode }[]; multiple?: boolean; match?: (row: T, value: TableFilterValue) => boolean }
 type TableFilterValue = "string" | "string[]"
 type TableFilters = { [key: string]?: TableFilterValue }
-type TableLabels = { selectAll: string; selectRow: string; pagination: string; search: string; actions: string; filterAll: string; columns: string; noResults: string; noResultsHint: string; clearFilters: string; results: (count: number) => string; previous: string; next: string; first: string; last: string; perPage: string }
+type TableLabels = { selectAll: string; selectRow: string; pagination: string; search: string; actions: string; filterAll: string; columns: string; noResults: string; noResultsHint: string; clearFilters: string; results: (count: number) => string; edit: string; previous: string; next: string; first: string; last: string; perPage: string }
 type TableQuery = { page: number; perPage: number; sort: TableSort | null; search: string; filters: TableFilters }
 type TableSort = { key: string; direction: "asc" | "desc" }
 type TagProps = Tag props
 type TextBreakpointHide = { hide?: boolean }
-type TextType = "body" | "code" | "label" | "heading" | "display"
-type TextVariant = `${"body" | "code" | "label" | "heading" | "display"}-${"strong" | "default" | "normal" | "medium"}-${"xl" | "xs" | "s" | "l" | "m"}`
+type TextType = "body" | "code" | "label" | "display" | "heading"
+type TextVariant = `${"body" | "code" | "label" | "display" | "heading"}-${"strong" | "default" | "normal" | "medium"}-${"xl" | "xs" | "s" | "l" | "m"}`
 type TextWeight = "strong" | "default" | "normal" | "medium"
 type Theme = "dark" | "light" | "system"
 type ThemeProviderState = { theme: Theme; resolvedTheme: "light" | "dark"; setTheme: (theme: Theme) => void }
@@ -641,6 +645,7 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - At s the sidebar hides and a header button opens the same nav in a left Drawer; following a link closes it
 - Breadcrumbs from the route, and the account or workspace switcher as a Dropdown or a User with a dropdown of Option rows
 - A header Search button opens Kbar with `open` and `onOpenChange` (no children); ⌘K still toggles it
+- Every view that loads data shows loading (Skeleton shaped like the content), empty (title, one line, the action that fills it), error (Feedback tone="danger" with Retry) and filled, through a typed lib/ data layer of async functions over mock data — even when the brief never mentions data
 
 ## Layout shell
 

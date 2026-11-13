@@ -11,7 +11,10 @@
     "IconButton",
     "Text",
     "Media",
-    "MediaVideoPlayer"
+    "MediaVideoPlayer",
+    "Skeleton",
+    "Feedback",
+    "Button"
   ],
   "recipes": [],
   "layout": "layouts.md#3-editor-shell",
@@ -30,6 +33,8 @@
     "height": "The shell takes the viewport (height=\"100dvh\", never 100vh) and each pane scrolls on its own",
     "panes": "overflowY=\"auto\" on each SplitView panel, never on the SplitView; set labels so the tabs it collapses into below collapseBelow are named",
     "timeline": "Scrubber is a sibling of the SplitView, spanning both panes; onGestureStart pauses playback",
-    "toolbar": "IconButtons with tooltips in a Row with borderBottom; one primary action at most"
+    "toolbar": "IconButtons with tooltips in a Row with borderBottom; one primary action at most",
+    "states": "Every view that loads data shows loading (Skeleton shaped like the content), empty (title, one line, the action that fills it), error (Feedback tone=\"danger\" with Retry) and filled, through a typed lib/ data layer of async functions over mock data — even when the brief never mentions data",
+    "writes": "Writes are optimistic: loading on the pressed Button, rollback plus addToast({ tone: \"danger\" }) when the save fails"
   }
 }

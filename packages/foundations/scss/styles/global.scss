@@ -6,6 +6,13 @@ html {
     scroll-behavior: smooth;
 }
 
+/* The browser's 8px body margin. A body rendered through Once UI sets its own
+   (`<Column as="body" margin="0">`); one that isn't kept the default, which
+   Tailwind's preflight used to hide. Layered, so an app's own rule wins. */
+body {
+    margin: 0;
+}
+
 h1, h2, h3, h4, h5, h6 {
     scroll-margin-top: var(--static-space-80);
 }

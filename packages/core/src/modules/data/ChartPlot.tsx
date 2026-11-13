@@ -3,7 +3,14 @@
 import { createContext, type ReactNode, useContext, useMemo } from "react";
 import { Row, type RowProps } from "../../components/Row.js";
 import { ChartSummary } from "./ChartSummary.js";
-import type { DataPoint, DateConfig, SeriesConfig, ValueFormat } from "./interfaces.js";
+import type {
+  ChartAnnotation,
+  ChartThreshold,
+  DataPoint,
+  DateConfig,
+  SeriesConfig,
+  ValueFormat,
+} from "./interfaces.js";
 import { type ChartSummaryInput, chartSummary } from "./utils/chartSummary.js";
 
 /**
@@ -23,6 +30,8 @@ interface ChartA11yValue {
   title?: ReactNode;
   loading?: boolean;
   error?: boolean;
+  thresholds?: readonly ChartThreshold[];
+  annotations?: readonly ChartAnnotation[];
   /** The author's `summary`: replaces the generated text, after the title. */
   summary?: string;
   /** The author's `aria-label`: the plot's whole accessible name. */
@@ -41,6 +50,8 @@ interface ChartA11yProps {
   title?: ReactNode;
   loading?: boolean;
   error?: boolean;
+  thresholds?: readonly ChartThreshold[];
+  annotations?: readonly ChartAnnotation[];
   /** PieChart: the key that sizes each slice, and the one that names it. */
   dataKey?: unknown;
   nameKey?: unknown;
@@ -59,8 +70,20 @@ function ChartA11y({
   label?: string;
   children: ReactNode;
 }) {
-  const { series, xKey, valueFormat, locale, date, title, loading, error, dataKey, nameKey } =
-    props;
+  const {
+    series,
+    xKey,
+    valueFormat,
+    locale,
+    date,
+    title,
+    loading,
+    error,
+    dataKey,
+    nameKey,
+    thresholds,
+    annotations,
+  } = props;
   const value = useMemo<ChartA11yValue>(() => {
     const given = (Array.isArray(series) ? series : series ? [series] : []) as SeriesConfig[];
     if (kind === "pie") {
@@ -84,6 +107,8 @@ function ChartA11y({
       kind,
       series: series as SeriesConfig[] | undefined,
       xKey: xKey as string | undefined,
+      thresholds,
+      annotations,
       valueFormat,
       locale,
       date,
@@ -105,6 +130,8 @@ function ChartA11y({
     error,
     dataKey,
     nameKey,
+    thresholds,
+    annotations,
     summary,
     label,
   ]);
@@ -138,6 +165,8 @@ function ChartPlot({
       locale: ctx?.locale,
       date: ctx?.date,
       title,
+      thresholds: ctx?.thresholds,
+      annotations: ctx?.annotations,
     }),
     [data, ctx, title],
   );
