@@ -256,7 +256,7 @@ Mixins: LeafProps.
 - value, defaultValue?: string | string[]
 - onValueChange?: (value: string | string[]) => void
 - open?: boolean
-- defaultOpen, searchable, multiple?: boolean = false
+- defaultOpen, alignSelected, searchable, multiple?: boolean = false
 - onOpenChange?: (open: boolean) => void
 - emptyState?: ReactNode = No results
 - placement?: Placement
@@ -264,7 +264,7 @@ Mixins: LeafProps.
 - fillWidth?: boolean = true
 
 ### Dropdown
-- fillWidth, disabled, contents, closeAfterClick, handleArrowNavigation, open, nested, disableTriggerClick?: boolean
+- fillWidth, disabled, contents, closeAfterClick, handleArrowNavigation, open, nested, disableTriggerClick, alignSelected?: boolean
 - minWidth, maxWidth, minHeight?: number | CSSUnit
 - placement?: Placement
 - trigger: ReactNode

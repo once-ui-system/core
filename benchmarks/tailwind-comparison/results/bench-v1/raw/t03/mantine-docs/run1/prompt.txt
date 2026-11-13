@@ -1,0 +1,132 @@
+You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.
+
+Build the app described below in an existing Next.js 16 project (App Router, React 19, strict TypeScript).
+
+Stack: Mantine (`@mantine/core` 9) is set up with its Next.js App Router provider, styles and PostCSS preset; `@mantine/hooks`, `form`, `dates`, `charts`, `notifications`, `modals`, `spotlight` and `@tabler/icons-react` are installed, and the Mantine documentation is in the `docs/` folder, which you can read (start with `docs/README.md`).
+
+Task: Lumen needs a command palette. Inside a shared app layout with three screens (a dashboard at `/`, projects at `/projects`, members at `/members`), pressing Ctrl+K (Cmd+K on a Mac) opens a palette with a search field. Results are grouped under "Pages" (the three screens), "Actions" ("Create project", "Invite member", "Toggle theme") and "Recent" (three recently opened projects). Typing filters every group; arrow keys move the highlight and Enter runs it. "Invite member" opens a dialog with an email field. A visible button in the header (with the shortcut shown next to it) opens the palette too, so it works on phones.
+
+Use this data for the content (define it in the code; you may put it in `lib/data.ts`):
+
+```json
+{
+  "product": "Lumen, a product-analytics and issue-tracking app for small software teams",
+  "user": {
+    "name": "Maya Okafor",
+    "email": "maya@acmelabs.io",
+    "role": "Owner"
+  },
+  "projects": [
+    {
+      "key": "WEB",
+      "name": "Marketing site",
+      "status": "Active",
+      "issues": 12,
+      "updated": "2026-10-12"
+    },
+    {
+      "key": "APP",
+      "name": "Customer app",
+      "status": "Active",
+      "issues": 31,
+      "updated": "2026-10-14"
+    },
+    {
+      "key": "API",
+      "name": "Public API",
+      "status": "Active",
+      "issues": 9,
+      "updated": "2026-10-09"
+    },
+    {
+      "key": "MOB",
+      "name": "Mobile beta",
+      "status": "Paused",
+      "issues": 4,
+      "updated": "2026-09-28"
+    },
+    {
+      "key": "OPS",
+      "name": "Internal tools",
+      "status": "Archived",
+      "issues": 0,
+      "updated": "2026-08-30"
+    }
+  ],
+  "members": [
+    {
+      "id": "m-01",
+      "name": "Maya Okafor",
+      "email": "maya@acmelabs.io",
+      "role": "Owner",
+      "status": "Active",
+      "joined": "2024-03-02"
+    },
+    {
+      "id": "m-02",
+      "name": "Daniel Reyes",
+      "email": "daniel@acmelabs.io",
+      "role": "Admin",
+      "status": "Active",
+      "joined": "2024-05-19"
+    },
+    {
+      "id": "m-03",
+      "name": "Priya Natarajan",
+      "email": "priya@acmelabs.io",
+      "role": "Member",
+      "status": "Active",
+      "joined": "2024-11-07"
+    },
+    {
+      "id": "m-04",
+      "name": "Tomás Lindqvist",
+      "email": "tomas@acmelabs.io",
+      "role": "Member",
+      "status": "Active",
+      "joined": "2025-02-14"
+    },
+    {
+      "id": "m-05",
+      "name": "Hana Sato",
+      "email": "hana@acmelabs.io",
+      "role": "Member",
+      "status": "Invited",
+      "joined": null
+    },
+    {
+      "id": "m-06",
+      "name": "Grace Mensah",
+      "email": "grace@acmelabs.io",
+      "role": "Viewer",
+      "status": "Active",
+      "joined": "2025-06-30"
+    },
+    {
+      "id": "m-07",
+      "name": "Leo Brandt",
+      "email": "leo@acmelabs.io",
+      "role": "Member",
+      "status": "Suspended",
+      "joined": "2025-01-21"
+    },
+    {
+      "id": "m-08",
+      "name": "Ines Duarte",
+      "email": "ines@acmelabs.io",
+      "role": "Viewer",
+      "status": "Invited",
+      "joined": null
+    }
+  ]
+}
+```
+
+Requirements:
+- The app must serve these routes: `/`, `/projects`, `/members`. Each route default-exports its page from its `page.tsx`; nested layouts are allowed.
+- Write as many files as the app needs, under `app/`, `components/` or `lib/`. Do not change any file that already exists in the project except `app/page.tsx`. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.
+- Put "use client" at the top of every file that uses state, effects or event handlers.
+- Use realistic placeholder content defined in the files (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.
+- The app must type-check under strict TypeScript, pass `next build`, and render every route without console errors.
+- Make it responsive from phone to desktop, and accessible.
+- Reply with every file, each in its own fenced code block whose opening line names the file's path, like ```tsx app/settings/page.tsx, and nothing else.

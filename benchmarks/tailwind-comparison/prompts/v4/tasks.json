@@ -1,0 +1,173 @@
+{
+ "$comment": "Real-world full-app set (2026-11-10): a specific use case with an open style. Hand-written; Lorant's direction: specific use case, vague style, domains Stack has no surface for.",
+ "generation": {
+  "max_tokens": 64000,
+  "max_tool_calls_per_attempt": 80
+ },
+ "tasks": [
+  {
+   "id": 201,
+   "slug": "vet-front-desk",
+   "title": "Veterinary clinic front desk",
+   "set": "realworld",
+   "max_tokens": 64000,
+   "routes": [
+    "/",
+    "/patients/p-104"
+   ],
+   "output": "multi",
+   "editable": {
+    "once": [
+     "app/layout.tsx",
+     "app/providers.tsx",
+     "app/fonts.css"
+    ],
+    "shadcn": [
+     "app/globals.css",
+     "app/layout.tsx"
+    ],
+    "tailwind": [
+     "app/globals.css",
+     "app/layout.tsx"
+    ],
+    "mui": [
+     "app/theme.ts",
+     "app/layout.tsx"
+    ],
+    "chakra": [
+     "app/layout.tsx",
+     "components/ui/provider.tsx",
+     "components/ui/color-mode.tsx"
+    ],
+    "mantine": [
+     "app/theme.ts",
+     "app/layout.tsx"
+    ]
+   },
+   "checklist": [
+    "Today's schedule shows every appointment by vet and time, with its status",
+    "Statuses are visibly different and urgent visits stand out",
+    "Checking a patient in updates their status and the waiting list",
+    "New appointment flow: pick patient, vet and time, and it appears on the schedule; a clash with an existing booking is prevented",
+    "Patient record shows owner, alerts, weight trend, vaccinations with overdue ones flagged, medications and visit history",
+    "Alerts (allergies, conditions) are hard to miss wherever the patient appears",
+    "Search finds a patient or owner by name",
+    "Works on a tablet at the front desk and on a phone"
+   ],
+   "prompt": "Pawpoint is the software the front desk of Hillside Veterinary Clinic runs on all day. Rosa, the receptionist, uses it to see who is in, who is waiting and who is next, to check patients in as they arrive, to book follow-ups while the owner is standing at the counter, and to pull up a pet's record when a vet asks.\n\nAt `/`, today's schedule: every appointment for the three vets with its time, patient, owner, reason and status (booked, checked in, in exam, done, cancelled). Urgent visits stand out. Rosa can check a booked patient in, and the waiting list (who is checked in and for how long) updates. She can book a new appointment by picking a patient, a vet and a time; it then shows on the schedule, and it cannot clash with an existing booking for that vet. A search finds a patient or owner by name and opens the record.\n\nAt `/patients/p-104`, Olive's record: patient and owner details, the alerts, a weight trend over her visits, vaccinations with the overdue ones flagged against today's date, current medications and the visit history with notes. Medical alerts must be hard to miss wherever a patient appears.\n\nIt is used on a tablet at the counter and sometimes on a phone.\n\nStyle: up to you. It should look and feel like software the people above would pay for and use all day; no style guide is given, so the visual choices are yours.\n\nUse this data for the content (define it in the code; you may put it in `lib/data.ts`):\n\n```json\n{\n  \"clinic\": \"Pawpoint, front-desk and records software for Hillside Veterinary Clinic\",\n  \"today\": \"2026-11-12\",\n  \"user\": {\n    \"name\": \"Rosa Lindqvist\",\n    \"role\": \"Receptionist\"\n  },\n  \"vets\": [\n    {\n      \"id\": \"v-1\",\n      \"name\": \"Dr. Amara Osei\",\n      \"room\": \"Exam 1\"\n    },\n    {\n      \"id\": \"v-2\",\n      \"name\": \"Dr. Tomás Reyes\",\n      \"room\": \"Exam 2\"\n    },\n    {\n      \"id\": \"v-3\",\n      \"name\": \"Dr. Helen Park\",\n      \"room\": \"Surgery\"\n    }\n  ],\n  \"owners\": [\n    {\n      \"id\": \"o-1\",\n      \"name\": \"Daniel Kim\",\n      \"phone\": \"+1 555 0142\"\n    },\n    {\n      \"id\": \"o-2\",\n      \"name\": \"Priya Natarajan\",\n      \"phone\": \"+1 555 0178\"\n    },\n    {\n      \"id\": \"o-3\",\n      \"name\": \"Lucas Moreau\",\n      \"phone\": \"+1 555 0119\"\n    },\n    {\n      \"id\": \"o-4\",\n      \"name\": \"Grace Whitfield\",\n      \"phone\": \"+1 555 0163\"\n    },\n    {\n      \"id\": \"o-5\",\n      \"name\": \"Sam Oduya\",\n      \"phone\": \"+1 555 0190\"\n    },\n    {\n      \"id\": \"o-6\",\n      \"name\": \"Elena Rossi\",\n      \"phone\": \"+1 555 0105\"\n    }\n  ],\n  \"patients\": [\n    {\n      \"id\": \"p-101\",\n      \"name\": \"Biscuit\",\n      \"species\": \"Dog\",\n      \"breed\": \"Beagle\",\n      \"born\": \"2019-04-02\",\n      \"sex\": \"Male, neutered\",\n      \"owner\": \"o-1\",\n      \"alerts\": []\n    },\n    {\n      \"id\": \"p-102\",\n      \"name\": \"Mochi\",\n      \"species\": \"Cat\",\n      \"breed\": \"Domestic shorthair\",\n      \"born\": \"2021-07-15\",\n      \"sex\": \"Female, spayed\",\n      \"owner\": \"o-2\",\n      \"alerts\": [\n        \"Bites when restrained\"\n      ]\n    },\n    {\n      \"id\": \"p-103\",\n      \"name\": \"Pepper\",\n      \"species\": \"Dog\",\n      \"breed\": \"Border collie\",\n      \"born\": \"2016-01-20\",\n      \"sex\": \"Female, spayed\",\n      \"owner\": \"o-3\",\n      \"alerts\": []\n    },\n    {\n      \"id\": \"p-104\",\n      \"name\": \"Olive\",\n      \"species\": \"Dog\",\n      \"breed\": \"Labrador retriever\",\n      \"born\": \"2014-09-08\",\n      \"sex\": \"Female, spayed\",\n      \"owner\": \"o-4\",\n      \"alerts\": [\n        \"Penicillin allergy\",\n        \"Chronic kidney disease, stage 2\"\n      ]\n    },\n    {\n      \"id\": \"p-105\",\n      \"name\": \"Kiwi\",\n      \"species\": \"Bird\",\n      \"breed\": \"Budgerigar\",\n      \"born\": \"2023-03-11\",\n      \"sex\": \"Male\",\n      \"owner\": \"o-5\",\n      \"alerts\": []\n    },\n    {\n      \"id\": \"p-106\",\n      \"name\": \"Tofu\",\n      \"species\": \"Rabbit\",\n      \"breed\": \"Holland lop\",\n      \"born\": \"2022-05-30\",\n      \"sex\": \"Female\",\n      \"owner\": \"o-6\",\n      \"alerts\": []\n    },\n    {\n      \"id\": \"p-107\",\n      \"name\": \"Ziggy\",\n      \"species\": \"Cat\",\n      \"breed\": \"Maine coon\",\n      \"born\": \"2018-11-02\",\n      \"sex\": \"Male, neutered\",\n      \"owner\": \"o-2\",\n      \"alerts\": [\n        \"Diabetic: insulin twice daily\"\n      ]\n    },\n    {\n      \"id\": \"p-108\",\n      \"name\": \"Bruno\",\n      \"species\": \"Dog\",\n      \"breed\": \"French bulldog\",\n      \"born\": \"2022-02-14\",\n      \"sex\": \"Male\",\n      \"owner\": \"o-5\",\n      \"alerts\": [\n        \"Brachycephalic: sedation risk\"\n      ]\n    }\n  ],\n  \"appointments\": [\n    {\n      \"id\": \"a-01\",\n      \"patient\": \"p-101\",\n      \"vet\": \"v-1\",\n      \"start\": \"08:30\",\n      \"minutes\": 20,\n      \"reason\": \"Annual vaccination\",\n      \"status\": \"done\"\n    },\n    {\n      \"id\": \"a-02\",\n      \"patient\": \"p-104\",\n      \"vet\": \"v-2\",\n      \"start\": \"08:30\",\n      \"minutes\": 30,\n      \"reason\": \"Kidney panel recheck\",\n      \"status\": \"done\"\n    },\n    {\n      \"id\": \"a-03\",\n      \"patient\": \"p-108\",\n      \"vet\": \"v-3\",\n      \"start\": \"08:00\",\n      \"minutes\": 120,\n      \"reason\": \"Soft palate surgery\",\n      \"status\": \"in_exam\"\n    },\n    {\n      \"id\": \"a-04\",\n      \"patient\": \"p-102\",\n      \"vet\": \"v-1\",\n      \"start\": \"09:00\",\n      \"minutes\": 30,\n      \"reason\": \"Limping, left hind leg\",\n      \"status\": \"in_exam\"\n    },\n    {\n      \"id\": \"a-05\",\n      \"patient\": \"p-107\",\n      \"vet\": \"v-2\",\n      \"start\": \"09:15\",\n      \"minutes\": 20,\n      \"reason\": \"Glucose curve\",\n      \"status\": \"checked_in\"\n    },\n    {\n      \"id\": \"a-06\",\n      \"patient\": \"p-105\",\n      \"vet\": \"v-1\",\n      \"start\": \"09:45\",\n      \"minutes\": 20,\n      \"reason\": \"Beak and nail trim\",\n      \"status\": \"checked_in\"\n    },\n    {\n      \"id\": \"a-07\",\n      \"patient\": \"p-103\",\n      \"vet\": \"v-2\",\n      \"start\": \"10:00\",\n      \"minutes\": 30,\n      \"reason\": \"Senior wellness exam\",\n      \"status\": \"booked\"\n    },\n    {\n      \"id\": \"a-08\",\n      \"patient\": \"p-106\",\n      \"vet\": \"v-1\",\n      \"start\": \"10:30\",\n      \"minutes\": 20,\n      \"reason\": \"Not eating since yesterday\",\n      \"status\": \"booked\",\n      \"urgent\": true\n    },\n    {\n      \"id\": \"a-09\",\n      \"patient\": \"p-104\",\n      \"vet\": \"v-3\",\n      \"start\": \"11:00\",\n      \"minutes\": 45,\n      \"reason\": \"Dental cleaning\",\n      \"status\": \"booked\"\n    },\n    {\n      \"id\": \"a-10\",\n      \"patient\": \"p-101\",\n      \"vet\": \"v-2\",\n      \"start\": \"11:30\",\n      \"minutes\": 20,\n      \"reason\": \"Ear infection follow-up\",\n      \"status\": \"booked\"\n    },\n    {\n      \"id\": \"a-11\",\n      \"patient\": \"p-107\",\n      \"vet\": \"v-1\",\n      \"start\": \"13:30\",\n      \"minutes\": 30,\n      \"reason\": \"Dental check\",\n      \"status\": \"booked\"\n    },\n    {\n      \"id\": \"a-12\",\n      \"patient\": \"p-103\",\n      \"vet\": \"v-3\",\n      \"start\": \"14:00\",\n      \"minutes\": 60,\n      \"reason\": \"Lump removal\",\n      \"status\": \"cancelled\"\n    },\n    {\n      \"id\": \"a-13\",\n      \"patient\": \"p-102\",\n      \"vet\": \"v-2\",\n      \"start\": \"15:00\",\n      \"minutes\": 20,\n      \"reason\": \"X-ray results\",\n      \"status\": \"booked\"\n    }\n  ],\n  \"records\": {\n    \"p-104\": {\n      \"weights_kg\": [\n        {\n          \"date\": \"2025-05-14\",\n          \"kg\": 31.8\n        },\n        {\n          \"date\": \"2025-08-20\",\n          \"kg\": 31.1\n        },\n        {\n          \"date\": \"2025-11-03\",\n          \"kg\": 30.4\n        },\n        {\n          \"date\": \"2026-02-11\",\n          \"kg\": 29.9\n        },\n        {\n          \"date\": \"2026-06-17\",\n          \"kg\": 29.2\n        },\n        {\n          \"date\": \"2026-11-12\",\n          \"kg\": 28.6\n        }\n      ],\n      \"vaccinations\": [\n        {\n          \"name\": \"Rabies\",\n          \"given\": \"2024-10-02\",\n          \"due\": \"2027-10-02\"\n        },\n        {\n          \"name\": \"DHPP\",\n          \"given\": \"2025-10-15\",\n          \"due\": \"2026-10-15\"\n        },\n        {\n          \"name\": \"Leptospirosis\",\n          \"given\": \"2025-10-15\",\n          \"due\": \"2026-10-15\"\n        },\n        {\n          \"name\": \"Bordetella\",\n          \"given\": \"2026-04-08\",\n          \"due\": \"2027-04-08\"\n        }\n      ],\n      \"medications\": [\n        {\n          \"name\": \"Benazepril 5 mg\",\n          \"dose\": \"1 tablet daily\",\n          \"since\": \"2025-08-20\"\n        },\n        {\n          \"name\": \"Renal diet (dry)\",\n          \"dose\": \"2.5 cups daily\",\n          \"since\": \"2025-08-20\"\n        }\n      ],\n      \"visits\": [\n        {\n          \"date\": \"2026-11-12\",\n          \"vet\": \"v-2\",\n          \"reason\": \"Kidney panel recheck\",\n          \"notes\": \"Creatinine 2.1 mg/dL (was 2.0). Weight down 0.6 kg. Continue benazepril, recheck in 3 months.\",\n          \"invoice_usd\": 186.0\n        },\n        {\n          \"date\": \"2026-06-17\",\n          \"vet\": \"v-2\",\n          \"reason\": \"Kidney panel recheck\",\n          \"notes\": \"Stable. Appetite good. Owner reports more drinking in hot weather.\",\n          \"invoice_usd\": 172.5\n        },\n        {\n          \"date\": \"2026-02-11\",\n          \"vet\": \"v-1\",\n          \"reason\": \"Coughing\",\n          \"notes\": \"Mild kennel cough. Supportive care; no antibiotics given (penicillin allergy).\",\n          \"invoice_usd\": 94.0\n        },\n        {\n          \"date\": \"2025-11-03\",\n          \"vet\": \"v-2\",\n          \"reason\": \"Senior wellness exam\",\n          \"notes\": \"Grade 2 dental tartar. Dental cleaning recommended.\",\n          \"invoice_usd\": 148.0\n        }\n      ]\n    }\n  }\n}\n```"
+  },
+  {
+   "id": 202,
+   "slug": "seating-planner",
+   "title": "Wedding seating planner",
+   "set": "realworld",
+   "max_tokens": 64000,
+   "routes": [
+    "/",
+    "/guests"
+   ],
+   "output": "multi",
+   "editable": {
+    "once": [
+     "app/layout.tsx",
+     "app/providers.tsx",
+     "app/fonts.css"
+    ],
+    "shadcn": [
+     "app/globals.css",
+     "app/layout.tsx"
+    ],
+    "tailwind": [
+     "app/globals.css",
+     "app/layout.tsx"
+    ],
+    "mui": [
+     "app/theme.ts",
+     "app/layout.tsx"
+    ],
+    "chakra": [
+     "app/layout.tsx",
+     "components/ui/provider.tsx",
+     "components/ui/color-mode.tsx"
+    ],
+    "mantine": [
+     "app/theme.ts",
+     "app/layout.tsx"
+    ]
+   },
+   "checklist": [
+    "Floor plan of the room drawn to scale with the tables and fixtures in place",
+    "Each table shows its seats and who sits where; empty seats visible",
+    "Guests can be seated, moved between tables and unseated, and every count updates",
+    "Unseated attending guests are listed and easy to place",
+    "Rule breaks (apart, together, near) are flagged where they happen and in a summary",
+    "Selecting a table shows its guests and their dietary needs",
+    "Guest list page: search and filter by party, RSVP and diet; counts per meal for the caterer",
+    "Usable on a tablet; on a phone at least the lists and table details work"
+   ],
+   "prompt": "Seatwise is what Hannah, a wedding planner, uses to build the seating plan for Ines & Mateo's dinner with the couple, usually on a tablet at their kitchen table, then hands the result to the venue and the caterer.\n\nAt `/`, the plan: the room drawn to scale from the data with the tables, band, dance floor, bar and garden doors in place. Each table shows its seats and who is in them, with empty seats visible. Hannah seats guests, moves them between tables and unseats them (drag and drop, or tapping, or both), and every count follows: seated, unseated, per table. Attending guests without a seat are listed so they are easy to place. The couple's rules (keep together, keep apart, seat near) are checked as she works: a broken rule is flagged on the tables involved and in a short summary. Selecting a table shows its guests and their dietary needs.\n\nAt `/guests`, the guest list: search, filter by party, RSVP and diet, see each guest's table, and a count per meal (including dietary needs) for the caterer.\n\nChanges only need to last for the session.\n\nStyle: up to you. It should look and feel like software the people above would pay for and use all day; no style guide is given, so the visual choices are yours.\n\nUse this data for the content (define it in the code; you may put it in `lib/data.ts`):\n\n```json\n{\n  \"app\": \"Seatwise, a seating planner for wedding and event planners\",\n  \"event\": {\n    \"name\": \"Ines & Mateo's wedding dinner\",\n    \"date\": \"2027-06-19\",\n    \"venue\": \"The Orangery, Hollin Hall\",\n    \"room_m\": {\n      \"width\": 24,\n      \"depth\": 14\n    }\n  },\n  \"planner\": {\n    \"name\": \"Hannah Brook\"\n  },\n  \"fixtures\": [\n    {\n      \"id\": \"f-1\",\n      \"kind\": \"stage\",\n      \"label\": \"Band\",\n      \"x\": 10,\n      \"y\": 0.5,\n      \"w\": 4,\n      \"h\": 2\n    },\n    {\n      \"id\": \"f-2\",\n      \"kind\": \"dancefloor\",\n      \"label\": \"Dance floor\",\n      \"x\": 8.5,\n      \"y\": 3,\n      \"w\": 7,\n      \"h\": 4\n    },\n    {\n      \"id\": \"f-3\",\n      \"kind\": \"bar\",\n      \"label\": \"Bar\",\n      \"x\": 21,\n      \"y\": 10,\n      \"w\": 2.5,\n      \"h\": 3.5\n    },\n    {\n      \"id\": \"f-4\",\n      \"kind\": \"door\",\n      \"label\": \"Garden doors\",\n      \"x\": 0,\n      \"y\": 6,\n      \"w\": 0.5,\n      \"h\": 2.5\n    }\n  ],\n  \"tables\": [\n    {\n      \"id\": \"t-head\",\n      \"name\": \"Top table\",\n      \"shape\": \"long\",\n      \"seats\": 8,\n      \"x\": 8,\n      \"y\": 8.2,\n      \"rotation\": 0\n    },\n    {\n      \"id\": \"t-1\",\n      \"name\": \"Table 1\",\n      \"shape\": \"round\",\n      \"seats\": 8,\n      \"x\": 3,\n      \"y\": 2.5\n    },\n    {\n      \"id\": \"t-2\",\n      \"name\": \"Table 2\",\n      \"shape\": \"round\",\n      \"seats\": 8,\n      \"x\": 3,\n      \"y\": 7\n    },\n    {\n      \"id\": \"t-3\",\n      \"name\": \"Table 3\",\n      \"shape\": \"round\",\n      \"seats\": 8,\n      \"x\": 3,\n      \"y\": 11.5\n    },\n    {\n      \"id\": \"t-4\",\n      \"name\": \"Table 4\",\n      \"shape\": \"round\",\n      \"seats\": 8,\n      \"x\": 19,\n      \"y\": 2.5\n    },\n    {\n      \"id\": \"t-5\",\n      \"name\": \"Table 5\",\n      \"shape\": \"round\",\n      \"seats\": 8,\n      \"x\": 19,\n      \"y\": 7\n    },\n    {\n      \"id\": \"t-6\",\n      \"name\": \"Table 6\",\n      \"shape\": \"round\",\n      \"seats\": 6,\n      \"x\": 12,\n      \"y\": 12\n    }\n  ],\n  \"guests\": [\n    {\n      \"id\": \"g-01\",\n      \"name\": \"Ines Carvalho\",\n      \"party\": \"Couple\",\n      \"rsvp\": \"yes\",\n      \"diet\": null,\n      \"table\": \"t-head\"\n    },\n    {\n      \"id\": \"g-02\",\n      \"name\": \"Mateo Alvarez\",\n      \"party\": \"Couple\",\n      \"rsvp\": \"yes\",\n      \"diet\": \"Vegetarian\",\n      \"table\": \"t-head\"\n    },\n    {\n      \"id\": \"g-03\",\n      \"name\": \"Rui Carvalho\",\n      \"party\": \"Bride's family\",\n      \"rsvp\": \"yes\",\n      \"diet\": null,\n      \"table\": \"t-head\"\n    },\n    {\n      \"id\": \"g-04\",\n      \"name\": \"Marta Carvalho\",\n      \"party\": \"Bride's family\",\n      \"rsvp\": \"yes\",\n      \"diet\": \"Gluten free\",\n      \"table\": \"t-head\"\n    },\n    {\n      \"id\": \"g-05\",\n      \"name\": \"Javier Alvarez\",\n      \"party\": \"Groom's family\",\n      \"rsvp\": \"yes\",\n      \"diet\": null,\n      \"table\": \"t-head\"\n    },\n    {\n      \"id\": \"g-06\",\n      \"name\": \"Lucia Alvarez\",\n      \"party\": \"Groom's family\",\n      \"rsvp\": \"yes\",\n      \"diet\": null,\n      \"table\": \"t-head\"\n    },\n    {\n      \"id\": \"g-07\",\n      \"name\": \"Sofia Carvalho\",\n      \"party\": \"Bride's family\",\n      \"rsvp\": \"yes\",\n      \"diet\": null,\n      \"table\": \"t-1\"\n    },\n    {\n      \"id\": \"g-08\",\n      \"name\": \"Tiago Carvalho\",\n      \"party\": \"Bride's family\",\n      \"rsvp\": \"yes\",\n      \"diet\": null,\n      \"table\": \"t-1\"\n    },\n    {\n      \"id\": \"g-09\",\n      \"name\": \"Avó Rosa Carvalho\",\n      \"party\": \"Bride's family\",\n      \"rsvp\": \"yes\",\n      \"diet\": \"Soft food\",\n      \"table\": \"t-1\"\n    },\n    {\n      \"id\": \"g-10\",\n      \"name\": \"Pedro Nunes\",\n      \"party\": \"Bride's family\",\n      \"rsvp\": \"yes\",\n      \"diet\": null,\n      \"table\": \"t-1\"\n    },\n    {\n      \"id\": \"g-11\",\n      \"name\": \"Ana Nunes\",\n      \"party\": \"Bride's family\",\n      \"rsvp\": \"yes\",\n      \"diet\": \"Vegan\",\n      \"table\": \"t-1\"\n    },\n    {\n      \"id\": \"g-12\",\n      \"name\": \"Carmen Alvarez\",\n      \"party\": \"Groom's family\",\n      \"rsvp\": \"yes\",\n      \"diet\": null,\n      \"table\": \"t-4\"\n    },\n    {\n      \"id\": \"g-13\",\n      \"name\": \"Diego Alvarez\",\n      \"party\": \"Groom's family\",\n      \"rsvp\": \"yes\",\n      \"diet\": null,\n      \"table\": \"t-4\"\n    },\n    {\n      \"id\": \"g-14\",\n      \"name\": \"Elena Ruiz\",\n      \"party\": \"Groom's family\",\n      \"rsvp\": \"yes\",\n      \"diet\": \"Nut allergy\",\n      \"table\": \"t-4\"\n    },\n    {\n      \"id\": \"g-15\",\n      \"name\": \"Pablo Ruiz\",\n      \"party\": \"Groom's family\",\n      \"rsvp\": \"yes\",\n      \"diet\": null,\n      \"table\": \"t-4\"\n    },\n    {\n      \"id\": \"g-16\",\n      \"name\": \"Isabel Ruiz\",\n      \"party\": \"Groom's family\",\n      \"rsvp\": \"maybe\",\n      \"diet\": null,\n      \"table\": null\n    },\n    {\n      \"id\": \"g-17\",\n      \"name\": \"Chloe Martin\",\n      \"party\": \"University friends\",\n      \"rsvp\": \"yes\",\n      \"diet\": null,\n      \"table\": \"t-2\"\n    },\n    {\n      \"id\": \"g-18\",\n      \"name\": \"Ben Okafor\",\n      \"party\": \"University friends\",\n      \"rsvp\": \"yes\",\n      \"diet\": null,\n      \"table\": \"t-2\"\n    },\n    {\n      \"id\": \"g-19\",\n      \"name\": \"Leila Haddad\",\n      \"party\": \"University friends\",\n      \"rsvp\": \"yes\",\n      \"diet\": \"Halal\",\n      \"table\": \"t-2\"\n    },\n    {\n      \"id\": \"g-20\",\n      \"name\": \"Omar Haddad\",\n      \"party\": \"University friends\",\n      \"rsvp\": \"yes\",\n      \"diet\": \"Halal\",\n      \"table\": \"t-2\"\n    },\n    {\n      \"id\": \"g-21\",\n      \"name\": \"Freya Lund\",\n      \"party\": \"University friends\",\n      \"rsvp\": \"yes\",\n      \"diet\": \"Vegetarian\",\n      \"table\": null\n    },\n    {\n      \"id\": \"g-22\",\n      \"name\": \"Jonas Lund\",\n      \"party\": \"University friends\",\n      \"rsvp\": \"yes\",\n      \"diet\": null,\n      \"table\": null\n    },\n    {\n      \"id\": \"g-23\",\n      \"name\": \"Grace Lee\",\n      \"party\": \"Work friends\",\n      \"rsvp\": \"yes\",\n      \"diet\": null,\n      \"table\": \"t-5\"\n    },\n    {\n      \"id\": \"g-24\",\n      \"name\": \"Marcus Webb\",\n      \"party\": \"Work friends\",\n      \"rsvp\": \"yes\",\n      \"diet\": null,\n      \"table\": \"t-5\"\n    },\n    {\n      \"id\": \"g-25\",\n      \"name\": \"Nadia Petrova\",\n      \"party\": \"Work friends\",\n      \"rsvp\": \"yes\",\n      \"diet\": \"Pescatarian\",\n      \"table\": \"t-5\"\n    },\n    {\n      \"id\": \"g-26\",\n      \"name\": \"Tom Fisher\",\n      \"party\": \"Work friends\",\n      \"rsvp\": \"no\",\n      \"diet\": null,\n      \"table\": null\n    },\n    {\n      \"id\": \"g-27\",\n      \"name\": \"Hana Sato\",\n      \"party\": \"Work friends\",\n      \"rsvp\": \"yes\",\n      \"diet\": null,\n      \"table\": null\n    },\n    {\n      \"id\": \"g-28\",\n      \"name\": \"Luis Ortega\",\n      \"party\": \"Groom's football club\",\n      \"rsvp\": \"yes\",\n      \"diet\": null,\n      \"table\": \"t-3\"\n    },\n    {\n      \"id\": \"g-29\",\n      \"name\": \"Kai Brennan\",\n      \"party\": \"Groom's football club\",\n      \"rsvp\": \"yes\",\n      \"diet\": null,\n      \"table\": \"t-3\"\n    },\n    {\n      \"id\": \"g-30\",\n      \"name\": \"Sean Doyle\",\n      \"party\": \"Groom's football club\",\n      \"rsvp\": \"yes\",\n      \"diet\": null,\n      \"table\": \"t-3\"\n    },\n    {\n      \"id\": \"g-31\",\n      \"name\": \"Ryan Doyle\",\n      \"party\": \"Groom's football club\",\n      \"rsvp\": \"yes\",\n      \"diet\": null,\n      \"table\": null\n    },\n    {\n      \"id\": \"g-32\",\n      \"name\": \"Hugo Carvalho\",\n      \"party\": \"Bride's family\",\n      \"rsvp\": \"yes\",\n      \"diet\": \"Children's menu\",\n      \"table\": \"t-1\"\n    },\n    {\n      \"id\": \"g-33\",\n      \"name\": \"Mia Carvalho\",\n      \"party\": \"Bride's family\",\n      \"rsvp\": \"yes\",\n      \"diet\": \"Children's menu\",\n      \"table\": null\n    },\n    {\n      \"id\": \"g-34\",\n      \"name\": \"Paula Mendes\",\n      \"party\": \"Bride's family\",\n      \"rsvp\": \"pending\",\n      \"diet\": null,\n      \"table\": null\n    },\n    {\n      \"id\": \"g-35\",\n      \"name\": \"Victor Mendes\",\n      \"party\": \"Bride's family\",\n      \"rsvp\": \"pending\",\n      \"diet\": null,\n      \"table\": null\n    },\n    {\n      \"id\": \"g-36\",\n      \"name\": \"Zoe Bennett\",\n      \"party\": \"Plus-ones\",\n      \"rsvp\": \"yes\",\n      \"diet\": null,\n      \"table\": \"t-2\"\n    },\n    {\n      \"id\": \"g-37\",\n      \"name\": \"Arjun Mehta\",\n      \"party\": \"Plus-ones\",\n      \"rsvp\": \"yes\",\n      \"diet\": \"Vegetarian\",\n      \"table\": \"t-5\"\n    },\n    {\n      \"id\": \"g-38\",\n      \"name\": \"Laura Svensson\",\n      \"party\": \"Plus-ones\",\n      \"rsvp\": \"yes\",\n      \"diet\": null,\n      \"table\": null\n    }\n  ],\n  \"rules\": [\n    {\n      \"kind\": \"together\",\n      \"guests\": [\n        \"g-21\",\n        \"g-22\"\n      ],\n      \"note\": \"Couple\"\n    },\n    {\n      \"kind\": \"together\",\n      \"guests\": [\n        \"g-32\",\n        \"g-33\"\n      ],\n      \"note\": \"Siblings, under 10\"\n    },\n    {\n      \"kind\": \"apart\",\n      \"guests\": [\n        \"g-29\",\n        \"g-30\"\n      ],\n      \"note\": \"Brothers Sean and Ryan Doyle are not speaking\"\n    },\n    {\n      \"kind\": \"apart\",\n      \"guests\": [\n        \"g-12\",\n        \"g-34\"\n      ],\n      \"note\": \"Ask the couple: old family dispute\"\n    },\n    {\n      \"kind\": \"near\",\n      \"guests\": [\n        \"g-09\"\n      ],\n      \"note\": \"Avó Rosa uses a wheelchair: seat near the garden doors, away from the band\"\n    }\n  ]\n}\n```"
+  }
+ ],
+ "interactions": {
+  "201": {
+   "viewports": [
+    "desktop"
+   ],
+   "steps": [
+    {
+     "action": "click",
+     "target": {
+      "role": "button",
+      "name": "check.?in"
+     }
+    }
+   ],
+   "describe": "Clicks the first 'Check in' button on the schedule."
+  },
+  "202": {
+   "viewports": [
+    "desktop"
+   ],
+   "steps": [
+    {
+     "action": "click",
+     "target": {
+      "selector": "text=Table 3"
+     }
+    }
+   ],
+   "describe": "Clicks Table 3 on the floor plan."
+  }
+ },
+ "views": {
+  "201": [
+   {
+    "name": "new-appointment",
+    "route": "/",
+    "steps": [
+     {
+      "action": "click",
+      "target": {
+       "role": "button",
+       "name": "new appointment|book|new booking"
+      }
+     }
+    ]
+   }
+  ],
+  "202": [
+   {
+    "name": "table-selected",
+    "route": "/",
+    "steps": [
+     {
+      "action": "click",
+      "target": {
+       "selector": "text=Table 1"
+      }
+     }
+    ]
+   }
+  ]
+ }
+}

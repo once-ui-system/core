@@ -1,0 +1,19 @@
+{
+  "files": [
+    "src/lib/data.ts",
+    "src/components/team/MemberBadges.tsx",
+    "src/components/team/MemberAvatar.tsx",
+    "src/components/team/InviteDialog.tsx",
+    "src/components/team/RowActions.tsx",
+    "src/components/team/ChangeRoleDialog.tsx",
+    "src/components/team/TeamClient.tsx",
+    "src/components/team/TeamHeader.tsx",
+    "src/app/(team)/layout.tsx",
+    "src/app/(team)/page.tsx",
+    "src/app/(team)/members/[id]/page.tsx",
+    "src/app/page.tsx",
+    "src/app/(team)/team-redirect.tsx",
+    "src/app/(team)/team/page.tsx"
+  ],
+  "rejected": []
+}

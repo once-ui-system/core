@@ -1,0 +1,251 @@
+{
+  "arm": "T",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 3577
+    },
+    "build": {
+      "ok": true,
+      "ms": 10646
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 578,
+          "height": 1131,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 598,
+          "height": 1024,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 598,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 578,
+              "height": 1131,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 598,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 598,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 24,
+            "serious_or_critical": 2,
+            "ids": [
+              "aria-allowed-attr:critical:2",
+              "color-contrast:serious:22"
+            ]
+          }
+        },
+        "/projects": {
+          "viewports": {
+            "phone": {
+              "text": 479,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 499,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 499,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 11,
+            "serious_or_critical": 2,
+            "ids": [
+              "aria-allowed-attr:critical:2",
+              "color-contrast:serious:9"
+            ]
+          }
+        },
+        "/settings": {
+          "viewports": {
+            "phone": {
+              "text": 499,
+              "height": 896,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 519,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 519,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 12,
+            "serious_or_critical": 2,
+            "ids": [
+              "aria-allowed-attr:critical:2",
+              "color-contrast:serious:10"
+            ]
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 2,
+        "nodes": 24,
+        "serious_or_critical": 2,
+        "ids": [
+          "aria-allowed-attr:critical:2",
+          "color-contrast:serious:22"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "click > click",
+          "found": true,
+          "steps": 1,
+          "errors": [
+            "interaction failed: locator.click: Timeout 5000ms exceeded."
+          ]
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1757,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1764,
+          "settled": true
+        },
+        "/projects phone": {
+          "ms": 22769,
+          "settled": false
+        },
+        "/projects tablet": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/projects desktop": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/settings phone": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/settings tablet": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/settings desktop": {
+          "ms": 1762,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 175,
+          "distinct_fontSize": 8,
+          "distinct_color": 7,
+          "distinct_background": 6,
+          "distinct_radius": 3,
+          "distinct_shadow": 0,
+          "distinct_spacing": 9,
+          "spacing_on_4px_grid": 0.909
+        },
+        "/projects": {
+          "elements": 164,
+          "distinct_fontSize": 7,
+          "distinct_color": 8,
+          "distinct_background": 6,
+          "distinct_radius": 3,
+          "distinct_shadow": 0,
+          "distinct_spacing": 9,
+          "spacing_on_4px_grid": 0.92
+        },
+        "/settings": {
+          "elements": 156,
+          "distinct_fontSize": 6,
+          "distinct_color": 6,
+          "distinct_background": 5,
+          "distinct_radius": 3,
+          "distinct_shadow": 0,
+          "distinct_spacing": 13,
+          "spacing_on_4px_grid": 0.816
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "lib/navigation.ts",
+    "components/NavContent.tsx",
+    "components/NavContent.module.css",
+    "components/AppFrame.tsx",
+    "components/DashboardContent.tsx",
+    "components/ProjectsTable.tsx",
+    "components/SettingsForm.tsx",
+    "app/page.tsx",
+    "app/(shell)/layout.tsx",
+    "app/(shell)/projects/page.tsx",
+    "app/(shell)/reports/page.tsx",
+    "app/(shell)/settings/page.tsx"
+  ]
+}

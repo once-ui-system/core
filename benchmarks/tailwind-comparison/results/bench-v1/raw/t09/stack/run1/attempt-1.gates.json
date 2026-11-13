@@ -1,0 +1,244 @@
+{
+  "arm": "S",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 4631
+    },
+    "build": {
+      "ok": true,
+      "ms": 25141
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 1534,
+          "height": 3303,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 1534,
+          "height": 2739,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 1571,
+          "height": 2243,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 1534,
+              "height": 3303,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1534,
+              "height": 2739,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1571,
+              "height": 2243,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/pricing": {
+          "viewports": {
+            "phone": {
+              "text": 1396,
+              "height": 3026,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1396,
+              "height": 2860,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1433,
+              "height": 2205,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      },
+      "interaction": {
+        "phone": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        },
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/pricing phone": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/pricing tablet": {
+          "ms": 1767,
+          "settled": true
+        },
+        "/pricing desktop": {
+          "ms": 1761,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 166,
+          "distinct_fontSize": 9,
+          "distinct_color": 3,
+          "distinct_background": 5,
+          "distinct_radius": 1,
+          "distinct_shadow": 2,
+          "distinct_spacing": 12,
+          "spacing_on_4px_grid": 0.986
+        },
+        "/pricing": {
+          "elements": 258,
+          "distinct_fontSize": 10,
+          "distinct_color": 4,
+          "distinct_background": 6,
+          "distinct_radius": 1,
+          "distinct_shadow": 2,
+          "distinct_spacing": 13,
+          "spacing_on_4px_grid": 0.97
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 393.5,
+          "css_kb": 48.8,
+          "fcp_ms": 196,
+          "cls": 0,
+          "long_task_ms": 31
+        },
+        "/pricing": {
+          "js_kb": 393.5,
+          "css_kb": 48.8,
+          "fcp_ms": 212,
+          "cls": 0,
+          "long_task_ms": 19
+        }
+      },
+      "brand": {
+        "filled_buttons": 3,
+        "brand_filled_buttons": 0,
+        "button_radius_matches": 3,
+        "heading_font": "Georgia, \"Times New Roman\", serif",
+        "heading_serif": true,
+        "body_font": "ui-sans-serif, system-ui, sans-serif",
+        "page_background": "rgb(12, 10, 9)",
+        "dark_first_paint": true
+      },
+      "views": {
+        "pricing-yearly phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-pricing-yearly-phone.jpg"
+        },
+        "pricing-yearly tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-pricing-yearly-tablet.jpg"
+        },
+        "pricing-yearly desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-pricing-yearly-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "src/lib/data.ts",
+    "src/resources/once-ui.config.js",
+    "src/resources/seo.js",
+    "src/resources/custom.css",
+    "src/components/Providers.tsx",
+    "src/app/layout.tsx",
+    "src/components/site/SiteHeader.tsx",
+    "src/components/site/SiteFooter.tsx",
+    "src/components/site/SiteShell.tsx",
+    "src/app/page.tsx",
+    "src/components/pricing/PricingContent.tsx",
+    "src/app/pricing/page.tsx",
+    "src/app/not-found.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ src/lib/data.ts: no mechanical issues\n✓ src/components/Providers.tsx: no mechanical issues\n✗ src/app/layout.tsx: 1 issue(s)\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint\n✓ src/components/site/SiteHeader.tsx: no mechanical issues\n✓ src/components/site/SiteFooter.tsx: no mechanical issues\n✓ src/components/site/SiteShell.tsx: no mechanical issues\n✓ src/app/page.tsx: no mechanical issues\n✓ src/components/pricing/PricingContent.tsx: no mechanical issues\n✓ src/app/pricing/page.tsx: no mechanical issues\n✓ src/app/not-found.tsx: no mechanical issues",
+    "validator": {
+      "package_version": "2.6.0",
+      "script_sha256": "ab274b3e6be15eb6"
+    }
+  }
+}

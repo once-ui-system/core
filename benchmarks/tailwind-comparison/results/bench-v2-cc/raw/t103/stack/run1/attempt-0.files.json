@@ -1,0 +1,14 @@
+{
+  "files": [
+    "src/resources/once-ui.config.js",
+    "src/resources/custom.css",
+    "src/lib/data.ts",
+    "src/components/AppShell.tsx",
+    "src/app/layout.tsx",
+    "src/app/page.tsx",
+    "src/app/projects/page.tsx",
+    "src/app/settings/page.tsx",
+    "src/app/settings/SettingsForm.tsx"
+  ],
+  "rejected": []
+}

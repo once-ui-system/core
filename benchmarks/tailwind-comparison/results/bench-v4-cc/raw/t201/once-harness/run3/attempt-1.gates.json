@@ -1,0 +1,243 @@
+{
+  "arm": "A",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2189
+    },
+    "build": {
+      "ok": true,
+      "ms": 7506
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 2324,
+          "height": 3560,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 2324,
+          "height": 2004,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 2385,
+          "height": 2053,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 2324,
+              "height": 3560,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 2324,
+              "height": 2004,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 2385,
+              "height": 2053,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 3,
+            "nodes": 19,
+            "serious_or_critical": 3,
+            "ids": [
+              "aria-valid-attr-value:critical:1",
+              "color-contrast:serious:15",
+              "label-content-name-mismatch:serious:3"
+            ]
+          }
+        },
+        "/patients/p-104": {
+          "viewports": {
+            "phone": {
+              "text": 1783,
+              "height": 3200,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1783,
+              "height": 2772,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1844,
+              "height": 1862,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 2,
+            "serious_or_critical": 2,
+            "ids": [
+              "aria-valid-attr-value:critical:1",
+              "label-content-name-mismatch:serious:1"
+            ]
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 3,
+        "nodes": 19,
+        "serious_or_critical": 3,
+        "ids": [
+          "aria-valid-attr-value:critical:1",
+          "color-contrast:serious:15",
+          "label-content-name-mismatch:serious:3"
+        ]
+      },
+      "interaction": {
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/patients/p-104 phone": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/patients/p-104 tablet": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/patients/p-104 desktop": {
+          "ms": 1757,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 521,
+          "distinct_fontSize": 8,
+          "distinct_color": 6,
+          "distinct_background": 11,
+          "distinct_radius": 5,
+          "distinct_shadow": 1,
+          "distinct_spacing": 7,
+          "spacing_on_4px_grid": 0.883
+        },
+        "/patients/p-104": {
+          "elements": 301,
+          "distinct_fontSize": 10,
+          "distinct_color": 7,
+          "distinct_background": 8,
+          "distinct_radius": 4,
+          "distinct_shadow": 1,
+          "distinct_spacing": 7,
+          "spacing_on_4px_grid": 0.899
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 241.3,
+          "css_kb": 47.5,
+          "fcp_ms": 140,
+          "cls": 0,
+          "long_task_ms": 0
+        },
+        "/patients/p-104": {
+          "js_kb": 241.3,
+          "css_kb": 47.5,
+          "fcp_ms": 144,
+          "cls": 0,
+          "long_task_ms": 0
+        }
+      },
+      "views": {
+        "new-appointment phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-phone.jpg"
+        },
+        "new-appointment tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-tablet.jpg"
+        },
+        "new-appointment desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "lib/time.ts",
+    "lib/schedule.ts",
+    "components/DeskProvider.tsx",
+    "components/StatusTag.tsx",
+    "components/Alerts.tsx",
+    "components/SearchBox.tsx",
+    "components/AppHeader.tsx",
+    "components/BookingDialog.tsx",
+    "components/WaitingList.tsx",
+    "components/ScheduleView.tsx",
+    "components/Panel.tsx",
+    "components/WeightChart.tsx",
+    "components/PatientRecord.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "app/layout.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ lib/data.ts: no mechanical issues\n✓ lib/time.ts: no mechanical issues\n✓ lib/schedule.ts: no mechanical issues\n✓ components/DeskProvider.tsx: no mechanical issues\n✓ components/StatusTag.tsx: no mechanical issues\n✓ components/Alerts.tsx: no mechanical issues\n✓ components/SearchBox.tsx: no mechanical issues\n✓ components/AppHeader.tsx: no mechanical issues\n✓ components/BookingDialog.tsx: no mechanical issues\n✓ components/WaitingList.tsx: no mechanical issues\n✓ components/ScheduleView.tsx: no mechanical issues\n✓ components/Panel.tsx: no mechanical issues\n✓ components/WeightChart.tsx: no mechanical issues\n✓ components/PatientRecord.tsx: no mechanical issues\n✓ app/page.tsx: no mechanical issues\n✓ app/patients/[id]/page.tsx: no mechanical issues\n✗ app/layout.tsx: 1 issue(s)\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint",
+    "validator": {
+      "package_version": "3.0.0-beta.1",
+      "script_sha256": "8b6fb92b077251ad"
+    }
+  }
+}

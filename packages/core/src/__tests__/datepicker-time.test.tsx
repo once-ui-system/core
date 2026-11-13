@@ -68,24 +68,20 @@ describe("DateInput time picker", () => {
 });
 
 /**
- * The 2.0 "ms timings" pass multiplied every RevealFx `speed` it found by a
- * thousand — including the two that were already milliseconds. DatePicker's
- * calendar and Carousel's slide sat inside a RevealFx with a 250 s / 300 s
- * transition: mounted, focusable, clickable, and at opacity 0 for four minutes.
+ * The calendar used to sit inside a reveal: a blurred mask wiping in after
+ * the dropdown had already faded and scaled in, and once (after the 2.0 "ms
+ * timings" pass) at opacity 0 for four minutes. It now shows as it mounts.
  */
 describe("DatePicker reveal and time header", () => {
-  it("reveals the calendar in a fraction of a second", () => {
+  it("shows the calendar without a reveal transition", () => {
     const { container } = render(
       <DatePicker timePicker value={new Date(2026, 3, 10, 13, 14)} onValueChange={() => {}} />,
       { wrapper: wrap },
     );
     const reveal = Array.from(container.querySelectorAll<HTMLElement>("[style]")).find(
-      (el) => el.style.transitionDuration !== "",
+      (el) => el.style.transitionDuration !== "" || el.style.maskImage !== "",
     );
-    expect(reveal).toBeDefined();
-    const duration = reveal?.style.transitionDuration ?? "0s";
-    const seconds = Number.parseFloat(duration) / (duration.endsWith("ms") ? 1000 : 1);
-    expect(seconds).toBeLessThanOrEqual(1);
+    expect(reveal).toBeUndefined();
   });
 
   it("shows the header time as 12-hour, not 24-hour with an AM/PM suffix", () => {
@@ -113,7 +109,8 @@ describe("DatePicker reveal and time header", () => {
         if (Number(m[1]) > 5000) slow.push(`${file}: ${m[0]}`);
       }
     }
-    expect(found).toBeGreaterThanOrEqual(2);
+    // Carousel's slide; DatePicker's calendar dropped its reveal (from 2.x main).
+    expect(found).toBeGreaterThanOrEqual(1);
     expect(slow).toEqual([]);
   });
 });

@@ -1,0 +1,265 @@
+{
+  "arm": "D",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2804
+    },
+    "build": {
+      "ok": true,
+      "ms": 10956
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 404,
+          "height": 876,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 463,
+          "height": 1024,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 463,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 404,
+              "height": 876,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 463,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 463,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 4,
+            "serious_or_critical": 1,
+            "ids": [
+              "color-contrast:serious:4"
+            ]
+          }
+        },
+        "/projects": {
+          "viewports": {
+            "phone": {
+              "text": 377,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 392,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 392,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 10,
+            "serious_or_critical": 1,
+            "ids": [
+              "color-contrast:serious:10"
+            ]
+          }
+        },
+        "/members": {
+          "viewports": {
+            "phone": {
+              "text": 679,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 694,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 694,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 8,
+            "serious_or_critical": 1,
+            "ids": [
+              "color-contrast:serious:8"
+            ]
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 1,
+        "nodes": 4,
+        "serious_or_critical": 1,
+        "ids": [
+          "color-contrast:serious:4"
+        ]
+      },
+      "interaction": {
+        "desktop": {
+          "action": "press > type > press",
+          "found": true,
+          "steps": 3,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1767,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/projects phone": {
+          "ms": 1777,
+          "settled": true
+        },
+        "/projects tablet": {
+          "ms": 34734,
+          "settled": false
+        },
+        "/projects desktop": {
+          "ms": 1791,
+          "settled": true
+        },
+        "/members phone": {
+          "ms": 1815,
+          "settled": true
+        },
+        "/members tablet": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/members desktop": {
+          "ms": 1759,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 61,
+          "distinct_fontSize": 6,
+          "distinct_color": 5,
+          "distinct_background": 7,
+          "distinct_radius": 5,
+          "distinct_shadow": 0,
+          "distinct_spacing": 8,
+          "spacing_on_4px_grid": 0.822
+        },
+        "/projects": {
+          "elements": 71,
+          "distinct_fontSize": 4,
+          "distinct_color": 7,
+          "distinct_background": 10,
+          "distinct_radius": 5,
+          "distinct_shadow": 0,
+          "distinct_spacing": 9,
+          "spacing_on_4px_grid": 0.767
+        },
+        "/members": {
+          "elements": 92,
+          "distinct_fontSize": 4,
+          "distinct_color": 7,
+          "distinct_background": 9,
+          "distinct_radius": 5,
+          "distinct_shadow": 0,
+          "distinct_spacing": 9,
+          "spacing_on_4px_grid": 0.802
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 151.5,
+          "css_kb": 14.5,
+          "fcp_ms": 112,
+          "cls": 0,
+          "long_task_ms": 0
+        },
+        "/projects": {
+          "js_kb": 151.5,
+          "css_kb": 14.5,
+          "fcp_ms": 728,
+          "cls": 0,
+          "long_task_ms": 0
+        },
+        "/members": {
+          "js_kb": 151.5,
+          "css_kb": 14.5,
+          "fcp_ms": 180,
+          "cls": 0,
+          "long_task_ms": 9
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/app-shell.tsx",
+    "components/command-palette.tsx",
+    "components/invite-dialog.tsx",
+    "components/dashboard.tsx",
+    "app/page.tsx",
+    "app/projects/layout.tsx",
+    "app/projects/page.tsx",
+    "app/members/layout.tsx",
+    "app/members/page.tsx"
+  ]
+}

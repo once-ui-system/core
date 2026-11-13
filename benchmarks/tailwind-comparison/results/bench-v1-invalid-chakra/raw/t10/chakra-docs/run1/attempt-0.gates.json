@@ -1,0 +1,42 @@
+{
+  "arm": "K",
+  "passed": false,
+  "failed_gate": "render",
+  "failure_output": "server did not start:\n",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 15735
+    },
+    "build": {
+      "ok": true,
+      "ms": 31490
+    },
+    "render": {
+      "ok": false,
+      "viewports": {},
+      "routes": {},
+      "errors": [
+        "server did not start:\n"
+      ],
+      "axe": null,
+      "interaction": {},
+      "settle": {}
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/home-visual.tsx",
+    "components/save-button.tsx",
+    "components/home-card.tsx",
+    "components/home-map.tsx",
+    "components/lazy-home-map.tsx",
+    "components/search-view.tsx",
+    "app/page.tsx",
+    "components/contact-form.tsx",
+    "components/energy-rating.tsx",
+    "components/gallery-strip.tsx",
+    "components/detail-map.tsx",
+    "app/homes/[id]/page.tsx"
+  ]
+}

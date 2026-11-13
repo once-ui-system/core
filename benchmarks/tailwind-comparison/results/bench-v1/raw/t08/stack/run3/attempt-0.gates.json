@@ -1,0 +1,24 @@
+{
+  "arm": "S",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "src/app/welcome/page.tsx(9,46): error TS2307: Cannot find module '@/lib/onboarding' or its corresponding type declarations.\nsrc/app/welcome/page.tsx(67,29): error TS7006: Parameter 'item' implicitly has an 'any' type.\nsrc/app/welcome/page.tsx(67,35): error TS7006: Parameter 'i' implicitly has an 'any' type.\nsrc/components/onboarding/Summary.tsx(6,8): error TS2307: Cannot find module '@/lib/onboarding' or its corresponding type declarations.\nsrc/components/onboarding/Summary.tsx(33,43): error TS7006: Parameter 'o' implicitly has an 'any' type.\nsrc/components/onboarding/Summary.tsx(34,41): error TS7006: Parameter 'o' implicitly has an 'any' type.\nsrc/components/onboarding/Summary.tsx(35,37): error TS7006: Parameter 'v' implicitly has an 'any' type.\nsrc/components/onboarding/Summary.tsx(69,31): error TS7006: Parameter 'e' implicitly has an 'any' type.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2597
+    }
+  },
+  "files": [
+    "src/components/onboarding/Summary.tsx",
+    "src/app/welcome/page.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ src/components/onboarding/Summary.tsx: 1 issue(s)\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✗ src/app/welcome/page.tsx: 2 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "2.6.0",
+      "script_sha256": "ab274b3e6be15eb6"
+    }
+  }
+}
