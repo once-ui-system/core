@@ -12,7 +12,6 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import type { default as GlobeComponent, GlobeMethods } from "react-globe.gl";
-import { dev } from "@/utils/dev-logger";
 
 /** A GeoJSON feature, as far as this block reads one. */
 type Feature = { type: "Feature"; geometry: unknown; properties: Record<string, unknown> | null };
@@ -169,11 +168,11 @@ export const Globe1 = forwardRef<Globe1Handle, WorldMapProps>(
               setLandPolygons(features);
             }
           } catch (err) {
-            dev.error("Error processing map data:", err);
+            console.error("Error processing map data:", err);
           }
         })
         .catch((err) => {
-          dev.error("Error loading map data:", err);
+          console.error("Error loading map data:", err);
         });
     }, []);
 
