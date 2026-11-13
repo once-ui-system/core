@@ -317,3 +317,21 @@ describe("SegmentedControl's sliding background", () => {
     expect((pillOf(container) as HTMLElement).style.borderRadius).toBe("var(--radius-s)");
   });
 });
+
+describe("SegmentedControl rail radius", () => {
+  it("follows the options' size plus its 4px padding", () => {
+    for (const size of ["s", "m", "l"] as const) {
+      const { container, unmount } = render(
+        <SegmentedControl
+          buttons={[
+            { value: "a", label: "A", size },
+            { value: "b", label: "B", size },
+          ]}
+        />,
+        { wrapper: wrap },
+      );
+      expect(container.querySelector(`.radius-${size}-4`)).not.toBeNull();
+      unmount();
+    }
+  });
+});

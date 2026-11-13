@@ -1,0 +1,15 @@
+{
+  "files": [
+    "components/page-header.tsx",
+    "components/action-buttons.tsx",
+    "components/status-badge.tsx",
+    "components/dashboard.tsx",
+    "components/projects-view.tsx",
+    "components/members-view.tsx",
+    "app/(app)/layout.tsx",
+    "app/(app)/projects/page.tsx",
+    "app/(app)/members/page.tsx",
+    "app/page.tsx"
+  ],
+  "rejected": []
+}

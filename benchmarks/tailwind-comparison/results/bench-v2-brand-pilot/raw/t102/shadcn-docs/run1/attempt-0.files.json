@@ -1,0 +1,9 @@
+{
+  "files": [
+    "components/new-project-button.tsx",
+    "app/projects/page.tsx",
+    "components/settings-form.tsx",
+    "app/settings/page.tsx"
+  ],
+  "rejected": []
+}

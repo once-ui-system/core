@@ -1,0 +1,230 @@
+{
+  "arm": "S",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 5370
+    },
+    "build": {
+      "ok": true,
+      "ms": 30999
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 1623,
+          "height": 2658,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 1623,
+          "height": 1949,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 1715,
+          "height": 2041,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 1623,
+              "height": 2658,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1623,
+              "height": 1949,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1715,
+              "height": 2041,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 35,
+            "serious_or_critical": 1,
+            "ids": [
+              "label-content-name-mismatch:serious:35"
+            ]
+          }
+        },
+        "/guests": {
+          "viewports": {
+            "phone": {
+              "text": 3374,
+              "height": 3678,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 3374,
+              "height": 2677,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 3466,
+              "height": 2517,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 1,
+        "nodes": 35,
+        "serious_or_critical": 1,
+        "ids": [
+          "label-content-name-mismatch:serious:35"
+        ]
+      },
+      "interaction": {
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1764,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/guests phone": {
+          "ms": 1764,
+          "settled": true
+        },
+        "/guests tablet": {
+          "ms": 1775,
+          "settled": true
+        },
+        "/guests desktop": {
+          "ms": 1764,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 313,
+          "distinct_fontSize": 11,
+          "distinct_color": 11,
+          "distinct_background": 10,
+          "distinct_radius": 8,
+          "distinct_shadow": 2,
+          "distinct_spacing": 9,
+          "spacing_on_4px_grid": 0.85
+        },
+        "/guests": {
+          "elements": 754,
+          "distinct_fontSize": 10,
+          "distinct_color": 10,
+          "distinct_background": 4,
+          "distinct_radius": 4,
+          "distinct_shadow": 1,
+          "distinct_spacing": 11,
+          "spacing_on_4px_grid": 0.628
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 398,
+          "css_kb": 51.5,
+          "fcp_ms": 312,
+          "cls": 0,
+          "long_task_ms": 15
+        },
+        "/guests": {
+          "js_kb": 398,
+          "css_kb": 51.5,
+          "fcp_ms": 200,
+          "cls": 0,
+          "long_task_ms": 0
+        }
+      },
+      "views": {
+        "table-selected phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-phone.jpg"
+        },
+        "table-selected tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-tablet.jpg"
+        },
+        "table-selected desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "src/app/guests/page.tsx",
+    "src/app/layout.tsx",
+    "src/app/page.tsx",
+    "src/components/GuestsView.tsx",
+    "src/components/PlanView.tsx",
+    "src/components/RoomPlan.tsx",
+    "src/components/SeatProvider.tsx",
+    "src/components/Shell.tsx",
+    "src/lib/data.ts",
+    "src/lib/seating.ts",
+    "src/resources/seatwise.css"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ src/app/guests/page.tsx: no mechanical issues\n✗ src/app/layout.tsx: 1 issue(s)\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint\n✓ src/app/page.tsx: no mechanical issues\n✗ src/components/GuestsView.tsx: 1 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n✗ src/components/PlanView.tsx: 3 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [layout.defaults] minWidth={0} beside fillWidth — fillWidth already sets min-width: 0, omit minWidth\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n✗ src/components/RoomPlan.tsx: 1 issue(s)\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n✓ src/components/SeatProvider.tsx: no mechanical issues\n✓ src/components/Shell.tsx: no mechanical issues\n✓ src/lib/data.ts: no mechanical issues\n✓ src/lib/seating.ts: no mechanical issues",
+    "validator": {
+      "package_version": "2.6.0",
+      "script_sha256": "ab274b3e6be15eb6"
+    }
+  }
+}

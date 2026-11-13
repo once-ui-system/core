@@ -1,0 +1,30 @@
+{
+  "arm": "M",
+  "passed": false,
+  "failed_gate": "build",
+  "failure_output": "Error: Functions cannot be passed directly to Client Components unless you explicitly expose it by marking it with \"use server\". Or maybe you meant to call this function rather than return it.\n  {component: function i, href: \"/\", sx: ..., children: ...}\n              ^^^^^^^^^^\n    at stringify (<anonymous>) {\n  digest: '378719027'\n}\nExport encountered an error on /homes/[id]/page: /homes/h-101, exiting the build.\n⨯ Next.js build worker exited with code: 1 and signal: null",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 4009
+    },
+    "build": {
+      "ok": false,
+      "ms": 22161
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/Placeholder.tsx",
+    "components/HomeCard.tsx",
+    "components/MapView.tsx",
+    "components/MapClient.tsx",
+    "components/DetailMap.tsx",
+    "components/DetailMapClient.tsx",
+    "components/SearchPage.tsx",
+    "components/ContactForm.tsx",
+    "components/HomeDetail.tsx",
+    "app/page.tsx",
+    "app/homes/[id]/page.tsx"
+  ]
+}

@@ -5,7 +5,7 @@
  "group": "media",
  "importFrom": "@once-ui-system/core/media",
  "props": {
-  "peaks": "!number[]",
+  "peaks": "!number[] = []",
   "tone": "Tone = brand"
  },
  "tags": [

@@ -243,7 +243,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - style?: React.CSSProperties
 
 ### Dropdown
-- fillWidth, disabled, contents, closeAfterClick, handleArrowNavigation, open, nested, disableTriggerClick?: boolean
+- fillWidth, disabled, contents, closeAfterClick, handleArrowNavigation, open, nested, disableTriggerClick, alignSelected?: boolean
 - minWidth, maxWidth, minHeight?: number | CSSUnit
 - placement?: Placement
 - trigger: ReactNode

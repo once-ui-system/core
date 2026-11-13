@@ -1,0 +1,24 @@
+{
+  "arm": "M",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/PatientSearch.tsx(62,36): error TS2339: Property 'inputProps' does not exist on type 'AutocompleteRenderInputParams'.\ncomponents/PatientSearch.tsx(64,25): error TS2339: Property 'InputProps' does not exist on type 'AutocompleteRenderInputParams'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 4440
+    }
+  },
+  "files": [
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "app/theme.ts",
+    "components/AlertChips.tsx",
+    "components/AppShell.tsx",
+    "components/BookDialog.tsx",
+    "components/PatientRecord.tsx",
+    "components/PatientSearch.tsx",
+    "components/Schedule.tsx",
+    "lib/data.ts"
+  ]
+}

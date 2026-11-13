@@ -1,0 +1,26 @@
+{
+  "arm": "K",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/Schedule.tsx(107,50): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'SetStateAction<string>'.\n  Type 'null' is not assignable to type 'SetStateAction<string>'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 11692
+    }
+  },
+  "files": [
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "components/Alerts.tsx",
+    "components/AppShell.tsx",
+    "components/BookingDialog.tsx",
+    "components/PatientRecordView.tsx",
+    "components/PatientSearch.tsx",
+    "components/Schedule.tsx",
+    "components/StatusBadge.tsx",
+    "lib/clinic.tsx",
+    "lib/data.ts"
+  ]
+}
