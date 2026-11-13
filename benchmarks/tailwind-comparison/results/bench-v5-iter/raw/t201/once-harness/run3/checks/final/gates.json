@@ -1,0 +1,225 @@
+{
+  "arm": "A",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 3028
+    },
+    "build": {
+      "ok": true,
+      "ms": 18580
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 2638,
+          "height": 4133,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 2638,
+          "height": 4011,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 2693,
+          "height": 2379,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 2638,
+              "height": 4133,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 2638,
+              "height": 4011,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 2693,
+              "height": 2379,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/patients/p-104": {
+          "viewports": {
+            "phone": {
+              "text": 1640,
+              "height": 2766,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1669,
+              "height": 2387,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1724,
+              "height": 1702,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      },
+      "interaction": {
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1765,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/patients/p-104 phone": {
+          "ms": 1755,
+          "settled": true
+        },
+        "/patients/p-104 tablet": {
+          "ms": 1776,
+          "settled": true
+        },
+        "/patients/p-104 desktop": {
+          "ms": 1760,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 470,
+          "distinct_fontSize": 8,
+          "distinct_color": 7,
+          "distinct_background": 10,
+          "distinct_radius": 4,
+          "distinct_shadow": 1,
+          "distinct_spacing": 7,
+          "spacing_on_4px_grid": 0.878
+        },
+        "/patients/p-104": {
+          "elements": 276,
+          "distinct_fontSize": 10,
+          "distinct_color": 5,
+          "distinct_background": 7,
+          "distinct_radius": 4,
+          "distinct_shadow": 1,
+          "distinct_spacing": 9,
+          "spacing_on_4px_grid": 0.738
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 356.6,
+          "css_kb": 61.6,
+          "fcp_ms": 236,
+          "cls": 0,
+          "long_task_ms": 0
+        },
+        "/patients/p-104": {
+          "js_kb": 356.6,
+          "css_kb": 61.6,
+          "fcp_ms": 208,
+          "cls": 0,
+          "long_task_ms": 0
+        }
+      },
+      "views": {
+        "new-appointment phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-phone.jpg"
+        },
+        "new-appointment tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-tablet.jpg"
+        },
+        "new-appointment desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "components/AlertTags.tsx",
+    "components/AppShell.tsx",
+    "components/BookDialog.tsx",
+    "components/PatientRecord.tsx",
+    "components/PatientSearch.tsx",
+    "components/Schedule.tsx",
+    "lib/data.ts"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/layout.tsx: 1 issue(s)\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint\n✓ app/page.tsx: no mechanical issues\n✓ app/patients/[id]/page.tsx: no mechanical issues\n✓ components/AlertTags.tsx: no mechanical issues\n✗ components/AppShell.tsx: 3 issue(s)\n  [layout.leafProps] Text is a leaf in 3.0 and does not take s: put it on a <Column> around it (a leaf keeps margins, flex, fillWidth, position and the offsets, className and style)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✗ components/BookDialog.tsx: 1 issue(s)\n  [layout.primitiveProps] <Column as=\"form\"> keeps a div's event types, so an onSubmit taking FormEvent<HTMLFormElement>, and noValidate, are type errors — wrap the Column in a native <form onSubmit={…}>\n✗ components/PatientRecord.tsx: 2 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✗ components/PatientSearch.tsx: 2 issue(s)\n  [layout.defaults] position=\"relative\" is the default — omit it\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n✗ components/Schedule.tsx: 1 issue(s)\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ lib/data.ts: no mechanical issues",
+    "validator": {
+      "package_version": "3.0.0-beta.1",
+      "script_sha256": "8b6fb92b077251ad"
+    }
+  }
+}

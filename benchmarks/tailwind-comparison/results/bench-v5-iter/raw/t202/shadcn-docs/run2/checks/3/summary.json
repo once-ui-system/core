@@ -1,0 +1,36 @@
+{
+  "check": "3",
+  "at": "2026-11-11T00:06:27.369Z",
+  "ms": 52315,
+  "files": [
+    "app/globals.css",
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "components/app-shell.tsx",
+    "components/guests/guests-view.tsx",
+    "components/plan/guest-chip.tsx",
+    "components/plan/plan-view.tsx",
+    "components/plan/room.tsx",
+    "components/plan/rules-panel.tsx",
+    "components/plan/stats-bar.tsx",
+    "components/plan/table-panel.tsx",
+    "components/plan/unseated-strip.tsx",
+    "lib/data.ts",
+    "lib/geometry.ts",
+    "lib/plan-store.tsx",
+    "lib/rules.ts"
+  ],
+  "passed": true,
+  "gates_passed": true,
+  "failed_gate": null,
+  "adherence": {
+    "system": 94,
+    "raw": 6,
+    "share": 0.94,
+    "colours": 4,
+    "cssLines": 4,
+    "ok": true,
+    "reasons": []
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 15,
+      "input_total": 1607786,
+      "input_uncached": 32,
+      "cache_creation": 112288,
+      "cache_read": 1495466,
+      "visible_output_tokens_o200k": 7789,
+      "visible_output_tokens_claudeLegacy": 8558,
+      "thinking_blocks": 8
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t102/stack/run2/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/AGENTS.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project/src"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/resources/once-ui.config.js"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/AGENTS.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "docs"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/app/(product)/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/components/Providers.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/resources/custom.css"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/bundles/app-shell.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/app/(product)/components/Sidebar.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/app/(product)/components/Header.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "docs"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/components/ThemeProvider.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/starters/app/src/resources/once-ui.config.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/components/ThemeInit.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/ai"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/ai"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/spec.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/ai/tokens.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "project/src"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/resources/index.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/resources/icons.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/ai"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/ai"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/ai/bundles/settings.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v2-cc/raw/t102/stack/run2/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "S"
+}

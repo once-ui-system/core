@@ -9,3 +9,39 @@
   --line-height-body-multiplier:    1;
   --line-height-label-multiplier:   1;
 }
+
+// Every scroll area on the site, the page itself included, uses Once UI's
+// minimal scrollbar (the `scrollbar-minimal` utility that Flex, Row and Column
+// already get), not only the ones built from those components.
+*::-webkit-scrollbar {
+  background: var(--static-transparent);
+  width: var(--static-space-4);
+  height: var(--static-space-4);
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--static-transparent);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--neutral-alpha-medium);
+  transition: var(--transition-micro-medium);
+  border-radius: var(--radius-full);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--neutral-alpha-strong);
+}
+
+*::-webkit-scrollbar-corner {
+  background-color: var(--static-transparent);
+}
+
+// Browsers without the ::-webkit-scrollbar pseudo-elements (Firefox) get the
+// closest standard equivalent.
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--neutral-alpha-medium) var(--static-transparent);
+  }
+}

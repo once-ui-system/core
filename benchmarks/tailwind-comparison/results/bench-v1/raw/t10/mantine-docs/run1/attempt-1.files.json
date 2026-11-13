@@ -1,0 +1,21 @@
+{
+  "files": [
+    "lib/data.ts",
+    "components/Placeholder.module.css",
+    "components/Placeholder.tsx",
+    "components/HomeCard.module.css",
+    "components/HomeCard.tsx",
+    "components/SearchMap.module.css",
+    "components/SearchMap.tsx",
+    "components/SearchPage.module.css",
+    "components/SearchPage.tsx",
+    "components/DetailMap.module.css",
+    "components/DetailMap.tsx",
+    "components/ContactForm.tsx",
+    "components/HomeDetail.module.css",
+    "components/HomeDetail.tsx",
+    "app/page.tsx",
+    "app/homes/[id]/page.tsx"
+  ],
+  "rejected": []
+}

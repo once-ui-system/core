@@ -1,0 +1,265 @@
+{
+  "arm": "A",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2120
+    },
+    "build": {
+      "ok": true,
+      "ms": 8155
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 553,
+          "height": 812,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 553,
+          "height": 1024,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 662,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 553,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 553,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 662,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/projects": {
+          "viewports": {
+            "phone": {
+              "text": 353,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 353,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 462,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/settings": {
+          "viewports": {
+            "phone": {
+              "text": 352,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 352,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 461,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      },
+      "interaction": {
+        "phone": {
+          "action": "click > click",
+          "found": true,
+          "steps": 2,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/projects phone": {
+          "ms": 1763,
+          "settled": true
+        },
+        "/projects tablet": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/projects desktop": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/settings phone": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/settings tablet": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/settings desktop": {
+          "ms": 1759,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 192,
+          "distinct_fontSize": 7,
+          "distinct_color": 4,
+          "distinct_background": 4,
+          "distinct_radius": 5,
+          "distinct_shadow": 1,
+          "distinct_spacing": 13,
+          "spacing_on_4px_grid": 0.516
+        },
+        "/projects": {
+          "elements": 173,
+          "distinct_fontSize": 6,
+          "distinct_color": 7,
+          "distinct_background": 5,
+          "distinct_radius": 5,
+          "distinct_shadow": 1,
+          "distinct_spacing": 12,
+          "spacing_on_4px_grid": 0.488
+        },
+        "/settings": {
+          "elements": 162,
+          "distinct_fontSize": 8,
+          "distinct_color": 5,
+          "distinct_background": 5,
+          "distinct_radius": 5,
+          "distinct_shadow": 1,
+          "distinct_spacing": 13,
+          "spacing_on_4px_grid": 0.524
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 329.4,
+          "css_kb": 54.8,
+          "fcp_ms": 168,
+          "cls": 0,
+          "long_task_ms": 0
+        },
+        "/projects": {
+          "js_kb": 329.4,
+          "css_kb": 54.8,
+          "fcp_ms": 136,
+          "cls": 0,
+          "long_task_ms": 0
+        },
+        "/settings": {
+          "js_kb": 329.4,
+          "css_kb": 54.8,
+          "fcp_ms": 112,
+          "cls": 0,
+          "long_task_ms": 0
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/AppShell.tsx",
+    "components/PageHeader.tsx",
+    "components/Dashboard.tsx",
+    "app/page.tsx",
+    "app/(app)/layout.tsx",
+    "app/(app)/projects/page.tsx",
+    "app/(app)/reports/page.tsx",
+    "components/SettingsForm.tsx",
+    "app/(app)/settings/page.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ lib/data.ts: no mechanical issues\n✗ components/AppShell.tsx: 1 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n✗ components/PageHeader.tsx: 1 issue(s)\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ components/Dashboard.tsx: no mechanical issues\n✓ app/page.tsx: no mechanical issues\n✓ app/(app)/layout.tsx: no mechanical issues\n✓ app/(app)/projects/page.tsx: no mechanical issues\n✓ app/(app)/reports/page.tsx: no mechanical issues\n✗ components/SettingsForm.tsx: 1 issue(s)\n  [layout.primitiveProps] <Column as=\"form\"> keeps a div's event types, so an onSubmit taking FormEvent<HTMLFormElement>, and noValidate, are type errors — wrap the Column in a native <form onSubmit={…}>\n✓ app/(app)/settings/page.tsx: no mechanical issues",
+    "validator": {
+      "package_version": "3.0.0-beta.1",
+      "script_sha256": "d8f443844780a521"
+    }
+  }
+}

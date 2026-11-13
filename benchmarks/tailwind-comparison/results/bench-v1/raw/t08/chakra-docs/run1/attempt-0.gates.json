@@ -1,0 +1,21 @@
+{
+  "arm": "K",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/onboarding/wizard.tsx(148,11): error TS2322: Type '{ children: Element[]; as: \"form\"; flex: \"1\"; w: \"full\"; minW: \"0\"; noValidate: true; \"aria-labelledby\": string; onSubmit: (e: FormEvent<Element>) => void; }' is not assignable to type 'IntrinsicAttributes & CardRootProps & RefAttributes<HTMLDivElement>'.\n  Property 'noValidate' does not exist on type 'IntrinsicAttributes & CardRootProps & RefAttributes<HTMLDivElement>'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 11420
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "lib/wizard.ts",
+    "components/onboarding/step-indicator.tsx",
+    "components/onboarding/summary-card.tsx",
+    "components/onboarding/wizard.tsx",
+    "app/page.tsx",
+    "app/welcome/page.tsx"
+  ]
+}

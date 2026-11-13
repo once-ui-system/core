@@ -1,0 +1,211 @@
+{
+  "arm": "A",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2959
+    },
+    "build": {
+      "ok": true,
+      "ms": 10484
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 633,
+          "height": 1086,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 633,
+          "height": 1069,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 662,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 633,
+              "height": 1086,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 633,
+              "height": 1069,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 662,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/members/m-02": {
+          "viewports": {
+            "phone": {
+              "text": 434,
+              "height": 1016,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 434,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 434,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      },
+      "interaction": {
+        "phone": {
+          "action": "click > click",
+          "found": true,
+          "steps": 2,
+          "errors": []
+        },
+        "desktop": {
+          "action": "click > click",
+          "found": true,
+          "steps": 2,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1763,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/members/m-02 phone": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/members/m-02 tablet": {
+          "ms": 1757,
+          "settled": true
+        },
+        "/members/m-02 desktop": {
+          "ms": 1764,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 257,
+          "distinct_fontSize": 6,
+          "distinct_color": 9,
+          "distinct_background": 2,
+          "distinct_radius": 4,
+          "distinct_shadow": 1,
+          "distinct_spacing": 10,
+          "spacing_on_4px_grid": 0.862
+        },
+        "/members/m-02": {
+          "elements": 77,
+          "distinct_fontSize": 6,
+          "distinct_color": 4,
+          "distinct_background": 2,
+          "distinct_radius": 4,
+          "distinct_shadow": 0,
+          "distinct_spacing": 9,
+          "spacing_on_4px_grid": 0.83
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 343.1,
+          "css_kb": 55.4,
+          "fcp_ms": 136,
+          "cls": 0.002,
+          "long_task_ms": 0
+        },
+        "/members/m-02": {
+          "js_kb": 343.1,
+          "css_kb": 55.4,
+          "fcp_ms": 144,
+          "cls": 0,
+          "long_task_ms": 0
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/Badges.tsx",
+    "components/InviteDialog.tsx",
+    "components/MemberActions.tsx",
+    "components/ChangeRoleDialog.tsx",
+    "components/TeamView.tsx",
+    "components/TeamView.module.css",
+    "components/MemberDetail.tsx",
+    "app/page.tsx",
+    "app/members/[id]/page.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ lib/data.ts: no mechanical issues\n✓ components/Badges.tsx: no mechanical issues\n✗ components/InviteDialog.tsx: 1 issue(s)\n  [layout.primitiveProps] <Column as=\"form\"> keeps a div's event types, so an onSubmit taking FormEvent<HTMLFormElement>, and noValidate, are type errors — wrap the Column in a native <form onSubmit={…}>\n✓ components/MemberActions.tsx: no mechanical issues\n✗ components/ChangeRoleDialog.tsx: 1 issue(s)\n  [layout.primitiveProps] <Column as=\"form\"> keeps a div's event types, so an onSubmit taking FormEvent<HTMLFormElement>, and noValidate, are type errors — wrap the Column in a native <form onSubmit={…}>\n✓ components/TeamView.tsx: no mechanical issues\n✓ components/MemberDetail.tsx: no mechanical issues\n✓ app/page.tsx: no mechanical issues\n✓ app/members/[id]/page.tsx: no mechanical issues",
+    "validator": {
+      "package_version": "3.0.0-beta.1",
+      "script_sha256": "d8f443844780a521"
+    }
+  }
+}

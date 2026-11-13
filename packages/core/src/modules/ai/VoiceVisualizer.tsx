@@ -155,7 +155,9 @@ const VoiceVisualizer = ({
           <span className={styles.voiceRing} aria-hidden="true" />
           <span className={classNames(styles.voiceRing, styles.voiceRingLate)} aria-hidden="true" />
           <span className={styles.voiceOrb} aria-hidden="true">
-            <span className={styles.voiceSwirl} />
+            <span className={styles.voiceSwirlClip}>
+              <span className={styles.voiceSwirl} />
+            </span>
           </span>
         </>
       ) : (

@@ -44,7 +44,7 @@ export function summarise(lines, { sandbox, runDir }) {
     if (!m) continue;
     if (l.type === "user") {
       const text = typeof m.content === "string" ? m.content : (m.content ?? []).map((b) => b.text ?? "").join("");
-      if (/Your page failed the /.test(text)) attempt++;
+      if (/Your page failed the |Your app failed a check/.test(text)) attempt++;
       continue;
     }
     if (l.type !== "assistant") continue;
