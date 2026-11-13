@@ -2873,8 +2873,59 @@
    "swatches": "StylePanelSwatchLabels",
    "themeSwitcher": "ThemeSwitcherLabels",
    "scroller": "ScrollerLabels",
-   "custom": "StylePanelCustomLabels"
+   "custom": "StylePanelCustomLabels",
+   "hints": "StylePanelRowLabels"
   },
+  "StylePanelLabelWidth": [
+   "undefined",
+   "number",
+   "s",
+   "xl",
+   "l",
+   "m",
+   "xs",
+   "0",
+   "32",
+   "1",
+   "2",
+   "4",
+   "64",
+   "160",
+   "12",
+   "8",
+   "16",
+   "20",
+   "24",
+   "40",
+   "48",
+   "56",
+   "72",
+   "80",
+   "104",
+   "128",
+   "`${number}px`",
+   "`${number}rem`",
+   "`${number}em`",
+   "`${number}ch`",
+   "`${number}%`",
+   "`${number}vh`",
+   "`${number}vw`",
+   "`${number}dvh`",
+   "`${number}dvw`",
+   "`${number}svh`",
+   "`${number}svw`",
+   "`${number}lvh`",
+   "`${number}lvw`",
+   "`${number}vmin`",
+   "`${number}vmax`",
+   "`${number}cqw`",
+   "`${number}cqh`",
+   "`calc(${string})`",
+   "`min(${string})`",
+   "`max(${string})`",
+   "`clamp(${string})`",
+   "`var(${string})`"
+  ],
   "StylePanelNameLabels": {
    "shapes": "Partial<Record<BorderStyle, string>>",
    "schemes": "Partial<Record<Schemes, string>>",
@@ -7483,7 +7534,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "MascotPanelEyes": {
@@ -7662,7 +7714,8 @@
    ],
    "props": {
     "custom": "boolean",
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelAdvanced": {
@@ -7694,7 +7747,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelBodySize": {
@@ -7709,7 +7763,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelBodyText": {
@@ -7742,7 +7797,8 @@
    ],
    "props": {
     "custom": "boolean",
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelColor": {
@@ -7775,7 +7831,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelDensity": {
@@ -7790,7 +7847,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelEffect": {
@@ -7805,7 +7863,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelGroup": {
@@ -7836,7 +7895,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelPage": {
@@ -7872,7 +7932,9 @@
     "onValueChange": "(next: StylePanelValue, changed: Partial<StylePanelValue>) => void",
     "labels": "StylePanelLabels",
     "stacked": "boolean = false",
-    "size": "StylePanelSize = m"
+    "size": "StylePanelSize = m",
+    "labelWidth": "StylePanelLabelWidth",
+    "hints": "boolean = false"
    }
   },
   "StylePanelRow": {
@@ -7887,7 +7949,9 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false",
+    "hintFor": "keyof StylePanelRowLabels"
    }
   },
   "StylePanelScaling": {
@@ -7902,7 +7966,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelShape": {
@@ -7917,7 +7982,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelSolid": {
@@ -7932,7 +7998,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelSolidStyle": {
@@ -7964,7 +8031,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelTheme": {
@@ -7979,7 +8047,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelTransition": {
@@ -7994,7 +8063,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanel": {
@@ -8010,6 +8080,8 @@
    ],
    "props": {
     "size": "StylePanelSize",
+    "labelWidth": "StylePanelLabelWidth",
+    "hints": "boolean",
     "visibility": "StylePanelVisibility",
     "value": "StylePanelRootProps[\"value\"]",
     "onValueChange": "StylePanelRootProps[\"onValueChange\"]",
