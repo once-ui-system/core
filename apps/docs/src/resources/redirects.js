@@ -59,11 +59,12 @@ export function applyPrefixMoves(slug) {
  *
  * Release history lives on GitHub, generated from the repo's CHANGELOG.md,
  * which is the source of truth. The docs held a hand-maintained second copy
- * that drifted from it.
+ * that drifted from it. The roadmap goes through once-ui.com/roadmap, which
+ * picks its destination (the public Chirio board, or ROADMAP.md before that).
  */
 export const retiredPages = [
   { from: "changelog", to: "https://github.com/once-ui-system/core/releases" },
-  { from: "roadmap", to: "https://github.com/once-ui-system/core/blob/main/ROADMAP.md" },
+  { from: "roadmap", to: "https://once-ui.com/roadmap" },
 ];
 
 export const retiredPageRedirects = retiredPages.map(({ from, to }) => ({
