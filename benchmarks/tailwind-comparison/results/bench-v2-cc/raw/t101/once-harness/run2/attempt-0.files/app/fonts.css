@@ -1,0 +1,17 @@
+/* Lumen type and shape, set once as tokens: every Once UI component reads them. */
+:root {
+  --font-heading: Georgia, "Times New Roman", serif;
+  --font-body: ui-sans-serif, system-ui, sans-serif;
+  --font-label: ui-sans-serif, system-ui, sans-serif;
+  --font-code: ui-monospace, monospace;
+}
+
+/* 2px corners on buttons, inputs, cards and menus. */
+:root,
+[data-border] {
+  --radius-xs: 2px;
+  --radius-s: 2px;
+  --radius-m: 2px;
+  --radius-l: 2px;
+  --radius-xl: 2px;
+}

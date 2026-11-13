@@ -1,0 +1,29 @@
+{
+  "arm": "M",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/UnseatedTray.tsx(10,32): error TS2307: Cannot find module '@mui/icons-material/CheckCircleOutline' or its corresponding type declarations.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 4595
+    }
+  },
+  "files": [
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/theme.ts",
+    "components/AppShell.tsx",
+    "components/GuestsView.tsx",
+    "components/PlanProvider.tsx",
+    "components/PlanView.tsx",
+    "components/RoomPlan.tsx",
+    "components/Sidebar.tsx",
+    "components/Stack.tsx",
+    "components/UnseatedTray.tsx",
+    "components/ui.ts",
+    "lib/data.ts",
+    "lib/plan.ts"
+  ]
+}

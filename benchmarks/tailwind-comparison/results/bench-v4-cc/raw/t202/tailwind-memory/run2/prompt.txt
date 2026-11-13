@@ -1,0 +1,491 @@
+Benchmark generation run. Rules: your working folder is /home/user/core/benchmarks/tailwind-comparison/work/sandbox/tailwind-memory. Paths below such as `project/` and `docs/` are relative to it. Read files only inside that folder (Read, Glob, Grep). Do not read anything outside it, do not run shell commands, and do not use any other tool, skill or connector.
+Deliver the page by writing the complete file to /home/user/core/benchmarks/tailwind-comparison/results/bench-v4-cc/raw/t202/tailwind-memory/run2/attempt-0.tsx with the Write tool (instead of replying with a code block), then reply with the single word: done.
+
+You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.
+
+Build the app described below in an existing Next.js 16 project (App Router, React 19, strict TypeScript).
+
+Stack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.
+
+Task: Seatwise is what Hannah, a wedding planner, uses to build the seating plan for Ines & Mateo's dinner with the couple, usually on a tablet at their kitchen table, then hands the result to the venue and the caterer.
+
+At `/`, the plan: the room drawn to scale from the data with the tables, band, dance floor, bar and garden doors in place. Each table shows its seats and who is in them, with empty seats visible. Hannah seats guests, moves them between tables and unseats them (drag and drop, or tapping, or both), and every count follows: seated, unseated, per table. Attending guests without a seat are listed so they are easy to place. The couple's rules (keep together, keep apart, seat near) are checked as she works: a broken rule is flagged on the tables involved and in a short summary. Selecting a table shows its guests and their dietary needs.
+
+At `/guests`, the guest list: search, filter by party, RSVP and diet, see each guest's table, and a count per meal (including dietary needs) for the caterer.
+
+Changes only need to last for the session.
+
+Style: up to you. It should look and feel like software the people above would pay for and use all day; no style guide is given, so the visual choices are yours.
+
+Use this data for the content (define it in the code; you may put it in `lib/data.ts`):
+
+```json
+{
+  "app": "Seatwise, a seating planner for wedding and event planners",
+  "event": {
+    "name": "Ines & Mateo's wedding dinner",
+    "date": "2027-06-19",
+    "venue": "The Orangery, Hollin Hall",
+    "room_m": {
+      "width": 24,
+      "depth": 14
+    }
+  },
+  "planner": {
+    "name": "Hannah Brook"
+  },
+  "fixtures": [
+    {
+      "id": "f-1",
+      "kind": "stage",
+      "label": "Band",
+      "x": 10,
+      "y": 0.5,
+      "w": 4,
+      "h": 2
+    },
+    {
+      "id": "f-2",
+      "kind": "dancefloor",
+      "label": "Dance floor",
+      "x": 8.5,
+      "y": 3,
+      "w": 7,
+      "h": 4
+    },
+    {
+      "id": "f-3",
+      "kind": "bar",
+      "label": "Bar",
+      "x": 21,
+      "y": 10,
+      "w": 2.5,
+      "h": 3.5
+    },
+    {
+      "id": "f-4",
+      "kind": "door",
+      "label": "Garden doors",
+      "x": 0,
+      "y": 6,
+      "w": 0.5,
+      "h": 2.5
+    }
+  ],
+  "tables": [
+    {
+      "id": "t-head",
+      "name": "Top table",
+      "shape": "long",
+      "seats": 8,
+      "x": 8,
+      "y": 8.2,
+      "rotation": 0
+    },
+    {
+      "id": "t-1",
+      "name": "Table 1",
+      "shape": "round",
+      "seats": 8,
+      "x": 3,
+      "y": 2.5
+    },
+    {
+      "id": "t-2",
+      "name": "Table 2",
+      "shape": "round",
+      "seats": 8,
+      "x": 3,
+      "y": 7
+    },
+    {
+      "id": "t-3",
+      "name": "Table 3",
+      "shape": "round",
+      "seats": 8,
+      "x": 3,
+      "y": 11.5
+    },
+    {
+      "id": "t-4",
+      "name": "Table 4",
+      "shape": "round",
+      "seats": 8,
+      "x": 19,
+      "y": 2.5
+    },
+    {
+      "id": "t-5",
+      "name": "Table 5",
+      "shape": "round",
+      "seats": 8,
+      "x": 19,
+      "y": 7
+    },
+    {
+      "id": "t-6",
+      "name": "Table 6",
+      "shape": "round",
+      "seats": 6,
+      "x": 12,
+      "y": 12
+    }
+  ],
+  "guests": [
+    {
+      "id": "g-01",
+      "name": "Ines Carvalho",
+      "party": "Couple",
+      "rsvp": "yes",
+      "diet": null,
+      "table": "t-head"
+    },
+    {
+      "id": "g-02",
+      "name": "Mateo Alvarez",
+      "party": "Couple",
+      "rsvp": "yes",
+      "diet": "Vegetarian",
+      "table": "t-head"
+    },
+    {
+      "id": "g-03",
+      "name": "Rui Carvalho",
+      "party": "Bride's family",
+      "rsvp": "yes",
+      "diet": null,
+      "table": "t-head"
+    },
+    {
+      "id": "g-04",
+      "name": "Marta Carvalho",
+      "party": "Bride's family",
+      "rsvp": "yes",
+      "diet": "Gluten free",
+      "table": "t-head"
+    },
+    {
+      "id": "g-05",
+      "name": "Javier Alvarez",
+      "party": "Groom's family",
+      "rsvp": "yes",
+      "diet": null,
+      "table": "t-head"
+    },
+    {
+      "id": "g-06",
+      "name": "Lucia Alvarez",
+      "party": "Groom's family",
+      "rsvp": "yes",
+      "diet": null,
+      "table": "t-head"
+    },
+    {
+      "id": "g-07",
+      "name": "Sofia Carvalho",
+      "party": "Bride's family",
+      "rsvp": "yes",
+      "diet": null,
+      "table": "t-1"
+    },
+    {
+      "id": "g-08",
+      "name": "Tiago Carvalho",
+      "party": "Bride's family",
+      "rsvp": "yes",
+      "diet": null,
+      "table": "t-1"
+    },
+    {
+      "id": "g-09",
+      "name": "Avó Rosa Carvalho",
+      "party": "Bride's family",
+      "rsvp": "yes",
+      "diet": "Soft food",
+      "table": "t-1"
+    },
+    {
+      "id": "g-10",
+      "name": "Pedro Nunes",
+      "party": "Bride's family",
+      "rsvp": "yes",
+      "diet": null,
+      "table": "t-1"
+    },
+    {
+      "id": "g-11",
+      "name": "Ana Nunes",
+      "party": "Bride's family",
+      "rsvp": "yes",
+      "diet": "Vegan",
+      "table": "t-1"
+    },
+    {
+      "id": "g-12",
+      "name": "Carmen Alvarez",
+      "party": "Groom's family",
+      "rsvp": "yes",
+      "diet": null,
+      "table": "t-4"
+    },
+    {
+      "id": "g-13",
+      "name": "Diego Alvarez",
+      "party": "Groom's family",
+      "rsvp": "yes",
+      "diet": null,
+      "table": "t-4"
+    },
+    {
+      "id": "g-14",
+      "name": "Elena Ruiz",
+      "party": "Groom's family",
+      "rsvp": "yes",
+      "diet": "Nut allergy",
+      "table": "t-4"
+    },
+    {
+      "id": "g-15",
+      "name": "Pablo Ruiz",
+      "party": "Groom's family",
+      "rsvp": "yes",
+      "diet": null,
+      "table": "t-4"
+    },
+    {
+      "id": "g-16",
+      "name": "Isabel Ruiz",
+      "party": "Groom's family",
+      "rsvp": "maybe",
+      "diet": null,
+      "table": null
+    },
+    {
+      "id": "g-17",
+      "name": "Chloe Martin",
+      "party": "University friends",
+      "rsvp": "yes",
+      "diet": null,
+      "table": "t-2"
+    },
+    {
+      "id": "g-18",
+      "name": "Ben Okafor",
+      "party": "University friends",
+      "rsvp": "yes",
+      "diet": null,
+      "table": "t-2"
+    },
+    {
+      "id": "g-19",
+      "name": "Leila Haddad",
+      "party": "University friends",
+      "rsvp": "yes",
+      "diet": "Halal",
+      "table": "t-2"
+    },
+    {
+      "id": "g-20",
+      "name": "Omar Haddad",
+      "party": "University friends",
+      "rsvp": "yes",
+      "diet": "Halal",
+      "table": "t-2"
+    },
+    {
+      "id": "g-21",
+      "name": "Freya Lund",
+      "party": "University friends",
+      "rsvp": "yes",
+      "diet": "Vegetarian",
+      "table": null
+    },
+    {
+      "id": "g-22",
+      "name": "Jonas Lund",
+      "party": "University friends",
+      "rsvp": "yes",
+      "diet": null,
+      "table": null
+    },
+    {
+      "id": "g-23",
+      "name": "Grace Lee",
+      "party": "Work friends",
+      "rsvp": "yes",
+      "diet": null,
+      "table": "t-5"
+    },
+    {
+      "id": "g-24",
+      "name": "Marcus Webb",
+      "party": "Work friends",
+      "rsvp": "yes",
+      "diet": null,
+      "table": "t-5"
+    },
+    {
+      "id": "g-25",
+      "name": "Nadia Petrova",
+      "party": "Work friends",
+      "rsvp": "yes",
+      "diet": "Pescatarian",
+      "table": "t-5"
+    },
+    {
+      "id": "g-26",
+      "name": "Tom Fisher",
+      "party": "Work friends",
+      "rsvp": "no",
+      "diet": null,
+      "table": null
+    },
+    {
+      "id": "g-27",
+      "name": "Hana Sato",
+      "party": "Work friends",
+      "rsvp": "yes",
+      "diet": null,
+      "table": null
+    },
+    {
+      "id": "g-28",
+      "name": "Luis Ortega",
+      "party": "Groom's football club",
+      "rsvp": "yes",
+      "diet": null,
+      "table": "t-3"
+    },
+    {
+      "id": "g-29",
+      "name": "Kai Brennan",
+      "party": "Groom's football club",
+      "rsvp": "yes",
+      "diet": null,
+      "table": "t-3"
+    },
+    {
+      "id": "g-30",
+      "name": "Sean Doyle",
+      "party": "Groom's football club",
+      "rsvp": "yes",
+      "diet": null,
+      "table": "t-3"
+    },
+    {
+      "id": "g-31",
+      "name": "Ryan Doyle",
+      "party": "Groom's football club",
+      "rsvp": "yes",
+      "diet": null,
+      "table": null
+    },
+    {
+      "id": "g-32",
+      "name": "Hugo Carvalho",
+      "party": "Bride's family",
+      "rsvp": "yes",
+      "diet": "Children's menu",
+      "table": "t-1"
+    },
+    {
+      "id": "g-33",
+      "name": "Mia Carvalho",
+      "party": "Bride's family",
+      "rsvp": "yes",
+      "diet": "Children's menu",
+      "table": null
+    },
+    {
+      "id": "g-34",
+      "name": "Paula Mendes",
+      "party": "Bride's family",
+      "rsvp": "pending",
+      "diet": null,
+      "table": null
+    },
+    {
+      "id": "g-35",
+      "name": "Victor Mendes",
+      "party": "Bride's family",
+      "rsvp": "pending",
+      "diet": null,
+      "table": null
+    },
+    {
+      "id": "g-36",
+      "name": "Zoe Bennett",
+      "party": "Plus-ones",
+      "rsvp": "yes",
+      "diet": null,
+      "table": "t-2"
+    },
+    {
+      "id": "g-37",
+      "name": "Arjun Mehta",
+      "party": "Plus-ones",
+      "rsvp": "yes",
+      "diet": "Vegetarian",
+      "table": "t-5"
+    },
+    {
+      "id": "g-38",
+      "name": "Laura Svensson",
+      "party": "Plus-ones",
+      "rsvp": "yes",
+      "diet": null,
+      "table": null
+    }
+  ],
+  "rules": [
+    {
+      "kind": "together",
+      "guests": [
+        "g-21",
+        "g-22"
+      ],
+      "note": "Couple"
+    },
+    {
+      "kind": "together",
+      "guests": [
+        "g-32",
+        "g-33"
+      ],
+      "note": "Siblings, under 10"
+    },
+    {
+      "kind": "apart",
+      "guests": [
+        "g-29",
+        "g-30"
+      ],
+      "note": "Brothers Sean and Ryan Doyle are not speaking"
+    },
+    {
+      "kind": "apart",
+      "guests": [
+        "g-12",
+        "g-34"
+      ],
+      "note": "Ask the couple: old family dispute"
+    },
+    {
+      "kind": "near",
+      "guests": [
+        "g-09"
+      ],
+      "note": "Avó Rosa uses a wheelchair: seat near the garden doors, away from the band"
+    }
+  ]
+}
+```
+
+Requirements:
+- The app must serve these routes: `/`, `/guests`. Each route default-exports its page from its `page.tsx`; nested layouts are allowed.
+- Write as many files as the app needs, under `app/`, `components/` or `lib/`. Do not change any file that already exists in the project except `app/page.tsx`, `app/globals.css`, `app/layout.tsx` (send the whole new file). The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.
+- Put "use client" at the top of every file that uses state, effects or event handlers.
+- Use realistic placeholder content defined in the files (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.
+- The app must type-check under strict TypeScript, pass `next build`, and render every route without console errors.
+- Make it responsive from phone to desktop, and accessible.
+- Reply with every file, each in its own fenced code block whose opening line names the file's path, like ```tsx app/settings/page.tsx, and nothing else.

@@ -1,0 +1,35 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/SidePanel.tsx(302,27): error TS2769: No overload matches this call.\n  Overload 1 of 2, '(props: PolymorphicProps<\"ul\", FlexLayoutProps>): ReactNode', gave the following error.\n    Type '\"6\"' is not assignable to type 'number | SpacingToken | CSSUnit | \"-1\" | undefined'.\n  Overload 2 of 2, '(props: FlexLayoutProps & Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, keyof FlexLayoutProps>): ReactNode', gave the following error.\n    Type '\"6\"' is not assignable to type 'number | SpacingToken | CSSUnit | \"-1\" | undefined'.\ncomponents/SidePanel.tsx(311,19): error TS2769: No overload matches this call.\n  Overload 1 of 2, '(props: PolymorphicProps<\"div\", FlexLayoutProps>): ReactNode', gave the following error.\n    Type '\"6\"' is not assignable to type 'number | SpacingToken | CSSUnit | \"-1\" | undefined'.\n  Overload 2 of 2, '(props: FlexLayoutProps & Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, keyof FlexLayoutProps>): ReactNode', gave the following error.\n    Type '\"6\"' is not assignable to type 'number | SpacingToken | CSSUnit | \"-1\" | undefined'.\ncomponents/SidePanel.tsx(315,29): error TS2769: No overload matches this call.\n  Overload 1 of 2, '(props: PolymorphicProps<\"ul\", FlexLayoutProps>): ReactNode', gave the following error.\n    Type '\"6\"' is not assignable to type 'number | SpacingToken | CSSUnit | \"-1\" | undefined'.\n  Overload 2 of 2, '(props: FlexLayoutProps & Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, keyof FlexLayoutProps>): ReactNode', gave the following error.\n    Type '\"6\"' is not assignable to type 'number | SpacingToken | CSSUnit | \"-1\" | undefined'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2628
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "lib/rules.ts",
+    "lib/plan.tsx",
+    "lib/useWide.ts",
+    "components/ui.ts",
+    "components/AppShell.tsx",
+    "components/Plan.tsx",
+    "components/SidePanel.tsx",
+    "components/PlanView.tsx",
+    "components/GuestsView.tsx",
+    "app/page.tsx",
+    "app/guests/page.tsx",
+    "app/layout.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ lib/data.ts: no mechanical issues\n✓ lib/rules.ts: no mechanical issues\n✓ lib/plan.tsx: no mechanical issues\n✓ lib/useWide.ts: no mechanical issues\n✓ components/ui.ts: no mechanical issues\n✗ components/AppShell.tsx: 3 issue(s)\n  [layout.leafProps] Text is a leaf in 3.0 and does not take s: put it on a <Column> around it (a leaf keeps margins, flex, fillWidth, position and the offsets, className and style)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✗ components/Plan.tsx: 2 issue(s)\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✗ components/SidePanel.tsx: 2 issue(s)\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✗ components/PlanView.tsx: 1 issue(s)\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✗ components/GuestsView.tsx: 1 issue(s)\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ app/page.tsx: no mechanical issues\n✓ app/guests/page.tsx: no mechanical issues\n✗ app/layout.tsx: 1 issue(s)\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint",
+    "validator": {
+      "package_version": "3.0.0-beta.1",
+      "script_sha256": "8b6fb92b077251ad"
+    }
+  }
+}

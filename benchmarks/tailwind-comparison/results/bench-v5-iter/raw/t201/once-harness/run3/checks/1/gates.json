@@ -1,0 +1,32 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/PatientSearch.tsx(86,82): error TS2769: No overload matches this call.\n  Overload 1 of 2, '(props: TextProps<\"p\"> & CommonProps & LeafProps & Pick<DisplayProps, \"opacity\"> & Omit<DetailedHTMLProps<HTMLAttributes<HTMLParagraphElement>, HTMLParagraphElement>, \"ref\"> & { ...; }): ReactNode', gave the following error.\n    Type '{ children: string; as: \"p\"; textVariant: \"label-default-s\"; onBackground: \"neutral-weak\"; paddingX: string; paddingY: string; \"aria-live\": \"polite\"; }' is not assignable to type 'IntrinsicAttributes & TextProps<\"p\"> & CommonProps & LeafProps & Pick<DisplayProps, \"opacity\"> & Omit<...> & { ...; }'.\n      Property 'paddingX' does not exist on type 'IntrinsicAttributes & TextProps<\"p\"> & CommonProps & LeafProps & Pick<DisplayProps, \"opacity\"> & Omit<...> & { ...; }'.\n  Overload 2 of 2, '(props: Omit<TypeProps<\"span\">, \"as\"> & { as?: TextElement | undefined; ref?: undefined; }): ReactNode', gave the following error.\n    Type '{ children: string; as: \"p\"; textVariant: \"label-default-s\"; onBackground: \"neutral-weak\"; paddingX: string; paddingY: string; \"aria-live\": \"polite\"; }' is not assignable to type 'IntrinsicAttributes & Omit<TypeProps<\"span\">, \"as\"> & { as?: TextElement | undefined; ref?: undefined; }'.\n      Property 'paddingX' does not exist on type 'IntrinsicAttributes & Omit<TypeProps<\"span\">, \"as\"> & { as?: TextElement | undefined; ref?: undefined; }'.\ncomponents/Schedule.tsx(227,15): error TS2322: Type '\"bolt\" | \"calendar\" | \"people\" | \"clock\"' is not assignable to type 'IconName'.\n  Type '\"clock\"' is not assignable to type 'IconName'. Did you mean '\"lock\"'?",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2751
+    }
+  },
+  "files": [
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "components/AlertTags.tsx",
+    "components/AppShell.tsx",
+    "components/BookDialog.tsx",
+    "components/PatientRecord.tsx",
+    "components/PatientSearch.tsx",
+    "components/Schedule.tsx",
+    "lib/data.ts"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/layout.tsx: 1 issue(s)\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint\n✓ app/page.tsx: no mechanical issues\n✓ app/patients/[id]/page.tsx: no mechanical issues\n✓ components/AlertTags.tsx: no mechanical issues\n✗ components/AppShell.tsx: 3 issue(s)\n  [layout.leafProps] Text is a leaf in 3.0 and does not take s: put it on a <Column> around it (a leaf keeps margins, flex, fillWidth, position and the offsets, className and style)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✗ components/BookDialog.tsx: 1 issue(s)\n  [layout.primitiveProps] <Column as=\"form\"> keeps a div's event types, so an onSubmit taking FormEvent<HTMLFormElement>, and noValidate, are type errors — wrap the Column in a native <form onSubmit={…}>\n✗ components/PatientRecord.tsx: 2 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✗ components/PatientSearch.tsx: 3 issue(s)\n  [layout.leafProps] Text is a leaf in 3.0 and does not take paddingX, paddingY: put them on a <Column> around it (a leaf keeps margins, flex, fillWidth, position and the offsets, className and style)\n  [layout.defaults] position=\"relative\" is the default — omit it\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n✗ components/Schedule.tsx: 2 issue(s)\n  [Icon.names] Unknown icon name in icon: \"clock\" — use a name from iconNames in spec.json, or register it by augmenting IconLibraryOverrides\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ lib/data.ts: no mechanical issues",
+    "validator": {
+      "package_version": "3.0.0-beta.1",
+      "script_sha256": "8b6fb92b077251ad"
+    }
+  }
+}

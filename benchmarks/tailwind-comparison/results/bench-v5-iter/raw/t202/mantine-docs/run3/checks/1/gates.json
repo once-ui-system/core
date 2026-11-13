@@ -1,0 +1,233 @@
+{
+  "arm": "T",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 3879
+    },
+    "build": {
+      "ok": true,
+      "ms": 10510
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 2039,
+          "height": 2704,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 2056,
+          "height": 2070,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 2056,
+          "height": 1363,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 2039,
+              "height": 2704,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 2056,
+              "height": 2070,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 2056,
+              "height": 1363,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 3,
+            "nodes": 65,
+            "serious_or_critical": 2,
+            "ids": [
+              "color-contrast:serious:16",
+              "label-content-name-mismatch:serious:48",
+              "page-has-heading-one:moderate:1"
+            ]
+          }
+        },
+        "/guests": {
+          "viewports": {
+            "phone": {
+              "text": 3174,
+              "height": 3423,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 3191,
+              "height": 2997,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 3191,
+              "height": 2147,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 49,
+            "serious_or_critical": 1,
+            "ids": [
+              "color-contrast:serious:49"
+            ]
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 3,
+        "nodes": 65,
+        "serious_or_critical": 2,
+        "ids": [
+          "color-contrast:serious:16",
+          "label-content-name-mismatch:serious:48",
+          "page-has-heading-one:moderate:1"
+        ]
+      },
+      "interaction": {
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1763,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1757,
+          "settled": true
+        },
+        "/guests phone": {
+          "ms": 1771,
+          "settled": true
+        },
+        "/guests tablet": {
+          "ms": 1765,
+          "settled": true
+        },
+        "/guests desktop": {
+          "ms": 1758,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 580,
+          "distinct_fontSize": 16,
+          "distinct_color": 13,
+          "distinct_background": 15,
+          "distinct_radius": 6,
+          "distinct_shadow": 1,
+          "distinct_spacing": 10,
+          "spacing_on_4px_grid": 0.466
+        },
+        "/guests": {
+          "elements": 707,
+          "distinct_fontSize": 7,
+          "distinct_color": 12,
+          "distinct_background": 14,
+          "distinct_radius": 5,
+          "distinct_shadow": 1,
+          "distinct_spacing": 8,
+          "spacing_on_4px_grid": 0.798
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 255.1,
+          "css_kb": 42.5,
+          "fcp_ms": 232,
+          "cls": 0,
+          "long_task_ms": 27
+        },
+        "/guests": {
+          "js_kb": 255.1,
+          "css_kb": 42.5,
+          "fcp_ms": 208,
+          "cls": 0,
+          "long_task_ms": 7
+        }
+      },
+      "views": {
+        "table-selected phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-phone.jpg"
+        },
+        "table-selected tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-tablet.jpg"
+        },
+        "table-selected desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/theme.ts",
+    "components/GuestChip.tsx",
+    "components/GuestsView.tsx",
+    "components/PlanView.tsx",
+    "components/Room.tsx",
+    "components/Shell.tsx",
+    "components/TablePanel.tsx",
+    "components/room.module.css",
+    "lib/data.ts",
+    "lib/drag.tsx",
+    "lib/plan.tsx",
+    "lib/rules.ts",
+    "lib/style.ts"
+  ]
+}

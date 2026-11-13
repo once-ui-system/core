@@ -1,0 +1,18 @@
+{
+  "status": "accepted",
+  "attempts": 2,
+  "accepted_attempt": 1,
+  "repair_rounds": 1,
+  "gates": [
+    {
+      "attempt": 0,
+      "passed": false,
+      "failed_gate": "typecheck"
+    },
+    {
+      "attempt": 1,
+      "passed": true,
+      "failed_gate": null
+    }
+  ]
+}

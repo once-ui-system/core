@@ -1,0 +1,394 @@
+Benchmark generation run. Rules: your working folder is /home/user/core/benchmarks/tailwind-comparison/work/sandbox/mui-docs. Paths below such as `project/` and `docs/` are relative to it. Read files only inside that folder (Read, Glob, Grep). Do not read anything outside it, do not run shell commands, and do not use any other tool, skill or connector.
+Deliver the page by writing the complete file to /home/user/core/benchmarks/tailwind-comparison/results/bench-v4-cc/raw/t201/mui-docs/run1/attempt-0.tsx with the Write tool (instead of replying with a code block), then reply with the single word: done.
+
+You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.
+
+Build the app described below in an existing Next.js 16 project (App Router, React 19, strict TypeScript).
+
+Stack: Material UI (`@mui/material` 9) is set up with its Next.js App Router integration, light and dark color schemes and `CssBaseline`; `@mui/icons-material`, `@mui/x-charts` and `@mui/x-data-grid` are installed, and the Material UI documentation is in the `docs/` folder, which you can read (start with `docs/README.md`).
+
+Task: Pawpoint is the software the front desk of Hillside Veterinary Clinic runs on all day. Rosa, the receptionist, uses it to see who is in, who is waiting and who is next, to check patients in as they arrive, to book follow-ups while the owner is standing at the counter, and to pull up a pet's record when a vet asks.
+
+At `/`, today's schedule: every appointment for the three vets with its time, patient, owner, reason and status (booked, checked in, in exam, done, cancelled). Urgent visits stand out. Rosa can check a booked patient in, and the waiting list (who is checked in and for how long) updates. She can book a new appointment by picking a patient, a vet and a time; it then shows on the schedule, and it cannot clash with an existing booking for that vet. A search finds a patient or owner by name and opens the record.
+
+At `/patients/p-104`, Olive's record: patient and owner details, the alerts, a weight trend over her visits, vaccinations with the overdue ones flagged against today's date, current medications and the visit history with notes. Medical alerts must be hard to miss wherever a patient appears.
+
+It is used on a tablet at the counter and sometimes on a phone.
+
+Style: up to you. It should look and feel like software the people above would pay for and use all day; no style guide is given, so the visual choices are yours.
+
+Use this data for the content (define it in the code; you may put it in `lib/data.ts`):
+
+```json
+{
+  "clinic": "Pawpoint, front-desk and records software for Hillside Veterinary Clinic",
+  "today": "2026-11-12",
+  "user": {
+    "name": "Rosa Lindqvist",
+    "role": "Receptionist"
+  },
+  "vets": [
+    {
+      "id": "v-1",
+      "name": "Dr. Amara Osei",
+      "room": "Exam 1"
+    },
+    {
+      "id": "v-2",
+      "name": "Dr. Tomás Reyes",
+      "room": "Exam 2"
+    },
+    {
+      "id": "v-3",
+      "name": "Dr. Helen Park",
+      "room": "Surgery"
+    }
+  ],
+  "owners": [
+    {
+      "id": "o-1",
+      "name": "Daniel Kim",
+      "phone": "+1 555 0142"
+    },
+    {
+      "id": "o-2",
+      "name": "Priya Natarajan",
+      "phone": "+1 555 0178"
+    },
+    {
+      "id": "o-3",
+      "name": "Lucas Moreau",
+      "phone": "+1 555 0119"
+    },
+    {
+      "id": "o-4",
+      "name": "Grace Whitfield",
+      "phone": "+1 555 0163"
+    },
+    {
+      "id": "o-5",
+      "name": "Sam Oduya",
+      "phone": "+1 555 0190"
+    },
+    {
+      "id": "o-6",
+      "name": "Elena Rossi",
+      "phone": "+1 555 0105"
+    }
+  ],
+  "patients": [
+    {
+      "id": "p-101",
+      "name": "Biscuit",
+      "species": "Dog",
+      "breed": "Beagle",
+      "born": "2019-04-02",
+      "sex": "Male, neutered",
+      "owner": "o-1",
+      "alerts": []
+    },
+    {
+      "id": "p-102",
+      "name": "Mochi",
+      "species": "Cat",
+      "breed": "Domestic shorthair",
+      "born": "2021-07-15",
+      "sex": "Female, spayed",
+      "owner": "o-2",
+      "alerts": [
+        "Bites when restrained"
+      ]
+    },
+    {
+      "id": "p-103",
+      "name": "Pepper",
+      "species": "Dog",
+      "breed": "Border collie",
+      "born": "2016-01-20",
+      "sex": "Female, spayed",
+      "owner": "o-3",
+      "alerts": []
+    },
+    {
+      "id": "p-104",
+      "name": "Olive",
+      "species": "Dog",
+      "breed": "Labrador retriever",
+      "born": "2014-09-08",
+      "sex": "Female, spayed",
+      "owner": "o-4",
+      "alerts": [
+        "Penicillin allergy",
+        "Chronic kidney disease, stage 2"
+      ]
+    },
+    {
+      "id": "p-105",
+      "name": "Kiwi",
+      "species": "Bird",
+      "breed": "Budgerigar",
+      "born": "2023-03-11",
+      "sex": "Male",
+      "owner": "o-5",
+      "alerts": []
+    },
+    {
+      "id": "p-106",
+      "name": "Tofu",
+      "species": "Rabbit",
+      "breed": "Holland lop",
+      "born": "2022-05-30",
+      "sex": "Female",
+      "owner": "o-6",
+      "alerts": []
+    },
+    {
+      "id": "p-107",
+      "name": "Ziggy",
+      "species": "Cat",
+      "breed": "Maine coon",
+      "born": "2018-11-02",
+      "sex": "Male, neutered",
+      "owner": "o-2",
+      "alerts": [
+        "Diabetic: insulin twice daily"
+      ]
+    },
+    {
+      "id": "p-108",
+      "name": "Bruno",
+      "species": "Dog",
+      "breed": "French bulldog",
+      "born": "2022-02-14",
+      "sex": "Male",
+      "owner": "o-5",
+      "alerts": [
+        "Brachycephalic: sedation risk"
+      ]
+    }
+  ],
+  "appointments": [
+    {
+      "id": "a-01",
+      "patient": "p-101",
+      "vet": "v-1",
+      "start": "08:30",
+      "minutes": 20,
+      "reason": "Annual vaccination",
+      "status": "done"
+    },
+    {
+      "id": "a-02",
+      "patient": "p-104",
+      "vet": "v-2",
+      "start": "08:30",
+      "minutes": 30,
+      "reason": "Kidney panel recheck",
+      "status": "done"
+    },
+    {
+      "id": "a-03",
+      "patient": "p-108",
+      "vet": "v-3",
+      "start": "08:00",
+      "minutes": 120,
+      "reason": "Soft palate surgery",
+      "status": "in_exam"
+    },
+    {
+      "id": "a-04",
+      "patient": "p-102",
+      "vet": "v-1",
+      "start": "09:00",
+      "minutes": 30,
+      "reason": "Limping, left hind leg",
+      "status": "in_exam"
+    },
+    {
+      "id": "a-05",
+      "patient": "p-107",
+      "vet": "v-2",
+      "start": "09:15",
+      "minutes": 20,
+      "reason": "Glucose curve",
+      "status": "checked_in"
+    },
+    {
+      "id": "a-06",
+      "patient": "p-105",
+      "vet": "v-1",
+      "start": "09:45",
+      "minutes": 20,
+      "reason": "Beak and nail trim",
+      "status": "checked_in"
+    },
+    {
+      "id": "a-07",
+      "patient": "p-103",
+      "vet": "v-2",
+      "start": "10:00",
+      "minutes": 30,
+      "reason": "Senior wellness exam",
+      "status": "booked"
+    },
+    {
+      "id": "a-08",
+      "patient": "p-106",
+      "vet": "v-1",
+      "start": "10:30",
+      "minutes": 20,
+      "reason": "Not eating since yesterday",
+      "status": "booked",
+      "urgent": true
+    },
+    {
+      "id": "a-09",
+      "patient": "p-104",
+      "vet": "v-3",
+      "start": "11:00",
+      "minutes": 45,
+      "reason": "Dental cleaning",
+      "status": "booked"
+    },
+    {
+      "id": "a-10",
+      "patient": "p-101",
+      "vet": "v-2",
+      "start": "11:30",
+      "minutes": 20,
+      "reason": "Ear infection follow-up",
+      "status": "booked"
+    },
+    {
+      "id": "a-11",
+      "patient": "p-107",
+      "vet": "v-1",
+      "start": "13:30",
+      "minutes": 30,
+      "reason": "Dental check",
+      "status": "booked"
+    },
+    {
+      "id": "a-12",
+      "patient": "p-103",
+      "vet": "v-3",
+      "start": "14:00",
+      "minutes": 60,
+      "reason": "Lump removal",
+      "status": "cancelled"
+    },
+    {
+      "id": "a-13",
+      "patient": "p-102",
+      "vet": "v-2",
+      "start": "15:00",
+      "minutes": 20,
+      "reason": "X-ray results",
+      "status": "booked"
+    }
+  ],
+  "records": {
+    "p-104": {
+      "weights_kg": [
+        {
+          "date": "2025-05-14",
+          "kg": 31.8
+        },
+        {
+          "date": "2025-08-20",
+          "kg": 31.1
+        },
+        {
+          "date": "2025-11-03",
+          "kg": 30.4
+        },
+        {
+          "date": "2026-02-11",
+          "kg": 29.9
+        },
+        {
+          "date": "2026-06-17",
+          "kg": 29.2
+        },
+        {
+          "date": "2026-11-12",
+          "kg": 28.6
+        }
+      ],
+      "vaccinations": [
+        {
+          "name": "Rabies",
+          "given": "2024-10-02",
+          "due": "2027-10-02"
+        },
+        {
+          "name": "DHPP",
+          "given": "2025-10-15",
+          "due": "2026-10-15"
+        },
+        {
+          "name": "Leptospirosis",
+          "given": "2025-10-15",
+          "due": "2026-10-15"
+        },
+        {
+          "name": "Bordetella",
+          "given": "2026-04-08",
+          "due": "2027-04-08"
+        }
+      ],
+      "medications": [
+        {
+          "name": "Benazepril 5 mg",
+          "dose": "1 tablet daily",
+          "since": "2025-08-20"
+        },
+        {
+          "name": "Renal diet (dry)",
+          "dose": "2.5 cups daily",
+          "since": "2025-08-20"
+        }
+      ],
+      "visits": [
+        {
+          "date": "2026-11-12",
+          "vet": "v-2",
+          "reason": "Kidney panel recheck",
+          "notes": "Creatinine 2.1 mg/dL (was 2.0). Weight down 0.6 kg. Continue benazepril, recheck in 3 months.",
+          "invoice_usd": 186.0
+        },
+        {
+          "date": "2026-06-17",
+          "vet": "v-2",
+          "reason": "Kidney panel recheck",
+          "notes": "Stable. Appetite good. Owner reports more drinking in hot weather.",
+          "invoice_usd": 172.5
+        },
+        {
+          "date": "2026-02-11",
+          "vet": "v-1",
+          "reason": "Coughing",
+          "notes": "Mild kennel cough. Supportive care; no antibiotics given (penicillin allergy).",
+          "invoice_usd": 94.0
+        },
+        {
+          "date": "2025-11-03",
+          "vet": "v-2",
+          "reason": "Senior wellness exam",
+          "notes": "Grade 2 dental tartar. Dental cleaning recommended.",
+          "invoice_usd": 148.0
+        }
+      ]
+    }
+  }
+}
+```
+
+Requirements:
+- The app must serve these routes: `/`, `/patients/p-104`. Each route default-exports its page from its `page.tsx`; nested layouts are allowed.
+- Write as many files as the app needs, under `app/`, `components/` or `lib/`. Do not change any file that already exists in the project except `app/page.tsx`, `app/theme.ts`, `app/layout.tsx` (send the whole new file). The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.
+- Put "use client" at the top of every file that uses state, effects or event handlers.
+- Use realistic placeholder content defined in the files (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.
+- The app must type-check under strict TypeScript, pass `next build`, and render every route without console errors.
+- Make it responsive from phone to desktop, and accessible.
+- Reply with every file, each in its own fenced code block whose opening line names the file's path, like ```tsx app/settings/page.tsx, and nothing else.

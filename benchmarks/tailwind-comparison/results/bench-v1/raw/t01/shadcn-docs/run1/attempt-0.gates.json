@@ -1,0 +1,40 @@
+{
+  "arm": "C",
+  "passed": false,
+  "failed_gate": "render",
+  "failure_output": "server did not start:\n",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 5415
+    },
+    "build": {
+      "ok": true,
+      "ms": 16974
+    },
+    "render": {
+      "ok": false,
+      "viewports": {},
+      "routes": {},
+      "errors": [
+        "server did not start:\n"
+      ],
+      "axe": null,
+      "interaction": {},
+      "settle": {}
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/app-sidebar.tsx",
+    "components/app-header.tsx",
+    "components/app-shell.tsx",
+    "app/page.tsx",
+    "components/dashboard-content.tsx",
+    "app/(app)/layout.tsx",
+    "app/(app)/projects/page.tsx",
+    "components/projects-table.tsx",
+    "app/(app)/settings/page.tsx",
+    "components/settings-form.tsx"
+  ]
+}
