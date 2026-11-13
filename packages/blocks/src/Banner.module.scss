@@ -78,7 +78,9 @@
   }
 }
 
-.close {
+// Scoped to the banner so the button's own `position: relative` cannot win
+// when its stylesheet loads later, as it does in production bundles.
+[data-banner] > .close {
   position: absolute;
   top: 50%;
   right: var(--static-space-8);

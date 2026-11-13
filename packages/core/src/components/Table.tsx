@@ -211,7 +211,11 @@ interface TableProps<T>
   columns: TableColumn<T>[];
   /** The rows: every row, or with `count` or `total` only the current page's. */
   rows: T[];
-  /** Called with the row the reader clicks, and its index in `rows`. */
+  /**
+   * Called with the row the reader clicks, and its index in `rows`. A pointer
+   * shortcut only: a row is not a tab stop, so also put a link or `Button` in
+   * one of its cells for keyboard users.
+   */
   onRowClick?: (row: T, index: number) => void;
   /**
    * Add a search field to the toolbar above the table: rows whose cells'

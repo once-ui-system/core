@@ -1,0 +1,61 @@
+// The strip scrolls sideways when its frames do not fit; then it can also be
+// dragged with the mouse.
+.strip {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.draggable {
+  cursor: grab;
+  user-select: none;
+}
+
+.dragging {
+  cursor: grabbing;
+
+  .hit {
+    cursor: grabbing;
+  }
+}
+
+// A block rendered at desktop width and scaled down to the thumbnail, so the
+// strip shows each block's real layout rather than a squeezed one.
+.canvas {
+  width: 1280px;
+  transform: scale(0.15);
+  transform-origin: top left;
+}
+
+.item {
+  flex: none;
+  transition: border-color var(--transition-duration-micro-medium, 200ms) ease;
+
+  &:hover {
+    border-color: var(--neutral-border-strong);
+  }
+}
+
+// The frame's click target: a plain button laid over the whole frame, as a
+// sibling of the preview and never around it, because a preview holds its own
+// buttons and links, which may not be nested inside another button.
+.hit {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: inherit;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--brand-solid-strong);
+    outline-offset: 2px;
+  }
+}

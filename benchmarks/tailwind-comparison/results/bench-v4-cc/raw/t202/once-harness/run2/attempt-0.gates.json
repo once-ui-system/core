@@ -1,0 +1,234 @@
+{
+  "arm": "A",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2548
+    },
+    "build": {
+      "ok": true,
+      "ms": 7700
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 1879,
+          "height": 2337,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 1879,
+          "height": 2086,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 1976,
+          "height": 1590,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 1879,
+              "height": 2337,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1879,
+              "height": 2086,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1976,
+              "height": 1590,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 56,
+            "serious_or_critical": 1,
+            "ids": [
+              "label-content-name-mismatch:serious:56"
+            ]
+          }
+        },
+        "/guests": {
+          "viewports": {
+            "phone": {
+              "text": 3050,
+              "height": 3028,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 3050,
+              "height": 2741,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 3147,
+              "height": 2050,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 1,
+        "nodes": 56,
+        "serious_or_critical": 1,
+        "ids": [
+          "label-content-name-mismatch:serious:56"
+        ]
+      },
+      "interaction": {
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1777,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1767,
+          "settled": true
+        },
+        "/guests phone": {
+          "ms": 1756,
+          "settled": true
+        },
+        "/guests tablet": {
+          "ms": 1767,
+          "settled": true
+        },
+        "/guests desktop": {
+          "ms": 1778,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 583,
+          "distinct_fontSize": 12,
+          "distinct_color": 5,
+          "distinct_background": 11,
+          "distinct_radius": 4,
+          "distinct_shadow": 0,
+          "distinct_spacing": 5,
+          "spacing_on_4px_grid": 0.857
+        },
+        "/guests": {
+          "elements": 925,
+          "distinct_fontSize": 8,
+          "distinct_color": 5,
+          "distinct_background": 9,
+          "distinct_radius": 4,
+          "distinct_shadow": 1,
+          "distinct_spacing": 9,
+          "spacing_on_4px_grid": 0.698
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 239.8,
+          "css_kb": 45.6,
+          "fcp_ms": 300,
+          "cls": 0,
+          "long_task_ms": 0
+        },
+        "/guests": {
+          "js_kb": 239.8,
+          "css_kb": 45.6,
+          "fcp_ms": 144,
+          "cls": 0.004,
+          "long_task_ms": 11
+        }
+      },
+      "views": {
+        "table-selected phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-phone.jpg"
+        },
+        "table-selected tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-tablet.jpg"
+        },
+        "table-selected desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "lib/plan.ts",
+    "components/PlanProvider.tsx",
+    "components/AppFrame.tsx",
+    "components/GuestChip.tsx",
+    "components/FloorPlan.tsx",
+    "components/TableStrip.tsx",
+    "components/UnseatedPanel.tsx",
+    "components/TablePanel.tsx",
+    "components/RulesPanel.tsx",
+    "components/PlanView.tsx",
+    "components/GuestsView.tsx",
+    "app/page.tsx",
+    "app/guests/page.tsx",
+    "app/layout.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ lib/data.ts: no mechanical issues\n✓ lib/plan.ts: no mechanical issues\n✓ components/PlanProvider.tsx: no mechanical issues\n✓ components/AppFrame.tsx: no mechanical issues\n✗ components/GuestChip.tsx: 2 issue(s)\n  [layout.primitiveProps] <Row as=\"button\" type> — a layout primitive has no type. Use <Card onClick> (it renders a button; selected sets aria-pressed), Button or ToggleButton\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ components/FloorPlan.tsx: no mechanical issues\n✓ components/TableStrip.tsx: no mechanical issues\n✓ components/UnseatedPanel.tsx: no mechanical issues\n✗ components/TablePanel.tsx: 1 issue(s)\n  [layout.primitiveProps] <Row as=\"button\" type> — a layout primitive has no type. Use <Card onClick> (it renders a button; selected sets aria-pressed), Button or ToggleButton\n✗ components/RulesPanel.tsx: 1 issue(s)\n  [layout.primitiveProps] <Row as=\"button\" type> — a layout primitive has no type. Use <Card onClick> (it renders a button; selected sets aria-pressed), Button or ToggleButton\n✗ components/PlanView.tsx: 1 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n✗ components/GuestsView.tsx: 3 issue(s)\n  [layout.primitiveProps] <Row as=\"button\" type> — a layout primitive has no type. Use <Card onClick> (it renders a button; selected sets aria-pressed), Button or ToggleButton\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ app/page.tsx: no mechanical issues\n✓ app/guests/page.tsx: no mechanical issues\n✗ app/layout.tsx: 1 issue(s)\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint",
+    "validator": {
+      "package_version": "3.0.0-beta.1",
+      "script_sha256": "8b6fb92b077251ad"
+    }
+  }
+}

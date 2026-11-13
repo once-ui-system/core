@@ -1,0 +1,270 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 28,
+      "input_total": 3740810,
+      "input_uncached": 62,
+      "cache_creation": 287732,
+      "cache_read": 3453016,
+      "visible_output_tokens_o200k": 23876,
+      "visible_output_tokens_claudeLegacy": 26285,
+      "thinking_blocks": 23
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/AGENTS.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/AGENTS.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project/src"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/app/(product)/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/app/(product)/components/Sidebar.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/components/Providers.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/node_modules/@once-ui-system/core/ai/bundles/page.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/resources/custom.css"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/bundles/page.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/bundles/list-page.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/ai"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/ai/examples/blocks/Footer4.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/files/src/lib/data.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/files/src/lib/seating.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/files/src/lib/seating.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/files/src/components/Providers.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/files/src/resources/custom.css"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/files/src/components/seatwise/party.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/files/src/components/seatwise/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/files/src/components/seatwise/Panels.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/files/src/components/seatwise/AppFrame.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/files/src/components/seatwise/PlanView.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/files/src/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/files/src/resources/custom.css"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/files/src/components/seatwise/GuestsView.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/files/src/app/guests/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/checks/1/screenshot-desktop.jpg"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/checks/1/screenshot-tablet.jpg"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/files/src/resources/custom.css"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/files/src/components/seatwise/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/files/src/components/seatwise/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/files/src/components/seatwise/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/files/src/components/seatwise/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t202/stack/run1/checks/4/screenshot-guests-tablet.jpg"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": false,
+    "violations": [
+      "disallowed tool: Bash",
+      "disallowed tool: Bash",
+      "disallowed tool: Bash",
+      "disallowed tool: Bash",
+      "disallowed tool: Bash",
+      "disallowed tool: Bash",
+      "disallowed tool: Bash",
+      "disallowed tool: Bash",
+      "disallowed tool: Bash"
+    ]
+  },
+  "arm": "S"
+}

@@ -1,0 +1,31 @@
+{
+  "check": "2",
+  "at": "2026-11-10T23:37:37.757Z",
+  "ms": 52034,
+  "files": [
+    "app/globals.css",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "components/Alerts.tsx",
+    "components/BookingDialog.tsx",
+    "components/Header.tsx",
+    "components/Schedule.tsx",
+    "components/SearchBox.tsx",
+    "components/StatusBadge.tsx",
+    "components/WeightChart.tsx",
+    "lib/data.ts"
+  ],
+  "passed": true,
+  "gates_passed": true,
+  "failed_gate": null,
+  "adherence": {
+    "system": 0,
+    "raw": 21,
+    "share": null,
+    "colours": 1,
+    "cssLines": 15,
+    "ok": true,
+    "reasons": []
+  }
+}

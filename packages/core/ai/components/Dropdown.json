@@ -28,6 +28,7 @@
   "optionsCount": "number",
   "dropdownId": "string",
   "disableTriggerClick": "boolean",
+  "alignSelected": "boolean",
   "onFocusCapture": "React.FocusEventHandler<HTMLDivElement>",
   "onBlurCapture": "React.FocusEventHandler<HTMLDivElement>"
  },
