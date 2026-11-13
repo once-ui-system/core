@@ -16,7 +16,8 @@
   "value": "StylePanelValue",
   "onValueChange": "(next: StylePanelValue, changed: Partial<StylePanelValue>) => void",
   "labels": "StylePanelLabels",
-  "stacked": "boolean = false"
+  "stacked": "boolean = false",
+  "size": "StylePanelSize = m"
  },
  "tags": [
   "settings",
@@ -280,6 +281,10 @@
   "StylePanelSchemeRow": [
    "brand",
    "accent"
+  ],
+  "StylePanelSize": [
+   "s",
+   "m"
   ],
   "StylePanelSwatchLabels": {
    "shape": "(name: string) => string",

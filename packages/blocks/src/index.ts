@@ -3,6 +3,7 @@
 export * from "./Banner.js";
 export * from "./Book.js";
 export * from "./LogoCloud.js";
+export * from "./MascotPanel.js";
 export * from "./ScrollToTop.js";
 export * from "./StyleOverlay.js";
 export * from "./StylePanel.js";

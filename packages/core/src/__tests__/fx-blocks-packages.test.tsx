@@ -37,7 +37,15 @@ const FX = [
   "TypeFx",
   "WeatherFx",
 ];
-const BLOCKS = ["Banner", "Book", "LogoCloud", "ScrollToTop", "StyleOverlay", "StylePanel"];
+const BLOCKS = [
+  "Banner",
+  "Book",
+  "LogoCloud",
+  "MascotPanel",
+  "ScrollToTop",
+  "StyleOverlay",
+  "StylePanel",
+];
 /** The page sections, new in blocks with 3.0 (never in core). */
 const PAGE_SECTIONS = [
   "AboutSection",
@@ -81,12 +89,26 @@ const SECTIONS = [
   "BodyText",
   "Advanced",
 ].map((part) => `StylePanel${part}`);
+
+/** MascotPanel's parts, plain named exports of blocks like StylePanel's. */
+const MASCOT_PANEL_PARTS = [
+  "Root",
+  "Preview",
+  "Actions",
+  "Body",
+  "Color",
+  "Eyes",
+  "Face",
+  "Accessories",
+  "Working",
+  "Motion",
+].map((part) => `MascotPanel${part}`);
 const PACKAGES = [
   ["@once-ui-system/fx", FX, []],
   [
     "@once-ui-system/blocks",
     [...BLOCKS, ...PAGE_SECTIONS, ...SETTINGS],
-    [...SECTIONS, "SettingsLabelsProvider"],
+    [...SECTIONS, "SettingsLabelsProvider", ...MASCOT_PANEL_PARTS],
   ],
 ] as const;
 

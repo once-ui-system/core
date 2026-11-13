@@ -5,6 +5,7 @@ import {
   Banner,
   Book,
   LogoCloud,
+  MascotPanel,
   ScrollToTop,
   StyleOverlay,
   StylePanel,
@@ -469,6 +470,7 @@ const mdxComponents = createMdxComponents({
   ScrollLock,
   StyleOverlay,
   StylePanel,
+  MascotPanel,
   ThemeSwitcher,
   ThemeInit,
 
