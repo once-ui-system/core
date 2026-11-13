@@ -1,0 +1,23 @@
+{
+  "arm": "K",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/homes/[id]/not-found.tsx(3,28): error TS2307: Cannot find module '@/components/site-header' or its corresponding type declarations.\napp/homes/[id]/page.tsx(10,28): error TS2307: Cannot find module '@/components/site-header' or its corresponding type declarations.\napp/homes/[id]/page.tsx(11,77): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\napp/homes/[id]/page.tsx(14,21): error TS7006: Parameter 'h' implicitly has an 'any' type.\napp/homes/[id]/page.tsx(110,37): error TS7006: Parameter 'feature' implicitly has an 'any' type.\napp/layout.tsx(2,33): error TS2307: Cannot find module '@/components/ui/emotion-registry' or its corresponding type declarations.\napp/page.tsx(4,28): error TS2307: Cannot find module '@/components/site-header' or its corresponding type declarations.\ncomponents/contact-form.tsx(6,23): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\ncomponents/detail-map.tsx(5,45): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\ncomponents/gallery.tsx(2,29): error TS2307: Cannot find module '@/components/placeholder' or its corresponding type declarations.\ncomponents/search-view.tsx(6,58): error TS2307: Cannot find module '@/components/filter-bar' or its corresponding type declarations.\ncomponents/search-view.tsx(7,26): error TS2307: Cannot find module '@/components/home-card' or its corresponding type declarations.\ncomponents/search-view.tsx(8,31): error TS2307: Cannot find module '@/components/search-map-lazy' or its corresponding type declarations.\ncomponents/search-view.tsx(9,34): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 11443
+    }
+  },
+  "files": [
+    "components/search-view.tsx",
+    "app/page.tsx",
+    "components/detail-map.tsx",
+    "components/detail-map-lazy.tsx",
+    "components/contact-form.tsx",
+    "components/gallery.tsx",
+    "components/energy-rating.tsx",
+    "app/homes/[id]/page.tsx",
+    "app/homes/[id]/not-found.tsx"
+  ]
+}

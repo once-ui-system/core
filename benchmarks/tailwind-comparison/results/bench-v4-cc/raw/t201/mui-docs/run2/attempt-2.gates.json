@@ -1,0 +1,237 @@
+{
+  "arm": "M",
+  "passed": false,
+  "failed_gate": "render",
+  "failure_output": "[/patients/p-104 375px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\n[/patients/p-104 768px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\n[/patients/p-104 1440px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 3887
+    },
+    "build": {
+      "ok": true,
+      "ms": 11805
+    },
+    "render": {
+      "ok": false,
+      "viewports": {
+        "phone": {
+          "text": 2775,
+          "height": 5732,
+          "width": 476,
+          "horizontal_overflow": true,
+          "errors": []
+        },
+        "tablet": {
+          "text": 2802,
+          "height": 5668,
+          "width": 976,
+          "horizontal_overflow": true,
+          "errors": []
+        },
+        "desktop": {
+          "text": 2882,
+          "height": 2932,
+          "width": 1628,
+          "horizontal_overflow": true,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 2775,
+              "height": 5732,
+              "width": 476,
+              "horizontal_overflow": true,
+              "errors": []
+            },
+            "tablet": {
+              "text": 2802,
+              "height": 5668,
+              "width": 976,
+              "horizontal_overflow": true,
+              "errors": []
+            },
+            "desktop": {
+              "text": 2882,
+              "height": 2932,
+              "width": 1628,
+              "horizontal_overflow": true,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 1,
+            "serious_or_critical": 1,
+            "ids": [
+              "label-content-name-mismatch:serious:1"
+            ]
+          }
+        },
+        "/patients/p-104": {
+          "viewports": {
+            "phone": {
+              "text": 1996,
+              "height": 3247,
+              "width": 435,
+              "horizontal_overflow": true,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            },
+            "tablet": {
+              "text": 2079,
+              "height": 3105,
+              "width": 997,
+              "horizontal_overflow": true,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            },
+            "desktop": {
+              "text": 2109,
+              "height": 1894,
+              "width": 2069,
+              "horizontal_overflow": true,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 2,
+            "serious_or_critical": 2,
+            "ids": [
+              "label-content-name-mismatch:serious:1",
+              "list:serious:1"
+            ]
+          }
+        }
+      },
+      "errors": [
+        "[/patients/p-104 375px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+        "[/patients/p-104 768px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+        "[/patients/p-104 1440px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+      ],
+      "axe": {
+        "rules": 1,
+        "nodes": 1,
+        "serious_or_critical": 1,
+        "ids": [
+          "label-content-name-mismatch:serious:1"
+        ]
+      },
+      "interaction": {
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/patients/p-104 phone": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/patients/p-104 tablet": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/patients/p-104 desktop": {
+          "ms": 1758,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 534,
+          "distinct_fontSize": 10,
+          "distinct_color": 8,
+          "distinct_background": 9,
+          "distinct_radius": 4,
+          "distinct_shadow": 0,
+          "distinct_spacing": 16,
+          "spacing_on_4px_grid": 0.479
+        },
+        "/patients/p-104": {
+          "elements": 302,
+          "distinct_fontSize": 10,
+          "distinct_color": 7,
+          "distinct_background": 7,
+          "distinct_radius": 3,
+          "distinct_shadow": 0,
+          "distinct_spacing": 19,
+          "spacing_on_4px_grid": 0.569
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 435.2,
+          "css_kb": 0,
+          "fcp_ms": 112,
+          "cls": 0,
+          "long_task_ms": 0
+        },
+        "/patients/p-104": {
+          "js_kb": 435.2,
+          "css_kb": 0,
+          "fcp_ms": 112,
+          "cls": 0,
+          "long_task_ms": 8
+        }
+      },
+      "views": {
+        "new-appointment phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-phone.jpg"
+        },
+        "new-appointment tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-tablet.jpg"
+        },
+        "new-appointment desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/ui.ts",
+    "components/AlertChips.tsx",
+    "components/StatusChip.tsx",
+    "components/AppShell.tsx",
+    "components/BookingDialog.tsx",
+    "components/ScheduleBoard.tsx",
+    "components/WeightChart.tsx",
+    "components/PatientRecord.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "app/theme.ts",
+    "app/layout.tsx"
+  ]
+}

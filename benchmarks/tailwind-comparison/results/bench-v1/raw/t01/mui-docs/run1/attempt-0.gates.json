@@ -1,0 +1,38 @@
+{
+  "arm": "M",
+  "passed": false,
+  "failed_gate": "render",
+  "failure_output": "server did not start:\n▲ Next.js 16.2.12\n- Local:         http://127.0.0.1:3105\n- Network:       http://127.0.0.1:3105\n✓ Ready in 196ms\n",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 4325
+    },
+    "build": {
+      "ok": true,
+      "ms": 16699
+    },
+    "render": {
+      "ok": false,
+      "viewports": {},
+      "routes": {},
+      "errors": [
+        "server did not start:\n▲ Next.js 16.2.12\n- Local:         http://127.0.0.1:3105\n- Network:       http://127.0.0.1:3105\n✓ Ready in 196ms\n"
+      ],
+      "axe": null,
+      "interaction": {},
+      "settle": {}
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/AppShell.tsx",
+    "components/DashboardView.tsx",
+    "app/page.tsx",
+    "app/(app)/layout.tsx",
+    "components/ProjectsTable.tsx",
+    "app/(app)/projects/page.tsx",
+    "components/SettingsForm.tsx",
+    "app/(app)/settings/page.tsx"
+  ]
+}

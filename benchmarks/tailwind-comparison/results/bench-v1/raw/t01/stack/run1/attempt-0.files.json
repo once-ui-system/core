@@ -1,0 +1,15 @@
+{
+  "files": [
+    "src/lib/data.ts",
+    "src/components/lumen/AppShell.tsx",
+    "src/app/(lumen)/layout.tsx",
+    "src/app/page.tsx",
+    "src/components/lumen/Dashboard.tsx",
+    "src/app/(lumen)/reports/page.tsx",
+    "src/app/(lumen)/projects/page.tsx",
+    "src/components/lumen/ProjectsTable.tsx",
+    "src/app/(lumen)/settings/page.tsx",
+    "src/components/lumen/SettingsForm.tsx"
+  ],
+  "rejected": []
+}

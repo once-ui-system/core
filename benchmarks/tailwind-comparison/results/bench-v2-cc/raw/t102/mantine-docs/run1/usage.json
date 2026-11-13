@@ -1,0 +1,110 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 9,
+      "input_total": 752352,
+      "input_uncached": 18,
+      "cache_creation": 85963,
+      "cache_read": 666371,
+      "visible_output_tokens_o200k": 9386,
+      "visible_output_tokens_claudeLegacy": 10223,
+      "thinking_blocks": 5
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t102/mantine-docs/run1/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/README.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/theme.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "docs"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "docs"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/pages/theming-colors.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/pages/core-nav-link.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/pages/core-app-shell.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/pages/theming-theme-object.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/pages/guides-next.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/pages"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/pages/styles-css-variables.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v2-cc/raw/t102/mantine-docs/run1/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "T"
+}

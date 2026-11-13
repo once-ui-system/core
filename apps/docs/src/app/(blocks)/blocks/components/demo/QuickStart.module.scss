@@ -1,0 +1,18 @@
+// The hero's tilted wall of category previews, oversized so its rotated edges
+// never show inside the rounded frame.
+.mosaic {
+  position: absolute;
+  inset: -12%;
+  transform: rotate(-6deg);
+}
+
+// Fades the mosaic out toward the centre so the headline sits on the plain
+// surface, while the previews stay visible around the edges.
+.fade {
+  background: radial-gradient(
+    60% 65% at 50% 50%,
+    var(--surface-background) 35%,
+    color-mix(in srgb, var(--surface-background) 55%, transparent) 75%,
+    color-mix(in srgb, var(--surface-background) 85%, transparent) 100%
+  );
+}

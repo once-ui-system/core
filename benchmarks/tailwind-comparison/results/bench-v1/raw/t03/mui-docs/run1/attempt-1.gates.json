@@ -1,0 +1,266 @@
+{
+  "arm": "M",
+  "passed": false,
+  "failed_gate": "render",
+  "failure_output": "[/projects 768px] navigation failed: page.goto: Timeout 30000ms exceeded.",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 4443
+    },
+    "build": {
+      "ok": true,
+      "ms": 11260
+    },
+    "render": {
+      "ok": false,
+      "viewports": {
+        "phone": {
+          "text": 465,
+          "height": 897,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 472,
+          "height": 1024,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 472,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 465,
+              "height": 897,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 472,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 472,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 2,
+            "serious_or_critical": 2,
+            "ids": [
+              "color-contrast:serious:1",
+              "label-content-name-mismatch:serious:1"
+            ]
+          }
+        },
+        "/projects": {
+          "viewports": {
+            "phone": {
+              "text": 348,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "errors": [
+                "navigation failed: page.goto: Timeout 30000ms exceeded."
+              ]
+            },
+            "desktop": {
+              "text": 355,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 3,
+            "serious_or_critical": 2,
+            "ids": [
+              "color-contrast:serious:2",
+              "label-content-name-mismatch:serious:1"
+            ]
+          }
+        },
+        "/members": {
+          "viewports": {
+            "phone": {
+              "text": 632,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 639,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 639,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 4,
+            "serious_or_critical": 2,
+            "ids": [
+              "color-contrast:serious:3",
+              "label-content-name-mismatch:serious:1"
+            ]
+          }
+        }
+      },
+      "errors": [
+        "[/projects 768px] navigation failed: page.goto: Timeout 30000ms exceeded."
+      ],
+      "axe": {
+        "rules": 2,
+        "nodes": 2,
+        "serious_or_critical": 2,
+        "ids": [
+          "color-contrast:serious:1",
+          "label-content-name-mismatch:serious:1"
+        ]
+      },
+      "interaction": {
+        "desktop": {
+          "action": "press > type > press",
+          "found": true,
+          "steps": 3,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1764,
+          "settled": true
+        },
+        "/projects phone": {
+          "ms": 1767,
+          "settled": true
+        },
+        "/projects desktop": {
+          "ms": 1773,
+          "settled": true
+        },
+        "/members phone": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/members tablet": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/members desktop": {
+          "ms": 1760,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 66,
+          "distinct_fontSize": 6,
+          "distinct_color": 5,
+          "distinct_background": 3,
+          "distinct_radius": 3,
+          "distinct_shadow": 0,
+          "distinct_spacing": 11,
+          "spacing_on_4px_grid": 0.674
+        },
+        "/projects": {
+          "elements": 74,
+          "distinct_fontSize": 6,
+          "distinct_color": 6,
+          "distinct_background": 3,
+          "distinct_radius": 3,
+          "distinct_shadow": 0,
+          "distinct_spacing": 10,
+          "spacing_on_4px_grid": 0.839
+        },
+        "/members": {
+          "elements": 98,
+          "distinct_fontSize": 6,
+          "distinct_color": 7,
+          "distinct_background": 3,
+          "distinct_radius": 3,
+          "distinct_shadow": 0,
+          "distinct_spacing": 10,
+          "spacing_on_4px_grid": 0.858
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 249.1,
+          "css_kb": 0,
+          "fcp_ms": 124,
+          "cls": 0,
+          "long_task_ms": 48
+        },
+        "/projects": {
+          "js_kb": 249.1,
+          "css_kb": 0,
+          "fcp_ms": 512,
+          "cls": 0,
+          "long_task_ms": 101
+        },
+        "/members": {
+          "js_kb": 249.1,
+          "css_kb": 0,
+          "fcp_ms": 192,
+          "cls": 0,
+          "long_task_ms": 154
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "lib/commands.ts",
+    "components/InviteDialog.tsx",
+    "components/CommandPalette.tsx",
+    "components/AppShell.tsx",
+    "components/StatusChip.tsx",
+    "components/DashboardView.tsx",
+    "app/page.tsx",
+    "app/(app)/layout.tsx",
+    "app/(app)/projects/page.tsx",
+    "app/(app)/members/page.tsx"
+  ]
+}

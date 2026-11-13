@@ -1,0 +1,34 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/layout.tsx(8,34): error TS2307: Cannot find module '../lib/theme' or its corresponding type declarations.\napp/providers.tsx(8,34): error TS2307: Cannot find module '../lib/theme' or its corresponding type declarations.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 3129
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "app/fonts.css",
+    "app/layout.tsx",
+    "app/providers.tsx",
+    "components/ThemeToggle.tsx",
+    "components/SiteHeader.tsx",
+    "components/SiteFooter.tsx",
+    "components/SiteShell.tsx",
+    "components/FeatureSection.tsx",
+    "app/page.tsx",
+    "components/PricingView.tsx",
+    "app/pricing/page.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ lib/data.ts: no mechanical issues\n✗ app/layout.tsx: 1 issue(s)\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint\n✓ app/providers.tsx: no mechanical issues\n✓ components/ThemeToggle.tsx: no mechanical issues\n✓ components/SiteHeader.tsx: no mechanical issues\n✓ components/SiteFooter.tsx: no mechanical issues\n✓ components/SiteShell.tsx: no mechanical issues\n✓ components/FeatureSection.tsx: no mechanical issues\n✓ app/page.tsx: no mechanical issues\n✓ components/PricingView.tsx: no mechanical issues\n✓ app/pricing/page.tsx: no mechanical issues",
+    "validator": {
+      "package_version": "3.0.0-beta.1",
+      "script_sha256": "d8f443844780a521"
+    }
+  }
+}

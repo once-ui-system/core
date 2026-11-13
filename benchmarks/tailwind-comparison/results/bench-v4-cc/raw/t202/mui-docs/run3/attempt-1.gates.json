@@ -1,0 +1,28 @@
+{
+  "arm": "M",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/SidePanel.tsx(15,30): error TS2307: Cannot find module '@mui/icons-material/ErrorOutline' or its corresponding type declarations.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 3227
+    }
+  },
+  "files": [
+    "app/layout.tsx",
+    "app/theme.ts",
+    "app/page.tsx",
+    "app/guests/page.tsx",
+    "lib/data.ts",
+    "lib/plan.ts",
+    "lib/rules.ts",
+    "components/PlanProvider.tsx",
+    "components/AppShell.tsx",
+    "components/SeatMenuButton.tsx",
+    "components/PlanView.tsx",
+    "components/RoomPlan.tsx",
+    "components/SidePanel.tsx",
+    "components/GuestsView.tsx"
+  ]
+}

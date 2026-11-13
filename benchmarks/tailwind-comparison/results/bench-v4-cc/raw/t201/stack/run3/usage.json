@@ -1,0 +1,70 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 5,
+      "input_total": 380139,
+      "input_uncached": 12,
+      "cache_creation": 80879,
+      "cache_read": 299248,
+      "visible_output_tokens_o200k": 20268,
+      "visible_output_tokens_claudeLegacy": 21642,
+      "thinking_blocks": 2
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v4-cc/raw/t201/stack/run3/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/AGENTS.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/AGENTS.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project/src"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/resources/once-ui.config.js"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v4-cc/raw/t201/stack/run3/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "S"
+}

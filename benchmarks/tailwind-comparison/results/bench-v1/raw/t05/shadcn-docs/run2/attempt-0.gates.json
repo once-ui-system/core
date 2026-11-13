@@ -1,0 +1,18 @@
+{
+  "arm": "C",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/members/[id]/page.tsx(37,40): error TS2307: Cannot find module '@/components/team/member-badges' or its corresponding type declarations.\napp/members/[id]/page.tsx(46,8): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\napp/members/[id]/page.tsx(51,23): error TS7006: Parameter 'm' implicitly has an 'any' type.\napp/members/[id]/page.tsx(200,32): error TS7006: Parameter 'item' implicitly has an 'any' type.\napp/members/[id]/page.tsx(200,38): error TS7006: Parameter 'index' implicitly has an 'any' type.\napp/page.tsx(4,47): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\ncomponents/team/member-actions.tsx(47,66): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\ncomponents/team/member-actions.tsx(123,31): error TS7006: Parameter 'r' implicitly has an 'any' type.\ncomponents/team/members-table.tsx(45,8): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\ncomponents/team/members-table.tsx(46,36): error TS2307: Cannot find module './invite-member-dialog' or its corresponding type declarations.\ncomponents/team/members-table.tsx(48,40): error TS2307: Cannot find module './member-badges' or its corresponding type declarations.\ncomponents/team/members-table.tsx(154,29): error TS7006: Parameter 'r' implicitly has an 'any' type.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 13489
+    }
+  },
+  "files": [
+    "components/team/member-actions.tsx",
+    "components/team/members-table.tsx",
+    "app/page.tsx",
+    "app/members/[id]/page.tsx"
+  ]
+}

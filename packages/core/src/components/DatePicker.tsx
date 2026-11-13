@@ -10,7 +10,6 @@ import React, {
   useSyncExternalStore,
 } from "react";
 import { mergeLabels } from "../internal/labels.js";
-import { Reveal } from "../internal/Reveal.js";
 import { CondensedTShirtSizes } from "../types.js";
 import { getCalendarNames } from "../utils/calendarLocale.js";
 import {
@@ -250,7 +249,6 @@ const Calendar = ({
    */
   const hadValueRef = useRef(value !== undefined);
   const [isTimeSelector, setIsTimeSelector] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(true);
   const [isMonthOpen, setIsMonthOpen] = useState(false);
   const [isYearOpen, setIsYearOpen] = useState(false);
   const [isReady, setIsReady] = useState(false);
@@ -370,7 +368,6 @@ const Calendar = ({
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsTransitioning(true);
       setIsReady(true);
     }, 100);
 
@@ -439,13 +436,13 @@ const Calendar = ({
   /** The grid's name: the month it shows, which tells two calendars side by side apart. */
   const gridLabel = monthYear(currentMonth, currentYear);
 
-  const handleTimeToggle = (show: boolean) => {
-    setIsTransitioning(false);
-    setTimeout(() => {
-      setIsTimeSelector(show);
-      setIsTransitioning(true);
-    }, 400);
-  };
+  /**
+   * Swaps the calendar for the time panel and back at once. Both used to
+   * wipe in through a reveal (a blurred mask, 250 ms, after a 400 ms wait
+   * on the toggle), on top of the dropdown's own fade and scale: the panel
+   * opened twice and a click on the clock waited most of a second.
+   */
+  const handleTimeToggle = (show: boolean) => setIsTimeSelector(show);
 
   const closeDropdown = useContext(DropdownCloseContext);
 
@@ -1110,13 +1107,7 @@ const Calendar = ({
         )}
       </Flex>
 
-      <Reveal
-        fillWidth
-        center
-        key={isTimeSelector ? "time" : "date"}
-        revealed={isTransitioning}
-        duration={250}
-      >
+      <Flex fillWidth center key={isTimeSelector ? "time" : "date"}>
         {isTimeSelector ? (
           <Column maxWidth="24rem" center padding="32" gap="32">
             <SegmentedControl
@@ -1219,7 +1210,7 @@ const Calendar = ({
             <FollowFocusedDay gridRef={gridRef} />
           </ArrowNavigation>
         )}
-      </Reveal>
+      </Flex>
     </Column>
   );
 };

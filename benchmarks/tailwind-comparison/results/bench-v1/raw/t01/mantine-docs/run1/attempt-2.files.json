@@ -1,0 +1,18 @@
+{
+  "files": [
+    "lib/data.ts",
+    "lib/navigation.ts",
+    "components/NavContent.tsx",
+    "components/NavContent.module.css",
+    "components/AppFrame.tsx",
+    "components/DashboardContent.tsx",
+    "components/ProjectsTable.tsx",
+    "components/SettingsForm.tsx",
+    "app/page.tsx",
+    "app/(shell)/layout.tsx",
+    "app/(shell)/projects/page.tsx",
+    "app/(shell)/reports/page.tsx",
+    "app/(shell)/settings/page.tsx"
+  ],
+  "rejected": []
+}
