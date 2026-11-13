@@ -24,6 +24,10 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **A CodeBlock's file tabs slide.** The row of files above the code is now a `SegmentedControl`,
+  so the selected background slides from one file to the next instead of jumping, and the files are
+  real tabs (arrow keys move between them). The rail draws no border of its own inside the block's.
+
 - **A Select's highlight stays where the arrow keys put it.** The list scrolling under a
   resting pointer fired `mouseover`, which moved the highlight back under the pointer, so the
   keys seemed to skip or stick. The highlight now follows the pointer only when it moves.
