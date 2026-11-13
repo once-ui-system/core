@@ -1,0 +1,15 @@
+.footer {
+  border-top: 1px solid var(--mantine-color-default-border);
+  background: var(--mantine-color-body);
+}
+
+.link {
+  color: var(--mantine-color-dimmed);
+  font-size: var(--mantine-font-size-sm);
+  text-decoration: none;
+
+  @mixin hover {
+    color: var(--mantine-color-bright);
+    text-decoration: underline;
+  }
+}

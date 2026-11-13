@@ -1,0 +1,1829 @@
+[
+  {
+    "task": 102,
+    "arm": "S",
+    "run": 2,
+    "id": "R001",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "Cohesive warm-sand shell with pink brand accents, rounded 16px surfaces, shared header/breadcrumb and nested nav; the phone projects table clips its columns inside a scroll container, the phone dashboard card list is cut off, and the drawer opens with Workspace expanded and Analytics collapsed instead of the requested Analytics expansion.",
+    "usage": {
+      "input_tokens": 11697,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 183,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 103,
+    "arm": "S",
+    "run": 2,
+    "id": "R002",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive dark, warm-stone control-room shell with monospace headings, orange accents, a working breadcrumb, a collapsible desktop sidebar and a phone drawer with nested groups; the drawer covers the page header and the Analytics group appears to expand with no sub-items visible.",
+    "usage": {
+      "input_tokens": 11692,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 159,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 101,
+    "arm": "T",
+    "run": 1,
+    "id": "R003",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 3,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive, calm ledger-like identity with correct teal, serif headings and compact density across all routes; the drawer interaction was never shown on phone, and the phone projects table clips its Issues/Updated columns (scroll-contained) so nothing confirms the drawer or expandable groups work.",
+    "usage": {
+      "input_tokens": 11263,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 160,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 103,
+    "arm": "C",
+    "run": 1,
+    "id": "R004",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive dark mono-headed control-room look with correct brand orange, consistent shell and breadcrumbs, and nested nav that highlights the active route. The phone drawer and the collapsed sidebar were not shown, and the projects table clips sideways on phone, which is acceptable.",
+    "usage": {
+      "input_tokens": 12239,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 158,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 101,
+    "arm": "K",
+    "run": 2,
+    "id": "R005",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive ledger-like identity (teal, serif headings, 2px radii) and consistent shell across routes; the phone drawer screenshot shows the Analytics group still collapsed after the scripted expand, and the dashboard table is clipped sideways on phone (acceptable).",
+    "usage": {
+      "input_tokens": 11716,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 157,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 102,
+    "arm": "S",
+    "run": 3,
+    "id": "R006",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 3,
+    "note": "Clean, consistent shell with brand pink on breadcrumbs, toggles and buttons, a working drawer and nested nav, and a good table collapse on phone; the look is polished but fairly restrained and template-like, and the rounded heading font and warm personality are subtle.",
+    "usage": {
+      "input_tokens": 11697,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 153,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 102,
+    "arm": "S",
+    "run": 1,
+    "id": "R007",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive warm-sand shell with brand-pink accents, shared layout and breadcrumbs on every route, and working drawer and nested nav; the phone drawer screenshot shows the Analytics group still collapsed after the scripted expand, and the pink brand colour is used quite sparingly.",
+    "usage": {
+      "input_tokens": 11697,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 161,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 103,
+    "arm": "M",
+    "run": 1,
+    "id": "R008",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "Cohesive dark stone/orange identity with monospace headings and a consistent shell; however, the phone drawer, when opened, collapses the Analytics group in the interaction screenshot (not showing Overview/Reports expanded), and the Projects table clips columns on phone.",
+    "usage": {
+      "input_tokens": 12350,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 153,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 103,
+    "arm": "A",
+    "run": 2,
+    "id": "R009",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "Cohesive dark stone-and-orange shell with monospace headings and consistent breadcrumb across routes; but the drawer interaction shows the expanded Analytics group collapsed (no Overview/Reports visible), the brand orange is barely used on nav active state, and the phone's Projects table clips columns.",
+    "usage": {
+      "input_tokens": 11692,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 165,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 101,
+    "arm": "C",
+    "run": 3,
+    "id": "R010",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive, restrained ledger-like identity with correct brand teal, serif headings and a consistent shell; the phone projects table clips its Open issues and Updated columns, and the drawer interaction isn't shown, so the phone menu is unverified.",
+    "usage": {
+      "input_tokens": 11305,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 146,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 102,
+    "arm": "T",
+    "run": 1,
+    "id": "R011",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive pink/sand brand shell with correct nav groups, active highlight and breadcrumbs on all routes, but tablet keeps the sidebar and squeezes content (settings fields truncated, projects table clipping columns), the status/project pills render as empty dark blobs, and the phone drawer interaction is not shown.",
+    "usage": {
+      "input_tokens": 13370,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 171,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 103,
+    "arm": "M",
+    "run": 3,
+    "id": "R012",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive dark control-room look with correct brand orange, monospace headings and a consistent shell; the phone projects table clips Issues/Updated columns (acceptable sideways scroll), and the collapse-to-icons control and the drawer's active highlight aren't visibly demonstrated.",
+    "usage": {
+      "input_tokens": 11902,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 159,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 103,
+    "arm": "D",
+    "run": 1,
+    "id": "R013",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive dark, monospace-headed control-room identity with the brand orange used sparingly, a consistent shell and a working phone drawer with Analytics expanded; the projects table is clipped on tablet (Updated column cut off), and the drawer's expanded Analytics group is not visibly populated.",
+    "usage": {
+      "input_tokens": 12000,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 162,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 102,
+    "arm": "K",
+    "run": 1,
+    "id": "R014",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive, on-brand pink/sand shell with active nav and breadcrumbs, but the tablet breadcrumb wraps awkwardly (\"Overvie/w\"), phone breadcrumbs break mid-word, the projects table is cramped and clipped at tablet, and the drawer interaction was not shown.",
+    "usage": {
+      "input_tokens": 13736,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 171,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 102,
+    "arm": "T",
+    "run": 2,
+    "id": "R015",
+    "polish": 3,
+    "completeness": 4,
+    "responsiveness": 2,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "Brand colours, rounded radii and the shared shell are well carried and consistent on tablet and desktop, but on phone the header breadcrumb collides with the avatar and is clipped, the projects table clips its columns inside the card, and the tablet layout keeps the full sidebar, which squeezes the content area.",
+    "usage": {
+      "input_tokens": 13132,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 164,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 103,
+    "arm": "A",
+    "run": 3,
+    "id": "R016",
+    "polish": 2,
+    "completeness": 3,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 3,
+    "intentionality": 2,
+    "note": "The dark monospace headings and data content are present, but the sidebar and header render as pale, washed-out light-theme fragments against the dark content panel, so the theme is not applied consistently. The brand orange barely appears and the breadcrumb is faint. The active nav item is only subtly highlighted, there is no visible menu button or collapse control, and the phone drawer lacks any sign of the active route.",
+    "usage": {
+      "input_tokens": 11818,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 191,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 102,
+    "arm": "K",
+    "run": 3,
+    "id": "R017",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive warm-sand and pink identity with a consistent shell across all routes, adaptive layouts and a working drawer; minor gaps are the breadcrumb wrapping mid-word on phone, no visible active highlight or Reports item in the drawer shot, and no screenshot proving the desktop collapse.",
+    "usage": {
+      "input_tokens": 13199,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 167,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 101,
+    "arm": "C",
+    "run": 1,
+    "id": "R018",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive ledger-like identity with correct teal brand, serif headings, compact density and a consistent shell across routes; the phone drawer and Analytics expansion were never shown, and the projects table clips sideways on phone (acceptable).",
+    "usage": {
+      "input_tokens": 11263,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 143,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 103,
+    "arm": "K",
+    "run": 3,
+    "id": "R019",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive dark control-room identity with monospace headings, orange accent, and a consistent shell across routes; the drawer shows Analytics collapsed with a chevron rather than expanded (the interaction may not have worked), the phone projects table clips columns inside its scroll container, and the dark-mode toggle shows off while the theme is dark.",
+    "usage": {
+      "input_tokens": 12346,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 175,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 102,
+    "arm": "A",
+    "run": 2,
+    "id": "R020",
+    "polish": 3,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Coherent shared shell with a nested nav, breadcrumb and a working drawer, but the phone header is cramped with the breadcrumb stacked and clipped over the avatar, the 'Lumen' logo is missing on phone and tablet, the brand pink is used sparingly (the active nav item is grey rather than pink), and the phone drawer's group expansion appears not to show Overview/Reports.",
+    "usage": {
+      "input_tokens": 11739,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 195,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 102,
+    "arm": "T",
+    "run": 3,
+    "id": "R021",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "Cohesive warm-sand and pink identity with a consistent shell, breadcrumb and active nav highlight, but the tablet sidebar leaves a broken empty area and squeezes the projects table (truncated status badges, clipped columns), and the phone drawer interaction is not shown.",
+    "usage": {
+      "input_tokens": 13074,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 158,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 103,
+    "arm": "T",
+    "run": 3,
+    "id": "R022",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive, restrained dark control-room identity with mono headings, orange accent, 4px radii and a consistent shell with correct active nav and breadcrumbs; the phone projects table clips its columns (acceptable scroll), the phone drawer was never shown, the sidebar collapse toggle is visible, and tablet keeps the full sidebar, leaving the table cramped.",
+    "usage": {
+      "input_tokens": 11379,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 188,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 101,
+    "arm": "A",
+    "run": 3,
+    "id": "R023",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive, restrained ledger-like shell with a serif/sans pairing, 2px corners and teal accents, and a nested nav that works in the drawer and sidebar; the phone projects table clips the Open issues and Updated columns so only part of it is visible, the drawer is plain, and the dashboard is a little sparse on tablet and desktop.",
+    "usage": {
+      "input_tokens": 11688,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 179,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 103,
+    "arm": "T",
+    "run": 1,
+    "id": "R024",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive dark, orange-accented control-room shell with monospace headings and consistent layout across all routes; the phone drawer interaction was not captured and the projects table is clipped sideways on tablet and phone.",
+    "usage": {
+      "input_tokens": 11421,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 133,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 102,
+    "arm": "A",
+    "run": 3,
+    "id": "R025",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, consistent shell with working drawer and nested groups. However, the active nav highlight is a muted grey rather than brand pink, the brand colour is barely used outside buttons and toggles, and the desktop collapse control isn't clearly shown.",
+    "usage": {
+      "input_tokens": 11697,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 145,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 101,
+    "arm": "K",
+    "run": 1,
+    "id": "R026",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive ledger-like identity with serif headings, teal active nav and tight compact density across all routes; drawer shows the Analytics group expanded yet with no visible Overview/Reports children, the collapsed-icon sidebar state isn't shown, and the phone projects table clips Open issues/Updated columns (acceptable as horizontal scroll but a bit cut).",
+    "usage": {
+      "input_tokens": 11716,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 187,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 102,
+    "arm": "C",
+    "run": 1,
+    "id": "R027",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive warm-sand and pink identity with a consistent shell, active-nav highlight, breadcrumbs and sensible responsive layouts; the open drawer and collapsed sidebar are not shown, the tablet table is cut off at the edge, and the sidebar background stops short of the full page height.",
+    "usage": {
+      "input_tokens": 12826,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 163,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 101,
+    "arm": "K",
+    "run": 3,
+    "id": "R028",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive teal/slate ledger-like identity with serif headings, compact density, a consistent shell with breadcrumbs and active nav; the drawer interaction shows an Analytics group that appears collapsed (its items are not visible after the expand attempt), and the phone Projects table omits the Updated column.",
+    "usage": {
+      "input_tokens": 11814,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 164,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 103,
+    "arm": "S",
+    "run": 1,
+    "id": "R029",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive dark control-room identity with monospace headings, orange accents, shared shell and breadcrumbs on all routes; the phone drawer works with nested groups, though the Analytics expansion and active-item highlight aren't clearly visible in the drawer (Workspace is open while Analytics is shown collapsed), and the Reports section on the dashboard is sparse and the tablet layout leaves a lot of empty space.",
+    "usage": {
+      "input_tokens": 11692,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 202,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 101,
+    "arm": "S",
+    "run": 1,
+    "id": "R030",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive, calm ledger-like identity with correct serif headings, teal accents, 2px radii and a consistent shell; the phone drawer shows the Analytics group collapsed even after the scripted expand, the tablet and phone headers skip the breadcrumb, and the projects table clips sideways on phone.",
+    "usage": {
+      "input_tokens": 11688,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 166,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 103,
+    "arm": "K",
+    "run": 1,
+    "id": "R031",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive dark control-room identity with brand orange, monospace headings, a consistent shell and breadcrumbs on every route; the phone drawer opens with Analytics collapsed in the screenshot (the expand step is unconfirmed), and the sidebar-collapse state is not shown.",
+    "usage": {
+      "input_tokens": 12698,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 159,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 101,
+    "arm": "D",
+    "run": 1,
+    "id": "R032",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Clean ledger-like identity with correct teal, serif headings, compact density and consistent shell across routes; the phone drawer interaction was not shown, and the phone projects table drops the Issues and Updated columns.",
+    "usage": {
+      "input_tokens": 11263,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 133,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 101,
+    "arm": "M",
+    "run": 3,
+    "id": "R033",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive, restrained ledger-like identity (teal, serif headings, 2px radii) applied consistently across routes and widths; the phone drawer shows Analytics collapsed and the active route is not visible, and the Projects table clips its Updated column on phone.",
+    "usage": {
+      "input_tokens": 11758,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 150,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 103,
+    "arm": "M",
+    "run": 2,
+    "id": "R034",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive dark control-room look with correct brand orange, monospace headings, 4px radii and a shared shell; the phone drawer opens with the Analytics group collapsed in the screenshot, so its Overview/Reports children aren't shown, and the phone projects table scrolls sideways hiding columns.",
+    "usage": {
+      "input_tokens": 11958,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 164,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 101,
+    "arm": "A",
+    "run": 1,
+    "id": "R035",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive ledger-like shell with brand teal, serif headings and compact density across all routes; drawer works, though the phone projects table clips the Issues column to horizontal scroll, the drawer shows no expanded Analytics children or highlighted route in the screenshot, and the dashboard at 768px is sparse.",
+    "usage": {
+      "input_tokens": 11688,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 167,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 102,
+    "arm": "D",
+    "run": 2,
+    "id": "R036",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive warm-sand and pink brand shell with a consistent sidebar, breadcrumb and routes, though the tablet projects table clips its Updated column and the interaction screenshot expands Analytics without showing its children.",
+    "usage": {
+      "input_tokens": 13113,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 138,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 102,
+    "arm": "K",
+    "run": 2,
+    "id": "R037",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "Cohesive warm-sand and pink identity with a consistent shell and good hierarchy, but the phone breadcrumb wraps awkwardly letter by letter, the projects table is clipped at tablet width, the drawer screenshot shows the Analytics group collapsed (chevron up, items missing) so the requested expansion is not shown, and the desktop collapse state is not shown.",
+    "usage": {
+      "input_tokens": 13077,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 182,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 101,
+    "arm": "S",
+    "run": 2,
+    "id": "R038",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive ledger-like shell with teal brand, serif headings and compact density across all routes; the phone drawer opens with the Analytics group collapsed in the screenshot and the table clips Issues on phone (scrollable), but overall it is solid.",
+    "usage": {
+      "input_tokens": 11688,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 146,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 101,
+    "arm": "S",
+    "run": 3,
+    "id": "R039",
+    "polish": 3,
+    "completeness": 3,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, consistent shell with correct brand teal, serif headings and 2px radii, but the phone projects table clips its Open issues and Updated columns, the stat cards stack in a single column at tablet width, the phone drawer shows Analytics collapsed after the expand interaction, and the active-route highlight is a neutral grey rather than brand teal.",
+    "usage": {
+      "input_tokens": 11688,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 171,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 103,
+    "arm": "K",
+    "run": 2,
+    "id": "R040",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "Cohesive dark mono-headed identity with orange accent and consistent shell; the phone projects table clips columns and the Analytics group in the drawer appears collapsed with a right chevron despite being expanded, while the dark-theme toggle shows off in settings.",
+    "usage": {
+      "input_tokens": 11902,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 149,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 101,
+    "arm": "T",
+    "run": 3,
+    "id": "R041",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive, calm ledger-like identity with consistent shell, teal accents, serif headings and compact density across all routes; the phone drawer interaction was not demonstrated and the phone projects table clips columns (acceptable horizontal scroll), but nothing else is missing.",
+    "usage": {
+      "input_tokens": 11263,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 154,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 101,
+    "arm": "T",
+    "run": 2,
+    "id": "R042",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive, restrained ledger-like identity with consistent shell, breadcrumbs and active nav state; the phone drawer interaction was never captured, and the projects table scrolls sideways on phone (hiding the Open issues and Updated columns).",
+    "usage": {
+      "input_tokens": 11263,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 147,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 103,
+    "arm": "D",
+    "run": 2,
+    "id": "R043",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive dark, orange-accented monospace identity with a consistent shell and good responsive adaptation; the phone drawer and Analytics expansion were never shown, and the project name wraps awkwardly beside the status badge on phone.",
+    "usage": {
+      "input_tokens": 11547,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 141,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 102,
+    "arm": "D",
+    "run": 3,
+    "id": "R044",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive warm-sand and pink Lumen shell with a consistent sidebar, breadcrumb and active state across routes, and a table that adapts to cards on phone; the phone drawer opens with Analytics still collapsed in the interaction shot, and the desktop settings page shows a background mismatch below the sidebar.",
+    "usage": {
+      "input_tokens": 12301,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 170,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 103,
+    "arm": "A",
+    "run": 1,
+    "id": "R045",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive dark mono-headed shell with consistent breadcrumbs, sidebar and orange accents; phone breadcrumb is clipped under the header and the projects table cuts off columns on phone, and the drawer interaction shows groups collapsed (Analytics not expanded) in the screenshot.",
+    "usage": {
+      "input_tokens": 11692,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 164,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 101,
+    "arm": "A",
+    "run": 2,
+    "id": "R046",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive, restrained ledger-like identity with correct brand teal, serif headings and 2px radii across a shared shell; the phone drawer opens with Analytics highlighted but its expanded child items (Overview, Reports) aren't visible, and the phone projects table is clipped sideways inside its container (acceptable), with large empty areas below the content.",
+    "usage": {
+      "input_tokens": 11688,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 179,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 102,
+    "arm": "C",
+    "run": 3,
+    "id": "R047",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive warm-sand and pink brand carried through a shared shell with correct active nav and breadcrumbs, but the drawer interaction was not shown and the tablet sidebar ends abruptly (the sidebar background stops short of the page bottom on tablet/desktop) while the projects table clips columns at 768.",
+    "usage": {
+      "input_tokens": 12560,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 168,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 102,
+    "arm": "C",
+    "run": 2,
+    "id": "R048",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 3,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive warm-sand and pink identity with a consistent shell and clear active nav, but the drawer interaction was never shown, the projects table clips its columns on phone and tablet, and the tablet sidebar leaves a gap beneath it.",
+    "usage": {
+      "input_tokens": 12090,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 144,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 103,
+    "arm": "C",
+    "run": 2,
+    "id": "R049",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "A coherent dark shell with consistent orange accent, mono headings and correct nav/breadcrumb on all routes, though the phone drawer interaction wasn't demonstrated, there are no collapse controls visible beyond the toggle icon, and the phone projects table is cut off at the side.",
+    "usage": {
+      "input_tokens": 11449,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 158,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 102,
+    "arm": "M",
+    "run": 1,
+    "id": "R050",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive warm-sand and pink identity with a consistent shell and good responsive behavior; the phone drawer shows Analytics collapsed after the expand interaction, and the desktop sidebar ends abruptly at 900px on tall pages with no visible collapse control.",
+    "usage": {
+      "input_tokens": 13613,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 153,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 103,
+    "arm": "C",
+    "run": 3,
+    "id": "R051",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive dark control-room identity with orange accent, monospace headings and consistent shell across routes; the phone drawer interaction is not visible and the projects table scrolls sideways on phone, but the desktop collapse toggle, nested groups, active highlight and breadcrumbs are all present.",
+    "usage": {
+      "input_tokens": 11491,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 160,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 103,
+    "arm": "D",
+    "run": 3,
+    "id": "R052",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive dark mono-accented control-room identity with a consistent shell and clear active-route and breadcrumb states; the phone drawer and Analytics expansion were not shown, and the tablet projects table is clipped at the page edge, though it scrolls inside its own container.",
+    "usage": {
+      "input_tokens": 11407,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 153,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 101,
+    "arm": "M",
+    "run": 1,
+    "id": "R053",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive, restrained ledger-like identity with correct brand teal, serif headings, compact density and a shared shell; the phone drawer shows Analytics expanded in the chevron state but its children aren't visible, the projects table is cut off at 375px, and the collapsed sidebar state isn't shown.",
+    "usage": {
+      "input_tokens": 11688,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 157,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 101,
+    "arm": "D",
+    "run": 3,
+    "id": "R054",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive, calm ledger-style identity with consistent shell, teal active nav, serif headings and compact density; the phone drawer wasn't shown (interaction failed) and the dashboard leaves a lot of empty space, but all routes adapt cleanly.",
+    "usage": {
+      "input_tokens": 11263,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 150,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 102,
+    "arm": "A",
+    "run": 1,
+    "id": "R055",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive, airy sand-toned shell with consistent rounded 16px components, breadcrumbs and active nav; the brand pink is mostly confined to toggles and buttons, and the phone drawer's active state is faint and the Analytics group appears not to expand in the interaction shot.",
+    "usage": {
+      "input_tokens": 11739,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 158,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 103,
+    "arm": "S",
+    "run": 3,
+    "id": "R056",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive dark stone shell with monospace headings, orange accents, and a consistent header/breadcrumb on every route, though the collapsed-icon state isn't shown, tablet reuses the phone's drawer, and the dashboard cards stack into a plain list on narrower widths.",
+    "usage": {
+      "input_tokens": 11692,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 157,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 102,
+    "arm": "D",
+    "run": 1,
+    "id": "R057",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive, airy brand-pink shell with consistent breadcrumbs, cards and nav across all routes and widths; the drawer screenshot shows Analytics collapsed rather than expanded (the interaction may not have worked), and the tablet dashboard leaves an orphaned third card plus empty space.",
+    "usage": {
+      "input_tokens": 12733,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 165,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 102,
+    "arm": "M",
+    "run": 2,
+    "id": "R058",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "A cohesive pink-and-sand identity with rounded cards, a shared shell and a working drawer; the nested groups, breadcrumb and active highlight are all present. Small flaws: the drawer expands Workspace instead of showing Analytics' children, the desktop sidebar ends abruptly at the viewport height, and the collapse control isn't clearly visible.",
+    "usage": {
+      "input_tokens": 13339,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 183,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 101,
+    "arm": "M",
+    "run": 2,
+    "id": "R059",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Coherent ledger-like identity with serif headings, teal accent and 2px radii; shared shell, breadcrumbs, and active nav highlight work, but in the phone drawer the Analytics group appears collapsed (Overview/Reports not visible) and the phone projects table is cropped sideways without a clear affordance.",
+    "usage": {
+      "input_tokens": 11744,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 169,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 102,
+    "arm": "M",
+    "run": 3,
+    "id": "R060",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "Coherent warm-sand and pink identity with a consistent shell, highlighted active nav, breadcrumbs and a working phone drawer. Minor flaws: the Projects table is clipped on phone (acceptable horizontal scroll), the desktop settings page has a sidebar background that stops short of the page height, and the drawer's Analytics group looks odd when expanded.",
+    "usage": {
+      "input_tokens": 12645,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 186,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 103,
+    "arm": "T",
+    "run": 2,
+    "id": "R061",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive dark monospace-flavored shell with orange active nav and consistent cards across all routes; the phone drawer and expanded Analytics group were never shown, and the projects table on phone hides issues/updated columns while the tablet table is cropped at its edge.",
+    "usage": {
+      "input_tokens": 11435,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 150,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 101,
+    "arm": "D",
+    "run": 2,
+    "id": "R062",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive, calm ledger-like identity with the brand teal, serif headings, 2px radii and a consistent shell; the tablet projects table is clipped at the right edge (the Updated column is cut off while the page itself does not scroll), and the phone drawer's Analytics group arrow looks collapsed in the expand interaction shot.",
+    "usage": {
+      "input_tokens": 11688,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 174,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 101,
+    "arm": "C",
+    "run": 2,
+    "id": "R063",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive, calm ledger-like identity with correct teal accent, serif headings, 2px radii and compact density across all routes; the phone drawer interaction isn't shown and the projects table scrolls sideways on phone, but the shell, breadcrumbs and active-nav highlight are consistent.",
+    "usage": {
+      "input_tokens": 11263,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 162,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  }
+]

@@ -174,7 +174,7 @@ export function ListPageExample({
           rows={visible.map((member) => [
             <Column key="name" gap="4">
               <Text textVariant="label-default-s">{member.name}</Text>
-              <Text textVariant="body-default-xs" onBackground="neutral-weak">
+              <Text textVariant="body-default-s" onBackground="neutral-weak">
                 {member.email}
               </Text>
             </Column>,

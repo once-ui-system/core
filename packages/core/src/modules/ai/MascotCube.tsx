@@ -67,9 +67,18 @@ let probe: CanvasRenderingContext2D | null | undefined;
 
 /** Any CSS color, or a scheme read from the element's tokens, as 0–1 RGB. */
 export function resolveColor(node: Element, value: string, fallback: RGB = [0.45, 0.5, 0.95]): RGB {
-  let css = value;
-  if (SCHEMES.has(value)) {
-    css = getComputedStyle(node).getPropertyValue(`--function-${value}-500`).trim();
+  let css = value.trim();
+  if (SCHEMES.has(css)) {
+    css = getComputedStyle(node).getPropertyValue(`--function-${css}-500`).trim();
+    if (!css) return fallback;
+  }
+  // A canvas fillStyle can't read custom properties, so `var(--x)` (with or
+  // without a fallback) is looked up on the node first. A few rounds, in case
+  // the fallback is itself a var().
+  for (let round = 0; round < 4; round++) {
+    const ref = /^var\(\s*(--[\w-]+)\s*(?:,\s*([\s\S]*))?\)$/.exec(css);
+    if (!ref) break;
+    css = getComputedStyle(node).getPropertyValue(ref[1]).trim() || (ref[2] ?? "").trim();
     if (!css) return fallback;
   }
   if (probe === undefined) {
@@ -122,13 +131,14 @@ export function cubeSides(
 
 /**
  * The 3D mascot behind `working="cube"`: a soft blob at rest that becomes the 2 × 2 Once UI cube
- * while it thinks, solves it, shows the logo and softens back with its face. It draws with a small
+ * while it thinks, solves it, shows the logo and softens back with its face. `working="d20"`
+ * firms into a twenty-sided die instead, which tumbles while it thinks and lands face on. It draws with a small
  * built-in WebGL renderer and hands back to the flat mascot where WebGL is missing.
  */
 export function MascotCube({ props, fallback }: { props: MascotProps; fallback: React.ReactNode }) {
   const {
     ref: forwardedRef,
-    working: _working,
+    working = "cube",
     state = "idle",
     mood = "neutral",
     seed,
@@ -210,6 +220,7 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
   const fx = effectsFor(shownMood, effects);
   const glyph = eyeGlyph(fx);
   input.current.state = state;
+  input.current.shape = working === "d20" ? "d20" : "cube";
   input.current.mood = baseMood(shownMood);
   input.current.pokes = prod.pokes;
   input.current.hideEyes = Boolean(glyph);
@@ -396,7 +407,7 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
       aria-label={ariaLabel ?? LABEL[state]}
       data-state={state}
       data-mood={baseMood(mood)}
-      data-working="cube"
+      data-working={working}
       className={classNames(styles.mascot, className)}
       style={
         {

@@ -1,0 +1,22 @@
+:root {
+  --default-border: var(--neutral-alpha-weak);
+}
+
+/* Lumen typography: set once, every component reads these variables. */
+:root,
+html {
+  --font-heading: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  --font-body: ui-sans-serif, system-ui, sans-serif;
+  --font-label: ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Lumen corners: 16px on buttons, inputs, cards and menus. */
+:root,
+html:root[data-border],
+[data-border] {
+  --radius-xs: 8px;
+  --radius-s: 12px;
+  --radius-m: 16px;
+  --radius-l: 16px;
+  --radius-xl: 20px;
+}

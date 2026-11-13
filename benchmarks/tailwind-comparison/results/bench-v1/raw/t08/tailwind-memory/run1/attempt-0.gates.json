@@ -1,0 +1,36 @@
+{
+  "arm": "D",
+  "passed": false,
+  "failed_gate": "render",
+  "failure_output": "server did not start:\n▲ Next.js 16.2.12\n- Local:         http://127.0.0.1:3104\n- Network:       http://127.0.0.1:3104\n✓ Ready in 168ms\n",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2585
+    },
+    "build": {
+      "ok": true,
+      "ms": 10333
+    },
+    "render": {
+      "ok": false,
+      "viewports": {},
+      "routes": {},
+      "errors": [
+        "server did not start:\n▲ Next.js 16.2.12\n- Local:         http://127.0.0.1:3104\n- Network:       http://127.0.0.1:3104\n✓ Ready in 168ms\n"
+      ],
+      "axe": null,
+      "interaction": {},
+      "settle": {}
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/onboarding-wizard.tsx",
+    "components/field.tsx",
+    "components/step-indicator.tsx",
+    "components/summary-card.tsx",
+    "app/page.tsx",
+    "app/welcome/page.tsx"
+  ]
+}

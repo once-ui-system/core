@@ -1,0 +1,19 @@
+{
+  "files": [
+    "lib/data.ts",
+    "lib/cx.ts",
+    "lib/clinic-context.tsx",
+    "app/globals.css",
+    "app/layout.tsx",
+    "components/Header.tsx",
+    "components/PatientSearch.tsx",
+    "components/AlertBadges.tsx",
+    "components/StatusBadge.tsx",
+    "components/Schedule.tsx",
+    "app/page.tsx",
+    "components/WeightChart.tsx",
+    "components/TodayVisits.tsx",
+    "app/patients/[id]/page.tsx"
+  ],
+  "rejected": []
+}

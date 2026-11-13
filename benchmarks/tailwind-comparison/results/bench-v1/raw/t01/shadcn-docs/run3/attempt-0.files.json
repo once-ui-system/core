@@ -1,0 +1,15 @@
+{
+  "files": [
+    "lib/data.ts",
+    "lib/navigation.ts",
+    "components/app-sidebar.tsx",
+    "components/app-header.tsx",
+    "components/app-shell.tsx",
+    "components/page-heading.tsx",
+    "app/page.tsx",
+    "app/projects/page.tsx",
+    "app/settings/page.tsx",
+    "components/settings-form.tsx"
+  ],
+  "rejected": []
+}

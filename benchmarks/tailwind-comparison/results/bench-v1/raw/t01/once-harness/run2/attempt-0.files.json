@@ -1,0 +1,15 @@
+{
+  "files": [
+    "lib/data.ts",
+    "components/AppShell.tsx",
+    "components/PageHeader.tsx",
+    "components/Dashboard.tsx",
+    "app/page.tsx",
+    "app/(app)/layout.tsx",
+    "app/(app)/projects/page.tsx",
+    "app/(app)/reports/page.tsx",
+    "components/SettingsForm.tsx",
+    "app/(app)/settings/page.tsx"
+  ],
+  "rejected": []
+}

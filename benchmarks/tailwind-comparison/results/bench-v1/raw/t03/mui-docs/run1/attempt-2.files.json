@@ -1,0 +1,17 @@
+{
+  "files": [
+    "lib/data.ts",
+    "lib/commands.ts",
+    "components/InviteDialog.tsx",
+    "components/CommandPalette.tsx",
+    "components/AppShell.tsx",
+    "components/StatusChip.tsx",
+    "components/DashboardView.tsx",
+    "components/ProjectsView.tsx",
+    "components/MembersView.tsx",
+    "app/page.tsx",
+    "app/projects/page.tsx",
+    "app/members/page.tsx"
+  ],
+  "rejected": []
+}

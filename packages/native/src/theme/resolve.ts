@@ -119,10 +119,12 @@ export function resolveTokens(
     if (name in resolved) return resolved[name];
     let value = raw[name];
     if (typeof value === "string") {
-      const ref = value.match(/^\{([\w-]+)\}$/);
+      // `{x}` is token x; `{x}/0.15` is colour token x at 15% opacity.
+      const ref = value.match(/^\{([\w-]+)\}(?:\/([\d.]+))?$/);
       if (ref) {
         if (seen.includes(ref[1])) return undefined;
         value = follow(ref[1], [...seen, name]) as TokenValue;
+        if (ref[2] !== undefined) value = withAlpha(value, Number(ref[2])) as TokenValue;
       }
     }
     if (value !== undefined) resolved[name] = value;
@@ -130,6 +132,16 @@ export function resolveTokens(
   };
   for (const name of Object.keys(raw)) follow(name, [name]);
   return resolved;
+}
+
+/** A hex colour at `alpha` times its own opacity, as `color-mix(in srgb, x N%, transparent)`. */
+export function withAlpha(value: TokenValue | undefined, alpha: number): TokenValue | undefined {
+  if (typeof value !== "string") return undefined;
+  const m = value.match(/^#([0-9a-f]{6})([0-9a-f]{2})?$/i);
+  if (!m) return undefined;
+  const own = m[2] === undefined ? 1 : Number.parseInt(m[2], 16) / 255;
+  const a = Math.round(Math.min(1, Math.max(0, own * alpha)) * 255);
+  return `#${m[1].toLowerCase()}${a.toString(16).padStart(2, "0")}`;
 }
 
 /** The root font size in px for a screen `width` points wide (`--font-scaling-*`). */

@@ -126,6 +126,30 @@ const CUBE_STATES: { label: string; value: MascotState }[] = [
   { label: "Sleeping", value: "sleeping" },
 ];
 
+// Set it thinking: the blob firms into a d20 and tumbles. Back to idle, it lands face on, holds a
+// beat and softens into the blob with its face.
+export function MascotD20Example() {
+  const [state, setState] = useState<MascotState>("thinking");
+
+  return (
+    <Column fillWidth gap="24" horizontal="center" paddingY="24">
+      <Row gap="24" vertical="center" wrap horizontal="center">
+        <Mascot working="d20" size="xl" state={state} mood="happy" />
+        <Mascot working="d20" size="xl" state={state} mood="happy" color="accent" eyes="pill" />
+        <Mascot working="d20" size="xl" state={state} mood="happy" surface="matte" face="flat" />
+      </Row>
+      <Column gap="12" horizontal="center" fillWidth maxWidth="36rem">
+        <SegmentedControl
+          aria-label="D20 mascot state"
+          buttons={CUBE_STATES}
+          value={state}
+          onValueChange={(value) => setState(value as MascotState)}
+        />
+      </Column>
+    </Column>
+  );
+}
+
 // Set it thinking: the blob becomes the cube and turns its layers. Back to idle, it solves the
 // cube, shows the logo and softens into the blob with its face.
 export function MascotCubeExample() {
