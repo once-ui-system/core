@@ -16,6 +16,16 @@
     }
   }
 
+  // A row whose "more" menu is open keeps its hover look while the pointer
+  // is in the menu.
+  &.hoverable tbody tr:has(:global(.dropdown-trigger)[data-state="open"]) {
+    background: var(--neutral-alpha-weak);
+  }
+
+  &.clickable .row:has(:global(.dropdown-trigger)[data-state="open"]) {
+    background: var(--neutral-alpha-medium);
+  }
+
   &.clickable .row {
     cursor: var(--cursor-pointer, pointer);
 

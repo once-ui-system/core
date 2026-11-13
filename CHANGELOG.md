@@ -758,6 +758,12 @@ entry below that had landed by then:
 
 ### Fixed
 
+- A row keeps its hover look while a menu opened from it is open. The
+  `DropdownWrapper` trigger now carries `data-state="open" | "closed"`, and
+  `Accordion` headers, `Table` rows (hoverable and clickable) and `Card` stay lit
+  while a dropdown inside them is open, so moving the pointer into the menu no
+  longer makes the row it belongs to go dark. Rows of your own can do the same
+  with `:has(.dropdown-trigger[data-state="open"])`.
 - `MegaMenu` on a translucent surface keeps its frosted glass through the
   opening animation. The panel used to fade on the box that clips it, which made
   that box the blur's backdrop root, so the panel looked clear while it opened

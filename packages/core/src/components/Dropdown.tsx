@@ -1190,6 +1190,10 @@ const DropdownMenu = ({
             data-is-dropdown="true"
             aria-haspopup={wrapperIsTrigger ? "true" : undefined}
             aria-expanded={wrapperIsTrigger ? isOpen : undefined}
+            // Lets a row, card or accordion header that holds this trigger
+            // keep its hover look while the panel is open and the pointer is
+            // in it: `:has(.dropdown-trigger[data-state="open"])`.
+            data-state={isOpen ? "open" : "closed"}
             className="dropdown-trigger"
           >
             <DropdownTriggerContext.Provider value={triggerState}>
