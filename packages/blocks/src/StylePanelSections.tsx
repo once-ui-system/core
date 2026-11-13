@@ -102,6 +102,12 @@ export interface StylePanelVisibility {
 /** `label={false}` drops the row's label; any node replaces it. */
 export interface StyleRowProps extends Omit<React.ComponentProps<typeof Flex>, "label"> {
   label?: ReactNode | false;
+  /**
+   * What the row does, shown in a tooltip on an info icon beside the label.
+   * A built-in row takes its English default from `labels.hints` while the
+   * Root's `hints` is on; `false` drops it.
+   */
+  hint?: ReactNode | false;
 }
 
 /** Brand and Accent take one more prop than the other rows. */
@@ -255,6 +261,8 @@ export interface StylePanelLabels {
   /** The scroll buttons of the colour swatch strips, passed to their `Scroller`. */
   scroller?: ScrollerLabels;
   custom?: StylePanelCustomLabels;
+  /** Each built-in row's tooltip, shown while the Root's `hints` is on. */
+  hints?: StylePanelRowLabels;
 }
 
 /** A labels type with every field filled in, at every depth. */
@@ -342,6 +350,22 @@ const DEFAULT_LABELS: ResolvedLabels = {
     swatch: (row) => `${row === "brand" ? "Brand" : "Accent"} colour: custom`,
     picker: (row) => `Custom ${row} colour`,
   },
+  hints: {
+    theme: "Light, dark, or the visitor's own system setting.",
+    shape: "How round buttons, cards and inputs are.",
+    brand: "The main colour: buttons, links and highlights.",
+    accent: "A second colour for small touches such as badges.",
+    neutral: "The tint in the greys of text, borders and backgrounds.",
+    solid: "What fills a solid button: the colour, its inverse or high contrast.",
+    effect: "The finish of solid buttons: flat, plastic or glow.",
+    surface: "Filled surfaces, or translucent ones that blur what is behind.",
+    density: "How much room controls and lists take.",
+    scaling: "Makes all text and spacing a little smaller or larger.",
+    transition: "Which animations play.",
+    dataStyle: "How charts colour their series.",
+    bodySize: "The size of running text; headings keep theirs.",
+    bodyLineHeight: "The space between lines of running text.",
+  },
 };
 
 /**
@@ -352,6 +376,20 @@ const DEFAULT_LABELS: ResolvedLabels = {
 const StylePanelLabelsContext = createContext<ResolvedLabels>(DEFAULT_LABELS);
 
 const useStylePanelLabels = () => useContext(StylePanelLabelsContext);
+
+/** A row label's width, in any unit Flex takes. */
+export type StylePanelLabelWidth = Exclude<
+  React.ComponentProps<typeof Flex>["width"],
+  "auto" | "fit"
+>;
+
+/** Row labels' shared width beside their control, and whether built-in hints show. */
+const StylePanelRowLayoutContext = createContext<{
+  labelWidth?: StylePanelLabelWidth;
+  hints: boolean;
+}>({
+  hints: false,
+});
 
 /** Whether rows put their label above their control. False outside a Root. */
 const StylePanelStackedContext = createContext(false);
@@ -488,6 +526,13 @@ export interface StylePanelRootProps
   stacked?: boolean;
   /** How much room rows and groups take: `m` (default), or `s` for a denser panel. */
   size?: StylePanelSize;
+  /**
+   * One width for every row's label beside its control (`"8rem"`), so the
+   * controls line up and a long label never breaks. Ignored while `stacked`.
+   */
+  labelWidth?: StylePanelLabelWidth;
+  /** Show each built-in row's tooltip from `labels.hints`. A row's own `hint` still wins. */
+  hints?: boolean;
 }
 
 const Root = function Root({
@@ -497,6 +542,8 @@ const Root = function Root({
   labels,
   stacked = false,
   size = "m",
+  labelWidth,
+  hints = false,
   children,
   ...rest
 }: StylePanelRootProps) {
@@ -518,15 +565,18 @@ const Root = function Root({
   );
 
   const resolvedLabels = useMemo(() => mergeLabels(DEFAULT_LABELS, labels), [labels]);
+  const rowLayout = useMemo(() => ({ labelWidth, hints }), [labelWidth, hints]);
 
   return (
     <StylePanelContext.Provider value={context}>
       <StylePanelLabelsContext.Provider value={resolvedLabels}>
         <StylePanelStackedContext.Provider value={stacked}>
           <StylePanelSizeContext.Provider value={size}>
-            <Column fillWidth gap={SPACING[size].groupGap} ref={ref} {...rest}>
-              {children}
-            </Column>
+            <StylePanelRowLayoutContext.Provider value={rowLayout}>
+              <Column fillWidth gap={SPACING[size].groupGap} ref={ref} {...rest}>
+                {children}
+              </Column>
+            </StylePanelRowLayoutContext.Provider>
           </StylePanelSizeContext.Provider>
         </StylePanelStackedContext.Provider>
       </StylePanelLabelsContext.Provider>
@@ -536,20 +586,74 @@ const Root = function Root({
 
 /* ---- primitives ---------------------------------------------------------- */
 
-function RowLabel({ id, children }: { id?: string; children: ReactNode }) {
+function RowLabel({ id, children, hint }: { id?: string; children: ReactNode; hint?: ReactNode }) {
+  const stacked = useContext(StylePanelStackedContext);
+  const { labelWidth } = useContext(StylePanelRowLayoutContext);
+  const fixed = !stacked && labelWidth !== undefined;
   return (
-    <Flex id={id} textVariant="label-default-s" minWidth="3rem" onBackground="neutral-strong">
-      {children}
+    <Flex
+      id={id}
+      textVariant="label-default-s"
+      onBackground="neutral-strong"
+      vertical={hint || fixed ? "center" : undefined}
+      gap={hint ? "4" : undefined}
+      minWidth={fixed ? labelWidth : "3rem"}
+      width={fixed ? labelWidth : undefined}
+      style={fixed ? { flexShrink: 0 } : undefined}
+    >
+      {fixed ? (
+        <span
+          style={{
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            minWidth: 0,
+          }}
+        >
+          {children}
+        </span>
+      ) : (
+        children
+      )}
+      {hint && (
+        <Icon
+          name="info"
+          size="xs"
+          onBackground="neutral-weak"
+          tooltip={hint}
+          tooltipPosition="top"
+          style={{ flexShrink: 0 }}
+        />
+      )}
     </Flex>
   );
+}
+
+/** A row's tooltip: its own `hint`, else the built-in one while the Root's `hints` is on. */
+function useRowHint(hint: ReactNode | false | undefined, row?: keyof StylePanelRowLabels) {
+  const { hints } = useContext(StylePanelRowLayoutContext);
+  const labels = useStylePanelLabels();
+  if (hint !== undefined) return hint || undefined;
+  return hints && row ? labels.hints[row] : undefined;
 }
 
 /** One labelled row. Dividers come from the group's stylesheet rather than a
  *  prop, so cherry-picking rows never leaves a dangling border. A host's
  *  `className` joins the row's own rather than replacing it, which would
  *  drop the divider. */
-function Row({ label, children, className, ...rest }: StyleRowProps) {
+function Row({
+  label,
+  hint,
+  hintFor,
+  children,
+  className,
+  ...rest
+}: StyleRowProps & {
+  /** Show this built-in row's hint from `labels.hints` while the Root's `hints` is on. */
+  hintFor?: keyof StylePanelRowLabels;
+}) {
   const stacked = useContext(StylePanelStackedContext);
+  const tip = useRowHint(hint, hintFor);
   const space = SPACING[useContext(StylePanelSizeContext)];
   const labelId = useId();
   return (
@@ -563,7 +667,11 @@ function Row({ label, children, className, ...rest }: StyleRowProps) {
         gap={stacked ? space.stackedGap : space.inlineGap}
         {...rest}
       >
-        {label !== false && <RowLabel id={labelId}>{label}</RowLabel>}
+        {label !== false && (
+          <RowLabel id={labelId} hint={tip}>
+            {label}
+          </RowLabel>
+        )}
         {children}
       </Flex>
     </StyleRowLabelContext.Provider>
@@ -742,7 +850,7 @@ function ThemeRow({ label, ...rest }: StyleRowProps) {
       }
     : {};
   return (
-    <Row label={prefer(label, labels.rows.theme)} {...rest}>
+    <Row label={prefer(label, labels.rows.theme)} hintFor="theme" {...rest}>
       <ThemeOptions name={labels.rows.theme} labels={labels.themeSwitcher} {...controlled} />
     </Row>
   );
@@ -764,7 +872,7 @@ function ShapeRow({ label, ...rest }: StyleRowProps) {
   const { value, set, mounted } = useStylePanel();
   const labels = useStylePanelLabels();
   return (
-    <Row label={prefer(label, labels.rows.shape)} {...rest}>
+    <Row label={prefer(label, labels.rows.shape)} hintFor="shape" {...rest}>
       <Swatches
         options={shapes}
         selected={mounted ? value.border : undefined}
@@ -812,8 +920,9 @@ function splitLineProps({ direction, horizontal, vertical, gap, wrap, ...row }: 
 }
 
 function schemeRow(key: StylePanelSchemeRow) {
-  return function SchemeRow({ label, custom = false, ...rest }: StyleSchemeRowProps) {
+  return function SchemeRow({ label, hint, custom = false, ...rest }: StyleSchemeRowProps) {
     const { value, set, mounted, controlled } = useStylePanel();
+    const tip = useRowHint(hint, key);
     const labels = useStylePanelLabels();
     const stacked = useContext(StylePanelStackedContext);
     const pickerId = useId();
@@ -840,7 +949,7 @@ function schemeRow(key: StylePanelSchemeRow) {
     // colour is a controlled-mode feature and the row renders as it always has.
     if (!custom || !controlled) {
       return (
-        <Row label={rowLabel} {...rest}>
+        <Row label={rowLabel} hint={hint} hintFor={key} {...rest}>
           {swatches()}
         </Row>
       );
@@ -859,7 +968,11 @@ function schemeRow(key: StylePanelSchemeRow) {
       <Row label={false} direction="row" {...row}>
         <Column fillWidth gap="16">
           <Flex fillWidth {...(stacked ? STACKED_LINE : INLINE_LINE)} {...line}>
-            {rowLabel !== false && <RowLabel id={labelId}>{rowLabel}</RowLabel>}
+            {rowLabel !== false && (
+              <RowLabel id={labelId} hint={tip}>
+                {rowLabel}
+              </RowLabel>
+            )}
             <StyleRowLabelContext.Provider value={rowLabel !== false ? labelId : null}>
               {swatches(
                 <Swatch
@@ -907,7 +1020,7 @@ function NeutralRow({ label, ...rest }: StyleRowProps) {
   const { value, set, mounted } = useStylePanel();
   const labels = useStylePanelLabels();
   return (
-    <Row label={prefer(label, labels.rows.neutral)} {...rest}>
+    <Row label={prefer(label, labels.rows.neutral)} hintFor="neutral" {...rest}>
       <Swatches
         options={neutrals}
         selected={mounted ? value.neutral : undefined}
@@ -981,7 +1094,7 @@ function segmentedRow<K extends keyof StylePanelValue>(
     const { value, set, mounted } = useStylePanel();
     const labels = useStylePanelLabels();
     return (
-      <Row label={prefer(label, labels.rows[row])} {...rest}>
+      <Row label={prefer(label, labels.rows[row])} hintFor={row} {...rest}>
         <Options
           onValueChange={(next) => set({ [key]: next } as Partial<StylePanelValue>)}
           value={mounted ? (value[key] as string | undefined) : undefined}
@@ -1097,7 +1210,7 @@ function DataStyleRow({ label, ...rest }: StyleRowProps) {
   const { value, set, mounted, controlled } = useStylePanel();
   const labels = useStylePanelLabels();
   return (
-    <Row label={prefer(label, labels.rows.dataStyle)} {...rest}>
+    <Row label={prefer(label, labels.rows.dataStyle)} hintFor="dataStyle" {...rest}>
       {controlled ? (
         <Options
           onValueChange={(next) => set({ chartMode: next as ChartMode })}
