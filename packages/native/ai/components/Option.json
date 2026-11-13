@@ -1,0 +1,21 @@
+{
+ "name": "Option",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "One row of a list to pick from.",
+ "mixins": [],
+ "props": {
+  "value": "!string",
+  "label": "ReactNode",
+  "description": "ReactNode",
+  "prefix": "ReactNode",
+  "suffix": "ReactNode",
+  "selected": "boolean",
+  "disabled": "boolean",
+  "danger": "boolean",
+  "onPress": "(value: string) => void",
+  "onClick": "(value: string) => void",
+  "testID": "string"
+ },
+ "resolvedMixins": {},
+ "types": {}
+}

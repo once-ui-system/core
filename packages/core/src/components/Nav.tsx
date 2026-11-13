@@ -2,31 +2,27 @@
 
 import classNames from "clsx";
 import type React from "react";
-import {
-  createContext,
-  type FocusEvent,
-  forwardRef,
-  type KeyboardEvent,
-  type PointerEvent,
-  type ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import type { SpacingToken } from "../types";
-import { Column } from "./Column";
+import { createContext, type ReactNode, useContext } from "react";
+import { useStyle } from "../contexts/ThemeProvider.js";
+import { SidebarRailContext } from "../internal/sidebarRail.js";
+import { useHoverExpand } from "../internal/useHoverExpand.js";
+import type { SpacingToken, Tone } from "../types.js";
+import type { Density } from "../utils/density.js";
+import { tokenLength } from "../utils/layoutClasses.js";
+import { Column } from "./Column.js";
 import styles from "./Nav.module.scss";
-import { Row } from "./Row";
+import { Row } from "./Row.js";
 
-type NavDensity = "compact" | "normal" | "spacious";
+/** The theme-wide density (`style.density`), which a Nav follows unless it sets its own. */
+type NavDensity = Density;
 type NavVariant = "solid" | "subtle" | "minimal";
 
 interface NavStyle {
   density: NavDensity;
   variant: NavVariant;
   rail: boolean;
+  /** The palette the current row is marked in; NavItems take it unless they set their own. */
+  tone: Tone;
   /** Icons only right now: a collapsed Nav that is not expanded over the page. */
   collapsed: boolean;
 }
@@ -89,12 +85,13 @@ const DENSITY = {
   }
 >;
 
-const OUTSIDE: NavStyle = { density: "normal", variant: "solid", rail: true, collapsed: false };
-
-/** Hover intent: a pointer crossing the rail on its way to the page does not open it. */
-const OPEN_DELAY = 150;
-/** Grace period, so overshooting the open edge by a few pixels does not snap it shut. */
-const CLOSE_DELAY = 200;
+const OUTSIDE: NavStyle = {
+  density: "normal",
+  variant: "solid",
+  rail: true,
+  tone: "neutral",
+  collapsed: false,
+};
 
 const NavContext = createContext<NavStyle>(OUTSIDE);
 
@@ -110,7 +107,9 @@ const useNavStyle = () => {
 interface NavProps extends React.ComponentProps<typeof Column> {
   /**
    * How tight the rows sit: 32, 40 or 48px tall. Compact is the dashboard
-   * size; it also drops the text to the small label.
+   * size; it also drops the text to the small label. Left out, the theme's
+   * `density` (ThemeProvider, `style.density` in the config); set, it wins
+   * for this Nav.
    */
   density?: NavDensity;
   /**
@@ -119,12 +118,20 @@ interface NavProps extends React.ComponentProps<typeof Column> {
    * altogether and marks the current row by weight and contrast alone.
    */
   variant?: NavVariant;
+  /**
+   * The palette the current row is marked in, for every NavItem inside.
+   * `neutral` (the default) is the grey fill; `brand` tints the current row
+   * and colours its label and icon in the brand colour, which is how most
+   * apps show the page you are on. A NavItem's own `tone` still wins.
+   */
+  tone?: Tone;
   /** The vertical line down an open NavGroup. Off, the children keep the indent. */
   rail?: boolean;
   /**
    * Icons only. Labels, badges and section headings fade out but stay each
-   * row's accessible name, and NavGroups close. The Nav narrows to one icon
-   * column plus its own padding.
+   * row's accessible name, and a NavGroup opens its rows in a menu beside its
+   * icon. The Nav narrows to one icon column plus its own padding. Inside a
+   * Sidebar this follows the Sidebar's rail, and the Sidebar sets the width.
    */
   collapsed?: boolean;
   /**
@@ -134,142 +141,76 @@ interface NavProps extends React.ComponentProps<typeof Column> {
    * moves. Touch never opens it.
    */
   expandOnHover?: boolean;
-  /** How wide `expandOnHover` opens: a number of rem or a spacing token. */
+  /** How wide `expandOnHover` opens: a number on the px/token scale (default 256) or a spacing token. */
   expandedWidth?: number | SpacingToken;
 }
 
 /**
- * A sidebar's navigation: sets density, variant and rail once for every
+ * A sidebar's navigation: sets density, variant, tone and rail once for every
  * NavItem, NavGroup and NavSection inside it. The rows still work without it,
  * at the defaults.
  */
-const Nav = forwardRef<HTMLDivElement, NavProps>(
-  (
-    {
-      density = "normal",
-      variant = "solid",
-      rail = true,
-      collapsed = false,
-      expandOnHover = false,
-      expandedWidth = 16,
-      className,
-      style,
-      children,
-      ...column
-    },
-    ref,
-  ) => {
-    const { expanded, handlers } = useHoverExpand(collapsed && expandOnHover, column);
-    const iconsOnly = collapsed && !expanded;
-    return (
-      <NavContext.Provider value={{ density, variant, rail, collapsed: iconsOnly }}>
-        <Column
-          ref={ref}
-          as="nav"
-          fillWidth={!collapsed}
-          gap={DENSITY[density].gap}
-          data-density={density}
-          data-variant={variant}
-          data-collapsed={collapsed ? (expanded ? "expanded" : "collapsed") : undefined}
-          className={classNames(
-            collapsed && styles.collapsed,
-            collapsed && expandOnHover && styles.expandable,
-            expanded && styles.expanded,
-            className,
-          )}
-          style={
-            collapsed && expandOnHover
-              ? ({
-                  "--nav-expanded-width":
-                    typeof expandedWidth === "number"
-                      ? `${expandedWidth}rem`
-                      : `var(--static-space-${expandedWidth})`,
-                  ...style,
-                } as React.CSSProperties)
-              : style
-          }
-          {...column}
-          {...handlers}
-        >
-          {children}
-        </Column>
-      </NavContext.Provider>
-    );
-  },
-);
-
-type HoverHandlers = Pick<
-  React.ComponentProps<typeof Column>,
-  "onPointerEnter" | "onPointerLeave" | "onFocus" | "onBlur" | "onKeyDown"
->;
-
-/** `:focus-visible` is the keyboard's focus; a click focuses a row too, and must not pin the Nav open. */
-const isKeyboardFocus = (el: Element) => {
-  try {
-    return el.matches(":focus-visible");
-  } catch {
-    return true;
-  }
+const Nav = ({
+  ref,
+  density: own,
+  variant = "solid",
+  rail = true,
+  tone = "neutral",
+  collapsed = false,
+  expandOnHover = false,
+  expandedWidth = 256,
+  className,
+  style,
+  children,
+  ...column
+}: NavProps) => {
+  const theme = useStyle().density;
+  // One scale for the theme and the Nav: an unknown value falls back to normal.
+  const density: NavDensity = own ?? (theme in DENSITY ? theme : "normal");
+  // Inside a Sidebar, the Sidebar owns the width, the collapse and the peek:
+  // the Nav only follows it into icons and back.
+  const sidebar = useContext(SidebarRailContext);
+  const standalone = sidebar === null;
+  const ownCollapse = standalone && collapsed;
+  const { expanded, handlers } = useHoverExpand(ownCollapse && expandOnHover, column);
+  const iconsOnly = sidebar ? collapsed || sidebar.iconsOnly : collapsed && !expanded;
+  return (
+    <NavContext.Provider value={{ density, variant, rail, tone, collapsed: iconsOnly }}>
+      <Column
+        ref={ref}
+        as="nav"
+        fillWidth={!ownCollapse}
+        gap={DENSITY[density].gap}
+        data-density={density}
+        data-variant={variant}
+        data-collapsed={
+          ownCollapse ? (expanded ? "expanded" : "collapsed") : iconsOnly ? "collapsed" : undefined
+        }
+        className={classNames(
+          ownCollapse && styles.collapsed,
+          ownCollapse && expandOnHover && styles.expandable,
+          expanded && styles.expanded,
+          className,
+        )}
+        style={
+          ownCollapse && expandOnHover
+            ? ({
+                "--nav-expanded-width":
+                  typeof expandedWidth === "number"
+                    ? tokenLength(expandedWidth)
+                    : `var(--static-space-${expandedWidth})`,
+                ...style,
+              } as React.CSSProperties)
+            : style
+        }
+        {...column}
+        {...handlers}
+      >
+        {children}
+      </Column>
+    </NavContext.Provider>
+  );
 };
-
-/**
- * Open on a resting mouse or on keyboard focus, close on leave, blur or
- * Escape. The host's own handlers still run.
- */
-function useHoverExpand(enabled: boolean, own: HoverHandlers) {
-  const [expanded, setExpanded] = useState(false);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const cancel = useCallback(() => {
-    if (timer.current) clearTimeout(timer.current);
-    timer.current = null;
-  }, []);
-  const schedule = (next: boolean, delay: number) => {
-    cancel();
-    timer.current = setTimeout(() => setExpanded(next), delay);
-  };
-  useEffect(() => cancel, [cancel]);
-  useEffect(() => {
-    if (!enabled) {
-      cancel();
-      setExpanded(false);
-    }
-  }, [enabled, cancel]);
-
-  if (!enabled) return { expanded: false, handlers: {} as HoverHandlers };
-
-  const handlers: HoverHandlers = {
-    onPointerEnter: (event: PointerEvent<HTMLDivElement>) => {
-      own.onPointerEnter?.(event);
-      if (event.pointerType === "mouse") schedule(true, OPEN_DELAY);
-    },
-    onPointerLeave: (event: PointerEvent<HTMLDivElement>) => {
-      own.onPointerLeave?.(event);
-      if (event.pointerType === "mouse") schedule(false, CLOSE_DELAY);
-    },
-    onFocus: (event: FocusEvent<HTMLDivElement>) => {
-      own.onFocus?.(event);
-      if (isKeyboardFocus(event.target)) {
-        cancel();
-        setExpanded(true);
-      }
-    },
-    onBlur: (event: FocusEvent<HTMLDivElement>) => {
-      own.onBlur?.(event);
-      if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-        cancel();
-        setExpanded(false);
-      }
-    },
-    onKeyDown: (event: KeyboardEvent<HTMLDivElement>) => {
-      own.onKeyDown?.(event);
-      if (event.key === "Escape") {
-        cancel();
-        setExpanded(false);
-      }
-    },
-  };
-  return { expanded, handlers };
-}
 
 Nav.displayName = "Nav";
 
@@ -284,35 +225,33 @@ interface NavSectionProps extends Omit<React.ComponentProps<typeof Column>, "tit
  * A titled block of rows: "Projects", "Pinned", "Resources". The heading is
  * small and dim at every variant so the rows stay the thing you read.
  */
-const NavSection = forwardRef<HTMLDivElement, NavSectionProps>(
-  ({ label, action, children, ...column }, ref) => {
-    const { sizes, collapsed } = useNavStyle();
-    return (
-      <Column ref={ref} fillWidth gap={sizes.gap} {...column}>
-        {(label || action) && (
-          <Row
-            fillWidth
-            vertical="center"
-            horizontal="between"
-            gap="8"
-            minHeight="24"
-            paddingLeft={sizes.toggle === "m" ? "12" : "16"}
-            paddingRight="4"
-            paddingTop="8"
-            textVariant={`label-default-${sizes.section}`}
-            onBackground="neutral-weak"
-            opacity={collapsed ? 0 : 100}
-            transition="micro-medium"
-          >
-            {label}
-            {action}
-          </Row>
-        )}
-        {children}
-      </Column>
-    );
-  },
-);
+const NavSection = ({ ref, label, action, children, ...column }: NavSectionProps) => {
+  const { sizes, collapsed } = useNavStyle();
+  return (
+    <Column ref={ref} fillWidth gap={sizes.gap} {...column}>
+      {(label || action) && (
+        <Row
+          fillWidth
+          vertical="center"
+          horizontal="between"
+          gap="8"
+          minHeight="24"
+          paddingLeft={sizes.toggle === "m" ? "12" : "16"}
+          paddingRight="4"
+          paddingTop="8"
+          textVariant={`label-default-${sizes.section}`}
+          onBackground="neutral-weak"
+          opacity={collapsed ? 0 : 100}
+          transition="micro-medium"
+        >
+          {label}
+          {action}
+        </Row>
+      )}
+      {children}
+    </Column>
+  );
+};
 
 NavSection.displayName = "NavSection";
 

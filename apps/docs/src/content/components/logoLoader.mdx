@@ -28,7 +28,7 @@ navIcon: "components"
 
 ## Your logo
 
-Pass the SVG as a URL (`src`, fetched on the client) or as markup (`svg`), for example a file a server component read, so the loader can draw on the first paint. The logo is drawn in one color, so one file covers both themes; `color` picks it.
+Pass the SVG as a URL (`src`, fetched on the client) or as markup (`svg`), for example a file a server component read, so the loader can draw on the first paint. The logo is drawn in one color, so one file covers both themes; `tone` picks it.
 
 Every path, circle, rect, ellipse, polygon and line is drawn. A compound path splits into its parts, so each letter, and each counter inside one, gets its own stroke. Strokes draw left to right by default. With `order="document"` they keep the file's order instead, so a logo can list its symbol last to have it land after the letters. Groups' transforms, masks and gradients are not read: export the logo with flat, outlined paths.
 
@@ -44,7 +44,7 @@ import { LogoLoader } from "@once-ui-system/core";
 // A server component reads the file once and hands the markup down.
 export default async function Splash() {
   const wordmark = await readFile("public/trademarks/wordmark.svg", "utf8");
-  return <LogoLoader svg={wordmark} height={120} color="brand" />;
+  return <LogoLoader svg={wordmark} height={120} tone="brand" />;
 }`,
       language: "tsx",
       label: "Inline markup"
@@ -83,7 +83,7 @@ const showSplash = loading || !introDone;
 
 ## Accessibility
 
-The loader is one `status` region named "Loading" unless you pass `ariaLabel`. With reduced motion the strokes are skipped and the logo fades in on the same schedule, so `onComplete` still fires.
+The loader is one `status` region named "Loading" unless you pass `aria-label`. With reduced motion the strokes are skipped and the logo fades in on the same schedule, so `onComplete` still fires.
 
 ## API reference
 
@@ -93,11 +93,10 @@ The loader is one `status` region named "Loading" unless you pass `ariaLabel`. W
     svg: "The logo as SVG markup. Wins over src.",
     src: "URL of the logo's SVG file, fetched on the client.",
     height: "Height in px or any CSS length; the width follows the viewBox.",
-    color: "brand, accent, neutral, or inherit for the text color.",
+    tone: "brand, accent, neutral, or inherit for the text color.",
     order: "reading (left to right) or document (the file's order).",
     settled: "Show the filled logo without the intro.",
     onComplete: "Fires once the intro has played.",
-    ariaLabel: "What assistive tech announces.",
   }}
   content={[
     ["className"],

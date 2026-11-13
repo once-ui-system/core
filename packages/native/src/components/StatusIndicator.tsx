@@ -1,17 +1,21 @@
 import { forwardRef } from "react";
 import { View } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
-import type { CondensedTShirtSizes, Schemes } from "../types";
+import type { CondensedTShirtSizes, Schemes, Tone } from "../types";
 import { type FlexProps, flexStyle } from "./Flex";
 import type { RefComponent, ViewRef } from "./refs";
 
 export interface StatusIndicatorProps extends FlexProps {
   size?: CondensedTShirtSizes;
-  /** Core 3.0's name for `color`. */
+  /** The dot's palette hue, a fixed colour. 2.x called this `color`. */
   scheme?: Schemes | "gray";
-  color?: Schemes | "gray";
+  /**
+   * A theme role (`brand`, `danger`, `success`, …) that follows the theme's
+   * scheme for it, as core 3.0's `tone`. It wins over `scheme`.
+   */
+  tone?: Tone;
   /** Read out by screen readers; defaults to `"<color> status indicator"`, as in core. */
-  ariaLabel?: string;
+  "aria-label"?: string;
 }
 
 // StatusIndicator.module.scss sizes, in static spacing steps.
@@ -21,8 +25,11 @@ const SIZES = { s: "4", m: "8", l: "16" } as const;
 export const StatusIndicator: RefComponent<StatusIndicatorProps, ViewRef> = forwardRef<
   ViewRef,
   StatusIndicatorProps
->(function StatusIndicator({ size = "m", scheme, color: colorProp, ariaLabel, ...props }, ref) {
-  const color = scheme ?? colorProp ?? "blue";
+>(function StatusIndicator(
+  { size = "m", scheme = "blue", tone, "aria-label": ariaLabel, ...props },
+  ref,
+) {
+  const hue = tone ?? scheme;
   const theme = useTheme();
   const { style, rest, userStyle, hidden } = flexStyle(theme, { radius: "full", ...props });
   if (hidden) return null;
@@ -31,11 +38,15 @@ export const StatusIndicator: RefComponent<StatusIndicatorProps, ViewRef> = forw
     <View
       ref={ref}
       accessibilityRole="image"
-      aria-label={ariaLabel ?? `${color} status indicator`}
+      aria-label={ariaLabel ?? `${hue} status indicator`}
       {...rest}
       style={[
         style,
-        { width: px, height: px, backgroundColor: theme.color(`scheme-${color}-700`) },
+        {
+          width: px,
+          height: px,
+          backgroundColor: theme.color(tone ? `function-${tone}-700` : `scheme-${scheme}-700`),
+        },
         userStyle,
       ]}
     />

@@ -4,7 +4,7 @@ import type React from "react";
 import { useState } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Column } from "../components/Column";
-import { ContextMenu } from "../components/ContextMenu";
+import { Dropdown } from "../components/Dropdown";
 import { Option } from "../components/Option";
 import { resetScrollLockState } from "../components/ScrollLock";
 import { LayoutProvider } from "../contexts/LayoutProvider";
@@ -29,11 +29,11 @@ const items = (
   </Column>
 );
 
-const Target = (props: Partial<React.ComponentProps<typeof ContextMenu>>) => (
+const Target = (props: Partial<React.ComponentProps<typeof Dropdown>>) => (
   <>
-    <ContextMenu dropdown={items} {...props}>
-      <button type="button">Clip</button>
-    </ContextMenu>
+    <Dropdown openOn="contextmenu" trigger={<button type="button">Clip</button>} {...props}>
+      {items}
+    </Dropdown>
     <p>Outside</p>
   </>
 );
@@ -158,9 +158,14 @@ describe("ContextMenu", () => {
       const [open, setOpen] = useState(false);
       return (
         <>
-          <ContextMenu dropdown={items} open={open} onOpenChange={setOpen}>
-            <button type="button">Clip</button>
-          </ContextMenu>
+          <Dropdown
+            openOn="contextmenu"
+            trigger={<button type="button">Clip</button>}
+            open={open}
+            onOpenChange={setOpen}
+          >
+            {items}
+          </Dropdown>
           <button type="button" onClick={() => setOpen(false)}>
             Force close
           </button>

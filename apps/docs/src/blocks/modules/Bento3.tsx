@@ -1,4 +1,4 @@
-import { Column, Heading, Hover, Icon, Media, Row, Text } from "@once-ui-system/core";
+import { Column, Heading, HoverCard, Icon, Media, Row, Text } from "@once-ui-system/core";
 
 type Tile = {
   title: string;
@@ -47,7 +47,7 @@ function BentoTile({
   aspectRatio: string;
 }) {
   return (
-    <Hover
+    <HoverCard placement="cover"
       flex={flex}
       fillWidth
       radius="xl"
@@ -58,21 +58,17 @@ function BentoTile({
         <Row fillWidth aspectRatio={aspectRatio}>
           <Media stretch sizes="(max-width: 768px) 100vw, 50vw" src={tile.image} alt={tile.alt} />
         </Row>
-      }
-      overlay={
-        <Column fill vertical="end" padding="l" gap="4" background="overlay">
+      }><Column fill vertical="end" padding="l" gap="4" background="overlay">
           <Row gap="8" vertical="center">
-            <Text variant="heading-strong-m" onBackground="neutral-strong">
+            <Text textVariant="heading-strong-m" onBackground="neutral-strong">
               {tile.title}
             </Text>
             <Icon name="arrowUpRight" size="xs" onBackground="neutral-strong" />
           </Row>
-          <Text variant="body-default-s" onBackground="neutral-weak" wrap="balance">
+          <Text textVariant="body-default-s" onBackground="neutral-weak" wrap="balance">
             {tile.description}
           </Text>
-        </Column>
-      }
-    />
+        </Column></HoverCard>
   );
 }
 
@@ -80,10 +76,10 @@ export const Bento3 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" gap="40" {...flex}>
       <Column fillWidth paddingX="l" gap="8">
-        <Heading as="h2" variant="display-strong-m">
+        <Heading as="h2" textVariant="display-strong-m">
           Every workflow, one system
         </Heading>
-        <Text onBackground="neutral-weak" variant="body-default-l">
+        <Text onBackground="neutral-weak" textVariant="body-default-l">
           Built to adapt to how your team actually works, from first sketch to shipped product.
         </Text>
       </Column>

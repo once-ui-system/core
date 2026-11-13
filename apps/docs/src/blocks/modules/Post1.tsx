@@ -78,12 +78,12 @@ export const Post1 = () => {
         <SmartLink href="#">{post.tag}</SmartLink>
       </Row>
       <Column maxWidth="s" gap="24" horizontal="center" align="center">
-        <Heading as="h2" variant="display-strong-s">
+        <Heading as="h2" textVariant="display-strong-s">
           {post.title}
         </Heading>
         <Row gap="12" vertical="center">
           <Avatar src={post.author.avatar} size="s" />
-          <Text variant="label-default-s" onBackground="neutral-weak">
+          <Text textVariant="label-default-s" onBackground="neutral-weak">
             {post.author.name}
           </Text>
         </Row>
@@ -165,7 +165,7 @@ export const Post1 = () => {
       </Column>
 
       <Column maxWidth="s" gap="24" marginTop="64">
-        <Heading marginLeft="32" as="h2" variant="heading-strong-xl">
+        <Heading marginLeft="32" as="h2" textVariant="heading-strong-xl">
           Related posts
         </Heading>
         <Grid fillWidth columns={2} s={{ columns: 1 }} gap="8">
@@ -189,16 +189,16 @@ export const Post1 = () => {
                 ></Media>
                 <Column fillWidth gap="16" paddingY="20" paddingX="24">
                   {post.tag && (
-                    <Text variant="label-strong-s" onBackground="neutral-weak">
+                    <Text textVariant="label-strong-s" onBackground="neutral-weak">
                       {post.tag}
                     </Text>
                   )}
-                  <Heading as="h2" variant="heading-strong-s">
+                  <Heading as="h2" textVariant="heading-strong-s">
                     {post.title}
                   </Heading>
                   <Row gap="12" vertical="center">
                     <Avatar src={post.author.avatar} size="s" />
-                    <Text variant="label-default-s" onBackground="neutral-weak">
+                    <Text textVariant="label-default-s" onBackground="neutral-weak">
                       {post.author.name}
                     </Text>
                   </Row>

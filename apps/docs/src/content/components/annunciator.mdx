@@ -1,0 +1,101 @@
+---
+title: "Annunciator and AlarmList"
+summary: "Alarms with acknowledge: a lightbox panel, a list to work through, and the useAlarms model behind both."
+updatedAt: "2026-11-08"
+docs: "once-ui/components/annunciator.mdx"
+github: "components/Annunciator.tsx"
+navLabel: "Annunciator"
+navIcon: "components"
+---
+
+`useAlarms` keeps a set of alarm points and the rules for them, after ISA-18.2:
+an alarm that comes in is **new** until someone acknowledges it, **standing**
+while it is present and seen, **cleared, not acknowledged** when it went away
+before anyone saw it, and **normal** when it is clear and seen. An operator can
+also **shelve** a point (a known fault, maintenance), which keeps it out of the
+counts and the announcements.
+
+`Annunciator` shows every point as a tile in a fixed order, as a panel does.
+`AlarmList` shows the ones that need someone, new first, then by priority, then
+newest. Both read without colour: the priority is a numbered shape
+(`AlarmMark`: critical an octagon with 1, high a triangle with 2, medium a
+diamond with 3, low a circle with 4), and the state is written on every tile and
+row, and drawn as a pattern too: a new alarm flashes (or holds a heavy double
+outline with reduced motion), a cleared unseen one has a dashed edge, a shelved
+one is hatched.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="16">
+      <Annunciator
+        columns={4}
+        alarms={[
+          { id: "rcp-b", tag: "RCP-B", label: "Coolant pump B trip", priority: "critical", active: true, acknowledged: false },
+          { id: "lt-201", tag: "LT-201", label: "Pressuriser level low", priority: "medium", active: true, acknowledged: true },
+          { id: "tt-101", tag: "TT-101", label: "Outlet temp high", priority: "high", active: false, acknowledged: false },
+          { id: "pt-401", tag: "PT-401", label: "Condenser vacuum low", priority: "low", active: false, acknowledged: true }
+        ]}
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`const plant = useAlarms({ defaultAlarms: points });
+
+// Feed it from your telemetry
+plant.raise("rcp-b", { detail: "Motor overcurrent" });
+plant.clear("tt-101");
+
+<Annunciator alarms={plant.alarms} onAcknowledge={plant.acknowledge} columns={4} />
+<AlarmList alarms={plant.alarms} onAcknowledge={plant.acknowledge} />`,
+      language: "tsx",
+      label: "useAlarms"
+    }
+  ]}
+/>
+
+## AlarmList
+
+Each waiting row has an Acknowledge button and the header acknowledges them
+all. Alarms that come in are announced to screen readers: politely, and as an
+alert when one is critical. Pass `timeZone` to write times the same on the
+server and in the browser.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth border="neutral-alpha-weak" radius="l" overflow="hidden">
+      <AlarmList
+        timeZone="UTC"
+        alarms={[
+          { id: "rcp-b", tag: "RCP-B", label: "Coolant pump B trip", priority: "critical", active: true, acknowledged: false, since: "2026-11-08T14:14:00Z", detail: "Motor overcurrent" },
+          { id: "lt-201", tag: "LT-201", label: "Pressuriser level low", priority: "medium", active: true, acknowledged: true, since: "2026-11-08T13:58:10Z" },
+          { id: "tt-101", tag: "TT-101", label: "Outlet temp high", priority: "high", active: false, acknowledged: false, since: "2026-11-08T14:17:00Z", detail: "331 °C, limit 325 °C" }
+        ]}
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code: `<AlarmList alarms={plant.alarms} onAcknowledge={plant.acknowledge} timeZone="UTC" />`,
+      language: "tsx",
+      label: "AlarmList"
+    }
+  ]}
+/>
+
+## The model on its own
+
+`alarmsReducer(alarms, action)` is the same rules as a pure function, for a
+server, a reducer or a test. `alarmState`, `sortAlarms` and `countAlarms` read a
+set the way the components do.
+
+## API reference
+
+<PropsTable component="Annunciator" />
+
+<PropsTable component="AlarmList" />

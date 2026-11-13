@@ -2,6 +2,7 @@
 
 import {
   createContext,
+  startTransition,
   useCallback,
   useContext,
   useEffect,
@@ -9,19 +10,21 @@ import {
   useMemo,
   useState,
 } from "react";
-import { Schemes } from "../types";
-import type { ThemedSchemeScale } from "../utils/colorScheme";
-import type { CursorPresetValue } from "../utils/cursor";
-import { dev } from "../utils/devLogger";
-import { type ThemeColor, themeStyle } from "../utils/themeCss";
+import type { Schemes } from "../types.js";
+import type { ThemedSchemeScale } from "../utils/colorScheme.js";
+import type { CursorPresetValue } from "../utils/cursor.js";
+import { DEFAULT_DENSITY, type Density, densityScaling } from "../utils/density.js";
+import { dev } from "../utils/devLogger.js";
+import { type ThemeColor, themeStyle } from "../utils/themeCss.js";
 
-export type { ThemeColor } from "../utils/themeCss";
+export type { Density } from "../utils/density.js";
+export type { ThemeColor } from "../utils/themeCss.js";
 
 export type Theme = "dark" | "light" | "system";
 /** Every neutral scheme tokens.css ships a `[data-neutral]` mapping for. */
 export type NeutralColor = "sand" | "gray" | "slate" | "rose" | "mint" | "dusk";
 export type SolidType = "color" | "contrast" | "inverse";
-export type SolidStyle = "flat" | "plastic";
+export type SolidStyle = "flat" | "plastic" | "glow";
 /** Every corner style tokens.css ships a `[data-border]` mapping for. */
 export type BorderStyle = "rounded" | "playful" | "conservative" | "sharp";
 export type SurfaceStyle = "filled" | "translucent";
@@ -120,7 +123,21 @@ export interface OnceUIStyleConfig {
   border?: BorderStyle;
   surface?: SurfaceStyle;
   transition?: TransitionStyle;
+  /**
+   * Everything sized in rem, and every number on a size, spacing or offset
+   * prop, multiplied by this percentage: `data-scaling`. Left out, `density`
+   * picks it (compact 95, normal 100, spacious 105).
+   */
   scaling?: ScalingSize;
+  /**
+   * How roomy the controls are: `data-density`. Every Button, IconButton,
+   * ToggleButton, SegmentedControl, Tag, Switch, Checkbox, RadioButton and
+   * Slider given no `size` takes s when `"compact"`, m when `"normal"` (the
+   * default) and l when `"spacious"`, through CSS; a `size` on the control,
+   * or on its `Form`, always wins. Without its own `scaling` the theme also
+   * scales to 95, 100 or 105.
+   */
+  density?: Density;
   bodySize?: BodySize;
   bodyLineHeight?: BodyLineHeight;
   /** Root font size above 1024px: `data-desktop-size`. */
@@ -140,8 +157,11 @@ export interface OnceUIStyleConfig {
    */
   cursor?: CursorPresetValue;
   /**
-   * A colour to generate the brand scheme from — hex, `rgb()` or `oklch()` —
-   * for `brand: "custom"`, which it implies when `brand` is not set.
+   * An exact brand colour — hex, `rgb()` or `oklch()` — for `brand: "custom"`,
+   * which it implies when `brand` is not set. The colour itself is step 500,
+   * what filled buttons and other solids use in both themes (with
+   * `solid: "color"`); the other steps are generated around it. This is all
+   * an exact brand colour needs: `brandSeed: "#0F766E"`.
    * `ThemeInit` renders the scheme on the server, so it is there before the
    * first paint.
    */
@@ -151,9 +171,14 @@ export interface OnceUIStyleConfig {
   /** As {@link OnceUIStyleConfig.brandSeed}, for `neutral: "custom"`. */
   neutralSeed?: string;
   /**
-   * The brand scheme step by step, `{ 100: "#…", …, 1200: "#…" }`, for exact
-   * brand colours. Implies `brand: "custom"`. Steps it leaves out come from
-   * `brandSeed`; without a seed it needs at least step 600.
+   * The brand scheme step by step, `{ 100: "#…", …, 1200: "#…" }`, for a
+   * brand book that fixes every shade. Implies `brand: "custom"`. Steps it
+   * leaves out come from `brandSeed`; without a seed it needs at least step
+   * 600. For one exact colour, `brandSeed` alone is simpler.
+   *
+   * Steps run dark to light in both themes: 100 is the darkest and 1200 the
+   * lightest (the reverse of Tailwind's numbering). Solids use 500, brand text
+   * on a light page 400, on a dark page 900 and 700.
    *
    * One scale serves both themes. For a ramp per theme, write
    * `{ light: { … }, dark: { … } }`; a theme left out uses the other's.
@@ -189,6 +214,7 @@ interface StyleOptions {
   surface: SurfaceStyle;
   transition: TransitionStyle;
   scaling: ScalingSize;
+  density: Density;
   bodySize: BodySize;
   bodyLineHeight: BodyLineHeight;
   // No defaults: the CSS already has them, and writing them onto <html>
@@ -233,6 +259,7 @@ const defaultStyleOptions: StyleOptions = {
   surface: "filled",
   transition: "all",
   scaling: "100",
+  density: DEFAULT_DENSITY,
   bodySize: "100",
   bodyLineHeight: "100",
 };
@@ -262,6 +289,7 @@ function getStoredStyleValues(store: StylePersistenceAdapter | null) {
       "surface",
       "transition",
       "scaling",
+      "density",
       "body-size",
       "body-line-height",
       "desktop-size",
@@ -303,6 +331,10 @@ const getDomResolvedTheme = (fallback: "light" | "dark"): "light" | "dark" => {
 // a plain effect on the server, where layout effects warn.
 const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
+const camelToKebab = (str: string): string => {
+  return str.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1-$2").toLowerCase();
+};
+
 export function ThemeProvider({
   children,
   theme: propTheme = "system",
@@ -316,6 +348,7 @@ export function ThemeProvider({
   surface,
   transition,
   scaling,
+  density,
   bodySize,
   bodyLineHeight,
   desktopSize,
@@ -348,9 +381,16 @@ export function ThemeProvider({
 
   useIsomorphicLayoutEffect(() => {
     if (isForced) return;
-    setTheme(getStoredTheme(store, defaultTheme));
-    setResolvedTheme((current) => getDomResolvedTheme(current));
-    setThemeSynced(true);
+    // A transition: ThemeInit has already painted the theme, so nothing is
+    // waiting on this. As an urgent update it reached every Suspense boundary
+    // still hydrating (a lazy CodeBlock or chart), and React threw away their
+    // server HTML for the empty fallback until their chunk loaded: the page
+    // collapsed and grew back, a layout shift on every page with one.
+    startTransition(() => {
+      setTheme(getStoredTheme(store, defaultTheme));
+      setResolvedTheme((current) => getDomResolvedTheme(current));
+      setThemeSynced(true);
+    });
   }, [isForced, store, defaultTheme]);
 
   const getResolvedTheme = useCallback((t: Theme): "light" | "dark" => {
@@ -434,6 +474,7 @@ export function ThemeProvider({
   if (surface) directProps.surface = surface;
   if (transition) directProps.transition = transition;
   if (scaling) directProps.scaling = scaling;
+  if (density) directProps.density = density;
   if (bodySize) directProps.bodySize = bodySize;
   if (bodyLineHeight) directProps.bodyLineHeight = bodyLineHeight;
   if (desktopSize) directProps.desktopSize = desktopSize;
@@ -473,62 +514,81 @@ export function ThemeProvider({
   if (!accent && schemes.includes("accent")) directProps.accent = "custom";
   if (!neutral && schemes.includes("neutral")) directProps.neutral = "custom";
 
-  const [style, setStyleState] = useState<StyleOptions>({
-    ...defaultStyleOptions,
-    ...directProps,
-    ...storedValues,
-    theme: theme,
+  // A scaling set by a prop or chosen earlier (stored) is the theme's own;
+  // otherwise the density picks it, now and whenever the density changes.
+  const [scalingSet, setScalingSet] = useState(Boolean(scaling || storedValues.scaling));
+
+  const [style, setStyleState] = useState<StyleOptions>(() => {
+    const initial = { ...defaultStyleOptions, ...directProps, ...storedValues, theme };
+    if (!scaling && !storedValues.scaling) {
+      initial.scaling = densityScaling(initial.density) ?? initial.scaling;
+    }
+    return initial;
   });
 
   useEffect(() => {
-    setStyleState((prevStyle) => ({
-      ...prevStyle,
-      theme: theme,
-    }));
+    setStyleState((prevStyle) =>
+      prevStyle.theme === theme ? prevStyle : { ...prevStyle, theme: theme },
+    );
   }, [theme]);
 
-  const themeValue = {
-    theme,
-    resolvedTheme,
-    setTheme: setThemeAndSave,
-  };
+  // Memoized, like the style value below: a render that changes nothing
+  // (themeSynced flipping on mount) must not hand consumers a new object, or
+  // the context change reaches Suspense boundaries still hydrating.
+  const themeValue = useMemo(
+    () => ({
+      theme,
+      resolvedTheme,
+      setTheme: setThemeAndSave,
+    }),
+    [theme, resolvedTheme, setThemeAndSave],
+  );
 
-  const camelToKebab = (str: string): string => {
-    return str.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1-$2").toLowerCase();
-  };
+  const styleValue: StyleProviderState = useMemo(
+    () => ({
+      ...style,
+      setStyle: (newStyle: Partial<StyleOptions>) => {
+        // A new density brings its scaling along, unless the scaling is the
+        // theme's own; that one is applied but not stored, so it is worked
+        // out again from the density on the next visit.
+        const derived =
+          newStyle.density && !newStyle.scaling && !scalingSet
+            ? densityScaling(newStyle.density)
+            : undefined;
+        if (newStyle.scaling) setScalingSet(true);
+        setStyleState((prevStyle) => ({
+          ...prevStyle,
+          ...newStyle,
+          ...(derived && { scaling: derived }),
+        }));
+        if (derived) document.documentElement.setAttribute("data-scaling", derived);
 
-  const styleValue: StyleProviderState = {
-    ...style,
-    setStyle: (newStyle: Partial<StyleOptions>) => {
-      setStyleState((prevStyle) => ({
-        ...prevStyle,
-        ...newStyle,
-      }));
+        Object.entries(newStyle).forEach(([key, value]) => {
+          if (value && key !== "setStyle") {
+            const attrName = `data-${camelToKebab(key)}`;
 
-      Object.entries(newStyle).forEach(([key, value]) => {
-        if (value && key !== "setStyle") {
-          const attrName = `data-${camelToKebab(key)}`;
-
-          if (key === "theme") {
-            if (value === "system") {
-              if (defaultTheme === "system") store?.remove?.("data-theme");
-              else store?.set("data-theme", "system");
-              const resolvedValue = window.matchMedia("(prefers-color-scheme: dark)").matches
-                ? "dark"
-                : "light";
-              document.documentElement.setAttribute(attrName, resolvedValue);
+            if (key === "theme") {
+              if (value === "system") {
+                if (defaultTheme === "system") store?.remove?.("data-theme");
+                else store?.set("data-theme", "system");
+                const resolvedValue = window.matchMedia("(prefers-color-scheme: dark)").matches
+                  ? "dark"
+                  : "light";
+                document.documentElement.setAttribute(attrName, resolvedValue);
+              } else {
+                store?.set("data-theme", value.toString());
+                document.documentElement.setAttribute(attrName, value.toString());
+              }
             } else {
-              store?.set("data-theme", value.toString());
               document.documentElement.setAttribute(attrName, value.toString());
+              store?.set(attrName, value.toString());
             }
-          } else {
-            document.documentElement.setAttribute(attrName, value.toString());
-            store?.set(attrName, value.toString());
           }
-        }
-      });
-    },
-  };
+        });
+      },
+    }),
+    [style, scalingSet, store, defaultTheme],
+  );
 
   useEffect(() => {
     if (typeof window !== "undefined") {

@@ -3,13 +3,13 @@
 import classNames from "clsx";
 import type React from "react";
 import type { ReactNode } from "react";
-import type { IconName } from "../icons";
-import { Column } from "./Column";
+import type { IconName } from "../icons.js";
+import { Column } from "./Column.js";
 import styles from "./EmptyState.module.scss";
-import { Heading } from "./Heading";
-import { Icon } from "./Icon";
-import { Row } from "./Row";
-import { Text } from "./Text";
+import { Heading } from "./Heading.js";
+import { Icon } from "./Icon.js";
+import { Row } from "./Row.js";
+import { Text } from "./Text.js";
 
 type EmptyStateSize = "s" | "m" | "l";
 
@@ -40,7 +40,7 @@ export interface EmptyStateProps
 }
 
 const SIZES = {
-  // `s` keeps the look DataTable's empty states had before they used this.
+  // `s` keeps the look Table's empty states had before they used this.
   s: { paddingY: "xl", gap: "m", icon: "l", title: "heading-strong-s", body: "body-default-s" },
   m: { paddingY: "48", gap: "16", icon: "l", title: "heading-strong-m", body: "body-default-m" },
   l: { paddingY: "80", gap: "20", icon: "xl", title: "heading-strong-l", body: "body-default-m" },
@@ -83,11 +83,11 @@ const EmptyState = ({
         </Row>
       )}
       <Column horizontal="center" gap={size === "s" ? "4" : "8"} className={styles.text}>
-        <Heading as={titleAs} variant={s.title} align="center">
+        <Heading as={titleAs} textVariant={s.title} align="center">
           {title}
         </Heading>
         {description && (
-          <Text variant={s.body} onBackground="neutral-weak" align="center" wrap="balance">
+          <Text textVariant={s.body} onBackground="neutral-weak" align="center" wrap="balance">
             {description}
           </Text>
         )}

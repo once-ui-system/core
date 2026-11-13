@@ -81,12 +81,12 @@ export const Checkout1 = () => {
               </Row>
               <Row fillWidth vertical="center" paddingX="20">
                 <Column gap="2" fillWidth>
-                  <Text variant="body-strong-s">{product.name}</Text>
-                  <Text variant="body-default-s" onBackground="neutral-weak">
+                  <Text textVariant="body-strong-s">{product.name}</Text>
+                  <Text textVariant="body-default-s" onBackground="neutral-weak">
                     {product.variant}
                   </Text>
                 </Column>
-                <Text variant="body-default-s">
+                <Text textVariant="body-default-s">
                   {`$${(product.price * product.qty).toFixed(2)}`}
                 </Text>
               </Row>
@@ -136,17 +136,17 @@ export const Checkout1 = () => {
           <Button fillWidth prefixIcon="apple" label="Pay" />
           <Row vertical="center" gap="16" paddingY="16">
             <Line key="line-4" />
-            <Text wrap="nowrap" variant="body-default-s" onBackground="neutral-weak" align="center">
+            <Text wrap="nowrap" textVariant="body-default-s" onBackground="neutral-weak" align="center">
               Or pay another way
             </Text>
             <Line key="line-5" />
           </Row>
           <Column fillWidth gap="8">
-            <Text variant="body-strong-s">Email</Text>
+            <Text textVariant="body-strong-s">Email</Text>
             <Input autoComplete="off" id="email" placeholder="mail@example.com" />
           </Column>
           <Column fillWidth gap="8">
-            <Text variant="body-strong-s">Card information</Text>
+            <Text textVariant="body-strong-s">Card information</Text>
             <Column fillWidth gap="-1">
               <Input
                 corners="top"
@@ -174,11 +174,11 @@ export const Checkout1 = () => {
             </Column>
           </Column>
           <Column fillWidth gap="8">
-            <Text variant="body-strong-s">Name on card</Text>
+            <Text textVariant="body-strong-s">Name on card</Text>
             <Input autoComplete="off" id="name" placeholder="Jane Smith" />
           </Column>
           <Column fillWidth gap="8" paddingBottom="16">
-            <Text variant="body-strong-s">Country or region</Text>
+            <Text textVariant="body-strong-s">Country or region</Text>
             <Select
               id="country"
               placeholder="United States"
@@ -217,7 +217,7 @@ export const Checkout1 = () => {
                 },
               ]}
               value="United States"
-              onSelect={() => {}}
+              onValueChange={() => {}}
             />
           </Column>
           <Button fillWidth label="Pay" />

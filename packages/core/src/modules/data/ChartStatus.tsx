@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import { Column } from "../../components/Column";
-import { Spinner } from "../../components/Spinner";
-import { Text } from "../../components/Text";
+import { Column } from "../../components/Column.js";
+import { Spinner } from "../../components/Spinner.js";
+import { Text } from "../../components/Text.js";
 
 export interface ChartStatusProps {
   loading?: boolean;
@@ -13,31 +13,31 @@ export interface ChartStatusProps {
   errorState?: React.ReactNode;
 }
 
-export const ChartStatus: React.FC<ChartStatusProps> = ({
+export const ChartStatus = ({
   loading = false,
   empty = false,
   error = false,
   emptyState = "No data available for the selected period",
   errorState = "An error occurred while fetching data",
-}) => {
+}: ChartStatusProps) => {
   if (!loading && !empty && !error) {
     return null;
   }
 
   return (
     <Column fill center>
+      {/* An error wins over empty: a failed request usually leaves `data` empty
+          too (`data ?? []`), and "No data" would hide that it failed. */}
       {loading ? (
         <Spinner size="m" />
-      ) : empty ? (
-        <Text align="center" variant="label-default-s" onBackground="neutral-weak">
-          {emptyState}
+      ) : error ? (
+        <Text align="center" textVariant="label-default-s" onBackground="danger-weak">
+          {errorState}
         </Text>
       ) : (
-        error && (
-          <Text align="center" variant="label-default-s" onBackground="danger-weak">
-            {errorState}
-          </Text>
-        )
+        <Text align="center" textVariant="label-default-s" onBackground="neutral-weak">
+          {emptyState}
+        </Text>
       )}
     </Column>
   );

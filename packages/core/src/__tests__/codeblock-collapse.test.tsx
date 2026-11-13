@@ -19,7 +19,7 @@ const collapsed = async (background?: string) => {
   const { container } = render(
     <CodeBlock
       compact
-      isCollapsible
+      collapsible
       maxLines={3}
       {...(background ? { background: background as never } : {})}
       codes={[{ code: long, language: "tsx", label: "Example" }]}
@@ -37,6 +37,16 @@ describe("CodeBlock collapse", () => {
   it("fades to the block's own surface, not the page", async () => {
     const fade = await collapsed();
     expect(fade.style.getPropertyValue("--base-color")).toBe("var(--surface-background)");
+  });
+
+  // 2.x passed blur={100}, which its Fade never wrote outside pattern mode:
+  // the fade blurred at the mask's 0.5rem. 3.0's Fade writes its blur, and
+  // 100rem made Chromium drop the backdrop filter. The 2.x look is the
+  // default, which the stylesheet holds: no radius of its own.
+  it("blurs at the default 0.5rem, as 2.x did", async () => {
+    const fade = await collapsed();
+    expect(fade.style.getPropertyValue("--fade-blur")).toBe("");
+    expect(fade.style.backdropFilter).toBe("");
   });
 
   it("follows an explicit background", async () => {

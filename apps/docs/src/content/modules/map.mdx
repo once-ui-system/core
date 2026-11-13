@@ -16,7 +16,7 @@ navTagVariant: "cyan"
 
 ## Installation
 
-`maplibre-gl` is an optional peer dependency, like `recharts` for the charts. Install it next to Once UI and import the map from its own entry point, so an app without a map never loads it:
+`maplibre-gl` is an optional peer dependency, like `prismjs` for `CodeBlock`. Install it next to Once UI and import the map from its own entry point, so an app without a map never loads it:
 
 ```bash
 npm install maplibre-gl
@@ -25,12 +25,30 @@ npm install maplibre-gl
 ```tsx
 import { Map, MapMarker } from "@once-ui-system/core/map";
 
-<Map height={24} defaultViewport={{ center: [19.0402, 47.4979], zoom: 12 }}>
+<Map height={384} defaultViewport={{ center: [19.0402, 47.4979], zoom: 12 }}>
   <MapMarker position={[19.0402, 47.4979]} />
 </Map>
 ```
 
 Positions are `[longitude, latitude]`, the order MapLibre and GeoJSON use. The map renders on the client only; on the server and until MapLibre loads it draws an empty frame of the same size, so the page does not shift.
+
+## Units and status
+
+For things that move or change state (vehicles, crews, sensors), give each pin an `icon` for what it is and a `tone` for its state. Both show at rest, so a dispatcher reads the board without opening a pin; the name can wait until the pin is active.
+
+<MapStatusExample />
+
+```tsx
+<MapPin
+  icon="heart"
+  tone="danger"
+  active={unit.id === active}
+  onClick={() => setActive(unit.id)}
+  aria-label="M12, Responding"
+>
+  {unit.id === active ? "M12 · Responding" : undefined}
+</MapPin>
+```
 
 ## Listings, clustering and popups
 
@@ -42,7 +60,7 @@ Positions are `[longitude, latitude]`, the order MapLibre and GeoJSON use. The m
 const [hovered, setHovered] = useState<string>();
 const [open, setOpen] = useState<Listing>();
 
-<Map height={32} bounds={listings.map((listing) => listing.position)}>
+<Map height={512} bounds={listings.map((listing) => listing.position)}>
   <MapMarkers
     items={listings}
     cluster
@@ -60,7 +78,7 @@ const [open, setOpen] = useState<Listing>();
   />
   {open && (
     <MapPopup position={open.position} onClose={() => setOpen(undefined)}>
-      <Text variant="label-strong-m">{open.title}</Text>
+      <Text textVariant="label-strong-m">{open.title}</Text>
       <Button size="s" variant="secondary" href={`/listings/${open.id}`}>View listing</Button>
     </MapPopup>
   )}
@@ -76,7 +94,7 @@ const [open, setOpen] = useState<Listing>();
 <MapAvatarExample />
 
 ```tsx
-<Map height={24} bounds={venues.map((venue) => venue.position)} controls={false}>
+<Map height={384} bounds={venues.map((venue) => venue.position)} controls={false}>
   {venues.map((venue) => (
     <MapMarker key={venue.id} position={venue.position} anchor="center">
       <Avatar size="m" value={venue.name[0]} />
@@ -87,13 +105,25 @@ const [open, setOpen] = useState<Listing>();
 
 ## Areas
 
-`MapCircle` marks an area on the ground, sized in metres, in a token colour. It scales with the map, which makes it the honest way to show an approximate address.
+`MapCircle` marks an area on the ground, sized in metres, in a `tone`. It scales with the map, which makes it the honest way to show an approximate address.
 
 <MapAreaExample />
 
 ```tsx
-<Map height={24} defaultViewport={{ center: [19.0545, 47.5065], zoom: 14 }}>
+<Map height={384} defaultViewport={{ center: [19.0545, 47.5065], zoom: 14 }}>
   <MapCircle position={[19.0545, 47.5065]} radius={400} />
+</Map>
+```
+
+## Routes
+
+`MapRoute` draws a path in a `tone`: a delivery, a run, a flight. Give it `progress` (0 to 1) and the part travelled is solid while the rest is dashed, so a moving courier reads at a glance. `dashed` draws a planned route. The line sits on a casing in the page colour, so it reads on either basemap.
+
+<MapRouteExample />
+
+```tsx
+<Map height={384} defaultViewport={{ center: [19.0506, 47.5034], zoom: 14 }}>
+  <MapRoute path={route} progress={0.4} />
 </Map>
 ```
 
@@ -105,7 +135,7 @@ const [open, setOpen] = useState<Listing>();
 
 ```tsx
 <Map
-  height={32}
+  height={512}
   projection="globe"
   buildings="3d"
   defaultViewport={{ center: [19.0457, 47.507], zoom: 15.5, pitch: 60, bearing: -20 }}
@@ -189,3 +219,5 @@ The map is a focusable region: arrow keys pan, `+` and `-` zoom, and the frame s
 <PropsTable component="MapPopup" />
 
 <PropsTable component="MapCircle" />
+
+<PropsTable component="MapRoute" />

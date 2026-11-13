@@ -1,4 +1,4 @@
-import { Breadcrumbs, Column, Heading, Row, Text } from "@once-ui-system/core";
+import { Breadcrumbs, type CSSUnit, Column, Heading, Row, Text } from "@once-ui-system/core";
 import type { ComponentProps, ReactNode } from "react";
 import { Pagination } from "./Pagination";
 
@@ -9,7 +9,7 @@ interface DocsLayoutProps {
   breadcrumbs?: ComponentProps<typeof Breadcrumbs>["items"];
   /** Small detail aligned to the end of the title row, e.g. the variant count. */
   aside?: ReactNode;
-  maxWidth?: number | "xs" | "s" | "m" | "l" | "xl";
+  maxWidth?: number | CSSUnit | "xs" | "s" | "m" | "l" | "xl";
   children: ReactNode;
   pagination?: boolean;
   align?: "center";
@@ -20,7 +20,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   description,
   breadcrumbs,
   aside,
-  maxWidth = 96,
+  maxWidth = "96rem",
   children,
   pagination = true,
   align,
@@ -34,13 +34,13 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
               <Breadcrumbs items={breadcrumbs} aria-label="Breadcrumb" />
             )}
             <Row fillWidth wrap gap="16" horizontal="between" style={{ alignItems: "flex-end" }}>
-              <Column gap="8" flex={1} minWidth={20}>
-                <Heading align={align} variant="display-strong-xs">
+              <Column gap="8" flex={1} minWidth="20rem">
+                <Heading align={align} textVariant="display-strong-xs">
                   {title}
                 </Heading>
                 <Text
                   align={align}
-                  variant="body-default-m"
+                  textVariant="body-default-m"
                   onBackground="neutral-medium"
                   wrap="balance"
                 >

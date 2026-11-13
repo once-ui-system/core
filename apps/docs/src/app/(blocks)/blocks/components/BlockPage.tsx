@@ -1,6 +1,16 @@
 "use client";
 
-import { Button, Column, Row, SegmentedControl, Tag, Text, useToast } from "@once-ui-system/core";
+import { StyleOverlay } from "@once-ui-system/blocks";
+import {
+  Button,
+  Column,
+  IconButton,
+  Row,
+  SegmentedControl,
+  Tag,
+  Text,
+  useToast,
+} from "@once-ui-system/core";
 import { CodeBlock } from "@once-ui-system/core/code";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { harness } from "@/resources/prompts";
@@ -118,7 +128,7 @@ function renderBlock(example: BlockExampleDef, framed: boolean, isFixed: boolean
       horizontal="center"
       vertical="start"
       center={false}
-      minHeight={24}
+      minHeight="24rem"
       padding="l"
     >
       {rendered}
@@ -133,7 +143,7 @@ function BuiltWith({ sources }: { sources: string[] }) {
   if (!components.length) return null;
   return (
     <Row flex={1} minWidth={0} wrap gap="8" vertical="center">
-      <Text variant="label-default-s" onBackground="neutral-weak" marginRight="4">
+      <Text textVariant="label-default-s" onBackground="neutral-weak" marginRight="4">
         Built with
       </Text>
       {components.map((name) => {
@@ -231,9 +241,9 @@ function BlockExample({
     const prompt = buildBlockPrompt(title, description, codes.slice(1));
     try {
       await navigator.clipboard.writeText(prompt);
-      addToast({ variant: "success", message: `Prompt for ${title} copied` });
+      addToast({ tone: "success", message: `Prompt for ${title} copied` });
     } catch {
-      addToast({ variant: "danger", message: "Couldn't copy to the clipboard" });
+      addToast({ tone: "danger", message: "Couldn't copy to the clipboard" });
     }
   };
 
@@ -243,7 +253,7 @@ function BlockExample({
     selectedTab !== 0 ? undefined : inView ? (
       renderBlock(example, framed, isFixed)
     ) : (
-      <Row fillWidth minHeight={24} />
+      <Row fillWidth minHeight="24rem" />
     );
 
   // Content-sized on the preview tab (capped at 80vh); the code view and
@@ -273,7 +283,18 @@ function BlockExample({
       <CodeBlock
         className={styles.frame}
         lineNumbers
-        styleButton
+        actions={
+          <StyleOverlay>
+            <IconButton
+              size="m"
+              variant="tertiary"
+              icon="sparkle"
+              tooltip="Style"
+              tooltipPosition="bottom"
+              aria-label="Open the style panel"
+            />
+          </StyleOverlay>
+        }
         reloadButton={reloadButton}
         fullscreenButton
         copyButton
@@ -406,13 +427,13 @@ export function BlockPage({
       aside={
         browsable ? (
           <Row gap="16" vertical="center" wrap>
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               {ordered.length} variants
             </Text>
             <SegmentedControl
               fillWidth={false}
               value={mode}
-              onChange={(value) => setMode(value as ViewMode)}
+              onValueChange={(value) => setMode(value as ViewMode)}
               buttons={[
                 { value: "focus", label: "Focus" },
                 { value: "all", label: "All blocks" },

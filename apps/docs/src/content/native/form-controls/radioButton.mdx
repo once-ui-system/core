@@ -29,13 +29,13 @@ export function Delivery() {
         label="Standard"
         description="3 to 5 days"
         checked={method === "standard"}
-        onToggle={() => setMethod("standard")}
+        onCheckedChange={() => setMethod("standard")}
       />
       <RadioButton
         label="Express"
         description="Next day"
         checked={method === "express"}
-        onToggle={() => setMethod("express")}
+        onCheckedChange={() => setMethod("express")}
       />
     </Column>
   );
@@ -70,7 +70,7 @@ export function Options() {
 
 ## Differences from the web
 
-- The handler is `onToggle`. There is no `name` or form submission.
+- The handler is `onCheckedChange`. There is no `name` or form submission.
 - Pressing a radio that is already on does nothing.
 
 ## API reference
@@ -80,9 +80,9 @@ export function Options() {
 | `checked` | `boolean` | | The state, when the screen owns it. |
 | `defaultChecked` | `boolean` | `false` | The first state when the radio keeps its own. |
 | `value` | `string` | | Inside a `RadioGroup`, the group checks the button whose `value` it holds. |
-| `onToggle` | `(checked: boolean) => void` | | Called with `true` when an unchecked radio is pressed. |
+| `onCheckedChange` | `(checked: boolean) => void` | | Called with `true` when an unchecked radio is pressed. |
 | `label` | `ReactNode` | | Text beside the circle. A string is also the accessibility label. |
 | `description` | `ReactNode` | | A line under the label. |
 | `disabled` | `boolean` | `false` | Dims the radio and ignores taps. |
-| `ariaLabel` | `string` | `"Radio button"` | The accessibility label when `label` is not a string. |
+| `aria-label` | `string` | `"Radio button"` | The accessibility label when `label` is not a string. |
 | `style` | `ViewStyle` | | Style for the row. |

@@ -38,7 +38,7 @@ describe("Pagination: keyboard", () => {
   it("picks a page with Enter and with Space", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<Pagination total={5} onChange={onChange} />, { wrapper });
+    render(<Pagination total={5} onPageChange={onChange} />, { wrapper });
     pageButton(3).focus();
     await user.keyboard("{Enter}");
     expect(current()).toHaveTextContent("3");
@@ -83,7 +83,7 @@ describe("Pagination: rendering", () => {
       const [page, setPage] = useState(1);
       return (
         <>
-          <Pagination total={10} page={page} onChange={setPage} showFirstLast />
+          <Pagination total={10} page={page} onPageChange={setPage} showFirstLast />
           <output>{page}</output>
         </>
       );

@@ -3,11 +3,19 @@
   "order": 6,
   "pages": {
     "setup": 1,
-    "lineChart": 2,
-    "barChart": 3,
-    "groupedBarChart": 4,
-    "lineBarChart": 5,
-    "pieChart": 6,
-    "radialGauge": 7
+    "choosing": 2,
+    "data": 3,
+    "formatting": 4,
+    "colors": 5,
+    "interaction": 6,
+    "recipes": 7,
+    "parts": 8,
+    "lineChart": 9,
+    "barChart": 10,
+    "lineBarChart": 11,
+    "pieChart": 12,
+    "sparkline": 13,
+    "radialGauge": 14,
+    "linearGauge": 15
   }
 }

@@ -1,0 +1,18 @@
+{
+ "name": "IconProvider",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "Adds to or replaces the built-in icons, by name.",
+ "mixins": [],
+ "props": {
+  "icons": "Partial<Record<IconName, NativeIcon>> | Record<string, NativeIcon>",
+  "children": "!ReactNode"
+ },
+ "resolvedMixins": {},
+ "types": {
+  "BuiltInIconName": "one of the names listed under Icons",
+  "IconLibraryOverrides": "{} (an app augments it to register its own icon names)",
+  "IconName": "BuiltInIconName | Extract<keyof IconLibraryOverrides, string>",
+  "IconNode": "{ tag: string; attr: Record<string, string | number | undefined>; child: IconNode[] }",
+  "NativeIcon": "IconNode | ComponentType<{ size: number; color: string }>"
+ }
+}

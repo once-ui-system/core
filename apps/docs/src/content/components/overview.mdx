@@ -18,8 +18,7 @@ everything else sits inside.
 The primitives, and the containers built from them.
 
 - [Flex](/components/flex) — the layout primitive; one axis, and every shared prop
-- [Grid](/components/grid) — two-dimensional layout with a responsive column count
-- [MasonryGrid](/components/masonryGrid) — columns for items of uneven height
+- [Grid](/components/grid) — two-dimensional layout with a responsive column count, or masonry columns for items of uneven height
 - [SplitView](/components/splitView) — two resizable panes, collapsing to tabs when narrow
 - [Line](/components/line) — a rule, horizontal or vertical
 - [Mask](/components/mask) — reveal content through a shape or cursor-following window
@@ -55,32 +54,30 @@ Things that hold other things.
 - [SmartLink](/components/smartLink) — the link, routed through the framework adapter
 - [Button](/components/button) / [IconButton](/components/iconButton) / [ToggleButton](/components/toggleButton)
 - [SegmentedControl](/components/segmentedControl) — one choice from a small set
-- [Dropdown](/components/dropdown) / [DropdownWrapper](/components/dropdownWrapper) / [Option](/components/option)
-- [ContextMenu](/components/contextMenu) — a menu on right-click
-- [UserMenu](/components/userMenu) — the account menu
+- [Dropdown](/components/dropdown) / [Option](/components/option) — a trigger and the menu it opens
+- [Dropdown `openOn="contextmenu"`](/components/dropdown#context-menu) — a menu on right-click
+- [User `dropdown`](/components/user#menu) — the account menu
 - [NavIcon](/components/navIcon) — the hamburger, animated
-- [Arrow](/components/arrow) — a pointer that follows a trigger
 - [ScrollToTop](/components/scrollToTop) — the button that comes back on scroll
 
 ## Overlays
 
 - [Dialog](/components/dialog) — a modal, stackable
-- [Modal](/components/modal) — a full-screen modal with an optional backdrop, separate from Dialog
+- [Dialog `variant="sheet"`](/components/dialog#sheet) — a full-height sheet with an optional backdrop
 - [Tooltip](/components/tooltip) — a label on hover
 - [HoverCard](/components/hoverCard) — a preview on hover
-- [InfoTip](/components/infoTip) — an info icon that explains a field
+- [Tooltip `content`](/components/tooltip#info-icon) — an info icon that explains a field
 - [Toast](/components/toast) — transient confirmation
-- [EmojiPicker](/components/emojiPicker) / [EmojiPickerDropdown](/components/emojiPickerDropdown)
+- [EmojiPicker](/components/emojiPicker), inline or from a `trigger`
 
 ## Status and feedback
 
 - [Spinner](/components/spinner) — work in progress, duration unknown
 - [Skeleton](/components/skeleton) — the shape of content that has not arrived
 - [ProgressBar](/components/progressBar) — work in progress, duration known
-- [StatusIndicator](/components/statusIndicator) — a state dot
-- [Badge](/components/badge) / [Tag](/components/tag) — a count, and a label
+- [StatusIndicator](/components/statusIndicator) — a state dot, or a pulsing live indicator
+- [Tag](/components/tag) — a label, an announcement or a toggle (Badge and Chip in 2.x)
 - [Feedback](/components/feedback) — an inline message with a severity
-- [Pulse](/components/pulse) — a live indicator
 
 ## Identity
 
@@ -91,9 +88,9 @@ Things that hold other things.
 ## Scrolling
 
 - [Scroller](/components/scroller) — a scrollable strip with arrow affordances
-- [ScrollContainer](/components/scrollContainer) — a scroll area with faded edges
-- [Carousel](/components/carousel) / [Swiper](/components/swiper) — one item at a time
-- [AutoScroll](/components/autoScroll) — a continuously moving strip
+- [Scroller](/components/scroller#track-mode) track mode — a run of tiles with drag, wrap-around and markers
+- [Carousel](/components/carousel) — one item at a time, cross-fading or snapping (`mode="snap"`)
+- [Scroller `auto`](/components/scroller#auto) — a continuously moving strip
 - [InfiniteScroll](/components/infiniteScroll) — load more as it comes into view
 - [ScrollLock](/components/scrollLock) — freeze the page behind an overlay
 
@@ -101,7 +98,7 @@ Things that hold other things.
 
 - [RevealFx](/effects/revealFx) — enter on scroll
 - [Animation](/components/animation) — the primitive the rest are built on
-- [Hover](/components/hover) — a hover-driven transition
+- [HoverCard `placement="cover"`](/components/hoverCard#cover) — content over its trigger on hover
 - [Scrubber](/components/scrubber) — a playhead over time
 
 See [Effects](/effects/effect) for the ambient layers — blobs, matrix, weather,
@@ -118,10 +115,9 @@ glitch, holo and the rest.
 
 Components with no UI of their own.
 
-- [ElementType](/components/elementType) — render as a link, a button or a div by prop
 - [FocusTrap](/components/focusTrap) — keep focus inside an overlay
-- [ArrowNavigation](/components/arrowNavigation) — arrow keys across a collection
-- [CursorCard](/components/cursorCard) — content that follows the pointer
+- [useArrowNavigation](/hooks/useArrowNavigation) — arrow keys across a collection (a hook)
+- [HoverCard `placement="cursor"`](/components/hoverCard#cursor) — content that follows the pointer
 
 ## Elsewhere
 

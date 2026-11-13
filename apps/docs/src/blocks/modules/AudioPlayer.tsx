@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Column, dev, Icon, IconButton, Line, Row, Text } from "@once-ui-system/core";
+import { Button, Column, Icon, IconButton, Line, Row, Text } from "@once-ui-system/core";
 import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./AudioPlayer.module.css";
 
@@ -104,7 +104,7 @@ export const AudioPlayer: React.FC<
           setIsAudioPlaying(true);
         })
         .catch((error) => {
-          dev.log("Audio play failed:", error);
+          console.warn("Audio play failed:", error);
         });
     } else {
       audio.pause();
@@ -142,7 +142,7 @@ export const AudioPlayer: React.FC<
           setIsAudioPlaying(true);
         })
         .catch((error) => {
-          dev.log("Audio play failed:", error);
+          console.warn("Audio play failed:", error);
         });
     }
   };
@@ -156,7 +156,7 @@ export const AudioPlayer: React.FC<
         <Button rounded onClick={toggleAudio} weight="default">
           <Row gap="8" vertical="center">
             <Icon size="xs" onSolid="brand-weak" name={isAudioPlaying ? "pause" : "play"} />
-            <Row horizontal="center" width={3}>
+            <Row horizontal="center" width="3rem">
               {isAudioPlaying ? "Pause" : "Play"}
             </Row>
           </Row>
@@ -166,7 +166,7 @@ export const AudioPlayer: React.FC<
             suppressHydrationWarning
             ref={containerRef}
             onClick={handleProgressClick}
-            cursor={<Line vert height={3} />}
+            cursor={<Line vert height="3rem" />}
             fillWidth
             height="40"
             vertical="end"
@@ -271,7 +271,7 @@ export const AudioPlayer: React.FC<
                         radius="s"
                         border
                         style={{ minWidth: "auto", width: "auto" }}
-                        maxWidth={14}
+                        maxWidth="14rem"
                       >
                         <IconButton
                           data-scaling="90"

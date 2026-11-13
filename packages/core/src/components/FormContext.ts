@@ -1,7 +1,7 @@
 "use client";
 
-import { createContext, useContext } from "react";
-import type { FieldSize } from "../types";
+import { createContext, type ReactNode, useContext, useEffect } from "react";
+import type { FieldSize } from "../types.js";
 
 /**
  * What a `Form` hands down to the fields inside it.
@@ -22,9 +22,16 @@ export const FormFieldContext = createContext<FormFieldDefaults>({});
  * Resolve a field's size. The field's own prop always wins; a `Form` only
  * supplies a default, and `"m"` remains the default outside one.
  */
-export const useFieldSize = (own?: FieldSize): FieldSize => {
+export const useFieldSize = (own?: FieldSize): FieldSize => useFieldSizing(own).size;
+
+/**
+ * As {@link useFieldSize}, and whether no size was given at all (`auto`): then
+ * the field draws at m and the theme's `density` restyles it in CSS.
+ */
+export const useFieldSizing = (own?: FieldSize): { size: FieldSize; auto: boolean } => {
   const inherited = useContext(FormFieldContext).size;
-  return own ?? inherited ?? "m";
+  const given = own ?? inherited;
+  return { size: given ?? "m", auto: given === undefined };
 };
 
 /**
@@ -57,6 +64,32 @@ export const useField = (): FieldControl | null => useContext(FieldControlContex
 export const useFieldInvalid = (id: string | undefined): boolean => {
   const field = useContext(FieldControlContext);
   return Boolean(field && id !== undefined && field.id === id && field.invalid);
+};
+
+/**
+ * Development hint: a control inside a `Field` that also sets its own
+ * `label`, `errorMessage` or `description` draws a second label, or a message
+ * at a different inset from the Field's. The Field owns those; say so once.
+ */
+export const useWarnFieldOwnedProps = (
+  component: string,
+  id: string | undefined,
+  own: { label?: ReactNode; errorMessage?: ReactNode; description?: ReactNode },
+): void => {
+  const field = useContext(FieldControlContext);
+  const inField = Boolean(field && id !== undefined && field.id === id);
+  const set = (Object.keys(own) as (keyof typeof own)[]).filter((key) => {
+    const value = own[key];
+    return value !== undefined && value !== null && value !== false && value !== "";
+  });
+  const names = set.join(", ");
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production" || !inField || !names) return;
+    console.warn(
+      `${component} "${id}" is inside a Field and sets its own ${names}. ` +
+        "Give the label, hint and error to the Field instead, so there is one label and the messages line up under it.",
+    );
+  }, [component, id, inField, names]);
 };
 
 /**

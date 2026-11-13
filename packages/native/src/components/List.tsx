@@ -59,7 +59,7 @@ function isInline(children: ReactNode) {
 
 /** Core's `ListItem`: one line of a `List`, its marker in `neutral-on-background-weak`. */
 export const ListItem: RefComponent<ListItemProps, ViewRef> = forwardRef<ViewRef, ListItemProps>(
-  function ListItem({ children, variant = "body-default-m", ...props }, ref) {
+  function ListItem({ children, textVariant = "body-default-m", ...props }, ref) {
     const theme = useTheme();
     const list = useContext(ListContext);
     const marker = list?.ordered ? `${list.number}.` : "•";
@@ -75,7 +75,7 @@ export const ListItem: RefComponent<ListItemProps, ViewRef> = forwardRef<ViewRef
       >
         {/* Right-aligned in the list's indent, as a browser draws an outside marker. */}
         <Text
-          variant={variant}
+          textVariant={textVariant}
           aria-hidden
           accessibilityElementsHidden
           importantForAccessibility="no"
@@ -88,7 +88,12 @@ export const ListItem: RefComponent<ListItemProps, ViewRef> = forwardRef<ViewRef
           {marker}
         </Text>
         {isInline(children) ? (
-          <Text variant={variant} paddingLeft="8" {...text} style={[{ flex: 1 }, ...styles]}>
+          <Text
+            textVariant={textVariant}
+            paddingLeft="8"
+            {...text}
+            style={[{ flex: 1 }, ...styles]}
+          >
             {children}
           </Text>
         ) : (

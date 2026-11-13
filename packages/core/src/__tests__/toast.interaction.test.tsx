@@ -1,13 +1,18 @@
 import { act, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type React from "react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { Toast } from "../components/Toast";
-import { Toaster } from "../components/Toaster";
+import { loadToast, Toaster } from "../components/Toaster";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { ToastProvider, useToast } from "../contexts/ToastProvider";
 import { expectNoAxeViolations } from "../test/axe";
 import { failOnConsoleError } from "../test/failOnConsoleError";
+
+// Toast loads after the page (see Toaster); these tests add toasts synchronously.
+beforeAll(async () => {
+  await loadToast();
+});
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -22,7 +27,7 @@ const consoleError = failOnConsoleError();
  */
 describe("Toast", () => {
   it("renders its message as a polite status, with the variant icon", async () => {
-    const { container } = render(<Toast variant="success">Saved</Toast>, { wrapper: wrap });
+    const { container } = render(<Toast tone="success">Saved</Toast>, { wrapper: wrap });
     const toast = screen.getByRole("status");
     expect(toast).toHaveTextContent("Saved");
     expect(toast.querySelector("svg")).not.toBeNull();
@@ -33,7 +38,7 @@ describe("Toast", () => {
 
   it("drops the icon with showIcon={false}", () => {
     render(
-      <Toast variant="info" showIcon={false}>
+      <Toast tone="info" showIcon={false}>
         Plain
       </Toast>,
       { wrapper: wrap },
@@ -46,7 +51,7 @@ describe("Toast", () => {
     const undo = vi.fn();
     const { container } = render(
       <Toast
-        variant="warning"
+        tone="warning"
         onClose={() => {}}
         action={
           <button type="button" onClick={undo}>
@@ -68,7 +73,7 @@ describe("Toast", () => {
     const user = userEvent.setup();
     const onClose = vi.fn();
     render(
-      <Toast variant="danger" onClose={onClose}>
+      <Toast tone="danger" onClose={onClose}>
         Failed
       </Toast>,
       { wrapper: wrap },
@@ -86,7 +91,7 @@ describe("Toast", () => {
   it("forwards its ref and className to the toast element", () => {
     const ref = { current: null as HTMLDivElement | null };
     render(
-      <Toast ref={ref} variant="info" className="mine">
+      <Toast ref={ref} tone="info" className="mine">
         Hi
       </Toast>,
       { wrapper: wrap },
@@ -102,7 +107,7 @@ describe("Toast", () => {
     it("reports onClose once when the duration runs out", () => {
       const onClose = vi.fn();
       render(
-        <Toast variant="info" duration={500} onClose={onClose}>
+        <Toast tone="info" duration={500} onClose={onClose}>
           Brief
         </Toast>,
         { wrapper: wrap },
@@ -124,8 +129,8 @@ describe("Toast", () => {
  */
 describe("Toaster", () => {
   const toasts = [
-    { id: "1", variant: "success" as const, message: "One" },
-    { id: "2", variant: "danger" as const, message: "Two" },
+    { id: "1", tone: "success" as const, message: "One" },
+    { id: "2", tone: "danger" as const, message: "Two" },
   ];
 
   const stack = () => screen.getByText("One").closest('[class*="toastContainer"]');
@@ -188,7 +193,7 @@ describe("useToast", () => {
         <>
           <button
             type="button"
-            onClick={() => addToast({ variant: "success", message: "Copied", duration: Infinity })}
+            onClick={() => addToast({ tone: "success", message: "Copied", duration: Infinity })}
           >
             Copy
           </button>

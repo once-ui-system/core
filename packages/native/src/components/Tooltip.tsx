@@ -33,7 +33,7 @@ export const Tooltip: RefComponent<TooltipProps, ViewRef> = forwardRef<ViewRef, 
         {prefixIcon && <Icon name={prefixIcon} size="xs" />}
         <Row paddingX="2" vertical="center">
           {typeof label === "string" || typeof label === "number" ? (
-            <Text variant="body-default-xs" onBackground="neutral-strong" numberOfLines={1}>
+            <Text textVariant="body-default-xs" onBackground="neutral-strong" numberOfLines={1}>
               {label}
             </Text>
           ) : (

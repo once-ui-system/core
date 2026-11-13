@@ -92,20 +92,24 @@ const MediaList = ({
 
   return (
     <Column
-      minWidth={24}
+      minWidth="24rem"
       gap="24"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       ref={referenceRef}
     >
       <Media aspectRatio="16/9" src={image} alt={title} sizes="400px" radius="l" />
-      {progress > 0 && <ProgressBar showLabel={false} value={progress} paddingX="l" />}
+      {progress > 0 && (
+        <Column fillWidth paddingX="l">
+          <ProgressBar showLabel={false} value={progress} />
+        </Column>
+      )}
 
       {portalContainer &&
         (isHovered || isVisible) &&
         createPortal(
           <Column
-            maxWidth={28}
+            maxWidth="28rem"
             background="surface"
             transition="macro-short"
             gap="24"
@@ -129,7 +133,11 @@ const MediaList = ({
             }}
           >
             <Media aspectRatio="16/9" src={image} alt={title} sizes="400px" radius="l" />
-            {progress > 0 && <ProgressBar showLabel={false} value={progress} paddingX="l" />}
+            {progress > 0 && (
+              <Column fillWidth paddingX="l">
+                <ProgressBar showLabel={false} value={progress} />
+              </Column>
+            )}
             <Column fillWidth paddingX="16" paddingBottom="20" paddingTop="8" gap="8">
               <Row fillWidth horizontal="between" paddingBottom="12">
                 <Row gap="8" themeBorder="rounded">
@@ -141,20 +149,25 @@ const MediaList = ({
                   <IconButton size="l" icon="dislike" variant="secondary" />
                 </Row>
               </Row>
-              <Heading as="h3" variant="heading-strong-l">
+              <Heading as="h3" textVariant="heading-strong-l">
                 {title}
               </Heading>
-              <Text variant="body-default-m" onBackground="neutral-weak">
+              <Text textVariant="body-default-m" onBackground="neutral-weak">
                 {description}
               </Text>
               <Row paddingTop="12" gap="16" vertical="center">
                 {categories?.map((category, index) => (
                   <React.Fragment key={index}>
-                    <Text variant="label-default-s" onBackground="neutral-medium">
+                    <Text textVariant="label-default-s" onBackground="neutral-medium">
                       {category}
                     </Text>
                     {index < categories.length - 1 && (
-                      <Row height={0.4} width={0.4} radius="full" background="neutral-strong" />
+                      <Row
+                        height="0.4rem"
+                        width="0.4rem"
+                        radius="full"
+                        background="neutral-strong"
+                      />
                     )}
                   </React.Fragment>
                 ))}
@@ -184,7 +197,7 @@ const FeedSection = ({
     <Column fillWidth padding="l">
       <Column fillWidth gap="24">
         <Column fillWidth paddingX="24">
-          <Heading as="h2" variant="display-strong-s">
+          <Heading as="h2" textVariant="display-strong-s">
             {title}
           </Heading>
         </Column>
@@ -351,7 +364,7 @@ export const Streaming1: React.FC = () => {
             pointerEvents="none"
             bottom="0"
             to="top"
-            height={32}
+            height="32rem"
             pattern={{ display: true, size: "2" }}
           />
           <Carousel
@@ -366,11 +379,11 @@ export const Streaming1: React.FC = () => {
             play={{ auto: true, interval: 10000, controls: false, progress: false }}
             items={featured.map((item) => ({
               slide: (
-                <Column fillHeight maxWidth={48} vertical="end" padding="xl" gap="l">
-                  <Heading variant="display-strong-m" onSolid="neutral-strong">
+                <Column fillHeight maxWidth="48rem" vertical="end" padding="xl" gap="l">
+                  <Heading textVariant="display-strong-m" onSolid="neutral-strong">
                     #1 in Movies Today
                   </Heading>
-                  <Text variant="heading-default-xl" onSolid="neutral-weak" wrap="balance">
+                  <Text textVariant="heading-default-xl" onSolid="neutral-weak" wrap="balance">
                     {item.description}
                   </Text>
                   <Row gap="8" pointerEvents="all" s={{ direction: "column" }}>

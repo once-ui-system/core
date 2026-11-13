@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, CountFx, Pulse, Row, Text } from "@once-ui-system/core";
+import { Button, StatusIndicator, Row, Text } from "@once-ui-system/core";
+import { CountFx } from "@once-ui-system/fx";
 import { LinearGauge } from "@once-ui-system/core/data";
 
 export const StatusBar = (flex: React.ComponentProps<typeof Row>) => {
@@ -10,7 +11,7 @@ export const StatusBar = (flex: React.ComponentProps<typeof Row>) => {
 
   return (
     <Row
-      maxWidth={56}
+      maxWidth="56rem"
       border="brand-alpha-weak"
       radius="l"
       paddingX="16"
@@ -23,29 +24,29 @@ export const StatusBar = (flex: React.ComponentProps<typeof Row>) => {
       {...flex}
     >
       <Row gap="12" vertical="center" wrap>
-        <Pulse size="s" />
-        <Text variant="label-default-s" onBackground="brand-medium">
+        <StatusIndicator pulse size="s" />
+        <Text textVariant="label-default-s" onBackground="brand-medium">
           Live
         </Text>
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           ·
         </Text>
-        <Text variant="label-default-s">
+        <Text textVariant="label-default-s">
           $<CountFx value={value} separator="," />
           /mo
         </Text>
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           ·
         </Text>
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           {progress}% to next tier
         </Text>
       </Row>
-      <Row minWidth={24} flex={1} s={{ hide: true }}>
+      <Row minWidth="24rem" flex={1} s={{ hide: true }}>
         <LinearGauge
           fillWidth
           value={progress}
-          hue="success"
+          tone="success"
           height={20}
           line={{ count: 60, width: 1.5, length: 8 }}
         />

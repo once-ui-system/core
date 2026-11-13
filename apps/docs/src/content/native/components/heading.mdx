@@ -12,7 +12,7 @@ navIcon: "components"
 
 ## Variants
 
-Pick the size with `variant`. Any `heading` or `display` variant works.
+Pick the size with `textVariant`. Any `heading` or `display` variant works.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -23,11 +23,11 @@ codes={[
 export function Headings() {
   return (
     <Column gap="8">
-      <Heading variant="display-strong-s">Display</Heading>
-      <Heading variant="heading-strong-xl">Extra large</Heading>
+      <Heading textVariant="display-strong-s">Display</Heading>
+      <Heading textVariant="heading-strong-xl">Extra large</Heading>
       <Heading>Large, the default</Heading>
-      <Heading variant="heading-strong-m">Medium</Heading>
-      <Heading variant="heading-default-s">Small, default weight</Heading>
+      <Heading textVariant="heading-strong-m">Medium</Heading>
+      <Heading textVariant="heading-default-s">Small, default weight</Heading>
     </Column>
   );
 }`,
@@ -49,7 +49,7 @@ codes={[
 export function Section() {
   return (
     <Column>
-      <Heading variant="heading-strong-m" onBackground="brand-strong" marginBottom="4">
+      <Heading textVariant="heading-strong-m" onBackground="brand-strong" marginBottom="4">
         Rewards
       </Heading>
       <Text onBackground="neutral-weak">Two stamps until your next free coffee.</Text>
@@ -64,7 +64,7 @@ export function Section() {
 ## Differences from the web
 
 - **No `as`.** There are no `h1` to `h6` elements. Every `Heading` is a header to screen readers, and the variant sets its size.
-- **Use `variant`.** `Heading` always passes a variant, so `family`, `size` and `weight` alone do not change it.
+- **Use `textVariant`.** `Heading` always passes a preset; `family` and `weight` swap its family and weight and keep its size.
 
 ## Props
 
@@ -72,7 +72,7 @@ export function Section() {
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `variant` | `TextVariant` | `"heading-strong-l"` | The type style. |
+| `textVariant` | `TextVariant` | `"heading-strong-l"` | The type style. |
 | `onBackground` | `"<scheme>-<weight>"` | `"neutral-strong"` | Text colour on a background. |
 | `onSolid` | `"<scheme>-<weight>"` | | Text colour on a solid surface. Wins over `onBackground`. |
 | `align` | `"left" \| "center" \| "right" \| "justify"` | | Text alignment. |

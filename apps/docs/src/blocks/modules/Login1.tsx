@@ -6,7 +6,6 @@ import {
   Input,
   Line,
   Logo,
-  PasswordInput,
   Row,
   SmartLink,
 } from "@once-ui-system/core";
@@ -15,7 +14,7 @@ import { Background3 } from "./Background3";
 export const Login1 = () => {
   return (
     <Row fill>
-      <Row m={{ hide: true }} fill maxWidth={48} padding="8">
+      <Row m={{ hide: true }} fill maxWidth="48rem" padding="8">
         <Row fill radius="l" overflow="hidden" background="page" theme="dark">
           <Row fill position="absolute">
             <Background3 />
@@ -91,23 +90,23 @@ TRANSLOG:
             position="absolute"
             top="0"
             topRadius="l"
-            height={32}
+            height="32rem"
             fillWidth
           />
           <Column fill padding="xl" zIndex={2} pointerEvents="none">
-            <Heading as="h2" variant="display-strong-m" align="center">
+            <Heading as="h2" textVariant="display-strong-m" align="center">
               Enter your vault
             </Heading>
           </Column>
         </Row>
       </Row>
       <Column fill center>
-        <Column center gap="16" padding="32" maxWidth={32}>
+        <Column center gap="16" padding="32" maxWidth="32rem">
           <Logo
             icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
             size="l"
           />
-          <Heading variant="display-strong-xs" align="center">
+          <Heading textVariant="display-strong-xs" align="center">
             Welcome to Once UI
           </Heading>
           <Row onBackground="neutral-medium" marginBottom="24" gap="4" align="center">
@@ -139,7 +138,7 @@ TRANSLOG:
           </Row>
           <Column gap="-1" fillWidth>
             <Input id="email" placeholder="Email" corners="top" />
-            <PasswordInput id="password" placeholder="Password" corners="bottom" />
+            <Input id="password" placeholder="Password" corners="bottom" type="password" />
           </Column>
           <Button id="login" label="Log in" arrowIcon fillWidth />
         </Column>

@@ -71,7 +71,7 @@ export function Breadcrumbs({
     <Row gap="4" vertical="center">
       {item.prefixIcon && <Icon name={item.prefixIcon} size="xs" color={color} />}
       {typeof item.label === "string" || typeof item.label === "number" ? (
-        <Text variant="label-default-s" style={{ color }}>
+        <Text textVariant="label-default-s" style={{ color }}>
           {item.label}
         </Text>
       ) : (
@@ -119,7 +119,7 @@ export function Breadcrumbs({
               icon="moreHorizontal"
               size="s"
               variant="tertiary"
-              ariaLabel={`Show ${hidden} more`}
+              aria-label={`Show ${hidden} more`}
               testID={testID && `${testID}-more`}
               onPress={() => setExpanded(true)}
             />

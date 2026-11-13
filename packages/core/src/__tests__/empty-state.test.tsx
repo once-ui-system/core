@@ -1,10 +1,10 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import type React from "react";
 import { describe, expect, it } from "vitest";
-import { Button } from "../components/Button";
-import { DataTable } from "../components/DataTable";
-import { EmptyState } from "../components/EmptyState";
-import { LayoutProvider } from "../contexts/LayoutProvider";
+import { Button } from "../components/Button.js";
+import { EmptyState } from "../components/EmptyState.js";
+import { Table } from "../components/Table.js";
+import { LayoutProvider } from "../contexts/LayoutProvider.js";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -44,22 +44,19 @@ describe("EmptyState", () => {
   });
 });
 
-describe("DataTable empty states use EmptyState", () => {
+describe("Table empty states use EmptyState", () => {
   const columns = [{ key: "name" as const, header: "Name", sortable: true }];
 
   it("shows the default empty state with no rows", () => {
-    const { container } = render(<DataTable columns={columns} rows={[]} />, { wrapper });
+    const { container } = render(<Table columns={columns} rows={[]} />, { wrapper });
     expect(screen.getByRole("heading", { level: 3, name: "No data available" })).toBeTruthy();
     expect(container.querySelector("[data-size='s']")).toBeTruthy();
   });
 
   it("keeps the clear filters action when a search matches nothing", () => {
-    render(
-      <DataTable columns={columns} rows={[{ name: "Ada" }]} searchable defaultSearch="zzz" />,
-      {
-        wrapper,
-      },
-    );
+    render(<Table columns={columns} rows={[{ name: "Ada" }]} searchable defaultSearch="zzz" />, {
+      wrapper,
+    });
     expect(screen.getByRole("heading", { level: 3, name: "No results" })).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Clear filters" }));
     expect(screen.getByText("Ada")).toBeTruthy();

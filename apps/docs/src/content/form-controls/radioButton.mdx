@@ -1,7 +1,7 @@
 ---
 title: "RadioButton"
 summary: "RadioButton provides a selectable control for mutually exclusive options with customizable labels and styling."
-updatedAt: "2026-10-11"
+updatedAt: "2026-10-17"
 docs: "once-ui/form-controls/radioButton.mdx"
 github: "components/RadioButton.tsx"
 navLabel: "RadioButton"
@@ -10,7 +10,7 @@ navTag: "Update"
 navTagVariant: "success"
 ---
 
-The `RadioButton` component provides a selectable control for mutually exclusive options in a group. It's built on top of the `InteractiveDetails` component for consistent styling and behavior.
+The `RadioButton` component provides a selectable control for mutually exclusive options in a group. Its `label` and `description` are drawn the same way as on `Checkbox` and `Switch`.
 
 <CodeBlock
   marginTop="16"
@@ -31,7 +31,7 @@ The `RadioButton` component provides a selectable control for mutually exclusive
     value="monthly"
     label="Monthly subscription"
     description="Billed monthly at $9.99"
-    onToggle={() => console.log('Selected monthly')}
+    onCheckedChange={() => console.log('Selected monthly')}
 />`,
       language: "tsx",
       label: "RadioButton"
@@ -63,7 +63,7 @@ const handleToggle = (value: string) => {
       label="Monthly subscription"
       description="Billed monthly at $9.99"
       checked={selectedPlan === "monthly"}
-      onToggle={() => handleToggle("monthly")}
+      onCheckedChange={() => handleToggle("monthly")}
     />
     <RadioButton
       name="subscription"
@@ -71,7 +71,7 @@ const handleToggle = (value: string) => {
       label="Annual subscription"
       description="Billed annually at $99.99"
       checked={selectedPlan === "annual"}
-      onToggle={() => handleToggle("annual")}
+      onCheckedChange={() => handleToggle("annual")}
     />
     <RadioButton
       name="subscription"
@@ -79,7 +79,7 @@ const handleToggle = (value: string) => {
       label="Lifetime access"
       description="One-time payment of $299.99"
       checked={selectedPlan === "lifetime"}
-      onToggle={() => handleToggle("lifetime")}
+      onCheckedChange={() => handleToggle("lifetime")}
     />
 </Column>`,
       language: "tsx",
@@ -140,14 +140,45 @@ Disable the hover pulse animation by setting `hoverable` to `false`.
   ]}
 />
 
+## Validation and size
+
+`error` marks the RadioButton invalid (a danger border and `aria-invalid`);
+`errorMessage` shows under it, linked with `aria-describedby`, and marks it
+invalid too. `size` (`s`, `m`, `l`) scales the control and its text; left out,
+it takes the enclosing `Form`'s `size`, as `Input` does.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <RadioButton label="Annual" value="annual" size="l" errorMessage="Pick a billing period" />
+  }
+  codes={[
+    {
+      code:
+`<RadioButton
+    label="Annual"
+    value="annual"
+    size="l"
+    errorMessage="Pick a billing period"
+/>`,
+      language: "tsx",
+      label: "Validation"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
   component="RadioButton"
   describe={{
+    size: "s, m or l. Left out, the enclosing Form's size, else m.",
+    error: "Mark it invalid: a danger border and aria-invalid.",
+    errorMessage: "Shown under it, linked with aria-describedby; marks it invalid too.",
     checked: "Whether this one is chosen, controlled. Leave it out and the radio keeps its own state.",
     defaultChecked: "The starting state when `checked` is left out.",
-    onToggle: "Called with the new state when it is picked: true when it becomes the chosen one.",
+    onCheckedChange: "Called with the new state when it is picked: true when it becomes the chosen one.",
     name: "Group name. Radios sharing one are mutually exclusive.",
     value: "Form field value.",
     disabled: "Block interaction.",
@@ -159,6 +190,7 @@ Disable the hover pulse animation by setting `hoverable` to `false`.
     ["className"],
     ["style"],
     ["iconButtonProps", "IconButtonProps", "-", "Props forwarded to the icon button beside the label."],
-    ["...InputHTMLAttributes"]
+    ["...InputHTMLAttributes"],
+    ["onChange", "ChangeEventHandler", "-", "The native change event of the hidden input, with the rest of the input attributes (name, required, onBlur), so a form library's register() works."]
   ]}
 />

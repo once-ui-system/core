@@ -5,7 +5,6 @@ import {
   Column,
   Heading,
   Input,
-  PasswordInput,
   Row,
   SmartLink,
   Text,
@@ -29,12 +28,12 @@ const Login3 = () => {
           <Row fill position="absolute" top="0" left="0" style={{ transform: "scale(1.5)" }}>
             <Background4 />
           </Row>
-          <Column center gap="32" padding="l" maxWidth={32}>
+          <Column center gap="32" padding="l" maxWidth="32rem">
             <Column horizontal="center" fillWidth gap="4">
-              <Heading variant="heading-strong-xl" marginTop="24">
+              <Heading textVariant="heading-strong-xl" marginTop="24">
                 Welcome to Once UI
               </Heading>
-              <Text onBackground="neutral-medium" variant="body-default-s">
+              <Text onBackground="neutral-medium" textVariant="body-default-s">
                 Access your account
               </Text>
             </Column>
@@ -84,7 +83,7 @@ const Login3 = () => {
               <Column fillWidth gap="24" horizontal="center">
                 <Column gap="-1" fillWidth>
                   <Input corners="top" id="email" label="Email" size="s" />
-                  <PasswordInput corners="bottom" id="password" label="Password" size="s" />
+                  <Input corners="bottom" id="password" label="Password" size="s" type="password" />
                   <Row
                     fillWidth
                     horizontal="end"

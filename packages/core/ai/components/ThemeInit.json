@@ -15,22 +15,22 @@
  "mixinsRef": [],
  "types": {
   "BodyLineHeight": [
-   "90",
    "100",
+   "90",
    "110",
    "120"
   ],
   "BodySize": [
-   "90",
-   "95",
    "100",
-   "105",
-   "110"
+   "90",
+   "110",
+   "95",
+   "105"
   ],
   "BorderStyle": [
    "rounded",
-   "playful",
    "conservative",
+   "playful",
    "sharp"
   ],
   "ChartMode": [
@@ -39,10 +39,15 @@
    "sequential"
   ],
   "CursorPresetValue": [
-   "soft",
    "rounded",
    "dot",
-   "system"
+   "system",
+   "soft"
+  ],
+  "Density": [
+   "normal",
+   "compact",
+   "spacious"
   ],
   "DeviceFontSize": [
    "15",
@@ -57,9 +62,9 @@
    "pointer"
   ],
   "NeutralColor": [
+   "slate",
    "sand",
    "gray",
-   "slate",
    "rose",
    "mint",
    "dusk"
@@ -76,6 +81,7 @@
    "surface": "SurfaceStyle",
    "transition": "TransitionStyle",
    "scaling": "ScalingSize",
+   "density": "Density",
    "bodySize": "BodySize",
    "bodyLineHeight": "BodyLineHeight",
    "desktopSize": "DeviceFontSize",
@@ -93,14 +99,15 @@
    "surfaceBackground": "ThemeColor"
   },
   "ScalingSize": [
-   "90",
-   "95",
    "100",
-   "105",
-   "110"
+   "90",
+   "110",
+   "95",
+   "105"
   ],
   "SchemeRampWeight": [
    "100",
+   "1200",
    "200",
    "300",
    "400",
@@ -110,8 +117,7 @@
    "800",
    "900",
    "1000",
-   "1100",
-   "1200"
+   "1100"
   ],
   "SchemeScale": "Partial< Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string> >",
   "SchemeScaleByTheme": {
@@ -119,6 +125,7 @@
    "dark": "SchemeScale"
   },
   "Schemes": [
+   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -130,12 +137,12 @@
    "moss",
    "green",
    "emerald",
-   "aqua",
-   "cyan"
+   "aqua"
   ],
   "SolidStyle": [
    "flat",
-   "plastic"
+   "plastic",
+   "glow"
   ],
   "SolidType": [
    "color",

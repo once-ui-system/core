@@ -1,0 +1,28 @@
+{
+ "name": "SceneLabel",
+ "group": "scene",
+ "importFrom": "@once-ui-system/core/scene",
+ "props": {
+  "position": "Vec3 = [0, 0, 0]",
+  "anchor": "\"center\" | \"top\" | \"bottom\" | \"left\" | \"right\" = bottom",
+  "hideBehind": "boolean = true",
+  "children": "!React.ReactNode",
+  "className": "string",
+  "style": "React.CSSProperties"
+ },
+ "tags": [
+  "3d",
+  "overlay"
+ ],
+ "pairsWith": [
+  "Scene",
+  "Tag",
+  "Card"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "Vec3": {
+   "[key: number]": "number"
+  }
+ }
+}

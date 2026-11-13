@@ -11,7 +11,7 @@ import spec from "../../ai/spec.json";
  */
 type CatalogEntry = { purpose: string; tags: string[]; importFrom?: string; pairsWith?: string[] };
 const entries = catalog.components as unknown as Record<string, CatalogEntry>;
-const seeded = seed as unknown as Record<string, { purpose?: string }>;
+const seeded = seed as unknown as Record<string, { purpose?: string; partOf?: string }>;
 const components = spec.components as unknown as Record<string, { importFrom?: string }>;
 
 describe("ai catalog", () => {
@@ -45,8 +45,18 @@ describe("ai catalog", () => {
 
   it("says where a component outside the package root is imported from", () => {
     for (const [name, entry] of Object.entries(components)) {
+      if (seeded[name]?.partOf) continue;
       expect(entries[name]?.importFrom).toBe(entry.importFrom);
     }
     expect(entries.LineChart.importFrom).toBe("@once-ui-system/core/data");
+  });
+
+  it("leaves a component's parts to its slices, each with its purpose", () => {
+    const parts = Object.keys(seeded).filter((name) => seeded[name].partOf);
+    expect(parts).toContain("StylePanelRoot");
+    for (const name of parts) {
+      expect(entries[name]).toBeUndefined();
+      expect(entries[seeded[name].partOf as string]).toBeDefined();
+    }
   });
 });

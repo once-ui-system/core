@@ -50,8 +50,8 @@ describe("VoiceVisualizer", () => {
     expect(container.querySelectorAll("[style*='--voice-bar']")).toHaveLength(7);
   });
 
-  it("takes a scheme for its colors", () => {
-    render(<VoiceVisualizer color="accent" />);
+  it("takes a tone for its colors", () => {
+    render(<VoiceVisualizer tone="accent" />);
     expect(screen.getByRole("status").style.getPropertyValue("--voice-color")).toBe(
       "var(--function-accent-500)",
     );

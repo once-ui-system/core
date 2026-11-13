@@ -20,8 +20,8 @@ export function Guests() {
     <ScrollView style={{ backgroundColor: theme.color("page-background") }}>
       <Column padding="20" gap="16" safeArea={["top"]}>
         <Column gap="4">
-          <Heading variant="heading-strong-l">Guests</Heading>
-          <Text variant="body-default-s" onBackground="neutral-weak">
+          <Heading textVariant="heading-strong-l">Guests</Heading>
+          <Text textVariant="body-default-s" onBackground="neutral-weak">
             Loyalty members, by visits
           </Text>
         </Column>
@@ -43,7 +43,7 @@ export function Guests() {
               name,
               visits,
               last,
-              <Tag key="tier" size="s" scheme={TONE[tier as keyof typeof TONE]} label={tier} />,
+              <Tag key="tier" size="s" tone={TONE[tier as keyof typeof TONE]} label={tier} />,
             ]),
           }}
         />

@@ -1,4 +1,6 @@
-import { Column, Heading, Text } from "@once-ui-system/core";
+import { Column } from "@once-ui-system/core/components/Column";
+import { Heading } from "@once-ui-system/core/components/Heading";
+import { Text } from "@once-ui-system/core/components/Text";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Profile" };
@@ -8,10 +10,10 @@ export default function ProfilePage() {
   return (
     <Column fillWidth gap="24">
       <Column gap="8">
-        <Heading as="h1" variant="heading-strong-l">
+        <Heading as="h1" textVariant="heading-strong-l">
           Profile
         </Heading>
-        <Text variant="body-default-m" onBackground="neutral-weak">
+        <Text textVariant="body-default-m" onBackground="neutral-weak">
           Your name and email.
         </Text>
       </Column>

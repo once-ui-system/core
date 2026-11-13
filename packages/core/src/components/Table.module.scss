@@ -187,6 +187,37 @@
   }
 }
 
+// Sortable headers, selection and the selected row.
+
+// The sort button reaches across its whole header cell, padding included, so
+// the cell stays the pointer target.
+.sortableTh {
+  position: relative;
+}
+
+.sortButton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+// The selection column is as narrow as its checkbox.
+.selectCell {
+  width: 1px;
+}
+
+.selectedRow {
+  background: var(--brand-alpha-weak);
+}
+
+// `keepRowsWhileLoading`: the last rows stay in place, dimmed and inert,
+// until the next ones arrive.
+.dimmedBody {
+  opacity: 0.5;
+  pointer-events: none;
+  transition: var(--transition-micro-medium);
+}
+
 // A column's `hide`, per breakpoint: each one hides at and below its width
 // (xl: above l), and a show class undoes a wider breakpoint's hide. Widest
 // first, so where two apply the narrower one wins.
@@ -233,5 +264,30 @@
 
   .showXs {
     display: table-cell;
+  }
+}
+
+// Virtual rows: the spacers that stand in for the rows out of view.
+.spacer td {
+  padding: 0 !important;
+  border: none !important;
+}
+
+// An editable cell: the whole cell content is the button that opens its field.
+.editCell {
+  display: block;
+  width: 100%;
+  min-height: var(--static-space-24);
+  text-align: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-radius: var(--radius-xs);
+  cursor: text;
+
+  @media (hover: hover) {
+    &:hover {
+      box-shadow: 0 0 0 var(--static-space-4) var(--neutral-alpha-weak);
+      background: var(--neutral-alpha-weak);
+    }
   }
 }

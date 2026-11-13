@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  AutoScroll,
+  Scroller,
   Avatar,
   AvatarGroup,
   Button,
@@ -44,11 +44,11 @@ export const Testimonial8 = (flex: React.ComponentProps<typeof Column>) => {
 
   return (
     <Column fillWidth horizontal="center" gap="32" {...flex}>
-      <Column horizontal="center" align="center" gap="16" maxWidth={32}>
-        <Tag size="s" scheme="brand" themeBorder="rounded">
+      <Column horizontal="center" align="center" gap="16" maxWidth="32rem">
+        <Tag size="s" tone="brand" themeBorder="rounded">
           Social proof
         </Tag>
-        <Heading as="h2" variant="display-strong-s" align="center">
+        <Heading as="h2" textVariant="display-strong-s" align="center">
           Loved by 2,400+ builders shipping real products
         </Heading>
       </Column>
@@ -71,7 +71,7 @@ export const Testimonial8 = (flex: React.ComponentProps<typeof Column>) => {
               open={open}
               onClose={() => setOpen(false)}
               title={`${members.length} builders shipping with Once UI`}
-              maxHeight={40}
+              maxHeight="40rem"
               footer={
                 <Button variant="secondary" onClick={() => setOpen(false)}>
                   Close
@@ -83,8 +83,8 @@ export const Testimonial8 = (flex: React.ComponentProps<typeof Column>) => {
                   <Row key={member.name} gap="12" vertical="center" paddingY="4">
                     <Avatar size="xs" src={member.avatar} />
                     <Column>
-                      <Text variant="body-default-s">{member.name}</Text>
-                      <Text variant="label-default-s" onBackground="neutral-weak">
+                      <Text textVariant="body-default-s">{member.name}</Text>
+                      <Text textVariant="label-default-s" onBackground="neutral-weak">
                         {member.role}
                       </Text>
                     </Column>
@@ -97,12 +97,12 @@ export const Testimonial8 = (flex: React.ComponentProps<typeof Column>) => {
       </Row>
 
       <Column fillWidth gap="24" horizontal="center">
-        <Line maxWidth={4} background="neutral-alpha-medium" />
-        <AutoScroll fillWidth gap="40" speed="slow">
+        <Line maxWidth="4rem" background="neutral-alpha-medium" />
+        <Scroller auto={{ speed: "slow" }} fillWidth gap="40">
           {logos.map((logo, index) => (
             <Logo key={index} wordmark={logo} />
           ))}
-        </AutoScroll>
+        </Scroller>
       </Column>
     </Column>
   );

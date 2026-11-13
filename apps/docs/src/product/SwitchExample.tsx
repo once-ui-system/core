@@ -16,7 +16,7 @@ export function BasicSwitch() {
       label="Enable notifications"
       description="Receive updates about new features and improvements"
       checked={isChecked}
-      onToggle={handleToggle}
+      onCheckedChange={handleToggle}
     />
   );
 }
@@ -34,7 +34,7 @@ export function SwitchWithFeedback() {
       <Switch
         label={isChecked ? "Feature is now enabled" : "Feature is currently disabled"}
         checked={isChecked}
-        onToggle={handleToggle}
+        onCheckedChange={handleToggle}
       />
     </Flex>
   );
@@ -60,7 +60,7 @@ export function SwitchWithLoading() {
       label="Processing"
       checked={isChecked}
       loading={isLoading}
-      onToggle={handleToggle}
+      onCheckedChange={handleToggle}
     />
   );
 }
@@ -79,7 +79,7 @@ export function ReversedSwitch() {
       description="This places the switch after the label text"
       reverse
       checked={isChecked}
-      onToggle={handleToggle}
+      onCheckedChange={handleToggle}
     />
   );
 }
@@ -96,7 +96,7 @@ export function ClientSwitch(props: React.ComponentProps<typeof Switch>) {
     <Switch
       {...props}
       checked={isChecked}
-      onToggle={props.onToggle || handleToggle}
+      onCheckedChange={props.onCheckedChange || handleToggle}
     />
   );
 }

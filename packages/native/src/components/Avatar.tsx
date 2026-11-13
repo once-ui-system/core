@@ -1,17 +1,33 @@
 import { Image, View, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
-import type { ColorScheme, TShirtSizes } from "../types";
+import type { ColorScheme, Schemes, Tone, TShirtSizes } from "../types";
+import { Icon, type IconName } from "./Icon";
 import { Skeleton } from "./Skeleton";
+import type { Length } from "./spacing";
 import { Text } from "./Text";
 
 export interface AvatarProps {
-  /** A t-shirt size, or a number of rem as on the web. */
-  size?: TShirtSizes | number;
+  /**
+   * A t-shirt size, a number of points (px, as in core 3.0: `40`), or a
+   * `"40px"` / `"2.5rem"` string.
+   */
+  size?: TShirtSizes | number | Length;
   /** Initials shown when there is no image. */
   value?: string;
   src?: string;
   loading?: boolean;
-  statusIndicator?: { color: "green" | "yellow" | "red" | "gray" };
+  /** Shows the icon (`person` by default) instead of an image or initials. */
+  empty?: boolean;
+  /** The icon of an empty avatar, as in core. */
+  icon?: IconName;
+  /** A status dot; `scheme` is its palette hue, as in core 3.0 (2.x called it `color`). */
+  /**
+   * A dot in the corner, as core 3.0: `scheme` takes any hue StatusIndicator
+   * takes, `tone` a colour that follows the theme (`"success"`).
+   */
+  statusIndicator?:
+    | { scheme: Schemes | "gray"; tone?: undefined }
+    | { tone: Tone; scheme?: undefined };
   /**
    * A coloured ring around the avatar, with a gap of page background between,
    * as for a story or a live state. `true` is the brand colour; a scheme
@@ -26,12 +42,17 @@ export interface AvatarProps {
 // Avatar.tsx sizeMapping, in px at 16px rem.
 const SIZES: Record<TShirtSizes, number> = { xs: 20, s: 24, m: 32, l: 48, xl: 160 };
 const TEXT = { xs: "s", s: "s", m: "m", l: "m", xl: "l" } as const;
-const STATUS = {
+const ICON = { xs: "xs", s: "xs", m: "s", l: "m", xl: "xl" } as const;
+const STATUS: Record<string, string> = {
   green: "success-solid-medium",
   yellow: "warning-solid-medium",
   red: "danger-solid-medium",
   gray: "neutral-solid-medium",
-} as const;
+};
+
+/** The 2.x hues keep their solid colours; any other hue is its scheme's 700, as StatusIndicator. */
+const statusColor = (s: { scheme?: Schemes | "gray"; tone?: Tone }) =>
+  s.tone ? `function-${s.tone}-700` : (STATUS[s.scheme ?? "gray"] ?? `scheme-${s.scheme}-700`);
 
 /** Core's `Avatar`: an image, or initials on a neutral circle. */
 export function Avatar({
@@ -39,14 +60,19 @@ export function Avatar({
   value,
   src,
   loading,
+  empty,
+  icon,
   statusIndicator,
   ring,
   testID,
   style,
 }: AvatarProps) {
   const theme = useTheme();
-  const px = typeof size === "number" ? size * theme.rem : (SIZES[size] / 16) * theme.rem;
-  const textSize = typeof size === "number" ? "m" : TEXT[size];
+  const scale = size in SIZES ? (size as TShirtSizes) : undefined;
+  // A t-shirt size follows the device's rem, as core's classes do; a number is px.
+  const px = scale ? (SIZES[scale] / 16) * theme.rem : theme.space(size as number | Length);
+  const textSize = scale ? TEXT[scale] : "m";
+  const isEmpty = empty || (!src && !value);
   // The ring and its gap each take a sixteenth of the avatar, two points at the least.
   const band = ring ? Math.max(2, Math.round(px / 16)) : 0;
   const outer = px + band * 4;
@@ -90,10 +116,16 @@ export function Avatar({
             borderColor: theme.color("neutral-alpha-weak"),
           }}
         >
-          {src ? (
+          {isEmpty ? (
+            <Icon
+              name={icon ?? "person"}
+              size={scale ? ICON[scale] : px >= 96 ? "xl" : px >= 40 ? "m" : "xs"}
+              onBackground="neutral-medium"
+            />
+          ) : src ? (
             <Image source={{ uri: src }} style={{ width: px, height: px }} />
           ) : value ? (
-            <Text variant={`label-default-${textSize}`} onBackground="neutral-weak">
+            <Text textVariant={`label-default-${textSize}`} onBackground="neutral-weak">
               {value}
             </Text>
           ) : null}
@@ -101,7 +133,7 @@ export function Avatar({
       </View>
       {statusIndicator && (
         <View
-          accessibilityLabel={`Status: ${statusIndicator.color}`}
+          accessibilityLabel={`Status: ${statusIndicator.tone ?? statusIndicator.scheme}`}
           style={{
             position: "absolute",
             right: 0,
@@ -111,7 +143,7 @@ export function Avatar({
             borderRadius: 9999,
             borderWidth: 2,
             borderColor: theme.color("page-background"),
-            backgroundColor: theme.color(STATUS[statusIndicator.color]),
+            backgroundColor: theme.color(statusColor(statusIndicator)),
           }}
         />
       )}

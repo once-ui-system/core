@@ -1,0 +1,92 @@
+{
+ "name": "Sparkline",
+ "group": "data",
+ "importFrom": "@once-ui-system/core/data",
+ "props": {
+  "data": "!readonly number[] | readonly T[]",
+  "valueKey": "SeriesKey<T>",
+  "variant": "\"line\" | \"area\" | \"bar\" = line",
+  "color": "ColorValue = blue",
+  "width": "number | string = 100%",
+  "height": "number | string = 32",
+  "curve": "SparklineCurve = monotone",
+  "showLast": "boolean = false",
+  "min": "number",
+  "max": "number",
+  "valueFormat": "ValueFormat",
+  "locale": "string",
+  "aria-label": "string"
+ },
+ "tags": [
+  "data",
+  "chart",
+  "dashboard"
+ ],
+ "pairsWith": [
+  "Text",
+  "Table",
+  "Column"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "ColorValue": [
+   "string & {}",
+   "neutral-strong",
+   "neutral-medium",
+   "neutral-weak",
+   "brand-strong",
+   "brand-medium",
+   "brand-weak",
+   "accent-strong",
+   "accent-medium",
+   "accent-weak",
+   "info-strong",
+   "info-medium",
+   "info-weak",
+   "danger-strong",
+   "danger-medium",
+   "danger-weak",
+   "warning-strong",
+   "warning-medium",
+   "warning-weak",
+   "success-strong",
+   "success-medium",
+   "success-weak",
+   "neutral-alpha-strong",
+   "neutral-alpha-medium",
+   "neutral-alpha-weak",
+   "brand-alpha-strong",
+   "brand-alpha-medium",
+   "brand-alpha-weak",
+   "accent-alpha-strong",
+   "accent-alpha-medium",
+   "accent-alpha-weak",
+   "info-alpha-strong",
+   "info-alpha-medium",
+   "info-alpha-weak",
+   "danger-alpha-strong",
+   "danger-alpha-medium",
+   "danger-alpha-weak",
+   "warning-alpha-strong",
+   "warning-alpha-medium",
+   "warning-alpha-weak",
+   "success-alpha-strong",
+   "success-alpha-medium",
+   "success-alpha-weak"
+  ],
+  "SeriesKey": "Extract<keyof T, string>",
+  "SparklineCurve": [
+   "step",
+   "linear",
+   "natural",
+   "monotone"
+  ],
+  "ValueFormat": [
+   "number",
+   "compact",
+   "percent",
+   "NumberFormatOptions",
+   "(value: number) => string"
+  ]
+ }
+}

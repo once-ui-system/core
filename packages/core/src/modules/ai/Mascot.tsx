@@ -2,9 +2,13 @@
 
 import classNames from "clsx";
 import type React from "react";
-import { forwardRef, useCallback, useEffect, useId, useRef, useState } from "react";
-import { Flex } from "../../components/Flex";
-import { type AudioLevelSource, createAudioMeter } from "./audioLevel";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { Flex } from "../../components/Flex.js";
+import type { LeafPropsOf } from "../../interfaces.js";
+import type { CSSUnit } from "../../types.js";
+import { tokenLength } from "../../utils/layoutClasses.js";
+import { accessoryLayers, isMascotAccessory, type MascotAccessory } from "./accessories.js";
+import { type AudioLevelSource, createAudioMeter } from "./audioLevel.js";
 import {
   baseMood,
   EyeGlyph,
@@ -14,9 +18,13 @@ import {
   type MascotBaseMood,
   type MascotEffect,
   type MascotKawaiiMood,
-} from "./kawaii";
+} from "./kawaii.js";
 import styles from "./Mascot.module.scss";
-import { MascotCube } from "./MascotCube";
+import { MascotCube } from "./MascotCube.js";
+import { bodyShape, clamp, DEFAULT_LOOK, EYE_BOX, mascotLook, TILE } from "./mascotShape.js";
+import { readSeedWords } from "./mascotWords.js";
+
+export { mascotLook };
 
 export type MascotState = "idle" | "listening" | "thinking" | "speaking" | "sleeping";
 /** Everyday moods, and kawaii ones (`love`, `excited`, `laughing`, `embarrassed`, `crying`, `angry`, `confused`) that add effects. */
@@ -68,16 +76,15 @@ export interface MascotLook {
   face?: "3d" | "flat";
 }
 
-export interface MascotProps
-  extends MascotLook,
-    Omit<React.ComponentProps<typeof Flex>, "children" | "color"> {
+export interface MascotProps extends MascotLook, Omit<LeafPropsOf<"div">, "children" | "color"> {
   /**
    * `cube`: the mascot is drawn in 3D, and while it thinks it turns into a 2 × 2 cube, the Once UI
    * mark, and solves it with no face showing. When it stops thinking the cube clicks into place,
-   * shows the logo for a beat and softens back into the mascot. Needs WebGL; without it the
-   * flat mascot shows instead.
+   * shows the logo for a beat and softens back into the mascot. `d20`: the same, but it firms
+   * into a twenty-sided die that tumbles while it thinks and lands face on when it stops. Both
+   * need WebGL; without it the flat mascot shows instead.
    */
-  working?: "cube";
+  working?: "cube" | "d20";
   /**
    * Kawaii effects: heart, star or laughing eyes, blush, tears, a sweat drop, an anger mark and
    * symbols rising off the head. `true` (default) draws the ones a mood brings, `false` none, and a
@@ -90,38 +97,33 @@ export interface MascotProps
   state?: MascotState;
   /** The expression on top of the state. */
   mood?: MascotMood;
-  /** A string or number that picks a whole look; props you pass win over it. See `mascotLook`. */
+  /**
+   * A string or number that picks a whole look; props you pass win over it. Words in it describe
+   * the mascot ("happy-red-fox", "sleepyPandaDJ"), and the rest comes from its hash. See `mascotLook`.
+   */
   seed?: string | number;
-  /** SVG drawn with the body in its 200 × 200 box (a hat, an antenna), moving with it. */
-  accessory?: React.ReactNode;
+  /**
+   * Something it wears, moving with the body. A built-in one (`antenna`, `bow`, `beanie`,
+   * `headphones`, `sprout`, `helmet`, `crown`, `catEars`, `partyHat`), several at once as a
+   * list, or your own SVG drawn in the body's 200 × 200 box. Built-ins fit any body shape.
+   */
+  accessory?: MascotAccessory | MascotAccessory[] | React.ReactNode;
+  /** One color for the built-in accessories, in place of each one's own. */
+  accessoryColor?: string;
   /** `pointer` follows the cursor, `{ x, y }` from -1 to 1 looks that way, `center` looks ahead. */
   lookAt?: "pointer" | "center" | { x: number; y: number };
   /** Loudness from 0 to 1 that drives the body (and mouth) while speaking. Takes precedence over `source`. */
   level?: number;
   /** The reply's `<audio>` element, a stream or an `AnalyserNode`, to move with. */
   source?: AudioLevelSource | null;
-  size?: "s" | "m" | "l" | "xl" | number;
+  /** A t-shirt size, a number on the token scale (`48` is 3rem), or a CSS length. */
+  size?: "s" | "m" | "l" | "xl" | number | CSSUnit;
   /** What screen readers hear. Defaults to "Assistant" and the state. */
-  ariaLabel?: string;
+  "aria-label"?: string;
 }
 
 const SIZE = { s: 32, m: 48, l: 96, xl: 160 } as const;
 const SCHEMES = new Set(["brand", "accent", "neutral"]);
-
-const DEFAULT_LOOK: Required<Omit<MascotLook, "bodyPath" | "eyeColor" | "sides" | "face">> = {
-  color: "brand",
-  roundness: 0.7,
-  aspect: 1,
-  surface: "glossy",
-  eyes: "tile",
-  eyeSize: 1,
-  eyeSpacing: 1,
-  eyeHeight: 0,
-  mouth: "none",
-  brows: false,
-  cheeks: false,
-  personality: "default",
-};
 
 const STATE_LABEL: Record<MascotState, string> = {
   idle: "Assistant",
@@ -130,77 +132,6 @@ const STATE_LABEL: Record<MascotState, string> = {
   speaking: "Assistant, speaking",
   sleeping: "Assistant, asleep",
 };
-
-/* The top tile of the Once UI mark (590 box), centered on 0,0 below. */
-const TILE =
-  "M173.08 155.146L247.587 80.6393C273.772 54.4536 316.228 54.4536 342.413 80.6393L416.92 155.146L308.547 263.52C301.065 271.002 288.935 271.002 281.453 263.52L173.08 155.146Z";
-
-/** Width and height of each eye, before `eyeSize`. */
-const EYE_BOX = {
-  tile: { w: 42, h: 36 },
-  pill: { w: 22, h: 40 },
-  round: { w: 28, h: 28 },
-  wide: { w: 36, h: 18 },
-  dot: { w: 16, h: 16 },
-  custom: { w: 40, h: 40 },
-} as const;
-
-const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
-
-/** A superellipse around (100, 104): exponent 2 is a circle, higher is squarer. */
-function bodyShape(roundness: number, aspect: number) {
-  const n = 2 + (1 - clamp(roundness, 0, 1)) * 4;
-  const scale = clamp(aspect, 0.6, 1.6);
-  const a = scale >= 1 ? 82 : 82 * scale;
-  const b = scale >= 1 ? 78 / scale : 78;
-  const points: string[] = [];
-  for (let i = 0; i < 72; i++) {
-    const t = (i / 72) * Math.PI * 2;
-    const c = Math.cos(t);
-    const s = Math.sin(t);
-    const x = 100 + a * Math.sign(c) * Math.abs(c) ** (2 / n);
-    const y = 104 + b * Math.sign(s) * Math.abs(s) ** (2 / n);
-    points.push(`${x.toFixed(2)} ${y.toFixed(2)}`);
-  }
-  return { d: `M${points.join("L")}Z`, top: 104 - b, bottom: 104 + b, halfWidth: a };
-}
-
-/* A small deterministic generator, so a seed always gives the same character. */
-function random(seed: string | number) {
-  let h = 2166136261;
-  for (const char of String(seed)) h = Math.imul(h ^ char.charCodeAt(0), 16777619);
-  return () => {
-    h += 0x6d2b79f5;
-    let t = h;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-/**
- * A whole look from a seed: a user id, a product name, any string or number.
- * The same seed always gives the same character.
- */
-export function mascotLook(seed: string | number): MascotLook {
-  const next = random(seed);
-  const pick = <T,>(items: readonly T[]) => items[Math.floor(next() * items.length)];
-  const range = (min: number, max: number) => Math.round((min + next() * (max - min)) * 100) / 100;
-  return {
-    color: `oklch(0.72 0.16 ${Math.round(next() * 360)})`,
-    roundness: range(0.2, 1),
-    aspect: range(0.8, 1.3),
-    surface: pick(["glossy", "glossy", "matte", "flat", "glass"] as const),
-    eyes: pick(["tile", "pill", "round", "wide", "dot"] as const),
-    eyeSize: range(0.85, 1.25),
-    eyeSpacing: range(0.8, 1.25),
-    eyeHeight: range(-0.35, 0.3),
-    mouth: pick(["none", "none", "smile", "dot", "line"] as const),
-    brows: next() < 0.35,
-    cheeks: next() < 0.4,
-    personality: pick(["calm", "default", "default", "bouncy"] as const),
-  };
-}
 
 function EyeShape({ kind, w, h }: { kind: MascotLook["eyes"]; w: number; h: number }) {
   if (kind === "tile") {
@@ -352,7 +283,28 @@ function Mouth({
  * Every part of the look is a prop (`MascotLook`), or comes from a `seed`, so
  * two products never have to share a character. With reduced motion it holds
  * still and keeps its expressions.
+ *
+ * `working="cube"` draws it in 3D: while it thinks it becomes the Once UI cube
+ * and solves it, then shows the logo and softens back with its face.
+ * `working="d20"` firms into a twenty-sided die that tumbles and lands instead.
  */
+const Mascot = (props: MascotProps) => {
+  const {
+    working,
+    state = "idle",
+    mood = "neutral",
+    lookAt = "pointer",
+    size = "l",
+    ...rest
+  } = props;
+  const full = { ...rest, state, mood, lookAt, size };
+  return working === "cube" || working === "d20" ? (
+    <MascotCube props={{ ...full, working }} fallback={<FlatMascot {...full} />} />
+  ) : (
+    <FlatMascot {...full} />
+  );
+};
+
 /** How long a poke keeps its surprised face, in milliseconds. */
 const POKE_MS = 600;
 
@@ -379,319 +331,324 @@ export function useMascotPoke(
   return { pokes, poked, onPointerDown: handler };
 }
 
-const FlatMascot = forwardRef<HTMLDivElement, MascotProps>(
-  (
-    {
-      sides: _sides,
-      face: _face,
-      poke = true,
-      onPointerDown,
-      effects,
-      state = "idle",
-      mood = "neutral",
-      seed,
+const FlatMascot = ({
+  ref: forwardedRef,
+  sides: _sides,
+  face: _face,
+  poke = true,
+  onPointerDown,
+  effects,
+  state = "idle",
+  mood = "neutral",
+  seed,
+  color,
+  roundness,
+  aspect,
+  bodyPath,
+  surface,
+  eyes,
+  eyeSize,
+  eyeSpacing,
+  eyeHeight,
+  eyeColor,
+  mouth,
+  brows,
+  cheeks,
+  personality,
+  accessory,
+  accessoryColor,
+  lookAt = "pointer",
+  level,
+  source,
+  size = "l",
+  "aria-label": ariaLabel,
+  className,
+  style,
+  ...flex
+}: MascotProps) => {
+  const root = useRef<HTMLDivElement | null>(null);
+  const ref = useCallback(
+    (node: HTMLDivElement | null) => {
+      root.current = node;
+      if (typeof forwardedRef === "function") forwardedRef(node);
+      else if (forwardedRef) forwardedRef.current = node;
+    },
+    [forwardedRef],
+  );
+  const id = useId().replace(/[^a-zA-Z0-9_-]/g, "");
+  const length =
+    typeof size === "number"
+      ? tokenLength(size)
+      : size in SIZE
+        ? tokenLength(SIZE[size as keyof typeof SIZE])
+        : size;
+  const live = level !== undefined || Boolean(source);
+
+  // Seeded look, then the props that were passed.
+  const passed = Object.fromEntries(
+    Object.entries({
       color,
       roundness,
       aspect,
-      bodyPath,
       surface,
       eyes,
       eyeSize,
       eyeSpacing,
       eyeHeight,
-      eyeColor,
       mouth,
       brows,
       cheeks,
       personality,
-      accessory,
-      lookAt = "pointer",
-      level,
-      source,
-      size = "l",
-      ariaLabel,
-      className,
-      style,
-      ...flex
-    },
-    forwardedRef,
-  ) => {
-    const root = useRef<HTMLDivElement | null>(null);
-    const ref = useCallback(
-      (node: HTMLDivElement | null) => {
-        root.current = node;
-        if (typeof forwardedRef === "function") forwardedRef(node);
-        else if (forwardedRef) forwardedRef.current = node;
-      },
-      [forwardedRef],
-    );
-    const id = useId().replace(/[^a-zA-Z0-9_-]/g, "");
-    const px = typeof size === "number" ? size : SIZE[size];
-    const live = level !== undefined || Boolean(source);
-
-    // Seeded look, then the props that were passed.
-    const passed = Object.fromEntries(
-      Object.entries({
-        color,
-        roundness,
-        aspect,
-        surface,
-        eyes,
-        eyeSize,
-        eyeSpacing,
-        eyeHeight,
-        mouth,
-        brows,
-        cheeks,
-        personality,
-      }).filter(([, value]) => value !== undefined),
-    );
-    const look = {
-      ...DEFAULT_LOOK,
-      ...(seed !== undefined ? mascotLook(seed) : {}),
-      ...passed,
-    } as typeof DEFAULT_LOOK;
-
-    const shape = bodyShape(look.roundness, look.aspect);
-    const body = bodyPath ? { d: bodyPath, top: 26, bottom: 182, halfWidth: 82 } : shape;
-    const spread = Math.min(29 * look.eyeSpacing, body.halfWidth - 22);
-    const eyeY = 96 + clamp(look.eyeHeight, -1, 1) * 30;
-    const tile = look.eyes === "tile";
-
-    // A quick squash whenever the expression changes, never on the first render.
-    const prod = useMascotPoke(poke, onPointerDown);
-    const shownMood = prod.poked ? "surprised" : mood;
-    const fx = effectsFor(shownMood, effects);
-    const base = baseMood(shownMood);
-    const glyph = eyeGlyph(fx);
-    // Kawaii glyphs scale with the eyes, whatever their shape.
-    const unit = 30 * look.eyeSize;
-
-    const changes = useRef({ key: `${state}-${mood}`, count: 0 });
-    if (changes.current.key !== `${state}-${mood}`) {
-      changes.current = { key: `${state}-${mood}`, count: changes.current.count + 1 };
-    }
-
-    // Where the eyes look: a fixed direction, ahead, or toward the pointer.
-    const lookX = typeof lookAt === "object" ? lookAt.x : 0;
-    const lookY = typeof lookAt === "object" ? lookAt.y : 0;
-    useEffect(() => {
-      const node = root.current;
-      if (!node) return;
-      node.style.setProperty("--mascot-look-x", String(clamp(lookX, -1, 1)));
-      node.style.setProperty("--mascot-look-y", String(clamp(lookY, -1, 1)));
-      if (lookAt !== "pointer") return;
-      let frame = 0;
-      let pending: PointerEvent | undefined;
-      const apply = () => {
-        frame = 0;
-        if (!pending) return;
-        const box = node.getBoundingClientRect();
-        const dx = pending.clientX - (box.left + box.width / 2);
-        const dy = pending.clientY - (box.top + box.height / 2);
-        // Full deflection a few body-widths away, so it doesn't twitch up close.
-        const reach = Math.max(box.width * 3, 240);
-        node.style.setProperty("--mascot-look-x", clamp(dx / reach, -1, 1).toFixed(3));
-        node.style.setProperty("--mascot-look-y", clamp(dy / reach, -1, 1).toFixed(3));
-      };
-      const onMove = (event: PointerEvent) => {
-        pending = event;
-        if (!frame) frame = requestAnimationFrame(apply);
-      };
-      window.addEventListener("pointermove", onMove, { passive: true });
-      return () => {
-        window.removeEventListener("pointermove", onMove);
-        if (frame) cancelAnimationFrame(frame);
-      };
-    }, [lookAt, lookX, lookY]);
-
-    // Speaking: a level from props, or a source read every frame.
-    useEffect(() => {
-      const node = root.current;
-      if (!node) return;
-      if (level !== undefined) {
-        node.style.setProperty("--mascot-level", String(clamp(level, 0, 1)));
-        return;
-      }
-      node.style.removeProperty("--mascot-level");
-      if (!source) return;
-      const meter = createAudioMeter(source);
-      if (!meter) return;
-      let frame = 0;
-      const tick = () => {
-        node.style.setProperty("--mascot-level", meter.level().toFixed(3));
-        frame = requestAnimationFrame(tick);
-      };
-      frame = requestAnimationFrame(tick);
-      return () => {
-        cancelAnimationFrame(frame);
-        meter.disconnect();
-      };
-    }, [level, source]);
-
-    const scheme = String(look.color);
-
-    return (
-      <Flex
-        ref={ref}
-        center
-        role="img"
-        aria-label={ariaLabel ?? STATE_LABEL[state]}
-        data-state={state}
-        data-mood={base}
-        data-surface={look.surface}
-        data-personality={look.personality}
-        data-eyes={tile ? "tile" : "shape"}
-        data-live={live || undefined}
-        className={classNames(styles.mascot, className)}
-        style={
-          {
-            width: px,
-            height: px,
-            "--mascot-color": SCHEMES.has(scheme) ? `var(--function-${scheme}-500)` : scheme,
-            ...(eyeColor ? { "--mascot-eye": eyeColor } : {}),
-            ...style,
-          } as React.CSSProperties
-        }
-        {...flex}
-        onPointerDown={prod.onPointerDown}
-      >
-        <svg viewBox="0 0 200 200" className={styles.svg} aria-hidden="true" focusable="false">
-          <defs>
-            <radialGradient id={`${id}-light`} cx="34%" cy="26%" r="62%">
-              <stop offset="0%" stopColor="#fff" stopOpacity="0.5" />
-              <stop offset="100%" stopColor="#fff" stopOpacity="0" />
-            </radialGradient>
-            <radialGradient id={`${id}-shade`} cx="44%" cy="38%" r="70%">
-              <stop offset="55%" stopColor="#000" stopOpacity="0" />
-              <stop offset="100%" stopColor="#000" stopOpacity="0.42" />
-            </radialGradient>
-            <linearGradient id={`${id}-rim`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="72%" stopColor="#fff" stopOpacity="0" />
-              <stop offset="100%" stopColor="#fff" stopOpacity="0.22" />
-            </linearGradient>
-            <clipPath id={`${id}-clip`}>
-              <path d={body.d} />
-            </clipPath>
-          </defs>
-          <ellipse cx={100} cy={196} rx={56} ry={5} className={styles.shadow} />
-          <g className={styles.float}>
-            <g
-              key={`${changes.current.count}-${prod.pokes}`}
-              className={classNames(
-                styles.body,
-                prod.poked ? styles.poke : changes.current.count > 0 && styles.pop,
-              )}
-              style={{ transformOrigin: `100px ${body.bottom}px` }}
-            >
-              <path d={body.d} className={styles.fill} />
-              <g clipPath={`url(#${id}-clip)`}>
-                <path d={body.d} fill={`url(#${id}-shade)`} className={styles.shade} />
-                <path d={body.d} fill={`url(#${id}-rim)`} className={styles.rim} />
-                <g className={styles.sheen}>
-                  <path d={body.d} fill={`url(#${id}-light)`} className={styles.light} />
-                  <ellipse cx={70} cy={body.top + 26} rx={20} ry={11} className={styles.spec} />
-                </g>
-              </g>
-              <path d={body.d} className={styles.edge} />
-              {accessory && <g className={styles.accessory}>{accessory}</g>}
-              <g className={styles.face}>
-                <g className={styles.flick}>
-                  {look.brows &&
-                    ([-1, 1] as const).map((side) => (
-                      <path
-                        key={side}
-                        d={`M${100 + side * spread - 9} ${eyeY - 26 * look.eyeSize} L${100 + side * spread + 9} ${eyeY - 26 * look.eyeSize}`}
-                        className={classNames(styles.brow, side < 0 ? styles.left : styles.right)}
-                      />
-                    ))}
-                  {glyph ? (
-                    ([-1, 1] as const).map((side) => (
-                      <g
-                        key={side}
-                        transform={`translate(${100 + side * spread} ${eyeY}) scale(${unit})`}
-                        className={styles.kawaii}
-                      >
-                        <EyeGlyph kind={glyph} side={side} />
-                      </g>
-                    ))
-                  ) : (
-                    <>
-                      <Eye id={id} side={-1} x={100 - spread} y={eyeY} look={look} />
-                      <Eye id={id} side={1} x={100 + spread} y={eyeY} look={look} />
-                    </>
-                  )}
-                  {look.cheeks &&
-                    ([-1, 1] as const).map((side) => (
-                      <ellipse
-                        key={side}
-                        cx={100 + side * (spread + 8)}
-                        cy={eyeY + 22 * look.eyeSize}
-                        rx={9}
-                        ry={5}
-                        className={styles.cheek}
-                      />
-                    ))}
-                  <g
-                    className={styles.mouth}
-                    transform={`translate(100 ${eyeY + 34 * Math.max(0.8, look.eyeSize)})`}
-                  >
-                    <Mouth kind={look.mouth} mood={base} state={state} laugh={glyph === "laugh"} />
-                  </g>
-                </g>
-                <KawaiiLayer
-                  effects={fx}
-                  at={{
-                    eyes: [
-                      [100 - spread, eyeY],
-                      [100 + spread, eyeY],
-                    ],
-                    unit,
-                    top: body.top,
-                    halfWidth: body.halfWidth,
-                  }}
-                />
-              </g>
-            </g>
-          </g>
-          {state === "sleeping" && (
-            <g className={styles.zzz}>
-              <text x={156} y={44}>
-                z
-              </text>
-              <text x={172} y={26}>
-                z
-              </text>
-            </g>
-          )}
-        </svg>
-      </Flex>
-    );
-  },
-);
-
-FlatMascot.displayName = "FlatMascot";
-
-/**
- * `working="cube"` draws it in 3D: while it thinks it becomes the Once UI cube
- * and solves it, then shows the logo and softens back with its face.
- */
-const Mascot = forwardRef<HTMLDivElement, MascotProps>((props, ref) => {
-  const {
-    working,
-    state = "idle",
-    mood = "neutral",
-    lookAt = "pointer",
-    size = "l",
-    ...rest
-  } = props;
-  const full = { ...rest, state, mood, lookAt, size };
-  return working === "cube" ? (
-    <MascotCube props={{ ...full, ref }} fallback={<FlatMascot ref={ref} {...full} />} />
-  ) : (
-    <FlatMascot ref={ref} {...full} />
+    }).filter(([, value]) => value !== undefined),
   );
-});
+  const look = {
+    ...DEFAULT_LOOK,
+    ...(seed !== undefined ? mascotLook(seed) : {}),
+    ...passed,
+  } as typeof DEFAULT_LOOK;
+  // A seed with a dark colour brings light eyes, unless you pass the colour or the eyes yourself.
+  const eyeInk =
+    eyeColor ?? (color === undefined && seed !== undefined ? mascotLook(seed).eyeColor : undefined);
+
+  const shape = bodyShape(look.roundness, look.aspect);
+  const body = bodyPath ? { d: bodyPath, top: 26, bottom: 182, halfWidth: 82 } : shape;
+  // Without an `accessory` prop, the seed's words can put some on ("royal" a crown, "dj" headphones).
+  const wearing = accessory ?? (seed !== undefined ? readSeedWords(seed).accessory : undefined);
+  const builtIn = (Array.isArray(wearing) ? wearing : [wearing]).filter(isMascotAccessory);
+  const worn = builtIn.length
+    ? accessoryLayers(
+        builtIn,
+        {
+          a: body.halfWidth,
+          b: (body.bottom - body.top) / 2,
+          n: bodyPath ? 3 : 2 + (1 - clamp(look.roundness, 0, 1)) * 4,
+        },
+        accessoryColor,
+      )
+    : { back: null, on: wearing, front: null };
+  const spread = Math.min(29 * look.eyeSpacing, body.halfWidth - 22);
+  const eyeY = 96 + clamp(look.eyeHeight, -1, 1) * 30;
+  const tile = look.eyes === "tile";
+
+  // A quick squash whenever the expression changes, never on the first render.
+  const prod = useMascotPoke(poke, onPointerDown);
+  const shownMood = prod.poked ? "surprised" : mood;
+  const fx = effectsFor(shownMood, effects);
+  const base = baseMood(shownMood);
+  const glyph = eyeGlyph(fx);
+  // Kawaii glyphs scale with the eyes, whatever their shape.
+  const unit = 30 * look.eyeSize;
+
+  const changes = useRef({ key: `${state}-${mood}`, count: 0 });
+  if (changes.current.key !== `${state}-${mood}`) {
+    changes.current = { key: `${state}-${mood}`, count: changes.current.count + 1 };
+  }
+
+  // Where the eyes look: a fixed direction, ahead, or toward the pointer.
+  const lookX = typeof lookAt === "object" ? lookAt.x : 0;
+  const lookY = typeof lookAt === "object" ? lookAt.y : 0;
+  useEffect(() => {
+    const node = root.current;
+    if (!node) return;
+    node.style.setProperty("--mascot-look-x", String(clamp(lookX, -1, 1)));
+    node.style.setProperty("--mascot-look-y", String(clamp(lookY, -1, 1)));
+    if (lookAt !== "pointer") return;
+    let frame = 0;
+    let pending: PointerEvent | undefined;
+    const apply = () => {
+      frame = 0;
+      if (!pending) return;
+      const box = node.getBoundingClientRect();
+      const dx = pending.clientX - (box.left + box.width / 2);
+      const dy = pending.clientY - (box.top + box.height / 2);
+      // Full deflection a few body-widths away, so it doesn't twitch up close.
+      const reach = Math.max(box.width * 3, 240);
+      node.style.setProperty("--mascot-look-x", clamp(dx / reach, -1, 1).toFixed(3));
+      node.style.setProperty("--mascot-look-y", clamp(dy / reach, -1, 1).toFixed(3));
+    };
+    const onMove = (event: PointerEvent) => {
+      pending = event;
+      if (!frame) frame = requestAnimationFrame(apply);
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [lookAt, lookX, lookY]);
+
+  // Speaking: a level from props, or a source read every frame.
+  useEffect(() => {
+    const node = root.current;
+    if (!node) return;
+    if (level !== undefined) {
+      node.style.setProperty("--mascot-level", String(clamp(level, 0, 1)));
+      return;
+    }
+    node.style.removeProperty("--mascot-level");
+    if (!source) return;
+    const meter = createAudioMeter(source);
+    if (!meter) return;
+    let frame = 0;
+    const tick = () => {
+      node.style.setProperty("--mascot-level", meter.level().toFixed(3));
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(frame);
+      meter.disconnect();
+    };
+  }, [level, source]);
+
+  const scheme = String(look.color);
+
+  return (
+    <Flex
+      ref={ref}
+      center
+      role="img"
+      aria-label={ariaLabel ?? STATE_LABEL[state]}
+      data-state={state}
+      data-mood={base}
+      data-surface={look.surface}
+      data-personality={look.personality}
+      data-eyes={tile ? "tile" : "shape"}
+      data-live={live || undefined}
+      className={classNames(styles.mascot, className)}
+      style={
+        {
+          width: length,
+          height: length,
+          "--mascot-color": SCHEMES.has(scheme) ? `var(--function-${scheme}-500)` : scheme,
+          ...(eyeInk ? { "--mascot-eye": eyeInk } : {}),
+          ...style,
+        } as React.CSSProperties
+      }
+      {...flex}
+      onPointerDown={prod.onPointerDown}
+    >
+      <svg viewBox="0 0 200 200" className={styles.svg} aria-hidden="true" focusable="false">
+        <defs>
+          <radialGradient id={`${id}-light`} cx="34%" cy="26%" r="62%">
+            <stop offset="0%" stopColor="#fff" stopOpacity="0.5" />
+            <stop offset="100%" stopColor="#fff" stopOpacity="0" />
+          </radialGradient>
+          <radialGradient id={`${id}-shade`} cx="44%" cy="38%" r="70%">
+            <stop offset="55%" stopColor="#000" stopOpacity="0" />
+            <stop offset="100%" stopColor="#000" stopOpacity="0.42" />
+          </radialGradient>
+          <linearGradient id={`${id}-rim`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="72%" stopColor="#fff" stopOpacity="0" />
+            <stop offset="100%" stopColor="#fff" stopOpacity="0.22" />
+          </linearGradient>
+          <clipPath id={`${id}-clip`}>
+            <path d={body.d} />
+          </clipPath>
+        </defs>
+        <ellipse cx={100} cy={196} rx={56} ry={5} className={styles.shadow} />
+        <g className={styles.float}>
+          <g
+            key={`${changes.current.count}-${prod.pokes}`}
+            className={classNames(
+              styles.body,
+              prod.poked ? styles.poke : changes.current.count > 0 && styles.pop,
+            )}
+            style={{ transformOrigin: `100px ${body.bottom}px` }}
+          >
+            {worn.back && <g className={styles.accessory}>{worn.back}</g>}
+            <path d={body.d} className={styles.fill} />
+            <g clipPath={`url(#${id}-clip)`}>
+              <path d={body.d} fill={`url(#${id}-shade)`} className={styles.shade} />
+              <path d={body.d} fill={`url(#${id}-rim)`} className={styles.rim} />
+              <g className={styles.sheen}>
+                <path d={body.d} fill={`url(#${id}-light)`} className={styles.light} />
+                <ellipse cx={70} cy={body.top + 26} rx={20} ry={11} className={styles.spec} />
+              </g>
+            </g>
+            <path d={body.d} className={styles.edge} />
+            {worn.on && <g className={styles.accessory}>{worn.on}</g>}
+            <g className={styles.face}>
+              <g className={styles.flick}>
+                {look.brows &&
+                  ([-1, 1] as const).map((side) => (
+                    <path
+                      key={side}
+                      d={`M${100 + side * spread - 9} ${eyeY - 26 * look.eyeSize} L${100 + side * spread + 9} ${eyeY - 26 * look.eyeSize}`}
+                      className={classNames(styles.brow, side < 0 ? styles.left : styles.right)}
+                    />
+                  ))}
+                {glyph ? (
+                  ([-1, 1] as const).map((side) => (
+                    <g
+                      key={side}
+                      transform={`translate(${100 + side * spread} ${eyeY}) scale(${unit})`}
+                      className={styles.kawaii}
+                    >
+                      <EyeGlyph kind={glyph} side={side} />
+                    </g>
+                  ))
+                ) : (
+                  <>
+                    <Eye id={id} side={-1} x={100 - spread} y={eyeY} look={look} />
+                    <Eye id={id} side={1} x={100 + spread} y={eyeY} look={look} />
+                  </>
+                )}
+                {look.cheeks &&
+                  ([-1, 1] as const).map((side) => (
+                    <ellipse
+                      key={side}
+                      cx={100 + side * (spread + 8)}
+                      cy={eyeY + 22 * look.eyeSize}
+                      rx={9}
+                      ry={5}
+                      className={styles.cheek}
+                    />
+                  ))}
+                <g
+                  className={styles.mouth}
+                  transform={`translate(100 ${eyeY + 34 * Math.max(0.8, look.eyeSize)})`}
+                >
+                  <Mouth kind={look.mouth} mood={base} state={state} laugh={glyph === "laugh"} />
+                </g>
+              </g>
+              <KawaiiLayer
+                effects={fx}
+                at={{
+                  eyes: [
+                    [100 - spread, eyeY],
+                    [100 + spread, eyeY],
+                  ],
+                  unit,
+                  top: body.top,
+                  halfWidth: body.halfWidth,
+                }}
+              />
+            </g>
+            {worn.front && <g className={styles.accessory}>{worn.front}</g>}
+          </g>
+        </g>
+        {state === "thinking" && (
+          <g className={styles.thought}>
+            <circle cx={156} cy={34} r={7} />
+            <circle cx={174} cy={16} r={10} />
+            <circle cx={198} cy={-6} r={14} />
+          </g>
+        )}
+        {state === "sleeping" && (
+          <g className={styles.zzz}>
+            <text x={156} y={44}>
+              z
+            </text>
+            <text x={172} y={26}>
+              z
+            </text>
+          </g>
+        )}
+      </svg>
+    </Flex>
+  );
+};
 
 Mascot.displayName = "Mascot";
 

@@ -129,6 +129,6 @@ describe("SmartLink: interaction and style", () => {
     );
     const link = screen.getByRole("link", { name: "Docs" });
     expect(link.style.textDecoration).toBe("none");
-    expect(link).not.toHaveClass("px-2");
+    expect(link).not.toHaveClass("padding-x-2");
   });
 });

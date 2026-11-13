@@ -1,9 +1,9 @@
 "use client";
 
 import { useCallback } from "react";
-import { IconButton } from "../../components/IconButton";
-import { useOptionalToast } from "../../contexts/ToastContext";
-import { copyText } from "../../internal/copyText";
+import { IconButton } from "../../components/IconButton.js";
+import { useOptionalToast } from "../../contexts/ToastContext.js";
+import { copyText } from "../../internal/copyText.js";
 
 /**
  * Copies the URL of the section `id` to the clipboard, and confirms with a
@@ -19,8 +19,8 @@ export function useCopySectionLink(id: string) {
     void copyText(url).then((copied) =>
       addToast?.(
         copied
-          ? { variant: "success", message: "Link copied to clipboard." }
-          : { variant: "danger", message: "Failed to copy link." },
+          ? { tone: "success", message: "Link copied to clipboard." }
+          : { tone: "danger", message: "Failed to copy link." },
       ),
     );
   }, [addToast, id]);

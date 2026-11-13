@@ -4,7 +4,6 @@ import {
   Avatar,
   Button,
   Column,
-  EmojiPickerDropdown,
   IconButton,
   Media,
   OgCard,
@@ -12,6 +11,7 @@ import {
   Text,
   Textarea,
 } from "@once-ui-system/core";
+import { EmojiPicker } from "@once-ui-system/core/emoji";
 import { useState } from "react";
 import { chatMessages } from "./chat1content";
 
@@ -55,9 +55,9 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
         vertical="center"
         gap="12"
       >
-        <Text variant="label-default-s">👋 | intro</Text>
+        <Text textVariant="label-default-s">👋 | intro</Text>
         <Row minWidth="4" minHeight="4" background="neutral-strong" radius="full" />
-        <Text variant="body-default-xs" onBackground="neutral-weak">
+        <Text textVariant="body-default-xs" onBackground="neutral-weak">
           Let us know a bit about you!
         </Text>
       </Row>
@@ -68,26 +68,26 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
               <Avatar src={messages.author.avatar} />
               <Column fillWidth gap="4">
                 <Row fillWidth gap="8" vertical="center">
-                  <Text variant="label-strong-s" onBackground="brand-medium">
+                  <Text textVariant="label-strong-s" onBackground="brand-medium">
                     {messages.author.name}
                   </Text>
-                  <Text variant="body-default-xs" onBackground="neutral-weak">
+                  <Text textVariant="body-default-xs" onBackground="neutral-weak">
                     {formatTime(messages.postedAt)}
                   </Text>
                 </Row>
-                {messages.message && <Text variant="body-default-s">{messages.message}</Text>}
+                {messages.message && <Text textVariant="body-default-s">{messages.message}</Text>}
 
                 {/* Attachments */}
                 {messages.attachments && messages.attachments.length > 0 && (
                   <Column>
                     {/* If multiple media, show as a grid-like row, else handle individually */}
                     {messages.attachments.length > 1 ? (
-                      <Row maxWidth={48} marginTop="16" gap="8" wrap>
+                      <Row maxWidth="48rem" marginTop="16" gap="8" wrap>
                         {messages.attachments.map((att, aIdx) =>
                           att?.media ? (
                             <Media
                               key={aIdx}
-                              maxWidth={20}
+                              maxWidth="20rem"
                               src={att.media}
                               border
                               radius="l"
@@ -101,7 +101,7 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
                       (messages.attachments[0].media.includes("youtube.com") ||
                       messages.attachments[0].media.includes("youtu.be") ? (
                         <Media
-                          maxWidth={32}
+                          maxWidth="32rem"
                           border
                           aspectRatio="16/9"
                           marginTop="16"
@@ -111,7 +111,7 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
                         />
                       ) : messages.attachments[0].media.match(/\.(png|jpg|jpeg|gif|webp)$/i) ? (
                         <Media
-                          maxWidth={32}
+                          maxWidth="32rem"
                           border
                           marginTop="16"
                           src={messages.attachments[0].media}
@@ -119,7 +119,7 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
                           sizes="320px"
                         />
                       ) : (
-                        <Row maxWidth={24} marginTop="16">
+                        <Row maxWidth="24rem" marginTop="16">
                           <OgCard url={messages.attachments[0].media} description={false} />
                         </Row>
                       ))
@@ -160,7 +160,7 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
             style={{ padding: "0.75rem" }}
             value={message}
             prefix={
-              <EmojiPickerDropdown
+              <EmojiPicker
                 onSelect={(emoji) => setMessage(message + emoji)}
                 trigger={
                   <Row fillWidth themeBorder="rounded" style={{ marginLeft: "-0.25rem" }}>

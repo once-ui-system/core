@@ -1,7 +1,7 @@
 "use client";
 
 import { type ReactNode, useEffect, useState } from "react";
-import { formatRelativeTime, relativeTimeRefresh } from "../../utils/relativeTime";
+import { formatRelativeTime, relativeTimeRefresh } from "../../utils/relativeTime.js";
 
 /**
  * A chat time is either a `Date`, which the chat components format and put in

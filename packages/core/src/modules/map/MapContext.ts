@@ -2,7 +2,7 @@
 
 import type { Map as MapLibreMap } from "maplibre-gl";
 import { createContext, useContext } from "react";
-import type { LngLat } from "./types";
+import type { LngLat } from "./types.js";
 
 type MapLibre = typeof import("maplibre-gl");
 

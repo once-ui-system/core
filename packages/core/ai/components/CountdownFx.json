@@ -1,11 +1,22 @@
 {
  "name": "CountdownFx",
- "group": "components",
+ "group": "fx",
+ "importFrom": "@once-ui-system/fx",
+ "extends": [
+  "CountFx",
+  "Text"
+ ],
+ "mixins": [
+  "CommonProps",
+  "LeafProps",
+  "TextProps"
+ ],
  "props": {
   "targetDate": "!Date | string",
   "format": "\"HH:MM:SS\" | \"DD:HH:MM:SS\" | \"MM:SS\" = HH:MM:SS",
   "effect": "CountFxProps[\"effect\"] = wheel",
-  "onComplete": "() => void"
+  "onComplete": "() => void",
+  "opacity": "Opacity"
  },
  "tags": [
   "effect",
@@ -15,8 +26,67 @@
   "Heading",
   "Row"
  ],
- "mixinsRef": [],
+ "mixinsRef": [
+  "CommonProps",
+  "LeafProps",
+  "TextProps"
+ ],
+ "tokensRef": "see tokens.json",
+ "resolvedMixins": {
+  "CommonProps": {
+   "onBackground": "Colors",
+   "onSolid": "Colors",
+   "align": "CSSProperties[\"textAlign\"]",
+   "children": "ReactNode",
+   "className": "string",
+   "style": "React.CSSProperties"
+  },
+  "LeafProps": {
+   "margin": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginTop": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginRight": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginBottom": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginLeft": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginX": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginY": "SpacingToken | number | CSSUnit | \"auto\"",
+   "flex": "FlexValue",
+   "fillWidth": "boolean",
+   "position": "CSSProperties[\"position\"]",
+   "top": "SpacingToken | number | CSSUnit",
+   "right": "SpacingToken | number | CSSUnit",
+   "bottom": "SpacingToken | number | CSSUnit",
+   "left": "SpacingToken | number | CSSUnit",
+   "className": "string",
+   "style": "CSSProperties"
+  },
+  "TextProps": {
+   "as": "ElementType",
+   "textVariant": "TextVariant",
+   "wrap": "CSSProperties[\"textWrap\"]",
+   "family": "TextType",
+   "weight": "TextWeight",
+   "truncate": "boolean",
+   "xl": "TextBreakpointHide",
+   "l": "TextBreakpointHide",
+   "m": "TextBreakpointHide",
+   "s": "TextBreakpointHide",
+   "xs": "TextBreakpointHide"
+  }
+ },
  "types": {
-  "CountFxProps": "CountFx props"
+  "CountFxProps": "CountFx props",
+  "Opacity": [
+   "0",
+   "10",
+   "20",
+   "30",
+   "40",
+   "50",
+   "60",
+   "70",
+   "80",
+   "90",
+   "100"
+  ]
  }
 }

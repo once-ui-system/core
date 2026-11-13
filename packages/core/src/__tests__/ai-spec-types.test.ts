@@ -29,6 +29,7 @@ const NOT_A_TYPE = new Set([
   "HTMLInputElement",
   "MouseEvent",
   "MouseEventHandler",
+  "PointerEvent",
   "FocusEventHandler",
   "FormEvent",
   "FormEventHandler",
@@ -45,6 +46,10 @@ const NOT_A_TYPE = new Set([
   "RefObject",
   "ComponentProps",
   "File",
+  // three.js's own classes, which an agent reads from three's docs:
+  // SceneModel's `onLoad` hands over a `Three.Object3D`.
+  "Three",
+  "Object3D",
   // literal values that happen to be capitalised
   "ANIMATION_DURATION",
   "An",
@@ -102,10 +107,11 @@ describe("spec types", () => {
     "LegendConfig",
     "DateConfig",
     "BarWidth",
-    "TableHeader",
+    "ValueFormat",
+    "TableColumn",
     "GridSize",
     "Opacity",
-    "curveType",
+    "CurveType",
     "AccordionItem",
     "ButtonOption",
     "GradientProps",
@@ -116,7 +122,10 @@ describe("spec types", () => {
   });
 
   it("gives a chart its row and series shape, not just their names", () => {
-    expect(types.SeriesConfig).toMatchObject({ key: "!string" });
+    // Generic over the row (3.0): read at its default, the key is a DataPoint
+    // key, and SeriesKey says that is any string key of the row.
+    expect(types.SeriesConfig).toMatchObject({ key: "!SeriesKey<DataPoint>" });
+    expect(types.SeriesKey).toBe("Extract<keyof T, string>");
     // DataPoint's whole point is the index signature — series keys live there.
     expect(Object.keys(types.DataPoint as Record<string, string>)).toContain("[key: string]");
   });

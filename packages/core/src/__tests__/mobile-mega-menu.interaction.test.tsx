@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { LayoutProvider } from "../contexts/LayoutProvider";
-import { type MenuGroup, MobileMegaMenu } from "../modules/navigation/MobileMegaMenu";
+import { MegaMenu, type MenuGroup } from "../modules/navigation/MegaMenu";
 import { expectNoAxeViolations } from "../test/axe";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
@@ -32,7 +32,7 @@ const header = (name: string) => screen.getByRole("button", { name });
 describe("MobileMegaMenu: keyboard", () => {
   it("keeps a closed group's links inert, and tabs into them once it is open", async () => {
     const user = userEvent.setup();
-    render(<MobileMegaMenu menuGroups={groups} />, { wrapper });
+    render(<MegaMenu collapseBelow="always" menuGroups={groups} />, { wrapper });
     const panel = () =>
       document.getElementById(header("Product").getAttribute("aria-controls") as string);
     // user-event's Tab ignores `inert`; the browser does not.
@@ -55,7 +55,7 @@ describe("MobileMegaMenu: keyboard", () => {
   it("calls onClose when a link is followed with Enter", async () => {
     const user = userEvent.setup();
     const onClose = vi.fn();
-    render(<MobileMegaMenu menuGroups={groups} onClose={onClose} />, { wrapper });
+    render(<MegaMenu collapseBelow="always" menuGroups={groups} onClose={onClose} />, { wrapper });
     await user.click(header("Product"));
     screen.getByRole("link", { name: "Pricing" }).focus();
     await user.keyboard("{Enter}");
@@ -67,9 +67,12 @@ describe("MobileMegaMenu: rendering", () => {
   it("renders a plain group as a link that calls onClose", async () => {
     const user = userEvent.setup();
     const onClose = vi.fn();
-    const { container } = render(<MobileMegaMenu menuGroups={groups} onClose={onClose} />, {
-      wrapper,
-    });
+    const { container } = render(
+      <MegaMenu collapseBelow="always" menuGroups={groups} onClose={onClose} />,
+      {
+        wrapper,
+      },
+    );
     const blog = screen.getByRole("link", { name: "Blog" });
     expect(blog).toHaveAttribute("href", "/blog");
     await expectNoAxeViolations(container);
@@ -79,7 +82,9 @@ describe("MobileMegaMenu: rendering", () => {
 
   it("shows a link's description and passes axe fully open", async () => {
     const user = userEvent.setup();
-    const { container } = render(<MobileMegaMenu menuGroups={groups} />, { wrapper });
+    const { container } = render(<MegaMenu collapseBelow="always" menuGroups={groups} />, {
+      wrapper,
+    });
     await user.click(header("Product"));
     await user.click(header("Learn"));
     expect(screen.getByText("Guides")).toBeInTheDocument();
@@ -88,7 +93,7 @@ describe("MobileMegaMenu: rendering", () => {
 
   it("does not throw without onClose", async () => {
     const user = userEvent.setup();
-    render(<MobileMegaMenu menuGroups={groups} />, { wrapper });
+    render(<MegaMenu collapseBelow="always" menuGroups={groups} />, { wrapper });
     await user.click(screen.getByRole("link", { name: "Blog" }));
   });
 });

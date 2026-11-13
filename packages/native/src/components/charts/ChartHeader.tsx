@@ -20,13 +20,13 @@ export function ChartHeader({ title, description, ...flex }: ChartHeaderProps) {
     <Column fillWidth paddingX="20" paddingY="12" gap="4" {...flex}>
       {title &&
         textOrNode(title, (children) => (
-          <Text variant="heading-strong-xs" accessibilityRole="header">
+          <Text textVariant="heading-strong-xs" accessibilityRole="header">
             {children}
           </Text>
         ))}
       {description &&
         textOrNode(description, (children) => (
-          <Text variant="label-default-s" onBackground="neutral-weak">
+          <Text textVariant="label-default-s" onBackground="neutral-weak">
             {children}
           </Text>
         ))}

@@ -9,6 +9,7 @@ const {
   validate,
   applyFixes,
   PRE_2_PROPS,
+  PRE_3_PROPS,
   loadSpec,
   parseIconNames,
   openingTags,
@@ -16,10 +17,14 @@ const {
   registeredIconNames,
   projectIconNames,
   isNextProject,
-} = require("../../scripts/validate-ai-code.js");
+} = require("../../scripts/validate-ai-code.cjs");
 
 type Issue = { rule: string; message: string; fix?: string };
-type Options = { next?: boolean; icons?: { names: Set<string>; unresolved: boolean } };
+type Options = {
+  next?: boolean;
+  icons?: { names: Set<string>; unresolved: boolean };
+  file?: string;
+};
 
 const spec = loadSpec();
 const iconNames = parseIconNames(spec);
@@ -99,31 +104,44 @@ describe("color.svgPaint", () => {
 describe("RevealFx.delay", () => {
   it("flags seconds, which is what 1.8.x took", () => {
     expect(rules(`<RevealFx delay={index * 0.1} />`)).toContain("RevealFx.delay");
-    expect(rules(`<ShineFx speed={0.75} />`)).toContain("RevealFx.delay");
+    expect(rules(`<ShineFx duration={0.75} />`)).toContain("RevealFx.delay");
+  });
+
+  it("flags whole seconds on a duration, which CelebrationFx and WeatherFx took in 2.x", () => {
+    expect(rules(`<CelebrationFx duration={5} />`)).toContain("RevealFx.delay");
+    expect(rules(`<WeatherFx duration={4} />`)).toContain("RevealFx.delay");
+    expect(rules(`<CelebrationFx duration={5000} />`)).not.toContain("RevealFx.delay");
   });
 
   it("leaves milliseconds alone", () => {
     expect(rules(`<RevealFx delay={index * 100} />`)).not.toContain("RevealFx.delay");
-    expect(rules(`<ShineFx speed={750} />`)).not.toContain("RevealFx.delay");
+    expect(rules(`<ShineFx duration={750} />`)).not.toContain("RevealFx.delay");
     expect(rules(`<RevealFx delay={index * 0.1 * 1000} />`)).not.toContain("RevealFx.delay");
   });
 
   it("covers every effect whose timing is in milliseconds, and what extends one", () => {
-    expect(rules(`<CountFx value={9} speed={1.5} />`)).toContain("RevealFx.delay");
+    expect(rules(`<CountFx value={9} duration={1.5} />`)).toContain("RevealFx.delay");
     expect(rules(`<TypeFx words={w} delay={0.4} />`)).toContain("RevealFx.delay");
     // HoverCard extends Animation, whose delay is milliseconds.
     expect(rules(`<HoverCard trigger={t} delay={0.2} />`)).toContain("RevealFx.delay");
   });
 
-  it("does not flag speed on effects where it is a multiplier", () => {
-    for (const fx of ["MatrixFx", "WeatherFx", "ParticleFx", "CelebrationFx", "Effect"]) {
+  it("does not flag speed, which is a multiplier on every effect", () => {
+    for (const fx of [
+      "MatrixFx",
+      "WeatherFx",
+      "ParticleFx",
+      "CelebrationFx",
+      "Effect",
+      "AutoScroll",
+    ]) {
       expect(rules(`<${fx} speed={0.5} />`)).not.toContain("RevealFx.delay");
     }
   });
 
   it("names the component and prop it found", () => {
-    const [issue] = issues(`<ShineFx speed={0.75}>Shine</ShineFx>`);
-    expect(issue.message).toMatch(/^ShineFx speed is in milliseconds/);
+    const [issue] = issues(`<ShineFx duration={0.75}>Shine</ShineFx>`);
+    expect(issue.message).toMatch(/^ShineFx duration is in milliseconds/);
   });
 });
 
@@ -267,7 +285,27 @@ describe("Logo.themes", () => {
     expect(
       rules(`<Logo wordmark={{ light: "/logo-light.svg", dark: "/logo-dark.svg" }} href="/" />`),
     ).not.toContain("Logo.themes");
-    expect(rules(`<Logo dark icon="/mark-dark.svg" />`)).not.toContain("Logo.themes");
+    expect(rules(`<Logo showIn="dark" icon="/mark-dark.svg" />`)).not.toContain("Logo.themes");
+  });
+
+  it("flags the 3.0 spelling too", () => {
+    expect(
+      rules(`<Row>
+  <Logo showIn="dark" wordmark="/logo-dark.svg" href="/" />
+  <Logo showIn="light" wordmark="/logo-light.svg" href="/" />
+</Row>`),
+    ).toContain("Logo.themes");
+  });
+});
+
+describe("G5 renames", () => {
+  it("names showIn and textVariant for the 2.x aliases", () => {
+    const messages = issues(`<Row dark textSize="m" /><Text size="l" />`)
+      .map((issue) => issue.message)
+      .join("\n");
+    expect(messages).toMatch(/Row takes showIn in 3.0; dark is the 2.x name/);
+    expect(messages).toMatch(/Row takes textVariant in 3.0; textSize is the 2.x name/);
+    expect(messages).toMatch(/Text takes textVariant in 3.0; size is the 2.x name/);
   });
 });
 
@@ -671,6 +709,27 @@ describe("Icon.names", () => {
   });
 });
 
+describe("Meta.layout", () => {
+  const meta = `export const metadata = Meta.generate({ title: "T", description: "D", baseURL });\n`;
+
+  it("flags Meta.generate in a layout, by file name or by a Layout component", () => {
+    expect(rules(meta, { file: "src/app/layout.tsx" })).toContain("Meta.layout");
+    expect(rules(meta, { file: "app\\blog\\layout.js" })).toContain("Meta.layout");
+    expect(
+      rules(`${meta}export default function RootLayout({ children }) { return children; }`),
+    ).toContain("Meta.layout");
+  });
+
+  it("leaves pages, and a layout that opts out of the canonical, alone", () => {
+    expect(rules(meta, { file: "src/app/page.tsx" })).not.toContain("Meta.layout");
+    expect(
+      rules(meta.replace("baseURL }", "baseURL, canonical: false }"), {
+        file: "src/app/layout.tsx",
+      }),
+    ).not.toContain("Meta.layout");
+  });
+});
+
 describe("LayoutProvider.next", () => {
   const rootImport = `import { Column, LayoutProvider } from "@once-ui-system/core";\n`;
 
@@ -738,22 +797,103 @@ describe("LayoutProvider.next", () => {
   });
 });
 
+describe("layout.leafProps: G2 leaves take a small prop set", () => {
+  const leaf = (source: string) =>
+    issues(source)
+      .filter((issue) => issue.rule === "layout.leafProps")
+      .map((issue) => issue.message);
+
+  it("names a dropped prop and the wrapper to put it on", () => {
+    expect(leaf('<Button padding="8" s={{ fillWidth: true }}>Go</Button>')).toEqual([
+      expect.stringMatching(
+        /^Button is a leaf in 3\.0 and does not take padding, s: put them on a <Row> around it/,
+      ),
+    ]);
+    expect(leaf('<Text paddingX="8">a</Text>')).toEqual([
+      expect.stringMatching(/does not take paddingX: put it on a <Column> around it/),
+    ]);
+    expect(leaf('<Icon name="close" radius="full" />')).toEqual([
+      expect.stringMatching(/<Row fit>/),
+    ]);
+    expect(leaf('<Kbd onBackground="neutral-weak">K</Kbd>')).toEqual([
+      expect.stringMatching(/does not take onBackground/),
+    ]);
+  });
+
+  it("leaves the kept props, a leaf's own props, values and layout components alone", () => {
+    expect(
+      leaf(
+        '<Row padding="8" hide s={{ hide: false }}><Button fillWidth marginTop="8" aria-label="padding" style={{ padding: 2 }}>a</Button><Text opacity={60} onBackground="neutral-weak" flex={1}>a</Text><Kbd keys="mod+k" marginLeft="4" /></Row>',
+      ),
+    ).toEqual([]);
+  });
+});
+
 describe("api.renamed: 1.x prop names", () => {
   it("names the 2.x prop for a 1.x one, which TypeScript does not", () => {
     const found = issues(
       `<SegmentedControl buttons={b} selected="a" onToggle={(v) => set(v)} />\n<Dialog isOpen={open} title="Hi" onClose={close} />`,
     ).filter((issue) => issue.rule === "api.renamed");
     expect(found.map((issue) => issue.message)).toEqual([
-      "SegmentedControl takes value in 2.x; selected is the 1.x name",
-      "SegmentedControl takes onChange in 2.x; onToggle is the 1.x name",
-      "Dialog takes open in 2.x; isOpen is the 1.x name",
+      "SegmentedControl takes value; selected is the 1.x name",
+      "SegmentedControl takes onValueChange; onToggle is the 1.x name",
+      "Dialog takes open; isOpen is the 1.x name",
+    ]);
+  });
+
+  it("names the plain part for a dotted one", () => {
+    const found = issues(
+      `<Sortable items={a}><Sortable.Item id="x"><Sortable.Handle /></Sortable.Item></Sortable>\n<StylePanel.Root><StylePanel.Brand /></StylePanel.Root>\n<Once.Button>a</Once.Button>`,
+    ).filter((issue) => issue.rule === "api.renamed");
+    expect(found.map((issue) => issue.message)).toEqual([
+      "Sortable.Item is SortableItem in 3.0: a part is a plain named export, never a dotted name",
+      "Sortable.Handle is SortableHandle in 3.0: a part is a plain named export, never a dotted name",
+      "StylePanel.Root is StylePanelRoot in 3.0: a part is a plain named export, never a dotted name",
+      "StylePanel.Brand is StylePanelBrand in 3.0: a part is a plain named export, never a dotted name",
+    ]);
+  });
+
+  it("names the 3.0 prop for a 2.x one", () => {
+    const found = issues(
+      `<Switch checked={on} onToggle={set} />\n<Tabs value={tab} onChange={pick} />`,
+    ).filter((issue) => issue.rule === "api.renamed");
+    expect(found.map((issue) => issue.message)).toEqual([
+      "Switch takes onCheckedChange in 3.0; onToggle is the 2.x name",
+      "Tabs takes onValueChange in 3.0; onChange is the 2.x name",
+    ]);
+  });
+
+  it("names tone and textVariant for 2.x's variant, scheme and color", () => {
+    const found = issues(
+      `<Button variant="danger">Delete</Button>\n<IconButton variant="quaternary" icon="close" aria-label="Close" />\n<Tag scheme="brand" label="New" />\n<Text variant="body-default-s">Hi</Text>\n<StatusIndicator color="green" />`,
+    ).filter((issue) => issue.rule === "api.renamed");
+    expect(found.map((issue) => issue.message)).toEqual([
+      'Button takes tone="danger" in 3.0; variant="danger" is the 2.x spelling',
+      'IconButton takes variant="ghost" in 3.0; variant="quaternary" is the 2.x spelling',
+      "Tag takes tone in 3.0; scheme is the 2.x name",
+      "Text takes textVariant in 3.0; variant is the 2.x name",
+      "StatusIndicator takes scheme in 3.0; color is the 2.x name",
+    ]);
+    expect(
+      rules(`<Button tone="danger">Delete</Button>\n<Tag variant="announce" label="New" />`),
+    ).not.toContain("api.renamed");
+  });
+
+  it("names the 3.0 survivor for a 2.x component that merged (F6), and 2.x Table data", () => {
+    const found = issues(
+      `<PasswordInput id="p" label="Password" />\n<KeyTip keys="mod+z" />\n<Table data={{ headers: h, rows: r }} />\n<Table columns={c} rows={r} />`,
+    ).filter((issue) => issue.rule === "api.renamed");
+    expect(found.map((issue) => issue.message)).toEqual([
+      'PasswordInput is Input type="password" (it has the show/hide toggle) in 3.0',
+      'KeyTip is Kbd keys="mod+k" label="…" in 3.0',
+      "Table takes columns and rows in 3.0; data={{ headers, rows }} is the 2.x shape (a header's content is a column's header, array rows read by position)",
     ]);
   });
 
   it("leaves the 2.x names, and old names 2.x reuses, alone", () => {
     expect(
       rules(
-        `<SegmentedControl buttons={b} value="a" onChange={set} />\n<Media fill src="/a.jpg" />\n<Feedback icon />`,
+        `<SegmentedControl buttons={b} value="a" onValueChange={set} />\n<Media fill src="/a.jpg" />\n<Feedback icon />`,
       ),
     ).not.toContain("api.renamed");
   });
@@ -763,6 +903,8 @@ describe("api.renamed: 1.x prop names", () => {
     const components = spec.components as Record<string, Entry>;
     const mixins = spec.mixins as Record<string, Record<string, string>>;
     const accepts = (name: string, prop: string, seen = new Set<string>()): boolean => {
+      // Native ARIA attributes reach every component; the spec does not list them.
+      if (prop.startsWith("aria-")) return true;
       const entry = components[name];
       if (!entry || seen.has(name)) return false;
       seen.add(name);
@@ -772,9 +914,10 @@ describe("api.renamed: 1.x prop names", () => {
         (entry.extends ?? []).some((parent) => accepts(parent, prop, seen))
       );
     };
-    for (const [name, renames] of Object.entries(
-      PRE_2_PROPS as Record<string, Record<string, string>>,
-    )) {
+    for (const [name, renames] of [
+      ...Object.entries(PRE_2_PROPS as Record<string, Record<string, string>>),
+      ...Object.entries(PRE_3_PROPS as Record<string, Record<string, string>>),
+    ]) {
       expect(components[name], name).toBeDefined();
       for (const [old, now] of Object.entries(renames)) {
         expect(accepts(name, old), `${name}.${old}`).toBe(false);
@@ -785,39 +928,39 @@ describe("api.renamed: 1.x prop names", () => {
 });
 
 describe("size.rem", () => {
-  it("flags an icon box sized in pixels, which a number turns into rem", () => {
-    expect(rules(`<Row width={32} height={32} center><Icon name="check" /></Row>`)).toContain(
+  it("flags an icon box sized as if numbers were still rem, which 3.0 reads as px", () => {
+    expect(rules(`<Row width={2} height={2} center><Icon name="check" /></Row>`)).toContain(
       "size.rem",
     );
     expect(
-      rules(`<Row minWidth={40} minHeight={40} center><Icon name={item.icon} /></Row>`),
+      rules(`<Row minWidth={2.5} minHeight={2.5} center><Icon name={item.icon} /></Row>`),
     ).toContain("size.rem");
-    expect(rules(`<Column width={32} minWidth={32}><Avatar value="MO" /></Column>`)).toContain(
+    expect(rules(`<Column width={3} minWidth={3}><Avatar value="MO" /></Column>`)).toContain(
       "size.rem",
     );
   });
 
-  it("names the size in rem and pixels and the token to write instead", () => {
-    const issue = issues(`<Row width={40} height={40}><Icon name="check" /></Row>`).find(
+  it("names the size in px and the rem string to write instead", () => {
+    const issue = issues(`<Row width={2} height={2}><Icon name="check" /></Row>`).find(
       (i) => i.rule === "size.rem",
     );
-    expect(issue?.message).toMatch(/40rem \(640 px\).*width="40"/);
+    expect(issue?.message).toMatch(/2 px.*width="2rem".*width=\{32\}/);
   });
 
-  it("leaves rem sizes that hold layout, and tokens, alone", () => {
-    expect(rules(`<Column minWidth={14} gap="8"><Text>Name</Text></Column>`)).not.toContain(
+  it("leaves px sizes, rem strings, tokens and boxes that hold layout alone", () => {
+    expect(rules(`<Row width={32} height={32}><Icon name="check" /></Row>`)).not.toContain(
       "size.rem",
     );
     expect(rules(`<Row width="32" height="32"><Icon name="check" /></Row>`)).not.toContain(
       "size.rem",
     );
-    expect(rules(`<Row width={2} height={2}><Icon name="check" /></Row>`)).not.toContain(
+    expect(rules(`<Row width="2rem" height="2rem"><Icon name="check" /></Row>`)).not.toContain(
       "size.rem",
     );
     expect(
-      rules(`<Column width={32} height={32}><Row gap="8"><Text>Hero</Text></Row></Column>`),
+      rules(`<Column width={2} height={2}><Row gap="8"><Text>Hero</Text></Row></Column>`),
     ).not.toContain("size.rem");
-    expect(rules(`<Background width={40} height={40} />`)).not.toContain("size.rem");
+    expect(rules(`<Background width={4} height={4} />`)).not.toContain("size.rem");
   });
 });
 
@@ -951,5 +1094,155 @@ describe("responsive.props", () => {
     ).not.toContain("responsive.props");
     // A local component the spec does not know is not checked.
     expect(rules(`<PricingCard s={{ wide: true }} />`)).not.toContain("responsive.props");
+  });
+});
+
+describe("Select as a form value", () => {
+  it("points a Select with no label at a Button with a Dropdown", () => {
+    const src = `<Select value={sort} onValueChange={setSort} options={options} />`;
+    expect(issues(src).find((i) => i.rule === "Select.toolbar")?.message).toMatch(
+      /Dropdown of Options/,
+    );
+  });
+
+  it("leaves a labelled Select alone", () => {
+    expect(rules(`<Select label="Timezone" options={options} />`)).not.toContain("Select.toolbar");
+    expect(rules(`<Select aria-label="Timezone" options={options} />`)).not.toContain(
+      "Select.toolbar",
+    );
+    expect(rules(`<Select {...field} options={options} />`)).not.toContain("Select.toolbar");
+  });
+
+  it("flags a chevron passed by hand", () => {
+    const src = `<Select label="Country" options={options} suffix={<Icon name="chevronDown" />} />`;
+    expect(rules(src)).toContain("Select.chevron");
+  });
+});
+
+describe("ship, not screenshot", () => {
+  it("wants a caught load rendered, not only caught", () => {
+    const src = `export function Zones() {
+      const [zones, setZones] = useState([]);
+      useEffect(() => { load().then(setZones).catch((e) => console.error(e)); }, []);
+      return (<Column>{zones.length === 0 && <Text>None</Text>}{zones.map((z) => <Text key={z.id}>{z.name}</Text>)}{loading && <Skeleton />}</Column>);
+    }`;
+    expect(rules(src)).toContain("states.error");
+    expect(
+      rules(
+        src.replace("<Column>", '<Column>{error && <Feedback tone="danger" title="Failed" />}'),
+      ),
+    ).not.toContain("states.error");
+  });
+
+  it("asks a bare monogram for the brand's initial", () => {
+    expect(rules(`export const H = () => { return <Logo text="Sprig" monogram />; };`)).toContain(
+      "components.logo",
+    );
+    expect(
+      rules(`export const H = () => { return <Logo text="Sprig" monogram="S" />; };`),
+    ).not.toContain("components.logo");
+  });
+
+  it("stops a map app replacing the style by hand", () => {
+    const src = `import { Map, useMap } from "@once-ui-system/core/map";
+      export function Layers() { const { map } = useMap(); useEffect(() => { map.setStyle(style, { diff: false }); }, [map]); return <Map />; }`;
+    expect(rules(src)).toContain("map.raw");
+  });
+
+  it("points a hand-set app theme at a preset", () => {
+    expect(
+      rules(
+        `export const { style } = defineConfig({ style: { brand: "cyan", neutral: "gray" } });`,
+      ),
+    ).toContain("theme.preset");
+    expect(
+      rules(
+        `const p = themePreset("care", { style: { brandSeed: "#c2410c" } });\nexport const { style } = defineConfig({ style: p.style });`,
+      ),
+    ).not.toContain("theme.preset");
+    expect(
+      rules(
+        `export function Providers({ children }) { return <ThemeProvider brand="cyan" neutral="gray">{children}</ThemeProvider>; }`,
+      ),
+    ).toContain("theme.preset");
+    expect(
+      rules(
+        `const p = themePreset("ops");\nexport function Providers({ children }) { return <ThemeProvider {...p.style} brand="cyan">{children}</ThemeProvider>; }`,
+      ),
+    ).not.toContain("theme.preset");
+    // A config that sets its own page and surface already chose a look.
+    expect(
+      rules(
+        `export const { style } = defineConfig({ style: { brand: "violet", pageBackground: { light: "#f8f7fb", dark: "#0d0b12" } } });`,
+      ),
+    ).not.toContain("theme.preset");
+  });
+
+  it("flags maplibre-gl.css, which overrides Map's own styles", () => {
+    expect(
+      rules(
+        `import "maplibre-gl/dist/maplibre-gl.css";\nexport default function Layout() { return null; }`,
+      ),
+    ).toContain("map.css");
+  });
+
+  it("points a hand-drawn character at Mascot", () => {
+    const src = `export function SprigMascot() {
+      return (<svg viewBox="0 0 10 10"><circle cx="1" cy="1" r="1" /><circle cx="2" cy="1" r="1" /><ellipse cx="5" cy="5" rx="2" ry="1" /><path d="M0 0" /><path d="M1 1" /><path d="M2 2" /></svg>);
+    }`;
+    expect(rules(src)).toContain("components.mascot");
+    expect(rules(`${src}\nconst x = <Mascot />;`)).not.toContain("components.mascot");
+  });
+
+  it("points a hand-built brand mark at Logo and a file input at MediaUpload", () => {
+    expect(
+      rules(`function AppLogo() { return <Row><Icon name="leaf" /><Text>Sprig</Text></Row>; }`),
+    ).toContain("components.logo");
+    expect(rules(`function Attach() { return <input type="file" />; }`)).toContain(
+      "components.upload",
+    );
+  });
+
+  it("asks loaded data for loading and error states", () => {
+    const src = `export function Plants() {
+      const [plants, setPlants] = useState([]);
+      useEffect(() => { fetch("/api/plants").then((r) => r.json()).then(setPlants); }, []);
+      return (<Column>{plants.map((p) => <Text key={p.id}>{p.name}</Text>)}</Column>);
+    }`;
+    expect(rules(src)).toEqual(
+      expect.arrayContaining(["states.loading", "states.error", "states.empty"]),
+    );
+    const handled = src
+      .replace(
+        "<Column>",
+        '<Column>{loading && <Skeleton />}{error && <Feedback tone="danger" />}{plants.length === 0 && <Text>None yet</Text>}',
+      )
+      .replace("then(setPlants)", "then(setPlants).catch(setError)");
+    expect(rules(handled)).not.toEqual(expect.arrayContaining(["states.loading"]));
+    expect(rules(handled)).not.toContain("states.error");
+    expect(rules(handled)).not.toContain("states.empty");
+  });
+
+  it("leaves a fixed list alone and asks inline records for a data layer", () => {
+    expect(
+      rules(
+        `const links = [1, 2]; export const Nav = () => { return (<Row>{links.map((l) => <Text key={l}>{l}</Text>)}</Row>); };`,
+      ),
+    ).not.toContain("states.empty");
+    const records = Array.from({ length: 6 }, (_, i) => `{ id: "${i}", name: "N${i}" }`).join(", ");
+    expect(
+      rules(`const items = [${records}]; export const L = () => { return (<Column />); };`),
+    ).toContain("data.layer");
+  });
+
+  it("finds nothing in the gold examples", () => {
+    for (const file of ["chat", "map-app", "editor", "list-page", "dashboard"]) {
+      const src = fs.readFileSync(
+        path.join(__dirname, "..", "..", "ai", "examples", `${file}.tsx`),
+        "utf8",
+      );
+      const found = rules(src).filter((r) => /^(components|states|data)\./.test(r));
+      expect({ file, found }).toEqual({ file, found: [] });
+    }
   });
 });

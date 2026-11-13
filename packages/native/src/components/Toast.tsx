@@ -10,15 +10,15 @@ import {
 } from "react";
 import { View, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
+import type { Tone } from "../types";
 import { Row } from "./Flex";
 import { Icon, type IconName } from "./Icon";
 import { IconButton } from "./IconButton";
 import { Text } from "./Text";
 
-export type ToastVariant = "success" | "danger" | "warning" | "info";
-
 export interface ToastProps {
-  variant: ToastVariant;
+  /** The palette and its icon; `danger` also interrupts the screen reader. 2.x called it `variant`. */
+  tone: Tone;
   children: ReactNode;
   showIcon?: boolean;
   /** Shows a close button, called when the toast hides itself or is closed. */
@@ -31,7 +31,7 @@ export interface ToastProps {
   testID?: string;
 }
 
-const ICONS: Record<ToastVariant, IconName> = {
+const ICONS: Partial<Record<Tone, IconName>> = {
   success: "check",
   danger: "danger",
   warning: "warning",
@@ -40,7 +40,7 @@ const ICONS: Record<ToastVariant, IconName> = {
 
 /** Core's `Toast`: a short message on a surface card that hides itself. */
 export function Toast({
-  variant,
+  tone,
   children,
   showIcon = true,
   onClose,
@@ -76,23 +76,26 @@ export function Toast({
       paddingY="12"
       paddingX="20"
       // Only a danger toast interrupts, as in core.
-      accessibilityRole={variant === "danger" ? "alert" : "summary"}
-      accessibilityLiveRegion={variant === "danger" ? "assertive" : "polite"}
+      accessibilityRole={tone === "danger" ? "alert" : "summary"}
+      accessibilityLiveRegion={tone === "danger" ? "assertive" : "polite"}
       style={style}
       testID={testID}
     >
-      {showIcon && <Icon size="s" onBackground={`${variant}-medium`} name={ICONS[variant]} />}
+      {showIcon && <Icon size="s" onBackground={`${tone}-medium`} name={ICONS[tone] ?? "info"} />}
       <View style={{ flex: 1 }}>
-        <Text variant="body-default-s">{children}</Text>
+        <Text textVariant="body-default-s">{children}</Text>
       </View>
       {action}
-      {onClose && <IconButton variant="ghost" icon="close" ariaLabel="Hide" onPress={onClose} />}
+      {onClose && (
+        <IconButton variant="ghost" icon="close" size="m" tooltip="Hide" onPress={onClose} />
+      )}
     </Row>
   );
 }
 
 export interface ToastOptions {
-  variant: ToastVariant;
+  /** The palette and its icon, as core 3.0's `addToast({ tone, message })`. */
+  tone: Tone;
   message: ReactNode;
   action?: ReactNode;
   duration?: number;
@@ -104,11 +107,18 @@ interface ToastContextValue {
   toasts: (ToastOptions & { id: string })[];
   addToast: (toast: ToastOptions) => void;
   removeToast: (id: string) => void;
+  /**
+   * Native only: the height of a bar fixed to the bottom of the screen (a tab
+   * bar), safe area included, so toasts stack above it instead of over it. A
+   * tab bar sets it from its `onLayout`; 0 puts toasts back above the home
+   * indicator.
+   */
+  setBottomOffset: (points: number) => void;
 }
 
 const ToastContext = createContext<ToastContextValue | null>(null);
 
-/** Core's `useToast`: `addToast({ variant, message })` from anywhere under `ToastProvider`. */
+/** Core's `useToast`: `addToast({ tone, message })` from anywhere under `ToastProvider`. */
 export function useToast() {
   const context = useContext(ToastContext);
   if (!context) throw new Error("useToast must be used within a ToastProvider");
@@ -127,7 +137,11 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const removeToast = useCallback((id: string) => {
     setToasts((list) => list.filter((t) => t.id !== id));
   }, []);
-  const value = useMemo(() => ({ toasts, addToast, removeToast }), [toasts, addToast, removeToast]);
+  const [bottomOffset, setBottomOffset] = useState(0);
+  const value = useMemo(
+    () => ({ toasts, addToast, removeToast, setBottomOffset }),
+    [toasts, addToast, removeToast],
+  );
   const theme = useTheme();
 
   return (
@@ -139,15 +153,19 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           position: "absolute",
           left: theme.space("16"),
           right: theme.space("16"),
-          // Above the home indicator, as core's `calc(space + --safe-area-bottom)`.
-          bottom: theme.space("32") + theme.insets.bottom,
+          // Above the home indicator, as core's `calc(space + --safe-area-bottom)`,
+          // or above a bottom bar that already covers it.
+          bottom:
+            bottomOffset > 0
+              ? bottomOffset + theme.space("16")
+              : theme.space("32") + theme.insets.bottom,
           gap: theme.space("8"),
         }}
       >
         {toasts.map((t) => (
           <Toast
             key={t.id}
-            variant={t.variant}
+            tone={t.tone}
             action={t.action}
             duration={t.duration}
             testID={t.testID}

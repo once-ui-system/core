@@ -9,8 +9,38 @@
   "useNavStyle": {
    "group": "components",
    "kind": "hook",
-   "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly rail: \"8\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: N...",
+   "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly rail: \"8\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; ... 4 more...",
    "doc": "The look the nearest Nav set, or the defaults outside one."
+  },
+  "peerColor": {
+   "group": "components",
+   "kind": "function",
+   "signature": "(id: string) => PeerCursorScheme",
+   "doc": "The same hue for the same id on every screen, so a collaborator keeps their colour wherever they show up."
+  },
+  "usePeerPointer": {
+   "group": "components",
+   "kind": "hook",
+   "signature": "(ref: React.RefObject<HTMLElement | null>, onMove: (position: { x: number; y: number } | null) => void, options?: UsePeerPointerOptions) => void",
+   "doc": "Reports your pointer over `ref`'s element, throttled, ready to send to others: `{ x, y }` in `units`, or `null` when it leaves."
+  },
+  "photoViewerIndexFromUrl": {
+   "group": "components",
+   "kind": "function",
+   "signature": "(items: PhotoViewerItem[], param?: string) => number",
+   "doc": "The photo a deep link points at: its index in `items`, or -1 when the page's URL has no such parameter or names no photo in the list."
+  },
+  "photoViewerSlug": {
+   "group": "components",
+   "kind": "function",
+   "signature": "(src: string) => string",
+   "doc": "The value a photo has in a deep link: its file name, which stays put as photos are added or reordered."
+  },
+  "useSidebar": {
+   "group": "components",
+   "kind": "hook",
+   "signature": "() => SidebarContextValue",
+   "doc": "The sidebar's state, for a control outside it: a toggle in the top bar, a page that wants more room."
   },
   "arrayMove": {
    "group": "components",
@@ -18,16 +48,16 @@
    "signature": "<T>(items: readonly T[], from: number, to: number) => T[]",
    "doc": "Moves one entry of a copy of `items` from `from` to `to`."
   },
-  "useStylePanel": {
-   "group": "components",
-   "kind": "hook",
-   "signature": "() => StylePanelContextValue"
-  },
   "useFormPending": {
    "group": "components",
    "kind": "hook",
    "signature": "() => boolean",
    "doc": "Whether the enclosing `Form` is submitting."
+  },
+  "MASCOT_ACCESSORIES": {
+   "group": "modules",
+   "kind": "value",
+   "type": "readonly MascotAccessory[]"
   },
   "useAudioLevel": {
    "group": "modules",
@@ -35,11 +65,59 @@
    "signature": "(source: AudioLevelSource | null | undefined) => number",
    "doc": "The loudness of `source` from 0 to 1, updated every animation frame while there is a source."
   },
+  "MASCOT_DESIGN_DEFAULTS": {
+   "group": "modules",
+   "kind": "value",
+   "type": "{ readonly color: \"brand\"; readonly roundness: 0.7; readonly aspect: 1; readonly surface: \"glossy\"; readonly eyes: \"tile\"; readonly eyeSize: 1; readonly eyeSpacing: 1; readonly eyeHeight: 0; readonly mouth: \"none\"; readonly brows: false; readonly cheeks: false; readonly personality: \"default\"; }",
+   "doc": "The look a mascot has when a design leaves a part out."
+  },
+  "MASCOT_DESIGN_RANGES": {
+   "group": "modules",
+   "kind": "value",
+   "type": "{ readonly roundness: readonly [0, 1]; readonly aspect: readonly [0.6, 1.6]; readonly eyeSize: readonly [0.5, 1.8]; readonly eyeSpacing: readonly [0.5, 1.6]; readonly eyeHeight: readonly [-1, 1]; }",
+   "doc": "Where each number is allowed to go."
+  },
+  "mascotDesignProps": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(design: MascotDesign) => Omit<MascotDesign, \"v\">",
+   "doc": "The props a design gives `<Mascot />`."
+  },
+  "parseMascotDesign": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(input: unknown) => MascotDesign",
+   "doc": "Reads a stored, posted or AI-written design and returns one that is safe to render."
+  },
   "mascotLook": {
    "group": "modules",
    "kind": "function",
    "signature": "(seed: string | number) => MascotLook",
    "doc": "A whole look from a seed: a user id, a product name, any string or number."
+  },
+  "mascotDataUrl": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(options?: MascotSvgOptions) => string",
+   "doc": "The SVG as a `data:` URL, ready for an `<img src>`, including inside `ImageResponse`."
+  },
+  "mascotSvg": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(options?: MascotSvgOptions) => string",
+   "doc": "The mascot as a standalone SVG string: same look options as `Mascot`, one still expression."
+  },
+  "MASCOT_SEED_WORDS": {
+   "group": "modules",
+   "kind": "value",
+   "type": "{ readonly colors: string[]; readonly surfaces: string[]; readonly animals: string[]; readonly moods: string[]; readonly objects: string[]; }",
+   "doc": "Every word a seed can use, for pickers and docs."
+  },
+  "readSeedWords": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(seed: string | number) => MascotSeedReading",
+   "doc": "Reads the words in a seed."
   },
   "workingVerbs": {
    "group": "modules",
@@ -74,6 +152,306 @@
    "type": "{ readonly light: \"https://tiles.openfreemap.org/styles/positron\"; readonly dark: \"https://tiles.openfreemap.org/styles/dark\"; }",
    "doc": "OpenFreeMap: OpenStreetMap vector tiles with no key, no account and no view limit, commercial use included."
   },
+  "splitPath": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "kind": "function",
+   "signature": "(path: readonly LngLat[], progress: number) => { behind: [number, number][]; ahead: [number, number][] }",
+   "doc": "Splits a path at a fraction of its length: the part travelled and the part ahead, which share the split point so the two lines meet."
+  },
+  "useCanvas": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "hook",
+   "signature": "() => CanvasApi & { view: CanvasView }",
+   "doc": "The canvas's camera and its controls."
+  },
+  "useCanvasApi": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "hook",
+   "signature": "() => CanvasApi",
+   "doc": "The canvas's camera controls, without re-rendering when the camera moves."
+  },
+  "fitView": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(rect: CanvasRect, size: { width: number; height: number }, options?: { padding?: number; minZoom?: number; maxZoom?: number }) => CanvasView",
+   "doc": "The camera that centres `rect` in a `width` × `height` screen with `padding` px around it."
+  },
+  "mapRect": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(child: CanvasRect, from: CanvasRect, to: CanvasRect) => CanvasRect",
+   "doc": "Where `child` lands when its group's box goes from `from` to `to`: the move and scale of a multi-selection's handles, applied to each thing in it."
+  },
+  "pointsBounds": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(points: CanvasPoint[]) => CanvasRect"
+  },
+  "rectAABB": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(r: CanvasRect) => CanvasRect",
+   "doc": "The upright box around a turned one."
+  },
+  "rectCenter": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(r: CanvasRect) => CanvasPoint"
+  },
+  "rectContains": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(outer: CanvasRect, inner: CanvasRect) => boolean",
+   "doc": "`inner` lies wholly inside `outer` (by their upright bounds)."
+  },
+  "rectContainsPoint": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(r: CanvasRect, p: CanvasPoint) => boolean",
+   "doc": "The point lies inside the box, turned or not."
+  },
+  "rectCorners": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(r: CanvasRect) => CanvasPoint[]",
+   "doc": "The four corners in world units, turned with the box: nw, ne, se, sw."
+  },
+  "rectFromPoints": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(a: CanvasPoint, b: CanvasPoint) => CanvasRect",
+   "doc": "The box spanned by two points, whichever way round they are."
+  },
+  "rectsBounds": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(rects: CanvasRect[]) => CanvasRect | null",
+   "doc": "The upright box around every box given, turned ones included."
+  },
+  "rectsIntersect": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(a: CanvasRect, b: CanvasRect) => boolean",
+   "doc": "Two upright boxes overlap (touching edges count)."
+  },
+  "resizeRect": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(start: CanvasRect, handle: Exclude<CanvasHandle, \"rotate\">, pointer: CanvasPoint, options?: ResizeOptions) => CanvasRect",
+   "doc": "The box after dragging `handle` of `start` to the world point `pointer`."
+  },
+  "rotatePoint": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(p: CanvasPoint, degrees: number, around?: CanvasPoint) => { x: number; y: number; }"
+  },
+  "rotateRect": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(start: CanvasRect, from: CanvasPoint, to: CanvasPoint, options?: { step?: number }) => CanvasRect",
+   "doc": "The box's rotation after the rotate handle is dragged from `from` to `to`, both world points."
+  },
+  "screenToWorld": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(p: CanvasPoint, view: CanvasView) => CanvasPoint"
+  },
+  "snapRect": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(rect: CanvasRect, targets: CanvasRect[], options?: { threshold?: number; axes?: Array<\"x\" | \"y\"> }) => SnapResult",
+   "doc": "Moves `rect` so one of its edges or its centre lines up with an edge or centre of one of `targets`, when one is within `threshold` world units, and returns the guides that show it."
+  },
+  "snapToGrid": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(value: number, step: number) => number",
+   "doc": "Rounds a value to a grid of `step` world units."
+  },
+  "worldToScreen": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(p: CanvasPoint, view: CanvasView) => CanvasPoint"
+  },
+  "zoomAt": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "function",
+   "signature": "(view: CanvasView, zoom: number, at: CanvasPoint) => CanvasView",
+   "doc": "The camera zoomed to `zoom`, keeping the screen point `at` over the same world point."
+  },
+  "useCanvasDrag": {
+   "group": "canvas",
+   "importFrom": "@once-ui-system/core/canvas",
+   "kind": "hook",
+   "signature": "() => (event: React.PointerEvent<Element> | PointerEvent, options: CanvasDragOptions) => void",
+   "doc": "Turns a press on something in the canvas into a drag measured in world units, whatever the zoom, and keeps measuring if the view moves mid-drag."
+  },
+  "resolveSceneColor": {
+   "group": "scene",
+   "importFrom": "@once-ui-system/core/scene",
+   "kind": "function",
+   "signature": "(color: SceneColor, element: Element | null) => { r: number; g: number; b: number; a: number }",
+   "doc": "A scene colour as sRGB channels from 0 to 1 and an alpha, resolved in the theme `element` is drawn in."
+  },
+  "sceneColorVariable": {
+   "group": "scene",
+   "importFrom": "@once-ui-system/core/scene",
+   "kind": "function",
+   "signature": "(color: SceneColor) => string | null",
+   "doc": "The CSS custom property a scene colour reads, or null for a plain CSS colour."
+  },
+  "useScene": {
+   "group": "scene",
+   "importFrom": "@once-ui-system/core/scene",
+   "kind": "hook",
+   "signature": "() => SceneContextValue",
+   "doc": "The scene these components sit in."
+  },
+  "useSceneFrame": {
+   "group": "scene",
+   "importFrom": "@once-ui-system/core/scene",
+   "kind": "hook",
+   "signature": "(callback: (frame: SceneFrame) => void) => void",
+   "doc": "Runs `callback` before every frame, for animation: spin a part, follow a value."
+  },
+  "addDays": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "kind": "function",
+   "signature": "(date: Date, days: number) => Date",
+   "doc": "The date `days` days on, at the same clock time (summer time kept)."
+  },
+  "addMonths": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "kind": "function",
+   "signature": "(date: Date, months: number) => Date",
+   "doc": "The same day of the month `months` months on, clamped to the month's end."
+  },
+  "isAllDayLike": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "kind": "function",
+   "signature": "(event: CalendarEventBase) => boolean",
+   "doc": "Whether the event goes in a view's all-day row rather than the hours: it is marked all-day, or it runs across midnight for a full day or more."
+  },
+  "isSameDay": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "kind": "function",
+   "signature": "(a: Date, b: Date) => boolean"
+  },
+  "layoutDay": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "kind": "function",
+   "signature": "<E extends CalendarEventBase>(events: E[], day: Date, minMinutes?: number) => TimedBlock<E>[]",
+   "doc": "One day's timed events as blocks, side by side where they overlap, the way calendar apps draw them: each group of events that overlap one another shares the column width, and an event takes the fir..."
+  },
+  "layoutSpans": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "kind": "function",
+   "signature": "<E extends CalendarEventBase>(events: E[], days: Date[]) => SpanSegment<E>[]",
+   "doc": "Events as bars across a row of days (a week of the month, or the all-day row above the hours), each in the first lane free over its whole span."
+  },
+  "startOfDay": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "kind": "function",
+   "signature": "(date: Date) => Date",
+   "doc": "Midnight at the start of the date's day."
+  },
+  "startOfWeek": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "kind": "function",
+   "signature": "(date: Date, weekStartsOn?: number) => Date",
+   "doc": "The first day of the date's week, for a week that starts on `weekStartsOn` (0 Sunday)."
+  },
+  "stepDate": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "kind": "function",
+   "signature": "(view: CalendarView, date: Date, step: number) => Date",
+   "doc": "The date one step back or on in the view: a month, a week or a day."
+  },
+  "touchesDay": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "kind": "function",
+   "signature": "(event: CalendarEventBase, day: Date) => boolean",
+   "doc": "Whether the event touches the day: it starts before the day ends and ends after it starts."
+  },
+  "viewDays": {
+   "group": "calendar",
+   "importFrom": "@once-ui-system/core/calendar",
+   "kind": "function",
+   "signature": "(view: CalendarView, date: Date, weekStartsOn?: number) => Date[]",
+   "doc": "The days a view shows, midnight each: one, seven, or whole weeks round the month."
+  },
+  "alarmState": {
+   "group": "hooks",
+   "kind": "function",
+   "signature": "(alarm: Alarm) => AlarmState"
+  },
+  "needsAcknowledge": {
+   "group": "hooks",
+   "kind": "function",
+   "signature": "(alarm: Alarm) => boolean",
+   "doc": "An alarm still waits for an operator: unacknowledged, or cleared without being seen."
+  },
+  "sortAlarms": {
+   "group": "hooks",
+   "kind": "function",
+   "signature": "(alarms: readonly Alarm[]) => Alarm[]",
+   "doc": "Alarms in the order an operator works them: unacknowledged first, then standing, then cleared; within each, the most urgent, then the newest."
+  },
+  "countAlarms": {
+   "group": "hooks",
+   "kind": "function",
+   "signature": "(alarms: readonly Alarm[]) => AlarmCounts"
+  },
+  "alarmsReducer": {
+   "group": "hooks",
+   "kind": "function",
+   "signature": "(alarms: readonly Alarm[], action: AlarmAction) => Alarm[]",
+   "doc": "The alarm rules as a pure function, for a reducer, a server or a test: `alarmsReducer(alarms, { type: \"acknowledge\", ids: [\"rcp-b\"] })`."
+  },
+  "useAlarms": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "(options?: UseAlarmsOptions) => { alarms: Alarm[]; counts: AlarmCounts; dispatch: (action: AlarmAction) => void; raise: (id: string, options?: { at?: string | number | Date | undefined; detail?: string | undefined; }) => void; clear: (id: string, at?: string | ... 2 more ... | undefined) => void; acknowledge: (ids: string | readonly string[]) => v...",
+   "doc": "A set of alarms and the actions an operator and the plant take on them."
+  },
+  "ALARM_PRIORITIES": {
+   "group": "hooks",
+   "kind": "value",
+   "type": "readonly AlarmPriority[]",
+   "doc": "The priorities from most to least urgent."
+  },
   "useArrowNavigation": {
    "group": "hooks",
    "kind": "hook",
@@ -83,6 +461,18 @@
    "group": "hooks",
    "kind": "hook",
    "signature": "<T>(value: T, delay: number) => T"
+  },
+  "elementTheme": {
+   "group": "hooks",
+   "kind": "function",
+   "signature": "(element: Element | null, fallback: ResolvedTheme) => ResolvedTheme",
+   "doc": "The theme `element` is drawn in: its nearest `data-theme=\"light\"` or `\"dark\"`, flipped once for every `data-theme=\"invert\"` between them."
+  },
+  "useElementTheme": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "(ref: RefObject<Element | null>) => ResolvedTheme",
+   "doc": "`useTheme().resolvedTheme`, but for the subtree `ref` sits in: a map in a `theme=\"dark\"` section of a light page, or under `theme=\"invert\"`, gets `\"dark\"`."
   },
   "useOgData": {
    "group": "hooks",
@@ -137,21 +527,10 @@
    "kind": "value",
    "type": "OnceUIAdapters"
   },
-  "resetAdapterWarning": {
-   "group": "contexts",
-   "kind": "function",
-   "signature": "() => void",
-   "doc": "Exported for tests; resets the once-per-session latch."
-  },
   "useAdapters": {
    "group": "contexts",
    "kind": "hook",
    "signature": "() => OnceUIAdapters"
-  },
-  "warnIfFrameworkUnadapted": {
-   "group": "contexts",
-   "kind": "function",
-   "signature": "(adapters: OnceUIAdapters) => void"
   },
   "useDataTheme": {
    "group": "contexts",
@@ -259,15 +638,298 @@
    "type": "readonly string[]",
    "doc": "Raster image types the proxy passes through by default."
   },
+  "createOgImageRoute": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "function",
+   "signature": "(options: OgImageRouteOptions) => { GET: (request: Request) => Promise<Response>; }",
+   "doc": "`GET /api/og/generate?title=…&eyebrow=…&description=…&mood=…&layout=…&image=…` → a 1200 × 630 PNG in the skin's look."
+  },
+  "defineOgSkin": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "function",
+   "signature": "(skin: OgSkin) => OgSkin",
+   "doc": "Type-checks a skin."
+  },
+  "OG_IMAGE_HEIGHT": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "value",
+   "type": "630"
+  },
+  "OG_IMAGE_WIDTH": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "value",
+   "type": "1200"
+  },
+  "ogImageUrl": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "function",
+   "signature": "(route: string, card: Partial<OgCardProps> & { title: string; v?: string | number }) => string",
+   "doc": "The URL of a page's card, for `Meta.generate({ image })` or `openGraph.images`."
+  },
+  "ogTitleSize": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "function",
+   "signature": "(title: string, layout: OgLayout) => number",
+   "doc": "The title's size in pixels, so short titles land big and long ones still fit."
+  },
+  "parseOgTitle": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "function",
+   "signature": "(title: string) => { text: string; em: boolean }[]",
+   "doc": "Splits `*emphasis*` out of a title, so it can be drawn in the brand color."
+  },
+  "readOgCard": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "function",
+   "signature": "(url: URL, skin: OgSkin, fallbackTitle?: string) => { title: string; eyebrow: string | undefined; description: string | undefined; mood: OgMood; layout: OgLayout; image: string | undefined; }",
+   "doc": "Reads a card from the query string: `title`, `eyebrow`, `description`, `mood`, `layout`, `image`."
+  },
+  "renderOgCard": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "function",
+   "signature": "(skin: OgSkin, card: OgCardProps, options?: { origin?: string }) => Promise<ReactElement>",
+   "doc": "The card as an element, for your own `ImageResponse` or a test."
+  },
+  "OG_SCHEMES": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "value",
+   "type": "{ readonly aqua: { readonly 200: \"#081719\"; readonly 500: \"#0b8184\"; readonly 700: \"#01c7c3\"; readonly 900: \"#78f6e4\"; }; readonly blue: { readonly 200: \"#0d0b44\"; readonly 500: \"#2d69fa\"; readonly 700: \"#84b5fd\"; readonly 900: \"#cbe3fb\"; }; ... 16 more ...; readonly yellow: { ...; }; }",
+   "doc": "The color schemes as sRGB hex, for Open Graph images: the image renderer reads neither CSS variables nor `oklch()`."
+  },
   "defineConfig": {
    "group": "config",
    "importFrom": "@once-ui-system/core/config",
    "kind": "function",
    "signature": "<T extends OnceUIConfig>(config: T & CheckedConfig<T>) => T",
-   "doc": "Type an app's `once-ui.config`."
+   "doc": "Type an app's `once-ui.config`, whose `style` keys are ThemeProvider's props (an exact brand colour is `brand: \"custom\", brandSeed: \"#0F766E\"`)."
+  },
+  "themePreset": {
+   "group": "config",
+   "importFrom": "@once-ui-system/core/config",
+   "kind": "function",
+   "signature": "<N extends ThemePresetName>(name: N, overrides?: { style?: OnceUIStyleConfig; dataStyle?: OnceUIDataStyleConfig }) => { style: OnceUIStyleConfig; dataStyle: OnceUIDataStyleConfig; fonts: (typeof themePresets)[N][\"fonts\"]; }",
+   "doc": "A preset's `style`, `dataStyle` and `fonts`, with the app's own changes on top."
+  },
+  "themePresets": {
+   "group": "config",
+   "importFrom": "@once-ui-system/core/config",
+   "kind": "value",
+   "type": "{ readonly ops: { readonly description: \"Operations, incident, dispatch and map tools: dark first, compact, a quiet cyan brand on slate so status colours carry the meaning.\"; readonly style: { ...; }; readonly dataStyle: { ...; }; readonly fonts: { ...; }; }; readonly care: { ...; }; readonly creative: { ...; }; rea...",
+   "doc": "Finished looks for the kinds of app Once UI is built for."
+  },
+  "randomMascotDesign": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "function",
+   "signature": "(keep?: Pick<MascotDesign, \"working\" | \"sides\" | \"face\">) => MascotDesign",
+   "doc": "A whole new look, keeping how it works."
+  },
+  "useMascotPanel": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "hook",
+   "signature": "() => MascotPanelContextValue",
+   "doc": "The panel's state, for a custom row inside a MascotPanelRoot."
+  },
+  "useMascotPanelLabels": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "() => Complete<MascotPanelLabels>",
+   "doc": "Use the panel's labels in a custom row."
+  },
+  "useStylePanel": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "hook",
+   "signature": "() => StylePanelContextValue"
+  },
+  "aboutLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"split\", \"stacked\"]"
+  },
+  "contactLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"split\", \"cards\", \"centered\"]"
+  },
+  "ctaLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"banner\", \"split\", \"minimal\", \"cover\"]"
+  },
+  "faqLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"stacked\", \"split\", \"grid\"]"
+  },
+  "featuresLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"cards\", \"list\", \"split\"]"
+  },
+  "galleryLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"grid\", \"mosaic\", \"masonry\"]"
+  },
+  "heroLayoutGuide": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "Record<(typeof heroLayouts)[number], string>",
+   "doc": "One sentence per hero layout on when it suits, for a model choosing one (or an editor's tooltip)."
+  },
+  "heroLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"split\", \"centered\", \"cover\", \"boxed\", \"fullscreen\", \"halves\", \"editorial\"]"
+  },
+  "logosLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"row\", \"grid\"]"
+  },
+  "pricingLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"cards\", \"list\"]"
+  },
+  "statsLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"row\", \"cards\", \"strip\"]"
+  },
+  "teamLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"grid\", \"list\"]"
+  },
+  "testimonialsLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"cards\", \"spotlight\", \"plain\"]"
+  },
+  "sectionComponents": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "Record<SectionType, AnySection>",
+   "doc": "The component for each section type."
+  },
+  "sectionSchemas": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "Record<SectionType, SectionSchema>"
+  },
+  "sectionTypes": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "SectionType[]",
+   "doc": "Every section type, in the order an editor offers them."
+  },
+  "isSectionType": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "function",
+   "signature": "(value: unknown) => value is SectionType"
+  },
+  "useSettingsLabels": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "hook",
+   "signature": "(labels?: SettingsLabelsInput) => SettingsLabels",
+   "doc": "The labels in context, with a block's own `labels` prop over them."
+  },
+  "useAccount": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "hook",
+   "signature": "(adapter: AccountAdapter) => { account: Account | null; data: Account | null; error: unknown; loading: boolean; reload: () => Promise<Account | null>; update: (next: void | Account | undefined) => Promise<...>; setData: Dispatch<...>; }",
+   "doc": "The signed-in person's account, read through the adapter."
+  },
+  "useOrganization": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "hook",
+   "signature": "(adapter: OrganizationAdapter) => { organization: Organization | null; data: Organization | null; error: unknown; loading: boolean; reload: () => Promise<Organization | null>; update: (next: void | ... 1 more ... | undefined) => Promise<...>; setData: Dispatch<...>; }",
+   "doc": "The organization, read through the adapter."
+  },
+  "createDemoAccountAdapter": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "function",
+   "signature": "(options?: DemoAccountOptions) => AccountAdapter"
+  },
+  "createDemoOrganizationAdapter": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "function",
+   "signature": "(options?: DemoOrganizationOptions) => OrganizationAdapter"
+  },
+  "defaultSettingsLabels": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "SettingsLabels"
+  },
+  "settingsLabelsHu": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "SettingsLabels"
   }
  },
  "types": {
+  "Account": {
+   "id": "!string",
+   "email": "!string",
+   "emailVerified": "boolean",
+   "pendingEmail": "string | null",
+   "name": "string | null",
+   "username": "string | null",
+   "avatarUrl": "string | null",
+   "hasPassword": "boolean",
+   "passwordChangedAt": "string | null",
+   "createdAt": "string | null"
+  },
+  "AccountAdapter": {
+   "getAccount": "!() => Promise<Account>",
+   "updateProfile": "((patch: ProfilePatch) => Promise<void | Account>) | undefined",
+   "avatar": "{ /** Receives the image already cropped square and resized. Returns its URL. */ upload(file: Blob): Promise<string>; remove?(): Promise<void>; }",
+   "changeEmail": "((next: string, proof: Reauth) => Promise<void | { pending: string; }>) | undefined",
+   "cancelEmailChange": "(() => Promise<void>) | undefined",
+   "changePassword": "((next: string, proof: Reauth, options: { signOutOthers: boolean; }) => Promise<void>) | undefined",
+   "twoFactor": "{ enabled(): Promise<boolean>; enroll(proof: Reauth): Promise<TwoFactorEnrollment>; /** Confirms the first code. Returns backup codes when the provider has them. */ verify(code: string): Promise<{ backupCodes?: string[] } | void>; disable(code: string): Promise<void>; }",
+   "identities": "{ list(): Promise<Identity[]>; /** The providers people may connect, in the order they are shown. */ providers: Provider[]; /** Usually a redirect to the provider: it may never resolve. */ link(provider: string): Promise<void>; unlink(id: string): Promise<void>; }",
+   "sessions": "{ /** Leave out when the provider cannot list sessions (Supabase): only * \"sign out everywhere else\" is shown. */ list?(): Promise<Session[]>; revoke?(id: string): Promise<void>; revokeOthers(): Promise<void>; }",
+   "deleteAccount": "((proof: Reauth) => Promise<void>) | undefined"
+  },
   "AdapterImageProps": {
    "src": "!string",
    "alt": "!string",
@@ -281,6 +943,47 @@
    "href": "!string",
    "children": "React.ReactNode"
   },
+  "Alarm": {
+   "id": "!string",
+   "label": "!string",
+   "priority": "!AlarmPriority",
+   "active": "!boolean",
+   "acknowledged": "!boolean",
+   "tag": "string",
+   "since": "Date | string | number",
+   "detail": "string",
+   "shelved": "boolean"
+  },
+  "AlarmAction": [
+   "{ type: \"raise\"; id: string; at?: string | number | Date | undefined; detail?: string | undefined; }",
+   "{ type: \"clear\"; id: string; at?: string | number | Date | undefined; }",
+   "{ type: \"acknowledge\"; ids: readonly string[]; }",
+   "{ type: \"acknowledgeAll\"; }",
+   "{ type: \"shelve\"; id: string; shelved: boolean; }"
+  ],
+  "AlarmCounts": {
+   "active": "!number",
+   "unacknowledged": "!number",
+   "shelved": "!number",
+   "byPriority": "!Record<AlarmPriority, number>"
+  },
+  "AlarmPriority": [
+   "medium",
+   "critical",
+   "high",
+   "low"
+  ],
+  "AlarmState": [
+   "normal",
+   "shelved",
+   "unacknowledged",
+   "acknowledged",
+   "returned"
+  ],
+  "AnySection": [
+   "ComponentClass<any, any>",
+   "FunctionComponent<any>"
+  ],
   "ArrowNavigationOptions": {
    "layout": "!NavigationLayout",
    "itemCount": "!number",
@@ -301,32 +1004,125 @@
    "AnalyserNode"
   ],
   "BodyLineHeight": [
-   "90",
    "100",
+   "90",
    "110",
    "120"
   ],
   "BodySize": [
-   "90",
-   "95",
    "100",
-   "105",
-   "110"
+   "90",
+   "110",
+   "95",
+   "105"
   ],
   "BorderStyle": [
    "rounded",
-   "playful",
    "conservative",
+   "playful",
    "sharp"
   ],
   "BreakpointKey": [
+   "s",
    "xl",
    "l",
    "m",
-   "s",
    "xs"
   ],
   "Breakpoints": "Record<BreakpointKey, number>",
+  "CSSUnit": [
+   "`${number}px`",
+   "`${number}rem`",
+   "`${number}em`",
+   "`${number}ch`",
+   "`${number}%`",
+   "`${number}vh`",
+   "`${number}vw`",
+   "`${number}dvh`",
+   "`${number}dvw`",
+   "`${number}svh`",
+   "`${number}svw`",
+   "`${number}lvh`",
+   "`${number}lvw`",
+   "`${number}vmin`",
+   "`${number}vmax`",
+   "`${number}cqw`",
+   "`${number}cqh`",
+   "`calc(${string})`",
+   "`min(${string})`",
+   "`max(${string})`",
+   "`clamp(${string})`",
+   "`var(${string})`"
+  ],
+  "CalendarEventBase": {
+   "id": "!string",
+   "start": "!Date",
+   "end": "!Date",
+   "allDay": "boolean"
+  },
+  "CalendarView": [
+   "month",
+   "week",
+   "day"
+  ],
+  "CanvasApi": {
+   "getView": "!() => CanvasView",
+   "setView": "!(next: CanvasView | ((prev: CanvasView) => CanvasView)) => void",
+   "getSize": "!() => { width: number; height: number }",
+   "screenToWorld": "!(p: CanvasPoint) => CanvasPoint",
+   "worldToScreen": "!(p: CanvasPoint) => CanvasPoint",
+   "clientToWorld": "!(clientX: number, clientY: number) => CanvasPoint",
+   "zoomBy": "!(factor: number, at?: CanvasPoint) => void",
+   "zoomTo": "!(zoom: number, at?: CanvasPoint) => void",
+   "fitTo": "!(rect?: CanvasRect | null, options?: { padding?: number; maxZoom?: number }) => void",
+   "overlay": "!HTMLElement | null"
+  },
+  "CanvasDragOptions": {
+   "onStart": "(state: CanvasDragState) => void",
+   "onMove": "(state: CanvasDragState) => void",
+   "onEnd": "(state: CanvasDragState & { moved: boolean }) => void",
+   "threshold": "number"
+  },
+  "CanvasDragState": {
+   "origin": "!CanvasPoint",
+   "point": "!CanvasPoint",
+   "delta": "!CanvasPoint",
+   "event": "!PointerEvent"
+  },
+  "CanvasGuide": {
+   "axis": "!\"x\" | \"y\"",
+   "at": "!number",
+   "start": "!number",
+   "end": "!number",
+   "gap": "number"
+  },
+  "CanvasHandle": [
+   "s",
+   "rotate",
+   "n",
+   "ne",
+   "e",
+   "se",
+   "sw",
+   "w",
+   "nw"
+  ],
+  "CanvasPoint": {
+   "x": "!number",
+   "y": "!number"
+  },
+  "CanvasRect": {
+   "x": "!number",
+   "y": "!number",
+   "width": "!number",
+   "height": "!number",
+   "rotation": "number"
+  },
+  "CanvasView": {
+   "x": "!number",
+   "y": "!number",
+   "zoom": "!number"
+  },
   "ChartMode": [
    "categorical",
    "divergent",
@@ -335,7 +1131,7 @@
   "ChartOptions": {
    "variant": "!ChartVariant",
    "mode": "!ChartMode",
-   "height": "!number",
+   "height": "!number | CSSUnit",
    "axis": "!{ stroke: string; }",
    "tick": "!{ fill: string; fontSize: number; line: boolean; }"
   },
@@ -348,20 +1144,40 @@
    "{ type: \"item\"; item: T; position: LngLat; }",
    "{ type: \"cluster\"; id: string; items: T[]; position: LngLat; }"
   ],
+  "Color": [
+   "string",
+   "number",
+   "ColorInstance",
+   "ArrayLike<number>",
+   "Record<string, any>"
+  ],
   "CursorPresetValue": [
-   "soft",
    "rounded",
    "dot",
-   "system"
+   "system",
+   "soft"
   ],
   "DataThemeState": {
    "setChartOptions": "!(options: Partial<ChartOptions>) => void",
    "variant": "!ChartVariant",
    "mode": "!ChartMode",
-   "height": "!number",
+   "height": "!number | CSSUnit",
    "axis": "!{ stroke: string; }",
    "tick": "!{ fill: string; fontSize: number; line: boolean; }"
   },
+  "DemoAccountOptions": {
+   "account": "Partial<Account>",
+   "latency": "number"
+  },
+  "DemoOrganizationOptions": {
+   "organization": "Partial<Organization>",
+   "latency": "number"
+  },
+  "Density": [
+   "normal",
+   "compact",
+   "spacious"
+  ],
   "DeviceFontSize": [
    "15",
    "16",
@@ -370,12 +1186,32 @@
    "17",
    "18"
   ],
+  "Dispatch": [
+   "undefined",
+   "(args?: any) => any"
+  ],
+  "EyeShape": [
+   "round",
+   "tile",
+   "pill",
+   "wide",
+   "dot"
+  ],
   "FieldControl": {
    "id": "!string",
    "invalid": "!boolean",
    "required": "!boolean",
    "describedBy": "string"
   },
+  "GroupKey": [
+   "body",
+   "eyes",
+   "working",
+   "face",
+   "motion",
+   "preview",
+   "accessories"
+  ],
   "IconComponent": [
    "ComponentClass<SVGProps<SVGSVGElement>, any>",
    "FunctionComponent<SVGProps<SVGSVGElement>>"
@@ -383,28 +1219,20 @@
   "IconLibrary": "Record<IconName, IconComponent>",
   "IconName": [
    "symbol",
-   "security",
-   "opacity",
-   "dark",
-   "light",
-   "copy",
-   "help",
-   "filter",
-   "info",
-   "danger",
-   "warning",
    "code",
    "link",
    "menu",
    "search",
    "time",
    "video",
+   "filter",
    "image",
-   "enter",
-   "send",
-   "checkbox",
-   "document",
-   "grid",
+   "security",
+   "opacity",
+   "download",
+   "info",
+   "danger",
+   "warning",
    "adjustments",
    "arrowDown",
    "arrowLeft",
@@ -422,6 +1250,7 @@
    "cart",
    "chat",
    "check",
+   "checkbox",
    "chevronDoubleLeft",
    "chevronDoubleRight",
    "chevronDown",
@@ -432,10 +1261,13 @@
    "clipboard",
    "close",
    "computer",
+   "copy",
    "cube",
+   "dark",
    "dislike",
-   "download",
+   "document",
    "edit",
+   "enter",
    "eye",
    "eyeDropper",
    "eyeOff",
@@ -446,15 +1278,19 @@
    "forward",
    "gift",
    "globe",
+   "grid",
    "grip",
    "heart",
+   "help",
    "home",
    "inbox",
+   "light",
    "like",
    "linearGauge",
    "lock",
    "logout",
    "mail",
+   "mapPin",
    "maximize",
    "minimize",
    "minus",
@@ -467,12 +1303,14 @@
    "people",
    "person",
    "personRemove",
+   "phone",
    "play",
    "plus",
    "radialGauge",
    "refresh",
    "return",
    "screen",
+   "send",
    "settings",
    "smiley",
    "sparkle",
@@ -490,6 +1328,12 @@
    "wordmark",
    "world"
   ],
+  "Identity": {
+   "id": "!string",
+   "provider": "!string",
+   "detail": "string | null",
+   "connectedAt": "string | null"
+  },
   "InteractiveCursor": [
    "default",
    "pointer"
@@ -501,6 +1345,14 @@
    "isBreakpoint": "!(key: BreakpointKey) => boolean",
    "maxWidth": "!(key: BreakpointKey) => boolean",
    "minWidth": "!(key: BreakpointKey) => boolean"
+  },
+  "LegacyToast": {
+   "variant": "Tone",
+   "tone": "Tone",
+   "children": "ReactNode",
+   "message": "ReactNode",
+   "action": "ReactNode",
+   "duration": "number"
   },
   "LngLat": {
    "[key: number]": "number"
@@ -519,7 +1371,121 @@
    "fitTo": "!(positions: readonly LngLat[], options?: { padding?: number; maxZoom?: number }) => void"
   },
   "MapLibre": "typeof import(\"maplibre-gl\")",
+  "MascotAccessory": [
+   "antenna",
+   "bow",
+   "beanie",
+   "headphones",
+   "sprout",
+   "helmet",
+   "crown",
+   "catEars",
+   "partyHat"
+  ],
+  "MascotDesign": {
+   "v": "!1",
+   "color": "\"brand\" | \"accent\" | \"neutral\" | (string & {})",
+   "roundness": "number",
+   "aspect": "number",
+   "bodyPath": "string",
+   "surface": "\"glossy\" | \"matte\" | \"flat\" | \"glass\"",
+   "eyes": "\"tile\" | \"pill\" | \"round\" | \"wide\" | \"dot\" | { path: string }",
+   "eyeSize": "number",
+   "eyeSpacing": "number",
+   "eyeHeight": "number",
+   "eyeColor": "string",
+   "mouth": "\"none\" | \"smile\" | \"dot\" | \"line\"",
+   "brows": "boolean",
+   "cheeks": "boolean",
+   "personality": "\"calm\" | \"default\" | \"bouncy\"",
+   "accessory": "MascotAccessory[]",
+   "accessoryColor": "string",
+   "working": "\"cube\" | \"d20\"",
+   "sides": "MascotSides",
+   "face": "\"3d\" | \"flat\""
+  },
   "MascotLook": {
+   "color": "\"brand\" | \"accent\" | \"neutral\" | (string & {})",
+   "roundness": "number",
+   "aspect": "number",
+   "bodyPath": "string",
+   "surface": "\"glossy\" | \"matte\" | \"flat\" | \"glass\"",
+   "eyes": "\"tile\" | \"pill\" | \"round\" | \"wide\" | \"dot\" | { path: string }",
+   "eyeSize": "number",
+   "eyeSpacing": "number",
+   "eyeHeight": "number",
+   "eyeColor": "string",
+   "mouth": "\"none\" | \"smile\" | \"dot\" | \"line\"",
+   "brows": "boolean",
+   "cheeks": "boolean",
+   "personality": "\"calm\" | \"default\" | \"bouncy\"",
+   "sides": "\"classic\" | \"tints\" | \"mono\" | Partial<Record<\"top\" | \"front\" | \"right\" | \"bottom\" | \"back\" | \"left\", string>>",
+   "face": "\"3d\" | \"flat\""
+  },
+  "MascotMood": [
+   "neutral",
+   "happy",
+   "surprised",
+   "sad",
+   "skeptical",
+   "wink",
+   "focused",
+   "determined",
+   "love",
+   "excited",
+   "laughing",
+   "embarrassed",
+   "crying",
+   "angry",
+   "confused"
+  ],
+  "MascotPanelContextValue": {
+   "value": "!MascotDesign",
+   "set": "!(patch: Partial<Omit<MascotDesign, \"v\">>) => void",
+   "replace": "!(next: MascotDesign) => void",
+   "trial": "!{ state: MascotState; mood: MascotMood }",
+   "setTrial": "!(next: Partial<{ state: MascotState; mood: MascotMood }>) => void"
+  },
+  "MascotPanelHeading": {
+   "title": "string",
+   "description": "string"
+  },
+  "MascotPanelLabels": {
+   "groups": "Partial<Record<GroupKey, MascotPanelHeading>>",
+   "rows": "Partial< Record< | \"color\" | \"roundness\" | \"aspect\" | \"surface\" | \"eyes\" | \"eyeSize\" | \"eyeSpacing\" | \"eyeHeight\" | \"eyeColor\" | \"mouth\" | \"brows\" | \"cheeks\" | \"accessories\" | \"accessoryColor\" | \"working\" | \"sides\" | \"face\" | \"personality\" | \"state\" | \"mood\", string > >",
+   "options": "{ colors?: Partial<Record<Scheme | \"custom\", string>>; surface?: Partial<Record<NonNullable<MascotDesign[\"surface\"]>, string>>; eyes?: Partial<Record<EyeShape, string>>; mouth?: Partial<Record<NonNullable<MascotDesign[\"mouth\"]>, string>>; personality?: Partial<Record<NonNullable<MascotDesign[\"personality\"]>, string>>; working?: Partial<Record<\"none\" | \"cube\" | \"d20\", string>>; sides?: Partial<Record<\"classic\" | \"tints\" | \"mono\", string>>; face?: Partial<Record<\"3d\" | \"flat\", string>>; state?: Partial<Record<MascotState, string>>; mood?: Partial<Record<MascotMood, string>>; accessories?: Partial<Record<MascotAccessory, string>>; }",
+   "actions": "Partial< Record< \"more\" | \"randomize\" | \"reset\" | \"copyJson\" | \"copyJsx\" | \"downloadSvg\" | \"downloadPng\", string > >",
+   "preview": "string",
+   "colorSwatch": "(name: string) => string"
+  },
+  "MascotSeedReading": {
+   "look": "!Partial<MascotLook>",
+   "accessory": "!MascotAccessory[]",
+   "matched": "!string[]",
+   "unmatched": "!string[]"
+  },
+  "MascotSides": [
+   "classic",
+   "tints",
+   "mono",
+   "Partial<Record<\"top\" | \"right\" | \"bottom\" | \"left\" | \"front\" | \"back\", string>>"
+  ],
+  "MascotState": [
+   "idle",
+   "listening",
+   "thinking",
+   "speaking",
+   "sleeping"
+  ],
+  "MascotSvgOptions": {
+   "seed": "string | number",
+   "mood": "MascotMood",
+   "accessory": "string",
+   "schemes": "Partial<Record<\"brand\" | \"accent\" | \"neutral\", string>>",
+   "lookAt": "{ x: number; y: number }",
+   "shadow": "boolean",
+   "size": "number",
+   "title": "string",
    "color": "\"brand\" | \"accent\" | \"neutral\" | (string & {})",
    "roundness": "number",
    "aspect": "number",
@@ -551,16 +1517,15 @@
    "column"
   ],
   "NeutralColor": [
+   "slate",
    "sand",
    "gray",
-   "slate",
    "rose",
    "mint",
    "dusk"
   ],
-  "NumericKeys": {
-   "[key: number]": "Extract<keyof T, string>"
-  },
+  "NumericKeys": "Array<Extract<keyof T, string>>",
+  "OgCardProps": "OgCard props",
   "OgData": {
    "title": "!string",
    "description": "!string",
@@ -582,6 +1547,45 @@
    "allowHttp": "boolean",
    "isAllowed": "(url: URL) => boolean | Promise<boolean>"
   },
+  "OgFont": {
+   "name": "!string",
+   "weight": "400 | 500 | 600 | 700 | 800 | 900",
+   "style": "\"normal\" | \"italic\"",
+   "data": "ArrayBuffer | Uint8Array",
+   "path": "string",
+   "google": "string"
+  },
+  "OgImageRouteOptions": {
+   "skin": "!OgSkin",
+   "fallbackTitle": "string",
+   "headers": "Record<string, string>"
+  },
+  "OgLayout": [
+   "page",
+   "photo",
+   "hero"
+  ],
+  "OgMascot": [
+   "Omit<MascotSvgOptions, \"title\" | \"size\" | \"accessory\" | \"mood\" | \"lookAt\"> & { accessory?: string | ReactElement<unknown, string | JSXElementConstructor<any>> | undefined; }",
+   "{ svg: string; }"
+  ],
+  "OgMood": [
+   "neutral",
+   "happy",
+   "surprised",
+   "sad",
+   "skeptical",
+   "wink",
+   "focused",
+   "determined",
+   "love",
+   "excited",
+   "laughing",
+   "embarrassed",
+   "crying",
+   "angry",
+   "confused"
+  ],
   "OgProxyRouteOptions": {
    "timeout": "number",
    "maxBytes": "number",
@@ -604,6 +1608,44 @@
    "proxy": "!string",
    "generate": "!string"
   },
+  "OgSchemeName": [
+   "slate",
+   "sand",
+   "gray",
+   "rose",
+   "mint",
+   "dusk",
+   "cyan",
+   "blue",
+   "indigo",
+   "violet",
+   "magenta",
+   "pink",
+   "red",
+   "orange",
+   "yellow",
+   "moss",
+   "green",
+   "emerald",
+   "aqua"
+  ],
+  "OgSkin": {
+   "name": "!string",
+   "domain": "string",
+   "brand": "OgSchemeName | (string & {})",
+   "accent": "OgSchemeName | (string & {})",
+   "background": "string",
+   "logo": "string",
+   "mark": "string",
+   "mascot": "OgMascot | false",
+   "fonts": "OgFont[]",
+   "headingFont": "string",
+   "bodyFont": "string",
+   "monoFont": "string",
+   "emphasisFont": "string",
+   "mood": "OgMood",
+   "imageHosts": "string[]"
+  },
   "OnceUIAdapters": {
    "Link": "!React.ComponentType<AdapterLinkProps & React.RefAttributes<HTMLAnchorElement>>",
    "Image": "!React.ComponentType<AdapterImageProps>",
@@ -620,7 +1662,7 @@
   "OnceUIDataStyleConfig": {
    "variant": "ChartVariant",
    "mode": "ChartMode",
-   "height": "number",
+   "height": "number | CSSUnit",
    "axis": "{ stroke: string; }",
    "tick": "{ fill: string; fontSize: number; line: boolean; }"
   },
@@ -648,6 +1690,7 @@
    "surface": "SurfaceStyle",
    "transition": "TransitionStyle",
    "scaling": "ScalingSize",
+   "density": "Density",
    "bodySize": "BodySize",
    "bodyLineHeight": "BodyLineHeight",
    "desktopSize": "DeviceFontSize",
@@ -664,9 +1707,60 @@
    "pageBackground": "ThemeColor",
    "surfaceBackground": "ThemeColor"
   },
+  "OrgRole": [
+   "string & {}",
+   "owner",
+   "admin",
+   "member"
+  ],
+  "Organization": {
+   "slug": "!string",
+   "name": "!string",
+   "logoUrl": "string | null",
+   "role": "!OrgRole"
+  },
+  "OrganizationAdapter": {
+   "getOrganization": "!() => Promise<Organization>",
+   "rename": "((name: string) => Promise<void | Organization>) | undefined",
+   "logo": "{ upload(file: Blob): Promise<string>; remove?(): Promise<void>; }",
+   "leave": "(() => Promise<void>) | undefined",
+   "delete": "(() => Promise<void>) | undefined"
+  },
+  "PeerCursorScheme": [
+   "cyan",
+   "blue",
+   "indigo",
+   "violet",
+   "magenta",
+   "pink",
+   "red",
+   "orange",
+   "yellow",
+   "moss",
+   "green",
+   "emerald",
+   "aqua"
+  ],
+  "PhotoViewerItem": {
+   "src": "!string",
+   "alt": "!string",
+   "title": "string",
+   "caption": "string",
+   "width": "number",
+   "height": "number"
+  },
+  "ProfilePatch": {
+   "name": "string",
+   "username": "string"
+  },
+  "Provider": {
+   "id": "!string",
+   "label": "!string",
+   "icon": "IconName"
+  },
   "ReactionMotion": [
-   "none",
    "pop",
+   "none",
    "beat",
    "nod",
    "shake",
@@ -683,15 +1777,83 @@
    "src": "string",
    "motion": "ReactionMotion"
   },
+  "Reauth": [
+   "{ password: string; }",
+   "{ recentSignIn: true; }"
+  ],
+  "ResizeOptions": {
+   "keepRatio": "boolean",
+   "fromCenter": "boolean",
+   "minSize": "number"
+  },
+  "ResolvedTheme": [
+   "dark",
+   "light"
+  ],
   "ScalingSize": [
-   "90",
-   "95",
    "100",
-   "105",
-   "110"
+   "90",
+   "110",
+   "95",
+   "105"
+  ],
+  "SceneColor": [
+   "string & {}",
+   "neutral-strong",
+   "neutral-medium",
+   "neutral-weak",
+   "brand-strong",
+   "brand-medium",
+   "brand-weak",
+   "accent-strong",
+   "accent-medium",
+   "accent-weak",
+   "info-strong",
+   "info-medium",
+   "info-weak",
+   "danger-strong",
+   "danger-medium",
+   "danger-weak",
+   "warning-strong",
+   "warning-medium",
+   "warning-weak",
+   "success-strong",
+   "success-medium",
+   "success-weak",
+   "`--${string}`"
+  ],
+  "SceneContextValue": {
+   "three": "!ThreeModule",
+   "scene": "!Three.Scene",
+   "camera": "!Three.PerspectiveCamera",
+   "renderer": "!Three.WebGLRenderer",
+   "container": "!HTMLDivElement",
+   "invalidate": "!() => void",
+   "color": "!(color: SceneColor) => { color: Three.Color; alpha: number }",
+   "themeVersion": "!number",
+   "theme": "!\"light\" | \"dark\"",
+   "reducedMotion": "!boolean",
+   "onFrame": "!(callback: (frame: SceneFrame) => void) => () => void",
+   "addPickable": "!(object: Three.Object3D, handlers: ScenePointerHandlers) => () => void",
+   "loadModel": "!(src: string) => Promise<Three.Object3D>"
+  },
+  "SceneFrame": {
+   "delta": "!number",
+   "elapsed": "!number"
+  },
+  "ScenePointerHandlers": {
+   "onClick": "() => void",
+   "onPointerEnter": "() => void",
+   "onPointerLeave": "() => void"
+  },
+  "Scheme": [
+   "neutral",
+   "brand",
+   "accent"
   ],
   "SchemeRampWeight": [
    "100",
+   "1200",
    "200",
    "300",
    "400",
@@ -701,8 +1863,7 @@
    "800",
    "900",
    "1000",
-   "1100",
-   "1200"
+   "1100"
   ],
   "SchemeScale": "Partial< Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string> >",
   "SchemeScaleByTheme": {
@@ -710,6 +1871,7 @@
    "dark": "SchemeScale"
   },
   "Schemes": [
+   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -721,18 +1883,173 @@
    "moss",
    "green",
    "emerald",
-   "aqua",
-   "cyan"
+   "aqua"
   ],
+  "SectionField": {
+   "key": "!string",
+   "kind": "!SectionFieldKind",
+   "label": "!string",
+   "options": "readonly string[]",
+   "split": "\"lines\" | \"paragraphs\"",
+   "fields": "SectionField[]",
+   "max": "number",
+   "rowTitle": "string",
+   "when": "{ key: string; is: readonly string[] }",
+   "hint": "string"
+  },
+  "SectionFieldKind": [
+   "boolean",
+   "link",
+   "textarea",
+   "image",
+   "text",
+   "list",
+   "choice"
+  ],
+  "SectionSchema": {
+   "type": "!SectionType",
+   "component": "!string",
+   "label": "!string",
+   "description": "!string",
+   "layouts": "!readonly string[]",
+   "layoutGuide": "Readonly<Record<string, string>>",
+   "fields": "!SectionField[]",
+   "sample": "!Record<string, unknown>"
+  },
+  "SectionType": [
+   "about",
+   "hero",
+   "features",
+   "stats",
+   "gallery",
+   "testimonials",
+   "team",
+   "pricing",
+   "faq",
+   "logos",
+   "cta",
+   "contact"
+  ],
+  "Session": {
+   "id": "!string",
+   "item": "!HTMLElement",
+   "label": "!string",
+   "source": "!SortableList",
+   "sourceIndex": "!number",
+   "target": "!SortableList",
+   "targetIndex": "!number",
+   "mode": "!\"pointer\" | \"keyboard\"",
+   "rect": "!DOMRect",
+   "start": "!{ x: number; y: number }",
+   "pointer": "!{ x: number; y: number }",
+   "clone": "!HTMLElement",
+   "line": "!HTMLElement",
+   "shifts": "!Map<HTMLElement, { value: number; vertical: boolean }>",
+   "touched": "!Set<HTMLElement>",
+   "reduced": "!boolean",
+   "frame": "!number",
+   "hover": "!{ el: Element | null; since: number; fired: boolean }",
+   "settling": "!boolean",
+   "teardown": "!Array<() => void>"
+  },
+  "SettingsLabels": {
+   "common": "!{ edit: string; add: string; save: string; cancel: string; close: string; next: string; back: string; notSet: string; saved: string; failed: string; copy: string; copied: string; currentPassword: string; /** Shown instead of the password field when the account has none. */ recentSignInNote: string; nav: string; }",
+   "sections": "!{ profile: string; security: string; organization: string; }",
+   "profile": "!{ title: string; description: string; photo: string; photoDescription: string; upload: string; remove: string; photoSaved: string; photoRemoved: string; name: string; nameDescription: string; username: string; usernameDescription: string; email: string; emailDescription: string; verified: string; unverified: string; pending: (address: string) => string; change: string; }",
+   "email": "!{ title: string; description: string; newEmail: string; send: string; sent: (address: string) => string; cancelChange: string; changeCancelled: string; }",
+   "password": "!{ row: string; rowDescription: (changedAt?: string) => string; set: string; change: string; title: string; description: string; newPassword: string; tooShort: string; signOutOthers: string; changed: string; }",
+   "twoFactor": "!{ row: string; rowDescription: string; on: string; off: string; setUp: string; turnOff: string; step: (step: number, of: number) => string; scanTitle: string; scanDescription: string; qrAlt: string; orEnterKey: string; codeTitle: string; codeDescription: string; verify: string; wrongCode: string; backupTitle: string; backupDescription: string; done: string; enabled: string; disableTitle: string; disableDescription: string; disabled: string; }",
+   "identities": "!{ title: string; connect: string; disconnect: string; notConnected: string; connectedSince: (date: string) => string; disconnected: string; lastMethod: string; }",
+   "sessions": "!{ title: string; thisDevice: string; signOut: string; signOutOthers: string; signOutOthersDescription: string; signedOut: string; othersSignedOut: string; }",
+   "danger": "!{ title: string; deleteAccount: string; deleteAccountDescription: string; deleteAccountTitle: string; deleteAccountBody: string; deleteAccountConfirm: string; }",
+   "organization": "!{ title: string; description: string; readOnly: string; logo: string; logoDescription: string; name: string; nameDescription: string; address: string; addressDescription: string; leave: string; leaveDescription: string; leaveTitle: string; leaveBody: string; delete: string; deleteDescription: string; deleteTitle: string; deleteBody: string; typeToConfirm: (slug: string) => string; }",
+   "formatDate": "!(iso: string) => string"
+  },
+  "SettingsLabelsInput": {
+   "common": "{ edit: string; add: string; save: string; cancel: string; close: string; next: string; back: string; notSet: string; saved: string; failed: string; copy: string; copied: string; currentPassword: string; /** Shown instead of the password field when the account has none. */ recentSignInNote: string; nav: string; }",
+   "sections": "{ profile: string; security: string; organization: string; }",
+   "profile": "{ title: string; description: string; photo: string; photoDescription: string; upload: string; remove: string; photoSaved: string; photoRemoved: string; name: string; nameDescription: string; username: string; usernameDescription: string; email: string; emailDescription: string; verified: string; unverified: string; pending: (address: string) => string; change: string; }",
+   "email": "{ title: string; description: string; newEmail: string; send: string; sent: (address: string) => string; cancelChange: string; changeCancelled: string; }",
+   "password": "{ row: string; rowDescription: (changedAt?: string) => string; set: string; change: string; title: string; description: string; newPassword: string; tooShort: string; signOutOthers: string; changed: string; }",
+   "twoFactor": "{ row: string; rowDescription: string; on: string; off: string; setUp: string; turnOff: string; step: (step: number, of: number) => string; scanTitle: string; scanDescription: string; qrAlt: string; orEnterKey: string; codeTitle: string; codeDescription: string; verify: string; wrongCode: string; backupTitle: string; backupDescription: string; done: string; enabled: string; disableTitle: string; disableDescription: string; disabled: string; }",
+   "identities": "{ title: string; connect: string; disconnect: string; notConnected: string; connectedSince: (date: string) => string; disconnected: string; lastMethod: string; }",
+   "sessions": "{ title: string; thisDevice: string; signOut: string; signOutOthers: string; signOutOthersDescription: string; signedOut: string; othersSignedOut: string; }",
+   "danger": "{ title: string; deleteAccount: string; deleteAccountDescription: string; deleteAccountTitle: string; deleteAccountBody: string; deleteAccountConfirm: string; }",
+   "organization": "{ title: string; description: string; readOnly: string; logo: string; logoDescription: string; name: string; nameDescription: string; address: string; addressDescription: string; leave: string; leaveDescription: string; leaveTitle: string; leaveBody: string; delete: string; deleteDescription: string; deleteTitle: string; deleteBody: string; typeToConfirm: (slug: string) => string; }",
+   "formatDate": "(iso: string) => string"
+  },
+  "SidebarContextValue": {
+   "collapsed": "!boolean",
+   "setCollapsed": "!(next: boolean) => void",
+   "toggle": "!() => void",
+   "width": "!number",
+   "setWidth": "!(next: number) => void",
+   "reset": "!() => void",
+   "minWidth": "!number",
+   "maxWidth": "!number",
+   "mobile": "!boolean",
+   "mobileOpen": "!boolean",
+   "setMobileOpen": "!(next: boolean) => void",
+   "shortcut": "!string | false"
+  },
+  "SnapResult": {
+   "rect": "!CanvasRect",
+   "dx": "!number",
+   "dy": "!number",
+   "guides": "!CanvasGuide[]"
+  },
   "SolidStyle": [
    "flat",
-   "plastic"
+   "plastic",
+   "glow"
   ],
   "SolidType": [
    "color",
    "contrast",
    "inverse"
   ],
+  "SortableAnnouncement": {
+   "item": "!string",
+   "position": "!number",
+   "total": "!number",
+   "list": "string"
+  },
+  "SortableDirection": [
+   "row",
+   "column"
+  ],
+  "SortableLabels": {
+   "instructions": "!string",
+   "handle": "!(item?: string) => string",
+   "lifted": "!(a: SortableAnnouncement) => string",
+   "moved": "!(a: SortableAnnouncement) => string",
+   "dropped": "!(a: SortableAnnouncement) => string",
+   "cancelled": "!(a: SortableAnnouncement) => string"
+  },
+  "SortableList": {
+   "el": "!HTMLElement",
+   "name": "!() => string",
+   "group": "!() => string",
+   "direction": "!() => SortableDirection",
+   "label": "!() => string | undefined",
+   "disabled": "!() => boolean",
+   "handle": "!() => boolean",
+   "labels": "!() => SortableLabels",
+   "reorder": "!(id: string, from: number, to: number) => void",
+   "move": "() => ((id: string, to: SortablePosition, from: SortablePosition) => void) | undefined"
+  },
+  "SortablePosition": {
+   "list": "!string",
+   "index": "!number"
+  },
+  "SpanSegment": {
+   "event": "!CalendarEventBase",
+   "startIndex": "!number",
+   "span": "!number",
+   "lane": "!number",
+   "continuesBefore": "!boolean",
+   "continuesAfter": "!boolean"
+  },
   "StreamingOptions": {
    "initialData": "!T[]",
    "windowSize": "!number",
@@ -748,6 +2065,7 @@
    "setRunning": "!React.Dispatch<React.SetStateAction<boolean>>",
    "reset": "!() => void"
   },
+  "StreamingTarget": "Partial<Record<Extract<keyof T, string>, number>>",
   "StreamingViewportOptions": {
    "initialData": "!T[]",
    "windowSize": "!number",
@@ -775,6 +2093,7 @@
    "surface": "!SurfaceStyle",
    "transition": "!TransitionStyle",
    "scaling": "!ScalingSize",
+   "density": "!Density",
    "bodySize": "!BodySize",
    "bodyLineHeight": "!BodyLineHeight",
    "desktopSize": "DeviceFontSize",
@@ -799,6 +2118,7 @@
    "solidStyle": "SolidStyle",
    "surface": "SurfaceStyle",
    "scaling": "ScalingSize",
+   "density": "Density",
    "transition": "TransitionStyle",
    "bodySize": "BodySize",
    "bodyLineHeight": "BodyLineHeight",
@@ -817,6 +2137,7 @@
    "surface": "!SurfaceStyle",
    "transition": "!TransitionStyle",
    "scaling": "!ScalingSize",
+   "density": "!Density",
    "bodySize": "!BodySize",
    "bodyLineHeight": "!BodyLineHeight",
    "desktopSize": "DeviceFontSize",
@@ -839,6 +2160,12 @@
    "string",
    "{ light?: string | undefined; dark?: string | undefined; }"
   ],
+  "ThemePresetName": [
+   "ops",
+   "care",
+   "creative",
+   "commerce"
+  ],
   "ThemeProviderState": {
    "theme": "!Theme",
    "resolvedTheme": "!\"light\" | \"dark\"",
@@ -848,23 +2175,58 @@
    "Partial<Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string>>",
    "SchemeScaleByTheme"
   ],
+  "ThreeModule": "typeof import(\"three\")",
+  "TimedBlock": {
+   "event": "!CalendarEventBase",
+   "top": "!number",
+   "bottom": "!number",
+   "lane": "!number",
+   "lanes": "!number",
+   "continuesBefore": "!boolean",
+   "continuesAfter": "!boolean"
+  },
   "ToastContextProps": {
    "toasts": "!Toast[]",
-   "addToast": "!(toast: Omit<Toast, \"id\">) => string",
+   "addToast": "!(toast: Omit<Toast, \"id\"> | LegacyToast) => string",
    "removeToast": "!(id: string) => void"
   },
+  "Tone": [
+   "neutral",
+   "brand",
+   "accent",
+   "info",
+   "danger",
+   "warning",
+   "success"
+  ],
   "TransitionStyle": [
    "none",
    "all",
    "micro",
    "macro"
   ],
+  "TwoFactorEnrollment": {
+   "secret": "!string",
+   "uri": "!string",
+   "qrCode": "string"
+  },
+  "UseAlarmsOptions": {
+   "alarms": "readonly Alarm[]",
+   "defaultAlarms": "readonly Alarm[]",
+   "onAlarmsChange": "(alarms: Alarm[]) => void"
+  },
   "UseHotkeysOptions": {
    "enabled": "boolean",
    "allowWhileTyping": "boolean",
    "target": "RefObject<HTMLElement | null>",
    "preventDefault": "boolean",
    "sequenceTimeout": "number"
+  },
+  "UsePeerPointerOptions": {
+   "interval": "number",
+   "units": "\"fraction\" | \"px\"",
+   "unproject": "(x: number, y: number) => { x: number; y: number }",
+   "disabled": "boolean"
   }
  }
 }

@@ -528,7 +528,7 @@ export const Markdown: RefComponent<MarkdownProps, ViewRef> = forwardRef<ViewRef
     const paragraph = (nodes: MarkdownInline[], key: string) => (
       <Text
         key={key}
-        variant={BODY}
+        textVariant={BODY}
         onBackground="neutral-medium"
         marginTop="8"
         marginBottom="12"
@@ -543,7 +543,7 @@ export const Markdown: RefComponent<MarkdownProps, ViewRef> = forwardRef<ViewRef
       cell.every((part) => part.type === "text") ? (
         plainText(cell)
       ) : (
-        <Text variant="body-default-s">{inline(cell)}</Text>
+        <Text textVariant="body-default-s">{inline(cell)}</Text>
       );
 
     const block = (node: MarkdownBlock, key: string, tight = false): ReactNode => {
@@ -552,7 +552,7 @@ export const Markdown: RefComponent<MarkdownProps, ViewRef> = forwardRef<ViewRef
           return (
             <Text
               key={key}
-              variant={HEADING_VARIANT[node.level]}
+              textVariant={HEADING_VARIANT[node.level]}
               accessibilityRole="header"
               aria-level={node.level}
               marginTop="24"
@@ -564,7 +564,7 @@ export const Markdown: RefComponent<MarkdownProps, ViewRef> = forwardRef<ViewRef
         case "paragraph":
           return tight ? (
             // In a list item, on the marker's line height.
-            <Text key={key} variant={BODY} onBackground="neutral-medium">
+            <Text key={key} textVariant={BODY} onBackground="neutral-medium">
               {inline(node.children)}
             </Text>
           ) : (

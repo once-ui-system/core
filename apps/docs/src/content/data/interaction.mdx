@@ -1,0 +1,204 @@
+---
+title: "States and interaction"
+export: false
+summary: "Loading, empty and error states, the tooltip and keyboard, legend toggles, the date-range picker, and what screen readers get from every Once UI chart."
+updatedAt: "2026-11-12"
+docs: "once-ui/data/interaction.mdx"
+github: "packages/core/src/modules/data/ChartStatus.tsx"
+navLabel: "States and interaction"
+navIcon: "info"
+---
+
+## Request states
+
+Charts fetch nothing themselves, so the states of a request are props you set from wherever the data comes from. Handled, a chart becomes a readable panel instead of an empty frame, and it keeps its height, so the page doesn't jump when the data lands.
+
+<PropsTable
+  content={[
+    ["loading", "boolean", "false", "Draws a loading state in place of the plot. The title and description stay."],
+    ["error", "boolean", "false", "Draws the error state in place of the plot."],
+    ["errorState", "ReactNode", "-", "What the error state says. Say what failed and what to do."],
+    ["emptyState", "ReactNode", "-", "What to show when data is empty, or when the date range leaves no rows."],
+  ]}
+/>
+
+<Grid fillWidth columns="3" s={{ columns: 1 }} gap="16" marginTop="16" marginBottom="24">
+  <LineChart title="loading" height="14rem" loading series={{ key: "v" }} data={[]} />
+  <LineChart
+    title="emptyState"
+    height="14rem"
+    emptyState={<Text onBackground="neutral-weak" textVariant="body-default-s">No orders in this range yet.</Text>}
+    series={{ key: "v" }}
+    data={[]}
+  />
+  <LineChart
+    title="error"
+    height="14rem"
+    error
+    errorState={<Text onBackground="danger-weak" textVariant="body-default-s">Couldn't load orders. Try again in a minute.</Text>}
+    series={{ key: "v" }}
+    data={[]}
+  />
+</Grid>
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const { data, isLoading, error } = useOrders(range);
+
+<LineChart
+  title="Orders"
+  loading={isLoading}
+  error={Boolean(error)}
+  errorState={<Text onBackground="danger-weak">Couldn't load orders. {error?.message}</Text>}
+  emptyState={<Text onBackground="neutral-weak">No orders in this range yet.</Text>}
+  xKey="day"
+  series={{ key: "orders" }}
+  data={data ?? []}
+/>`,
+      language: "tsx",
+      label: "Request states"
+    }
+  ]}
+/>
+
+An empty array is not an error: the query ran and matched nothing. That is why `emptyState` and `errorState` are separate. When both `loading` and `error` are false and `data` is empty, the empty state shows.
+
+## Tooltip and keyboard
+
+Hovering the plot shows a tooltip with every visible series at that x value, written in the chart's [format](/data/formatting). A line chart draws a cursor line, a bar chart highlights the band (`hover` on `BarChart` paints the whole band).
+
+The plot is also reachable from the keyboard. Tab to it, and:
+
+| Key | Does |
+| --- | --- |
+| `→` `↓` | Next point |
+| `←` `↑` | Previous point |
+| `Home` / `End` | First / last point |
+| `Esc` | Hide the tooltip |
+
+A pie moves slice by slice with the arrow keys. `tooltip={false}` turns the tooltip off and takes the plot out of the tab order, for a chart that is only a picture next to its numbers.
+
+## Legend
+
+The legend lists the series with their colours. With two or more series, each entry is a button: pressing it hides or shows that series, and the value axis rescales to what is left. That lets the reader take the big series out to see the small ones.
+
+<PropsTable
+  content={[
+    ["legend.display", "boolean", "true", "Show the legend. Turn it off for one series, where the title already names it."],
+    ["legend.position", "string", "top-left", "Where the legend sits on the plot: top-left, top-center, top-right, bottom-left, bottom-center or bottom-right."],
+    ["legend.direction", ["row", "column"], "row", "Entries side by side, or stacked (useful next to a pie)."],
+  ]}
+/>
+
+## Date range
+
+A time series can carry a date-range picker in its header. Give it a `start` and an `end`, which set the first range and filter the rows to it, and turn on `selector`:
+
+<LineChart
+  marginTop="16"
+  marginBottom="24"
+  title="Visits"
+  height="20rem"
+  axis="both"
+  legend={{ display: false }}
+  xKey="date"
+  date={{
+    format: "MMM yyyy",
+    start: new Date("2025-01-01"),
+    end: new Date("2025-12-31"),
+    selector: true,
+    presets: { display: true, granularity: "month" },
+    dual: true
+  }}
+  series={{ key: "visits", label: "Visits", color: "cyan" }}
+  data={[
+    { date: "2024-10-01", visits: 2100 },
+    { date: "2024-11-01", visits: 2350 },
+    { date: "2024-12-01", visits: 2280 },
+    { date: "2025-01-01", visits: 2600 },
+    { date: "2025-02-01", visits: 2550 },
+    { date: "2025-03-01", visits: 2900 },
+    { date: "2025-04-01", visits: 3100 },
+    { date: "2025-05-01", visits: 3050 },
+    { date: "2025-06-01", visits: 3400 },
+    { date: "2025-07-01", visits: 3600 },
+    { date: "2025-08-01", visits: 3500 },
+    { date: "2025-09-01", visits: 3900 },
+    { date: "2025-10-01", visits: 4100 },
+    { date: "2025-11-01", visits: 4300 },
+    { date: "2025-12-01", visits: 4600 }
+  ]}
+/>
+
+<PropsTable
+  content={[
+    ["date.start / date.end", "Date", "-", "The first range. Rows outside it are not drawn. The picker needs both."],
+    ["date.selector", "boolean", "false", "Show the range picker in the header."],
+    ["date.presets", "PresetsConfig", "week", "Quick ranges beside the calendar: { display, granularity }. granularity year offers this and last year, month adds the months, week adds the weeks."],
+    ["date.dual", "boolean", "false", "Show two months side by side in the calendar."],
+    ["date.min / date.max", "Date", "-", "The earliest and latest day the reader can pick."],
+    ["date.onRangeChange", "(range: DateRange) => void", "-", "Called with the picked range. Use it to fetch that range from the server."],
+    ["date.format", "string", "-", "How dates are written: a date-fns pattern."],
+  ]}
+/>
+
+The chart filters the rows it already has. For a long history, fetch the range instead: keep `start` and `end` in state, refetch in `onRangeChange`, and pass the new rows. `onRangeChange` is a function, so this chart lives in a client component.
+
+```tsx
+"use client";
+
+const [range, setRange] = useState({ start: startOfMonth(new Date()), end: new Date() });
+const { data, isLoading } = useVisits(range);
+
+<LineChart
+  loading={isLoading}
+  date={{
+    ...range,
+    format: "MMM d",
+    selector: true,
+    onRangeChange: ({ startDate, endDate }) =>
+      startDate && endDate && setRange({ start: startDate, end: endDate }),
+  }}
+  xKey="date"
+  series={{ key: "visits" }}
+  data={data ?? []}
+/>
+```
+
+## Animation
+
+Charts draw in on mount: lines sweep from the left, bars grow from the baseline. Readers who ask for reduced motion never see it. `LineChart` takes `animation={false}` and `animationBegin`, `animationDuration` and `animationEasing` to tune it. For live data, either match `animationDuration` to the sample interval so updates glide, or turn it off so they snap: see [LineChart](/data/lineChart#live-data).
+
+## Screen readers
+
+Each chart's plot is a figure (`role="figure"`), named by its title and a summary written from the data, in the chart's `valueFormat` and `locale`:
+
+- a line or bar chart: "Revenue and Cost, Jan to Dec. Revenue: highest 12,400 in Aug, lowest 3,100 in Feb."
+- a pie: "Share by browser: Chrome 62%, Safari 21%, Firefox 9%."
+
+Inside the card, hidden from sight, the chart also renders its data as a table: the x values as rows, a column per series. A reader who wants the numbers can walk them cell by cell. While a chart loads, fails or is empty, the plot is no figure, and its status is read as it is.
+
+The generated summary states only what is in the data. When the point of the chart is something the numbers don't say on their own, write it:
+
+<PropsTable
+  content={[
+    ["summary", "string", "generated", "What a screen reader hears after the title, in place of the generated summary."],
+    ["aria-label", "string", "-", "The plot's whole name, title included, in place of the title and summary. The hidden table stays."],
+  ]}
+/>
+
+```tsx
+<LineChart
+  title="Revenue"
+  summary="Revenue tripled over the summer and held through December."
+  xKey="month"
+  series={{ key: "revenue", label: "Revenue" }}
+  data={rows}
+/>
+```
+
+Colour is never the only cue: each series is named in the legend, the tooltip and the table. Use `label` so those names are words a reader knows, not `rev_q_usd`.

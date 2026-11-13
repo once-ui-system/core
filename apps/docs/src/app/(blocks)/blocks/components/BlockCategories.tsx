@@ -60,7 +60,7 @@ function BlockCategoryCard({ item }: { item: BlockItem }) {
       overflow="hidden"
     >
       <Row fillWidth gap="8" vertical="center" paddingX="20" paddingY="16">
-        <Text variant="heading-strong-s" truncate>
+        <Text textVariant="heading-strong-s" truncate>
           {item.label}
         </Text>
         <Row
@@ -76,7 +76,7 @@ function BlockCategoryCard({ item }: { item: BlockItem }) {
           {examplesCount}
         </Row>
         {hasRecentExample(item.examples) && (
-          <Tag size="s" scheme="brand">
+          <Tag size="s" tone="brand">
             NEW
           </Tag>
         )}
@@ -84,7 +84,7 @@ function BlockCategoryCard({ item }: { item: BlockItem }) {
       <Row fillWidth paddingLeft="20">
         <Media
           sizes="(max-width: 768px) 100vw, 400px"
-          dark
+          showIn="dark"
           src={item.image?.dark || ""}
           alt={alt}
           borderLeft
@@ -94,7 +94,7 @@ function BlockCategoryCard({ item }: { item: BlockItem }) {
         />
         <Media
           sizes="(max-width: 768px) 100vw, 400px"
-          light
+          showIn="light"
           src={item.image?.light || ""}
           alt={alt}
           borderLeft

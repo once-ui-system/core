@@ -4,9 +4,9 @@ import type { Marker, PositionAnchor } from "maplibre-gl";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { useMap } from "./MapContext";
-import { MapPin } from "./MapPin";
-import type { LngLat } from "./types";
+import { useMap } from "./MapContext.js";
+import { MapPin } from "./MapPin.js";
+import type { LngLat } from "./types.js";
 
 export interface MapMarkerProps {
   position: LngLat;
@@ -29,7 +29,7 @@ export interface MapMarkerProps {
  * real DOM: a button in it is reachable by Tab, and focusing one off screen
  * pans it into view.
  */
-const MapMarker: React.FC<MapMarkerProps> = ({
+const MapMarker = ({
   position,
   children,
   anchor = "bottom",
@@ -37,7 +37,7 @@ const MapMarker: React.FC<MapMarkerProps> = ({
   active = false,
   draggable = false,
   onDragEnd,
-}) => {
+}: MapMarkerProps) => {
   const { map, lib, reducedMotion } = useMap();
   const [element] = useState(() => {
     const div = document.createElement("div");
@@ -56,6 +56,12 @@ const MapMarker: React.FC<MapMarkerProps> = ({
     const instance = new lib.Marker({ element, anchor, offset, draggable })
       .setLngLat(latest.current.position)
       .addTo(map);
+    // MapLibre makes every marker element a button named "Map marker". The
+    // React content is the control (a MapPin is a button with its own name),
+    // so the wrapper stays a plain box: no nested controls, no stray name.
+    element.removeAttribute("role");
+    element.removeAttribute("aria-label");
+    if (element.getAttribute("tabindex") === "0") element.removeAttribute("tabindex");
     instance.on("dragend", () => {
       const { lng: x, lat: y } = instance.getLngLat();
       latest.current.onDragEnd?.([x, y]);

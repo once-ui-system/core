@@ -5,11 +5,10 @@
   "svg": "string",
   "src": "string",
   "height": "number | string = 120",
-  "color": "LogoLoaderColor = neutral",
+  "tone": "LogoLoaderTone = neutral",
   "settled": "boolean = false",
   "order": "\"reading\" | \"document\" = reading",
-  "onComplete": "() => void",
-  "ariaLabel": "string = Loading"
+  "onComplete": "() => void"
  },
  "tags": [
   "feedback",
@@ -21,11 +20,11 @@
  ],
  "mixinsRef": [],
  "types": {
-  "LogoLoaderColor": [
-   "inherit",
+  "LogoLoaderTone": [
    "neutral",
    "brand",
-   "accent"
+   "accent",
+   "inherit"
   ]
  }
 }

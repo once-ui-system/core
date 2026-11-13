@@ -36,11 +36,11 @@ export default function FormCheck() {
 
   return (
     <Column fillWidth gap="40" padding="24" maxWidth="l" data-testid="root">
-      <Text variant="heading-strong-l">Form — density and grouping</Text>
+      <Text textVariant="heading-strong-l">Form — density and grouping</Text>
 
       {/* 1. The motivating case: a plain stack. */}
       <Column gap="12" data-testid="case-stacked-1d">
-        <Text variant="label-strong-s">1. density=&quot;stacked&quot;, one column</Text>
+        <Text textVariant="label-strong-s">1. density=&quot;stacked&quot;, one column</Text>
         <Form density="stacked">
           <Input id="s1" placeholder="Email" />
           <Input id="s2" placeholder="Password" type="password" />
@@ -51,7 +51,7 @@ export default function FormCheck() {
       {/* 2. The bug the component exists to remove: hide the middle field and
           the group must still end on a round edge. */}
       <Column gap="12" data-testid="case-conditional">
-        <Text variant="label-strong-s">
+        <Text textVariant="label-strong-s">
           2. Conditional child — the group keeps its outer corners
         </Text>
         <Button
@@ -71,7 +71,7 @@ export default function FormCheck() {
 
       {/* 3. The brief's example: two columns with spans. */}
       <Column gap="12" data-testid="case-stacked-2d">
-        <Text variant="label-strong-s">3. density=&quot;stacked&quot;, columns=2, with spans</Text>
+        <Text textVariant="label-strong-s">3. density=&quot;stacked&quot;, columns=2, with spans</Text>
         <Form density="stacked" columns={2}>
           <Input id="g1" placeholder="First name" />
           <Input id="g2" placeholder="Last name" />
@@ -84,7 +84,7 @@ export default function FormCheck() {
           bottom-right is on the outside of the group even though it is not the
           last child. */}
       <Column gap="12" data-testid="case-ragged">
-        <Text variant="label-strong-s">4. Ragged last row — 3 fields, 2 columns</Text>
+        <Text textVariant="label-strong-s">4. Ragged last row — 3 fields, 2 columns</Text>
         <Form density="stacked" columns={2}>
           <Input id="r1" placeholder="City" />
           <Input id="r2" placeholder="Postcode" />
@@ -95,7 +95,7 @@ export default function FormCheck() {
       {/* 5. Responsive: one column below `m`, two above. The cell that is
           bottom-left changes with the viewport, from CSS alone. */}
       <Column gap="12" data-testid="case-responsive">
-        <Text variant="label-strong-s">
+        <Text textVariant="label-strong-s">
           5. columns=&#123;&#123; xs: 1, m: 2 &#125;&#125; — resize across 1024px
         </Text>
         <Form density="stacked" columns={{ xs: 1, m: 2 }}>
@@ -107,7 +107,7 @@ export default function FormCheck() {
 
       {/* 6. Focus ring over four neighbours. */}
       <Column gap="12" data-testid="case-focus">
-        <Text variant="label-strong-s">6. Focus ring in 2D — click the centre field</Text>
+        <Text textVariant="label-strong-s">6. Focus ring in 2D — click the centre field</Text>
         <Form density="stacked" columns={3}>
           {FOCUS_FIELDS.map((id, i) => (
             <Input key={id} id={id} placeholder={`Field ${i + 1}`} focusRing />
@@ -118,7 +118,7 @@ export default function FormCheck() {
       {/* 7. The non-fusing densities, for contrast. */}
       <Row fillWidth gap="24" s={{ direction: "column" }}>
         <Column gap="12" fillWidth data-testid="case-tight">
-          <Text variant="label-strong-s">7a. density=&quot;tight&quot;</Text>
+          <Text textVariant="label-strong-s">7a. density=&quot;tight&quot;</Text>
           <Form density="tight">
             {CASES.map((c) => (
               <Input key={c.id} id={`t-${c.id}`} placeholder={c.placeholder} />
@@ -126,7 +126,7 @@ export default function FormCheck() {
           </Form>
         </Column>
         <Column gap="12" fillWidth data-testid="case-spacious">
-          <Text variant="label-strong-s">7b. density=&quot;spacious&quot;</Text>
+          <Text textVariant="label-strong-s">7b. density=&quot;spacious&quot;</Text>
           <Form density="spacious">
             {CASES.map((c) => (
               <Input key={c.id} id={`sp-${c.id}`} placeholder={c.placeholder} />
@@ -137,7 +137,7 @@ export default function FormCheck() {
 
       {/* 7c. size, set once for the whole group. */}
       <Column gap="12" data-testid="case-size">
-        <Text variant="label-strong-s">7c. size on the Form, and a field overriding it</Text>
+        <Text textVariant="label-strong-s">7c. size on the Form, and a field overriding it</Text>
         <Form density="stacked" columns={2} size="s">
           <Input id="sz1" placeholder="Small" />
           <Input id="sz2" placeholder="Small" />
@@ -148,10 +148,10 @@ export default function FormCheck() {
 
       {/* 8. Mechanism B, hand-rolled, for the written comparison. */}
       <Column gap="12" data-testid="case-hairline">
-        <Text variant="label-strong-s">
+        <Text textVariant="label-strong-s">
           8. Mechanism B prototype — 1px gap, container paints the line
         </Text>
-        <Text variant="body-default-s" onBackground="neutral-weak">
+        <Text textVariant="body-default-s" onBackground="neutral-weak">
           Fields ghosted so the container owns the line. Compare the field fill against case 3: the
           cell has to restore an opaque backdrop, because a 15%-alpha field composites against the
           line colour otherwise.
@@ -172,7 +172,7 @@ export default function FormCheck() {
       {/* 9. Mechanism B without ghosting — shows the tint the brief warned
           about, and the doubled border. */}
       <Column gap="12" data-testid="case-hairline-untreated">
-        <Text variant="label-strong-s">
+        <Text textVariant="label-strong-s">
           9. Mechanism B without ghosting — the tint and the doubled border
         </Text>
         <div className={`${styles.lattice} ${styles.twoCol}`} data-testid="hairline-untreated">

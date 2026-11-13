@@ -150,16 +150,16 @@ something of your own, `useAudioLevel(source)` returns the same loudness from 0 
   preview={
     <Row gap="32" center>
       <VoiceVisualizer size="s" state="speaking" />
-      <VoiceVisualizer size="m" state="speaking" color="accent" />
-      <VoiceVisualizer size="m" variant="bars" bars={9} state="speaking" color="neutral" />
+      <VoiceVisualizer size="m" state="speaking" tone="accent" />
+      <VoiceVisualizer size="m" variant="bars" bars={9} state="speaking" tone="neutral" />
     </Row>
   }
   codes={[
     {
       code:
 `<VoiceVisualizer size="s" state="speaking" />
-<VoiceVisualizer size="m" state="speaking" color="accent" />
-<VoiceVisualizer size="m" variant="bars" bars={9} state="speaking" color="neutral" />`,
+<VoiceVisualizer size="m" state="speaking" tone="accent" />
+<VoiceVisualizer size="m" variant="bars" bars={9} state="speaking" tone="neutral" />`,
       language: "tsx",
       label: "Sizes and colors"
     }
@@ -198,8 +198,7 @@ Every part of the look is a prop, so two products never have to share a characte
 scheme or any CSS color and every shade comes from it; `roundness`, `aspect` or your own `bodyPath`
 set the outline; `surface` is `glossy`, `matte`, `flat` or `glass`. `eyes` is `tile`, `pill`,
 `round`, `wide`, `dot` or your own path, placed with `eyeSize`, `eyeSpacing` and `eyeHeight`.
-`mouth`, `brows` and `cheeks` add features that follow the mood, `accessory` draws your own SVG with
-the body, and `personality` makes it `calm` or `bouncy`. Or pass a `seed` (a product name, a user
+`mouth`, `brows` and `cheeks` add features that follow the mood, `accessory` dresses it (below), and `personality` makes it `calm` or `bouncy`. Or pass a `seed` (a product name, a user
 id) and `mascotLook(seed)` picks a whole look; props you pass still win.
 
 <CodeBlock
@@ -230,6 +229,122 @@ id) and `mascotLook(seed)` picks a whole look; props you pass still win.
   ]}
 />
 
+### Seeds that read words
+
+A seed is split into words at dashes, underscores, spaces, digits and camelCase, and the words it
+knows describe the mascot: colours set the hue (`red`, `mint`, `ink` or a hex like `#3fe3f2`), animals
+set the body and, where they have them, the ears (`fox`, `panda`, `frog`, `robot`), moods set the eyes,
+mouth and how it moves (`happy`, `sleepy`, `grumpy`), and objects add accessories (`royal` a crown, `dj`
+headphones, `astro` a helmet). An animal brings its own colour unless the seed names one. Anything the
+words leave open comes from the seed's hash, so a username with no known words still gets a stable
+mascot of its own. `readSeedWords(seed)` says which words it understood, and `MASCOT_SEED_WORDS` lists
+them all.
+
+<MascotSeedExample />
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Mascot seed="happy-red-fox" />
+<Mascot seed="sleepyPandaDJ" />
+<Mascot seed={user.username} />
+
+readSeedWords("royal-ink-cat");
+// { matched: ["royal", "ink", "cat"], accessory: ["crown", "catEars"], look: { ... }, unmatched: [] }`,
+      language: "tsx",
+      label: "Seeds"
+    }
+  ]}
+/>
+
+### Accessories
+
+Nine built-in accessories, flat and chunky so they read at avatar size: `antenna`, `bow`, `beanie`,
+`headphones`, `sprout`, `helmet`, `crown`, `catEars` and `partyHat`. Each one is placed from the body's
+own outline, so it fits a block as well as a circle, and moves and squashes with it. Pass a list to wear
+several, and `accessoryColor` to tint them all one color. Your own SVG still works: draw it in the
+body's 200 × 200 box.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="24" center wrap>
+      <Mascot size="m" surface="flat" accessory="helmet" color="#ffd24d" mouth="smile" />
+      <Mascot size="m" surface="flat" accessory="headphones" color="#ff7aa8" mouth="smile" />
+      <Mascot size="m" surface="flat" accessory="catEars" color="#e8ecf2" mouth="dot" cheeks />
+      <Mascot size="m" surface="flat" accessory="sprout" color="#ff8a5c" roundness={1} />
+      <Mascot size="m" surface="flat" accessory={["crown", "bow"]} color="#a78bfa" mouth="smile" />
+    </Row>
+  }
+  codes={[
+    {
+      code: `<Mascot surface="flat" accessory="helmet" />
+<Mascot surface="flat" accessory={["crown", "bow"]} accessoryColor="#ffd24d" />`,
+      language: "tsx",
+      label: "Accessories",
+    },
+  ]}
+/>
+
+### Cube
+
+`working="cube"` gives the mascot something to do while it works. At rest it is the same soft
+blob with its face. When it starts thinking, the face fades, the blob firms up into a 2 × 2 cube
+and it turns its layers like a puzzle. When the work is done it solves the cube, turns it 45° into
+the Once UI mark for a beat, and softens back into the blob with its face, a little happier.
+
+`sides` colors the cube: `classic` keeps the puzzle colors with the front in the mascot's color,
+`tints` uses shades of it, `mono` paints every side the same, or pass a color per side.
+`face="flat"` draws the eyes, brows and mouth flat on the body; `surface="flat"` turns the light
+off, so the shape is one solid color. Everything else from the flat mascot carries over.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<MascotCubeExample />}
+  codes={[
+    {
+      code:
+`<Mascot working="cube" state={busy ? "thinking" : "idle"} />
+<Mascot working="cube" sides="tints" face="flat" eyes="tile" />
+<Mascot working="cube" sides="mono" surface="flat" eyes="pill" color="accent" />
+<Mascot working="cube" sides={{ top: "#ffc53d", right: "#3fb6ff" }} />`,
+      language: "tsx",
+      label: "Cube"
+    }
+  ]}
+/>
+
+The cube draws with WebGL and no extra dependency. It only animates while it is on screen, and
+where WebGL is missing it renders the flat mascot instead.
+
+### D20
+
+`working="d20"` works the same way with a twenty-sided die. While it thinks, the blob firms into
+the die and tumbles, now slow, now in a quick spin. When the work is done it lands with a face
+toward you, point up, holds it for a beat and softens back into the blob with its face. The die
+takes the mascot's color, and every look prop carries over; `sides` only applies to the cube.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<MascotD20Example />}
+  codes={[
+    {
+      code:
+`<Mascot working="d20" state={busy ? "thinking" : "idle"} />
+<Mascot working="d20" color="accent" eyes="pill" />
+<Mascot working="d20" surface="matte" face="flat" />`,
+      language: "tsx",
+      label: "D20"
+    }
+  ]}
+/>
+
 ## LogoSpinner
 
 The four tiles of the Once UI mark, moving. `twist` parts the tiles, turns a quarter and clicks
@@ -243,8 +358,8 @@ where the product's own loader belongs.
     <Row gap="32" center>
       <LogoSpinner size="xl" />
       <LogoSpinner size="xl" variant="wave" />
-      <LogoSpinner size="xl" color="accent" />
-      <LogoSpinner size="xl" color="neutral" speed={2.4} />
+      <LogoSpinner size="xl" tone="accent" />
+      <LogoSpinner size="xl" tone="neutral" speed={2.4} />
     </Row>
   }
   codes={[
@@ -252,8 +367,8 @@ where the product's own loader belongs.
       code:
 `<LogoSpinner size="xl" />
 <LogoSpinner size="xl" variant="wave" />
-<LogoSpinner size="xl" color="accent" />
-<LogoSpinner size="xl" color="neutral" speed={2.4} />`,
+<LogoSpinner size="xl" tone="accent" />
+<LogoSpinner size="xl" tone="neutral" speed={2.4} />`,
       language: "tsx",
       label: "Variants"
     }
@@ -262,7 +377,7 @@ where the product's own loader belongs.
 
 ## Accessibility
 
-`WorkingIndicator` is one `status` region with a fixed name, "Working" unless you pass `ariaLabel`,
+`WorkingIndicator` is one `status` region with a fixed name, "Working" unless you pass `aria-label`,
 so a screen reader announces it once instead of reading every new verb. With reduced motion the
 tiles stop moving and fade in turn, the verbs swap without sliding and the shimmer is off.
 
@@ -271,7 +386,8 @@ reduced motion its stand-in animations stop; real audio still shows, as glow on 
 height, because that is feedback the person needs while they talk.
 
 `Mascot` is one image named for what it is doing ("Assistant, thinking"). With reduced motion it
-holds still and keeps its poses and expressions; it does not blink, bob or pulse on its own.
+holds still and keeps its poses and expressions; it does not blink, bob or pulse on its own, and
+the cube shows while it thinks but does not turn.
 
 ## API reference
 
@@ -288,7 +404,7 @@ holds still and keeps its poses and expressions; it does not blink, bob or pulse
     detail: "Quiet text after the verb.",
     loader: "The loader before the words; false for none.",
     size: "Text and loader size.",
-    ariaLabel: "What screen readers announce once.",
+    "aria-label": "What screen readers announce once.",
   }}
 />
 
@@ -300,9 +416,9 @@ holds still and keeps its poses and expressions; it does not blink, bob or pulse
     level: "Loudness from 0 to 1; takes precedence over source.",
     source: "A MediaStream, an audio or video element, or an AnalyserNode.",
     size: "s, m, l or xl.",
-    color: "brand, accent or neutral.",
+    tone: "brand, accent or neutral.",
     bars: "Number of bars in the bars variant.",
-    ariaLabel: "What screen readers announce; defaults to the state.",
+    "aria-label": "What screen readers announce; defaults to the state.",
   }}
 />
 
@@ -311,7 +427,7 @@ holds still and keeps its poses and expressions; it does not blink, bob or pulse
   describe={{
     state: "idle, listening, thinking, speaking or sleeping.",
     mood: "neutral, happy, surprised, sad, skeptical, wink, focused or determined.",
-    seed: "Picks a whole look (mascotLook); props you pass win over it.",
+    seed: "Picks a whole look (mascotLook): known words set colour, body, face and accessories, the hash the rest; props you pass win over it.",
     color: "brand, accent, neutral or any CSS color; every shade comes from it.",
     roundness: "0, a rounded square, to 1, a circle.",
     aspect: "Width over height: below 1 is tall, above 1 is wide.",
@@ -325,13 +441,15 @@ holds still and keeps its poses and expressions; it does not blink, bob or pulse
     mouth: "none, smile, dot or line; follows the mood and moves while speaking.",
     brows: "Brows that follow the mood.",
     cheeks: "Blush under the eyes.",
-    accessory: "SVG drawn with the body in its 200 × 200 box.",
+    accessory:
+      "antenna, bow, beanie, headphones, sprout, helmet, crown, catEars or partyHat, a list of them, or your own SVG in the 200 × 200 box.",
+    accessoryColor: "One color for the built-in accessories, in place of each one's own.",
     personality: "calm, default or bouncy.",
     lookAt: "pointer, center, or a direction from -1 to 1.",
     level: "Loudness from 0 to 1 that makes the body pulse while speaking.",
     source: "Audio to pulse with: an element, a stream or an AnalyserNode.",
-    size: "s, m, l, xl or a number of pixels.",
-    ariaLabel: "What screen readers hear.",
+    size: "s, m, l, xl, a number on the spacing scale, or a CSS length.",
+    "aria-label": "What screen readers hear.",
   }}
 />
 
@@ -340,8 +458,8 @@ holds still and keeps its poses and expressions; it does not blink, bob or pulse
   describe={{
     size: "Loader size, the same footprint as Spinner.",
     variant: "twist or wave.",
-    color: "brand, accent, neutral, or inherit for the text color.",
+    tone: "brand, accent, neutral, or inherit for the text color.",
     speed: "Seconds per cycle.",
-    ariaLabel: "What assistive tech announces.",
+    "aria-label": "What assistive tech announces.",
   }}
 />

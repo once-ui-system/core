@@ -224,7 +224,7 @@ export function BlockFilmstrip({
               data-filmstrip-id={item.id}
               role="listitem"
               className={styles.item}
-              width={12}
+              width="12rem"
               padding="4"
               gap="4"
               radius="l"
@@ -255,7 +255,7 @@ export function BlockFilmstrip({
                 )}
               </Column>
               <Row fillWidth paddingX="4" paddingBottom="2">
-                <Text variant={selected ? "label-strong-s" : "label-default-s"} truncate>
+                <Text textVariant={selected ? "label-strong-s" : "label-default-s"} truncate>
                   {item.title}
                 </Text>
               </Row>

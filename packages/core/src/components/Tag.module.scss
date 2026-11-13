@@ -1,3 +1,7 @@
+@use "../styles/density.scss" as density;
+@use "../styles/touch.scss" as touch;
+@use "../styles/glow.scss" as glow;
+
 .tag {
     white-space: nowrap;
     user-select: none;
@@ -6,5 +10,367 @@
         background-image: linear-gradient(45deg, var(--brand-background-strong), var(--accent-background-strong));
         color: var(--brand-on-background-medium);
         background-clip: padding-box;
+    }
+
+    // The default look: a neutral hairline on the page, white on light
+    // (inputs are white there), with the tone in a dot or prefix icon.
+    &.hairline {
+        background: transparent;
+
+        :global([data-theme="light"]) & {
+            background: var(--static-white);
+        }
+    }
+
+    // Filled in its tone, with the tone's own text colour on it.
+    &.solid {
+        background: var(--tag-tone-solid);
+        color: var(--tag-tone-on-solid);
+    }
+
+    &.clickable {
+        transition: border-color var(--transition-micro-medium);
+
+        @media (hover: hover) {
+            &:hover {
+                border-color: var(--neutral-alpha-strong);
+            }
+        }
+    }
+
+    // As 2.x's Badge: a long announcement wraps inside its pill.
+    &.announce {
+        white-space: normal;
+    }
+}
+
+// `effect`: a short brand-to-accent beam that travels round the edge (a
+// conic gradient masked to the 1px border, on a registered angle), faster on
+// hover and still under reduced motion. 2.x drew it on Badge.
+@property --tag-beam-angle {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+
+.beam {
+    position: relative;
+    isolation: isolate;
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        border-radius: inherit;
+        padding: 1px;
+        background: conic-gradient(
+            from var(--tag-beam-angle),
+            transparent 0deg 250deg,
+            var(--function-brand-600) 300deg,
+            var(--function-accent-600) 340deg,
+            transparent 360deg
+        );
+        z-index: -1;
+        -webkit-mask:
+            linear-gradient(#000 0 0) content-box,
+            linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask:
+            linear-gradient(#000 0 0) content-box,
+            linear-gradient(#000 0 0);
+        mask-composite: exclude;
+        pointer-events: none;
+        animation: tagBeam 6s linear infinite;
+    }
+
+    @media (hover: hover) {
+        &:hover::before {
+            animation-duration: 2.5s;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        &::before {
+            animation: none;
+            --tag-beam-angle: 45deg;
+        }
+    }
+}
+
+@keyframes tagBeam {
+    to {
+        --tag-beam-angle: 360deg;
+    }
+}
+
+.announce {
+    position: relative;
+    isolation: isolate;
+    transition:
+        background-color var(--transition-micro-medium),
+        border-color var(--transition-micro-medium);
+
+    // A soft highlight along the top edge in dark mode, so the pill reads as
+    // raised glass.
+    :global([data-theme="dark"]) &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -2;
+        border-radius: inherit;
+        background: linear-gradient(180deg, var(--neutral-alpha-weak), transparent 60%);
+        pointer-events: none;
+    }
+
+    @media (hover: hover) {
+        &:hover {
+            border-color: var(--neutral-alpha-strong);
+        }
+    }
+}
+
+// A fixed height per size, with the label trimmed to its cap height so it
+// sits in the optical middle whatever the font's line metrics: a line box
+// centres the em box, and most fonts (Geist among them) carry more room
+// above the caps than below the baseline, which lifts the text. A browser
+// without text-box keeps the line box, as before.
+// Written out, not generated, so every class is a literal in the source.
+.hairline,
+.solid {
+    &.size-xs { height: var(--static-space-16); }
+    &.size-s { height: var(--static-space-20); }
+    &.size-m { height: var(--static-space-24); }
+    &.size-l { height: calc(var(--static-space-24) + var(--static-space-4)); }
+    &.size-xl { height: var(--static-space-32); }
+}
+
+.toggle {
+    &.size-xs { height: var(--static-space-20); }
+    &.size-s { height: var(--static-space-24); }
+    &.size-m { height: calc(var(--static-space-24) + var(--static-space-4)); }
+    &.size-l { height: var(--static-space-32); }
+    &.size-xl { height: var(--static-space-40); }
+}
+
+.label {
+    text-box: trim-both cap alphabetic;
+}
+
+// The tone's dot: the most saturated step of its scale, which is 600 on dark
+// and 500 on light (the light scale runs from dark to pale).
+.dot {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: var(--radius-full);
+    background: var(--tag-dot);
+}
+
+.toneIcon {
+    color: var(--tag-dot);
+}
+
+// A toggle (2.x's Chip) in a hairline when off. On, it is solid ink, or
+// solid in its tone when one is given.
+@mixin tone($tone) {
+    --tag-dot: var(--function-#{$tone}-600);
+    --tag-tone-solid: var(--#{$tone}-solid-strong);
+    --tag-tone-on-solid: var(--#{$tone}-on-solid-strong);
+
+    :global([data-theme="light"]) & {
+        --tag-dot: var(--function-#{$tone}-500);
+    }
+}
+
+// Written out, not generated, so every class is a literal in the source.
+.tone-brand {
+    @include tone(brand);
+}
+.tone-accent {
+    @include tone(accent);
+}
+.tone-neutral {
+    @include tone(neutral);
+}
+.tone-info {
+    @include tone(info);
+}
+.tone-success {
+    @include tone(success);
+}
+.tone-warning {
+    @include tone(warning);
+}
+.tone-danger {
+    @include tone(danger);
+}
+
+.toggle {
+    border: 1px solid var(--neutral-alpha-medium);
+    transition:
+        background-color var(--transition-micro-medium),
+        border-color var(--transition-micro-medium),
+        color var(--transition-micro-medium);
+
+    &.unselected {
+        background: transparent;
+        color: var(--neutral-on-background-medium);
+
+        :global([data-theme="light"]) & {
+            background: var(--static-white);
+        }
+
+        &:focus {
+            color: var(--neutral-on-background-strong);
+            border-color: var(--neutral-alpha-strong);
+        }
+
+        @media (hover: hover) {
+            &:hover {
+                color: var(--neutral-on-background-strong);
+                border-color: var(--neutral-alpha-strong);
+            }
+        }
+
+        &:active {
+            background: var(--neutral-alpha-weak);
+        }
+    }
+
+    &.selected {
+        // Ink: the page's strongest text colour as the fill, the page as the text.
+        --tag-solid: var(--neutral-on-background-strong);
+        --tag-on-solid: var(--page-background);
+        border-color: transparent;
+        background: var(--tag-solid);
+        color: var(--tag-on-solid);
+
+        @media (hover: hover) {
+            &:hover {
+                opacity: 0.9;
+            }
+        }
+
+        &:active {
+            opacity: 0.8;
+        }
+    }
+
+    // A tone given to a toggle draws it solid in that tone when on.
+    &.selected[class*="tone-"] {
+        --tag-solid: var(--tag-tone-solid);
+        --tag-on-solid: var(--tag-tone-on-solid);
+        @include glow.solid-shadow(var(--tag-solid), var(--static-transparent), 0.7);
+    }
+
+    &:disabled {
+        background: var(--neutral-solid-weak);
+        cursor: var(--cursor-disabled, not-allowed);
+    }
+
+    // A toggle without a remove button is the control itself.
+    &[role="button"] {
+        @include touch.target;
+    }
+}
+
+// The remove button: the same 24px hit area, a smaller glyph, tucked into
+// the tag's padding.
+.remove {
+    margin-block: calc(-1 * var(--static-space-4));
+    margin-right: calc(-1 * var(--static-space-4));
+    opacity: 0.64;
+
+    @media (hover: hover) {
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    :global(svg) {
+        width: var(--static-space-12);
+        height: var(--static-space-12);
+    }
+}
+
+// With one, the toggle beside the remove button is.
+.action {
+    @include touch.target;
+}
+
+// A removable toggle takes focus on its own control, beside the remove
+// button, rather than on the box. The box still looks focused, as it did when
+// it was the control: the same background, and the browser's own focus ring
+// around the whole tag. Rules of their own, so a browser without `:has()`
+// drops only these and keeps the ring on the control itself.
+.toggle.unselected:has(> .action:focus) {
+    color: var(--neutral-on-background-strong);
+    border-color: var(--neutral-alpha-strong);
+}
+
+.toggle:has(> .action:focus-visible) {
+    outline: 1px auto;
+    outline: -webkit-focus-ring-color auto 1px;
+
+    > .action {
+        outline: none;
+    }
+}
+
+// No `size`: m, or the theme density's s or l (density.scss), with the
+// padding, text and icons Tag.tsx and InteractiveTag.tsx pick per size. The
+// padding is a utility class on the tag, so the attribute counts here.
+.auto {
+    @include density.parts(s) {
+        padding: var(--static-space-1) var(--static-space-8);
+
+        &.hairline {
+            height: var(--static-space-20);
+            padding-block: 0;
+        }
+
+        &.announce {
+            padding: var(--static-space-2) var(--static-space-8);
+
+            .icon {
+                @include density.icon(xs);
+            }
+        }
+
+        &.toggle {
+            height: var(--static-space-24);
+            padding: var(--static-space-0) var(--static-space-4);
+
+            .text {
+                @include density.text(body, s);
+            }
+
+            .icon {
+                @include density.icon(xs);
+            }
+        }
+    }
+
+    @include density.parts(l) {
+        padding: var(--static-space-4) var(--static-space-12);
+
+        &.hairline {
+            height: calc(var(--static-space-24) + var(--static-space-4));
+            padding-block: 0;
+        }
+
+        &.announce {
+            padding: var(--static-space-8) var(--static-space-16);
+            @include density.text(label, m);
+        }
+
+        &.toggle {
+            height: var(--static-space-32);
+            padding: var(--static-space-0) var(--static-space-8);
+
+            .text {
+                @include density.text(body, m);
+            }
+        }
     }
 }

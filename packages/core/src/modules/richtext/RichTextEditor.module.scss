@@ -1,0 +1,142 @@
+// The frame matches Input: a tinted well in dark mode, a white field with a
+// firmer edge in light mode, the border darkening on focus.
+.frame {
+  border: 1px solid var(--neutral-border-medium);
+  border-radius: var(--radius-l);
+  background-color: var(--neutral-alpha-weak);
+  overflow: hidden;
+  transition: border-color var(--transition-micro-medium);
+
+  &:focus-within {
+    border-color: var(--neutral-border-strong);
+  }
+}
+
+:global([data-theme="light"]) .frame:not(.invalid) {
+  background-color: var(--neutral-background-weak);
+  border-color: var(--neutral-border-strong);
+}
+
+.invalid {
+  border-color: var(--danger-border-medium);
+  background-color: var(--danger-alpha-weak);
+
+  &:focus-within {
+    border-color: var(--danger-border-strong);
+  }
+}
+
+.disabled {
+  opacity: 0.6;
+}
+
+.toolbar {
+  border-bottom: 1px solid var(--neutral-border-weak);
+}
+
+.icon {
+  width: var(--static-space-16);
+  height: var(--static-space-16);
+  display: block;
+}
+
+.scroll {
+  overflow-y: auto;
+}
+
+// The document itself: a contenteditable ProseMirror root.
+.content {
+  outline: none;
+  min-height: inherit;
+  padding: var(--static-space-12) var(--static-space-16);
+  font-family: var(--font-body);
+  font-size: var(--font-size-body-m);
+  line-height: var(--line-height-body-m);
+  color: var(--neutral-on-background-strong);
+  overflow-wrap: anywhere;
+
+  > * + * {
+    margin-top: var(--static-space-8);
+  }
+
+  p {
+    margin: 0;
+  }
+
+  h2,
+  h3 {
+    margin: var(--static-space-12) 0 0;
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-strong, 600);
+    line-height: 1.3;
+  }
+
+  h2 {
+    font-size: var(--font-size-heading-s);
+  }
+
+  h3 {
+    font-size: var(--font-size-heading-xs);
+  }
+
+  > :first-child {
+    margin-top: 0;
+  }
+
+  ul,
+  ol {
+    margin: 0;
+    padding-left: var(--static-space-24);
+  }
+
+  li > p {
+    margin: 0;
+  }
+
+  blockquote {
+    margin: 0;
+    padding-left: var(--static-space-12);
+    border-left: 2px solid var(--neutral-border-medium);
+    color: var(--neutral-on-background-medium);
+  }
+
+  code {
+    font-family: var(--font-code);
+    font-size: 0.9em;
+    padding: 0 var(--static-space-4);
+    border-radius: var(--radius-xs);
+    background: var(--neutral-alpha-medium);
+  }
+
+  pre {
+    margin: 0;
+    padding: var(--static-space-12);
+    border-radius: var(--radius-m);
+    background: var(--neutral-alpha-medium);
+    overflow-x: auto;
+
+    code {
+      padding: 0;
+      background: none;
+    }
+  }
+
+  a {
+    color: var(--brand-on-background-medium);
+    text-decoration: underline;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--neutral-border-medium);
+  }
+
+  // The placeholder, drawn by the Placeholder extension on the empty first paragraph.
+  p:global(.is-editor-empty):first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+    color: var(--neutral-on-background-weak);
+  }
+}

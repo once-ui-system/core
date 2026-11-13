@@ -134,7 +134,7 @@ describe("Carousel: navigation", () => {
 
   it("swipes left for the next slide and right for the previous", () => {
     render(<Carousel items={items} />, { wrapper });
-    const surface = screen.getAllByRole("img")[0].closest("[class*='revealFx']") as HTMLElement;
+    const surface = screen.getAllByRole("img")[0].closest("[class*='reveal']") as HTMLElement;
     fireEvent.touchStart(surface, { touches: [{ clientX: 300 }] });
     fireEvent.touchEnd(surface, { changedTouches: [{ clientX: 200 }] });
     advance(350);

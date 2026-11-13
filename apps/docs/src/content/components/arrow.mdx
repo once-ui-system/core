@@ -1,42 +1,71 @@
 ---
 title: "Arrow"
-summary: "The Arrow component provides an animated arrow that responds to hover events on specified trigger elements."
-updatedAt: "2025-05-04"
+summary: "An animated arrow that slides in while the element its trigger names is hovered."
+updatedAt: "2026-10-18"
 docs: "once-ui/components/arrow.mdx"
 github: "components/Arrow.tsx"
 navLabel: "Arrow"
 navIcon: "components"
 ---
 
-A decorative arrow component that animates when a specified trigger element is hovered. It's useful for creating visual cues and enhancing interactive elements with subtle animations.
+A decorative arrow that animates in while a trigger element is hovered: the cue on a card or link that the whole surface goes somewhere. `Button` (`arrowIcon`) and `Tag` (`arrow`) draw the same arrow themselves; use `Arrow` on its own for anything else, such as a whole-card link or a hover card.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
     <Column gap="16" horizontal="center">
-      <Row id="arrow-trigger-1" padding="16" fitWidth radius="m" vertical="center">
+      <Row id="arrow-trigger-1" padding="16" fitWidth radius="m" vertical="center" gap="8">
         Simple usage
         <Arrow trigger="#arrow-trigger-1" scale={1} />
       </Row>
-      <Row id="arrow-trigger-2" padding="16" fitWidth radius="m" vertical="center" solid="brand-medium" onSolid="brand-strong">
+      <Row id="arrow-trigger-2" padding="16" fitWidth radius="m" vertical="center" gap="8" solid="brand-medium" onSolid="brand-strong">
         Customized usage
         <Arrow trigger="#arrow-trigger-2" color="onSolid" scale={1.2} />
       </Row>
-    </Column>  }
+    </Column>
+  }
   codes={[
     {
       code:
-`<Row id="arrow-trigger-1">
-    Simple usage
-    <Arrow trigger="#arrow-trigger-1" scale={1} />
-  </Row>
-  <Row id="arrow-trigger-2">
-    Customized usage
-    <Arrow trigger="#arrow-trigger-2" color="onSolid" scale={1.2} />
+`<Row id="arrow-trigger-1" vertical="center" gap="8">
+  Simple usage
+  <Arrow trigger="#arrow-trigger-1" scale={1} />
+</Row>
+<Row id="arrow-trigger-2" vertical="center" gap="8" solid="brand-medium" onSolid="brand-strong">
+  Customized usage
+  <Arrow trigger="#arrow-trigger-2" color="onSolid" scale={1.2} />
 </Row>`,
       language: "tsx",
       label: "Arrow"
+    }
+  ]}
+/>
+
+## On a card
+
+Give the card an `id` and point `trigger` at it. The arrow takes Flex's layout props, so `position`, `top` and `right` pin it to a corner (a number is on the token scale, as the spacing step of the same name is).
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Card id="arrow-card" href="#" position="relative" padding="24" radius="l" maxWidth="xs" direction="column" gap="4">
+      <Text textVariant="heading-strong-s">Read the case study</Text>
+      <Text onBackground="neutral-weak">How a team of two shipped in a week.</Text>
+      <Arrow trigger="#arrow-card" position="absolute" top="24" right="24" />
+    </Card>
+  }
+  codes={[
+    {
+      code:
+`<Card id="case-study" href="/stories/case-study" position="relative" padding="24" radius="l" direction="column" gap="4">
+  <Text textVariant="heading-strong-s">Read the case study</Text>
+  <Text onBackground="neutral-weak">How a team of two shipped in a week.</Text>
+  <Arrow trigger="#case-study" position="absolute" top="24" right="24" />
+</Card>`,
+      language: "tsx",
+      label: "Card"
     }
   ]}
 />
@@ -46,9 +75,9 @@ A decorative arrow component that animates when a specified trigger element is h
 <PropsTable
   component="Arrow"
   describe={{
-    trigger: "CSS selector for the element it points from. It follows that element's hover.",
-    scale: "Arrow size, as a multiplier.",
-    color: "Whether it draws for a background or a solid surface.",
+    trigger: "CSS selector for the element whose hover draws the arrow.",
+    scale: "Arrow size, as a multiplier of its 16px box.",
+    color: "Whether it draws for a background or on a solid surface.",
   }}
   content={[
     ["style"],
@@ -56,9 +85,8 @@ A decorative arrow component that animates when a specified trigger element is h
   ]}
 />
 
-## Usage Notes
+## Usage notes
 
-- The `trigger` prop must be a valid CSS selector (e.g., `#element-id`, `.element-class`)
-- The arrow will animate when the user hovers over the element specified by the trigger selector
-- Use the `scale` prop to adjust the size of the arrow to fit your design
-- The `color` prop allows you to choose between styles optimized for light or dark backgrounds
+- `trigger` must be a valid CSS selector (`#element-id`, `[data-card="pro"]`), and the element must be on the page when the arrow mounts.
+- The arrow is decorative and hidden from assistive technology; the trigger element carries the link or action.
+- For a button or a tag, use `Button arrowIcon` or `Tag arrow`, which wire the hover for you.

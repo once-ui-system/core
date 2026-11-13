@@ -4,15 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import {
   AccordionGroup,
   Background,
-  BlobFx,
   Button,
   Column,
-  CountFx,
   Grid,
   Heading,
   Icon,
-  MatrixFx,
-  RevealFx,
   Row,
   SegmentedControl,
   Table,
@@ -20,6 +16,7 @@ import {
   Text,
   useInViewport,
 } from "@once-ui-system/core";
+import { BlobFx, CountFx, MatrixFx, RevealFx } from "@once-ui-system/fx";
 
 type Billing = "monthly" | "yearly";
 
@@ -99,7 +96,7 @@ const faqItems = [
   {
     title: "Can I switch plans later?",
     content: (
-      <Text variant="body-default-s" onBackground="neutral-weak">
+      <Text textVariant="body-default-s" onBackground="neutral-weak">
         Yes. Upgrades apply immediately and we prorate the difference; downgrades take effect at
         the start of your next billing cycle.
       </Text>
@@ -108,7 +105,7 @@ const faqItems = [
   {
     title: "What happens when my trial ends?",
     content: (
-      <Text variant="body-default-s" onBackground="neutral-weak">
+      <Text textVariant="body-default-s" onBackground="neutral-weak">
         Your workspace stays intact in read-only mode. Add a payment method any time to pick up
         exactly where you left off — nothing gets deleted.
       </Text>
@@ -117,7 +114,7 @@ const faqItems = [
   {
     title: "How does yearly billing work?",
     content: (
-      <Text variant="body-default-s" onBackground="neutral-weak">
+      <Text textVariant="body-default-s" onBackground="neutral-weak">
         Yearly plans are billed once per year at a 20% discount. You can switch from monthly to
         yearly at any point and the remaining balance is credited.
       </Text>
@@ -126,7 +123,7 @@ const faqItems = [
   {
     title: "Do you offer discounts for startups or non-profits?",
     content: (
-      <Text variant="body-default-s" onBackground="neutral-weak">
+      <Text textVariant="body-default-s" onBackground="neutral-weak">
         Early-stage startups and registered non-profits get 50% off Pro for the first year. Reach
         out to sales with a short note about what you're building.
       </Text>
@@ -135,7 +132,7 @@ const faqItems = [
   {
     title: "What payment methods do you accept?",
     content: (
-      <Text variant="body-default-s" onBackground="neutral-weak">
+      <Text textVariant="body-default-s" onBackground="neutral-weak">
         All major credit cards, plus invoicing with NET-30 terms on Enterprise plans.
       </Text>
     ),
@@ -165,7 +162,7 @@ export default function PricingPage() {
           size={1.5}
           spacing={8}
           colors={["brand-solid-strong"]}
-          bulge={{ type: "wave", duration: 3, intensity: 20, repeat: true }}
+          bulge={{ type: "wave", duration: 3000, intensity: 20, repeat: true }}
         />
         <Background
           position="absolute"
@@ -173,21 +170,21 @@ export default function PricingPage() {
           left="0"
           fill
           pointerEvents="none"
-          gradient={{ display: true, colorStart: "page-background", x: 0, y: 50, width: 150, height: 300 }}
+          gradient={{ display: true, colorStart: "page-background", x: 0, y: "50%", width: "150%", height: "300%" }}
         />
-        <Column zIndex={1} center gap="24" padding="48" maxWidth={48}>
+        <Column zIndex={1} center gap="24" padding="48" maxWidth="48rem">
           <RevealFx translateY="16">
             <Column center gap="16">
-              <Text variant="label-default-s" onBackground="brand-medium">
+              <Text textVariant="label-default-s" onBackground="brand-medium">
                 Pricing
               </Text>
-              <Heading as="h1" variant="display-strong-xl" align="center">
+              <Heading as="h1" textVariant="display-strong-xl" align="center">
                 Pay for momentum, not seats
               </Heading>
             </Column>
           </RevealFx>
           <RevealFx delay={100} translateY="16">
-            <Text variant="body-default-l" onBackground="neutral-weak" align="center">
+            <Text textVariant="body-default-l" onBackground="neutral-weak" align="center">
               Start free, scale when you're ready. Every plan includes unlimited viewers and our
               full component library.
             </Text>
@@ -206,17 +203,17 @@ export default function PricingPage() {
             s={{ direction: "column", horizontal: "start" }}
           >
             <Column gap="12">
-              <Text variant="label-default-s" onBackground="brand-medium">
+              <Text textVariant="label-default-s" onBackground="brand-medium">
                 Plans
               </Text>
-              <Heading as="h2" variant="display-strong-xs">
+              <Heading as="h2" textVariant="display-strong-xs">
                 Three plans, one decision
               </Heading>
             </Column>
             <SegmentedControl
               fillWidth={false}
               value={billing}
-              onChange={(value) => setBilling(value as Billing)}
+              onValueChange={(value) => setBilling(value as Billing)}
               buttons={[
                 { value: "monthly", label: "Monthly" },
                 { value: "yearly", label: "Yearly −20%" },
@@ -246,45 +243,47 @@ export default function PricingPage() {
                         display: true,
                         colorStart: "brand-alpha-medium",
                         colorEnd: "static-transparent",
-                        x: 50,
+                        x: "50%",
                         y: 0,
-                        width: 200,
-                        height: 60,
+                        width: "200%",
+                        height: "60%",
                         opacity: 50,
                       }}
                     />
                   )}
                   <Column zIndex={1} fill gap="24">
                     <Row fillWidth horizontal="between" vertical="center" gap="8">
-                      <Heading as="h3" variant="heading-strong-m">
+                      <Heading as="h3" textVariant="heading-strong-m">
                         {tier.name}
                       </Heading>
-                      {tier.highlighted && <Tag scheme="brand" size="s" label="Most popular" />}
+                      {tier.highlighted && <Tag tone="brand" size="s" label="Most popular" />}
                     </Row>
-                    <Text variant="body-default-s" onBackground="neutral-weak">
+                    <Text textVariant="body-default-s" onBackground="neutral-weak">
                       {tier.description}
                     </Text>
                     {tier.price ? (
                       <Row vertical="end" gap="2">
-                        <Text variant="display-strong-s">$</Text>
+                        <Text textVariant="display-strong-s">$</Text>
                         <CountFx
-                          variant="display-strong-s"
+                          textVariant="display-strong-s"
                           value={tier.price[billing]}
                           effect="wheel"
-                          speed={400}
+                          duration={400}
                         />
-                        <Text variant="label-default-s" onBackground="neutral-weak" paddingBottom="4" paddingLeft="4">
-                          / mo
-                        </Text>
+                        <Column paddingBottom="4" paddingLeft="4">
+                          <Text textVariant="label-default-s" onBackground="neutral-weak">
+                            / mo
+                          </Text>
+                        </Column>
                       </Row>
                     ) : (
-                      <Text variant="display-strong-s">Custom</Text>
+                      <Text textVariant="display-strong-s">Custom</Text>
                     )}
                     <Column flex={1} gap="12">
                       {tier.features.map((feature) => (
                         <Row key={feature} gap="12" vertical="center">
                           <Icon name="checkbox" size="xs" onBackground="brand-medium" />
-                          <Text variant="body-default-s">{feature}</Text>
+                          <Text textVariant="body-default-s">{feature}</Text>
                         </Row>
                       ))}
                     </Column>
@@ -307,28 +306,28 @@ export default function PricingPage() {
       <Column fillWidth horizontal="center" background="neutral-alpha-weak" paddingY="80" paddingX="24">
         <Column fillWidth maxWidth="l" gap="40">
           <Column gap="12">
-            <Text variant="label-default-s" onBackground="brand-medium">
+            <Text textVariant="label-default-s" onBackground="brand-medium">
               Compare
             </Text>
-            <Heading as="h2" variant="display-strong-xs">
+            <Heading as="h2" textVariant="display-strong-xs">
               Every feature, side by side
             </Heading>
           </Column>
-          <Table fillWidth data={comparisonData} />
+          <Table fillWidth columns={comparisonData.headers.map(({ content, ...column }) => ({ ...column, header: content }))} rows={comparisonData.rows} />
         </Column>
       </Column>
 
       {/* FAQ — split layout */}
       <Column fillWidth horizontal="center">
         <Row fillWidth maxWidth="l" gap="40" s={{ direction: "column" }}>
-          <Column gap="16" maxWidth={20}>
-            <Text variant="label-default-s" onBackground="brand-medium">
+          <Column gap="16" maxWidth="20rem">
+            <Text textVariant="label-default-s" onBackground="brand-medium">
               FAQ
             </Text>
-            <Heading as="h2" variant="display-strong-xs">
+            <Heading as="h2" textVariant="display-strong-xs">
               Questions, answered
             </Heading>
-            <Text variant="body-default-m" onBackground="neutral-weak">
+            <Text textVariant="body-default-m" onBackground="neutral-weak">
               Can't find what you're looking for? Our team replies within one business day.
             </Text>
             <Button variant="secondary" size="s" suffixIcon="arrowUpRight" href="mailto:sales@example.com">
@@ -353,11 +352,11 @@ export default function PricingPage() {
           center
         >
           <BlobFx position="absolute" top="0" left="0" fill opacity={60} seed={2} />
-          <Column zIndex={1} center gap="24" maxWidth={40}>
-            <Heading as="h2" variant="display-strong-s" align="center">
+          <Column zIndex={1} center gap="24" maxWidth="40rem">
+            <Heading as="h2" textVariant="display-strong-s" align="center">
               Ship your next launch on Pro
             </Heading>
-            <Text variant="body-default-m" onBackground="neutral-weak" align="center">
+            <Text textVariant="body-default-m" onBackground="neutral-weak" align="center">
               14-day free trial, no credit card required. Cancel anytime.
             </Text>
             <Row gap="12" s={{ direction: "column" }}>

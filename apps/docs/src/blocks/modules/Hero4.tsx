@@ -1,5 +1,5 @@
 import {
-  AutoScroll,
+  Scroller,
   Background,
   Button,
   Column,
@@ -18,14 +18,14 @@ export const Hero4: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
         left="0"
         gradient={{
           display: true,
-          x: 50,
+          x: "50%",
           y: 0,
-          width: 50,
-          height: 100,
+          width: "50%",
+          height: "100%",
           colorStart: "accent-background-strong",
           colorEnd: "static-transparent",
         }}
-        height={32}
+        height="32rem"
       />
       <Background
         themeSolid="inverse"
@@ -34,23 +34,23 @@ export const Hero4: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
         left="0"
         gradient={{
           display: true,
-          x: 50,
+          x: "50%",
           y: 0,
-          width: 50,
-          height: 100,
+          width: "50%",
+          height: "100%",
           colorStart: "brand-solid-medium",
           colorEnd: "static-transparent",
         }}
-        height={24}
+        height="24rem"
       />
       <Column fillWidth gap="32" fitHeight horizontal="center" {...flex}>
         <Column fillWidth horizontal="center" gap="24" marginBottom="32">
           <Column maxWidth="xs" horizontal="center" gap="12">
-            <Heading variant="display-strong-xl" marginTop="12">
+            <Heading textVariant="display-strong-xl" marginTop="12">
               Just ship it
               <br /> with Once UI
             </Heading>
-            <Heading onBackground="neutral-weak" variant="heading-default-xl" marginBottom="32">
+            <Heading onBackground="neutral-weak" textVariant="heading-default-xl" marginBottom="32">
               The design engine for builders
             </Heading>
             <Row gap="8" themeBorder="rounded">
@@ -62,10 +62,9 @@ export const Hero4: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
           </Column>
           <Column maxWidth="l" overflow="hidden">
             <Column fillWidth gap="12" style={{ transform: "perspective(1000px) rotateX(15deg)" }}>
-              <AutoScroll
+              <Scroller auto={{ speed: "slow" }}
                 aspectRatio="3 / 1"
                 style={{ transform: "scale(0.75) translateX(-25%)", width: "150%" }}
-                speed="slow"
               >
                 <Media
                   src="/images/og/home.jpg"
@@ -99,7 +98,7 @@ export const Hero4: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
                   radius="l"
                   border="neutral-alpha-medium"
                 />
-              </AutoScroll>
+              </Scroller>
             </Column>
             <Fade
               style={{ transform: "translateX(-1px)" }}
@@ -107,7 +106,7 @@ export const Hero4: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
               top="0"
               left="0"
               fillHeight
-              width={12}
+              width="12rem"
               to="right"
             />
             <Fade
@@ -116,7 +115,7 @@ export const Hero4: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
               top="0"
               right="0"
               fillHeight
-              width={12}
+              width="12rem"
               to="left"
             />
           </Column>

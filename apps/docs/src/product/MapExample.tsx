@@ -10,9 +10,10 @@ import {
   MapMarkers,
   MapPin,
   MapPopup,
+  MapRoute,
   type MapViewport,
 } from "@once-ui-system/core/map";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const BUDAPEST: LngLat = [19.0402, 47.4979];
 
@@ -50,7 +51,7 @@ const price = (value: number) =>
 
 export function MapBasicExample() {
   return (
-    <Map height={24} defaultViewport={{ center: BUDAPEST, zoom: 12 }} labels={{ map: "Budapest" }}>
+    <Map height={384} defaultViewport={{ center: BUDAPEST, zoom: 12 }} labels={{ map: "Budapest" }}>
       <MapMarker position={BUDAPEST} />
     </Map>
   );
@@ -63,7 +64,7 @@ export function MapListingsExample() {
 
   return (
     <Map
-      height={32}
+      height={512}
       bounds={listings.map((listing) => listing.position)}
       labels={{ map: "Listings" }}
     >
@@ -85,12 +86,12 @@ export function MapListingsExample() {
       />
       {open && (
         <MapPopup position={open.position} onClose={() => setOpen(undefined)}>
-          <Text variant="label-strong-m">{open.title}</Text>
+          <Text textVariant="label-strong-m">{open.title}</Text>
           <Row gap="8" vertical="center">
             <Tag size="s">
               {open.rooms} {open.rooms === 1 ? "room" : "rooms"}
             </Tag>
-            <Text variant="body-default-s" onBackground="neutral-weak">
+            <Text textVariant="body-default-s" onBackground="neutral-weak">
               {price(open.price)}
             </Text>
           </Row>
@@ -111,7 +112,7 @@ const VENUES = [
 
 export function MapAvatarExample() {
   return (
-    <Map height={24} bounds={VENUES.map((venue) => venue.position)} controls={false}>
+    <Map height={384} bounds={VENUES.map((venue) => venue.position)} controls={false}>
       {VENUES.map((venue) => (
         <MapMarker key={venue.id} position={venue.position} anchor="center">
           <Avatar size="m" value={venue.name.slice(0, 1)} aria-label={venue.name} />
@@ -123,8 +124,30 @@ export function MapAvatarExample() {
 
 export function MapAreaExample() {
   return (
-    <Map height={24} defaultViewport={{ center: [19.0545, 47.5065], zoom: 14 }}>
+    <Map height={384} defaultViewport={{ center: [19.0545, 47.5065], zoom: 14 }}>
       <MapCircle position={[19.0545, 47.5065]} radius={400} />
+    </Map>
+  );
+}
+
+const ROUTE: LngLat[] = [
+  [19.0402, 47.4979],
+  [19.0457, 47.5005],
+  [19.0512, 47.5021],
+  [19.0545, 47.5065],
+  [19.0611, 47.5089],
+];
+
+export function MapRouteExample() {
+  const [progress, setProgress] = useState(0.4);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setInterval(() => setProgress((p) => (p >= 1 ? 0 : p + 0.01)), 120);
+    return () => window.clearInterval(timer);
+  }, []);
+  return (
+    <Map height={384} defaultViewport={{ center: [19.0506, 47.5034], zoom: 14 }}>
+      <MapRoute path={ROUTE} progress={progress} />
     </Map>
   );
 }
@@ -159,7 +182,7 @@ export function MapGlobeExample() {
         ))}
       </Row>
       <Map
-        height={32}
+        height={512}
         projection="globe"
         buildings="3d"
         viewport={viewport}
@@ -191,17 +214,79 @@ export function MapControlledExample() {
           </Button>
         ))}
       </Row>
-      <Map height={24} viewport={viewport} onViewportChange={setViewport}>
+      <Map height={384} viewport={viewport} onViewportChange={setViewport}>
         {places.map((place) => (
           <MapMarker key={place.label} position={place.position}>
-            <MapPin color="accent" aria-label={place.label} />
+            <MapPin tone="accent" aria-label={place.label} />
           </MapMarker>
         ))}
       </Map>
-      <Text variant="label-default-s" onBackground="neutral-weak">
+      <Text textVariant="label-default-s" onBackground="neutral-weak">
         {viewport.center.map((value) => value.toFixed(4)).join(", ")} · zoom{" "}
         {viewport.zoom.toFixed(1)}
       </Text>
     </Column>
+  );
+}
+
+const UNITS = [
+  {
+    id: "m12",
+    call: "M12",
+    kind: "heart",
+    status: "danger",
+    label: "Responding",
+    position: [19.0559, 47.5068],
+  },
+  {
+    id: "e4",
+    call: "E4",
+    kind: "bolt",
+    status: "warning",
+    label: "En route",
+    position: [19.0368, 47.4925],
+  },
+  {
+    id: "p7",
+    call: "P7",
+    kind: "security",
+    status: "success",
+    label: "Available",
+    position: [19.0703, 47.4893],
+  },
+  {
+    id: "m3",
+    call: "M3",
+    kind: "heart",
+    status: "success",
+    label: "Available",
+    position: [19.022, 47.507],
+  },
+] as const;
+
+export function MapStatusExample() {
+  const [active, setActive] = useState<string>("e4");
+  return (
+    <Map
+      height={400}
+      bounds={UNITS.map((unit) => [...unit.position] as LngLat)}
+      labels={{ map: "Units" }}
+    >
+      <MapMarkers
+        items={UNITS.map((unit) => ({ ...unit, position: [...unit.position] as LngLat }))}
+        activeId={active}
+        renderItem={(unit) => (
+          <MapPin
+            icon={unit.kind}
+            tone={unit.status}
+            active={unit.id === active}
+            onClick={() => setActive(unit.id)}
+            aria-label={`${unit.call}, ${unit.label}`}
+          >
+            {unit.id === active ? `${unit.call} · ${unit.label}` : undefined}
+          </MapPin>
+        )}
+      />
+    </Map>
   );
 }

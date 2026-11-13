@@ -4,10 +4,10 @@ import {
   Heading,
   Mask,
   Media,
-  ParticleFx,
   Row,
   Text,
 } from "@once-ui-system/core";
+import { ParticleFx } from "@once-ui-system/fx";
 
 const section = {
   title: "The best of Once UI",
@@ -36,12 +36,12 @@ export const Features7: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
   return (
     <Column fillWidth horizontal="center" {...flex}>
       <Column maxWidth="m" align="center" gap="20" paddingBottom="64" paddingX="20">
-        <Heading as="h2" variant="display-strong-m">
+        <Heading as="h2" textVariant="display-strong-m">
           {section.subtitle}
         </Heading>
         <Text
           wrap="balance"
-          variant="heading-default-xl"
+          textVariant="heading-default-xl"
           onBackground="neutral-medium"
           marginBottom="12"
         >
@@ -58,11 +58,11 @@ export const Features7: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
         style={{ filter: "blur(3rem)" }}
         gradient={{
           display: true,
-          x: 60,
-          y: 30,
+          x: "60%",
+          y: "30%",
           tilt: 10,
-          height: 40,
-          width: 30,
+          height: "40%",
+          width: "30%",
           colorStart: "brand-solid-strong",
           colorEnd: "static-transparent",
         }}
@@ -76,17 +76,17 @@ export const Features7: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
         style={{ filter: "blur(3rem)", transform: "rotateY(40deg)", perspective: "1000px" }}
         gradient={{
           display: true,
-          x: 60,
-          y: 25,
+          x: "60%",
+          y: "25%",
           tilt: 20,
-          height: 25,
-          width: 20,
+          height: "25%",
+          width: "20%",
           colorStart: "brand-on-background-medium",
           colorEnd: "static-transparent",
         }}
       />
-      <Mask position="absolute" x={60} y={25} fill pointerEvents="none">
-        <ParticleFx speed={0.5} opacity={50} color="brand-on-background-strong" density={200} />
+      <Mask position="absolute" x="60%" y="25%" fill pointerEvents="none">
+        <ParticleFx speed={1.67} opacity={50} color="brand-on-background-strong" density={200} />
       </Mask>
       <Column
         maxWidth="l"
@@ -108,10 +108,10 @@ export const Features7: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
           left="0"
           gradient={{
             display: true,
-            x: 75,
-            y: 10,
-            height: 25,
-            width: 20,
+            x: "75%",
+            y: "10%",
+            height: "25%",
+            width: "20%",
             colorStart: "brand-solid-strong",
             colorEnd: "static-transparent",
           }}
@@ -145,9 +145,9 @@ export const Features7: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
           left="0"
           gradient={{
             display: true,
-            x: 50,
-            y: 130,
-            height: 70,
+            x: "50%",
+            y: "130%",
+            height: "70%",
             colorStart: "brand-solid-strong",
             colorEnd: "static-transparent",
           }}
@@ -157,7 +157,7 @@ export const Features7: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
         <Row maxWidth="l" gap="-1" s={{ direction: "column" }}>
           {features.map((feature, index) => (
             <Column fillWidth gap="12" padding="l" borderLeft borderRight key={index}>
-              <Text wrap="balance" variant="heading-default-m" onBackground="neutral-medium">
+              <Text wrap="balance" textVariant="heading-default-m" onBackground="neutral-medium">
                 {feature.title} <Text onBackground="neutral-weak">{feature.description}</Text>
               </Text>
             </Column>

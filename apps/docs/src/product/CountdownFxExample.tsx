@@ -1,13 +1,14 @@
 "use client";
 
-import { Column, Row, Text, CountdownFx, Heading } from "@once-ui-system/core";
+import { Column, Row, Text, Heading } from "@once-ui-system/core";
+import { CountdownFx } from "@once-ui-system/fx";
 
 export const CountdownFxBasic = () => {
   return (
     <Column gap="16" fill center>
       <CountdownFx
         targetDate={new Date(Date.now() + 24 * 60 * 60 * 1000)}
-        variant="display-strong-l"
+        textVariant="display-strong-l"
         format="HH:MM:SS"
       />
     </Column>
@@ -18,32 +19,32 @@ export const CountdownFxFormats = () => {
   return (
     <Column gap="24" fill>
       <Column gap="8">
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           HH:MM:SS
         </Text>
         <CountdownFx
           targetDate={new Date(Date.now() + 5 * 60 * 60 * 1000)}
-          variant="heading-strong-l"
+          textVariant="heading-strong-l"
           format="HH:MM:SS"
         />
       </Column>
       <Column gap="8">
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           MM:SS
         </Text>
         <CountdownFx
           targetDate={new Date(Date.now() + 10 * 60 * 1000)}
-          variant="heading-strong-l"
+          textVariant="heading-strong-l"
           format="MM:SS"
         />
       </Column>
       <Column gap="8">
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           DD:HH:MM:SS
         </Text>
         <CountdownFx
           targetDate={new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)}
-          variant="heading-strong-l"
+          textVariant="heading-strong-l"
           format="DD:HH:MM:SS"
         />
       </Column>
@@ -55,32 +56,32 @@ export const CountdownFxEffects = () => {
   return (
     <Column gap="24" fill>
       <Column gap="8">
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           Wheel Effect
         </Text>
         <CountdownFx
           targetDate={new Date(Date.now() + 2 * 60 * 60 * 1000)}
-          variant="display-strong-m"
+          textVariant="display-strong-m"
           effect="wheel"
         />
       </Column>
       <Column gap="8">
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           Smooth Effect
         </Text>
         <CountdownFx
           targetDate={new Date(Date.now() + 2 * 60 * 60 * 1000)}
-          variant="display-strong-m"
+          textVariant="display-strong-m"
           effect="smooth"
         />
       </Column>
       <Column gap="8">
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           Simple Effect
         </Text>
         <CountdownFx
           targetDate={new Date(Date.now() + 2 * 60 * 60 * 1000)}
-          variant="display-strong-m"
+          textVariant="display-strong-m"
           effect="simple"
         />
       </Column>
@@ -98,16 +99,16 @@ export const CountdownFxLaunch = () => {
       data-solid="contrast"
       radius="l"
     >
-      <Heading variant="display-strong-xl" align="center">
+      <Heading textVariant="display-strong-xl" align="center">
         Launching Soon
       </Heading>
       <CountdownFx
         targetDate={new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)}
-        variant="display-strong-l"
+        textVariant="display-strong-l"
         format="DD:HH:MM:SS"
         onBackground="brand-medium"
       />
-      <Text variant="body-default-m" onBackground="neutral-weak" align="center">
+      <Text textVariant="body-default-m" onBackground="neutral-weak" align="center">
         Get ready for something amazing
       </Text>
     </Column>
@@ -122,7 +123,7 @@ export const CountdownFxOnComplete = () => {
   return (
     <CountdownFx
       targetDate={new Date(Date.now() + 5000)}
-      variant="heading-strong-l"
+      textVariant="heading-strong-l"
       format="MM:SS"
       onComplete={handleComplete}
     />

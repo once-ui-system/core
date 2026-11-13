@@ -3,20 +3,21 @@
 import classNames from "clsx";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
-import { Flex } from "../../components/Flex";
-import { createAudioMeter } from "./audioLevel";
-import { clamp } from "./cube/math";
-import type { RGB } from "./cube/renderer";
-import { type CubeInput, CubeMotion } from "./cube/state";
-import { type CubeEyes, type CubeLook, type CubeSide, CubeView, faceUnits } from "./cube/view";
-import { baseMood, EyeGlyph, effectsFor, eyeGlyph, KawaiiLayer } from "./kawaii";
+import { Flex } from "../../components/Flex.js";
+import { tokenLength } from "../../utils/layoutClasses.js";
+import { createAudioMeter } from "./audioLevel.js";
+import { clamp } from "./cube/math.js";
+import type { RGB } from "./cube/renderer.js";
+import { type CubeInput, CubeMotion } from "./cube/state.js";
+import { type CubeEyes, type CubeLook, type CubeSide, CubeView, faceUnits } from "./cube/view.js";
+import { baseMood, EyeGlyph, effectsFor, eyeGlyph, KawaiiLayer } from "./kawaii.js";
 import {
   type MascotLook,
   type MascotProps,
   type MascotState,
   mascotLook,
   useMascotPoke,
-} from "./Mascot";
+} from "./Mascot.js";
 import styles from "./Mascot.module.scss";
 
 const SIZE = { s: 32, m: 48, l: 96, xl: 160 } as const;
@@ -66,9 +67,18 @@ let probe: CanvasRenderingContext2D | null | undefined;
 
 /** Any CSS color, or a scheme read from the element's tokens, as 0–1 RGB. */
 export function resolveColor(node: Element, value: string, fallback: RGB = [0.45, 0.5, 0.95]): RGB {
-  let css = value;
-  if (SCHEMES.has(value)) {
-    css = getComputedStyle(node).getPropertyValue(`--function-${value}-500`).trim();
+  let css = value.trim();
+  if (SCHEMES.has(css)) {
+    css = getComputedStyle(node).getPropertyValue(`--function-${css}-500`).trim();
+    if (!css) return fallback;
+  }
+  // A canvas fillStyle can't read custom properties, so `var(--x)` (with or
+  // without a fallback) is looked up on the node first. A few rounds, in case
+  // the fallback is itself a var().
+  for (let round = 0; round < 4; round++) {
+    const ref = /^var\(\s*(--[\w-]+)\s*(?:,\s*([\s\S]*))?\)$/.exec(css);
+    if (!ref) break;
+    css = getComputedStyle(node).getPropertyValue(ref[1]).trim() || (ref[2] ?? "").trim();
     if (!css) return fallback;
   }
   if (probe === undefined) {
@@ -121,13 +131,14 @@ export function cubeSides(
 
 /**
  * The 3D mascot behind `working="cube"`: a soft blob at rest that becomes the 2 × 2 Once UI cube
- * while it thinks, solves it, shows the logo and softens back with its face. It draws with a small
+ * while it thinks, solves it, shows the logo and softens back with its face. `working="d20"`
+ * firms into a twenty-sided die instead, which tumbles while it thinks and lands face on. It draws with a small
  * built-in WebGL renderer and hands back to the flat mascot where WebGL is missing.
  */
 export function MascotCube({ props, fallback }: { props: MascotProps; fallback: React.ReactNode }) {
   const {
     ref: forwardedRef,
-    working: _working,
+    working = "cube",
     state = "idle",
     mood = "neutral",
     seed,
@@ -148,11 +159,12 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
     sides,
     face,
     accessory: _accessory,
+    accessoryColor: _accessoryColor,
     lookAt = "pointer",
     level,
     source,
     size = "l",
-    ariaLabel,
+    "aria-label": ariaLabel,
     poke = true,
     onPointerDown,
     effects,
@@ -184,14 +196,16 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
     ...(seed !== undefined ? mascotLook(seed) : {}),
     ...passed,
   } as typeof CUBE_LOOK;
+  const eyeInk =
+    eyeColor ?? (color === undefined && seed !== undefined ? mascotLook(seed).eyeColor : undefined);
   const root = useRef<HTMLDivElement | null>(null);
   const canvas = useRef<HTMLCanvasElement | null>(null);
   const [failed, setFailed] = useState(false);
   const length =
     typeof size === "number"
-      ? `${size}px`
+      ? tokenLength(size)
       : size in SIZE
-        ? `${SIZE[size as keyof typeof SIZE]}px`
+        ? tokenLength(SIZE[size as keyof typeof SIZE])
         : size;
 
   // Everything the frame loop reads lives in refs, so a prop change never restarts it.
@@ -209,6 +223,7 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
   const fx = effectsFor(shownMood, effects);
   const glyph = eyeGlyph(fx);
   input.current.state = state;
+  input.current.shape = working === "d20" ? "d20" : "cube";
   input.current.mood = baseMood(shownMood);
   input.current.pokes = prod.pokes;
   input.current.hideEyes = Boolean(glyph);
@@ -222,9 +237,9 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
   });
   input.current.personality = look.personality;
   const cubeLook = useRef<CubeLook | null>(null);
-  const lookKey = JSON.stringify([look, eyeColor]);
-  const latest = useRef({ look, eyeColor });
-  latest.current = { look, eyeColor };
+  const lookKey = JSON.stringify([look, eyeInk]);
+  const latest = useRef({ look, eyeColor: eyeInk });
+  latest.current = { look, eyeColor: eyeInk };
 
   // Resolve colors against the element, again whenever the theme changes.
   // biome-ignore lint/correctness/useExhaustiveDependencies: `lookKey` is the trigger; the look is read from `latest`
@@ -395,7 +410,7 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
       aria-label={ariaLabel ?? LABEL[state]}
       data-state={state}
       data-mood={baseMood(mood)}
-      data-working="cube"
+      data-working={working}
       className={classNames(styles.mascot, className)}
       style={
         {
@@ -405,7 +420,7 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
           "--mascot-color": ["brand", "accent", "neutral"].includes(String(look.color))
             ? `var(--function-${look.color}-500)`
             : look.color,
-          ...(eyeColor ? { "--mascot-eye": eyeColor } : {}),
+          ...(eyeInk ? { "--mascot-eye": eyeInk } : {}),
           ...style,
         } as React.CSSProperties
       }

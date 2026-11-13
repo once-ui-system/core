@@ -7,7 +7,7 @@ import { ThemeInit } from "../components/ThemeInit";
 import { ThemeProvider } from "../contexts/ThemeProvider";
 import {
   customSchemeProperties,
-  generateColorScheme,
+  generateSeededScheme,
   schemeAlphaVariants,
 } from "../utils/colorScheme";
 
@@ -50,7 +50,7 @@ describe("ThemeInit renders a seeded scheme on the server", () => {
     expect(css?.startsWith("html:root{")).toBe(true);
     expect(markup.indexOf("<style")).toBeLessThan(markup.indexOf("<script"));
 
-    const scheme = generateColorScheme(SEED);
+    const scheme = generateSeededScheme(SEED);
     if (!scheme) throw new Error("seed did not parse");
     const expected: Record<string, string> = {};
     for (const [weight, value] of Object.entries(scheme)) {

@@ -433,6 +433,8 @@ the whole story.
   component="Textarea"
   describe={{
     variant: "Ghost drops the border and background.",
+    onValueChange: "Called with the field's text after every change, after the native onChange. Controlled only when value is set.",
+    validate: "Run on a debounce, controlled or not; return a message to show, or null to clear.",
     corners: "Round only some corners. Inside a [Form](/form-controls/form) with density=\"stacked\" this is worked out for you.",
     span: "How many columns to occupy inside a [Form](/form-controls/form) grid. Ignored outside one.",
   }}

@@ -98,7 +98,7 @@ describe("RadioButton accessibility", () => {
             label={option === "card" ? "Card" : "Bank transfer"}
             description={option === "bank" ? "Takes two days" : undefined}
             checked={value === option}
-            onToggle={() => setValue(option)}
+            onCheckedChange={() => setValue(option)}
           />
         ))}
       </form>

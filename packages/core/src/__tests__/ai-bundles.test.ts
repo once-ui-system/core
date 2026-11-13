@@ -43,10 +43,19 @@ describe("ai harness without spec.json", () => {
 
   // 25,000 until 2.4; raised by 500 bytes, about 125 tokens, for the AI
   // components (loader, working line, voice, mascot) so no existing purpose
-  // had to be cut to fit them; by 1,000 more for the six map components,
-  // each of which carries its subpath.
+  // had to be cut to fit them. 3.0 adds 300 more, about 75 tokens, for
+  // Sparkline and ChartSummary, which arrived with the catalog at 25,497.
+  // The 2.x merge adds 300 more for LogoLoader, Logo's monogram and Map's
+  // globe, which brought it to 25,899. GallerySection adds 100 more; it
+  // brought the catalog to 26,132. EmptyState brought it to 26,197. The
+  // components pulled forward from 3.1 (Sidebar, Combobox, Calendar,
+  // StatTile, PeerCursor, canvas, RichTextEditor and the Map additions)
+  // get 2,300 more, about 575 tokens, so each keeps a purpose line. The
+  // held 3.0 work (MascotPanel and its parts, the settings blocks, Scene,
+  // the control-room primitives, theme presets) brought it to 29,645; the
+  // cap moves to 30,500, about 125 tokens of headroom.
   it("keeps the catalog small enough to load on every task", () => {
-    expect(statSync(path.join(AI, "catalog.json")).size).toBeLessThan(26_500);
+    expect(statSync(path.join(AI, "catalog.json")).size).toBeLessThan(30_500);
   });
 });
 
@@ -98,7 +107,9 @@ describe("ai task bundles as one Markdown read", () => {
       expect(md).toContain("## Layout");
       if (task.example) expect(md).toContain(`## Gold example (\`${task.example}\`)`);
       expect(md).not.toMatch(/see spec\.json/);
-      expect(md.length).toBeLessThan(50_000);
+      // 50,000 until the 3.1 components moved into 3.0; 60,000 characters is
+      // about 15,000 tokens, still well inside one file read for an agent.
+      expect(md.length).toBeLessThan(60_000);
     },
   );
 

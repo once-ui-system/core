@@ -9,7 +9,7 @@ navIcon: "switch"
 status: "unreleased"
 ---
 
-`NumberInput` is an [Input](/native/form-controls/input) for a number. The − and + buttons step the value by `step` and stop at `min` and `max`. Typing works too, and `onChange` gets a number whenever the text reads as one. The keyboard is a number pad, with a minus key when `min` allows negative numbers. See the [web NumberInput](/form-controls/numberInput) for the browser version.
+`NumberInput` is an [Input](/native/form-controls/input) for a number. The − and + buttons step the value by `step` and stop at `min` and `max`. Typing works too, and `onValueChange` gets a number whenever the text reads as one. The keyboard is a number pad, with a minus key when `min` allows negative numbers. See the [web NumberInput](/form-controls/numberInput) for the browser version.
 
 ## Basic usage
 
@@ -31,7 +31,7 @@ export function Guests() {
 
 ## Controlled
 
-Pass `value` and update it in `onChange`. A new `value` from outside replaces the text, unless the text already reads as that number, so typing `1.` is not undone.
+Pass `value` and update it in `onValueChange`. A new `value` from outside replaces the text, unless the text already reads as that number, so typing `1.` is not undone.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -46,7 +46,7 @@ export function Quantity() {
     <NumberInput
       label="Quantity"
       value={quantity}
-      onChange={setQuantity}
+      onValueChange={setQuantity}
       min={0}
       description="Up to 12 per order."
       max={12}
@@ -93,9 +93,9 @@ export function Settings() {
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `value` | `number` | | The number, when the host owns the state. Pair with `onChange`. |
+| `value` | `number` | | The number, when the host owns the state. Pair with `onValueChange`. |
 | `defaultValue` | `number \| string` | | The starting number when there is no `value`. A string is parsed. |
-| `onChange` | `(value: number) => void` | | Called with the number, whenever the text reads as one. |
+| `onValueChange` | `(value: number) => void` | | Called with the number, whenever the text reads as one. |
 | `min` | `number` | | The lowest value the − button reaches. |
 | `max` | `number` | | The highest value the + button reaches. |
 | `step` | `number` | `1` | How far each button press moves the value. |

@@ -1,7 +1,7 @@
 ---
 title: "Social"
 export: "Reactions"
-summary: "Animated reactions for posts, comments and chat: each reaction has its own gesture, a pick bursts and rolls the count, and an app can bring its own images."
+summary: "Animated reactions for posts, comments and chat: each reaction has its own gesture, a pick bursts and updates the count, and an app can bring its own images."
 updatedAt: "2026-10-21"
 docs: "once-ui/modules/social.mdx"
 github: "modules/social/Reactions.tsx"
@@ -13,7 +13,8 @@ navTagVariant: "cyan"
 
 Reactions are the smallest way to answer a post, so they should feel good to leave. Every reaction
 moves in its own way: a heart beats, a thumbs-up nods, a laugh shakes, fire flickers. Picking one
-plays its gesture, sends a few copies flying out of the chip and rolls the count up.
+plays its gesture, sends a few copies flying out of the chip and updates the count. To roll the
+number, pass `renderCount` and draw it with CountFx from `@once-ui-system/fx`.
 
 ## Reactions
 
@@ -187,7 +188,7 @@ Known emoji get a fitting one (`reactionMotion` tells you which); anything else 
 The row is a group named "Reactions". Each chip is a toggle button named for its reaction and count
 ("Love, 12") with `aria-pressed` for the viewer's own. The add button opens a group of toggle
 buttons that the arrow keys move through; Escape closes it and gives focus back. With reduced motion
-nothing moves: the gestures, the burst and the rolling count are all off, and the reactions still
+nothing moves: the gestures and the burst are off, and the reactions still
 change at once.
 
 ## API reference
@@ -207,7 +208,8 @@ change at once.
     size: "s, m or l.",
     renderGlyph: "Draw a reaction yourself, such as with Lottie.",
     addLabel: "The add button's name.",
-    ariaLabel: "The group's name.",
+    renderCount: "Draw a count yourself, such as with CountFx from @once-ui-system/fx.",
+    "aria-label": "The group's name.",
   }}
 />
 

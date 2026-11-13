@@ -1,19 +1,19 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { useLayout } from "../contexts/LayoutProvider";
-import { ToastPosition } from "../types";
-import { Column } from "./Column";
-import { Row } from "./Row";
-import { Toast } from "./Toast";
+import { useLayout } from "../contexts/LayoutProvider.js";
+import { ToastPosition, Tone } from "../types.js";
+import { Column } from "./Column.js";
+import { Row } from "./Row.js";
+import type { Toast as ToastComponent } from "./Toast.js";
 import styles from "./Toaster.module.scss";
 
 interface ToasterProps {
   toasts: {
     id: string;
-    variant: "success" | "danger" | "warning" | "info";
+    tone: Tone;
     message: React.ReactNode;
     action?: React.ReactNode;
     duration?: number;
@@ -26,57 +26,99 @@ interface ToasterProps {
   xs?: ToastPosition;
 }
 
-const Toaster = forwardRef<HTMLDivElement, ToasterProps>(
-  ({ toasts, removeToast, xl, l, m, s, xs }, ref) => {
-    const [mounted, setMounted] = useState(false);
-    const { currentBreakpoint } = useLayout();
+/**
+ * Toast (with its IconButton, Tooltip and floating-ui) loads after the page,
+ * not with it: the region below is all a page needs until a toast shows, and
+ * it must be there before the first one so it is announced. The module starts
+ * loading as the Toaster mounts, so it is in by the time anything adds a toast.
+ */
+let LoadedToast: typeof ToastComponent | null = null;
+let loading: Promise<typeof ToastComponent> | null = null;
+export const loadToast = (): Promise<typeof ToastComponent> => {
+  loading ??= import("./Toast.js").then((m) => {
+    LoadedToast = m.Toast;
+    return m.Toast;
+  });
+  return loading;
+};
 
-    useEffect(() => {
-      setMounted(true);
-      return () => setMounted(false);
-    }, []);
+const Toaster = ({
+  ref,
+  toasts,
+  removeToast,
+  xl,
+  l,
+  m,
+  s,
+  xs,
+}: ToasterProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const [mounted, setMounted] = useState(false);
+  const { currentBreakpoint } = useLayout();
 
-    if (!mounted) return null;
+  const [Toast, setToast] = useState<typeof ToastComponent | null>(() => LoadedToast);
 
-    const getCascadedPosition = (): ToastPosition => {
-      const breakpointOrder = ["xl", "l", "m", "s", "xs"];
-      const breakpointProps = { xl, l, m, s, xs };
-      const currentIndex = breakpointOrder.indexOf(currentBreakpoint);
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
 
-      let activePosition: ToastPosition = "bottom";
-
-      if (currentIndex === -1) return activePosition;
-
-      for (let i = 0; i <= currentIndex; i++) {
-        const bp = breakpointOrder[i] as keyof typeof breakpointProps;
-        if (breakpointProps[bp]) {
-          activePosition = breakpointProps[bp] as ToastPosition;
-        }
-      }
-
-      return activePosition;
+  // The region above is in the page from the start, so screen readers hear the
+  // first toast; the component that draws it is fetched when that toast arrives.
+  const hasToasts = toasts.length > 0;
+  useEffect(() => {
+    if (!hasToasts || Toast) return;
+    let live = true;
+    loadToast().then((loaded) => live && setToast(() => loaded));
+    return () => {
+      live = false;
     };
+  }, [hasToasts, Toast]);
 
-    const actualPosition = getCascadedPosition();
-    const isTop = actualPosition === "top";
+  if (!mounted) return null;
 
-    return createPortal(
-      <Column
-        zIndex={10}
-        fillWidth
-        maxWidth={32}
-        position="fixed"
-        className={classNames(styles.toastContainer, styles[actualPosition])}
-        // One polite live region that is on the page before the first toast:
-        // a region inserted together with its text is often not read at all.
-        // Toasts are added to it, so each is announced once as it appears; a
-        // danger toast is still its own alert and interrupts.
-        role="region"
-        aria-label="Notifications"
-        aria-live="polite"
-        aria-relevant="additions text"
-      >
-        {toasts.map((toast, index, array) => {
+  const getCascadedPosition = (): ToastPosition => {
+    const breakpointOrder = ["xl", "l", "m", "s", "xs"];
+    const breakpointProps = { xl, l, m, s, xs };
+    const currentIndex = breakpointOrder.indexOf(currentBreakpoint);
+
+    let activePosition: ToastPosition = "bottom";
+
+    if (currentIndex === -1) return activePosition;
+
+    for (let i = 0; i <= currentIndex; i++) {
+      const bp = breakpointOrder[i] as keyof typeof breakpointProps;
+      if (breakpointProps[bp]) {
+        activePosition = breakpointProps[bp] as ToastPosition;
+      }
+    }
+
+    return activePosition;
+  };
+
+  const actualPosition = getCascadedPosition();
+  const isTop = actualPosition === "top";
+
+  return createPortal(
+    <Column
+      zIndex={10}
+      fillWidth
+      maxWidth="32rem"
+      position="fixed"
+      className={classNames(styles.toastContainer, styles[actualPosition])}
+      // One polite live region that is on the page before the first toast:
+      // a region inserted together with its text is often not read at all.
+      // Toasts are added to it, so each is announced once as it appears; a
+      // danger toast is still its own alert and interrupts.
+      role="region"
+      aria-label="Notifications"
+      aria-live="polite"
+      aria-relevant="additions text"
+      // Stays clickable under an open Dialog or Drawer: a toast's action
+      // (Undo, Try again) must work while one is open. See useOverlay.
+      data-overlay-exempt=""
+    >
+      {Toast &&
+        toasts.map((toast, index, array) => {
           const reverseIndex = array.length - 1 - index;
           const yDirection = isTop ? -1 : 1;
 
@@ -95,22 +137,21 @@ const Toaster = forwardRef<HTMLDivElement, ToasterProps>(
             >
               <Toast
                 className={classNames(styles.toastAnimation, styles[`animation-${actualPosition}`])}
-                variant={toast.variant}
+                tone={toast.tone}
                 onClose={() => removeToast(toast.id)}
                 action={toast.action}
                 duration={toast.duration}
-                announce={toast.variant === "danger"}
+                announce={toast.tone === "danger"}
               >
                 {toast.message}
               </Toast>
             </Row>
           );
         })}
-      </Column>,
-      document.body,
-    );
-  },
-);
+    </Column>,
+    document.body,
+  );
+};
 
 Toaster.displayName = "Toaster";
 

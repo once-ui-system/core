@@ -1,4 +1,5 @@
-import { Animation, BlobFx, Column, Grid, Heading, Icon, Text } from "@once-ui-system/core";
+import { Animation, Column, Grid, Heading, Icon, Row, Text } from "@once-ui-system/core";
+import { BlobFx } from "@once-ui-system/fx";
 
 const features = [
   {
@@ -43,7 +44,7 @@ export const Features1: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
   return (
     <Column fillWidth gap="40" {...flex}>
       <Column maxWidth="s" paddingX="40" gap="12">
-        <Heading as="h2" variant="display-default-s">
+        <Heading as="h2" textVariant="display-default-s">
           Empowering developers with <Text onBackground="brand-weak">cutting-edge tools</Text> and
           capabilities
         </Heading>
@@ -53,19 +54,19 @@ export const Features1: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
         {features.map((feature, index) => (
           <Animation key={index} zoomOut={1.02} fade={1} triggerType="hover">
             <Column background="surface" radius="s" padding="40" border fillWidth gap="8">
-              <Icon
+              <Row
+                fit
                 padding="8"
-                name={feature.icon}
-                onBackground="brand-weak"
-                size="xs"
                 radius="m"
                 border="brand-alpha-medium"
                 background="brand-alpha-weak"
-              />
-              <Heading marginTop="12" as="h3" variant="body-default-m">
+              >
+                <Icon name={feature.icon} onBackground="brand-weak" size="xs" />
+              </Row>
+              <Heading marginTop="12" as="h3" textVariant="body-default-m">
                 {feature.title}
               </Heading>
-              <Text wrap="balance" onBackground="neutral-weak" variant="body-default-s">
+              <Text wrap="balance" onBackground="neutral-weak" textVariant="body-default-s">
                 {feature.description}
               </Text>
             </Column>

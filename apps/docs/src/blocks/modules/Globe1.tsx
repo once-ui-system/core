@@ -1,6 +1,6 @@
 "use client";
 
-import { dev, Row } from "@once-ui-system/core";
+import { Row } from "@once-ui-system/core";
 import {
   forwardRef,
   type ReactNode,
@@ -168,11 +168,11 @@ export const Globe1 = forwardRef<Globe1Handle, WorldMapProps>(
               setLandPolygons(features);
             }
           } catch (err) {
-            dev.error("Error processing map data:", err);
+            console.error("Error processing map data:", err);
           }
         })
         .catch((err) => {
-          dev.error("Error loading map data:", err);
+          console.error("Error loading map data:", err);
         });
     }, []);
 

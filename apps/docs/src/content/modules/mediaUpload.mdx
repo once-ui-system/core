@@ -52,7 +52,7 @@ MediaUpload supports different aspect ratios to accommodate various design requi
 
 ## Preview
 
-Display an initial preview image by setting the `initialPreviewImage` prop.
+Display an initial preview image by setting the `defaultPreviewImage` prop.
 
 <CodeBlock
   marginTop="16"
@@ -60,14 +60,14 @@ Display an initial preview image by setting the `initialPreviewImage` prop.
   preview={
     <MediaUpload 
       aspectRatio="16 / 9"
-      initialPreviewImage="/images/docs/once-ui/vibe-coding-dark.jpg"
+      defaultPreviewImage="/images/docs/once-ui/vibe-coding-dark.jpg"
     />
   }
   codes={[
     {
       code:
 `<MediaUpload 
-    initialPreviewImage="/image.jpg" 
+    defaultPreviewImage="/image.jpg" 
 />`,
       language: "tsx",
       label: "Preview"
@@ -81,14 +81,14 @@ Customize the empty state message with the `emptyState` prop.
 
 <CodeBlock
   marginTop="16"
-  marginBottom="24"  isCollapsible={false}
+  marginBottom="24"  collapsible={false}
 
   preview={
     <MediaUpload 
       emptyState={
         <Column gap="8" fill center align="center">
           <Icon name="image" size="m" />
-          <Text variant="label-default-s">Add cover image</Text>
+          <Text textVariant="label-default-s">Add cover image</Text>
         </Column>
       } 
     />
@@ -100,7 +100,7 @@ Customize the empty state message with the `emptyState` prop.
     emptyState={
       <Column gap="8" fill center align="center">
         <Icon name="image" size="m" />
-        <Text variant="label-default-s">Add cover image</Text>
+        <Text textVariant="label-default-s">Add cover image</Text>
       </Column>
     } 
 />`,

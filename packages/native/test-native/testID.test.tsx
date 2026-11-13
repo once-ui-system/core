@@ -3,10 +3,8 @@ import { fireEvent, render, screen } from "@testing-library/react-native";
 import type { ReactNode } from "react";
 import {
   Accordion,
-  Badge,
   Breadcrumbs,
   Checkbox,
-  Chip,
   CodeBlock,
   ContextMenu,
   DateInput,
@@ -59,10 +57,8 @@ describe("testID", () => {
   it("lands on simple components", async () => {
     await wrap(
       <>
-        <Badge title="New" testID="badge" />
-        <Badge title="Go" onPress={() => {}} testID="badge-link" />
-        <Chip label="Oat" testID="chip" />
-        <Chip label="Soy" onPress={() => {}} testID="chip-button" />
+        <Tag label="Go" href="https://once-ui.com" testID="tag-link" />
+        <Tag label="Soy" onPress={() => {}} testID="tag-button" />
         <Feedback title="Saved" testID="feedback" />
         <FormErrorSummary errors={[{ message: "Name is required" }]} testID="summary" />
         <Icon name="check" decorative={false} testID="icon" />
@@ -71,7 +67,7 @@ describe("testID", () => {
         <Spinner testID="spinner" />
         <Tag label="Beta" testID="tag" />
         <User name="Anna" testID="user" />
-        <Toast variant="info" testID="toast">
+        <Toast tone="info" testID="toast">
           Copied
         </Toast>
         <Reaction value="heart" emoji="❤️" testID="reaction" />
@@ -83,10 +79,8 @@ describe("testID", () => {
       </>,
     );
     found(
-      "badge",
-      "badge-link",
-      "chip",
-      "chip-button",
+      "tag-link",
+      "tag-button",
       "feedback",
       "summary",
       "icon",
@@ -99,7 +93,7 @@ describe("testID", () => {
       "reaction",
       "item",
     );
-    expect(screen.getByTestId("badge-link").props.accessibilityRole).toBe("link");
+    expect(screen.getByTestId("tag-link").props.accessibilityRole).toBe("link");
     expect(screen.getByTestId("progress").props.accessibilityRole).toBe("progressbar");
     expect(screen.getByTestId("item").props.role).toBe("listitem");
   });
@@ -135,7 +129,7 @@ describe("testID", () => {
       <>
         <SegmentedControl
           testID="segments"
-          onChange={() => {}}
+          onValueChange={() => {}}
           buttons={[
             { value: "day", label: "Day" },
             { value: "week", label: "Week" },

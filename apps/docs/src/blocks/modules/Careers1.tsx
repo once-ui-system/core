@@ -54,11 +54,11 @@ export const Careers1 = () => {
         </Row>
         <Row fillWidth horizontal="center" borderTop="neutral-medium" borderX="neutral-medium">
           <Column maxWidth="xs" gap="16" paddingY="48" paddingX="24">
-            <Heading variant="display-strong-s" align="center">
+            <Heading textVariant="display-strong-s" align="center">
               Join our team
             </Heading>
             <Text
-              variant="body-default-xl"
+              textVariant="body-default-xl"
               align="center"
               wrap="balance"
               onBackground="neutral-weak"
@@ -105,23 +105,23 @@ export const Careers1 = () => {
                 vertical="center"
               >
                 <Column gap="8" fillWidth>
-                  <Heading variant="heading-strong-l">{role.title}</Heading>
+                  <Heading textVariant="heading-strong-l">{role.title}</Heading>
                   <Row gap="24">
                     <Row gap="8" vertical="center">
                       <Icon name="europe" size="xs" onBackground="neutral-weak" />
-                      <Text variant="body-default-s" onBackground="neutral-medium">
+                      <Text textVariant="body-default-s" onBackground="neutral-medium">
                         {role.location}
                       </Text>
                     </Row>
                     <Row gap="8" vertical="center">
                       <Icon name="time" size="xs" onBackground="neutral-weak" />
-                      <Text variant="body-default-s" onBackground="neutral-medium">
+                      <Text textVariant="body-default-s" onBackground="neutral-medium">
                         {role.type}
                       </Text>
                     </Row>
                     <Row gap="8" vertical="center">
                       <Icon name="tag" size="xs" onBackground="neutral-weak" />
-                      <Text variant="body-default-s" onBackground="neutral-medium">
+                      <Text textVariant="body-default-s" onBackground="neutral-medium">
                         {role.department}
                       </Text>
                     </Row>
@@ -133,8 +133,8 @@ export const Careers1 = () => {
             <Row fillWidth border="neutral-medium" padding="xl" gap="12" center>
               <Column gap="8" horizontal="center">
                 <Icon name="search" onBackground="neutral-weak" marginBottom="16" />
-                <Heading variant="heading-strong-l">No positions found</Heading>
-                <Text variant="body-default-s" onBackground="neutral-medium" align="center">
+                <Heading textVariant="heading-strong-l">No positions found</Heading>
+                <Text textVariant="body-default-s" onBackground="neutral-medium" align="center">
                   We currently don't have openings in the {selectedDepartment} department
                 </Text>
               </Column>

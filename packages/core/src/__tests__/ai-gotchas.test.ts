@@ -25,7 +25,7 @@ describe("ai gotchas", () => {
     "NumberInput.value",
     "Select.closed",
     "Button.trigger",
-    "ContextMenu.contents",
+    "Dropdown.contents",
   ])("%s says what 2.1 fixed", (id) => {
     expect((gotchas as Record<string, Gotcha>)[id]?.rule).toMatch(/^Fixed in 2\.1: /);
   });

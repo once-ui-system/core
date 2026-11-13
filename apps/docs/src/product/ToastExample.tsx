@@ -16,10 +16,10 @@ export function ToastExample() {
       info: 'Info',
     };
     addToast({
-      variant,
+      tone: variant,
       message: `Toast #${count + 1} - ${labels[variant]}`,
       action: (variant === 'danger' || variant === 'warning') ? (
-        <Button size="s" onClick={() => addToast({ variant: 'success', message: 'Retry successful!' })}>
+        <Button size="s" onClick={() => addToast({ tone: 'success', message: 'Retry successful!' })}>
           Retry
         </Button>
       ) : undefined,

@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "tasks": [
+    { "id": "app-shell", "file": "tasks/app-shell.json", "priority": 1 },
+    { "id": "home", "file": "tasks/home.json", "priority": 2 },
+    { "id": "list", "file": "tasks/list.json", "priority": 3 },
+    { "id": "settings", "file": "tasks/settings.json", "priority": 4 }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+ "name": "PeerCursors",
+ "group": "components",
+ "mixins": [
+  "LeafProps"
+ ],
+ "props": {
+  "peers": "!PeerCursorData[]",
+  "units": "\"fraction\" | \"px\" = fraction",
+  "project": "(x: number, y: number) => { x: number; y: number }",
+  "scale": "number",
+  "smooth": "boolean = true"
+ },
+ "tags": [
+  "collaboration"
+ ],
+ "pairsWith": [
+  "PeerCursor",
+  "AvatarGroup"
+ ],
+ "mixinsRef": [
+  "LeafProps"
+ ],
+ "tokensRef": "see tokens.json",
+ "resolvedMixins": {
+  "LeafProps": {
+   "margin": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginTop": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginRight": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginBottom": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginLeft": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginX": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginY": "SpacingToken | number | CSSUnit | \"auto\"",
+   "flex": "FlexValue",
+   "fillWidth": "boolean",
+   "position": "CSSProperties[\"position\"]",
+   "top": "SpacingToken | number | CSSUnit",
+   "right": "SpacingToken | number | CSSUnit",
+   "bottom": "SpacingToken | number | CSSUnit",
+   "left": "SpacingToken | number | CSSUnit",
+   "className": "string",
+   "style": "CSSProperties"
+  }
+ },
+ "types": {
+  "PeerCursorData": {
+   "id": "!string",
+   "name": "!string",
+   "x": "!number",
+   "y": "!number",
+   "scheme": "PeerCursorScheme",
+   "message": "string",
+   "avatar": "string",
+   "idle": "boolean"
+  },
+  "PeerCursorScheme": [
+   "cyan",
+   "blue",
+   "indigo",
+   "violet",
+   "magenta",
+   "pink",
+   "red",
+   "orange",
+   "yellow",
+   "moss",
+   "green",
+   "emerald",
+   "aqua"
+  ]
+ }
+}

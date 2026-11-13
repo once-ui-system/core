@@ -1,6 +1,6 @@
 "use client";
 
-import { HeadingAnchor, type HeadingAnchorProps } from "../navigation/HeadingAnchor";
+import { HeadingAnchor, type HeadingAnchorProps } from "../navigation/HeadingAnchor.js";
 
 export type MdxHeadingAnchorProps = HeadingAnchorProps;
 

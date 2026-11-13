@@ -5,7 +5,7 @@ import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { Button } from "../components/Button";
 import { DatePicker } from "../components/DatePicker";
-import { DropdownWrapper } from "../components/DropdownWrapper";
+import { Dropdown } from "../components/Dropdown";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
@@ -14,7 +14,7 @@ const wrap = ({ children }: { children: React.ReactNode }) => (
 
 /**
  * Reported as "NumberInput chevrons close the overlay": a DatePicker with a
- * time panel, opened from a button through DropdownWrapper. DropdownWrapper
+ * time panel, opened from a button through Dropdown (2.x DropdownWrapper). It
  * treated any child with a `value` prop as an option and gave it a "pick and
  * close" onClick, which replaced DatePicker's own. Day clicks stopped
  * propagation and survived; the stepper chevrons, AM/PM and "Back to calendar"
@@ -23,23 +23,20 @@ const wrap = ({ children }: { children: React.ReactNode }) => (
 function Scheduler({ onChange }: { onChange: (date: Date) => void }) {
   const [date, setDate] = useState<Date | undefined>(new Date(2026, 9, 23, 18, 1));
   return (
-    <DropdownWrapper
-      trigger={<Button>Schedule</Button>}
-      dropdown={
-        <DatePicker
-          timePicker
-          value={date}
-          onChange={(next) => {
-            setDate(next);
-            onChange(next);
-          }}
-        />
-      }
-    />
+    <Dropdown trigger={<Button>Schedule</Button>}>
+      <DatePicker
+        timePicker
+        value={date}
+        onValueChange={(next) => {
+          setDate(next);
+          onChange(next);
+        }}
+      />
+    </Dropdown>
   );
 }
 
-describe("DatePicker time panel in a DropdownWrapper", () => {
+describe("DatePicker time panel in a Dropdown", () => {
   it("stays open when the hour and minute chevrons are clicked", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     try {
@@ -107,12 +104,9 @@ describe("DatePicker Apply button", () => {
       const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
       const onApply = vi.fn();
       render(
-        <DropdownWrapper
-          trigger={<Button>Schedule</Button>}
-          dropdown={
-            <DatePicker timePicker defaultDate={new Date(2026, 9, 23, 18, 1)} onApply={onApply} />
-          }
-        />,
+        <Dropdown trigger={<Button>Schedule</Button>}>
+          <DatePicker timePicker defaultValue={new Date(2026, 9, 23, 18, 1)} onApply={onApply} />
+        </Dropdown>,
         { wrapper: wrap },
       );
       await user.click(screen.getByRole("button", { name: "Schedule" }));

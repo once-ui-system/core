@@ -1,4 +1,4 @@
-import { Background, Badge, Button, Column, Heading, Media, Row, Tag } from "@once-ui-system/core";
+import { Background, Button, Column, Heading, Media, Row, Tag } from "@once-ui-system/core";
 
 export const Hero8: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (
@@ -17,11 +17,11 @@ export const Hero8: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
         position="absolute"
         top="0"
         left="0"
-        gradient={{ display: true, colorStart: "brand-solid-medium", y: 80, width: 40, height: 64 }}
+        gradient={{ display: true, colorStart: "brand-solid-medium", y: "80%", width: "40%", height: "64%" }}
       />
       <Column maxWidth="xl" horizontal="center">
         <Column maxWidth="l" gap="24" paddingX="s" paddingBottom="l" paddingTop="m">
-          <Badge
+          <Tag variant="announce"
             background="overlay"
             paddingLeft="8"
             paddingRight="16"
@@ -30,15 +30,15 @@ export const Hero8: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
             href="#"
           >
             <Row vertical="center" gap="8">
-              <Tag themeBorder="rounded" size="s" scheme="brand">
+              <Tag themeBorder="rounded" size="s" tone="brand">
                 Blog
               </Tag>
               <Row textVariant="code-default-s" gap="8" vertical="center">
                 The new service model
               </Row>
             </Row>
-          </Badge>
-          <Heading variant="display-default-l" marginTop="8">
+          </Tag>
+          <Heading textVariant="display-default-l" marginTop="8">
             Sell $5k–$20k frontend systems. Without starting from scratch.
           </Heading>
           <Row gap="16" vertical="center" paddingTop="16" paddingLeft="8">
@@ -50,14 +50,14 @@ export const Hero8: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
             </Button>
           </Row>
         </Column>
-        <Row hide s={{ hide: false }} height={4} />
+        <Row hide s={{ hide: false }} height="4rem" />
       </Column>
 
       <Column fillWidth horizontal="center">
         <Row
           maxWidth="xl"
           position="absolute"
-          top={-6}
+          top="-6rem"
           horizontal="end"
           paddingRight="48"
           gap="24"
@@ -66,8 +66,8 @@ export const Hero8: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
           pointerEvents="none"
         >
           <Row
-            width={3}
-            height={12}
+            width="3rem"
+            height="12rem"
             borderLeft="brand-strong"
             borderTop="brand-strong"
             style={{ borderColor: "var(--brand-solid-strong)" }}

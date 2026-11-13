@@ -81,7 +81,7 @@ export function Timeline({ items, alignment = "left", size = "m", ...flex }: Tim
     >
       {typeof item.marker === "string" || typeof item.marker === "number" ? (
         <Text
-          variant="label-default-m"
+          textVariant="label-default-m"
           {...(state === "default"
             ? { onBackground: "neutral-weak" }
             : { onSolid: `${SCHEME[state]}-strong` })}
@@ -98,7 +98,7 @@ export function Timeline({ items, alignment = "left", size = "m", ...flex }: Tim
     <>
       {item.label && (
         <Text
-          variant="label-default-m"
+          textVariant="label-default-m"
           align={align}
           onBackground={state === "danger" ? "danger-weak" : undefined}
         >
@@ -107,7 +107,7 @@ export function Timeline({ items, alignment = "left", size = "m", ...flex }: Tim
       )}
       {item.description && (
         <Text
-          variant="body-default-s"
+          textVariant="body-default-s"
           align={align}
           onBackground={state === "danger" ? "danger-weak" : "neutral-weak"}
         >

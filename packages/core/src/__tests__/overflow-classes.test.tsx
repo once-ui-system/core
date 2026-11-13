@@ -58,7 +58,8 @@ describe("overflow classes", () => {
   });
 
   it("emits the class from Flex and Grid on the server path", () => {
-    for (const Component of [Flex, Grid]) {
+    // Flex and Grid are each overloaded, so their union is not callable as JSX.
+    for (const Component of [Flex, Grid] as React.ElementType[]) {
       const classes = classesOf(
         renderToStaticMarkup(
           <Component overflow="clip" overflowX="visible" overflowY="clip">

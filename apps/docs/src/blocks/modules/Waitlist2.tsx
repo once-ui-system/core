@@ -1,21 +1,7 @@
 "use client";
 
-import {
-  Avatar,
-  Badge,
-  BlobFx,
-  Button,
-  Column,
-  CountFx,
-  Fade,
-  Icon,
-  IconButton,
-  Input,
-  Line,
-  Pulse,
-  Row,
-  Text,
-} from "@once-ui-system/core";
+import { Avatar, Tag, Button, Column, Fade, Icon, IconButton, Input, Line, StatusIndicator, Row, Text } from "@once-ui-system/core";
+import { BlobFx, CountFx } from "@once-ui-system/fx";
 import { useState } from "react";
 
 const recentJoins = [
@@ -62,18 +48,18 @@ export const Waitlist2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
       {...flex}
     >
       <BlobFx position="absolute" bottom="0" left="0" />
-      <Column fill minWidth={24} padding="40" gap="24" horizontal="start">
-        <Badge
+      <Column fill minWidth="24rem" padding="40" gap="24" horizontal="start">
+        <Tag variant="announce"
           background="brand-alpha-weak"
           onBackground="brand-medium"
           textVariant="label-default-s"
           paddingX="16"
         >
           Private beta
-        </Badge>
+        </Tag>
         <Column gap="12">
-          <Text variant="display-strong-xs">Get early access to Nova</Text>
-          <Text variant="body-default-l" onBackground="neutral-weak" wrap="balance">
+          <Text textVariant="display-strong-xs">Get early access to Nova</Text>
+          <Text textVariant="body-default-l" onBackground="neutral-weak" wrap="balance">
             We're onboarding teams in small batches. Join the waitlist and skip the line by inviting
             others.
           </Text>
@@ -89,12 +75,12 @@ export const Waitlist2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
             border="brand-alpha-weak"
           >
             <Row horizontal="between" vertical="center">
-              <Text variant="label-default-m" onBackground="brand-medium">
+              <Text textVariant="label-default-m" onBackground="brand-medium">
                 You're on the list
               </Text>
               <Row vertical="center" gap="4" textVariant="heading-strong-m">
                 #
-                <CountFx value={position} speed={1200} effect="smooth" />
+                <CountFx value={position} duration={1200} effect="smooth" />
               </Row>
             </Row>
             <Row fillWidth vertical="center" gap="8">
@@ -106,12 +92,12 @@ export const Waitlist2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
                 onClick={copyInvite}
               />
             </Row>
-            <Text variant="body-default-xs" onBackground="neutral-weak">
+            <Text textVariant="body-default-xs" onBackground="neutral-weak">
               Every friend who joins with your link moves you up 5 spots.
             </Text>
           </Column>
         ) : (
-          <Column gap="12" maxWidth={22}>
+          <Column gap="12" maxWidth="22rem">
             <Input
               id="waitlist-email"
               placeholder="Enter your email"
@@ -139,7 +125,7 @@ export const Waitlist2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
 
       <Column
         fill
-        minWidth={20}
+        minWidth="20rem"
         background="surface"
         borderLeft
         padding="24"
@@ -148,12 +134,12 @@ export const Waitlist2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
       >
         <Row horizontal="between" vertical="center">
           <Row gap="8" vertical="center">
-            <Pulse scheme="success" size="s" />
-            <Text variant="label-default-s">Live queue</Text>
+            <StatusIndicator pulse tone="success" size="s" />
+            <Text textVariant="label-default-s">Live queue</Text>
           </Row>
           <Row gap="4" vertical="center" textVariant="label-strong-s">
-            <CountFx value={38} speed={2000} effect="smooth" />
-            <Text onBackground="neutral-weak" variant="label-default-s">
+            <CountFx value={38} duration={2000} effect="smooth" />
+            <Text onBackground="neutral-weak" textVariant="label-default-s">
               joined today
             </Text>
           </Row>
@@ -164,15 +150,15 @@ export const Waitlist2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
             <Row key={person.name} fillWidth vertical="center" gap="12" paddingY="8">
               <Avatar size="s" src={person.avatar} />
               <Column fillWidth gap="0">
-                <Text variant="label-default-s" truncate>
+                <Text textVariant="label-default-s" truncate>
                   {person.name}
                 </Text>
-                <Text variant="body-default-xs" onBackground="neutral-weak">
+                <Text textVariant="body-default-xs" onBackground="neutral-weak">
                   joined the waitlist
                 </Text>
               </Column>
               <Text
-                variant="body-default-xs"
+                textVariant="body-default-xs"
                 onBackground="neutral-weak"
                 style={{ whiteSpace: "nowrap" }}
               >
@@ -180,7 +166,7 @@ export const Waitlist2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
               </Text>
             </Row>
           ))}
-          <Fade position="absolute" bottom="0" fillWidth height={5} />
+          <Fade position="absolute" bottom="0" fillWidth height="5rem" />
         </Column>
       </Column>
     </Row>

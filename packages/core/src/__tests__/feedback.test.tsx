@@ -47,7 +47,7 @@ describe("Feedback alignment", () => {
 
 describe("Feedback icon", () => {
   it("renders the variant's icon by default", () => {
-    const { container } = render(<Feedback variant="success" description="Saved." />);
+    const { container } = render(<Feedback tone="success" description="Saved." />);
     const { container: reference } = render(<Icon name="check" />);
     expect(container.querySelector("svg")?.innerHTML).toBe(
       reference.querySelector("svg")?.innerHTML,
@@ -71,5 +71,22 @@ describe("Feedback icon", () => {
   it("still honours showIcon={false}", () => {
     const { container } = render(<Feedback description="Saved." icon="check" showIcon={false} />);
     expect(container.querySelector("svg")).toBeNull();
+  });
+
+  // 2.x MDX wrote a bare `<Feedback icon>` (icon={true}), and a name the
+  // library lacks resolves to nothing too: the icon's padded box used to
+  // render empty, a gap before the text. Only a resolved icon gets the box.
+  it("renders no icon box when the icon does not resolve", () => {
+    const warn = console.warn;
+    console.warn = () => {};
+    try {
+      const { container } = render(<Feedback description="Saved." icon={"not-an-icon" as never} />);
+      const { container: bare } = render(<Feedback description="Saved." icon={true as never} />);
+      const { container: plain } = render(<Feedback description="Saved." showIcon={false} />);
+      expect(container.innerHTML).toBe(plain.innerHTML);
+      expect(bare.innerHTML).toBe(plain.innerHTML);
+    } finally {
+      console.warn = warn;
+    }
   });
 });

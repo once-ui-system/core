@@ -14,6 +14,8 @@ interface RadioGroupContextValue {
   /** The value of the one radio in the page's Tab order. */
   tabbable: string | undefined;
   select: (value: string) => void;
+  /** The group's `error` or `errorMessage`: every radio in it is drawn and announced invalid. */
+  invalid: boolean;
 }
 
 export const RadioGroupContext = createContext<RadioGroupContextValue | null>(null);
@@ -23,12 +25,12 @@ interface RadioGroupItemProps<Args extends unknown[]> {
   checked: boolean | undefined;
   name: string | undefined;
   disabled: boolean | undefined;
-  onToggle: ((...args: Args) => void) | undefined;
+  onCheckedChange: ((...args: Args) => void) | undefined;
 }
 
 /**
  * Inside a RadioGroup, the group owns a RadioButton's checked state, name,
- * disabled state and place in the Tab order, and the button's own `onToggle`
+ * disabled state and place in the Tab order, and the button's own `onCheckedChange`
  * still runs when it is picked. Outside one, or with no `value` to match,
  * the button's own props stand.
  *
@@ -38,7 +40,8 @@ interface RadioGroupItemProps<Args extends unknown[]> {
 export function useRadioGroupItem<Args extends unknown[]>(props: RadioGroupItemProps<Args>) {
   const group = useContext(RadioGroupContext);
   const { value } = props;
-  if (!group || value === undefined) return { ...props, focusProps: undefined };
+  if (!group || value === undefined)
+    return { ...props, invalid: Boolean(group?.invalid), focusProps: undefined };
 
   const disabled = group.disabled || Boolean(props.disabled);
   return {
@@ -46,9 +49,10 @@ export function useRadioGroupItem<Args extends unknown[]>(props: RadioGroupItemP
     checked: group.value === value,
     name: group.name ?? props.name,
     disabled,
-    onToggle: (...args: Args) => {
+    invalid: group.invalid,
+    onCheckedChange: (...args: Args) => {
       group.select(value);
-      props.onToggle?.(...args);
+      props.onCheckedChange?.(...args);
     },
     focusProps: {
       tabIndex: !disabled && group.tabbable === value ? 0 : -1,

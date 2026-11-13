@@ -1,0 +1,11 @@
+{
+ "name": "ToastProvider",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "Shows toasts stacked at the bottom of the screen, newest last.",
+ "mixins": [],
+ "props": {
+  "children": "!ReactNode"
+ },
+ "resolvedMixins": {},
+ "types": {}
+}

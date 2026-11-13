@@ -37,7 +37,7 @@ export const Banner: RefComponent<BannerProps, ViewRef> = forwardRef<ViewRef, Ba
       >
         {Children.map(children, (child) =>
           typeof child === "string" || typeof child === "number" ? (
-            <Text variant="label-default-s" onSolid="brand-strong" align="center">
+            <Text textVariant="label-default-s" onSolid="brand-strong" align="center">
               {child}
             </Text>
           ) : (

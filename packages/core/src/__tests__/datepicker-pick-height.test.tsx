@@ -3,7 +3,6 @@ import type React from "react";
 import { Profiler, useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { DatePicker } from "../components/DatePicker";
-import { DateRangePicker } from "../components/DateRangePicker";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 
 /**
@@ -28,9 +27,9 @@ function Controlled({ range }: { range?: boolean }) {
     startDate: jan(5),
   });
   return range ? (
-    <DateRangePicker value={rangeValue} onChange={setRangeValue} />
+    <DatePicker range value={rangeValue} onValueChange={setRangeValue} />
   ) : (
-    <DatePicker value={value} onChange={setValue} />
+    <DatePicker value={value} onValueChange={setValue} />
   );
 }
 

@@ -21,22 +21,22 @@ export const Cookie3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
       wrap
       {...flex}
     >
-      <Row gap="12" vertical="center" minWidth={20} fillWidth>
+      <Row gap="12" vertical="center" minWidth="20rem" fillWidth>
         <Tag size="s" label="Privacy" />
-        <Text variant="body-default-s" onBackground="neutral-medium" wrap="balance">
+        <Text textVariant="body-default-s" onBackground="neutral-medium" wrap="balance">
           We use cookies to improve your experience. Read our{" "}
           <SmartLink href="#">Privacy Policy</SmartLink>.
         </Text>
       </Row>
 
       <Row gap="16" vertical="center" wrap fillWidth>
-        <Switch checked={analytics} onToggle={() => setAnalytics(!analytics)} label="Analytics" />
+        <Switch checked={analytics} onCheckedChange={() => setAnalytics(!analytics)} label="Analytics" />
         <Line vert background="neutral-alpha-weak" height="20" s={{ hide: true }} />
-        <Switch checked={marketing} onToggle={() => setMarketing(!marketing)} label="Marketing" />
+        <Switch checked={marketing} onCheckedChange={() => setMarketing(!marketing)} label="Marketing" />
         <Line vert background="neutral-alpha-weak" height="20" s={{ hide: true }} />
         <Switch
           checked={functional}
-          onToggle={() => setFunctional(!functional)}
+          onCheckedChange={() => setFunctional(!functional)}
           label="Functional"
         />
       </Row>

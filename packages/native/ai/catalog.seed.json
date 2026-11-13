@@ -1,0 +1,16 @@
+{
+  "_comment": "Purposes the component's JSDoc does not give in a line an agent can pick from. Everything else comes from the JSDoc first sentence; see scripts/generate-ai.cjs.",
+  "components": {
+    "AvatarGroup": "Overlapping stack of avatars with a limit and an overflow count",
+    "Button": "Action button with variants, sizes, prefix/suffix icons and a loading state; onPress runs it",
+    "Card": "Pressable surface (onPress), with every Flex prop; a static panel is a Column with background, border and radius instead",
+    "Checkbox": "Checkbox with label and description, including an indeterminate state",
+    "Dropdown": "The bordered surface a menu's Options sit on; DropdownWrapper places it under its trigger",
+    "DropdownWrapper": "A trigger that opens a menu of Options under it (or above when there is no room): row actions, an account menu",
+    "Heading": "A heading, heading-strong-l by default and announced as a header",
+    "Spinner": "Rotating loader for async and streaming states",
+    "StatusIndicator": "Small coloured status dot (online, error, warning) by colour scheme",
+    "ThemeProvider": "Root provider: core's style options with core's defaults (theme, brand, neutral, solid, border, scaling…), plus fonts and the screen's safe-area insets",
+    "Tooltip": "The small surface bubble a hint is drawn in; it shows nothing on its own (InfoTip shows a tip on press)"
+  }
+}

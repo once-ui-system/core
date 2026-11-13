@@ -1,10 +1,10 @@
 "use client";
 
-import { Button, Column, DropdownWrapper, Option, Row, Select, Text } from "@once-ui-system/core";
+import { Button, Column, Dropdown, Option, Row, Select, Text } from "@once-ui-system/core";
 import { useState } from "react";
 
 /**
- * Select `position="aligned"` check page.
+ * Select `alignSelected` check page.
  *
  * Expected behavior:
  * 1. Short list: opens with the selected option exactly over the field, the
@@ -14,7 +14,7 @@ import { useState } from "react";
  * 3. No selection: the first option sits over the field.
  * 4. Near the top or bottom of the viewport: opens as a normal dropdown.
  * 5. Searchable: opens as a normal dropdown.
- * 6. A Button trigger on DropdownWrapper `alignSelected`: the selected
+ * 6. A Button trigger on Dropdown `alignSelected`: the selected
  *    option lands on the button's label.
  */
 const SIZES = ["XS", "S", "M", "L", "XL"].map((v) => ({ label: v, value: v }));
@@ -55,88 +55,87 @@ export default function SelectAlignedCheck() {
 
   return (
     <Column fillWidth horizontal="center" paddingX="16">
-      <Row fillWidth maxWidth={40} paddingTop="8">
+      <Row fillWidth maxWidth="40rem" paddingTop="8">
         <Select
           id="aligned-edge-top"
           label="Near the top"
-          position="aligned"
+          alignSelected
           options={SIZES}
           value={edge}
-          onSelect={(v) => setEdge(v as string)}
+          onValueChange={(v) => setEdge(v as string)}
         />
       </Row>
-      <Column fillWidth maxWidth={40} gap="32" paddingY="160">
-        <Text variant="heading-strong-l">Select position="aligned"</Text>
+      <Column fillWidth maxWidth="40rem" gap="32" paddingY="160">
+        <Text textVariant="heading-strong-l">Select alignSelected</Text>
         <Select
           id="aligned-short"
           label="Size"
-          position="aligned"
+          alignSelected
           options={SIZES}
           value={size}
-          onSelect={(v) => setSize(v as string)}
+          onValueChange={(v) => setSize(v as string)}
         />
         <Select
           id="aligned-long"
           label="Time zone"
-          position="aligned"
+          alignSelected
           options={ZONES}
           value={zone}
-          onSelect={(v) => setZone(v as string)}
+          onValueChange={(v) => setZone(v as string)}
         />
         <Select
           id="aligned-empty"
           label="Nothing picked"
-          position="aligned"
+          alignSelected
           options={SIZES}
           value={empty}
-          onSelect={(v) => setEmpty(v as string)}
+          onValueChange={(v) => setEmpty(v as string)}
         />
         <Select
           id="aligned-search"
           label="Searchable (dropdown)"
-          position="aligned"
+          alignSelected
           searchable
           options={SIZES}
           value={search}
-          onSelect={(v) => setSearch(v as string)}
+          onValueChange={(v) => setSearch(v as string)}
         />
         <Row>
-          <DropdownWrapper
+          <Dropdown
             alignSelected
             open={sortOpen}
             onOpenChange={setSortOpen}
-            minWidth={12}
+            minWidth="12rem"
             trigger={
               <Button id="aligned-button" variant="secondary" suffixIcon="chevronDown">
                 {sort}
               </Button>
             }
-            dropdown={
-              <Column padding="4" gap="2" fillWidth>
-                {["Oldest", "Price: low to high", "Newest", "Price: high to low", "Popular"].map(
-                  (v) => (
-                    <Option
-                      key={v}
-                      value={v}
-                      label={v}
-                      selected={v === sort}
-                      onClick={() => {
-                        setSort(v);
-                        setSortOpen(false);
-                      }}
-                    />
-                  ),
-                )}
-              </Column>
-            }
-          />
+          >
+            <Column padding="4" gap="2" fillWidth>
+              {["Oldest", "Price: low to high", "Newest", "Price: high to low", "Popular"].map(
+                (v) => (
+                  <Option
+                    key={v}
+                    value={v}
+                    label={v}
+                    selected={v === sort}
+                    onClick={() => {
+                      setSort(v);
+                      setSortOpen(false);
+                    }}
+                  />
+                ),
+              )}
+            </Column>
+          </Dropdown>
         </Row>
         <Select
           id="dropdown-default"
           label="Default dropdown"
           options={SIZES}
           value={size}
-          onSelect={(v) => setSize(v as string)}
+          onValueChange={(v) => setSize(v as string)}
         />
       </Column>
     </Column>

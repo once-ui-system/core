@@ -1,11 +1,13 @@
 "use client";
 
 import React from "react";
-import { Row } from "../../components/Row";
-import { Text } from "../../components/Text";
-import { useDataTheme } from "../../contexts/DataThemeProvider";
-import { ChartVariant } from "./interfaces";
-import { Swatch } from "./Swatch";
+import { Row } from "../../components/Row.js";
+import { Text } from "../../components/Text.js";
+import { useDataTheme } from "../../contexts/DataThemeProvider.js";
+import { useControllableState } from "../../internal/useControllableState.js";
+import styles from "./Chart.module.css";
+import { ChartVariant } from "./interfaces.js";
+import { Swatch } from "./Swatch.js";
 
 interface LegendProps {
   payload?: readonly Record<string, any>[];
@@ -21,9 +23,20 @@ interface LegendProps {
     | "top-center"
     | "bottom-center";
   variant?: ChartVariant;
+  /** The y axis' width in px, so a top-left legend starts where the plot does. Defaults to 64. */
+  axisWidth?: number;
+  /** Which entries are hidden, by index, when the host owns it; they show dimmed. */
+  hidden?: readonly boolean[];
+  /** The entries hidden to start with when Legend owns the state. */
+  defaultHidden?: readonly boolean[];
+  /**
+   * Makes each entry a button that shows or hides its series, and is called
+   * with every entry's hidden state after each press.
+   */
+  onHiddenChange?: (hidden: boolean[]) => void;
 }
 
-const Legend: React.FC<LegendProps> = ({
+const Legend = ({
   payload,
   labels = "both",
   position = "top-left",
@@ -31,7 +44,16 @@ const Legend: React.FC<LegendProps> = ({
   direction,
   colors,
   variant,
-}) => {
+  axisWidth = 64,
+  hidden: hiddenProp,
+  defaultHidden = [],
+  onHiddenChange,
+}: LegendProps) => {
+  const [hidden, setHidden] = useControllableState<readonly boolean[]>({
+    value: hiddenProp,
+    defaultValue: defaultHidden,
+    onChange: onHiddenChange as ((next: readonly boolean[]) => void) | undefined,
+  });
   // Read the theme on every render: as a default parameter the hook ran only
   // when `variant` was omitted.
   const theme = useDataTheme();
@@ -44,13 +66,18 @@ const Legend: React.FC<LegendProps> = ({
   const getPositionStyle = () => {
     switch (position) {
       case "top-left":
-        return {
-          paddingLeft:
-            (labels === "y" || labels === "both") && !reverseY
-              ? "var(--static-space-80)"
-              : "var(--static-space-20)",
-          top: "var(--static-space-12)",
-        };
+        // Past the y axis, the legend starts where the plot does: offset by
+        // the axis, not `calc(axis + space)`, which jsdom cannot compute and
+        // so broke every role query in a test that renders a chart.
+        return (labels === "y" || labels === "both") && !reverseY
+          ? {
+              left: `${axisWidth}px`,
+              right: 0,
+              width: "auto",
+              paddingLeft: "var(--static-space-16)",
+              top: "var(--static-space-12)",
+            }
+          : { paddingLeft: "var(--static-space-20)", top: "var(--static-space-12)" };
       case "top-right":
         return {
           paddingRight: "var(--static-space-20)",
@@ -114,12 +141,30 @@ const Legend: React.FC<LegendProps> = ({
     >
       {payload.map((entry: Record<string, any>, index: number) => {
         const color = colors && colors[index] ? colors[index] : entry.stroke || entry.color;
-        return (
-          <Row key={index} vertical="center" gap="8">
+        const content = (
+          <>
             <Swatch color={color} size="m" variant={chartVariant} />
-            <Text variant="label-default-s" wrap="nowrap">
+            <Text textVariant="label-default-s" wrap="nowrap">
               {entry.value}
             </Text>
+          </>
+        );
+        // The legend lets the pointer through to the plot; only its buttons catch it.
+        return onHiddenChange ? (
+          <button
+            key={index}
+            type="button"
+            className={styles.legendItem}
+            aria-pressed={!hidden?.[index]}
+            onClick={() =>
+              setHidden((prev) => payload.map((_, i) => (i === index ? !prev[i] : !!prev[i])))
+            }
+          >
+            {content}
+          </button>
+        ) : (
+          <Row key={index} vertical="center" gap="8">
+            {content}
           </Row>
         );
       })}

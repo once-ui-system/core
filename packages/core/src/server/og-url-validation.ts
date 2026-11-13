@@ -1,9 +1,9 @@
-import { classifyHostname, normalizeHostname } from "./og-address";
-import { OGFetchError, OGUrlValidationError } from "./og-errors";
-import { loadNodeBuiltins } from "./og-node";
-import { createPinnedLookup, requestPinned, resolvePublicAddresses } from "./og-transport";
+import { classifyHostname, normalizeHostname } from "./og-address.js";
+import { OGFetchError, OGUrlValidationError } from "./og-errors.js";
+import { loadNodeBuiltins } from "./og-node.js";
+import { createPinnedLookup, requestPinned, resolvePublicAddresses } from "./og-transport.js";
 
-export { OGUrlValidationError } from "./og-errors";
+export { OGUrlValidationError } from "./og-errors.js";
 
 export interface OGUrlValidationOptions {
   /** When set, only these domains (and their subdomains) are permitted. */

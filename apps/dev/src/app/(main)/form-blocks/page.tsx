@@ -8,7 +8,6 @@ import {
   FormErrorSummary,
   Heading,
   Input,
-  PasswordInput,
   SubmitButton,
   Text,
   Textarea,
@@ -39,15 +38,15 @@ export default function FormBlocksPage() {
 
   return (
     <Column maxWidth="s" fillWidth gap="24" paddingY="64" paddingX="16" horizontal="center">
-      <Heading variant="heading-strong-l">Create your workspace</Heading>
-      <Form as="form" density="spacious" noValidate onSubmit={submit}>
+      <Heading textVariant="heading-strong-l">Create your workspace</Heading>
+      <Form as="form" density="spacious" onSubmit={submit}>
         <FormErrorSummary errors={errors} />
         <Fieldset legend="Account" description="You sign in with these.">
           <Field label="Email" required error={errors.email}>
             <Input id="email" name="email" placeholder="you@example.com" />
           </Field>
           <Field label="Password" required error={errors.password} hint="At least 8 characters.">
-            <PasswordInput id="password" name="password" />
+            <Input id="password" name="password" type="password" />
           </Field>
         </Fieldset>
         <Fieldset legend="Workspace" columns={{ xs: 1, m: 2 }}>
@@ -63,7 +62,7 @@ export default function FormBlocksPage() {
         </Fieldset>
         <SubmitButton pendingLabel="Creating…">Create workspace</SubmitButton>
         {saved && (
-          <Text variant="body-default-m" onBackground="success-medium">
+          <Text textVariant="body-default-m" onBackground="success-medium">
             Workspace created.
           </Text>
         )}

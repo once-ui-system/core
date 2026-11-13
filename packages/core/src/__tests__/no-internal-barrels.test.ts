@@ -35,7 +35,9 @@ const collect = (dir: string, files: string[] = []): string[] => {
 };
 
 const isBarrel = (from: string, specifier: string): boolean => {
-  const base = resolve(dirname(from), specifier);
+  // 3.0 source names the emitted file (`./Button.js`, `../components/index.js`).
+  if (/(^|\/)index\.js$/.test(specifier)) return true;
+  const base = resolve(dirname(from), specifier.replace(/\.js$/, ""));
   // A same-named file wins over a directory, as it does for the resolver.
   if (EXTENSIONS.some((ext) => existsSync(base + ext))) return false;
   return EXTENSIONS.some((ext) => existsSync(join(base, `index${ext}`)));

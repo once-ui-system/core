@@ -25,13 +25,13 @@ Placement matters: the wrapper is **full-bleed** (`fillWidth`, outside any `maxW
       display: true,
       colorStart: "brand-alpha-medium",
       colorEnd: "static-transparent",
-      x: 50, y: 0,
-      width: 150, height: 80,
+      x: "50%", y: 0,
+      width: "150%", height: "80%",
       opacity: 60,
     }}
     dots={{ display: true, color: "neutral-alpha-weak", size: "2", opacity: 40 }}
   />
-  <Column zIndex={1} horizontal="center" gap="24" maxWidth={48}>
+  <Column zIndex={1} horizontal="center" gap="24" maxWidth="48rem">
     {/* hero content */}
   </Column>
 </Column>
@@ -47,11 +47,11 @@ Animated matrix field behind a hero, faded into the page with a `page-background
     position="absolute" top="0" left="0" fill
     flicker size={1.5} spacing={8}
     colors={["brand-solid-strong"]}
-    bulge={{ type: "wave", duration: 3, intensity: 20, repeat: true }}
+    bulge={{ type: "wave", duration: 3000, intensity: 20, repeat: true }}
   />
   <Background
     position="absolute" top="0" left="0" fill pointerEvents="none"
-    gradient={{ display: true, colorStart: "page-background", x: 0, y: 50, width: 150, height: 300 }}
+    gradient={{ display: true, colorStart: "page-background", x: 0, y: "50%", width: "150%", height: "300%" }}
   />
   <Column zIndex={1} center gap="16" padding="48">
     {/* hero content */}
@@ -71,8 +71,8 @@ For the emphasized item in a set (e.g. "most popular" pricing tier). Border + to
       display: true,
       colorStart: "brand-alpha-medium",
       colorEnd: "static-transparent",
-      x: 50, y: 0,
-      width: 200, height: 60,
+      x: "50%", y: 0,
+      width: "200%", height: "60%",
       opacity: 50,
     }}
   />
