@@ -1310,6 +1310,7 @@
    "accent",
    "inherit"
   ],
+  "MapAreaData": "Exclude<GeoJSONSourceSpecification[\"data\"], string>",
   "MapBuildings": [
    "flat",
    "3d"
@@ -5343,6 +5344,19 @@
     "transformRequest": "MapOptions[\"transformRequest\"]",
     "labels": "Partial<MapLabels>",
     "children": "React.ReactNode"
+   }
+  },
+  "MapArea": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "props": {
+    "points": "readonly LngLat[]",
+    "data": "MapAreaData",
+    "tone": "MapTone = brand",
+    "opacity": "number = 0.2",
+    "outline": "\"solid\" | \"dashed\" | \"none\" = solid",
+    "width": "number = 2",
+    "onSelect": "() => void"
    }
   },
   "MapCircle": {
