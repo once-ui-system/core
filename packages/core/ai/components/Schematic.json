@@ -1,0 +1,71 @@
+{
+ "name": "Schematic",
+ "group": "components",
+ "props": {
+  "nodes": "!readonly SchematicNode[] = []",
+  "links": "readonly SchematicLink[] = []",
+  "viewBox": "[number, number, number, number]",
+  "selected": "string",
+  "onNodeSelect": "(id: string) => void",
+  "minWidth": "number = 560",
+  "aria-label": "!string",
+  "labels": "Partial<SchematicLabels>"
+ },
+ "tags": [
+  "data"
+ ],
+ "pairsWith": [
+  "AlarmList",
+  "LineChart"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "SchematicKind": [
+   "vessel",
+   "tank",
+   "pump",
+   "valve",
+   "exchanger",
+   "turbine",
+   "sensor",
+   "box"
+  ],
+  "SchematicLabels": {
+   "state": "!Record<SchematicState, string>",
+   "open": "!string",
+   "closed": "!string",
+   "stopped": "!string",
+   "flow": "!(from: string, to: string, link: SchematicLink) => string",
+   "flowsHeading": "!string"
+  },
+  "SchematicLink": {
+   "id": "string",
+   "from": "!string",
+   "to": "!string",
+   "via": "readonly [number, number][]",
+   "flow": "number",
+   "state": "SchematicState",
+   "label": "string"
+  },
+  "SchematicNode": {
+   "id": "!string",
+   "kind": "!SchematicKind",
+   "x": "!number",
+   "y": "!number",
+   "label": "!string",
+   "value": "string",
+   "state": "SchematicState",
+   "running": "boolean",
+   "open": "boolean",
+   "width": "number",
+   "height": "number",
+   "tag": "string"
+  },
+  "SchematicState": [
+   "warning",
+   "off",
+   "normal",
+   "alarm"
+  ]
+ }
+}

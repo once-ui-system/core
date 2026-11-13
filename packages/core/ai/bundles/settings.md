@@ -656,8 +656,8 @@ type TableLabels = { selectAll: string; selectRow: string; pagination: string; s
 type TableQuery = { page: number; perPage: number; sort: TableSort | null; search: string; filters: TableFilters }
 type TableSort = { key: string; direction: "asc" | "desc" }
 type TextBreakpointHide = { hide?: boolean }
-type TextType = "body" | "code" | "label" | "heading" | "display"
-type TextVariant = `${"body" | "code" | "label" | "heading" | "display"}-${"strong" | "default" | "normal" | "medium"}-${"xl" | "xs" | "s" | "l" | "m"}`
+type TextType = "body" | "code" | "label" | "display" | "heading"
+type TextVariant = `${"body" | "code" | "label" | "display" | "heading"}-${"strong" | "default" | "normal" | "medium"}-${"xl" | "xs" | "s" | "l" | "m"}`
 type TextWeight = "strong" | "default" | "normal" | "medium"
 type ToastContextProps = { toasts: Toast[]; addToast: (toast: Omit<Toast, "id"> | LegacyToast) => string; removeToast: (id: string) => void }
 // type Tone is one of these strings: neutral brand accent info danger warning success

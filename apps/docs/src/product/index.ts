@@ -6,6 +6,7 @@ export * from "./CheckboxExample";
 export * from "./ChipExamples";
 export * from "./ClientOption";
 export * from "./ColorSchemeGrid";
+export * from "./ConfirmButtonExample";
 export * from "./ContentPanel";
 export * from "./CopyPage";
 export * from "./CountdownFxExample";

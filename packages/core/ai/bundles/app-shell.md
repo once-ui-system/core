@@ -613,8 +613,8 @@ type TableQuery = { page: number; perPage: number; sort: TableSort | null; searc
 type TableSort = { key: string; direction: "asc" | "desc" }
 type TagProps = Tag props
 type TextBreakpointHide = { hide?: boolean }
-type TextType = "body" | "code" | "label" | "heading" | "display"
-type TextVariant = `${"body" | "code" | "label" | "heading" | "display"}-${"strong" | "default" | "normal" | "medium"}-${"xl" | "xs" | "s" | "l" | "m"}`
+type TextType = "body" | "code" | "label" | "display" | "heading"
+type TextVariant = `${"body" | "code" | "label" | "display" | "heading"}-${"strong" | "default" | "normal" | "medium"}-${"xl" | "xs" | "s" | "l" | "m"}`
 type TextWeight = "strong" | "default" | "normal" | "medium"
 type Theme = "dark" | "light" | "system"
 type ThemeProviderState = { theme: Theme; resolvedTheme: "light" | "dark"; setTheme: (theme: Theme) => void }

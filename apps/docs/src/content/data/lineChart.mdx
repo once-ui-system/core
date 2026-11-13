@@ -105,6 +105,42 @@ a total. `stack="percent"` shows each as its share of the total instead.
   ]}
 />
 
+## Thresholds and annotations
+
+`thresholds` draws limits across the value axis: a line at `value`, or a band
+from `from` to `to` (leave an end out for "above" or "below"). `annotations`
+marks moments on the x axis. Each is labelled in the plot and drawn so it reads
+without colour: `danger` is a heavy solid line over a hatched band, `warning` a
+dashed line, the other tones a thin dotted one. The summary a screen reader
+hears says which series crossed each limit, how often and first when.
+`yDomain` zooms the value axis to the range that matters.
+
+<LineChart
+  marginTop="16"
+  marginBottom="24"
+  title="Core outlet temperature"
+  xKey="time"
+  yDomain={[280, 350]}
+  curve="monotone"
+  valueFormat={{ style: "unit", unit: "celsius", maximumFractionDigits: 0 }}
+  series={[{ key: "outlet", label: "Outlet", color: "orange" }]}
+  thresholds={[
+    { from: 340, label: "Trip", tone: "danger" },
+    { value: 325, label: "High alarm", tone: "warning" }
+  ]}
+  annotations={[{ x: "14:04", label: "Pump B trip", tone: "danger" }]}
+  data={[
+    { time: "14:00", outlet: 302 },
+    { time: "14:01", outlet: 305 },
+    { time: "14:02", outlet: 311 },
+    { time: "14:03", outlet: 322 },
+    { time: "14:04", outlet: 331 },
+    { time: "14:05", outlet: 336 },
+    { time: "14:06", outlet: 318 },
+    { time: "14:07", outlet: 309 }
+  ]}
+/>
+
 ## Curve
 
 `curve` is how the line runs between points (d3's curve names), and it is a claim about the data between
@@ -206,4 +242,9 @@ animating rather than showing the data.
     error: "Render the error state instead of the chart.",
     border: "Panel border colour. false removes it.",
   }}
+  content={[
+    ["thresholds", "ChartThreshold[]", "-", "Limits across the value axis: { value } for a line, { from, to } for a band, with a label, a tone and the side that is out of limits."],
+    ["annotations", "ChartAnnotation[]", "-", "Moments on the x axis: { x, label, tone }."],
+    ["yDomain", "[number, number]", "-", "The value axis' range, [min, max], in place of zero to the data's top."],
+  ]}
 />

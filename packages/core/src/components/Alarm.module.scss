@@ -1,0 +1,324 @@
+// AlarmMark, Annunciator and AlarmList. Every state reads without colour:
+// it is written on the tile or row, and drawn as a pattern too (a flash or a
+// double outline for new, a solid edge for standing, a dashed edge for cleared
+// unseen, a hatch for shelved).
+
+// The priority hues are fixed, the same in both themes, as on a panel.
+.mark-critical,
+:is(.tile, .row)[data-priority="critical"] {
+  --alarm-fill: var(--scheme-red-700);
+}
+
+.mark-high,
+:is(.tile, .row)[data-priority="high"] {
+  --alarm-fill: var(--scheme-orange-700);
+}
+
+.mark-medium,
+:is(.tile, .row)[data-priority="medium"] {
+  --alarm-fill: var(--scheme-yellow-700);
+}
+
+.mark-low,
+:is(.tile, .row)[data-priority="low"] {
+  --alarm-fill: var(--scheme-cyan-700);
+}
+
+.mark {
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
+
+  polygon,
+  circle {
+    fill: var(--alarm-fill);
+    stroke: var(--scheme-gray-100);
+    stroke-width: 0.8;
+  }
+
+  text {
+    fill: var(--scheme-gray-100);
+    font-family: var(--font-code);
+    font-size: 8.5px;
+    font-weight: var(--font-weight-bold);
+  }
+}
+
+.live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+}
+
+// --- Annunciator ----------------------------------------------------------
+
+.annunciator {
+  list-style: none;
+  display: grid;
+  grid-template-columns: var(--annunciator-columns, repeat(auto-fill, minmax(160px, 1fr)));
+  // Room for the new-alarm double outline (4px) and air between neighbours.
+  --annunciator-gap: var(--static-space-16);
+  gap: var(--annunciator-gap);
+  margin: 0;
+  padding: 0;
+}
+
+.tileItem {
+  display: flex;
+  min-width: 0;
+}
+
+.tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--static-space-4);
+  width: 100%;
+  min-height: 72px;
+  padding: var(--static-space-8);
+  border: 1px solid var(--neutral-alpha-weak);
+  border-radius: var(--radius-s);
+  background: var(--neutral-alpha-weak);
+  color: var(--neutral-on-background-weak);
+  font: inherit;
+  text-align: left;
+
+  &:is(button) {
+    cursor: pointer;
+  }
+
+  &:is(button):focus-visible {
+    outline: 2px solid var(--neutral-on-background-strong);
+    outline-offset: 2px;
+  }
+
+  // Lit: the priority's colour, dark text on it.
+  &[data-state="unacknowledged"],
+  &[data-state="acknowledged"] {
+    background: var(--alarm-fill);
+    border-color: var(--alarm-fill);
+    color: var(--scheme-gray-100);
+  }
+
+  // New: a heavy double outline, and a flash on top of it.
+  &[data-state="unacknowledged"] {
+    box-shadow:
+      0 0 0 2px var(--page-background),
+      0 0 0 4px var(--alarm-fill);
+  }
+
+  // Cleared before anyone saw it: unlit, with a dashed edge in its colour.
+  &[data-state="returned"] {
+    border: 2px dashed var(--alarm-fill);
+    color: var(--neutral-on-background-strong);
+  }
+
+  &[data-state="shelved"] {
+    background: repeating-linear-gradient(
+      45deg,
+      var(--neutral-alpha-weak) 0 6px,
+      transparent 6px 12px
+    );
+    color: var(--neutral-on-background-weak);
+  }
+
+  &.flash[data-state="unacknowledged"] {
+    animation: alarm-flash 1s steps(1, end) infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &.flash[data-state="unacknowledged"] {
+      animation: none;
+    }
+  }
+}
+
+// Under one flash a second, well inside WCAG's three.
+@keyframes alarm-flash {
+  50% {
+    background: var(--neutral-alpha-weak);
+    color: var(--neutral-on-background-strong);
+  }
+}
+
+.tileHead {
+  display: flex;
+  align-items: center;
+  gap: var(--static-space-4);
+}
+
+.tileTag {
+  font-family: var(--font-code);
+  font-size: var(--font-size-label-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.02em;
+}
+
+.tileLabel {
+  font-size: var(--font-size-label-s);
+  font-weight: var(--font-weight-label-strong);
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.tileState {
+  margin-top: auto;
+  font-size: var(--font-size-label-xs);
+  opacity: 0.85;
+}
+
+// --- AlarmList ------------------------------------------------------------
+
+.list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.listHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--static-space-8);
+  padding: var(--static-space-8) var(--static-space-12);
+  border-bottom: 1px solid var(--neutral-alpha-weak);
+  color: var(--neutral-on-background-strong);
+  font-size: var(--font-size-label-s);
+}
+
+.listCounts {
+  font-variant-numeric: tabular-nums;
+}
+
+.listEmpty {
+  margin: 0;
+  padding: var(--static-space-16) var(--static-space-12);
+  color: var(--neutral-on-background-weak);
+  font-size: var(--font-size-body-s);
+}
+
+.rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--static-space-12);
+  min-height: 48px;
+  padding: var(--static-space-8) var(--static-space-12);
+  border-bottom: 1px solid var(--neutral-alpha-weak);
+  border-left: 4px solid transparent;
+  color: var(--neutral-on-background-strong);
+  font-size: var(--font-size-label-s);
+
+  &[data-state="unacknowledged"] {
+    border-left-color: var(--alarm-fill);
+    background: var(--neutral-alpha-weak);
+
+    .rowLabel {
+      font-weight: var(--font-weight-bold);
+    }
+  }
+
+  &[data-state="acknowledged"] {
+    border-left-color: var(--alarm-fill);
+  }
+
+  &[data-state="returned"] {
+    border-left-style: dashed;
+    border-left-color: var(--alarm-fill);
+    color: var(--neutral-on-background-medium);
+  }
+
+  &[data-state="normal"],
+  &[data-state="shelved"] {
+    color: var(--neutral-on-background-weak);
+  }
+}
+
+.rowText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.rowLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: var(--font-weight-label-strong);
+}
+
+.rowTag {
+  margin-right: var(--static-space-8);
+  color: var(--neutral-on-background-medium);
+  font-family: var(--font-code);
+}
+
+// With a mouse, a row's Acknowledge shows on hover or keyboard focus, over the
+// row's end, so a long list does not repeat it on every line. Touch screens
+// keep it in place. The row's edge and bold label already say it waits.
+@media (hover: hover) {
+  .row {
+    grid-template-columns: 16px minmax(0, 1fr);
+  }
+
+  .rowAction {
+    position: absolute;
+    right: var(--static-space-12);
+    top: 50%;
+    translate: 0 -50%;
+    display: flex;
+    // Covers the row's text it sits over, fading it out on the left.
+    border-radius: var(--radius-m);
+    background: var(--surface-background);
+    box-shadow: -16px 0 16px var(--surface-background);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+  }
+
+  .row:hover .rowAction,
+  .row:focus-within .rowAction {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rowAction {
+      transition: none;
+    }
+  }
+}
+
+// Priority and state in words, the time, the detail: one line that wraps.
+.rowMeta {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--static-space-12);
+  color: var(--neutral-on-background-medium);
+  font-size: var(--font-size-label-xs);
+}
+
+.rowState {
+  color: var(--neutral-on-background-strong);
+}
+
+.rowTime {
+  font-family: var(--font-code);
+  font-variant-numeric: tabular-nums;
+}

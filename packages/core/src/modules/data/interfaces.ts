@@ -158,10 +158,71 @@ interface ChartProps<T extends object = DataPoint>
   loading?: boolean;
 }
 
+/** The tones a threshold or annotation can take: each has its own line, so it reads without colour. */
+type ChartMarkTone = "neutral" | "info" | "success" | "warning" | "danger";
+
+/**
+ * A limit drawn across a chart's value axis: a line at `value`, or a band
+ * from `from` to `to` (leave one end out for "everything above" or "below").
+ * It is always labelled in the plot, and drawn so it reads without colour:
+ * `danger` is a heavy solid line over a hatched band, `warning` a dashed line
+ * over a lighter hatch, the other tones a thin dotted line over a plain tint.
+ * The value axis stretches to show every line.
+ */
+interface ChartThreshold {
+  /** A line at this value. */
+  value?: number;
+  /** A band's lower end; left out, the band runs to the bottom of the axis. */
+  from?: number;
+  /** A band's upper end; left out, the band runs to the top of the axis. */
+  to?: number;
+  /** Written in the plot beside the line or band, and in the summary. Keep it short: `"High alarm"`. */
+  label: string;
+  /** Defaults to `"warning"`. */
+  tone?: ChartMarkTone;
+  /**
+   * Which side of a line is out of limits, for the summary a screen reader
+   * hears (`"Coolant: above High alarm at 3 points, first at 14:05"`).
+   * Defaults to `"above"`; `"none"` leaves the line out of the summary's count.
+   * A band counts the points inside it, unless this is `"none"` (a normal range).
+   */
+  direction?: "above" | "below" | "none";
+}
+
+/**
+ * A moment marked on the x axis (the category axis of horizontal bars): a
+ * vertical rule at the row whose x value is `x`, labelled at the top.
+ */
+interface ChartAnnotation {
+  /** The x value it marks, as the rows hold it: `"14:05"`, a number, an ISO date. */
+  x: string | number | Date;
+  label: string;
+  /** Defaults to `"neutral"`. */
+  tone?: ChartMarkTone;
+}
+
+/** What LineChart, BarChart and LineBarChart take to draw limits and moments, and to zoom the value axis to them. */
+interface ChartMarksProps {
+  /** Limits drawn across the value axis, behind the data (bands) and over it (lines). */
+  thresholds?: readonly ChartThreshold[];
+  /** Moments marked on the x axis. */
+  annotations?: readonly ChartAnnotation[];
+  /**
+   * The value axis' range, `[min, max]`, in place of one from zero to the
+   * data's top: a reading that lives between 250 and 350 with its limits in
+   * view. Values outside it are clipped at the plot's edge.
+   */
+  yDomain?: [number, number];
+}
+
 export type {
   BarWidth,
+  ChartAnnotation,
+  ChartMarksProps,
+  ChartMarkTone,
   ChartMode,
   ChartProps,
+  ChartThreshold,
   ChartVariant,
   CurveType,
   curveType,

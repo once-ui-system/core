@@ -1,0 +1,258 @@
+// Parts and lines. A state is drawn as a stroke pattern as well as a colour:
+// warning dashed, alarm heavy, off hollow and struck through.
+.schematic {
+  // --schematic-background: the colour behind the drawing, which parts fill
+  // with and text haloes in. Defaults to the page; set it on an ancestor to
+  // the panel's colour when the drawing sits on a surface.
+  --schematic-bg: var(--schematic-background, var(--page-background));
+
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  min-width: var(--schematic-min-width, 0);
+  height: auto;
+  overflow: visible;
+  font-family: var(--font-body);
+}
+
+// --- Lines ----------------------------------------------------------------
+// Quiet by default: hairline pipes in the neutral scale, the flow as a run of
+// dots in the brand colour. Only a line in warning or alarm takes a tone.
+
+.link {
+  --link-color: var(--brand-on-background-weak);
+
+  &[data-state="warning"] {
+    --link-color: var(--warning-on-background-medium);
+  }
+
+  &[data-state="alarm"] {
+    --link-color: var(--danger-on-background-medium);
+  }
+
+  &[data-state="off"] {
+    --link-color: var(--neutral-on-background-weak);
+  }
+}
+
+.pipe {
+  fill: none;
+  stroke: var(--neutral-alpha-medium);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+
+  .link[data-state="warning"] & {
+    stroke: var(--warning-alpha-strong);
+  }
+
+  // Alarm: the pipe itself turns heavy, so it reads without the colour.
+  .link[data-state="alarm"] & {
+    stroke: var(--danger-alpha-strong);
+    stroke-width: 4;
+  }
+
+  .link[data-state="off"] & {
+    stroke-dasharray: 2 4;
+  }
+}
+
+.flow {
+  fill: none;
+  stroke: var(--link-color);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 0 8;
+  stroke-linejoin: round;
+  animation: schematic-flow var(--flow-duration, 1s) linear infinite;
+
+  // Warning: longer dashes in place of dots.
+  .link[data-state="warning"] & {
+    stroke-dasharray: 4 6;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes schematic-flow {
+  to {
+    stroke-dashoffset: -8;
+  }
+}
+
+.arrow {
+  fill: var(--link-color);
+  stroke: none;
+}
+
+.linkLabel {
+  fill: var(--neutral-on-background-weak);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+}
+
+// --- Parts ----------------------------------------------------------------
+// Outlined in the neutral scale on the panel's own colour. Warning: a dashed
+// tone outline and a tint. Alarm: a heavy tone outline and a tint. Off:
+// dashed, struck through.
+
+.node {
+  --node-stroke: var(--neutral-alpha-strong);
+  --node-detail: var(--neutral-on-background-weak);
+  --node-fill: var(--schematic-bg);
+  --node-text: var(--neutral-on-background-weak);
+
+  outline: none;
+
+  &[data-state="warning"] {
+    --node-stroke: var(--warning-solid-medium);
+    --node-detail: var(--warning-on-background-medium);
+    --node-fill: color-mix(in srgb, var(--warning-solid-medium) 12%, var(--schematic-bg));
+    --node-text: var(--warning-on-background-strong);
+  }
+
+  &[data-state="alarm"] {
+    --node-stroke: var(--danger-solid-medium);
+    --node-detail: var(--danger-on-background-medium);
+    --node-fill: color-mix(in srgb, var(--danger-solid-medium) 14%, var(--schematic-bg));
+    --node-text: var(--danger-on-background-strong);
+  }
+
+  &[data-state="off"] {
+    --node-stroke: var(--neutral-alpha-medium);
+    --node-detail: var(--neutral-alpha-strong);
+  }
+}
+
+.symbol {
+  rect,
+  circle,
+  path {
+    fill: var(--node-fill);
+    stroke: var(--node-stroke);
+    stroke-width: 1.25;
+    stroke-linejoin: round;
+  }
+
+  .node[data-state="warning"] & > :first-child {
+    stroke-width: 1.5;
+    stroke-dasharray: 4 3;
+  }
+
+  // Alarm: a heavy solid line.
+  .node[data-state="alarm"] & > :first-child {
+    stroke-width: 3;
+  }
+
+  .node[data-state="off"] & > :first-child {
+    stroke-dasharray: 3 3;
+  }
+
+  .node[data-selected] & > :first-child {
+    stroke: var(--brand-solid-medium);
+    stroke-width: 2.5;
+  }
+
+  .interactive:focus-visible & > :first-child {
+    stroke: var(--neutral-on-background-strong);
+    stroke-width: 2.5;
+  }
+
+  .inner,
+  .line {
+    fill: none;
+    stroke: var(--node-detail);
+    stroke-dasharray: none;
+  }
+
+  .inner {
+    fill: none;
+    stroke: var(--node-detail);
+    stroke-width: 1.25;
+  }
+
+  .hollow {
+    fill: var(--node-fill);
+  }
+
+  .node[data-kind="valve"] & path:not(.hollow) {
+    fill: var(--node-detail);
+    stroke: var(--node-detail);
+  }
+}
+
+.strike {
+  stroke: var(--neutral-alpha-strong);
+  stroke-width: 1.25;
+}
+
+.impeller {
+  animation: schematic-spin 1.6s linear infinite;
+
+  .node[data-stopped] & {
+    animation: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes schematic-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.interactive {
+  cursor: pointer;
+}
+
+// Text keeps a halo of the drawing's background, so a line running under it
+// never crosses it.
+.text text,
+.linkLabel {
+  paint-order: stroke;
+  stroke: var(--schematic-bg);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+.text {
+  pointer-events: none;
+}
+
+.tag {
+  fill: var(--neutral-on-background-weak);
+  font-family: var(--font-code);
+  font-size: 9px;
+  letter-spacing: 0.04em;
+}
+
+.label {
+  fill: var(--neutral-on-background-strong);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+}
+
+.value {
+  fill: var(--neutral-on-background-medium);
+  font-family: var(--font-code);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.status {
+  fill: var(--node-text);
+  font-size: 9px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.08em;
+}

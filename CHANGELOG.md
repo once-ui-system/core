@@ -13,6 +13,8 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [3.1.0] - Unreleased
 
+Built on the 3.0 branch and held until 3.0.0 ships.
+
 ### Added
 
 - **Glow solid style.** `solidStyle: "glow"` (`data-solid-style="glow"`) joins flat and plastic: a solid lights its own colour into a soft two-layer halo with a light edge along the top. It applies to primary buttons and icon buttons in every tone, checked switches, checkboxes and radios, and selected Tag toggles with a tone; secondary and neutral controls never glow. Put the attribute on any element to light up one area only. The halo is static (no filter, no animation), brightens on hover, is tighter and paler in the light theme, and goes away under `prefers-contrast: more` and forced colours. New tokens `--solid-glow-near`, `--solid-glow-far`, `--solid-glow-near-mix`, `--solid-glow-far-mix` and `--solid-glow-rim`; the shared `glow.scss` mixin in foundations draws it. The Style panel's Effect row gets a Glow option.
@@ -26,6 +28,29 @@ item (see `ROADMAP.md`, Week 4).
   dark. Orbit, turntable or fixed camera; draws on demand and pauses off screen, in hidden
   tabs and for reduced motion. `three` is an optional peer, loaded only when a scene
   renders. Non-breaking.
+- **Control-room pieces**, free in core, each readable without colour:
+  - **Chart thresholds and annotations.** `LineChart`, `BarChart` and
+    `LineBarChart` take `thresholds` (a line at `value`, or a band from `from`
+    to `to`) and `annotations` (a moment on the x axis), labelled in the plot.
+    `danger` is a heavy solid line over a hatched band, `warning` a dashed line,
+    the other tones a dotted one. The value axis stretches to every limit, and
+    `yDomain` zooms it. The chart's summary says which series crossed which
+    limit, how often and first when.
+  - **Alarms: `useAlarms`, `Annunciator`, `AlarmList`, `AlarmMark`.** The model
+    follows ISA-18.2 (new, standing, cleared unseen, normal, shelved) as a hook
+    and as the pure `alarmsReducer`. `Annunciator` is a lightbox panel, a tile
+    per point, and `AlarmList` the alarms in working order with Acknowledge and
+    Acknowledge all; incoming alarms are announced. Priorities are numbered
+    shapes, states are written out and drawn as patterns (flash or double
+    outline, dashed edge, hatch).
+  - **`Schematic`.** Parts (vessel, tank, pump, valve, exchanger, turbine,
+    sensor, box) and the lines between them, from data. Flowing lines run
+    dashes in their direction with an arrow; a pump turns while running. Parts
+    are buttons with `onNodeSelect`, and a screen reader hears each part's
+    reading and state, then the flows.
+  - **`ConfirmButton`.** For actions that are hard to take back: press twice
+    (the first press arms it, a double click never confirms) or hold to
+    confirm. Escape, blur or the timeout disarms it.
 
 ## [3.0.0] - Unreleased
 

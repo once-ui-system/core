@@ -145,8 +145,8 @@
    "inverse"
   ],
   "StylePersistence": [
-   "none",
    "local",
+   "none",
    "StylePersistenceAdapter"
   ],
   "StylePersistenceAdapter": {

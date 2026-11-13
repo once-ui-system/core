@@ -1,3 +1,4 @@
+export * from "./useAlarms.js";
 export * from "./useArrowNavigation.js";
 export * from "./useDebounce.js";
 export * from "./useElementTheme.js";
