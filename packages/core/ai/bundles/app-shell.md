@@ -641,6 +641,7 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - At s the sidebar hides and a header button opens the same nav in a left Drawer; following a link closes it
 - Breadcrumbs from the route, and the account or workspace switcher as a Dropdown or a User with a dropdown of Option rows
 - A header Search button opens Kbar with `open` and `onOpenChange` (no children); ⌘K still toggles it
+- Every view that loads data shows loading (Skeleton shaped like the content), empty (title, one line, the action that fills it), error (Feedback tone="danger" with Retry) and filled, through a typed lib/ data layer of async functions over mock data — even when the brief never mentions data
 
 ## Layout shell
 

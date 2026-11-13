@@ -684,6 +684,7 @@ type ValueFormat = "number" | "compact" | "percent" | "NumberFormatOptions" | (v
 - Column surface recipe — not Card
 - CountFx or display-strong-s with viewport latch
 - Inside an app: the layout shell below — the pane scrolls with height="below-header", the sidebar hides at s and a Drawer holds the same nav on a phone
+- Every view that loads data shows loading (Skeleton shaped like the content), empty (title, one line, the action that fills it), error (Feedback tone="danger" with Retry) and filled, through a typed lib/ data layer of async functions over mock data — even when the brief never mentions data
 
 ## Recipes
 
