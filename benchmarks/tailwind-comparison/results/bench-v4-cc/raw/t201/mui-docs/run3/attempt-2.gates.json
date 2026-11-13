@@ -1,0 +1,227 @@
+{
+  "arm": "M",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 3359
+    },
+    "build": {
+      "ok": true,
+      "ms": 10899
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 2331,
+          "height": 3958,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 2361,
+          "height": 3478,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 2361,
+          "height": 1999,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 2331,
+              "height": 3958,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 2361,
+              "height": 3478,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 2361,
+              "height": 1999,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 20,
+            "serious_or_critical": 2,
+            "ids": [
+              "color-contrast:serious:15",
+              "label-content-name-mismatch:serious:5"
+            ]
+          }
+        },
+        "/patients/p-104": {
+          "viewports": {
+            "phone": {
+              "text": 1637,
+              "height": 2789,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1690,
+              "height": 2410,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1690,
+              "height": 1908,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 3,
+            "serious_or_critical": 2,
+            "ids": [
+              "label-content-name-mismatch:serious:1",
+              "list:serious:2"
+            ]
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 2,
+        "nodes": 20,
+        "serious_or_critical": 2,
+        "ids": [
+          "color-contrast:serious:15",
+          "label-content-name-mismatch:serious:5"
+        ]
+      },
+      "interaction": {
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1767,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/patients/p-104 phone": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/patients/p-104 tablet": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/patients/p-104 desktop": {
+          "ms": 1758,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 475,
+          "distinct_fontSize": 9,
+          "distinct_color": 7,
+          "distinct_background": 11,
+          "distinct_radius": 3,
+          "distinct_shadow": 0,
+          "distinct_spacing": 17,
+          "spacing_on_4px_grid": 0.678
+        },
+        "/patients/p-104": {
+          "elements": 277,
+          "distinct_fontSize": 7,
+          "distinct_color": 5,
+          "distinct_background": 8,
+          "distinct_radius": 3,
+          "distinct_shadow": 0,
+          "distinct_spacing": 12,
+          "spacing_on_4px_grid": 0.872
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 439.3,
+          "css_kb": 0,
+          "fcp_ms": 112,
+          "cls": 0,
+          "long_task_ms": 0
+        },
+        "/patients/p-104": {
+          "js_kb": 439.3,
+          "css_kb": 0,
+          "fcp_ms": 100,
+          "cls": 0,
+          "long_task_ms": 23
+        }
+      },
+      "views": {
+        "new-appointment phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-phone.jpg"
+        },
+        "new-appointment tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-tablet.jpg"
+        },
+        "new-appointment desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "app/theme.ts",
+    "components/AlertChips.tsx",
+    "components/StatusChip.tsx",
+    "components/PatientSearch.tsx",
+    "components/AppShell.tsx",
+    "components/BookingDialog.tsx",
+    "components/Schedule.tsx",
+    "components/PatientRecord.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx"
+  ]
+}

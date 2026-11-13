@@ -1,0 +1,7 @@
+// The page caps a block's frame at 80vh (inline style). CodeBlock's fullscreen
+// view is a copy of the frame that receives the same inline style; its own
+// fullscreen rule sets the height but not the max-height, so the cap left the
+// "fullscreen" preview at 80% of the window with the page showing below.
+.frame[class*="fullscreen"] {
+  max-height: none !important;
+}

@@ -1,0 +1,29 @@
+{
+  "check": "1",
+  "at": "2026-11-10T23:14:59.361Z",
+  "ms": 42747,
+  "files": [
+    "app/globals.css",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "components/AlertChips.tsx",
+    "components/AppHeader.tsx",
+    "components/PatientSearch.tsx",
+    "components/Schedule.tsx",
+    "components/WeightChart.tsx",
+    "lib/data.ts"
+  ],
+  "passed": true,
+  "gates_passed": true,
+  "failed_gate": null,
+  "adherence": {
+    "system": 0,
+    "raw": 16,
+    "share": null,
+    "colours": 10,
+    "cssLines": 10,
+    "ok": true,
+    "reasons": []
+  }
+}

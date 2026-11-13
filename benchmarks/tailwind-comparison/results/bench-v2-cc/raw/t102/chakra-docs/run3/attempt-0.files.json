@@ -1,0 +1,15 @@
+{
+  "files": [
+    "lib/theme.ts",
+    "components/ui/provider.tsx",
+    "app/layout.tsx",
+    "lib/data.ts",
+    "components/nav-config.tsx",
+    "components/sidebar-nav.tsx",
+    "components/app-shell.tsx",
+    "app/page.tsx",
+    "app/projects/page.tsx",
+    "app/settings/page.tsx"
+  ],
+  "rejected": []
+}

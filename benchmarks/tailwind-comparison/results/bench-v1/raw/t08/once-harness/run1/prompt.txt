@@ -1,0 +1,29 @@
+You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.
+
+Build the app described below in an existing Next.js 16 project (App Router, React 19, strict TypeScript).
+
+Stack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; its agent documentation is in the `docs/` folder, which you can read (start with `docs/AGENTS.md`).
+
+Task: Lumen's onboarding at `/`: a four-step wizard (1 Account: name and work email; 2 Workspace: workspace name and team size; 3 Invite: up to three teammate emails, skippable; 4 Preferences: theme and weekly digest). A step indicator shows where the user is. Back and Next move between steps; Next validates the current step and shows inline errors instead of moving on. A summary card beside the form (below it on phones) shows what has been entered so far. Finishing goes to `/welcome`, a done screen with a short checklist of next steps.
+
+Use this data for the content (define it in the code; you may put it in `lib/data.ts`):
+
+```json
+{
+  "product": "Lumen, a product-analytics and issue-tracking app for small software teams",
+  "user": {
+    "name": "Maya Okafor",
+    "email": "maya@acmelabs.io",
+    "role": "Owner"
+  }
+}
+```
+
+Requirements:
+- The app must serve these routes: `/`, `/welcome`. Each route default-exports its page from its `page.tsx`; nested layouts are allowed.
+- Write as many files as the app needs, under `app/`, `components/` or `lib/`. Do not change any file that already exists in the project except `app/page.tsx`. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.
+- Put "use client" at the top of every file that uses state, effects or event handlers.
+- Use realistic placeholder content defined in the files (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.
+- The app must type-check under strict TypeScript, pass `next build`, and render every route without console errors.
+- Make it responsive from phone to desktop, and accessible.
+- Reply with every file, each in its own fenced code block whose opening line names the file's path, like ```tsx app/settings/page.tsx, and nothing else.

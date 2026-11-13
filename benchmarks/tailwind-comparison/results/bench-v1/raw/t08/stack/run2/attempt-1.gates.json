@@ -1,0 +1,206 @@
+{
+  "arm": "S",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2896
+    },
+    "build": {
+      "ok": true,
+      "ms": 22620
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 436,
+          "height": 1156,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 436,
+          "height": 1134,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 498,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 436,
+              "height": 1156,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 436,
+              "height": 1134,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 498,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/welcome": {
+          "viewports": {
+            "phone": {
+              "text": 513,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 513,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 513,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      },
+      "interaction": {
+        "phone": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        },
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1766,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/welcome phone": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/welcome tablet": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/welcome desktop": {
+          "ms": 1761,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 110,
+          "distinct_fontSize": 7,
+          "distinct_color": 6,
+          "distinct_background": 7,
+          "distinct_radius": 5,
+          "distinct_shadow": 1,
+          "distinct_spacing": 9,
+          "spacing_on_4px_grid": 0.968
+        },
+        "/welcome": {
+          "elements": 83,
+          "distinct_fontSize": 6,
+          "distinct_color": 3,
+          "distinct_background": 2,
+          "distinct_radius": 5,
+          "distinct_shadow": 1,
+          "distinct_spacing": 9,
+          "spacing_on_4px_grid": 0.906
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 393.5,
+          "css_kb": 49.6,
+          "fcp_ms": 156,
+          "cls": 0,
+          "long_task_ms": 0
+        },
+        "/welcome": {
+          "js_kb": 395.8,
+          "css_kb": 49.6,
+          "fcp_ms": 144,
+          "cls": 0,
+          "long_task_ms": 0
+        }
+      }
+    }
+  },
+  "files": [
+    "src/lib/data.ts",
+    "src/components/onboarding/Onboarding.tsx",
+    "src/app/page.tsx",
+    "src/components/onboarding/WelcomeChecklist.tsx",
+    "src/app/welcome/page.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ src/lib/data.ts: no mechanical issues\n✗ src/components/onboarding/Onboarding.tsx: 3 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [border.default] border=\"neutral-alpha-weak\" restates the default border — write bare border, and name a colour only to deviate\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ src/app/page.tsx: no mechanical issues\n✗ src/components/onboarding/WelcomeChecklist.tsx: 2 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [border.default] border=\"neutral-alpha-weak\" restates the default border — write bare border, and name a colour only to deviate\n✓ src/app/welcome/page.tsx: no mechanical issues",
+    "validator": {
+      "package_version": "2.6.0",
+      "script_sha256": "ab274b3e6be15eb6"
+    }
+  }
+}

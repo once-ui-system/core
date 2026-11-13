@@ -1,0 +1,115 @@
+---
+title: "EmptyState"
+summary: "What a page, panel or list shows before it has anything in it: a visual, a title, one line on what to do, and the action that does it."
+updatedAt: "2026-11-06"
+docs: "once-ui/components/emptyState.mdx"
+github: "components/EmptyState.tsx"
+navLabel: "EmptyState"
+navIcon: "components"
+---
+
+An empty page is the first thing a new user sees, so it should say what belongs there and offer the one step that puts it there. EmptyState does that in one tag, at three sizes, with a Mascot, a Cube Emote or an icon above it.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <EmptyState
+      size="l"
+      visual={<Mascot size="l" surface="flat" lookAt="pointer" effects={false} />}
+      title="No clients yet"
+      description="Invite a client by email. They fill in their company details once, and every contract reads them from there."
+      action={<Button size="s" prefixIcon="plus" label="New client" />}
+    />
+  }
+  codes={[
+    {
+      code:
+`<EmptyState
+  size="l"
+  visual={<Mascot size="l" surface="flat" lookAt="pointer" effects={false} />}
+  title="No clients yet"
+  description="Invite a client by email. They fill in their company details once, and every contract reads them from there."
+  action={<Button size="s" prefixIcon="plus" label="New client" />}
+/>`,
+      language: "tsx",
+      label: "Page"
+    }
+  ]}
+/>
+
+## Sizes
+
+`l` is for a whole page with nothing in it yet, `m` for a card or panel, and `s` for inside a table, list, select or chart. Table's own empty and no-results states use `s`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="16">
+      <Card fillWidth radius="l" direction="column">
+        <EmptyState
+          icon="inbox"
+          title="No invoices"
+          description="Invoices show up here once a contract is accepted."
+          secondaryAction={<Button size="s" variant="secondary" label="Learn more" />}
+        />
+      </Card>
+      <Card fillWidth radius="l" direction="column">
+        <EmptyState
+          size="s"
+          icon="search"
+          titleAs="h3"
+          title="No results"
+          description="Try a different search or filter"
+          action={<Button size="s" variant="secondary" label="Clear filters" />}
+        />
+      </Card>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<EmptyState
+  icon="inbox"
+  title="No invoices"
+  description="Invoices show up here once a contract is accepted."
+  secondaryAction={<Button size="s" variant="secondary" label="Learn more" />}
+/>
+
+<EmptyState
+  size="s"
+  icon="search"
+  titleAs="h3"
+  title="No results"
+  description="Try a different search or filter"
+  action={<Button size="s" variant="secondary" label="Clear filters" />}
+/>`,
+      language: "tsx",
+      label: "Sizes"
+    }
+  ]}
+/>
+
+## Writing it
+
+- The title says what is missing, plainly: "No clients yet", not "Nothing to see here".
+- The description is one sentence on what fills the space, or what happens next.
+- One primary action. When the page header has the same button, hide it there while the page is empty, so the step shows once.
+- A Mascot reads best with `surface="flat"`. A Cube Emote from once-ui.com/emotes goes in `visual` the same way.
+
+## API reference
+
+<PropsTable
+  component="EmptyState"
+  describe={{
+    visual: "What sits above the title: a Mascot, a Cube Emote, an illustration. Wins over icon.",
+    icon: "A plain icon above the title, when there is no visual.",
+    title: "What is empty, said plainly.",
+    description: "One sentence on what fills it, or what to do next.",
+    action: "The one next step, usually the page's primary button.",
+    secondaryAction: "A second, quieter step.",
+    size: "s inside a table or list, m in a card, l for a whole page.",
+    titleAs: "The title's element.",
+  }}
+/>
