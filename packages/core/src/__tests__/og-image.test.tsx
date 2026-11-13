@@ -104,6 +104,17 @@ describe("OG image cards", () => {
     expect(html).toContain(encodeURIComponent('<circle cx="1" cy="1" r="1">'));
   });
 
+  it("resolves a mark given as a path against the request's origin", async () => {
+    const html = renderToStaticMarkup(
+      await renderOgCard(
+        { ...skin, mark: "/og/mark.svg" },
+        { title: "Hi" },
+        { origin: "https://fjell.example" },
+      ),
+    );
+    expect(html).toContain("https://fjell.example/og/mark.svg");
+  });
+
   it("draws every layout", async () => {
     for (const layout of ["page", "hero", "photo"] as const) {
       const html = renderToStaticMarkup(

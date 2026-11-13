@@ -416,7 +416,7 @@ function Wordmark({
     // biome-ignore lint/performance/noImgElement: ImageResponse draws plain img elements.
     return <img src={logo} alt="" height={44} style={{ height: 44, objectFit: "contain" }} />;
   }
-  const mark = resolveLogo(skin.mark, "http://localhost");
+  const mark = skin.mark;
   return (
     <div
       style={{
@@ -902,9 +902,11 @@ export async function renderOgCard(
         ? { x: -0.7, y: -0.4 }
         : { x: -0.75, y: -0.15 };
   const mascot = skin.mascot ? await mascotImage(skin.mascot, palette, mood, lookAt) : undefined;
-  const logo = resolveLogo(skin.logo, options.origin ?? "http://localhost");
+  const origin = options.origin ?? "http://localhost";
+  const logo = resolveLogo(skin.logo, origin);
   const input: CardInput = {
-    skin,
+    // A mark given as a path resolves against the request's origin, like the logo.
+    skin: { ...skin, mark: resolveLogo(skin.mark, origin) },
     card: { ...card, layout, mood },
     palette,
     faces,
