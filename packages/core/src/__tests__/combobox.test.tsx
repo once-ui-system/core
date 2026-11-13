@@ -37,7 +37,7 @@ describe("Combobox", () => {
     wrap(<Combobox id="c" label="City" options={cities} onOptionSelect={onOptionSelect} />);
     await user.type(field(), "ber");
     await waitFor(() => expect(isOpen()).toBe(true));
-    expect(screen.getAllByRole("option").map((o) => o.textContent)).toEqual(["Berlin", "Bern"]);
+    expect((await screen.findAllByRole("option")).map((o) => o.textContent)).toEqual(["Berlin", "Bern"]);
     // Typing highlights nothing, so Enter alone would keep "ber".
     expect(field().getAttribute("aria-activedescendant")).toBeNull();
     await user.keyboard("{ArrowDown}{ArrowDown}");
@@ -55,7 +55,7 @@ describe("Combobox", () => {
     wrap(<Combobox id="c" label="City" options={cities} />);
     await user.type(field(), "b");
     await waitFor(() => expect(isOpen()).toBe(true));
-    await user.click(screen.getByRole("option", { name: "Budapest" }));
+    await user.click(await screen.findByRole("option", { name: "Budapest" }));
     expect(field()).toHaveValue("Budapest");
     expect(field()).toHaveFocus();
   });
@@ -97,7 +97,7 @@ describe("Combobox", () => {
     await user.type(field(), "lo");
     await waitFor(() => expect(screen.getByText("Loading…")).toBeTruthy());
     // filter={false}: both options show although neither contains "lo".
-    expect(screen.getAllByRole("option")).toHaveLength(2);
+    expect(await screen.findAllByRole("option")).toHaveLength(2);
   });
 
   it("has no axe violations open or closed", async () => {
