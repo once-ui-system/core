@@ -80,6 +80,29 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 Pre-releases on npm `next` (`npm i @once-ui-system/core@next`), each with every
 entry below that had landed by then:
 
+- **3.0.0-beta.2** (2026-11-13), with `@once-ui-system/foundations`, `fx` and
+  `blocks` at 3.0.0-beta.2 too. New since beta.1: an editor-grade `Scrubber`;
+  `EmptyState` (Table's empty states use it); nested `Submenu` and
+  `openOn="hover"` on Dropdown; `tone` on Nav, ToggleButton and Option; the
+  hairline Tag; Select's default chevron and `alignSelected`; the d20 Mascot;
+  light-mode alpha tokens as visible as in dark; root imports ship only the
+  components a page uses; `brandSeed` is the exact brand colour;
+  CelebrationFx and WeatherFx on 3.0; gallery, picture-first heroes
+  and more sections in blocks; chart tooltips that glide, `color: "brand"` that
+  paints the brand, and errors shown over empty charts; everything from 2.7 and
+  2.8 (SegmentedControl's sliding selection, Logo monogram, Map globe, Option
+  danger and selected looks); and fixes from the first real-app migrations onto
+  beta.1 (ghost fields in a composer, MascotCube colours, Dropdown focus, Switch,
+  FormErrorSummary, DatePicker, Avatar initials). Pulled forward from 3.1 for
+  beta.2: `Calendar` (`/calendar`), `Combobox`, the Sidebar shell,
+  `RichTextEditor` (`/richtext`), canvas editor primitives (`/canvas`), `Scene`
+  (`/scene`, three.js as an optional peer), peer cursors, Map routes, areas and
+  status pins, `StatTile` and the control-room primitives, theme presets, the
+  refreshed Timeline, the solid Tag, Logo `tone`, the glow solid style, Table
+  virtual rows and editable cells, Mascot accessories, agent guidance states,
+  Open Graph images (`createOgImageRoute`, `mascotSvg`), and in blocks
+  `MascotPanel` and the settings blocks. MatrixFx draws offscreen and dashboards
+  render less.
 - **3.0.0-beta.1** (2026-11-02), with `@once-ui-system/foundations`, `fx` and
   `blocks` at 3.0.0-beta.1 too. New since beta.0: charts draw their own SVG,
   so recharts is no longer a dependency (uninstall it); all shipped CSS in one
