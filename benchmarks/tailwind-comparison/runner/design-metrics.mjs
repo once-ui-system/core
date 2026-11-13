@@ -55,7 +55,15 @@ export async function brandCheck(page, brand) {
   const target = hexToRgb(brand.brand_color);
   return page.evaluate(
     ({ target, radius }) => {
-      const rgb = (s) => (s.match(/[\d.]+/g) ?? []).slice(0, 3).map(Number);
+      // Any CSS colour (rgb, lab, oklch, color-mix…) to sRGB through a 1×1 canvas.
+      const ctx = Object.assign(document.createElement("canvas"), { width: 1, height: 1 }).getContext("2d", { willReadFrequently: true });
+      const rgb = (c) => {
+        ctx.clearRect(0, 0, 1, 1);
+        ctx.fillStyle = "#000";
+        ctx.fillStyle = c;
+        ctx.fillRect(0, 0, 1, 1);
+        return [...ctx.getImageData(0, 0, 1, 1).data.slice(0, 3)];
+      };
       const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
       const lum = ([r, g, b]) => (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
       const visible = (el) => {
@@ -78,13 +86,22 @@ export async function brandCheck(page, brand) {
       const brandFilled = filled.filter((b) => dist(rgb(getComputedStyle(b).backgroundColor), target) < 40);
       const radii = filled.map((b) => Number.parseFloat(getComputedStyle(b).borderTopLeftRadius));
       const radiusOk = radii.filter((r) => Math.abs(r - radius) <= 1).length;
+      // Where else the brand colour shows: text (links, current nav item, labels)
+      // and borders or fills of any visible element.
+      const all = [...document.querySelectorAll("body *")].filter(visible).slice(0, 4000);
+      const near = (c) => c && c !== "rgba(0, 0, 0, 0)" && c !== "transparent" && dist(rgb(c), target) < 40;
+      const brandText = all.filter((el) => el.childElementCount === 0 && el.textContent.trim() && near(getComputedStyle(el).color)).length;
+      const brandFill = all.filter((el) => near(getComputedStyle(el).backgroundColor)).length;
       const h = document.querySelector("h1, h2");
       const headingFont = h ? getComputedStyle(h).fontFamily : null;
       const bodyFont = getComputedStyle(document.body).fontFamily;
       return {
         filled_buttons: filled.length,
+        brand_text_elements: brandText,
+        brand_fill_elements: brandFill,
         brand_filled_buttons: brandFilled.length,
         button_radius_matches: radiusOk,
+        button_radius: radii.length ? radii.sort((a, b) => a - b)[Math.floor(radii.length / 2)] : null,
         heading_font: headingFont,
         // The first family named decides; a sans stack that ends in "serif" doesn't count.
         heading_serif: headingFont ? /georgia|times|(^|,)\s*serif\s*(,|$)/i.test(headingFont.split(",")[0]) || /^\s*serif\s*$/i.test(headingFont) : null,

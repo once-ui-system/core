@@ -38,6 +38,21 @@ entry below that had landed by then:
 
 ### Added
 
+- **`Select alignSelected`** (2.x main's `position="aligned"`, renamed: `position` is the CSS position in 3.0): the list opens with the selected
+  option sitting on the field and the others above and below it, as macOS draws a
+  pop-up button. Near a viewport edge, and on a searchable or multiple Select, it opens
+  as the usual dropdown. `Dropdown` takes the same behaviour as `alignSelected`.
+- **An editor-grade `Scrubber`.** Everything is a new prop, so existing timelines
+  look and behave as before. `ruler` draws round time ticks with a playhead
+  handle, and a track `label` adds a header column. Blocks take
+  `variant: "gap"` (a hatched range that is not in the output, with its reason in
+  `label` and `description`), a corner `badge`, `content` drawn behind the label
+  (new `ScrubberFilmstrip` and `ScrubberWaveform`), and `highlight`, a one-off
+  shimmer for blocks that just changed. Blocks glide to new times. The timeline
+  takes `markers`, `snap` (edges stick to edges, markers and the playhead, with
+  a guide), `zoom` / `defaultZoom` / `onZoomChange` (Ctrl or Cmd + wheel, pinch,
+  `+` and `-`, following the playhead), `range` / `onRangeChange` (Shift-drag)
+  and `renderPreview` (a frame above the hovered time).
 - **`EmptyState`.** Also in 2.8: a `visual` (Mascot, Cube Emote) or `icon`, a `title`,
   one line of `description` and an `action`, at `size` `s`, `m` or `l`. `Table`'s own
   empty and no-results states are built from it. `Mascot surface="flat"` no longer paints
@@ -639,6 +654,35 @@ entry below that had landed by then:
 
 ### Fixed
 
+- **From 2.x main, carried into 3.0:** `SegmentedControl`'s rail takes its options'
+  radius plus its 4px padding (`s-4`, `m-4`, `l-4`) instead of a fixed `l`; a
+  Dropdown's panel clips its content to its rounded corners; `DatePicker` shows its
+  calendar and time panel without a second reveal and swaps them at once; the
+  `VoiceVisualizer` orb's swirl stays round on iOS Safari; a Select's highlight
+  follows the pointer only when it moves, so the arrow keys no longer lose it.
+- **`color: "brand"` paints a chart in the brand.** A bare `brand` or
+  `accent` on a series, slice, sparkline or gauge was `var(--data-brand)`,
+  which no theme defines, so it drew nothing; and `brand-strong`, the usual
+  workaround, is the brand's text colour: white in dark, black in light. In a
+  chart, `brand` and `accent` are now the theme's colours at the palette's
+  step (`var(--function-brand-400)`), matching the data hues in both themes.
+- **A chart whose request failed says so.** With `error` set and `data`
+  empty, as `data={data ?? []}` leaves it when a fetch fails, a chart showed
+  its empty message ("No data available for the selected period") instead of
+  `errorState`. `ChartStatus` now puts an error before empty: loading, then
+  error, then empty.
+- **`MediaVideoPlayer` shows a focus ring.** The player is a tab stop of its own
+  (Space plays, the arrows seek) but drew no outline, so keyboard focus on it
+  was invisible. It now draws the brand focus ring, inset.
+- **A ghost Input or Textarea gets no border on focus.** Focus gave it the
+  same darker border as a default field, so a ghost field inside a frame (a
+  chat composer, a toolbar search) showed a second box inset in that frame.
+  The frame now shows focus with `:focus-within`, or the field sets
+  `focusRing`.
+- **Mascot `working="cube"` accepts `color="var(--token)"`.** The colour
+  was painted through a canvas, which can't read custom properties, so the
+  cube came out black. A `var()` is now looked up on the element first,
+  falling back to its own fallback value.
 - **SegmentedControl's selected pill keeps its corners.** The pill copied its
   corners from the selected option's computed style once, at mount, before
   ThemeProvider had set the theme, so it could stay square. It now takes them
@@ -757,6 +801,72 @@ entry below that had landed by then:
 
 ### Added
 
+- **`Select` gets `position="aligned"`.** The list opens with the selected option sitting
+  exactly on the field and the others above and below it in their own order, as macOS draws
+  a pop-up button (the first option, with nothing picked). A long list shows six and a half
+  rows each side and scrolls the rest. Near a viewport edge, and on a searchable or multiple
+  Select, it opens as the usual dropdown. The default stays `"dropdown"`. `DropdownWrapper`
+  takes the same behaviour as `alignSelected`.
+
+### Fixed
+
+- **A Select's highlight stays where the arrow keys put it.** The list scrolling under a
+  resting pointer fired `mouseover`, which moved the highlight back under the pointer, so the
+  keys seemed to skip or stick. The highlight now follows the pointer only when it moves.
+
+- **`SegmentedControl`'s rail follows its options' corners.** Its radius was a fixed `l`,
+  so small options sat in a rail that was too round. It is now the options' radius plus the
+  4px padding (`s-4`, `m-4`, `l-4`), so the gap round the selected option stays even.
+- **Dropdowns clip their content to their rounded corners.** A `Background` glow behind a
+  menu's header (as in Stack's account menu) filled the panel's top corners square, past
+  the rounded edge. The panel now hides what falls outside its radius.
+
+## [2.8.0] — 2026-11-06
+
+Minor: `SegmentedControl` gets a new `sliding` prop. It is on by default, which changes how
+selection looks (an improvement that rides a minor, per RELEASING.md). Plus one `Banner` fix.
+
+### Changed
+
+- **`SegmentedControl` selection slides.** The selected background now slides along the
+  rail to the picked option, morphing its width between options of different widths. It
+  doesn't slide under reduced motion, `compact` keeps the static look, and
+  `sliding={false}` turns it off. The first paint (and server render) is unchanged.
+
+### Added
+
+- **`EmptyState`.** What a page, panel or list shows before it has anything in it: a
+  `visual` (a `Mascot`, a Cube Emote, an illustration) or an `icon`, a `title`, one line of
+  `description`, and an `action` with an optional `secondaryAction`. `size` is `s` inside a
+  table or list, `m` (default) in a card and `l` for a whole page; `titleAs` sets the
+  heading level. `DataTable`'s own empty and no-results states are now built from it, with
+  the same text and actions as before.
+
+### Fixed
+
+- **`Banner` dismiss button sits at the right edge again.** In production bundles the
+  button's own `position: relative` could load after the banner's rule and win, which put
+  the close button inline after the text instead of at the strip's right edge.
+- **`Mascot surface="flat"` is flat.** The eyes no longer keep their white glint on the
+  flat surface.
+- **`DatePicker` opens without a second animation.** The calendar no longer wipes in through
+  a blurred `RevealFx` mask after the dropdown has already faded in, and switching between
+  the calendar and the time panel is instant instead of waiting 400 ms. Inline pickers show
+  at once too.
+
+## [2.7.0] — 2026-11-05
+
+Minor: everything here adds new props, components or variants, changes the look of
+existing components without changing their props (`Badge`, `Option`), or fixes bugs. No
+consumer has to change code.
+
+### Added
+
+- **`Logo monogram`.** `<Logo text="Acme" monogram />` draws a plain mark for apps that
+  have no logo yet: one of five shapes picked from the name (the same name always gets
+  the same mark), in black on light and white on dark. Pass a string to draw those
+  characters instead. `icon` still wins. The `Logo.text` gotcha now tells agents to use
+  `monogram` instead of drawing placeholder SVGs, and the app starter's header uses it.
 - **`emphasis` on `Flex` and `Grid`.** Draws attention to an element with an animated
   brand-to-accent edge that travels round the border. Each value names a look: `edge` is
   the edge alone, `glow` (or `true`) adds a soft halo for bars and inputs, `aura` a wide
@@ -798,6 +908,10 @@ entry below that had landed by then:
   shine that swept across it every few seconds is replaced by a short brand-to-accent beam
   that travels round the border, faster on hover and still under reduced motion. Padding,
   colour and text props still override the defaults.
+- **Danger and selected `Option`s.** A danger item in a menu now hovers and takes focus
+  as a soft danger tint with danger text, instead of a solid red block. At rest, its
+  label and icon are danger-coloured too. A selected option gets a weak neutral fill
+  with no border, so it no longer looks like a pressed button.
 
 ### Fixed
 

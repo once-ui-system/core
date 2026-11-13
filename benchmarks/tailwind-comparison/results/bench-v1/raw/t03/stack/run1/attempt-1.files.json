@@ -1,0 +1,19 @@
+{
+  "files": [
+    "lib/data.ts",
+    "components/lumen/LumenProvider.tsx",
+    "components/lumen/CommandPalette.tsx",
+    "components/lumen/InviteDialog.tsx",
+    "components/lumen/CreateProjectDialog.tsx",
+    "components/lumen/LumenShell.tsx",
+    "components/lumen/PageHeader.tsx",
+    "components/lumen/DashboardView.tsx",
+    "components/lumen/ProjectsView.tsx",
+    "components/lumen/MembersView.tsx",
+    "app/page.tsx",
+    "app/(lumen)/layout.tsx",
+    "app/(lumen)/projects/page.tsx",
+    "app/(lumen)/members/page.tsx"
+  ],
+  "rejected": []
+}

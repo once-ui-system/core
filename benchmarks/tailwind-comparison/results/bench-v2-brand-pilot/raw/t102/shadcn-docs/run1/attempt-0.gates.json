@@ -1,0 +1,18 @@
+{
+  "arm": "C",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/projects/page.tsx(3,58): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\napp/projects/page.tsx(4,29): error TS2307: Cannot find module '@/components/page-heading' or its corresponding type declarations.\napp/projects/page.tsx(66,30): error TS7006: Parameter 'project' implicitly has an 'any' type.\napp/settings/page.tsx(3,29): error TS2307: Cannot find module '@/components/page-heading' or its corresponding type declarations.\ncomponents/settings-form.tsx(6,22): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 4436
+    }
+  },
+  "files": [
+    "components/new-project-button.tsx",
+    "app/projects/page.tsx",
+    "components/settings-form.tsx",
+    "app/settings/page.tsx"
+  ]
+}

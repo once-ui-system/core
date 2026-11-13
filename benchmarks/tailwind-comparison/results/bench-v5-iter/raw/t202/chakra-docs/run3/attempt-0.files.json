@@ -1,0 +1,22 @@
+{
+  "files": [
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "components/AppShell.tsx",
+    "components/PageHeader.tsx",
+    "components/guests/GuestsView.tsx",
+    "components/plan/GuestRow.tsx",
+    "components/plan/PlanBoard.tsx",
+    "components/plan/RoomMap.tsx",
+    "components/plan/RulesList.tsx",
+    "components/plan/SidePanel.tsx",
+    "components/plan/StatsBar.tsx",
+    "components/plan/TableView.tsx",
+    "components/ui/provider.tsx",
+    "lib/data.ts",
+    "lib/plan.ts",
+    "lib/store.tsx"
+  ],
+  "rejected": []
+}

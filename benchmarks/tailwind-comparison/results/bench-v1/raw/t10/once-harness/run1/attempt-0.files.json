@@ -1,0 +1,24 @@
+{
+  "files": [
+    "components/SearchMap.tsx",
+    "components/SearchMapLoader.tsx",
+    "components/DetailMap.tsx",
+    "components/DetailMapLoader.tsx",
+    "components/FilterBar.tsx",
+    "components/HomeCard.tsx",
+    "components/SearchApp.tsx",
+    "app/page.tsx",
+    "components/SiteHeader.tsx",
+    "components/ContactForm.tsx",
+    "components/DetailSave.tsx",
+    "app/homes/[id]/page.tsx",
+    "lib/data.ts",
+    "lib/placeholder.ts",
+    "lib/useSaved.ts",
+    "components/haven.module.css",
+    "components/map.css",
+    "components/Photo.tsx",
+    "components/SaveButton.tsx"
+  ],
+  "rejected": []
+}

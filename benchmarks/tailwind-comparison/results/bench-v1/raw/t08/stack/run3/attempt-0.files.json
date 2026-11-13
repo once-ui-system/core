@@ -1,0 +1,7 @@
+{
+  "files": [
+    "src/components/onboarding/Summary.tsx",
+    "src/app/welcome/page.tsx"
+  ],
+  "rejected": []
+}

@@ -1,0 +1,9 @@
+:root {
+  --default-border: var(--neutral-alpha-weak);
+
+  /* Lumen type: serif headings, system sans body. No network fonts. */
+  --font-heading: Georgia, "Times New Roman", serif;
+  --font-body: ui-sans-serif, system-ui, sans-serif;
+  --font-label: ui-sans-serif, system-ui, sans-serif;
+  --font-code: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}

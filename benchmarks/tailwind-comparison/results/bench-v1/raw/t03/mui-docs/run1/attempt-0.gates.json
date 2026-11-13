@@ -1,0 +1,25 @@
+{
+  "arm": "M",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/CommandPalette.tsx(14,24): error TS2307: Cannot find module '@mui/icons-material/PeopleOutline' or its corresponding type declarations.\ncomponents/CommandPalette.tsx(15,21): error TS2307: Cannot find module '@mui/icons-material/AddCircleOutline' or its corresponding type declarations.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 4715
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "lib/commands.ts",
+    "components/InviteDialog.tsx",
+    "components/CommandPalette.tsx",
+    "components/AppShell.tsx",
+    "components/StatusChip.tsx",
+    "components/DashboardView.tsx",
+    "app/page.tsx",
+    "app/(app)/layout.tsx",
+    "app/(app)/projects/page.tsx",
+    "app/(app)/members/page.tsx"
+  ]
+}

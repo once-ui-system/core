@@ -1,0 +1,260 @@
+{
+  "arm": "K",
+  "passed": false,
+  "failed_gate": "render",
+  "failure_output": "[/ 375px] empty page: text=0 height=812\n[/ 768px] empty page: text=0 height=1024\n[/ 1440px] empty page: text=0 height=900\n[/patients/p-104 375px] HTTP 404 /patients/p-104\n[/patients/p-104 375px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)\n[/patients/p-104 375px] empty page: text=33 height=812\n[/patients/p-104 768px] HTTP 404 /patients/p-104\n[/patients/p-104 768px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)\n[/patients/p-104 768px] empty page: text=33 height=1024\n[/patients/p-104 1440px] HTTP 404 /patients/p-104\n[/patients/p-104 1440px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)\n[/patients/p-104 1440px] empty page: text=33 height=900",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 10086
+    },
+    "build": {
+      "ok": true,
+      "ms": 14332
+    },
+    "render": {
+      "ok": false,
+      "viewports": {
+        "phone": {
+          "text": 0,
+          "height": 812,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": [
+            "empty page: text=0 height=812"
+          ]
+        },
+        "tablet": {
+          "text": 0,
+          "height": 1024,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": [
+            "empty page: text=0 height=1024"
+          ]
+        },
+        "desktop": {
+          "text": 0,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": [
+            "empty page: text=0 height=900"
+          ]
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 0,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": [
+                "empty page: text=0 height=812"
+              ]
+            },
+            "tablet": {
+              "text": 0,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": [
+                "empty page: text=0 height=1024"
+              ]
+            },
+            "desktop": {
+              "text": 0,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": [
+                "empty page: text=0 height=900"
+              ]
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 2,
+            "serious_or_critical": 0,
+            "ids": [
+              "landmark-one-main:moderate:1",
+              "page-has-heading-one:moderate:1"
+            ]
+          }
+        },
+        "/patients/p-104": {
+          "viewports": {
+            "phone": {
+              "text": 33,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": [
+                "HTTP 404 /patients/p-104",
+                "console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+                "empty page: text=33 height=812"
+              ]
+            },
+            "tablet": {
+              "text": 33,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": [
+                "HTTP 404 /patients/p-104",
+                "console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+                "empty page: text=33 height=1024"
+              ]
+            },
+            "desktop": {
+              "text": 33,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": [
+                "HTTP 404 /patients/p-104",
+                "console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+                "empty page: text=33 height=900"
+              ]
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 3,
+            "serious_or_critical": 0,
+            "ids": [
+              "landmark-one-main:moderate:1",
+              "region:moderate:2"
+            ]
+          }
+        }
+      },
+      "errors": [
+        "[/ 375px] empty page: text=0 height=812",
+        "[/ 768px] empty page: text=0 height=1024",
+        "[/ 1440px] empty page: text=0 height=900",
+        "[/patients/p-104 375px] HTTP 404 /patients/p-104",
+        "[/patients/p-104 375px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "[/patients/p-104 375px] empty page: text=33 height=812",
+        "[/patients/p-104 768px] HTTP 404 /patients/p-104",
+        "[/patients/p-104 768px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "[/patients/p-104 768px] empty page: text=33 height=1024",
+        "[/patients/p-104 1440px] HTTP 404 /patients/p-104",
+        "[/patients/p-104 1440px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "[/patients/p-104 1440px] empty page: text=33 height=900"
+      ],
+      "axe": {
+        "rules": 2,
+        "nodes": 2,
+        "serious_or_critical": 0,
+        "ids": [
+          "landmark-one-main:moderate:1",
+          "page-has-heading-one:moderate:1"
+        ]
+      },
+      "interaction": {
+        "desktop": {
+          "action": "click",
+          "found": false,
+          "steps": 0,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1769,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1855,
+          "settled": true
+        },
+        "/patients/p-104 phone": {
+          "ms": 1757,
+          "settled": true
+        },
+        "/patients/p-104 tablet": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/patients/p-104 desktop": {
+          "ms": 1768,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 0,
+          "distinct_fontSize": 0,
+          "distinct_color": 0,
+          "distinct_background": 0,
+          "distinct_radius": 0,
+          "distinct_shadow": 0,
+          "distinct_spacing": 0,
+          "spacing_on_4px_grid": null
+        },
+        "/patients/p-104": {
+          "elements": 5,
+          "distinct_fontSize": 2,
+          "distinct_color": 1,
+          "distinct_background": 0,
+          "distinct_radius": 0,
+          "distinct_shadow": 0,
+          "distinct_spacing": 1,
+          "spacing_on_4px_grid": 0
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 219.2,
+          "css_kb": 0,
+          "fcp_ms": null,
+          "cls": 0,
+          "long_task_ms": 82
+        },
+        "/patients/p-104": {
+          "js_kb": 219.2,
+          "css_kb": 0,
+          "fcp_ms": 120,
+          "cls": 0,
+          "long_task_ms": 79
+        }
+      },
+      "views": {
+        "new-appointment phone": {
+          "found": false,
+          "steps": 0,
+          "errors": [],
+          "file": null
+        },
+        "new-appointment tablet": {
+          "found": false,
+          "steps": 0,
+          "errors": [],
+          "file": null
+        },
+        "new-appointment desktop": {
+          "found": false,
+          "steps": 0,
+          "errors": [],
+          "file": null
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/desk-provider.tsx",
+    "components/alerts.tsx",
+    "components/patient-search.tsx",
+    "components/app-shell.tsx",
+    "components/booking-dialog.tsx",
+    "components/schedule.tsx"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "files": [
+    "src/lib/team.ts",
+    "src/components/MemberBadges.tsx",
+    "src/components/TeamClient.tsx",
+    "src/app/page.tsx",
+    "src/app/members/[id]/page.tsx"
+  ],
+  "rejected": []
+}

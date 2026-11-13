@@ -1,0 +1,258 @@
+{
+  "arm": "T",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 8778
+    },
+    "build": {
+      "ok": true,
+      "ms": 22140
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 1375,
+          "height": 4815,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 1401,
+          "height": 2692,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 1503,
+          "height": 2247,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 1375,
+              "height": 4815,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1401,
+              "height": 2692,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1503,
+              "height": 2247,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 3,
+            "nodes": 55,
+            "serious_or_critical": 3,
+            "ids": [
+              "color-contrast:serious:19",
+              "label-content-name-mismatch:serious:24",
+              "nested-interactive:serious:12"
+            ]
+          }
+        },
+        "/homes/h-104": {
+          "viewports": {
+            "phone": {
+              "text": 583,
+              "height": 2063,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 628,
+              "height": 1934,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 628,
+              "height": 1450,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 15,
+            "serious_or_critical": 2,
+            "ids": [
+              "color-contrast:serious:14",
+              "label-content-name-mismatch:serious:1"
+            ]
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 3,
+        "nodes": 55,
+        "serious_or_critical": 3,
+        "ids": [
+          "color-contrast:serious:19",
+          "label-content-name-mismatch:serious:24",
+          "nested-interactive:serious:12"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "hover",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        },
+        "desktop": {
+          "action": "hover",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1769,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1795,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 2537,
+          "settled": true
+        },
+        "/homes/h-104 phone": {
+          "ms": 1922,
+          "settled": true
+        },
+        "/homes/h-104 tablet": {
+          "ms": 2039,
+          "settled": true
+        },
+        "/homes/h-104 desktop": {
+          "ms": 2328,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 599,
+          "distinct_fontSize": 8,
+          "distinct_color": 8,
+          "distinct_background": 39,
+          "distinct_radius": 9,
+          "distinct_shadow": 2,
+          "distinct_spacing": 13,
+          "spacing_on_4px_grid": 0.695
+        },
+        "/homes/h-104": {
+          "elements": 179,
+          "distinct_fontSize": 8,
+          "distinct_color": 10,
+          "distinct_background": 41,
+          "distinct_radius": 10,
+          "distinct_shadow": 2,
+          "distinct_spacing": 13,
+          "spacing_on_4px_grid": 0.565
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 507.5,
+          "css_kb": 54.7,
+          "fcp_ms": 668,
+          "cls": 0,
+          "long_task_ms": 1793
+        },
+        "/homes/h-104": {
+          "js_kb": 506.6,
+          "css_kb": 54.7,
+          "fcp_ms": 308,
+          "cls": 0,
+          "long_task_ms": 722
+        }
+      },
+      "views": {
+        "filters phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-filters-phone.jpg"
+        },
+        "filters tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-filters-tablet.jpg"
+        },
+        "filters desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-filters-desktop.jpg"
+        },
+        "contact-errors phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-contact-errors-phone.jpg"
+        },
+        "contact-errors tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-contact-errors-tablet.jpg"
+        },
+        "contact-errors desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-contact-errors-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/Placeholder.module.css",
+    "components/Placeholder.tsx",
+    "components/HomeCard.module.css",
+    "components/HomeCard.tsx",
+    "components/SearchMap.module.css",
+    "components/SearchMap.tsx",
+    "components/SearchPage.module.css",
+    "components/SearchPage.tsx",
+    "components/DetailMap.module.css",
+    "components/DetailMap.tsx",
+    "components/ContactForm.tsx",
+    "components/HomeDetail.module.css",
+    "components/HomeDetail.tsx",
+    "app/page.tsx",
+    "app/homes/[id]/page.tsx"
+  ]
+}

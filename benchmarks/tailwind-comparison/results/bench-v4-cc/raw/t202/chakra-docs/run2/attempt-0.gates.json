@@ -1,0 +1,230 @@
+{
+  "arm": "K",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 9110
+    },
+    "build": {
+      "ok": true,
+      "ms": 15400
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 2397,
+          "height": 2907,
+          "width": 379,
+          "horizontal_overflow": true,
+          "errors": []
+        },
+        "tablet": {
+          "text": 2474,
+          "height": 2339,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 2408,
+          "height": 1885,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 2397,
+              "height": 2907,
+              "width": 379,
+              "horizontal_overflow": true,
+              "errors": []
+            },
+            "tablet": {
+              "text": 2474,
+              "height": 2339,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 2408,
+              "height": 1885,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 53,
+            "serious_or_critical": 2,
+            "ids": [
+              "color-contrast:serious:5",
+              "label-content-name-mismatch:serious:48"
+            ]
+          }
+        },
+        "/guests": {
+          "viewports": {
+            "phone": {
+              "text": 3337,
+              "height": 5145,
+              "width": 379,
+              "horizontal_overflow": true,
+              "errors": []
+            },
+            "tablet": {
+              "text": 3522,
+              "height": 3055,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 3548,
+              "height": 2251,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 28,
+            "serious_or_critical": 2,
+            "ids": [
+              "color-contrast:serious:27",
+              "scrollable-region-focusable:serious:1"
+            ]
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 2,
+        "nodes": 53,
+        "serious_or_critical": 2,
+        "ids": [
+          "color-contrast:serious:5",
+          "label-content-name-mismatch:serious:48"
+        ]
+      },
+      "interaction": {
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/guests phone": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/guests tablet": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/guests desktop": {
+          "ms": 1760,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 586,
+          "distinct_fontSize": 7,
+          "distinct_color": 9,
+          "distinct_background": 17,
+          "distinct_radius": 5,
+          "distinct_shadow": 1,
+          "distinct_spacing": 9,
+          "spacing_on_4px_grid": 0.776
+        },
+        "/guests": {
+          "elements": 673,
+          "distinct_fontSize": 6,
+          "distinct_color": 8,
+          "distinct_background": 16,
+          "distinct_radius": 5,
+          "distinct_shadow": 1,
+          "distinct_spacing": 9,
+          "spacing_on_4px_grid": 0.9
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 259.1,
+          "css_kb": 0,
+          "fcp_ms": 124,
+          "cls": 0,
+          "long_task_ms": 16
+        },
+        "/guests": {
+          "js_kb": 259.1,
+          "css_kb": 0,
+          "fcp_ms": 144,
+          "cls": 0,
+          "long_task_ms": 16
+        }
+      },
+      "views": {
+        "table-selected phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-phone.jpg"
+        },
+        "table-selected tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-tablet.jpg"
+        },
+        "table-selected desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "lib/plan.ts",
+    "components/plan-provider.tsx",
+    "components/app-shell.tsx",
+    "components/floor-plan.tsx",
+    "components/guest-chip.tsx",
+    "components/panel.tsx",
+    "components/plan-sidebar.tsx",
+    "components/table-list.tsx",
+    "components/plan-view.tsx",
+    "components/guests-view.tsx",
+    "app/page.tsx",
+    "app/guests/page.tsx",
+    "app/layout.tsx"
+  ]
+}
