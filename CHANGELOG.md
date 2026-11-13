@@ -24,6 +24,10 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **A CodeBlock's file tabs slide.** The row of files above the code is now a `SegmentedControl`,
+  so the selected background slides from one file to the next instead of jumping, and the files are
+  real tabs (arrow keys move between them). The rail draws no border of its own inside the block's.
+
 - **Menu items no longer draw a border inside the menu.** The highlighted, hovered and focused
   states of `Option` (Dropdown, ContextMenu, Select, UserMenu) kept a 1px border, so the first item,
   highlighted as soon as a menu opened, read as a box nested inside the panel's border. They now
