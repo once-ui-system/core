@@ -1,0 +1,15 @@
+{
+  "files": [
+    "src/resources/once-ui.config.js",
+    "src/components/Providers.tsx",
+    "src/resources/custom.css",
+    "src/app/layout.tsx",
+    "src/lib/data.ts",
+    "src/components/LumenShell.tsx",
+    "src/app/page.tsx",
+    "src/app/projects/page.tsx",
+    "src/app/reports/page.tsx",
+    "src/app/settings/page.tsx"
+  ],
+  "rejected": []
+}

@@ -1,0 +1,301 @@
+{
+  "arm": "K",
+  "passed": false,
+  "failed_gate": "render",
+  "failure_output": "[/ 375px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\n[/ 768px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\n[/ 1440px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\n[/projects 375px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\n[/projects 768px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\n[/projects 1440px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\n[/members 375px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\n[/members 768px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\n[/members 1440px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 11819
+    },
+    "build": {
+      "ok": true,
+      "ms": 20176
+    },
+    "render": {
+      "ok": false,
+      "viewports": {
+        "phone": {
+          "text": 491,
+          "height": 1112,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": [
+            "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+          ]
+        },
+        "tablet": {
+          "text": 514,
+          "height": 1024,
+          "width": 817,
+          "horizontal_overflow": true,
+          "errors": [
+            "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+          ]
+        },
+        "desktop": {
+          "text": 514,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": [
+            "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+          ]
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 491,
+              "height": 1112,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            },
+            "tablet": {
+              "text": 514,
+              "height": 1024,
+              "width": 817,
+              "horizontal_overflow": true,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            },
+            "desktop": {
+              "text": 514,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 2,
+            "serious_or_critical": 1,
+            "ids": [
+              "label-content-name-mismatch:serious:2"
+            ]
+          }
+        },
+        "/projects": {
+          "viewports": {
+            "phone": {
+              "text": 395,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            },
+            "tablet": {
+              "text": 418,
+              "height": 1024,
+              "width": 817,
+              "horizontal_overflow": true,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            },
+            "desktop": {
+              "text": 418,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 2,
+            "serious_or_critical": 1,
+            "ids": [
+              "label-content-name-mismatch:serious:2"
+            ]
+          }
+        },
+        "/members": {
+          "viewports": {
+            "phone": {
+              "text": 694,
+              "height": 844,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            },
+            "tablet": {
+              "text": 717,
+              "height": 1024,
+              "width": 817,
+              "horizontal_overflow": true,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            },
+            "desktop": {
+              "text": 717,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 2,
+            "serious_or_critical": 1,
+            "ids": [
+              "label-content-name-mismatch:serious:2"
+            ]
+          }
+        }
+      },
+      "errors": [
+        "[/ 375px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+        "[/ 768px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+        "[/ 1440px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+        "[/projects 375px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+        "[/projects 768px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+        "[/projects 1440px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+        "[/members 375px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+        "[/members 768px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+        "[/members 1440px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+      ],
+      "axe": {
+        "rules": 1,
+        "nodes": 2,
+        "serious_or_critical": 1,
+        "ids": [
+          "label-content-name-mismatch:serious:2"
+        ]
+      },
+      "interaction": {
+        "desktop": {
+          "action": "press > type > press",
+          "found": true,
+          "steps": 3,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 16578,
+          "settled": false
+        },
+        "/ tablet": {
+          "ms": 1768,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/projects phone": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/projects tablet": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/projects desktop": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/members phone": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/members tablet": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/members desktop": {
+          "ms": 1761,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 109,
+          "distinct_fontSize": 6,
+          "distinct_color": 5,
+          "distinct_background": 6,
+          "distinct_radius": 3,
+          "distinct_shadow": 1,
+          "distinct_spacing": 8,
+          "spacing_on_4px_grid": 0.815
+        },
+        "/projects": {
+          "elements": 104,
+          "distinct_fontSize": 5,
+          "distinct_color": 6,
+          "distinct_background": 7,
+          "distinct_radius": 4,
+          "distinct_shadow": 1,
+          "distinct_spacing": 7,
+          "spacing_on_4px_grid": 0.863
+        },
+        "/members": {
+          "elements": 159,
+          "distinct_fontSize": 5,
+          "distinct_color": 7,
+          "distinct_background": 8,
+          "distinct_radius": 4,
+          "distinct_shadow": 0,
+          "distinct_spacing": 7,
+          "spacing_on_4px_grid": 0.898
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 271.6,
+          "css_kb": 0,
+          "fcp_ms": 156,
+          "cls": 0,
+          "long_task_ms": 149
+        },
+        "/projects": {
+          "js_kb": 271.6,
+          "css_kb": 0,
+          "fcp_ms": 116,
+          "cls": 0,
+          "long_task_ms": 79
+        },
+        "/members": {
+          "js_kb": 271.6,
+          "css_kb": 0,
+          "fcp_ms": 128,
+          "cls": 0,
+          "long_task_ms": 84
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/command-palette.tsx",
+    "components/invite-dialog.tsx",
+    "components/app-shell.tsx",
+    "components/page-header.tsx",
+    "components/status-badge.tsx",
+    "components/dashboard.tsx",
+    "components/projects-table.tsx",
+    "components/members-table.tsx",
+    "app/page.tsx",
+    "app/projects/page.tsx",
+    "app/members/page.tsx"
+  ]
+}

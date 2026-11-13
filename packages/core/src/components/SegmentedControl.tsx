@@ -10,6 +10,18 @@ import styles from "./SegmentedControl.module.scss";
 import { Text } from "./Text.js";
 import { ToggleButton, ToggleButtonProps } from "./ToggleButton.js";
 
+/** The rail's radius for options of this size (or radius) inside 4px of padding. */
+function railRadius(
+  first: { size?: ToggleButtonProps["size"]; radius?: ToggleButtonProps["radius"] } | undefined,
+  compact: boolean | undefined,
+) {
+  const inner = first?.radius ?? first?.size ?? "m";
+  // Compact pads by 2px, which has no nested radius token: it keeps "l".
+  if (compact || inner === "none") return "l" as const;
+  if (inner === "full") return "full" as const;
+  return `${inner}-4` as const;
+}
+
 const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 interface ButtonOption extends Omit<ToggleButtonProps, "selected"> {
@@ -32,6 +44,7 @@ interface SegmentedControlProps
   /** Disables every button. */
   disabled?: boolean;
   fillWidth?: boolean;
+  /** A tighter track: the options sit 2px inside the border instead of 4px. */
   compact?: boolean;
   /**
    * What the segments are to assistive technology. `"tabs"` (the default) is
@@ -43,8 +56,7 @@ interface SegmentedControlProps
   semantics?: "tabs" | "radio";
   /**
    * The selected background slides from one option to the next instead of
-   * jumping. Not in `compact`, whose joined segments carry their own
-   * corners. Visitors who ask for reduced motion see it move without the
+   * jumping. Visitors who ask for reduced motion see it move without the
    * slide. Defaults to `true`.
    */
   sliding?: boolean;
@@ -171,7 +183,7 @@ const SegmentedControl = ({
   // One pill behind the options, measured onto the selected one. Until the
   // first measure (and on the server) the selected button keeps its own
   // background, so the first paint is right before any script runs.
-  const slides = sliding && !compact;
+  const slides = sliding;
   const tablistRef = useRef<HTMLDivElement | null>(null);
   const pillRef = useRef<HTMLSpanElement | null>(null);
   const [pillReady, setPillReady] = useState(false);
@@ -195,7 +207,6 @@ const SegmentedControl = ({
       pill.style.width = `${selected.offsetWidth}px`;
       pill.style.height = `${selected.offsetHeight}px`;
       pill.style.transform = `translate(${selected.offsetLeft}px, ${selected.offsetTop}px)`;
-      pill.style.borderRadius = getComputedStyle(selected).borderRadius;
       pill.style.opacity = "1";
     };
     place();
@@ -218,6 +229,18 @@ const SegmentedControl = ({
     return () => observer.disconnect();
   }, [slides, selectedIndex]);
 
+  // The pill takes the selected option's corners from the same radius token,
+  // in CSS, not from its computed style: read at mount, that froze whatever
+  // the theme said before ThemeProvider set it, and the pill stayed square.
+  const selectedButton = buttons[selectedIndex];
+  const pillRadius = selectedButton?.radius ?? selectedButton?.size;
+  const pillStyle: React.CSSProperties | undefined =
+    pillRadius === "none"
+      ? { borderRadius: 0 }
+      : pillRadius
+        ? { borderRadius: `var(--radius-${pillRadius})` }
+        : undefined;
+
   const tablist = (
     <Flex
       role={radio ? "radiogroup" : "tablist"}
@@ -234,10 +257,13 @@ const SegmentedControl = ({
       // ending at the edge of the strip with the last options outside it.
       // Not scrolling, it may shrink, and the options with it.
       style={scroll ? { minWidth: "max-content" } : { minWidth: 0 }}
-      gap={compact ? "-1" : "2"}
-      padding={compact ? "0" : "4"}
-      radius="l"
-      border={compact ? undefined : "neutral-alpha-weak"}
+      gap="2"
+      padding={compact ? "2" : "4"}
+      // The rail's corners follow the options inside it: their radius plus
+      // the 4px padding, so the gap round a selected option stays even at
+      // every size. A fixed "l" left small options with a too-round rail.
+      radius={railRadius(buttons[0], compact)}
+      border="neutral-alpha-weak"
     >
       {buttons.map(({ onClick, description, ...button }, index) => {
         const content = button.label ?? button.children;
@@ -278,16 +304,7 @@ const SegmentedControl = ({
             ref={(el) => {
               buttonRefs.current[index] = el as HTMLButtonElement;
             }}
-            variant={compact ? "outline" : "ghost"}
-            corners={
-              compact
-                ? index === 0
-                  ? "left"
-                  : index === buttons.length - 1
-                    ? "right"
-                    : "none"
-                : undefined
-            }
+            variant="ghost"
             key={button.value}
             selected={index === selectedIndex}
             // The option's own `onClick` runs as well; spread below, it
@@ -303,7 +320,7 @@ const SegmentedControl = ({
               [styles.twoLine]: description !== undefined,
               [styles.onPill]: slides && pillReady && index === selectedIndex,
             })}
-            style={{ opacity: index !== selectedIndex && !compact ? 0.6 : 1, ...style }}
+            style={{ opacity: index !== selectedIndex ? 0.6 : 1, ...style }}
             aria-selected={radio ? undefined : index === selectedIndex}
             aria-checked={radio ? index === selectedIndex : undefined}
             // No made-up `aria-controls`: it pointed at `panel-<value>`,
@@ -323,6 +340,7 @@ const SegmentedControl = ({
           ref={pillRef}
           aria-hidden="true"
           className={styles.pill}
+          style={pillStyle}
           data-ready={pillReady || undefined}
         />
       )}

@@ -1,0 +1,10 @@
+Your app failed the typecheck check. Output (truncated to 4,000 characters):
+
+```
+src/app/reports/page.tsx(31,19): error TS2820: Type '"brand-solid-strong"' is not assignable to type '"surface" | Colors | "overlay" | "page" | "transparent" | undefined'. Did you mean '"brand-strong"'?
+```
+
+Fix the problem and reply with every file of the app again, each complete in its own fenced code block whose opening line names the file's path, and nothing else.
+
+
+As before: write the complete corrected file to /home/user/core/benchmarks/tailwind-comparison/results/bench-v2-cc/raw/t101/stack/run3/attempt-1.tsx with the Write tool (no shell commands), then reply with the single word: done.

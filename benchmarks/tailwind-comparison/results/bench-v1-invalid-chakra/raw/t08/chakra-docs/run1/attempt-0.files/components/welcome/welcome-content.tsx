@@ -1,0 +1,177 @@
+"use client"
+
+import {
+  Badge,
+  Box,
+  Button,
+  Card,
+  Checkbox,
+  Flex,
+  Heading,
+  Icon,
+  Progress,
+  Stack,
+  Text,
+} from "@chakra-ui/react"
+import NextLink from "next/link"
+import { useEffect, useState } from "react"
+import { LuPartyPopper, LuRotateCcw } from "react-icons/lu"
+import {
+  nextSteps,
+  product,
+  sampleUser,
+  STORAGE_KEY,
+  type OnboardingData,
+} from "@/lib/data"
+
+interface WelcomeInfo {
+  name: string
+  email: string
+  workspace: string
+  invited: number
+}
+
+const fallback: WelcomeInfo = {
+  name: sampleUser.name,
+  email: sampleUser.email,
+  workspace: "Acme Labs",
+  invited: 0,
+}
+
+function readInfo(): WelcomeInfo {
+  try {
+    const raw = window.sessionStorage.getItem(STORAGE_KEY)
+    if (!raw) return fallback
+    const parsed = JSON.parse(raw) as Partial<OnboardingData>
+    return {
+      name: parsed.name?.trim() || fallback.name,
+      email: parsed.email?.trim() || fallback.email,
+      workspace: parsed.workspace?.trim() || fallback.workspace,
+      invited: Array.isArray(parsed.invites) ? parsed.invites.length : 0,
+    }
+  } catch {
+    return fallback
+  }
+}
+
+export function WelcomeContent() {
+  const [info, setInfo] = useState<WelcomeInfo>(fallback)
+  const [done, setDone] = useState<string[]>([])
+
+  useEffect(() => {
+    setInfo(readInfo())
+  }, [])
+
+  const firstName = info.name.split(" ")[0]
+  const progress = Math.round((done.length / nextSteps.length) * 100)
+
+  const toggle = (id: string, checked: boolean) => {
+    setDone((prev) =>
+      checked ? [...prev, id] : prev.filter((x) => x !== id),
+    )
+  }
+
+  return (
+    <Box minH="100dvh" bg="bg.subtle">
+      <Box
+        as="main"
+        maxW="3xl"
+        mx="auto"
+        px={{ base: "4", md: "8" }}
+        py={{ base: "8", md: "16" }}
+      >
+        <Stack gap="3" mb="8" align="flex-start">
+          <Flex
+            align="center"
+            justify="center"
+            boxSize="12"
+            rounded="full"
+            bg="green.subtle"
+            color="green.fg"
+          >
+            <Icon boxSize="6" aria-hidden="true">
+              <LuPartyPopper />
+            </Icon>
+          </Flex>
+          <Heading as="h1" size={{ base: "2xl", md: "3xl" }}>
+            You’re all set, {firstName}!
+          </Heading>
+          <Text color="fg.muted" fontSize="lg">
+            <Text as="strong" color="fg" fontWeight="semibold">
+              {info.workspace}
+            </Text>{" "}
+            is ready on {product.name}. We sent a sign-in link to{" "}
+            {info.email}
+            {info.invited > 0
+              ? ` and invited ${info.invited} teammate${info.invited === 1 ? "" : "s"}.`
+              : "."}
+          </Text>
+        </Stack>
+
+        <Card.Root variant="elevated" as="section" aria-labelledby="next-heading">
+          <Card.Header>
+            <Flex justify="space-between" align="center" gap="3" wrap="wrap">
+              <Heading as="h2" id="next-heading" size="lg">
+                Your next steps
+              </Heading>
+              <Badge variant="subtle" colorPalette={progress === 100 ? "green" : "blue"}>
+                {done.length} of {nextSteps.length} done
+              </Badge>
+            </Flex>
+            <Progress.Root
+              value={progress}
+              size="sm"
+              colorPalette="blue"
+              mt="3"
+              aria-label="Checklist progress"
+            >
+              <Progress.Track>
+                <Progress.Range />
+              </Progress.Track>
+            </Progress.Root>
+          </Card.Header>
+          <Card.Body>
+            <Stack as="ul" listStyleType="none" m="0" p="0" gap="4">
+              {nextSteps.map((item) => {
+                const checked = done.includes(item.id)
+                return (
+                  <li key={item.id}>
+                    <Checkbox.Root
+                      alignItems="flex-start"
+                      colorPalette="blue"
+                      checked={checked}
+                      onCheckedChange={(e) => toggle(item.id, e.checked === true)}
+                    >
+                      <Checkbox.HiddenInput />
+                      <Checkbox.Control mt="0.5" />
+                      <Checkbox.Label>
+                        <Text
+                          fontWeight="medium"
+                          textDecoration={checked ? "line-through" : "none"}
+                          color={checked ? "fg.muted" : "fg"}
+                        >
+                          {item.title}
+                        </Text>
+                        <Text textStyle="sm" color="fg.muted" fontWeight="normal">
+                          {item.description}
+                        </Text>
+                      </Checkbox.Label>
+                    </Checkbox.Root>
+                  </li>
+                )
+              })}
+            </Stack>
+          </Card.Body>
+          <Card.Footer>
+            <Button asChild variant="ghost" size="sm">
+              <NextLink href="/">
+                <LuRotateCcw aria-hidden="true" />
+                Run onboarding again
+              </NextLink>
+            </Button>
+          </Card.Footer>
+        </Card.Root>
+      </Box>
+    </Box>
+  )
+}

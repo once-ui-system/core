@@ -96,6 +96,70 @@
     }
 }
 
+// `tone` colours the selected state, as on ToggleButton: a tinted fill and
+// the label in the tone. Hover and focus deepen the tint instead of greying it.
+// Each tone class only sets the palette; the rules are written once.
+.tone-brand {
+    --option-tone-weak: var(--brand-alpha-weak);
+    --option-tone-medium: var(--brand-alpha-medium);
+    --option-tone-text: var(--brand-on-background-strong);
+    --option-tone-icon: var(--brand-on-background-weak);
+}
+.tone-accent {
+    --option-tone-weak: var(--accent-alpha-weak);
+    --option-tone-medium: var(--accent-alpha-medium);
+    --option-tone-text: var(--accent-on-background-strong);
+    --option-tone-icon: var(--accent-on-background-weak);
+}
+.tone-info {
+    --option-tone-weak: var(--info-alpha-weak);
+    --option-tone-medium: var(--info-alpha-medium);
+    --option-tone-text: var(--info-on-background-strong);
+    --option-tone-icon: var(--info-on-background-weak);
+}
+.tone-success {
+    --option-tone-weak: var(--success-alpha-weak);
+    --option-tone-medium: var(--success-alpha-medium);
+    --option-tone-text: var(--success-on-background-strong);
+    --option-tone-icon: var(--success-on-background-weak);
+}
+.tone-warning {
+    --option-tone-weak: var(--warning-alpha-weak);
+    --option-tone-medium: var(--warning-alpha-medium);
+    --option-tone-text: var(--warning-on-background-strong);
+    --option-tone-icon: var(--warning-on-background-weak);
+}
+.tone-danger {
+    --option-tone-weak: var(--danger-alpha-weak);
+    --option-tone-medium: var(--danger-alpha-medium);
+    --option-tone-text: var(--danger-on-background-strong);
+    --option-tone-icon: var(--danger-on-background-weak);
+}
+
+.option.toned {
+    color: var(--option-tone-text);
+
+    &:not(:hover):not(:focus) {
+        background: var(--option-tone-weak);
+    }
+
+    &:focus {
+        background: var(--option-tone-medium);
+        border-color: var(--option-tone-medium);
+    }
+
+    @media (hover: hover) {
+        &:hover {
+            background: var(--option-tone-medium);
+            border-color: var(--option-tone-medium);
+        }
+    }
+
+    svg {
+        color: var(--option-tone-icon);
+    }
+}
+
 .focused {
     background: var(--neutral-background-strong);
 }

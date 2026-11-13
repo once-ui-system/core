@@ -67,9 +67,18 @@ let probe: CanvasRenderingContext2D | null | undefined;
 
 /** Any CSS color, or a scheme read from the element's tokens, as 0–1 RGB. */
 export function resolveColor(node: Element, value: string, fallback: RGB = [0.45, 0.5, 0.95]): RGB {
-  let css = value;
-  if (SCHEMES.has(value)) {
-    css = getComputedStyle(node).getPropertyValue(`--function-${value}-500`).trim();
+  let css = value.trim();
+  if (SCHEMES.has(css)) {
+    css = getComputedStyle(node).getPropertyValue(`--function-${css}-500`).trim();
+    if (!css) return fallback;
+  }
+  // A canvas fillStyle can't read custom properties, so `var(--x)` (with or
+  // without a fallback) is looked up on the node first. A few rounds, in case
+  // the fallback is itself a var().
+  for (let round = 0; round < 4; round++) {
+    const ref = /^var\(\s*(--[\w-]+)\s*(?:,\s*([\s\S]*))?\)$/.exec(css);
+    if (!ref) break;
+    css = getComputedStyle(node).getPropertyValue(ref[1]).trim() || (ref[2] ?? "").trim();
     if (!css) return fallback;
   }
   if (probe === undefined) {

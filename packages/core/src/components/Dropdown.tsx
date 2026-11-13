@@ -17,6 +17,7 @@ import React, {
 } from "react";
 import { createPortal } from "react-dom";
 import type { NavigationLayout } from "../hooks/useArrowNavigation.js";
+import { type AlignSelectedData, alignSelected, unlessAligned } from "../internal/alignSelected.js";
 import { ContextMenuImpl } from "../internal/ContextMenuImpl.js";
 import { DropdownPanel } from "../internal/DropdownPanel.js";
 import {
@@ -105,6 +106,13 @@ export interface DropdownProps {
   optionsCount?: number;
   dropdownId?: string;
   disableTriggerClick?: boolean;
+  /**
+   * Open with the selected option (else the first enabled one) sitting on the
+   * trigger, the rest above and below it in their own order, as macOS draws a
+   * pop-up button. Falls back to `placement` when the trigger is too close to
+   * a viewport edge. Select's `position="aligned"` sets it.
+   */
+  alignSelected?: boolean;
   /** Capture-phase focus on the whole control, trigger and dropdown alike —
    *  the only place a consumer can see focus enter and leave the widget,
    *  since it moves between the two during a normal interaction. */
@@ -184,6 +192,7 @@ const DropdownMenu = ({
   optionsCount: propOptionsCount,
   dropdownId: propDropdownId,
   disableTriggerClick = false,
+  alignSelected: alignToSelected = false,
   hover = false,
   openDelay = 100,
   closeDelay = 300,
@@ -361,6 +370,25 @@ const DropdownMenu = ({
 
   // We'll measure the width directly in the floating UI middleware
 
+  /** The panel's width, on both the aligned and the normal path. */
+  const applyWidth = (floatingStyle: CSSStyleDeclaration, availableWidth: number) => {
+    if (fillWidth && triggerRef.current) {
+      // fillWidth means exactly the trigger's width — no hidden floor.
+      // A wider floor pushes the panel past the trigger on "-end"
+      // placements, which reads as broken positioning.
+      const w = `${triggerRef.current.getBoundingClientRect().width}px`;
+      floatingStyle.width = w;
+      floatingStyle.minWidth = minWidth ? cssLength(minWidth) : w;
+    } else {
+      // Let content determine width; only apply an explicit minWidth
+      floatingStyle.width = "";
+      floatingStyle.minWidth = minWidth ? cssLength(minWidth) : "";
+    }
+
+    floatingStyle.maxWidth = maxWidth ? cssLength(maxWidth) : `${availableWidth}px`;
+    declareTokenLengths(floatingStyle, floatingStyle.minWidth, floatingStyle.maxWidth);
+  };
+
   const {
     x,
     y,
@@ -369,41 +397,37 @@ const DropdownMenu = ({
     update,
     isPositioned,
     placement: resolvedPlacement,
+    middlewareData,
   } = useFloating({
     placement: placement,
     open: isOpen,
     middleware: [
-      offset(4),
-      flip(),
-      shift(),
-      size({
-        apply({ availableWidth, availableHeight, elements }) {
-          const floatingStyle = elements.floating.style;
-
-          if (fillWidth && triggerRef.current) {
-            // fillWidth means exactly the trigger's width — no hidden floor.
-            // A wider floor pushes the panel past the trigger on "-end"
-            // placements, which reads as broken positioning.
-            const w = `${triggerRef.current.getBoundingClientRect().width}px`;
-            floatingStyle.width = w;
-            floatingStyle.minWidth = minWidth ? cssLength(minWidth) : w;
-          } else {
-            // Let content determine width; only apply an explicit minWidth
-            floatingStyle.width = "";
-            floatingStyle.minWidth = minWidth ? cssLength(minWidth) : "";
-          }
-
-          floatingStyle.maxWidth = maxWidth ? cssLength(maxWidth) : `${availableWidth}px`;
-          floatingStyle.minHeight = minHeight ? cssLength(minHeight) : "0px";
-          floatingStyle.maxHeight = `${availableHeight}px`;
-          declareTokenLengths(
-            floatingStyle,
-            floatingStyle.minWidth,
-            floatingStyle.maxWidth,
-            floatingStyle.minHeight,
-          );
+      // First, and the rest step aside when it places the panel.
+      alignSelected({
+        enabled: alignToSelected,
+        // What the option lands on: the control in the trigger (a
+        // combobox's field, a button), not a label or hint around it.
+        anchor: () => {
+          const trigger = triggerRef.current;
+          if (!trigger) return null;
+          return trigger.querySelector<HTMLElement>("[aria-expanded]") ?? trigger;
         },
+        applyWidth,
       }),
+      unlessAligned(offset(4)),
+      unlessAligned(flip()),
+      unlessAligned(shift()),
+      unlessAligned(
+        size({
+          apply({ availableWidth, availableHeight, elements }) {
+            const floatingStyle = elements.floating.style;
+            applyWidth(floatingStyle, availableWidth);
+            floatingStyle.minHeight = minHeight ? cssLength(minHeight) : "0px";
+            floatingStyle.maxHeight = `${availableHeight}px`;
+            declareTokenLengths(floatingStyle, floatingStyle.minHeight);
+          },
+        }),
+      ),
     ],
     whileElementsMounted: autoUpdate,
   });
@@ -420,7 +444,10 @@ const DropdownMenu = ({
    * `flip()` is in the middleware — a panel that flips above its trigger has
    * to scale from its bottom edge instead.
    */
+  const aligned = middlewareData.alignSelected as AlignSelectedData | undefined;
   const transformOrigin = (() => {
+    // Aligned: from the option on the trigger, so it stays put as it grows.
+    if (aligned?.applied) return `center ${aligned.originY ?? 0}px`;
     const [side, align] = (resolvedPlacement || "bottom").split("-");
     if (side === "top" || side === "bottom") {
       const y = side === "bottom" ? "top" : "bottom";
@@ -480,6 +507,13 @@ const DropdownMenu = ({
 
   // Store the previously focused element to restore focus when dropdown closes
   const previouslyFocusedElement = useRef<Element | null>(null);
+  /**
+   * Set when a click outside closed the panel. Focus then stays where that
+   * click put it, as it would after any other click: handing it back to the
+   * trigger refocused an empty DateInput, whose label floated on and on over
+   * nothing after the user had clicked away.
+   */
+  const closedByOutsideClickRef = useRef(false);
 
   // Force update when dropdown opens
   useEffect(() => {
@@ -557,6 +591,9 @@ const DropdownMenu = ({
 
   useEffect(() => {
     if (isOpen && mounted) {
+      // The handler marks every click outside, open or not; only one made
+      // while this panel is open counts.
+      closedByOutsideClickRef.current = false;
       // Store the currently focused element before focusing the dropdown.
       // A panel the pointer opened leaves focus alone, so has none to restore.
       previouslyFocusedElement.current = hoverOpenedRef.current ? null : document.activeElement;
@@ -616,7 +653,11 @@ const DropdownMenu = ({
       setFocusedIndex(-1);
       setOpensOn(null);
 
-      if (previouslyFocusedElement.current) {
+      const closedByOutsideClick = closedByOutsideClickRef.current;
+      closedByOutsideClickRef.current = false;
+      if (closedByOutsideClick) {
+        previouslyFocusedElement.current = null;
+      } else if (previouslyFocusedElement.current) {
         // A combobox's field had focus all along, so focus that is now
         // somewhere else was put there by the user — Tab out of the field,
         // a click on another control — and stays. Only focus lost with the
@@ -710,6 +751,7 @@ const DropdownMenu = ({
         !isClickOnDropdownPortal &&
         !isClickOnDropdownElement
       ) {
+        closedByOutsideClickRef.current = true;
         handleOpenChange(false);
         setFocusedIndex(-1);
       } else {

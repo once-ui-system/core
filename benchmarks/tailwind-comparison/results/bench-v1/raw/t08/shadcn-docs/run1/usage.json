@@ -1,0 +1,567 @@
+{
+  "exact": true,
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 6,
+      "input_tokens": 49992,
+      "output_tokens": 11523
+    },
+    {
+      "attempt": 1,
+      "calls": 4,
+      "input_tokens": 114431,
+      "output_tokens": 11646
+    },
+    {
+      "attempt": 2,
+      "calls": 2,
+      "input_tokens": 83757,
+      "output_tokens": 10723
+    },
+    {
+      "attempt": 3,
+      "calls": 3,
+      "input_tokens": 161112,
+      "output_tokens": 10955
+    }
+  ],
+  "calls": [
+    {
+      "attempt": 0,
+      "id": "msg_011CgfwhtAetnSwHNw7yqidm",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 1318,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 160,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cgfwi2XCS3QXY7JVGGC1i",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 2087,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 249,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgfwiBTE6h7Xmdi5EuSdp",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 3735,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 462,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CgfwiQx5iGGXkw2GnBmcv",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 13341,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 192,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cgfwiaq9gVSjkV5XbeLN9",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 14062,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 315,
+        "output_tokens_details": {
+          "thinking_tokens": 202
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cgfwis8fskrRwRFKZcLov",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "end_turn",
+      "usage": {
+        "input_tokens": 15449,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 10145,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 1,
+      "id": "msg_011CgfwvBHNmzX1AWvxUBUPG",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 25740,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 268,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 1,
+      "id": "msg_011CgfwvPFDMXXzPm2idbzrP",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 27372,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 609,
+        "output_tokens_details": {
+          "thinking_tokens": 556
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 1,
+      "id": "msg_011CgfwvuUttSKqgVfo8G5gS",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 30194,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 643,
+        "output_tokens_details": {
+          "thinking_tokens": 585
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 1,
+      "id": "msg_011CgfwwRGHJ4SVhkJrRFQuY",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "end_turn",
+      "usage": {
+        "input_tokens": 31125,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 10126,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 2,
+      "id": "msg_011Cgfx6xxn5f7skT4jRjoBW",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 41397,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 274,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 2,
+      "id": "msg_011Cgfx7CiGcUWCfX1RWFhL8",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "end_turn",
+      "usage": {
+        "input_tokens": 42360,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 10449,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 3,
+      "id": "msg_011CgfxKNrHf85Bi5ZZs52q2",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 52955,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 456,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 3,
+      "id": "msg_011CgfxKmdVzCK3FPMVP6zgK",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 53515,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 284,
+        "output_tokens_details": {
+          "thinking_tokens": 225
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 3,
+      "id": "msg_011CgfxL4fSW6ir4UAvFcVEM",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "end_turn",
+      "usage": {
+        "input_tokens": 54642,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 10215,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/README.md",
+      "chars": 1186
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": ".",
+      "chars": 14
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project",
+      "chars": 106
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/app",
+      "chars": 31
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/lib",
+      "chars": 8
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/components/ui",
+      "chars": 785
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/layout.tsx",
+      "chars": 431
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/package.json",
+      "chars": 1103
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/page.tsx",
+      "chars": 124
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/field.tsx",
+      "chars": 6159
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/radio-group.tsx",
+      "chars": 1459
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/select.tsx",
+      "chars": 6352
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/switch.tsx",
+      "chars": 1407
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/card.tsx",
+      "chars": 1986
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/button.tsx",
+      "chars": 2391
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/input.tsx",
+      "chars": 961
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/sonner.tsx",
+      "chars": 1034
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/components",
+      "chars": 3
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/hooks",
+      "chars": 13
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/label.tsx",
+      "chars": 605
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/badge.tsx",
+      "chars": 1775
+    },
+    {
+      "attempt": 1,
+      "name": "read_file",
+      "path": "project/components/ui/checkbox.tsx",
+      "chars": 1213
+    },
+    {
+      "attempt": 1,
+      "name": "read_file",
+      "path": "project/components/ui/progress.tsx",
+      "chars": 734
+    },
+    {
+      "attempt": 1,
+      "name": "read_file",
+      "path": "project/next.config.mjs",
+      "chars": 197
+    },
+    {
+      "attempt": 1,
+      "name": "read_file",
+      "path": "project/tsconfig.json",
+      "chars": 720
+    },
+    {
+      "attempt": 1,
+      "name": "read_file",
+      "path": "project/app/globals.css",
+      "chars": 4219
+    },
+    {
+      "attempt": 1,
+      "name": "read_file",
+      "path": "project/components/ui/separator.tsx",
+      "chars": 693
+    },
+    {
+      "attempt": 2,
+      "name": "read_file",
+      "path": "project/hooks/use-mobile.ts",
+      "chars": 565
+    },
+    {
+      "attempt": 2,
+      "name": "read_file",
+      "path": "project/lib/utils.ts",
+      "chars": 166
+    },
+    {
+      "attempt": 2,
+      "name": "read_file",
+      "path": "project/components.json",
+      "chars": 426
+    },
+    {
+      "attempt": 2,
+      "name": "read_file",
+      "path": "project/postcss.config.mjs",
+      "chars": 81
+    },
+    {
+      "attempt": 3,
+      "name": "list_dir",
+      "path": "project/app",
+      "chars": 31
+    },
+    {
+      "attempt": 3,
+      "name": "list_dir",
+      "path": "docs",
+      "chars": 69
+    },
+    {
+      "attempt": 3,
+      "name": "read_file",
+      "path": "project/components/ui/native-select.tsx",
+      "chars": 1994
+    }
+  ]
+}

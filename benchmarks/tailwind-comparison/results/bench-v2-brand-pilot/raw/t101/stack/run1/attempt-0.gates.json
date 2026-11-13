@@ -1,0 +1,39 @@
+{
+  "arm": "S",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "src/app/(lumen)/reports/page.tsx(38,19): error TS2820: Type '\"brand-solid-strong\"' is not assignable to type '\"surface\" | \"page\" | Colors | \"overlay\" | \"transparent\" | undefined'. Did you mean '\"brand-strong\"'?\nsrc/app/layout.tsx(56,13): error TS2353: Object literal may only specify known properties, and 'defaultTheme' does not exist in type 'ThemeInitAttributeConfig'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 9505
+    }
+  },
+  "files": [
+    "src/resources/seo.js",
+    "src/components/Providers.tsx",
+    "src/app/layout.tsx",
+    "src/resources/custom.css",
+    "src/lib/data.ts",
+    "src/lib/nav.ts",
+    "src/components/LumenShell.tsx",
+    "src/app/(lumen)/layout.tsx",
+    "src/app/(lumen)/page.tsx",
+    "src/app/(lumen)/projects/page.tsx",
+    "src/app/(lumen)/projects/ProjectsTable.tsx",
+    "src/app/(lumen)/settings/page.tsx",
+    "src/app/(lumen)/settings/SettingsForm.tsx",
+    "src/app/(lumen)/reports/page.tsx",
+    "src/components/Dashboard.tsx",
+    "src/app/page.tsx",
+    "src/resources/once-ui.config.js"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ src/components/Providers.tsx: no mechanical issues\n✗ src/app/layout.tsx: 1 issue(s)\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint\n✓ src/lib/data.ts: no mechanical issues\n✓ src/lib/nav.ts: no mechanical issues\n✓ src/components/LumenShell.tsx: no mechanical issues\n✓ src/app/(lumen)/layout.tsx: no mechanical issues\n✓ src/app/(lumen)/page.tsx: no mechanical issues\n✓ src/app/(lumen)/projects/page.tsx: no mechanical issues\n✓ src/app/(lumen)/projects/ProjectsTable.tsx: no mechanical issues\n✓ src/app/(lumen)/settings/page.tsx: no mechanical issues\n✓ src/app/(lumen)/settings/SettingsForm.tsx: no mechanical issues\n✓ src/app/(lumen)/reports/page.tsx: no mechanical issues\n✓ src/components/Dashboard.tsx: no mechanical issues\n✓ src/app/page.tsx: no mechanical issues",
+    "validator": {
+      "package_version": "2.6.0",
+      "script_sha256": "ab274b3e6be15eb6"
+    }
+  }
+}

@@ -1,0 +1,88 @@
+import '@once-ui-system/core/css/styles.css';
+import '@once-ui-system/core/css/tokens.css';
+import '@/resources/custom.css'
+
+import classNames from "classnames";
+import type { ComponentProps } from "react";
+import type { ChartMode } from "@once-ui-system/core/data";
+
+import { baseURL, landing, fonts, style, dataStyle } from "@/resources";
+import { Meta, Schema,  Column, Flex, ThemeInit } from "@once-ui-system/core";
+import { LocaleProvider, Providers } from '@/components';
+import { AppShell } from '@/components/AppShell';
+import { getLocale } from '@/lib/i18n/server';
+
+export async function generateMetadata() {
+  return Meta.generate({
+    title: landing.home.title,
+    description: landing.home.description,
+    baseURL: baseURL,
+    // The site-wide defaults. No canonical here: each page names its own, and
+    // a default would point every page that doesn't at the landing page.
+    image: landing.home.image,
+  });
+}
+
+export default async function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  const locale = await getLocale();
+
+  return (
+    <Flex
+      suppressHydrationWarning
+      data-scroll-behavior="smooth"
+      as="html"
+      lang={locale}
+      fillWidth
+      className={classNames(
+        fonts.heading.variable,
+        fonts.body.variable,
+        fonts.label.variable,
+        fonts.code.variable,
+      )}
+    >
+      <head>
+        {/* A sync <script> is only allowed inside the document head; React 19.2
+            refuses one rendered as a bare child of <html>. */}
+        <Schema
+          as="webPage"
+          baseURL={baseURL}
+          title={landing.home.title}
+          description={landing.home.description}
+          path={landing.home.path}
+        />
+        <ThemeInit
+          config={
+            {
+              theme: style.theme,
+              brand: style.brand,
+              accent: style.accent,
+              neutral: style.neutral,
+              brandScale: style.brandScale,
+              accentScale: style.accentScale,
+              solid: style.solid,
+              solidStyle: style.solidStyle,
+              border: style.border,
+              surface: style.surface,
+              transition: style.transition,
+              scaling: style.scaling,
+            } as ComponentProps<typeof ThemeInit>["config"]
+          }
+          dataStyle={{ mode: dataStyle.mode as ChartMode }}
+        />
+      </head>
+      <LocaleProvider locale={locale}>
+        <Providers>
+          <Column as="body" background="page" fillWidth margin="0" padding="0" minHeight="100vh">
+            <Column fillWidth horizontal="center" flex={1}>
+              <AppShell>{children}</AppShell>
+            </Column>
+          </Column>
+        </Providers>
+      </LocaleProvider>
+    </Flex>
+  );
+}

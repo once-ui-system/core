@@ -1,6 +1,6 @@
 {
  "version": "3.0.0-beta.1",
- "generated": "2026-11-09",
+ "generated": "2026-11-13",
  "imports": {
   "@once-ui-system/core": {
    "use": "Components, hooks, providers, defineConfig and types: everything not listed below"
@@ -71,14 +71,20 @@
     "MediaAudioPlayer",
     "MediaVideoPlayer",
     "Scrubber",
+    "ScrubberFilmstrip",
+    "ScrubberWaveform",
     "MediaUpload"
    ],
    "types": [
     "MediaAudioPlayerProps",
     "MediaUploadProps",
     "ScrubberBlock",
+    "ScrubberFilmstripProps",
+    "ScrubberMarker",
     "ScrubberProps",
-    "ScrubberTrack"
+    "ScrubberRange",
+    "ScrubberTrack",
+    "ScrubberWaveformProps"
    ]
   },
   "@once-ui-system/core/emoji": {
@@ -229,23 +235,12 @@
    ]
   },
   "@once-ui-system/blocks": {
-   "use": "Compositions: Banner, Book, LogoCloud, ScrollToTop, StylePanel, StyleOverlay and MascotPanel: a package of its own, built on core",
+   "use": "Compositions: Banner, Book, LogoCloud, ScrollToTop, StylePanel and StyleOverlay: a package of its own, built on core",
    "install": "@once-ui-system/blocks",
    "exports": [
     "Banner",
     "Book",
     "LogoCloud",
-    "MascotPanelAccessories",
-    "MascotPanelActions",
-    "MascotPanelBody",
-    "MascotPanelColor",
-    "MascotPanelEyes",
-    "MascotPanelFace",
-    "MascotPanelMotion",
-    "MascotPanelPreview",
-    "MascotPanelRoot",
-    "MascotPanelWorking",
-    "MascotPanel",
     "ScrollToTop",
     "StyleOverlay",
     "StylePanelAccent",
@@ -284,9 +279,6 @@
     "StatsSection",
     "TeamSection",
     "TestimonialsSection",
-    "randomMascotDesign",
-    "useMascotPanel",
-    "useMascotPanelLabels",
     "useStylePanel",
     "aboutLayouts",
     "contactLayouts",
@@ -317,13 +309,6 @@
     "GallerySectionProps",
     "HeroSectionProps",
     "LogosSectionProps",
-    "MascotPanelActionsProps",
-    "MascotPanelContextValue",
-    "MascotPanelHeading",
-    "MascotPanelLabels",
-    "MascotPanelProps",
-    "MascotPanelRootProps",
-    "MascotPanelVisibility",
     "PricingSectionProps",
     "SectionBaseProps",
     "SectionField",

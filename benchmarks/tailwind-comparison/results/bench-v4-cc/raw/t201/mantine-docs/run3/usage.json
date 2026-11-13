@@ -1,0 +1,131 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 10,
+      "input_total": 785054,
+      "input_uncached": 20,
+      "cache_creation": 80606,
+      "cache_read": 704428,
+      "visible_output_tokens_o200k": 16259,
+      "visible_output_tokens_claudeLegacy": 17375,
+      "thinking_blocks": 6
+    },
+    {
+      "attempt": 1,
+      "calls": 3,
+      "input_total": 352768,
+      "input_uncached": 6,
+      "cache_creation": 102023,
+      "cache_read": 250739,
+      "visible_output_tokens_o200k": 15380,
+      "visible_output_tokens_claudeLegacy": 16349,
+      "thinking_blocks": 1
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v4-cc/raw/t201/mantine-docs/run3/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/README.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/theme.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/pages"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/pages/changelog-9-0-0.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/pages/changelog-9-0-0.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/tsconfig.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v4-cc/raw/t201/mantine-docs/run3/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v4-cc/raw/t201/mantine-docs/run3/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v4-cc/raw/t201/mantine-docs/run3/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v4-cc/raw/t201/mantine-docs/run3/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    },
+    {
+      "attempt": 1,
+      "name": "Read",
+      "path": "../../../results/bench-v4-cc/raw/t201/mantine-docs/run3/repair-1.txt"
+    },
+    {
+      "attempt": 1,
+      "name": "Write",
+      "path": "../../../results/bench-v4-cc/raw/t201/mantine-docs/run3/attempt-1.tsx"
+    },
+    {
+      "attempt": 1,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "T"
+}

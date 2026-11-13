@@ -1,0 +1,160 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 12,
+      "input_total": 1212122,
+      "input_uncached": 26,
+      "cache_creation": 104960,
+      "cache_read": 1107136,
+      "visible_output_tokens_o200k": 7938,
+      "visible_output_tokens_claudeLegacy": 8718,
+      "thinking_blocks": 7
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t101/stack/run2/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/AGENTS.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/AGENTS.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/bundles/app-shell.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/resources/once-ui.config.js"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/components/Providers.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/resources/custom.css"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/resources/index.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/proxy.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "project/src"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/components/ThemeProvider.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/components/ThemeInit.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/ai/rules.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/rules.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/ai/functions.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/ai"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/ai/tokens.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/components/Switch.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/components/SegmentedControl.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/app/(product)/components/Sidebar.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v2-cc/raw/t101/stack/run2/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "S"
+}

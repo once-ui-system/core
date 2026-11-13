@@ -1,0 +1,14 @@
+{
+ "name": "ScrubberFilmstrip",
+ "partOf": "Scrubber",
+ "purpose": "Thumbnails across a Scrubber block (block.content)",
+ "group": "media",
+ "importFrom": "@once-ui-system/core/media",
+ "props": {
+  "frames": "!string[] = []"
+ },
+ "tags": [
+  "media"
+ ],
+ "mixinsRef": []
+}

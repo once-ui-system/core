@@ -1,0 +1,17 @@
+Your app failed the build check. Output (truncated to 4,000 characters):
+
+```
+Error: Functions cannot be passed directly to Client Components unless you explicitly expose it by marking it with "use server". Or maybe you meant to call this function rather than return it.
+  {theme: ..., defaultColorScheme: ..., cssVariablesResolver: function k, children: ...}
+                                                              ^^^^^^^^^^
+    at stringify (<anonymous>) {
+  digest: '1438210993'
+}
+Export encountered an error on /_not-found/page: /_not-found, exiting the build.
+⨯ Next.js build worker exited with code: 1 and signal: null
+```
+
+Fix the problem and reply with every file of the app again, each complete in its own fenced code block whose opening line names the file's path, and nothing else.
+
+
+As before: write the complete corrected file to /home/user/core/benchmarks/tailwind-comparison/results/bench-v2-cc/raw/t102/mantine-docs/run3/attempt-3.tsx with the Write tool (no shell commands), then reply with the single word: done.
