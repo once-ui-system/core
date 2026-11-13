@@ -668,6 +668,11 @@ entry below that had landed by then:
 
 ### Fixed
 
+- A labelled `Flex` (`Row`, `Column`, …) with no `role` of its own renders
+  `role="group"`. ARIA does not allow `aria-label` on a plain `div` or `span`
+  (axe `aria-prohibited-attr`), and Lighthouse flagged it on several sites.
+- `MatrixFx` stops its animation loop while offscreen instead of waking every
+  frame to skip drawing, and resumes when it scrolls back into view.
 - **From 2.x main, carried into 3.0:** `SegmentedControl`'s rail takes its options'
   radius plus its 4px padding (`s-4`, `m-4`, `l-4`) instead of a fixed `l`; a
   Dropdown's panel clips its content to its rounded corners; `DatePicker` shows its
