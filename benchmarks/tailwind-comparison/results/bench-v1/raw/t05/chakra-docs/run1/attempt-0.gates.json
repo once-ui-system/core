@@ -1,0 +1,205 @@
+{
+  "arm": "K",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 10736
+    },
+    "build": {
+      "ok": true,
+      "ms": 17969
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 669,
+          "height": 1057,
+          "width": 533,
+          "horizontal_overflow": true,
+          "errors": []
+        },
+        "tablet": {
+          "text": 680,
+          "height": 1024,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 680,
+          "height": 933,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 669,
+              "height": 1057,
+              "width": 533,
+              "horizontal_overflow": true,
+              "errors": []
+            },
+            "tablet": {
+              "text": 680,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 680,
+              "height": 933,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 1,
+            "serious_or_critical": 1,
+            "ids": [
+              "color-contrast:serious:1"
+            ]
+          }
+        },
+        "/members/m-02": {
+          "viewports": {
+            "phone": {
+              "text": 495,
+              "height": 1153,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 506,
+              "height": 1025,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 506,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 1,
+        "nodes": 1,
+        "serious_or_critical": 1,
+        "ids": [
+          "color-contrast:serious:1"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "click > click",
+          "found": true,
+          "steps": 2,
+          "errors": []
+        },
+        "desktop": {
+          "action": "click > click",
+          "found": true,
+          "steps": 2,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1765,
+          "settled": true
+        },
+        "/members/m-02 phone": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/members/m-02 tablet": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/members/m-02 desktop": {
+          "ms": 1761,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 203,
+          "distinct_fontSize": 5,
+          "distinct_color": 10,
+          "distinct_background": 11,
+          "distinct_radius": 4,
+          "distinct_shadow": 0,
+          "distinct_spacing": 9,
+          "spacing_on_4px_grid": 0.986
+        },
+        "/members/m-02": {
+          "elements": 102,
+          "distinct_fontSize": 6,
+          "distinct_color": 5,
+          "distinct_background": 6,
+          "distinct_radius": 3,
+          "distinct_shadow": 0,
+          "distinct_spacing": 8,
+          "spacing_on_4px_grid": 0.87
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 299.9,
+          "css_kb": 0,
+          "fcp_ms": 128,
+          "cls": 0,
+          "long_task_ms": 33
+        },
+        "/members/m-02": {
+          "js_kb": 299.9,
+          "css_kb": 0,
+          "fcp_ms": 112,
+          "cls": 0,
+          "long_task_ms": 31
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/member-badges.tsx",
+    "components/app-shell.tsx",
+    "components/invite-dialog.tsx",
+    "components/change-role-dialog.tsx",
+    "components/team-page.tsx",
+    "app/page.tsx",
+    "app/members/[id]/page.tsx"
+  ]
+}

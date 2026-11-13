@@ -1,0 +1,28 @@
+{
+  "check": "final",
+  "at": "2026-11-10T23:58:03.498Z",
+  "ms": 56113,
+  "files": [
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "components/AppShell.tsx",
+    "components/PlanPanels.tsx",
+    "components/PlanProvider.tsx",
+    "components/RoomPlan.tsx",
+    "lib/data.ts",
+    "lib/plan.ts"
+  ],
+  "passed": true,
+  "gates_passed": true,
+  "failed_gate": null,
+  "adherence": {
+    "system": 233,
+    "raw": 0,
+    "share": 1,
+    "colours": 3,
+    "cssLines": 0,
+    "ok": true,
+    "reasons": []
+  }
+}

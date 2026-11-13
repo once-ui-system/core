@@ -1,0 +1,16 @@
+{
+  "files": [
+    "lib/once-ui.config.ts",
+    "app/fonts.css",
+    "lib/data.ts",
+    "components/AppShell.tsx",
+    "app/providers.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "components/ProjectsTable.tsx",
+    "app/projects/page.tsx",
+    "components/SettingsForm.tsx",
+    "app/settings/page.tsx"
+  ],
+  "rejected": []
+}

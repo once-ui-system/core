@@ -5,10 +5,10 @@
  *
  * Public means re-exported by `src/components/index.ts`, so this never makes
  * an internal module (a context, a shared style) importable, which is why 3.0
- * dropped the old `./components/*` wildcard. Next 16 builds with Turbopack,
- * which ignores `optimizePackageImports`, so a server component that imports a
- * client component from the root ships every client component; these paths
- * are how a page ships only what it uses.
+ * dropped the old `./components/*` wildcard. A page ships only what it imports
+ * either way: the root's built barrels list their exports by name
+ * (`scripts/flatten-barrels.mjs`), which Turbopack needs; these paths are for
+ * apps that prefer one import per component.
  *
  * Usage:  node scripts/sync-component-exports.mjs [--check]
  */

@@ -1,0 +1,23 @@
+{
+  "arm": "K",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(21,8): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\napp/page.tsx(41,28): error TS7006: Parameter 'card' implicitly has an 'any' type.\napp/projects/page.tsx(3,53): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\napp/projects/page.tsx(34,28): error TS7006: Parameter 'project' implicitly has an 'any' type.\napp/settings/page.tsx(4,22): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\ncomponents/app-shell.tsx(33,38): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\ncomponents/app-shell.tsx(170,28): error TS7006: Parameter 'crumb' implicitly has an 'any' type.\ncomponents/app-shell.tsx(170,35): error TS7006: Parameter 'index' implicitly has an 'any' type.\ncomponents/nav-list.tsx(15,60): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\ncomponents/nav-list.tsx(62,25): error TS7006: Parameter 'item' implicitly has an 'any' type.\ncomponents/nav-list.tsx(212,25): error TS7006: Parameter 'group' implicitly has an 'any' type.\ncomponents/settings-form.tsx(8,22): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 11616
+    }
+  },
+  "files": [
+    "components/nav-list.tsx",
+    "components/app-shell.tsx",
+    "components/page-heading.tsx",
+    "app/page.tsx",
+    "app/projects/layout.tsx",
+    "app/projects/page.tsx",
+    "app/settings/layout.tsx",
+    "app/settings/page.tsx",
+    "components/settings-form.tsx"
+  ]
+}

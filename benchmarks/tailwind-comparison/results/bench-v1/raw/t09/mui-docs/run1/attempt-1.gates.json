@@ -1,0 +1,246 @@
+{
+  "arm": "M",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 3597
+    },
+    "build": {
+      "ok": true,
+      "ms": 10245
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 1750,
+          "height": 3374,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 1775,
+          "height": 2816,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 1775,
+          "height": 2647,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 1750,
+              "height": 3374,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1775,
+              "height": 2816,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1775,
+              "height": 2647,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 5,
+            "serious_or_critical": 1,
+            "ids": [
+              "color-contrast:serious:5"
+            ]
+          }
+        },
+        "/pricing": {
+          "viewports": {
+            "phone": {
+              "text": 1457,
+              "height": 3335,
+              "width": 528,
+              "horizontal_overflow": true,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1482,
+              "height": 3146,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1482,
+              "height": 2343,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 5,
+            "serious_or_critical": 1,
+            "ids": [
+              "color-contrast:serious:5"
+            ]
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 1,
+        "nodes": 5,
+        "serious_or_critical": 1,
+        "ids": [
+          "color-contrast:serious:5"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "click",
+          "found": true,
+          "steps": 0,
+          "errors": [
+            "interaction failed: locator.click: Timeout 5000ms exceeded."
+          ]
+        },
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1763,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/pricing phone": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/pricing tablet": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/pricing desktop": {
+          "ms": 1765,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 133,
+          "distinct_fontSize": 9,
+          "distinct_color": 5,
+          "distinct_background": 2,
+          "distinct_radius": 3,
+          "distinct_shadow": 1,
+          "distinct_spacing": 16,
+          "spacing_on_4px_grid": 0.853
+        },
+        "/pricing": {
+          "elements": 231,
+          "distinct_fontSize": 11,
+          "distinct_color": 5,
+          "distinct_background": 5,
+          "distinct_radius": 4,
+          "distinct_shadow": 3,
+          "distinct_spacing": 15,
+          "spacing_on_4px_grid": 0.909
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 219.7,
+          "css_kb": 0,
+          "fcp_ms": 136,
+          "cls": 0,
+          "long_task_ms": 0
+        },
+        "/pricing": {
+          "js_kb": 231.3,
+          "css_kb": 0,
+          "fcp_ms": 156,
+          "cls": 0,
+          "long_task_ms": 23
+        }
+      },
+      "brand": {
+        "filled_buttons": 2,
+        "brand_filled_buttons": 2,
+        "button_radius_matches": 2,
+        "heading_font": "Georgia, \"Times New Roman\", serif",
+        "heading_serif": true,
+        "body_font": "ui-sans-serif, system-ui, sans-serif",
+        "page_background": "rgb(28, 25, 23)",
+        "dark_first_paint": true
+      },
+      "views": {
+        "pricing-yearly phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-pricing-yearly-phone.jpg"
+        },
+        "pricing-yearly tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-pricing-yearly-tablet.jpg"
+        },
+        "pricing-yearly desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-pricing-yearly-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "app/theme.ts",
+    "app/layout.tsx",
+    "components/ThemeToggle.tsx",
+    "components/SiteHeader.tsx",
+    "components/SiteFooter.tsx",
+    "components/SiteShell.tsx",
+    "components/Hero.tsx",
+    "components/CustomerLogos.tsx",
+    "components/FeatureSections.tsx",
+    "components/PricingPlans.tsx",
+    "components/ComparisonTable.tsx",
+    "components/FaqAccordion.tsx",
+    "app/page.tsx",
+    "app/pricing/page.tsx"
+  ]
+}

@@ -548,10 +548,11 @@ imports. The subset subpaths (`/components`, `/contexts`, `/hooks`, `/icons`,
 the root, and `/components/*` made every file in `dist/components` public,
 internals included. Import from the root instead. The exception is each public
 component's own path, `@once-ui-system/core/components/Button`: 3.0 lists one
-per component the root exports, and no internal module. Under Turbopack (Next
-16's default build), a server component that imports a client component from
-the root ships every client component, and its own path ships only that one.
-The codemod keeps such an import and drops a `.js` extension. Four components left it
+per component the root exports, and no internal module. Both ship only what a
+page imports, under Turbopack (Next 16's default build) too: 3.0's entry points
+list their exports by name, where 2.x's `export *` made Turbopack ship every
+client component to any page that imported one from the root. The codemod
+keeps a per-component import and drops a `.js` extension. Four components left it
 for a subpath, and twenty-two for a package of their own (below the table):
 
 | 2.x | 3.0 |

@@ -1,0 +1,54 @@
+.head {
+  padding: calc(var(--mantine-spacing-xl) * 2) 0 var(--mantine-spacing-xl);
+}
+
+.title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  letter-spacing: -0.02em;
+}
+
+.section {
+  padding: var(--mantine-spacing-xl) 0 calc(var(--mantine-spacing-xl) * 1.5);
+}
+
+.card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--mantine-color-default);
+  border: 1px solid var(--mantine-color-default-border);
+}
+
+/* Highlighted plan: brand border and a soft brand tint. */
+.card[data-highlight] {
+  border: 2px solid var(--mantine-primary-color-filled);
+  background: color-mix(
+    in srgb,
+    var(--mantine-primary-color-filled),
+    var(--mantine-color-default) 92%
+  );
+}
+
+.price {
+  font-family: var(--mantine-font-family-headings);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.check {
+  color: var(--mantine-primary-color-filled);
+}
+
+.tableWrap {
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: var(--mantine-radius-default);
+}
+
+.highlightCol {
+  background: color-mix(
+    in srgb,
+    var(--mantine-primary-color-filled),
+    transparent 92%
+  );
+}

@@ -1,0 +1,229 @@
+{
+  "arm": "C",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 6677
+    },
+    "build": {
+      "ok": true,
+      "ms": 17124
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 1802,
+          "height": 2326,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 1802,
+          "height": 1891,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 1884,
+          "height": 1510,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 1802,
+              "height": 2326,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1802,
+              "height": 1891,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1884,
+              "height": 1510,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/guests": {
+          "viewports": {
+            "phone": {
+              "text": 2369,
+              "height": 3354,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 2968,
+              "height": 2549,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 3050,
+              "height": 1802,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      },
+      "interaction": {
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 0,
+          "errors": [
+            "interaction failed: locator.click: Timeout 5000ms exceeded."
+          ]
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1778,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1801,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/guests phone": {
+          "ms": 1763,
+          "settled": true
+        },
+        "/guests tablet": {
+          "ms": 1782,
+          "settled": true
+        },
+        "/guests desktop": {
+          "ms": 1757,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 602,
+          "distinct_fontSize": 11,
+          "distinct_color": 6,
+          "distinct_background": 16,
+          "distinct_radius": 4,
+          "distinct_shadow": 2,
+          "distinct_spacing": 9,
+          "spacing_on_4px_grid": 0.655
+        },
+        "/guests": {
+          "elements": 721,
+          "distinct_fontSize": 6,
+          "distinct_color": 5,
+          "distinct_background": 18,
+          "distinct_radius": 4,
+          "distinct_shadow": 3,
+          "distinct_spacing": 8,
+          "spacing_on_4px_grid": 0.819
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 254.4,
+          "css_kb": 44.3,
+          "fcp_ms": 228,
+          "cls": 0,
+          "long_task_ms": 9
+        },
+        "/guests": {
+          "js_kb": 254.4,
+          "css_kb": 44.3,
+          "fcp_ms": 144,
+          "cls": 0,
+          "long_task_ms": 2
+        }
+      },
+      "views": {
+        "table-selected phone": {
+          "found": true,
+          "steps": 0,
+          "errors": [
+            "interaction failed: locator.click: Timeout 5000ms exceeded."
+          ],
+          "file": "view-table-selected-phone.jpg"
+        },
+        "table-selected tablet": {
+          "found": true,
+          "steps": 0,
+          "errors": [
+            "interaction failed: locator.click: Timeout 5000ms exceeded."
+          ],
+          "file": "view-table-selected-tablet.jpg"
+        },
+        "table-selected desktop": {
+          "found": true,
+          "steps": 0,
+          "errors": [
+            "interaction failed: locator.click: Timeout 5000ms exceeded."
+          ],
+          "file": "view-table-selected-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "app/globals.css",
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "components/seatwise/app-header.tsx",
+    "components/seatwise/floor-plan.tsx",
+    "components/seatwise/guest-row.tsx",
+    "components/seatwise/guests-view.tsx",
+    "components/seatwise/plan-provider.tsx",
+    "components/seatwise/plan-sidebar.tsx",
+    "components/seatwise/plan-view.tsx",
+    "components/seatwise/rules-panel.tsx",
+    "lib/data.ts",
+    "lib/plan.ts"
+  ]
+}

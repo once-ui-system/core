@@ -1,0 +1,18 @@
+{
+  "arm": "C",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/onboarding/welcome-content.tsx(19,67): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\ncomponents/onboarding/welcome-content.tsx(20,47): error TS2307: Cannot find module '@/lib/onboarding' or its corresponding type declarations.\ncomponents/onboarding/welcome-content.tsx(51,25): error TS7006: Parameter 'option' implicitly has an 'any' type.\ncomponents/onboarding/welcome-content.tsx(54,28): error TS7006: Parameter 'option' implicitly has an 'any' type.\ncomponents/onboarding/welcome-content.tsx(60,39): error TS7006: Parameter 'item' implicitly has an 'any' type.\ncomponents/onboarding/welcome-content.tsx(71,45): error TS7006: Parameter 'item' implicitly has an 'any' type.\ncomponents/onboarding/welcome-content.tsx(131,29): error TS7006: Parameter 'item' implicitly has an 'any' type.\ncomponents/onboarding/wizard.tsx(16,32): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\ncomponents/onboarding/wizard.tsx(24,8): error TS2307: Cannot find module '@/lib/onboarding' or its corresponding type declarations.\ncomponents/onboarding/wizard.tsx(25,31): error TS2307: Cannot find module '@/components/onboarding/step-indicator' or its corresponding type declarations.\ncomponents/onboarding/wizard.tsx(26,29): error TS2307: Cannot find module '@/components/onboarding/summary-card' or its corresponding type declarations.\ncomponents/onboarding/wizard.tsx(32,8): error TS2307: Cannot find module '@/components/onboarding/steps' or its corresponding type declarations.\ncomponents/onboarding/wizard.tsx(48,15): error TS7006: Parameter 'current' implicitly has an 'any' type.\ncomponents/onboarding/wizard.tsx(50,16): error TS7006: Parameter 'current' implicitly has an 'any' type.\ncomponents/onboarding/wizard.tsx(109,42): error TS7006: Parameter 'email' implicitly has an 'any' type.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 4809
+    }
+  },
+  "files": [
+    "components/onboarding/wizard.tsx",
+    "app/page.tsx",
+    "components/onboarding/welcome-content.tsx",
+    "app/welcome/page.tsx"
+  ]
+}

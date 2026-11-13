@@ -1,0 +1,7 @@
+/* System font stacks only (no network font fetch). Headings are rounded and friendly. */
+:root {
+  --font-heading: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  --font-body: ui-sans-serif, system-ui, sans-serif;
+  --font-label: ui-sans-serif, system-ui, sans-serif;
+  --font-code: ui-monospace, monospace;
+}

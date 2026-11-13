@@ -1,0 +1,18 @@
+import type { Metadata } from "next";
+
+import { PageHeader } from "@/components/page-header";
+import { SettingsForm } from "@/components/settings-form";
+
+export const metadata: Metadata = { title: "Settings" };
+
+export default function SettingsPage() {
+  return (
+    <>
+      <PageHeader
+        title="Settings"
+        description="Manage your profile and how Lumen contacts you."
+      />
+      <SettingsForm />
+    </>
+  );
+}

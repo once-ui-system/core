@@ -9,7 +9,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { config, armById, listFiles } from "./lib.mjs";
+import { config, armById, listFiles, extractFiles, isMulti, taskById } from "./lib.mjs";
 import { runGates } from "./gates.mjs";
 
 const arg = (k, d) => {
@@ -60,7 +60,19 @@ async function gateRun(dir) {
     const out = path.join(dir, `attempt-${n}`);
     const t0 = Date.now();
     const task = Number(path.basename(path.dirname(path.dirname(dir))).slice(1));
-    const r = await runGates(letter, code, out, task);
+    // A multi-file task's attempt file holds the reply (fenced blocks naming their paths).
+    let input = code;
+    if (isMulti(taskById(task))) {
+      const { files, rejected } = extractFiles(code);
+      input = files;
+      for (const [f, src] of Object.entries(files ?? {})) {
+        const p = path.join(dir, `attempt-${n}.files`, f);
+        fs.mkdirSync(path.dirname(p), { recursive: true });
+        fs.writeFileSync(p, src);
+      }
+      fs.writeFileSync(path.join(dir, `attempt-${n}.files.json`), JSON.stringify({ files: Object.keys(files ?? {}), rejected }, null, 2));
+    }
+    const r = await runGates(letter, input, out, task);
     fs.renameSync(path.join(out, "gates.json"), path.join(dir, `attempt-${n}.gates.json`));
     if (!fs.readdirSync(out).length) fs.rmdirSync(out);
     console.log(

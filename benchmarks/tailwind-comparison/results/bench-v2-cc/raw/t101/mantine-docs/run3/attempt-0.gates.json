@@ -1,0 +1,30 @@
+{
+  "arm": "T",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/SettingsForm.tsx(44,11): error TS2322: Type 'string' is not assignable to type 'void | Promise<any>'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 3064
+    }
+  },
+  "files": [
+    "app/theme.ts",
+    "app/layout.tsx",
+    "lib/data.ts",
+    "components/nav-config.ts",
+    "components/SidebarNav.tsx",
+    "components/AppFrame.tsx",
+    "components/PageHeader.tsx",
+    "components/ProjectStatusBadge.tsx",
+    "components/Dashboard.tsx",
+    "app/page.tsx",
+    "components/ProjectsList.tsx",
+    "app/projects/page.tsx",
+    "components/ReportsList.tsx",
+    "app/reports/page.tsx",
+    "components/SettingsForm.tsx",
+    "app/settings/page.tsx"
+  ]
+}
