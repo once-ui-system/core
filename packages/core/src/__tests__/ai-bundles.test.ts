@@ -47,9 +47,12 @@ describe("ai harness without spec.json", () => {
   // Sparkline and ChartSummary, which arrived with the catalog at 25,497.
   // The 2.x merge adds 300 more for LogoLoader, Logo's monogram and Map's
   // globe, which brought it to 25,899. GallerySection adds 100 more; it
-  // brought the catalog to 26,132.
+  // brought the catalog to 26,132. EmptyState brought it to 26,197. The
+  // components pulled forward from 3.1 (Sidebar, Combobox, Calendar,
+  // StatTile, PeerCursor, canvas, RichTextEditor and the Map additions)
+  // get 2,300 more, about 575 tokens, so each keeps a purpose line.
   it("keeps the catalog small enough to load on every task", () => {
-    expect(statSync(path.join(AI, "catalog.json")).size).toBeLessThan(26_200);
+    expect(statSync(path.join(AI, "catalog.json")).size).toBeLessThan(28_500);
   });
 });
 
