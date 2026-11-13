@@ -1,0 +1,19 @@
+{
+  "files": [
+    "app/globals.css",
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "components/seatwise/app-header.tsx",
+    "components/seatwise/floor-plan.tsx",
+    "components/seatwise/guest-row.tsx",
+    "components/seatwise/guests-view.tsx",
+    "components/seatwise/plan-provider.tsx",
+    "components/seatwise/plan-sidebar.tsx",
+    "components/seatwise/plan-view.tsx",
+    "components/seatwise/rules-panel.tsx",
+    "lib/data.ts",
+    "lib/plan.ts"
+  ],
+  "rejected": []
+}

@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-stone-50);
+    color: var(--color-stone-900);
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-teal-600);
+    outline-offset: 2px;
+  }
+  button:not(:disabled),
+  summary,
+  select {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+}
+
+@keyframes just-booked {
+  0% {
+    box-shadow: 0 0 0 0 rgb(13 148 136 / 0.6);
+  }
+  100% {
+    box-shadow: 0 0 0 10px rgb(13 148 136 / 0);
+  }
+}
+
+.just-booked {
+  animation: just-booked 1.4s ease-out 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,227 @@
+{
+  "arm": "M",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 4669
+    },
+    "build": {
+      "ok": true,
+      "ms": 12539
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 2015,
+          "height": 2823,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 2024,
+          "height": 2523,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 2039,
+          "height": 1648,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 2015,
+              "height": 2823,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 2024,
+              "height": 2523,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 2039,
+              "height": 1648,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 15,
+            "serious_or_critical": 2,
+            "ids": [
+              "color-contrast:serious:2",
+              "label-content-name-mismatch:serious:13"
+            ]
+          }
+        },
+        "/guests": {
+          "viewports": {
+            "phone": {
+              "text": 6438,
+              "height": 6886,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 6447,
+              "height": 6786,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 6490,
+              "height": 2630,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 12,
+            "serious_or_critical": 1,
+            "ids": [
+              "color-contrast:serious:12"
+            ]
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 2,
+        "nodes": 15,
+        "serious_or_critical": 2,
+        "ids": [
+          "color-contrast:serious:2",
+          "label-content-name-mismatch:serious:13"
+        ]
+      },
+      "interaction": {
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1769,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/guests phone": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/guests tablet": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/guests desktop": {
+          "ms": 1758,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 344,
+          "distinct_fontSize": 9,
+          "distinct_color": 5,
+          "distinct_background": 29,
+          "distinct_radius": 8,
+          "distinct_shadow": 0,
+          "distinct_spacing": 12,
+          "spacing_on_4px_grid": 0.316
+        },
+        "/guests": {
+          "elements": 702,
+          "distinct_fontSize": 6,
+          "distinct_color": 6,
+          "distinct_background": 5,
+          "distinct_radius": 4,
+          "distinct_shadow": 0,
+          "distinct_spacing": 14,
+          "spacing_on_4px_grid": 0.563
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 246.3,
+          "css_kb": 0,
+          "fcp_ms": 144,
+          "cls": 0,
+          "long_task_ms": 41
+        },
+        "/guests": {
+          "js_kb": 246.3,
+          "css_kb": 0,
+          "fcp_ms": 144,
+          "cls": 0,
+          "long_task_ms": 1
+        }
+      },
+      "views": {
+        "table-selected phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-phone.jpg"
+        },
+        "table-selected tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-tablet.jpg"
+        },
+        "table-selected desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/theme.ts",
+    "components/AppShell.tsx",
+    "components/DietChip.tsx",
+    "components/RoomPlan.tsx",
+    "components/SidePanel.tsx",
+    "lib/data.ts",
+    "lib/party.ts",
+    "lib/plan.tsx",
+    "lib/rules.ts"
+  ]
+}

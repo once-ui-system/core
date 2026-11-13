@@ -1,0 +1,21 @@
+{
+  "files": [
+    "app/theme.ts",
+    "app/layout.tsx",
+    "lib/data.ts",
+    "components/nav-config.ts",
+    "components/SidebarNav.tsx",
+    "components/AppFrame.tsx",
+    "components/PageHeader.tsx",
+    "components/ProjectStatusBadge.tsx",
+    "components/Dashboard.tsx",
+    "app/page.tsx",
+    "components/ProjectsList.tsx",
+    "app/projects/page.tsx",
+    "components/ReportsList.tsx",
+    "app/reports/page.tsx",
+    "components/SettingsForm.tsx",
+    "app/settings/page.tsx"
+  ],
+  "rejected": []
+}

@@ -1,0 +1,34 @@
+.hero {
+  padding: var(--mantine-spacing-xl) 0;
+  padding-block: clamp(3rem, 8vw, 7rem);
+  border-bottom: 1px solid var(--mantine-color-default-border);
+  background-image: radial-gradient(
+    ellipse at 15% 0%,
+    color-mix(in srgb, var(--mantine-primary-color-filled) 16%, transparent),
+    transparent 55%
+  );
+}
+
+.content {
+  max-width: 46rem;
+}
+
+.eyebrow {
+  margin-bottom: var(--mantine-spacing-sm);
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mantine-color-anchor);
+}
+
+.title {
+  margin-bottom: var(--mantine-spacing-md);
+}
+
+.lead {
+  max-width: 38rem;
+  font-size: var(--mantine-font-size-lg);
+  line-height: 1.6;
+  color: var(--mantine-color-dimmed);
+}

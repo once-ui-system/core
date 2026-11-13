@@ -1,0 +1,178 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 11,
+      "input_total": 950892,
+      "input_uncached": 22,
+      "cache_creation": 150678,
+      "cache_read": 800192,
+      "visible_output_tokens_o200k": 33806,
+      "visible_output_tokens_claudeLegacy": 35999,
+      "thinking_blocks": 8
+    },
+    {
+      "attempt": 1,
+      "calls": 4,
+      "input_total": 635900,
+      "input_uncached": 8,
+      "cache_creation": 149884,
+      "cache_read": 486008,
+      "visible_output_tokens_o200k": 19017,
+      "visible_output_tokens_claudeLegacy": 20202,
+      "thinking_blocks": 2
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v4-cc/raw/t201/chakra-docs/run1/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "."
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/README.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/provider.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/color-mode.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/tsconfig.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/package.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/charts"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/native-select.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/dialog.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/field.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/charts/line-chart.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/components/dialog.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "."
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/toaster.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/avatar.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/charts/charts.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../../../../../../tmp/claude-0/-home-user/4c827640-87d8-5312-9539-2f80e180acb1/scratchpad/placeholder.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v4-cc/raw/t201/chakra-docs/run1/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v4-cc/raw/t201/chakra-docs/run1/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    },
+    {
+      "attempt": 1,
+      "name": "Read",
+      "path": "../../../results/bench-v4-cc/raw/t201/chakra-docs/run1/repair-1.txt"
+    },
+    {
+      "attempt": 1,
+      "name": "Read",
+      "path": "../../../results/bench-v4-cc/raw/t201/chakra-docs/run1/attempt-0.tsx"
+    },
+    {
+      "attempt": 1,
+      "name": "Write",
+      "path": "../../../results/bench-v4-cc/raw/t201/chakra-docs/run1/attempt-1.tsx"
+    },
+    {
+      "attempt": 1,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": false,
+    "violations": [
+      "Write outside run folder: /tmp/claude-0/-home-user/4c827640-87d8-5312-9539-2f80e180acb1/scratchpad/placeholder.txt"
+    ]
+  },
+  "arm": "K"
+}

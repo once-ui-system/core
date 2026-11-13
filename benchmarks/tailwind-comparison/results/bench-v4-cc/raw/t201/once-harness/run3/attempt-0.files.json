@@ -1,0 +1,22 @@
+{
+  "files": [
+    "lib/data.ts",
+    "lib/time.ts",
+    "lib/schedule.ts",
+    "components/DeskProvider.tsx",
+    "components/StatusTag.tsx",
+    "components/Alerts.tsx",
+    "components/SearchBox.tsx",
+    "components/AppHeader.tsx",
+    "components/BookingDialog.tsx",
+    "components/WaitingList.tsx",
+    "components/ScheduleView.tsx",
+    "components/Panel.tsx",
+    "components/WeightChart.tsx",
+    "components/PatientRecord.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "app/layout.tsx"
+  ],
+  "rejected": []
+}

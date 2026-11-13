@@ -1,15 +1,30 @@
 "use client";
 
 import { StyleOverlay } from "@once-ui-system/blocks";
-import { Column, IconButton, Row } from "@once-ui-system/core";
+import {
+  Button,
+  Column,
+  IconButton,
+  Row,
+  SegmentedControl,
+  Tag,
+  Text,
+  useToast,
+} from "@once-ui-system/core";
 import { CodeBlock } from "@once-ui-system/core/code";
 import { type ReactNode, useEffect, useRef, useState } from "react";
-import { blocks } from "@/resources";
-import type { BlockItem } from "@/types";
-import { dev } from "@/utils/dev-logger";
-import { BlockTitle } from "./BlockTitle";
-import DocsLayout from "./layout";
+import { harness } from "@/resources/prompts";
 import { basePath } from "@/resources/versions";
+import { dev } from "@/utils/dev-logger";
+import { useBlockDocsLinks } from "./BlockDocsLinks";
+import { BlockFilmstrip } from "./BlockFilmstrip";
+import styles from "./BlockPage.module.scss";
+import { BlockTitle } from "./BlockTitle";
+import { findCategoryGroup, findCategoryGroupTitle, findCategoryMeta } from "./blockMeta";
+import { onceUIComponentsIn } from "./blockSource";
+import DocsLayout from "./layout";
+
+export { findCategoryMeta };
 
 type PreviewHeight = "auto" | "fixed";
 
@@ -50,28 +65,6 @@ export interface ExampleMeta {
   created?: string;
 }
 
-type BlockItemMeta = BlockItem;
-
-export function findCategoryMeta(category: string): BlockItemMeta | undefined {
-  const href = `/blocks/${category}`;
-  for (const section of Object.values(blocks)) {
-    const items = Array.isArray(section.items) ? section.items : Object.values(section.items);
-    const match = items.find((item) => item.href === href);
-    if (match) return match;
-  }
-  return undefined;
-}
-
-// Returns the top-level group key (landingPage, application, sections, ...) the category belongs to.
-function findCategoryGroup(category: string): string | undefined {
-  const href = `/blocks/${category}`;
-  for (const [groupKey, section] of Object.entries(blocks)) {
-    const items = Array.isArray(section.items) ? section.items : Object.values(section.items);
-    if (items.some((item) => item.href === href)) return groupKey;
-  }
-  return undefined;
-}
-
 // Sections/Misc previews are bare components; the page frames them with default
 // padding/min-height. Other groups (landing, application, layout) frame themselves.
 const FRAMED_GROUPS = new Set(["sections", "misc"]);
@@ -102,18 +95,88 @@ function fetchFileContent(file: string): Promise<string> {
   return promise;
 }
 
+/** A prompt that hands one block to a coding agent: the harness, the intent, then the source. */
+function buildBlockPrompt(
+  title: string,
+  description: string,
+  files: { label: string; code: string; language: string }[],
+) {
+  const sources = files
+    .filter((file) => file.code)
+    .map((file) => `${file.label}:\n\`\`\`${file.language}\n${file.code.trimEnd()}\n\`\`\``)
+    .join("\n\n");
+  return `${harness}
+
+Add the Once UI block "${title}" to my app${description ? ` (${description})` : ""}. Keep its layout and components; replace the copy, links and images with my product's.
+
+${sources}`;
+}
+
+/**
+ * A block's preview as the page shows it. Sections/Misc previews are bare
+ * components, so they get default padding, a min-height so narrow components
+ * don't collapse, and centering; other groups frame themselves.
+ */
+function renderBlock(example: BlockExampleDef, framed: boolean, isFixed: boolean) {
+  const rendered = example.render();
+  if (!framed) return rendered;
+  return (
+    <Row
+      fillWidth
+      fillHeight={isFixed}
+      fitHeight={!isFixed}
+      horizontal="center"
+      vertical="start"
+      center={false}
+      minHeight="24rem"
+      padding="l"
+    >
+      {rendered}
+    </Row>
+  );
+}
+
+/** The Once UI components a block is built from, each linked to its docs page when it has one. */
+function BuiltWith({ sources }: { sources: string[] }) {
+  const links = useBlockDocsLinks();
+  const components = onceUIComponentsIn(sources);
+  if (!components.length) return null;
+  return (
+    <Row flex={1} minWidth={0} wrap gap="8" vertical="center">
+      <Text textVariant="label-default-s" onBackground="neutral-weak" marginRight="4">
+        Built with
+      </Text>
+      {components.map((name) => {
+        const href = links[name.toLowerCase()];
+        return href ? (
+          <Button key={name} href={href} size="s" variant="secondary" weight="default">
+            {name}
+          </Button>
+        ) : (
+          <Tag key={name} size="m">
+            {name}
+          </Tag>
+        );
+      })}
+    </Row>
+  );
+}
+
 function BlockExample({
   example,
   meta,
   reloadButton,
   previewHeight,
   framed,
+  footerEnd,
 }: {
   example: BlockExampleDef;
   meta: ExampleMeta | undefined;
   reloadButton?: boolean;
   previewHeight: PreviewHeight;
   framed: boolean;
+  /** Shown at the end of the "Built with" row, e.g. previous/next block buttons. */
+  footerEnd?: ReactNode;
 }) {
   const [selectedTab, setSelectedTab] = useState(0);
   const [contents, setContents] = useState<string[]>(() => example.files.map(() => ""));
@@ -169,32 +232,26 @@ function BlockExample({
     })),
   ];
 
-  const isFixed = (example.previewHeight ?? previewHeight) === "fixed";
+  const { addToast } = useToast();
+  const title = meta?.title ?? example.id;
+  const description = meta?.description ?? "";
+  const sourcesLoaded = contents.some(Boolean);
 
-  // Sections/Misc previews are bare components — frame them with default padding,
-  // a min-height so narrow components don't collapse, and centering.
-  const renderPreview = () => {
-    const rendered = example.render();
-    if (!framed) return rendered;
-    return (
-      <Row
-        fillWidth
-        fillHeight={isFixed}
-        fitHeight={!isFixed}
-        horizontal="center"
-        vertical="start"
-        center={false}
-        minHeight="24rem"
-        padding="l"
-      >
-        {rendered}
-      </Row>
-    );
+  const copyPrompt = async () => {
+    const prompt = buildBlockPrompt(title, description, codes.slice(1));
+    try {
+      await navigator.clipboard.writeText(prompt);
+      addToast({ tone: "success", message: `Prompt for ${title} copied` });
+    } catch {
+      addToast({ tone: "danger", message: "Couldn't copy to the clipboard" });
+    }
   };
+
+  const isFixed = (example.previewHeight ?? previewHeight) === "fixed";
 
   const preview =
     selectedTab !== 0 ? undefined : inView ? (
-      renderPreview()
+      renderBlock(example, framed, isFixed)
     ) : (
       <Row fillWidth minHeight="24rem" />
     );
@@ -208,13 +265,23 @@ function BlockExample({
       <Row fillWidth horizontal="between" vertical="center" wrap gap="12" paddingX="16">
         <BlockTitle
           id={example.id}
-          title={meta?.title ?? example.id}
-          description={meta?.description ?? ""}
+          title={title}
+          description={description}
           created={meta?.created}
           updated={meta?.updated}
         />
+        <Button
+          size="s"
+          variant="secondary"
+          prefixIcon="sparkle"
+          disabled={!sourcesLoaded}
+          onClick={copyPrompt}
+        >
+          Copy prompt
+        </Button>
       </Row>
       <CodeBlock
+        className={styles.frame}
         lineNumbers
         actions={
           <StyleOverlay>
@@ -239,6 +306,10 @@ function BlockExample({
         codes={codes}
         onInstanceChange={setSelectedTab}
       />
+      <Row fillWidth wrap gap="12" vertical="center" paddingX="16">
+        <BuiltWith sources={contents} />
+        {footerEnd}
+      </Row>
     </Column>
   );
 }
@@ -251,6 +322,7 @@ export function BlockPage({
 }: BlockPageProps) {
   const meta = findCategoryMeta(category);
   const framed = FRAMED_GROUPS.has(findCategoryGroup(category) ?? "");
+  const groupTitle = findCategoryGroupTitle(category);
 
   const exampleById = new Map(examples.map((example) => [example.id, example]));
   const metaByTitle = new Map((meta?.examples ?? []).map((entry) => [entry.title, entry]));
@@ -281,18 +353,136 @@ export function BlockPage({
     ...examples.filter((example) => !metaByTitle.has(example.id)),
   ].reverse();
 
+  const ids = ordered.map((example) => example.id);
+  const idsKey = ids.join("|");
+  const browsable = ordered.length > 1;
+  const [mode, setMode] = useState<ViewMode>("focus");
+  const [activeId, setActiveId] = useState(ids[0] ?? "");
+
+  // `?view=all` opens on the full list (the visual check uses it to shoot every block).
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("view") === "all") setMode("all");
+  }, []);
+
+  // The block in focus follows the URL hash (#About7), so a link to one block
+  // opens on that block.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: idsKey stands in for ids, which is a new array every render
+  useEffect(() => {
+    const sync = () => {
+      const id = decodeURIComponent(window.location.hash.slice(1));
+      if (ids.includes(id)) setActiveId(id);
+    };
+    sync();
+    window.addEventListener("hashchange", sync);
+    return () => window.removeEventListener("hashchange", sync);
+  }, [idsKey]);
+
+  // Picking a block takes the reader to it. In focus mode the block only exists
+  // after the re-render, so the scroll waits for the commit below.
+  const scrollTarget = useRef<string | null>(null);
+  const select = (id: string) => {
+    setActiveId(id);
+    window.history.replaceState(null, "", `#${encodeURIComponent(id)}`);
+    scrollTarget.current = id;
+  };
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: runs after each selection commits; activeId is the trigger
+  useEffect(() => {
+    const id = scrollTarget.current;
+    if (!id) return;
+    scrollTarget.current = null;
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [activeId]);
+
+  const activeIndex = Math.max(0, ids.indexOf(activeId));
+  const active = ordered[activeIndex];
+  const previous = ordered[(activeIndex - 1 + ordered.length) % ordered.length];
+  const next = ordered[(activeIndex + 1) % ordered.length];
+  const titleOf = (example: BlockExampleDef) =>
+    (metaByTitle.get(example.id) ?? example.meta)?.title ?? example.id;
+  const isFixedFor = (example: BlockExampleDef) =>
+    (example.previewHeight ?? previewHeight) === "fixed";
+
+  const renderExample = (example: BlockExampleDef, footerEnd?: ReactNode) => (
+    <BlockExample
+      key={example.id}
+      example={example}
+      meta={metaByTitle.get(example.id) ?? example.meta}
+      reloadButton={reloadButton}
+      previewHeight={previewHeight}
+      framed={framed}
+      footerEnd={footerEnd}
+    />
+  );
+
   return (
-    <DocsLayout title={meta?.label ?? category} description={meta?.description}>
-      {ordered.map((example) => (
-        <BlockExample
-          key={example.id}
-          example={example}
-          meta={metaByTitle.get(example.id) ?? example.meta}
-          reloadButton={reloadButton}
-          previewHeight={previewHeight}
-          framed={framed}
+    <DocsLayout
+      title={meta?.label ?? category}
+      description={meta?.description}
+      breadcrumbs={[
+        { label: "Blocks", href: findCategoryMeta("quickStart")?.href ?? "/blocks/quickStart" },
+        ...(groupTitle ? [{ label: groupTitle }] : []),
+        { label: meta?.label ?? category },
+      ]}
+      aside={
+        browsable ? (
+          <Row gap="16" vertical="center" wrap>
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
+              {ordered.length} variants
+            </Text>
+            <SegmentedControl
+              fillWidth={false}
+              value={mode}
+              onValueChange={(value) => setMode(value as ViewMode)}
+              buttons={[
+                { value: "focus", label: "Focus" },
+                { value: "all", label: "All blocks" },
+              ]}
+            />
+          </Row>
+        ) : undefined
+      }
+    >
+      {browsable && (
+        <BlockFilmstrip
+          activeId={active?.id ?? ""}
+          onSelect={select}
+          items={ordered.map((example) => ({
+            id: example.id,
+            title: titleOf(example),
+            render: () => renderBlock(example, framed, isFixedFor(example)),
+          }))}
         />
-      ))}
+      )}
+      {mode === "focus" && active
+        ? renderExample(
+            active,
+            browsable ? (
+              <Row gap="8">
+                <Button
+                  size="s"
+                  variant="secondary"
+                  prefixIcon="chevronLeft"
+                  onClick={() => select(previous.id)}
+                  aria-label={`Previous block: ${titleOf(previous)}`}
+                >
+                  {titleOf(previous)}
+                </Button>
+                <Button
+                  size="s"
+                  variant="secondary"
+                  suffixIcon="chevronRight"
+                  onClick={() => select(next.id)}
+                  aria-label={`Next block: ${titleOf(next)}`}
+                >
+                  {titleOf(next)}
+                </Button>
+              </Row>
+            ) : undefined,
+          )
+        : ordered.map((example) => renderExample(example))}
     </DocsLayout>
   );
 }
+
+type ViewMode = "focus" | "all";

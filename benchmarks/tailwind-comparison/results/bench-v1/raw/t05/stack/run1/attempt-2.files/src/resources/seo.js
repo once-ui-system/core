@@ -1,0 +1,148 @@
+const landing = {
+  home: {
+    path: "/",
+    title: "Team · Lumen",
+    description:
+      "Lumen is a product-analytics and issue-tracking app for small software teams. Manage members, roles and invitations.",
+    image: "/images/og/home.jpg",
+    robots: "index,follow",
+    canonical: "http://localhost:3000",
+    alternates: [{ href: "http://localhost:3000", hrefLang: "en" }],
+  },
+  blog: {
+    path: "/blog",
+    title: "Blog - Lumen",
+    description: "Blog posts about Lumen.",
+    image: "/images/og/home.jpg",
+    robots: "index,follow",
+    canonical: "http://localhost:3000/blog",
+    alternates: [{ href: "http://localhost:3000", hrefLang: "en" }],
+  },
+  pricing: {
+    path: "/pricing",
+    title: "Pricing - Lumen",
+    description: "Pricing for Lumen.",
+    image: "/images/og/home.jpg",
+    robots: "index,follow",
+    canonical: "http://localhost:3000/pricing",
+    alternates: [{ href: "http://localhost:3000", hrefLang: "en" }],
+  },
+  about: {
+    path: "/about",
+    title: "About - Lumen",
+    description: "About Lumen.",
+    image: "/images/og/home.jpg",
+    robots: "index,follow",
+    canonical: "http://localhost:3000/about",
+    alternates: [{ href: "http://localhost:3000", hrefLang: "en" }],
+  },
+  terms: {
+    path: "/terms-of-use",
+    title: "Terms of Use - Lumen",
+    description: "Terms of Use for Lumen.",
+    image: "/images/og/home.jpg",
+    robots: "index,follow",
+    canonical: "http://localhost:3000/terms-of-use",
+    alternates: [{ href: "http://localhost:3000", hrefLang: "en" }],
+  },
+  privacy: {
+    path: "/privacy-policy",
+    title: "Privacy Policy - Lumen",
+    description: "Privacy Policy for Lumen.",
+    image: "/images/og/home.jpg",
+    robots: "index,follow",
+    canonical: "http://localhost:3000/privacy-policy",
+    alternates: [{ href: "http://localhost:3000", hrefLang: "en" }],
+  },
+  contact: {
+    path: "/contact",
+    title: "Contact - Lumen",
+    description: "Contact for Lumen.",
+    image: "/images/og/home.jpg",
+    robots: "index,follow",
+    canonical: "http://localhost:3000/contact",
+    alternates: [{ href: "http://localhost:3000", hrefLang: "en" }],
+  },
+  brand: {
+    path: "/brand",
+    title: "Brand - Lumen",
+    description: "Brand for Lumen.",
+    image: "/images/og/home.jpg",
+    robots: "index,follow",
+    canonical: "http://localhost:3000/brand",
+    alternates: [{ href: "http://localhost:3000", hrefLang: "en" }],
+  },
+  landing: {
+    path: "/products/landing",
+    title: "Landing - Lumen",
+    description: "Landing for Lumen.",
+    image: "/images/og/home.jpg",
+    robots: "index,follow",
+    canonical: "http://localhost:3000/products/landing",
+    alternates: [{ href: "http://localhost:3000", hrefLang: "en" }],
+  },
+  dashboard: {
+    path: "/products/dashboard",
+    title: "Dashboard - Lumen",
+    description: "Dashboard for Lumen.",
+    image: "/images/og/home.jpg",
+    robots: "index,follow",
+    canonical: "http://localhost:3000/products/dashboard",
+    alternates: [{ href: "http://localhost:3000", hrefLang: "en" }],
+  },
+};
+
+const product = {
+  dashboard: {
+    path: "/app",
+    title: "Dashboard - Lumen",
+    description: "Dashboard for Lumen.",
+    image: "/images/og/home.jpg",
+    robots: "noindex,nofollow",
+    canonical: "http://localhost:3000/app",
+    alternates: [{ href: "http://localhost:3000", hrefLang: "en" }],
+  },
+  analytics: {
+    path: "/app/analytics",
+    title: "Analytics - Lumen",
+    description: "Analytics for Lumen.",
+    image: "/images/og/home.jpg",
+    robots: "noindex,nofollow",
+    canonical: "http://localhost:3000/app/analytics",
+    alternates: [{ href: "http://localhost:3000", hrefLang: "en" }],
+  },
+  users: {
+    path: "/app/users",
+    title: "Users - Lumen",
+    description: "Users for Lumen.",
+    image: "/images/og/home.jpg",
+    robots: "noindex,nofollow",
+    canonical: "http://localhost:3000/app/users",
+    alternates: [{ href: "http://localhost:3000", hrefLang: "en" }],
+  },
+  settings: {
+    path: "/app/settings",
+    title: "Settings - Lumen",
+    description: "Settings for Lumen.",
+    image: "/images/og/home.jpg",
+    robots: "noindex,nofollow",
+    canonical: "http://localhost:3000/app/settings",
+    alternates: [{ href: "http://localhost:3000", hrefLang: "en" }],
+  },
+};
+
+const auth = {
+  auth: {
+    path: "/auth",
+    title: "Log in - Lumen",
+    description: "Sign up or log in to your Lumen account.",
+    image: "/images/og/home.jpg",
+    robots: "index,follow",
+    canonical: "http://localhost:3000/auth",
+    alternates: [{ href: "http://localhost:3000", hrefLang: "en" }],
+  },
+};
+
+const sameAs = {};
+
+export { landing, product, auth, sameAs };

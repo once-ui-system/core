@@ -1,0 +1,129 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 8,
+      "input_total": 634801,
+      "input_uncached": 16,
+      "cache_creation": 102682,
+      "cache_read": 532103,
+      "visible_output_tokens_o200k": 8647,
+      "visible_output_tokens_claudeLegacy": 9451,
+      "thinking_blocks": 4
+    },
+    {
+      "attempt": 1,
+      "calls": 3,
+      "input_total": 320837,
+      "input_uncached": 8,
+      "cache_creation": 11945,
+      "cache_read": 308884,
+      "visible_output_tokens_o200k": 8134,
+      "visible_output_tokens_claudeLegacy": 8834,
+      "thinking_blocks": 1
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t101/chakra-docs/run1/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/README.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/provider.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/color-mode.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/drawer.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/breadcrumb.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/package.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/theming"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/llms.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v2-cc/raw/t101/chakra-docs/run1/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    },
+    {
+      "attempt": 1,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t101/chakra-docs/run1/repair-1.txt"
+    },
+    {
+      "attempt": 1,
+      "name": "Write",
+      "path": "../../../results/bench-v2-cc/raw/t101/chakra-docs/run1/attempt-1.tsx"
+    },
+    {
+      "attempt": 1,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": false,
+    "violations": [
+      "disallowed tool: Bash",
+      "disallowed tool: Bash"
+    ]
+  },
+  "arm": "K"
+}

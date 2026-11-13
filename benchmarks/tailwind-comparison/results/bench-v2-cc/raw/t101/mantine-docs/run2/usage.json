@@ -1,0 +1,124 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 5,
+      "input_total": 358257,
+      "input_uncached": 10,
+      "cache_creation": 48865,
+      "cache_read": 309382,
+      "visible_output_tokens_o200k": 6705,
+      "visible_output_tokens_claudeLegacy": 7235,
+      "thinking_blocks": 1
+    },
+    {
+      "attempt": 1,
+      "calls": 3,
+      "input_total": 265318,
+      "input_uncached": 6,
+      "cache_creation": 94508,
+      "cache_read": 170804,
+      "visible_output_tokens_o200k": 6528,
+      "visible_output_tokens_claudeLegacy": 7019,
+      "thinking_blocks": 1
+    },
+    {
+      "attempt": 2,
+      "calls": 3,
+      "input_total": 288860,
+      "input_uncached": 6,
+      "cache_creation": 61217,
+      "cache_read": 227637,
+      "visible_output_tokens_o200k": 529,
+      "visible_output_tokens_claudeLegacy": 561,
+      "thinking_blocks": 1
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t101/mantine-docs/run2/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/README.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/theme.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/tsconfig.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v2-cc/raw/t101/mantine-docs/run2/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    },
+    {
+      "attempt": 1,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t101/mantine-docs/run2/repair-1.txt"
+    },
+    {
+      "attempt": 1,
+      "name": "Write",
+      "path": "../../../results/bench-v2-cc/raw/t101/mantine-docs/run2/attempt-1.tsx"
+    },
+    {
+      "attempt": 1,
+      "name": "SubagentHandback",
+      "path": null
+    },
+    {
+      "attempt": 2,
+      "name": "Read",
+      "path": "../../../results/bench-v2-cc/raw/t101/mantine-docs/run2/repair-2.txt"
+    },
+    {
+      "attempt": 2,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 2,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": false,
+    "violations": [
+      "disallowed tool: Bash"
+    ]
+  },
+  "arm": "T"
+}

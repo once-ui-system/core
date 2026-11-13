@@ -1,0 +1,406 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 41,
+      "input_total": 5536485,
+      "input_uncached": 85,
+      "cache_creation": 421262,
+      "cache_read": 5115138,
+      "visible_output_tokens_o200k": 34989,
+      "visible_output_tokens_claudeLegacy": 38247,
+      "thinking_blocks": 31
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "."
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/theme.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/package.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/tsconfig.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/lib/data.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/lib/plan.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/PlanProvider.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/PlanProvider.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/app/theme.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/AppShell.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/ui.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/UnseatedTray.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/Sidebar.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/Sidebar.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/PlanView.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/app/guests/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/GuestsView.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/GuestsView.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/GuestsView.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/Stack.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/PlanView.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/GuestsView.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/UnseatedTray.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/Sidebar.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/lib/plan.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/lib/plan.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/ui.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/UnseatedTray.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/UnseatedTray.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/AppShell.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/UnseatedTray.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/checks/3/screenshot-desktop.jpg"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/checks/3/screenshot-tablet.jpg"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/Sidebar.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/SrOnly.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/RoomPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/UnseatedTray.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run2/files/components/Sidebar.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": false,
+    "violations": [
+      "disallowed tool: Bash",
+      "disallowed tool: Bash",
+      "disallowed tool: Bash",
+      "disallowed tool: Bash",
+      "disallowed tool: Bash"
+    ]
+  },
+  "arm": "M"
+}

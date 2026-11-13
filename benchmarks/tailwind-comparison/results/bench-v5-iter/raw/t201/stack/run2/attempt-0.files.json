@@ -1,0 +1,17 @@
+{
+  "files": [
+    "src/app/layout.tsx",
+    "src/app/page.tsx",
+    "src/app/patients/[id]/page.tsx",
+    "src/components/desk/AlertTags.tsx",
+    "src/components/desk/BookDialog.tsx",
+    "src/components/desk/DeskHeader.tsx",
+    "src/components/desk/DeskProvider.tsx",
+    "src/components/desk/DeskShell.tsx",
+    "src/components/desk/PatientRecord.tsx",
+    "src/components/desk/Schedule.tsx",
+    "src/components/desk/WeightChart.tsx",
+    "src/lib/data.ts"
+  ],
+  "rejected": []
+}

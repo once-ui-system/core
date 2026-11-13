@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+/* Lumen design tokens: every screen reads these, nothing is styled one-off. */
+@theme {
+  /* Brand: #DB2777 */
+  --color-brand-50: #fdf2f8;
+  --color-brand-100: #fce7f3;
+  --color-brand-200: #fbcfe8;
+  --color-brand-300: #f9a8d4;
+  --color-brand-400: #f472b6;
+  --color-brand-500: #ec4899;
+  --color-brand-600: #db2777;
+  --color-brand-700: #be185d;
+  --color-brand-800: #9d174d;
+  --color-brand-900: #831843;
+
+  /* Neutrals: warm sand */
+  --color-sand-50: #faf7f2;
+  --color-sand-100: #f4efe6;
+  --color-sand-200: #e9e1d2;
+  --color-sand-300: #d9cdb7;
+  --color-sand-400: #b9aa8f;
+  --color-sand-500: #8f8068;
+  --color-sand-600: #6f6350;
+  --color-sand-700: #544a3b;
+  --color-sand-800: #3a3329;
+  --color-sand-900: #26211a;
+
+  /* Corner radius: 16px on buttons, inputs, cards and menus */
+  --radius-ui: 16px;
+
+  /* Fonts */
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-heading: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+
+  --shadow-card: 0 1px 2px rgb(58 51 41 / 0.06), 0 8px 24px rgb(58 51 41 / 0.06);
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  body {
+    background-color: var(--color-sand-50);
+    color: var(--color-sand-900);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.01em;
+  }
+
+  a {
+    color: var(--color-brand-700);
+  }
+
+  /* Brand focus ring for every interactive element */
+  :focus-visible {
+    outline: 3px solid var(--color-brand-600);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
+  }
+}

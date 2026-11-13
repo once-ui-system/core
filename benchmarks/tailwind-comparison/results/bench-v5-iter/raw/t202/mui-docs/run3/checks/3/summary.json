@@ -1,0 +1,31 @@
+{
+  "check": "3",
+  "at": "2026-11-10T23:59:02.618Z",
+  "ms": 44819,
+  "files": [
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/theme.ts",
+    "components/AppShell.tsx",
+    "components/DietChip.tsx",
+    "components/RoomPlan.tsx",
+    "components/SidePanel.tsx",
+    "lib/data.ts",
+    "lib/party.ts",
+    "lib/plan.tsx",
+    "lib/rules.ts"
+  ],
+  "passed": true,
+  "gates_passed": true,
+  "failed_gate": null,
+  "adherence": {
+    "system": 199,
+    "raw": 0,
+    "share": 1,
+    "colours": 4,
+    "cssLines": 0,
+    "ok": true,
+    "reasons": []
+  }
+}

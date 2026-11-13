@@ -1,0 +1,25 @@
+{
+  "arm": "M",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/StatusChip.tsx(4,32): error TS2307: Cannot find module '@mui/icons-material/CheckCircleOutline' or its corresponding type declarations.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 3828
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "app/theme.ts",
+    "components/AlertChips.tsx",
+    "components/StatusChip.tsx",
+    "components/PatientSearch.tsx",
+    "components/AppShell.tsx",
+    "components/BookingDialog.tsx",
+    "components/Schedule.tsx",
+    "components/PatientRecord.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx"
+  ]
+}

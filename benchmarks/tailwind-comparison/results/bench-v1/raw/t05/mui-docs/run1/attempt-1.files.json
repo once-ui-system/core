@@ -1,0 +1,17 @@
+{
+  "files": [
+    "lib/data.ts",
+    "components/AppLink.tsx",
+    "components/LinkButton.tsx",
+    "components/badges.tsx",
+    "components/MemberAvatar.tsx",
+    "components/InviteDialog.tsx",
+    "components/MemberActionsMenu.tsx",
+    "components/ChangeRoleDialog.tsx",
+    "components/TeamPage.tsx",
+    "app/page.tsx",
+    "app/members/[id]/page.tsx",
+    "app/members/[id]/not-found.tsx"
+  ],
+  "rejected": []
+}

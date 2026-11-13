@@ -1,0 +1,25 @@
+{
+  "arm": "K",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/shell/app-shell.tsx(166,11): error TS2322: Type '{ children: Element[]; as: \"button\"; type: string; w: \"full\"; justify: \"space-between\"; px: \"3\"; py: \"1.5\"; mb: \"1\"; rounded: \"l2\"; color: \"fg.subtle\"; fontFamily: \"heading\"; fontSize: \"xs\"; fontWeight: \"semibold\"; ... 7 more ...; focusVisibleRing: \"outside\"; }' is not assignable to type 'IntrinsicAttributes & StackProps & RefAttributes<HTMLDivElement>'.\n  Property 'type' does not exist on type 'IntrinsicAttributes & StackProps & RefAttributes<HTMLDivElement>'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 8644
+    }
+  },
+  "files": [
+    "lib/theme.ts",
+    "components/ui/provider.tsx",
+    "lib/data.ts",
+    "components/shell/nav-config.ts",
+    "components/shell/app-shell.tsx",
+    "components/page-header.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/projects/page.tsx",
+    "app/reports/page.tsx",
+    "app/settings/page.tsx"
+  ]
+}

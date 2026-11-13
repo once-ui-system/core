@@ -1,0 +1,19 @@
+{
+  "files": [
+    "lib/data.ts",
+    "lib/seating.ts",
+    "lib/plan.tsx",
+    "components/seatwise.module.css",
+    "components/AppFrame.tsx",
+    "components/GuestRow.tsx",
+    "components/RoomPlan.tsx",
+    "components/PlanSidebar.tsx",
+    "components/PlanScreen.tsx",
+    "components/GuestsScreen.tsx",
+    "app/page.tsx",
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/theme.ts"
+  ],
+  "rejected": []
+}
