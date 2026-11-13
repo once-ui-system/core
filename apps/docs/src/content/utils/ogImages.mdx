@@ -1,0 +1,150 @@
+---
+title: "OG images"
+summary: "One route draws a link preview for every page in your product's skin: the page's title, set large, and your mascot looking at it."
+updatedAt: "2026-11-12"
+docs: "once-ui/utils/ogImages.mdx"
+github: "next/ogImage.tsx"
+navLabel: "OG images"
+navIcon: "code"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+When someone shares a link, the network shows the page's Open Graph image. `createOgImageRoute` draws that image for every page: 1200 × 630, dark, with the page's title in your heading font, an eyebrow above it, your domain below, and your mascot beside it, looking at the title. You describe your product once, in a skin, and every page gets its own card.
+
+![A card for a journal post on Fjell, a made-up outdoor brand: the eyebrow "Journal", the title "Packing for a winter trail" with "winter" in an italic serif, and a blue mascot in a hard hat.](/images/docs/og-images/page.jpg)
+
+## Route file
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { createOgImageRoute } from "@once-ui-system/core/next";
+import { ogSkin } from "@/resources/og";
+
+export const { GET } = createOgImageRoute({ skin: ogSkin });`,
+      language: "tsx",
+      label: "app/api/og/generate/route.tsx"
+    },
+    {
+      code:
+`import { defineOgSkin } from "@once-ui-system/core/next";
+
+export const ogSkin = defineOgSkin({
+  name: "Fjell",
+  domain: "fjell.example",
+  brand: "blue",
+  accent: "orange",
+  mascot: { color: "brand", eyes: "round", mouth: "smile", cheeks: true, surface: "glossy" },
+  fonts: [
+    { name: "Geist", weight: 700, path: "public/fonts/og/Geist-Bold.ttf" },
+    { name: "Geist Mono", weight: 500, path: "public/fonts/og/GeistMono-Medium.ttf" },
+    { name: "Instrument Serif", weight: 400, style: "italic", google: "Instrument Serif" },
+  ],
+  headingFont: "Geist",
+  monoFont: "Geist Mono",
+  emphasisFont: "Instrument Serif",
+});`,
+      language: "tsx",
+      label: "resources/og.ts"
+    }
+  ]}
+/>
+
+`Meta.generate` already points a page without its own image at `/api/og/generate?title=…`, so once the route exists, every page has a card. The route needs the **Node.js runtime** (the default) when the skin reads fonts from disk.
+
+## What a card says
+
+The route reads the query string:
+
+| Parameter | What it does |
+|---|---|
+| `title` | The headline. Words in `*asterisks*` are drawn in the brand color, in `emphasisFont` when the skin has one. |
+| `eyebrow` | A short label above the title: the section, a date, a place. `section` works too. |
+| `description` | One line under the title. |
+| `mood` | The mascot's expression: `happy`, `surprised`, `wink` and the other `Mascot` moods. |
+| `layout` | `page` (the default), `hero` for a launch or a home page, or `photo`. |
+| `image` | A photo for the card, from your own origin or a host in `imageHosts`. A card with an image uses the `photo` layout. |
+| `v` | Ignored by the route. Change it to give a card a new URL, since networks cache images by URL. |
+
+Build the URL with `ogImageUrl`:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { ogImageUrl } from "@once-ui-system/core/next";
+
+export async function generateMetadata() {
+  return Meta.generate({
+    title: "Packing for a winter trail",
+    description: "What goes in a 30-litre bag",
+    baseURL,
+    path: "/journal/winter-trail",
+    image: ogImageUrl("/api/og/generate", {
+      title: "Packing for a *winter* trail",
+      eyebrow: "Journal",
+      description: "What goes in a 30-litre bag",
+    }),
+  });
+}`,
+      language: "tsx",
+      label: "app/journal/winter-trail/page.tsx"
+    }
+  ]}
+/>
+
+![The hero layout: the mascot above a centered title, "Once UI 3.0", for a release.](/images/docs/og-images/hero.jpg)
+
+![The photo layout: a tilted photo on the right, the mascot peeking from its corner, and the title "Three nights at Gjendebu".](/images/docs/og-images/photo.jpg)
+
+## Skin
+
+| Option | What it does |
+|---|---|
+| `name` | The product's name, drawn as the wordmark and, faintly, behind the mascot. |
+| `domain` | Shown at the bottom of every card. |
+| `brand`, `accent` | A scheme name (`emerald`, `violet`, …) or a CSS color. The brand lights the mascot and colors the eyebrow and emphasis; the accent adds a smaller glow. |
+| `background` | The ground. Near-black by default. |
+| `mark` | A small symbol before the name: SVG markup, or an image path or URL. |
+| `logo` | A full logo in place of the wordmark. |
+| `mascot` | A look, with the same options as `Mascot` and an `accessory` as SVG markup or JSX, or `{ svg }` for your own drawing in a 200 × 200 box. `false` leaves it out. |
+| `fonts` | TTF, OTF or WOFF files (not WOFF2), each from `data`, a `path` read from disk, or a `google` family fetched once per server. If a font can't be loaded, the card still draws in the fallback face. |
+| `headingFont`, `bodyFont`, `monoFont`, `emphasisFont` | Which family from `fonts` each role uses. |
+| `mood` | The mascot's expression when a card doesn't ask for one. |
+| `imageHosts` | Hosts `image=` may load from, besides your own origin. |
+
+Fonts from disk are the safest choice: a card renders on the first crawl of a page, and a Google Fonts outage would otherwise draw it in the fallback face.
+
+## Caching
+
+Cards are served with `Cache-Control: public, max-age=31536000, immutable`, so a CDN draws each one once. When you change the skin, change `v` in your URLs.
+
+## mascotSvg
+
+The card draws your mascot with `mascotSvg`, which returns the mascot as a standalone SVG string: the same look options as `Mascot`, one still expression, every color written out. Use it anywhere React can't animate, such as emails and favicons.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { mascotSvg } from "@once-ui-system/core";
+
+const svg = mascotSvg({ color: "#10b981", eyes: "round", mouth: "smile", mood: "happy" });`,
+      language: "tsx",
+      label: "Example"
+    }
+  ]}
+/>
+
+Scheme names such as `brand` need a color through `schemes`, since there is no CSS to read them from. Kawaii moods draw their base mood, with blush where they have it.

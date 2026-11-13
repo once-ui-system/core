@@ -38,6 +38,20 @@ entry below that had landed by then:
 
 ### Added
 
+- **Open Graph images: `createOgImageRoute` and `defineOgSkin`** in `@once-ui-system/core/next`.
+  One route draws a 1200 × 630 card for every page in the product's skin: the title set
+  large in the heading font (`*words*` in the brand color, optionally in an italic
+  `emphasisFont`), an eyebrow, a description, the domain and the product's mascot looking
+  at the title. Layouts `page`, `hero` and `photo`; `image=` only loads from the app's own
+  origin or the skin's `imageHosts`. Fonts come from disk, data or a Google family fetched
+  once, and a font that fails to load never fails the card. `Meta.generate` already points
+  pages at `/api/og/generate`, so a site gets per-page cards by adding the route.
+  `ogImageUrl`, `readOgCard`, `renderOgCard` and `OG_SCHEMES` (the color schemes as hex)
+  come with it. Docs: Utils › OG images.
+- **`mascotSvg` and `mascotDataUrl`**: the mascot as a still SVG string, with the same look
+  options as `Mascot` and a mood, every color written out, for places without React or
+  CSS (Open Graph images, emails, favicons). `Mascot` and `mascotSvg` share their geometry
+  from `mascotShape.ts`.
 - **`Select alignSelected`** (2.x main's `position="aligned"`, renamed: `position` is the CSS position in 3.0): the list opens with the selected
   option sitting on the field and the others above and below it, as macOS draws a
   pop-up button. Near a viewport edge, and on a searchable or multiple Select, it opens
