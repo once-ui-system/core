@@ -75,8 +75,8 @@
   ],
   "BorderStyle": [
    "rounded",
-   "playful",
    "conservative",
+   "playful",
    "sharp"
   ],
   "CSSUnit": [
@@ -149,9 +149,9 @@
   ],
   "CursorPresetValue": [
    "rounded",
+   "system",
    "soft",
-   "dot",
-   "system"
+   "dot"
   ],
   "RadiusNest": [
    "4",

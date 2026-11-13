@@ -228,13 +228,18 @@
   "@once-ui-system/core/config": {
    "use": "defineConfig and the OnceUIConfig types with no component code behind them, for once-ui.config (the root exports them too)",
    "exports": [
-    "defineConfig"
+    "defineConfig",
+    "themePreset",
+    "themePresets"
    ],
    "types": [
     "OnceUIConfig",
     "OnceUIConfigSections",
     "OnceUIFont",
-    "OnceUIFonts"
+    "OnceUIFonts",
+    "PresetFont",
+    "ThemePreset",
+    "ThemePresetName"
    ]
   },
   "@once-ui-system/fx": {

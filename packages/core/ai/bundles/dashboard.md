@@ -598,7 +598,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 type BaseColor = Exclude<ColorValue, string & {}> | "page" | "surface" | "overlay" | "transparent"
 type BlendMode = "color" | "screen" | "normal" | "multiply" | "overlay" | "darken" | "lighten" | "difference" | "exclusion" | "hue" | "saturation" | "luminosity" | `color-${"dodge" | "burn"}` | "hard-light" | "soft-light" | "plus-lighter"
 type BlurSize = "s" | "xl" | "l" | "m" | "xs"
-type BorderStyle = "rounded" | "playful" | "conservative" | "sharp"
+type BorderStyle = "rounded" | "conservative" | "playful" | "sharp"
 type BreakpointKey = "s" | "xl" | "l" | "m" | "xs"
 type ButtonOption = LeafProps & { value: string; description?: ReactNode; label?: ReactNode; children?: ReactNode; horizontal?: "start" | "center" | "end" | "between"; radius?: RadiusSize; disabled?: boolean; href?: string; size?: TShirtSizes; corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"; variant?: "ghost" | "outline" | "subtle"; tone?: Tone; weight?: "default" | "strong"; truncate?: boolean; rounded?: boolean; prefixIcon?: IconName; suffixIcon?: IconName }
 // type ButtonVariant is one of these strings: link ghost subtle primary secondary tertiary
@@ -609,7 +609,7 @@ type ColorValue = Exclude<BaseColor, "page" | "surface" | "overlay" | "transpare
 type ColorWeight = "strong" | "medium" | "weak"
 type Colors = Exclude<ColorValue, string & {}>
 type ColumnHide = Partial<Record<BreakpointKey, boolean>>
-type CursorPresetValue = "rounded" | "soft" | "dot" | "system"
+type CursorPresetValue = "rounded" | "system" | "soft" | "dot"
 // type CurveType is one of these strings: step linear basis basisClosed basisOpen bumpX bumpY bump linearClosed natural monotoneX monotoneY monotone stepBefore stepAfter
 type DataPoint = { [key: string]?: string | number | Date | undefined; label?: string }
 type DataStyle = "categorical" | "divergent" | "sequential"
@@ -645,7 +645,7 @@ type SolidType = "color" | "contrast" | "inverse"
 // type SpacingToken is one of these strings: s xl l m xs 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
 type Speed = "number" | "medium" | "slow" | "fast"
 // type StaticSpacingToken is one of these strings: 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
-// type StatusIndicatorScheme is one of these strings: blue indigo violet magenta pink red orange yellow moss green emerald aqua cyan sand gray slate rose mint dusk
+// type StatusIndicatorScheme is one of these strings: slate sand gray rose mint dusk cyan blue indigo violet magenta pink red orange yellow moss green emerald aqua
 type SurfaceStyle = "filled" | "translucent"
 type TShirtSizes = "s" | "xl" | "l" | "m" | "xs"
 type TableAction = { icon: string; label?: string; tooltip?: string; variant?: "primary" | "secondary" | "tertiary" | "ghost"; tone?: Tone; onClick: (row: unknown, index: number) => void; disabled?: (row: unknown, index: number) => boolean }

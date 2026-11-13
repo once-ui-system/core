@@ -486,8 +486,8 @@
   ],
   "BorderStyle": [
    "rounded",
-   "playful",
    "conservative",
+   "playful",
    "sharp"
   ],
   "BreadcrumbItem": {
@@ -784,9 +784,9 @@
   ],
   "CursorPresetValue": [
    "rounded",
+   "system",
    "soft",
-   "dot",
-   "system"
+   "dot"
   ],
   "CurveType": [
    "step",
@@ -1548,9 +1548,9 @@
    "minimal"
   ],
   "NeutralColor": [
+   "slate",
    "sand",
    "gray",
-   "slate",
    "rose",
    "mint",
    "dusk"
@@ -1946,6 +1946,7 @@
    "1100"
   ],
   "Schemes": [
+   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -1957,8 +1958,7 @@
    "moss",
    "green",
    "emerald",
-   "aqua",
-   "cyan"
+   "aqua"
   ],
   "SchemeScale": "Partial< Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string> >",
   "SchemeScaleByTheme": {
@@ -2281,6 +2281,13 @@
    "128"
   ],
   "StatusIndicatorScheme": [
+   "slate",
+   "sand",
+   "gray",
+   "rose",
+   "mint",
+   "dusk",
+   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -2292,14 +2299,7 @@
    "moss",
    "green",
    "emerald",
-   "aqua",
-   "cyan",
-   "sand",
-   "gray",
-   "slate",
-   "rose",
-   "mint",
-   "dusk"
+   "aqua"
   ],
   "StreamingOptions": {
    "initialData": "!T[]",
@@ -2762,6 +2762,12 @@
   "ThemeInitConfig": [
    "OnceUIStyleConfig",
    "ThemeInitAttributeConfig"
+  ],
+  "ThemePresetName": [
+   "ops",
+   "care",
+   "creative",
+   "commerce"
   ],
   "ThemeProviderState": {
    "theme": "!Theme",
@@ -7548,6 +7554,20 @@
    "kind": "function",
    "signature": "<T extends OnceUIConfig>(config: T & CheckedConfig<T>) => T",
    "doc": "Type an app's `once-ui.config`, whose `style` keys are ThemeProvider's props (an exact brand colour is `brand: \"custom\", brandSeed: \"#0F766E\"`)."
+  },
+  "themePreset": {
+   "group": "config",
+   "importFrom": "@once-ui-system/core/config",
+   "kind": "function",
+   "signature": "<N extends ThemePresetName>(name: N, overrides?: { style?: OnceUIStyleConfig; dataStyle?: OnceUIDataStyleConfig }) => { style: OnceUIStyleConfig; dataStyle: OnceUIDataStyleConfig; fonts: (typeof themePresets)[N][\"fonts\"]; }",
+   "doc": "A preset's `style`, `dataStyle` and `fonts`, with the app's own changes on top."
+  },
+  "themePresets": {
+   "group": "config",
+   "importFrom": "@once-ui-system/core/config",
+   "kind": "value",
+   "type": "{ readonly ops: { readonly description: \"Operations, incident, dispatch and map tools: dark first, compact, a quiet cyan brand on slate so status colours carry the meaning.\"; readonly style: { ...; }; readonly dataStyle: { ...; }; readonly fonts: { ...; }; }; readonly care: { ...; }; readonly creative: { ...; }; rea...",
+   "doc": "Finished looks for the kinds of app Once UI is built for."
   },
   "useStylePanel": {
    "group": "blocks",
