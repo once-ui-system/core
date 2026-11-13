@@ -21,6 +21,7 @@ import {
 } from "./kawaii.js";
 import styles from "./Mascot.module.scss";
 import { MascotCube } from "./MascotCube.js";
+import { type MascotIdentityLayer, mascotIdentity } from "./mascotIdentities.js";
 import { bodyShape, clamp, DEFAULT_LOOK, EYE_BOX, mascotLook, TILE } from "./mascotShape.js";
 import { readSeedWords } from "./mascotWords.js";
 
@@ -102,6 +103,12 @@ export interface MascotProps extends MascotLook, Omit<LeafPropsOf<"div">, "child
    * the mascot ("happy-red-fox", "sleepyPandaDJ"), and the rest comes from its hash. See `mascotLook`.
    */
   seed?: string | number;
+  /**
+   * A seed that names a canonical mascot ("once-ui", "quasar", a Dopler product) draws that
+   * character instead of a generated one. On by default; pass `false` for seeds people type
+   * (usernames, agent names) unless that person owns the identity. See `mascotIdentity`.
+   */
+  canonical?: boolean;
   /**
    * Something it wears, moving with the body. A built-in one (`antenna`, `bow`, `beanie`,
    * `headphones`, `sprout`, `helmet`, `crown`, `catEars`, `partyHat`), several at once as a
@@ -331,6 +338,41 @@ export function useMascotPoke(
   return { pokes, poked, onPointerDown: handler };
 }
 
+/** A canonical mascot's layers as SVG, sorted behind the body, on it and in front of the face. */
+function identityLayers(layers: readonly MascotIdentityLayer[], clip: string) {
+  const paint = (value?: string) =>
+    value === "body"
+      ? "var(--mascot-color)"
+      : value === "shade"
+        ? "color-mix(in srgb, var(--mascot-color) 68%, #000)"
+        : value;
+  const draw = (place: "back" | "on" | "front") => {
+    const shapes = layers.filter((layer) => (layer.place ?? "on") === place);
+    if (!shapes.length) return null;
+    const path = (layer: MascotIdentityLayer, i: number) => (
+      <path
+        key={i}
+        d={layer.d}
+        fill={paint(layer.fill) ?? "none"}
+        stroke={paint(layer.stroke)}
+        strokeWidth={layer.width}
+        strokeLinecap={layer.stroke ? (layer.cap ?? "round") : undefined}
+        strokeLinejoin={layer.stroke ? "round" : undefined}
+        opacity={layer.opacity}
+        transform={layer.transform}
+      />
+    );
+    const clipped = shapes.filter((layer) => layer.clip);
+    return (
+      <>
+        {clipped.length > 0 && <g clipPath={clip}>{clipped.map(path)}</g>}
+        {shapes.filter((layer) => !layer.clip).map(path)}
+      </>
+    );
+  };
+  return { back: draw("back"), on: draw("on"), front: draw("front") };
+}
+
 const FlatMascot = ({
   ref: forwardedRef,
   sides: _sides,
@@ -341,6 +383,7 @@ const FlatMascot = ({
   state = "idle",
   mood = "neutral",
   seed,
+  canonical = true,
   color,
   roundness,
   aspect,
@@ -401,19 +444,23 @@ const FlatMascot = ({
       personality,
     }).filter(([, value]) => value !== undefined),
   );
+  // A seed that names a canonical mascot draws that character; otherwise the generator runs.
+  const identity = canonical ? mascotIdentity(seed) : undefined;
+  const seeded = seed !== undefined ? mascotLook(seed, { canonical }) : {};
   const look = {
     ...DEFAULT_LOOK,
-    ...(seed !== undefined ? mascotLook(seed) : {}),
+    ...seeded,
     ...passed,
   } as typeof DEFAULT_LOOK;
   // A seed with a dark colour brings light eyes, unless you pass the colour or the eyes yourself.
-  const eyeInk =
-    eyeColor ?? (color === undefined && seed !== undefined ? mascotLook(seed).eyeColor : undefined);
+  const eyeInk = eyeColor ?? (color === undefined ? seeded.eyeColor : undefined);
 
   const shape = bodyShape(look.roundness, look.aspect);
-  const body = bodyPath ? { d: bodyPath, top: 26, bottom: 182, halfWidth: 82 } : shape;
+  const outline = bodyPath ?? seeded.bodyPath;
+  const body = outline ? { d: outline, top: 26, bottom: 182, halfWidth: 82 } : shape;
   // Without an `accessory` prop, the seed's words can put some on ("royal" a crown, "dj" headphones).
-  const wearing = accessory ?? (seed !== undefined ? readSeedWords(seed).accessory : undefined);
+  const wearing =
+    accessory ?? (seed !== undefined && !identity ? readSeedWords(seed).accessory : undefined);
   const builtIn = (Array.isArray(wearing) ? wearing : [wearing]).filter(isMascotAccessory);
   const worn = builtIn.length
     ? accessoryLayers(
@@ -421,11 +468,13 @@ const FlatMascot = ({
         {
           a: body.halfWidth,
           b: (body.bottom - body.top) / 2,
-          n: bodyPath ? 3 : 2 + (1 - clamp(look.roundness, 0, 1)) * 4,
+          n: outline ? 3 : 2 + (1 - clamp(look.roundness, 0, 1)) * 4,
         },
         accessoryColor,
       )
-    : { back: null, on: wearing, front: null };
+    : identity && accessory === undefined
+      ? identityLayers(identity.layers, `url(#${id}-clip)`)
+      : { back: null, on: wearing, front: null };
   const spread = Math.min(29 * look.eyeSpacing, body.halfWidth - 22);
   const eyeY = 96 + clamp(look.eyeHeight, -1, 1) * 30;
   const tile = look.eyes === "tile";

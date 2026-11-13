@@ -142,6 +142,7 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
     state = "idle",
     mood = "neutral",
     seed,
+    canonical = true,
     color,
     roundness,
     aspect,
@@ -191,13 +192,15 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
       face,
     }).filter(([, value]) => value !== undefined),
   );
+  // The cube has its own body, so a canonical mascot lends it only its colors and face.
+  const { bodyPath: _seededPath, ...seeded } =
+    seed !== undefined ? mascotLook(seed, { canonical }) : {};
   const look = {
     ...CUBE_LOOK,
-    ...(seed !== undefined ? mascotLook(seed) : {}),
+    ...seeded,
     ...passed,
   } as typeof CUBE_LOOK;
-  const eyeInk =
-    eyeColor ?? (color === undefined && seed !== undefined ? mascotLook(seed).eyeColor : undefined);
+  const eyeInk = eyeColor ?? (color === undefined ? seeded.eyeColor : undefined);
   const root = useRef<HTMLDivElement | null>(null);
   const canvas = useRef<HTMLCanvasElement | null>(null);
   const [failed, setFailed] = useState(false);

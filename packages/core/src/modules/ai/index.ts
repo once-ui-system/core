@@ -11,6 +11,13 @@ export {
 } from "./design.js";
 export type { MascotEffect, MascotLook, MascotMood, MascotProps, MascotState } from "./Mascot.js";
 export { Mascot, mascotLook } from "./Mascot.js";
+export type { MascotIdentity, MascotIdentityLayer } from "./mascotIdentities.js";
+export {
+  MASCOT_IDENTITIES,
+  MASCOT_IDENTITY_KEYS,
+  mascotIdentity,
+  mascotIdentityKey,
+} from "./mascotIdentities.js";
 export type { MascotSvgOptions } from "./mascotSvg.js";
 export { mascotDataUrl, mascotSvg } from "./mascotSvg.js";
 export type { MascotSeedReading } from "./mascotWords.js";
