@@ -1,0 +1,20 @@
+{
+  "files": [
+    "lib/data.ts",
+    "lib/saved-store.ts",
+    "components/haven/home-placeholder.tsx",
+    "components/haven/save-button.tsx",
+    "components/haven/site-header.tsx",
+    "components/haven/home-card.tsx",
+    "components/haven/homes-map.tsx",
+    "components/haven/homes-map-loader.tsx",
+    "components/haven/detail-map.tsx",
+    "components/haven/detail-map-loader.tsx",
+    "components/haven/search-view.tsx",
+    "app/page.tsx",
+    "components/haven/contact-form.tsx",
+    "components/haven/energy-rating.tsx",
+    "app/homes/[id]/page.tsx"
+  ],
+  "rejected": []
+}

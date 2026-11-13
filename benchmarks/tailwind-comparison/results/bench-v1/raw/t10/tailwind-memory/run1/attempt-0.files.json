@@ -1,0 +1,19 @@
+{
+  "files": [
+    "lib/data.ts",
+    "components/Placeholder.tsx",
+    "components/Header.tsx",
+    "components/HomeMap.tsx",
+    "components/HomeCard.tsx",
+    "components/FilterBar.tsx",
+    "components/SearchView.tsx",
+    "app/page.tsx",
+    "components/DetailMap.tsx",
+    "components/DetailMapLoader.tsx",
+    "components/ContactForm.tsx",
+    "components/EnergyRating.tsx",
+    "app/homes/[id]/page.tsx",
+    "app/homes/[id]/not-found.tsx"
+  ],
+  "rejected": []
+}

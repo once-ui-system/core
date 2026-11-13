@@ -1,0 +1,19 @@
+{
+  "files": [
+    "app/globals.css",
+    "lib/data.ts",
+    "components/app-sidebar.tsx",
+    "components/app-shell.tsx",
+    "components/page-header.tsx",
+    "components/settings-form.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/projects/layout.tsx",
+    "app/projects/page.tsx",
+    "app/settings/layout.tsx",
+    "app/settings/page.tsx",
+    "app/reports/layout.tsx",
+    "app/reports/page.tsx"
+  ],
+  "rejected": []
+}

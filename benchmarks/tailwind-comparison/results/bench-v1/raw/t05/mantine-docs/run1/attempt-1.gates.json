@@ -1,0 +1,206 @@
+{
+  "arm": "T",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 4005
+    },
+    "build": {
+      "ok": true,
+      "ms": 10988
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 688,
+          "height": 958,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 688,
+          "height": 1024,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 710,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 688,
+              "height": 958,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 688,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 710,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 20,
+            "serious_or_critical": 1,
+            "ids": [
+              "color-contrast:serious:20"
+            ]
+          }
+        },
+        "/members/m-02": {
+          "viewports": {
+            "phone": {
+              "text": 639,
+              "height": 1112,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 639,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 639,
+              "height": 933,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 16,
+            "serious_or_critical": 1,
+            "ids": [
+              "color-contrast:serious:16"
+            ]
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 1,
+        "nodes": 20,
+        "serious_or_critical": 1,
+        "ids": [
+          "color-contrast:serious:20"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "click > click",
+          "found": true,
+          "steps": 2,
+          "errors": []
+        },
+        "desktop": {
+          "action": "click > click",
+          "found": true,
+          "steps": 2,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1850,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1786,
+          "settled": true
+        },
+        "/members/m-02 phone": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/members/m-02 tablet": {
+          "ms": 1766,
+          "settled": true
+        },
+        "/members/m-02 desktop": {
+          "ms": 1762,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 222,
+          "distinct_fontSize": 5,
+          "distinct_color": 7,
+          "distinct_background": 6,
+          "distinct_radius": 3,
+          "distinct_shadow": 0,
+          "distinct_spacing": 9,
+          "spacing_on_4px_grid": 0.858
+        },
+        "/members/m-02": {
+          "elements": 85,
+          "distinct_fontSize": 7,
+          "distinct_color": 3,
+          "distinct_background": 3,
+          "distinct_radius": 3,
+          "distinct_shadow": 0,
+          "distinct_spacing": 9,
+          "spacing_on_4px_grid": 0.719
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 255.3,
+          "css_kb": 41.8,
+          "fcp_ms": 280,
+          "cls": 0,
+          "long_task_ms": 12
+        },
+        "/members/m-02": {
+          "js_kb": 255.3,
+          "css_kb": 41.8,
+          "fcp_ms": 272,
+          "cls": 0,
+          "long_task_ms": 1
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/member-avatar.tsx",
+    "components/back-link.tsx",
+    "components/invite-modal.tsx",
+    "components/team-view.tsx",
+    "app/page.tsx",
+    "app/members/[id]/page.tsx"
+  ]
+}

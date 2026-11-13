@@ -1,0 +1,17 @@
+/* System font stacks, no network fetch. Headings in monospace for the control-room feel. */
+:root {
+  --font-heading: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-body: ui-sans-serif, system-ui, sans-serif;
+  --font-label: ui-sans-serif, system-ui, sans-serif;
+  --font-code: ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
+/* Lumen: 4px corners on buttons, inputs, cards and menus. */
+:root,
+:root[data-border] {
+  --radius-xs: 4px;
+  --radius-s: 4px;
+  --radius-m: 4px;
+  --radius-l: 4px;
+  --radius-xl: 4px;
+}

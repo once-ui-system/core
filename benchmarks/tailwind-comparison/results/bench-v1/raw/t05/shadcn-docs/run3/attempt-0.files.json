@@ -1,0 +1,11 @@
+{
+  "files": [
+    "lib/data.ts",
+    "components/member-badges.tsx",
+    "components/invite-member-dialog.tsx",
+    "components/team-page.tsx",
+    "app/page.tsx",
+    "app/members/[id]/page.tsx"
+  ],
+  "rejected": []
+}

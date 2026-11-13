@@ -1,0 +1,37 @@
+{
+  "check": "1",
+  "at": "2026-11-10T23:57:06.833Z",
+  "ms": 41961,
+  "files": [
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/theme.ts",
+    "components/GuestChip.tsx",
+    "components/GuestsView.tsx",
+    "components/PlanView.tsx",
+    "components/Room.tsx",
+    "components/Shell.tsx",
+    "components/TablePanel.tsx",
+    "components/room.module.css",
+    "lib/data.ts",
+    "lib/drag.tsx",
+    "lib/plan.tsx",
+    "lib/rules.ts",
+    "lib/style.ts"
+  ],
+  "passed": false,
+  "gates_passed": true,
+  "failed_gate": "adherence",
+  "adherence": {
+    "system": 214,
+    "raw": 0,
+    "share": 1,
+    "colours": 40,
+    "cssLines": 55,
+    "ok": false,
+    "reasons": [
+      "40 raw colour literals (#hex, rgb(), hsl(), oklch()); at most 12. Use the stack's colour tokens or theme instead"
+    ]
+  }
+}

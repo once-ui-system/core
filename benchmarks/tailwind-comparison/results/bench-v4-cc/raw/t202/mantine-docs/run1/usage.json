@@ -1,0 +1,90 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 7,
+      "input_total": 545954,
+      "input_uncached": 14,
+      "cache_creation": 186364,
+      "cache_read": 359576,
+      "visible_output_tokens_o200k": 24837,
+      "visible_output_tokens_claudeLegacy": 26637,
+      "thinking_blocks": 4
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v4-cc/raw/t202/mantine-docs/run1/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "."
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/README.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/theme.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/package.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/tsconfig.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/pages"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "."
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/pages/guides-8x-to-9x.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v4-cc/raw/t202/mantine-docs/run1/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "T"
+}

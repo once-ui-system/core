@@ -1,0 +1,21 @@
+{
+  "arm": "K",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/layout.tsx(2,33): error TS2307: Cannot find module '@/components/ui/emotion-registry' or its corresponding type declarations.\napp/projects/page.tsx(40,35): error TS2322: Type '{ children: string; as: \"time\"; dateTime: string; whiteSpace: \"nowrap\"; }' is not assignable to type 'IntrinsicAttributes & TextProps & RefAttributes<HTMLParagraphElement>'.\n  Property 'dateTime' does not exist on type 'IntrinsicAttributes & TextProps & RefAttributes<HTMLParagraphElement>'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 11978
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/app-shell.tsx",
+    "components/page-heading.tsx",
+    "app/page.tsx",
+    "app/projects/page.tsx",
+    "components/settings-form.tsx",
+    "app/settings/page.tsx"
+  ]
+}

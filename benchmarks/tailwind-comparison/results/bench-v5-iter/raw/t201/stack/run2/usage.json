@@ -1,0 +1,321 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 25,
+      "input_total": 2823148,
+      "input_uncached": 58,
+      "cache_creation": 220023,
+      "cache_read": 2603067,
+      "visible_output_tokens_o200k": 17624,
+      "visible_output_tokens_claudeLegacy": 19222,
+      "thinking_blocks": 19
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/AGENTS.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project/src"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "docs"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/AGENTS.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/app/(product)/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/bundles/page.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/resources/once-ui.config.js"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/resources/seo.js"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/components/Providers.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/src/resources/custom.css"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/lib/data.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/lib/data.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/DeskProvider.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/AlertTags.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/DeskHeader.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/DeskHeader.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/DeskShell.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/BookDialog.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/Schedule.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/Schedule.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/Schedule.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/Schedule.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/Schedule.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/WeightChart.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/PatientRecord.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/app/patients/[id]/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/Schedule.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/Schedule.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/checks/3/screenshot-tablet.jpg"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/checks/3/screenshot-patients-p-104-phone.jpg"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/Schedule.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/Schedule.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/Schedule.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/Schedule.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/Schedule.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/Schedule.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/Schedule.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/Schedule.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/Schedule.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/Schedule.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/PatientRecord.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/PatientRecord.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/DeskHeader.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/checks/4/screenshot-desktop.jpg"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/DeskHeader.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/Schedule.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t201/stack/run2/files/src/components/desk/Schedule.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": false,
+    "violations": [
+      "disallowed tool: Bash",
+      "disallowed tool: Bash",
+      "disallowed tool: Bash",
+      "disallowed tool: Bash",
+      "disallowed tool: Bash"
+    ]
+  },
+  "arm": "S"
+}
