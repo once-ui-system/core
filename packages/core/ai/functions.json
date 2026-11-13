@@ -107,6 +107,18 @@
    "signature": "(options?: MascotSvgOptions) => string",
    "doc": "The mascot as a standalone SVG string: same look options as `Mascot`, one still expression."
   },
+  "MASCOT_SEED_WORDS": {
+   "group": "modules",
+   "kind": "value",
+   "type": "{ readonly colors: string[]; readonly surfaces: string[]; readonly animals: string[]; readonly moods: string[]; readonly objects: string[]; }",
+   "doc": "Every word a seed can use, for pickers and docs."
+  },
+  "readSeedWords": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(seed: string | number) => MascotSeedReading",
+   "doc": "Reads the words in a seed."
+  },
   "workingVerbs": {
    "group": "modules",
    "kind": "value",
@@ -1445,6 +1457,12 @@
    "actions": "Partial< Record< \"more\" | \"randomize\" | \"reset\" | \"copyJson\" | \"copyJsx\" | \"downloadSvg\" | \"downloadPng\", string > >",
    "preview": "string",
    "colorSwatch": "(name: string) => string"
+  },
+  "MascotSeedReading": {
+   "look": "!Partial<MascotLook>",
+   "accessory": "!MascotAccessory[]",
+   "matched": "!string[]",
+   "unmatched": "!string[]"
   },
   "MascotSides": [
    "classic",

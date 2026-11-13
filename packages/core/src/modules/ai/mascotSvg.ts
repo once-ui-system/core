@@ -134,7 +134,9 @@ export function mascotSvg(options: MascotSvgOptions = {}): string {
       : parseColor(scheme)
         ? scheme
         : FALLBACK;
-  const ink = eyeColor ?? mixColors(color, "#0c0b12", 0.12);
+  const seededEyes =
+    passed.color === undefined && seed !== undefined ? mascotLook(seed).eyeColor : undefined;
+  const ink = eyeColor ?? seededEyes ?? mixColors(color, "#0c0b12", 0.12);
   const kawaii = KAWAII_BASE[mood];
   const base = kawaii?.base ?? mood;
   const pose = POSES[base] ?? POSES.neutral;
