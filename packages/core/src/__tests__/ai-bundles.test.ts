@@ -104,7 +104,9 @@ describe("ai task bundles as one Markdown read", () => {
       expect(md).toContain("## Layout");
       if (task.example) expect(md).toContain(`## Gold example (\`${task.example}\`)`);
       expect(md).not.toMatch(/see spec\.json/);
-      expect(md.length).toBeLessThan(50_000);
+      // 50,000 until the 3.1 components moved into 3.0; 60,000 characters is
+      // about 15,000 tokens, still well inside one file read for an agent.
+      expect(md.length).toBeLessThan(60_000);
     },
   );
 
