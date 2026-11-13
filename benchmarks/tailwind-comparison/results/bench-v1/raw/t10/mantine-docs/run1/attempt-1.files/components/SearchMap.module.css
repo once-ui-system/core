@@ -1,0 +1,107 @@
+.wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  background: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-6));
+}
+
+.marker {
+  display: block;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1.5px solid #adb5bd;
+  background: #fff;
+  color: #1b1b1f;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  transition:
+    transform 120ms ease,
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+.marker:hover {
+  background: var(--mantine-color-teal-1);
+}
+
+.marker:focus-visible {
+  outline: 3px solid var(--mantine-color-blue-6);
+  outline-offset: 2px;
+}
+
+.marker[data-active] {
+  background: var(--mantine-color-teal-7);
+  border-color: var(--mantine-color-teal-9);
+  color: #fff;
+  transform: scale(1.18);
+}
+
+.marker[data-saved]::before {
+  content: "♥ ";
+  color: var(--mantine-color-red-6);
+}
+
+.marker[data-active][data-saved]::before {
+  color: #fff;
+}
+
+.popupCard {
+  width: 220px;
+  color: #1b1b1f;
+}
+
+.popupPhoto {
+  position: relative;
+  height: 96px;
+  overflow: hidden;
+}
+
+.popupBody {
+  padding: 10px 12px 12px;
+}
+
+.popupLink {
+  display: inline-block;
+  margin-top: 6px;
+  color: var(--mantine-color-teal-8);
+  font-weight: 600;
+  font-size: 13px;
+  text-decoration: underline;
+}
+
+.empty {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #fff;
+  color: #1b1b1f;
+  font-size: 13px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
+
+.wrap :global(.maplibregl-popup-content) {
+  padding: 0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.wrap :global(.maplibregl-popup-close-button) {
+  width: 28px;
+  height: 28px;
+  font-size: 20px;
+  line-height: 1;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 0 0 0 8px;
+  color: #1b1b1f;
+}

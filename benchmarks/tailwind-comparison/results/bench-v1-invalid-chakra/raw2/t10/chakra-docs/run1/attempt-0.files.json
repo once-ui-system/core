@@ -1,0 +1,14 @@
+{
+  "files": [
+    "components/search-view.tsx",
+    "app/page.tsx",
+    "components/detail-map.tsx",
+    "components/detail-map-lazy.tsx",
+    "components/contact-form.tsx",
+    "components/gallery.tsx",
+    "components/energy-rating.tsx",
+    "app/homes/[id]/page.tsx",
+    "app/homes/[id]/not-found.tsx"
+  ],
+  "rejected": []
+}

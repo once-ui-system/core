@@ -1,0 +1,285 @@
+{
+  "arm": "C",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 12497
+    },
+    "build": {
+      "ok": true,
+      "ms": 35056
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 440,
+          "height": 812,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 556,
+          "height": 1024,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 556,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 440,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 556,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 556,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 2,
+            "serious_or_critical": 0,
+            "ids": [
+              "region:moderate:2"
+            ]
+          }
+        },
+        "/projects": {
+          "viewports": {
+            "phone": {
+              "text": 390,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 506,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 506,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 2,
+            "serious_or_critical": 0,
+            "ids": [
+              "region:moderate:2"
+            ]
+          }
+        },
+        "/settings": {
+          "viewports": {
+            "phone": {
+              "text": 420,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 536,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 536,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 2,
+            "serious_or_critical": 0,
+            "ids": [
+              "region:moderate:2"
+            ]
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 1,
+        "nodes": 2,
+        "serious_or_critical": 0,
+        "ids": [
+          "region:moderate:2"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "click > click",
+          "found": true,
+          "steps": 1,
+          "errors": [
+            "interaction failed: locator.click: Timeout 5000ms exceeded."
+          ]
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1774,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1757,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/projects phone": {
+          "ms": 1769,
+          "settled": true
+        },
+        "/projects tablet": {
+          "ms": 1781,
+          "settled": true
+        },
+        "/projects desktop": {
+          "ms": 1764,
+          "settled": true
+        },
+        "/settings phone": {
+          "ms": 13081,
+          "settled": false
+        },
+        "/settings tablet": {
+          "ms": 72865,
+          "settled": false
+        },
+        "/settings desktop": {
+          "ms": 14689,
+          "settled": false
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 135,
+          "distinct_fontSize": 7,
+          "distinct_color": 5,
+          "distinct_background": 5,
+          "distinct_radius": 1,
+          "distinct_shadow": 0,
+          "distinct_spacing": 7,
+          "spacing_on_4px_grid": 0.792
+        },
+        "/projects": {
+          "elements": 130,
+          "distinct_fontSize": 6,
+          "distinct_color": 5,
+          "distinct_background": 5,
+          "distinct_radius": 1,
+          "distinct_shadow": 0,
+          "distinct_spacing": 6,
+          "spacing_on_4px_grid": 0.699
+        },
+        "/settings": {
+          "elements": 114,
+          "distinct_fontSize": 7,
+          "distinct_color": 4,
+          "distinct_background": 6,
+          "distinct_radius": 2,
+          "distinct_shadow": 2,
+          "distinct_spacing": 7,
+          "spacing_on_4px_grid": 0.836
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 206.7,
+          "css_kb": 43.1,
+          "fcp_ms": 276,
+          "cls": 0,
+          "long_task_ms": 0
+        },
+        "/projects": {
+          "js_kb": 206.7,
+          "css_kb": 43.1,
+          "fcp_ms": 220,
+          "cls": 0,
+          "long_task_ms": 0
+        },
+        "/settings": {
+          "js_kb": 206.7,
+          "css_kb": 43.1,
+          "fcp_ms": 360,
+          "cls": 0,
+          "long_task_ms": 0
+        }
+      },
+      "brand": {
+        "filled_buttons": 1,
+        "brand_text_elements": 1,
+        "brand_fill_elements": 5,
+        "brand_filled_buttons": 1,
+        "button_radius_matches": 1,
+        "button_radius": 2,
+        "heading_font": "Georgia, \"Times New Roman\", serif",
+        "heading_serif": true,
+        "body_font": "ui-sans-serif, system-ui, sans-serif",
+        "page_background": "lab(100 0 0)",
+        "dark_first_paint": false
+      }
+    }
+  },
+  "files": [
+    "app/globals.css",
+    "lib/data.ts",
+    "lib/nav.ts",
+    "components/app-sidebar.tsx",
+    "components/app-header.tsx",
+    "components/app-shell.tsx",
+    "components/page-header.tsx",
+    "components/status-badge.tsx",
+    "components/projects-table.tsx",
+    "components/settings-form.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/projects/page.tsx",
+    "app/settings/page.tsx",
+    "app/reports/page.tsx"
+  ]
+}

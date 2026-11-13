@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: ui-serif, "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --color-paper: #f7f5f0;
+  --color-ink: #1c2321;
+  --color-brand: #0f4c4a;
+  --color-brand-strong: #0a3837;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  background: var(--color-paper);
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.floor-grid {
+  background-image:
+    linear-gradient(to right, rgb(28 35 33 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(28 35 33 / 0.05) 1px, transparent 1px);
+  background-size: calc(100cqw / 24) calc(100cqw / 24);
+}

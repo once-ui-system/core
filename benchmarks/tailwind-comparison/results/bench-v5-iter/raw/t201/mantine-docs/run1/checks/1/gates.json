@@ -1,0 +1,24 @@
+{
+  "arm": "T",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/PatientRecord.tsx(29,3): error TS2724: '\"@tabler/icons-react\"' has no exported member named 'IconSyringe'. Did you mean 'IconRings'?\ncomponents/PatientRecord.tsx(147,17): error TS2322: Type '{ children: Element[]; gutter: string; style: { flex: string; maxWidth: number; }; }' is not assignable to type 'IntrinsicAttributes & GridProps & RefAttributes<HTMLDivElement> & { component?: any; renderRoot?: ((props: Record<string, any>) => ReactNode) | undefined; }'.\n  Property 'gutter' does not exist on type 'IntrinsicAttributes & GridProps & RefAttributes<HTMLDivElement> & { component?: any; renderRoot?: ((props: Record<string, any>) => ReactNode) | undefined; }'.\ncomponents/PatientRecord.tsx(168,15): error TS2322: Type '{ children: Element[]; gutter: string; }' is not assignable to type 'IntrinsicAttributes & GridProps & RefAttributes<HTMLDivElement> & { component?: any; renderRoot?: ((props: Record<string, any>) => ReactNode) | undefined; }'.\n  Property 'gutter' does not exist on type 'IntrinsicAttributes & GridProps & RefAttributes<HTMLDivElement> & { component?: any; renderRoot?: ((props: Record<string, any>) => ReactNode) | undefined; }'.\ncomponents/Schedule.tsx(133,13): error TS2322: Type '{ children: Element[]; gutter: string; }' is not assignable to type 'IntrinsicAttributes & GridProps & RefAttributes<HTMLDivElement> & { component?: any; renderRoot?: ((props: Record<string, any>) => ReactNode) | undefined; }'.\n  Property 'gutter' does not exist on type 'IntrinsicAttributes & GridProps & RefAttributes<HTMLDivElement> & { component?: any; renderRoot?: ((props: Record<string, any>) => ReactNode) | undefined; }'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 6070
+    }
+  },
+  "files": [
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "app/theme.ts",
+    "components/AlertBadges.tsx",
+    "components/AppFrame.tsx",
+    "components/BookingModal.tsx",
+    "components/PatientRecord.tsx",
+    "components/Schedule.tsx",
+    "lib/data.ts"
+  ]
+}

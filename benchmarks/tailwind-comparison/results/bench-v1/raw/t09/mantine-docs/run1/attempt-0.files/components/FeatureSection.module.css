@@ -1,0 +1,41 @@
+.section {
+  padding-block: clamp(2.5rem, 6vw, 5rem);
+  border-bottom: 1px solid var(--mantine-color-default-border);
+  scroll-margin-top: 4rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--mantine-spacing-xl);
+  align-items: center;
+
+  @mixin larger-than $mantine-breakpoint-md {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+
+    &[data-reversed] .copy {
+      order: 2;
+    }
+  }
+}
+
+.eyebrow {
+  margin-bottom: var(--mantine-spacing-xs);
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mantine-color-anchor);
+}
+
+.panel {
+  padding: var(--mantine-spacing-lg);
+  background-color: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-6));
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: var(--mantine-radius-default);
+}
+
+.check {
+  color: var(--mantine-color-anchor);
+}

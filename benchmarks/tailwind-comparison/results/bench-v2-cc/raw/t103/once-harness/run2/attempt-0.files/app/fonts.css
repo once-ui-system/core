@@ -1,0 +1,17 @@
+/* Lumen typography and shape, system stacks only (no network font fetch).
+   Once UI reads these variables for every Heading, Text, Button and field. */
+:root {
+  --font-heading: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-body: ui-sans-serif, system-ui, sans-serif;
+  --font-label: ui-sans-serif, system-ui, sans-serif;
+  --font-code: ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
+/* 4px corners on buttons, inputs, cards and menus, whatever border style is set. */
+:root[data-border] {
+  --radius-xs: 4px;
+  --radius-s: 4px;
+  --radius-m: 4px;
+  --radius-l: 4px;
+  --radius-xl: 4px;
+}

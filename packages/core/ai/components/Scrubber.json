@@ -22,7 +22,18 @@
   "onBlockContextMenu": "(event: React.MouseEvent, trackId: string, blockId: string) => void",
   "showTime": "boolean = true",
   "formatTime": "(time: number) => string = defaultFormatTime",
-  "step": "number"
+  "step": "number",
+  "ruler": "boolean = false",
+  "labelWidth": "string = 8rem",
+  "markers": "ScrubberMarker[] = []",
+  "snap": "boolean | number = false",
+  "zoom": "number",
+  "defaultZoom": "number = 1",
+  "onZoomChange": "(zoom: number) => void",
+  "maxZoom": "number = 40",
+  "range": "ScrubberRange | null = null",
+  "onRangeChange": "(range: ScrubberRange | null) => void",
+  "renderPreview": "(time: number) => React.ReactNode"
  },
  "tags": [
   "media",
@@ -157,7 +168,22 @@
    "end": "!number",
    "label": "React.ReactNode",
    "tone": "Tone",
-   "locked": "boolean"
+   "locked": "boolean",
+   "variant": "\"solid\" | \"gap\"",
+   "badge": "React.ReactNode",
+   "content": "React.ReactNode",
+   "highlight": "boolean",
+   "description": "string"
+  },
+  "ScrubberMarker": {
+   "id": "!string",
+   "time": "!number",
+   "label": "string",
+   "tone": "Tone"
+  },
+  "ScrubberRange": {
+   "start": "!number",
+   "end": "!number"
   },
   "ScrubberTrack": {
    "id": "!string",
@@ -166,7 +192,8 @@
    "tone": "Tone",
    "movable": "boolean",
    "resizable": "boolean",
-   "onAdd": "(time: number) => void"
+   "onAdd": "(time: number) => void",
+   "label": "React.ReactNode"
   },
   "SpacingToken": [
    "s",

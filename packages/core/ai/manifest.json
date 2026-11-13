@@ -1,6 +1,6 @@
 {
  "version": "3.0.0-beta.1",
- "generated": "2026-11-12",
+ "generated": "2026-11-13",
  "imports": {
   "@once-ui-system/core": {
    "use": "Components, hooks, providers, defineConfig and types: everything not listed below"
@@ -71,14 +71,20 @@
     "MediaAudioPlayer",
     "MediaVideoPlayer",
     "Scrubber",
+    "ScrubberFilmstrip",
+    "ScrubberWaveform",
     "MediaUpload"
    ],
    "types": [
     "MediaAudioPlayerProps",
     "MediaUploadProps",
     "ScrubberBlock",
+    "ScrubberFilmstripProps",
+    "ScrubberMarker",
     "ScrubberProps",
-    "ScrubberTrack"
+    "ScrubberRange",
+    "ScrubberTrack",
+    "ScrubberWaveformProps"
    ]
   },
   "@once-ui-system/core/emoji": {
@@ -123,18 +129,6 @@
     "MapStyleSource",
     "MapTone",
     "MapViewport"
-   ]
-  },
-  "@once-ui-system/core/richtext": {
-   "use": "RichTextEditor: bold, italic, headings, lists and links, with HTML in and out",
-   "peer": "@tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extensions",
-   "exports": [
-    "RichTextEditor"
-   ],
-   "types": [
-    "RichTextEditorLabels",
-    "RichTextEditorProps",
-    "RichTextTool"
    ]
   },
   "@once-ui-system/core/mdx": {

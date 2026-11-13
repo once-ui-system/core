@@ -10,8 +10,8 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 /**
- * ChartStatus fills the plot with a loading spinner, an empty message or an
- * error message, in that order of precedence, and renders nothing otherwise.
+ * ChartStatus fills the plot with a loading spinner, an error message or an
+ * empty message, in that order of precedence, and renders nothing otherwise.
  */
 describe("ChartStatus", () => {
   it("renders nothing when there is nothing to report", () => {
@@ -40,12 +40,13 @@ describe("ChartStatus", () => {
     expect(screen.getByText("Try again later")).toBeInTheDocument();
   });
 
-  it("puts loading before empty, and empty before error", () => {
+  it("puts loading before error, and error before empty", () => {
     const { rerender } = render(<ChartStatus loading empty error />, { wrapper });
     expect(screen.getByRole("status")).toBeInTheDocument();
     expect(screen.queryByText(/No data/)).toBeNull();
+    // A failed request usually leaves data empty too: the error is what to say.
     rerender(<ChartStatus empty error />);
-    expect(screen.getByText(/No data/)).toBeInTheDocument();
-    expect(screen.queryByText(/error occurred/)).toBeNull();
+    expect(screen.getByText(/error occurred/)).toBeInTheDocument();
+    expect(screen.queryByText(/No data/)).toBeNull();
   });
 });

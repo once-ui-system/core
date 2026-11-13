@@ -1,0 +1,26 @@
+{
+  "arm": "T",
+  "passed": false,
+  "failed_gate": "build",
+  "failure_output": "Error: Failed to collect configuration for /_not-found\n    at ignore-listed frames {\n  [cause]: TypeError: i.Card.extend is not a function\n      at module evaluation (.next/server/chunks/ssr/benchmarks_tailwind-comparison_work_gate_mantine-docs_1ke_gj2._.js:1:9346)\n      at instantiateModule (.next/server/chunks/ssr/[turbopack]_runtime.js:853:9)\n      at getOrInstantiateModuleFromParent (.next/server/chunks/ssr/[turbopack]_runtime.js:877:12)\n      at Context.esmImport [as i] (.next/server/chunks/ssr/[turbopack]_runtime.js:281:20)\n      at module evaluation (.next/server/chunks/ssr/benchmarks_tailwind-comparison_work_gate_mantine-docs_1ke_gj2._.js:1:9976)\n      at instantiateModule (.next/server/chunks/ssr/[turbopack]_runtime.js:853:9)\n      at getOrInstantiateModuleFromParent (.next/server/chunks/ssr/[turbopack]_runtime.js:877:12)\n      at Context.commonJsRequire [as r] (.next/server/chunks/ssr/[turbopack]_runtime.js:302:12)\n      at K.layout (.next/server/chunks/ssr/1g7e_next_dist_esm_build_templates_app-page_0sq-kt0.js:1:791)\n}\n\n> Build error occurred\nError: Failed to collect page data for /_not-found\n    at ignore-listed frames {\n  type: 'Error'\n}",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 3125
+    },
+    "build": {
+      "ok": false,
+      "ms": 9033
+    }
+  },
+  "files": [
+    "app/theme.ts",
+    "app/layout.tsx",
+    "lib/data.ts",
+    "components/AppFrame.tsx",
+    "app/page.tsx",
+    "app/reports/page.tsx",
+    "app/projects/page.tsx",
+    "app/settings/page.tsx"
+  ]
+}

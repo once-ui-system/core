@@ -1,0 +1,15 @@
+{
+  "files": [
+    "lib/data.ts",
+    "components/pawpoint/alert-chips.tsx",
+    "components/pawpoint/app-header.tsx",
+    "components/pawpoint/book-dialog.tsx",
+    "components/pawpoint/schedule-view.tsx",
+    "components/pawpoint/weight-chart.tsx",
+    "app/patients/[id]/page.tsx",
+    "app/page.tsx",
+    "app/layout.tsx",
+    "app/globals.css"
+  ],
+  "rejected": []
+}

@@ -1,0 +1,26 @@
+/*
+ * Lumen type and shape tokens. System fonts only: no network fetch at build.
+ * Headings are a serif ledger face; body, labels and controls use the system sans.
+ * Radius tokens are the design system's own variables, pinned to 2px so buttons,
+ * inputs, cards, menus and tags all share the same corner.
+ */
+:root {
+  --font-heading: Georgia, "Times New Roman", serif;
+  --font-body: ui-sans-serif, system-ui, sans-serif;
+  --font-label: ui-sans-serif, system-ui, sans-serif;
+  --font-code: ui-monospace, monospace;
+}
+
+:root,
+[data-border] {
+  --radius-xs: 2px;
+  --radius-s: 2px;
+  --radius-m: 2px;
+  --radius-l: 2px;
+  --radius-xl: 2px;
+  --static-radius-xs: 2px;
+  --static-radius-s: 2px;
+  --static-radius-m: 2px;
+  --static-radius-l: 2px;
+  --static-radius-xl: 2px;
+}

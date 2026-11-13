@@ -42,10 +42,10 @@ Static panel recipe (pricing tiers, stats, settings sections):
 - `Card` = interactive only (`href` or `onClick`). Static panels = Column + surface recipe.
 - Colors: `{tone}-{weight}` or `{tone}-alpha-{weight}`. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`.
 - `background` also: `surface | overlay | page | transparent`
-- Same-shaped records: one surface, divided rows (`borderTop={i > 0}`), or a `Table`; never a card per row
+- Same-shaped records: one surface, divided rows (`borderTop={i > 0}`), or a `Table` (row link: a link in a `cell`, not `onRowClick`); never a card per row
 - One raised `surface` for content on `page`; sections inside are spacing + `borderTop`, not grey cards
 - Alerts: `Feedback`, never a hand-built `role="alert"` box
-- Charts: `@once-ui-system/core/data` (`LineChart`, `BarChart`…), never hand-drawn SVG; `height="16rem"` (a string), series `color: "brand-strong"`
+- Charts: `@once-ui-system/core/data` (`LineChart`, `BarChart`…), never hand-drawn SVG; `height="16rem"` (a string), series `color: "brand"`
 - Brand mark: `<Logo text="Name" monogram />`, never `Icon` + `Text`
 - Critical outranks status: `Feedback tone="danger"` or `Tag prefixIcon`; urgent is `danger`/`warning`, never `info`
 
@@ -91,7 +91,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Pick one of a few | A form value with a label (timezone, country, role on a form): `Select`. A toolbar view control or action (sort, filter, export): `Dropdown` with `Option`s and `trigger={<Button variant="secondary" suffixIcon="chevronDown">Role: Admin</Button>}`, the label naming the current choice (a long, searchable filter list: `Select size="xxs" searchable` with a `label`). Two to four choices always shown: `SegmentedControl` |
 | Mobile nav, side sheet | `Drawer`, not a hand-made overlay |
 | Page trail | `Breadcrumbs items={[...]}` |
-| Keyboard shortcut | `useHotkeys("mod+k", fn)` + `Kbd keys="mod+k" label="Search"` |
+| Keyboard shortcut | `useHotkeys("mod+k", fn)` + `Kbd keys="mod+k" label="Search"` + `aria-keyshortcuts` |
 | Screen-reader text, skip link | `VisuallyHidden` (skip link: `<VisuallyHidden as="a" href="#main" focusable>`) |
 | Native attributes | Every component also takes its element's own: `aria-*`, `id`, `role`, `onClick`; `type` on `Button`; `value`, `onChange`, `type` on `Input` |
 | Formatted text (notes, descriptions, replies) | `RichTextEditor` from `/richtext` (HTML value; works in a `Field`), never `contentEditable` or Markdown in a `Textarea` |
@@ -219,7 +219,7 @@ Mixins: LeafProps.
 - value, defaultValue?: string | string[]
 - onValueChange?: (value: string | string[]) => void
 - open?: boolean
-- defaultOpen, searchable, multiple?: boolean = false
+- defaultOpen, alignSelected, searchable, multiple?: boolean = false
 - onOpenChange?: (open: boolean) => void
 - emptyState?: ReactNode = No results
 - placement?: Placement
@@ -243,7 +243,7 @@ Mixins: LeafProps.
 - span?: number
 
 ### Dropdown
-- fillWidth, disabled, contents, closeAfterClick, handleArrowNavigation, open, nested, disableTriggerClick?: boolean
+- fillWidth, disabled, contents, closeAfterClick, handleArrowNavigation, open, nested, disableTriggerClick, alignSelected?: boolean
 - minWidth, maxWidth, minHeight?: number | CSSUnit
 - placement?: Placement
 - trigger: ReactNode
