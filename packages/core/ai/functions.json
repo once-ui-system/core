@@ -24,6 +24,12 @@
    "signature": "(src: string) => string",
    "doc": "The value a photo has in a deep link: its file name, which stays put as photos are added or reordered."
   },
+  "useSidebar": {
+   "group": "components",
+   "kind": "hook",
+   "signature": "() => SidebarContextValue",
+   "doc": "The sidebar's state, for a control outside it: a toggle in the top bar, a page that wants more room."
+  },
   "arrayMove": {
    "group": "components",
    "kind": "function",
@@ -942,6 +948,20 @@
    "cta",
    "contact"
   ],
+  "SidebarContextValue": {
+   "collapsed": "!boolean",
+   "setCollapsed": "!(next: boolean) => void",
+   "toggle": "!() => void",
+   "width": "!number",
+   "setWidth": "!(next: number) => void",
+   "reset": "!() => void",
+   "minWidth": "!number",
+   "maxWidth": "!number",
+   "mobile": "!boolean",
+   "mobileOpen": "!boolean",
+   "setMobileOpen": "!(next: boolean) => void",
+   "shortcut": "!string | false"
+  },
   "SolidStyle": [
    "flat",
    "plastic"

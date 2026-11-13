@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "3.0.0-beta.1",
- "generated": "2026-11-12",
+ "generated": "2026-11-13",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root; '@once-ui-system/fx' and '@once-ui-system/blocks' are packages of their own, installed beside core.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -1884,6 +1884,25 @@
    "m",
    "xs"
   ],
+  "SidebarCollapsible": [
+   "false",
+   "rail",
+   "offcanvas"
+  ],
+  "SidebarContextValue": {
+   "collapsed": "!boolean",
+   "setCollapsed": "!(next: boolean) => void",
+   "toggle": "!() => void",
+   "width": "!number",
+   "setWidth": "!(next: number) => void",
+   "reset": "!() => void",
+   "minWidth": "!number",
+   "maxWidth": "!number",
+   "mobile": "!boolean",
+   "mobileOpen": "!boolean",
+   "setMobileOpen": "!(next: boolean) => void",
+   "shortcut": "!string | false"
+  },
   "SideContent": {
    "src": "!string | React.ReactNode",
    "alt": "string"
@@ -3912,6 +3931,98 @@
     "axisWidth": "number | CSSUnit"
    }
   },
+  "Sidebar": {
+   "group": "components",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "collapsible": "SidebarCollapsible",
+    "resizable": "boolean",
+    "expandOnHover": "boolean",
+    "railWidth": "number",
+    "labels": "{ resize?: string; menu?: string }",
+    "defaultWidth": "number",
+    "width": "number",
+    "onWidthChange": "(width: number) => void",
+    "defaultCollapsed": "boolean",
+    "collapsed": "boolean",
+    "onCollapsedChange": "(collapsed: boolean) => void",
+    "minWidth": "number",
+    "maxWidth": "number",
+    "persist": "string",
+    "shortcut": "string | false",
+    "mobileBelow": "\"xs\" | \"s\" | \"m\" | \"l\" | false"
+   }
+  },
+  "SidebarContent": {
+   "group": "components",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ]
+  },
+  "SidebarFooter": {
+   "group": "components",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ]
+  },
+  "SidebarHeader": {
+   "group": "components",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ]
+  },
+  "SidebarProvider": {
+   "group": "components",
+   "props": {
+    "children": "ReactNode",
+    "defaultWidth": "number = 256",
+    "width": "number",
+    "onWidthChange": "(width: number) => void",
+    "defaultCollapsed": "boolean = false",
+    "collapsed": "boolean",
+    "onCollapsedChange": "(collapsed: boolean) => void",
+    "minWidth": "number = 200",
+    "maxWidth": "number = 400",
+    "persist": "string",
+    "shortcut": "string | false = mod+b",
+    "mobileBelow": "\"xs\" | \"s\" | \"m\" | \"l\" | false = s"
+   }
+  },
+  "SidebarTrigger": {
+   "group": "components",
+   "props": {
+    "icon": "IconName",
+    "tooltip": "ReactNode",
+    "size": "React.ComponentProps<typeof IconButton>[\"size\"]",
+    "variant": "React.ComponentProps<typeof IconButton>[\"variant\"] = tertiary",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "onClick": "React.MouseEventHandler<HTMLElement>",
+    "labels": "{ collapse?: string; expand?: string; menu?: string }"
+   }
+  },
   "Skeleton": {
    "group": "components",
    "mixins": [
@@ -5239,14 +5350,14 @@
    "group": "media",
    "importFrom": "@once-ui-system/core/media",
    "props": {
-    "frames": "!string[]"
+    "frames": "!string[] = []"
    }
   },
   "ScrubberWaveform": {
    "group": "media",
    "importFrom": "@once-ui-system/core/media",
    "props": {
-    "peaks": "!number[]",
+    "peaks": "!number[] = []",
     "tone": "Tone = brand"
    }
   },
@@ -6666,6 +6777,12 @@
    "kind": "function",
    "signature": "(src: string) => string",
    "doc": "The value a photo has in a deep link: its file name, which stays put as photos are added or reordered."
+  },
+  "useSidebar": {
+   "group": "components",
+   "kind": "hook",
+   "signature": "() => SidebarContextValue",
+   "doc": "The sidebar's state, for a control outside it: a toggle in the top bar, a page that wants more room."
   },
   "arrayMove": {
    "group": "components",

@@ -325,6 +325,10 @@
       "types": "./dist/components/Setting.d.ts",
       "default": "./dist/components/Setting.js"
     },
+    "./components/Sidebar": {
+      "types": "./dist/components/Sidebar.d.ts",
+      "default": "./dist/components/Sidebar.js"
+    },
     "./components/Skeleton": {
       "types": "./dist/components/Skeleton.d.ts",
       "default": "./dist/components/Skeleton.js"
