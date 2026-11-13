@@ -45,8 +45,10 @@
 }
 
 // `effect`: a short brand-to-accent beam that travels round the edge (a
-// conic gradient masked to the 1px border, on a registered angle), faster on
-// hover and still under reduced motion. 2.x drew it on Badge.
+// conic gradient masked to the 1px border, on a registered angle), still
+// under reduced motion. 2.x drew it on Badge. It keeps one pace on hover:
+// changing `animation-duration` mid-run recomputes the progress from the time
+// already elapsed, so the beam jumped to a new spot as the pointer came in.
 @property --tag-beam-angle {
     syntax: "<angle>";
     inherits: false;
@@ -81,12 +83,6 @@
         mask-composite: exclude;
         pointer-events: none;
         animation: tagBeam 6s linear infinite;
-    }
-
-    @media (hover: hover) {
-        &:hover::before {
-            animation-duration: 2.5s;
-        }
     }
 
     @media (prefers-reduced-motion: reduce) {
