@@ -758,6 +758,11 @@ entry below that had landed by then:
 
 ### Fixed
 
+- `MegaMenu` on a translucent surface keeps its frosted glass through the
+  opening animation. The panel used to fade on the box that clips it, which made
+  that box the blur's backdrop root, so the panel looked clear while it opened
+  and turned frosted when the animation ended. Now the box only slides and the
+  surface itself fades.
 - A labelled `Flex` (`Row`, `Column`, …) with no `role` of its own renders
   `role="group"`. ARIA does not allow `aria-label` on a plain `div` or `span`
   (axe `aria-prohibited-attr`), and Lighthouse flagged it on several sites.
