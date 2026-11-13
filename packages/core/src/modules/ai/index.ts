@@ -13,6 +13,8 @@ export type { MascotEffect, MascotLook, MascotMood, MascotProps, MascotState } f
 export { Mascot, mascotLook } from "./Mascot.js";
 export type { MascotSvgOptions } from "./mascotSvg.js";
 export { mascotDataUrl, mascotSvg } from "./mascotSvg.js";
+export type { MascotSeedReading } from "./mascotWords.js";
+export { MASCOT_SEED_WORDS, readSeedWords } from "./mascotWords.js";
 export type { VoiceState, VoiceVisualizerProps } from "./VoiceVisualizer.js";
 export { VoiceVisualizer } from "./VoiceVisualizer.js";
 export type { WorkingIndicatorProps } from "./WorkingIndicator.js";

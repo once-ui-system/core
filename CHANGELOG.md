@@ -116,6 +116,7 @@ entry below that had landed by then:
 
 ### Added
 
+- **Mascot seeds read words.** A `seed` is split at dashes, underscores, spaces, digits and camelCase, and the words it knows describe the mascot: colours set the hue (`red`, `mint`, `ink`, `#3fe3f2`), animals the body and ears (`fox`, `panda`, `frog`, `robot`), moods the eyes, mouth and motion (`happy`, `sleepy`, `grumpy`), objects the accessories (`royal`, `dj`, `astro`). What the words leave open still comes from the hash, so a seed with no known words looks as it did. `readSeedWords(seed)` reports what it understood and `MASCOT_SEED_WORDS` lists the vocabulary.
 - **Open Graph images: `createOgImageRoute` and `defineOgSkin`** in `@once-ui-system/core/next`.
   One route draws a 1200 × 630 card for every page in the product's skin: the title set
   large in the heading font (`*words*` in the brand color, optionally in an italic

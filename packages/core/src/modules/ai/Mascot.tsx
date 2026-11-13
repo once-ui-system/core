@@ -22,6 +22,7 @@ import {
 import styles from "./Mascot.module.scss";
 import { MascotCube } from "./MascotCube.js";
 import { bodyShape, clamp, DEFAULT_LOOK, EYE_BOX, mascotLook, TILE } from "./mascotShape.js";
+import { readSeedWords } from "./mascotWords.js";
 
 export { mascotLook };
 
@@ -96,7 +97,10 @@ export interface MascotProps extends MascotLook, Omit<LeafPropsOf<"div">, "child
   state?: MascotState;
   /** The expression on top of the state. */
   mood?: MascotMood;
-  /** A string or number that picks a whole look; props you pass win over it. See `mascotLook`. */
+  /**
+   * A string or number that picks a whole look; props you pass win over it. Words in it describe
+   * the mascot ("happy-red-fox", "sleepyPandaDJ"), and the rest comes from its hash. See `mascotLook`.
+   */
   seed?: string | number;
   /**
    * Something it wears, moving with the body. A built-in one (`antenna`, `bow`, `beanie`,
@@ -402,10 +406,15 @@ const FlatMascot = ({
     ...(seed !== undefined ? mascotLook(seed) : {}),
     ...passed,
   } as typeof DEFAULT_LOOK;
+  // A seed with a dark colour brings light eyes, unless you pass the colour or the eyes yourself.
+  const eyeInk =
+    eyeColor ?? (color === undefined && seed !== undefined ? mascotLook(seed).eyeColor : undefined);
 
   const shape = bodyShape(look.roundness, look.aspect);
   const body = bodyPath ? { d: bodyPath, top: 26, bottom: 182, halfWidth: 82 } : shape;
-  const builtIn = (Array.isArray(accessory) ? accessory : [accessory]).filter(isMascotAccessory);
+  // Without an `accessory` prop, the seed's words can put some on ("royal" a crown, "dj" headphones).
+  const wearing = accessory ?? (seed !== undefined ? readSeedWords(seed).accessory : undefined);
+  const builtIn = (Array.isArray(wearing) ? wearing : [wearing]).filter(isMascotAccessory);
   const worn = builtIn.length
     ? accessoryLayers(
         builtIn,
@@ -416,7 +425,7 @@ const FlatMascot = ({
         },
         accessoryColor,
       )
-    : { back: null, on: accessory, front: null };
+    : { back: null, on: wearing, front: null };
   const spread = Math.min(29 * look.eyeSpacing, body.halfWidth - 22);
   const eyeY = 96 + clamp(look.eyeHeight, -1, 1) * 30;
   const tile = look.eyes === "tile";
@@ -512,7 +521,7 @@ const FlatMascot = ({
           width: length,
           height: length,
           "--mascot-color": SCHEMES.has(scheme) ? `var(--function-${scheme}-500)` : scheme,
-          ...(eyeColor ? { "--mascot-eye": eyeColor } : {}),
+          ...(eyeInk ? { "--mascot-eye": eyeInk } : {}),
           ...style,
         } as React.CSSProperties
       }

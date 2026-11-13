@@ -4,6 +4,7 @@
  * No React here, and no "use client", so server code can import it.
  */
 import type { MascotLook } from "./Mascot.js";
+import { readSeedWords } from "./mascotWords.js";
 
 export const DEFAULT_LOOK: Required<Omit<MascotLook, "bodyPath" | "eyeColor" | "sides" | "face">> =
   {
@@ -71,9 +72,17 @@ export function random(seed: string | number) {
 
 /**
  * A whole look from a seed: a user id, a product name, any string or number.
- * The same seed always gives the same character.
+ * The same seed always gives the same character. Words in it describe the
+ * mascot: "happy-red-fox", "sleepyPandaDJ" or "Royal Robot 42" set the colour,
+ * the body, the face and the mood (see `MASCOT_SEED_WORDS`); whatever the words
+ * leave open comes from the seed's hash, as it does for a seed with no words.
  */
 export function mascotLook(seed: string | number): MascotLook {
+  return { ...hashedLook(seed), ...readSeedWords(seed).look };
+}
+
+/* The look from the seed's hash alone: what every part the words don't set falls back to. */
+function hashedLook(seed: string | number): MascotLook {
   const next = random(seed);
   const pick = <T>(items: readonly T[]) => items[Math.floor(next() * items.length)];
   const range = (min: number, max: number) => Math.round((min + next() * (max - min)) * 100) / 100;

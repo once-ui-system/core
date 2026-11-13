@@ -229,6 +229,37 @@ id) and `mascotLook(seed)` picks a whole look; props you pass still win.
   ]}
 />
 
+### Seeds that read words
+
+A seed is split into words at dashes, underscores, spaces, digits and camelCase, and the words it
+knows describe the mascot: colours set the hue (`red`, `mint`, `ink` or a hex like `#3fe3f2`), animals
+set the body and, where they have them, the ears (`fox`, `panda`, `frog`, `robot`), moods set the eyes,
+mouth and how it moves (`happy`, `sleepy`, `grumpy`), and objects add accessories (`royal` a crown, `dj`
+headphones, `astro` a helmet). An animal brings its own colour unless the seed names one. Anything the
+words leave open comes from the seed's hash, so a username with no known words still gets a stable
+mascot of its own. `readSeedWords(seed)` says which words it understood, and `MASCOT_SEED_WORDS` lists
+them all.
+
+<MascotSeedExample />
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Mascot seed="happy-red-fox" />
+<Mascot seed="sleepyPandaDJ" />
+<Mascot seed={user.username} />
+
+readSeedWords("royal-ink-cat");
+// { matched: ["royal", "ink", "cat"], accessory: ["crown", "catEars"], look: { ... }, unmatched: [] }`,
+      language: "tsx",
+      label: "Seeds"
+    }
+  ]}
+/>
+
 ### Accessories
 
 Nine built-in accessories, flat and chunky so they read at avatar size: `antenna`, `bow`, `beanie`,
@@ -396,7 +427,7 @@ the cube shows while it thinks but does not turn.
   describe={{
     state: "idle, listening, thinking, speaking or sleeping.",
     mood: "neutral, happy, surprised, sad, skeptical, wink, focused or determined.",
-    seed: "Picks a whole look (mascotLook); props you pass win over it.",
+    seed: "Picks a whole look (mascotLook): known words set colour, body, face and accessories, the hash the rest; props you pass win over it.",
     color: "brand, accent, neutral or any CSS color; every shade comes from it.",
     roundness: "0, a rounded square, to 1, a circle.",
     aspect: "Width over height: below 1 is tall, above 1 is wide.",
