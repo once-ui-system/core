@@ -30,10 +30,12 @@ export interface TagProps extends Omit<React.ComponentProps<typeof Flex>, "onCli
    */
   tone?: Tone;
   /**
-   * How the tag looks: `default`, `gradient` (2.x's `scheme="gradient"`) or
-   * `announce`, the pill with a beam round its edge (2.x's Badge).
+   * How the tag looks: `default`, `gradient` (2.x's `scheme="gradient"`),
+   * `announce`, the pill with a beam round its edge (2.x's Badge), or
+   * `solid`, filled in its tone (default `neutral`): a status that has to be
+   * read across a room, a count on a tab, a label on a map or a photo.
    */
-  variant?: "default" | "gradient" | "announce";
+  variant?: "default" | "gradient" | "announce" | "solid";
   /**
    * Left out, the theme's `density` picks it: s when compact, m when normal
    * (the default), l when spacious. A size given here always wins.
@@ -173,11 +175,12 @@ const Tag = ({
   const phrasing = as === "span";
   const announce = variant === "announce";
   const gradient = variant === "gradient";
+  const solidLook = variant === "solid";
   const look = LOOK[announce ? "announce" : "default"];
   const palette = tone ?? (announce ? "brand" : "neutral");
   // The default tag is a neutral hairline; its tone lives in the dot (and a
   // prefix icon), so a table full of statuses stays calm.
-  const hairline = !announce && !gradient;
+  const hairline = !announce && !gradient && !solidLook;
   const dot = hairline && (dotProp ?? tone !== undefined);
   // A link tag's pointer handler, passed through for the caller.
   const pointer = onClick
@@ -214,20 +217,22 @@ const Tag = ({
             : "neutral-alpha-medium"
           : gradient
             ? "brand-medium"
-            : "neutral-alpha-medium"
+            : solidLook
+              ? "transparent"
+              : "neutral-alpha-medium"
       }
       onBackground={
         announce
           ? tone
             ? `${tone}-strong`
             : "neutral-strong"
-          : gradient
+          : gradient || solidLook
             ? undefined
             : "neutral-strong"
       }
       paddingLeft={announce && prefixIcon ? "8" : look.paddingX[size]}
       paddingRight={announce && arrow ? "8" : look.paddingX[size]}
-      paddingY={hairline ? "0" : look.paddingY[size]}
+      paddingY={hairline || solidLook ? "0" : look.paddingY[size]}
       vertical="center"
       radius={announce ? "full" : "s"}
       gap={announce ? "8" : "4"}
@@ -243,8 +248,9 @@ const Tag = ({
         effect ? styles.beam : undefined,
         announce ? styles.announce : undefined,
         hairline ? styles.hairline : undefined,
-        hairline ? styles[`size-${size}`] : undefined,
-        hairline ? styles[`tone-${palette}`] : undefined,
+        solidLook ? styles.solid : undefined,
+        hairline || solidLook ? styles[`size-${size}`] : undefined,
+        hairline || solidLook ? styles[`tone-${palette}`] : undefined,
         hairline && onClick ? styles.clickable : undefined,
         className,
       )}
@@ -276,7 +282,7 @@ const Tag = ({
         <Row as={phrasing ? "span" : undefined} style={{ userSelect: "none" }} vertical="center">
           <Text
             textVariant={textVariant ?? look.text[size]}
-            className={hairline ? styles.label : undefined}
+            className={hairline || solidLook ? styles.label : undefined}
           >
             {label || children}
           </Text>

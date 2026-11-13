@@ -69,6 +69,7 @@ const fixtures: Record<string, Record<string, unknown>> = {
       { value: "b", label: "B" },
     ],
   },
+  StatTile: { label: "Open jobs", value: "128" },
   Select: {
     id: "select",
     label: "Fruit",

@@ -973,6 +973,11 @@
     "tags": ["marketing"],
     "pairsWith": ["Sections"]
   },
+  "StatTile": {
+    "purpose": "Key number with its change",
+    "tags": ["dashboard"],
+    "pairsWith": ["Grid"]
+  },
   "StatusIndicator": {
     "purpose": "Small status dot (online, error, warning) by palette hue; `pulse` adds a pulsing ring for a live state",
     "tags": ["data", "feedback"],

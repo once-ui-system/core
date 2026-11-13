@@ -377,6 +377,10 @@
       "types": "./dist/components/SplitView.d.ts",
       "default": "./dist/components/SplitView.js"
     },
+    "./components/StatTile": {
+      "types": "./dist/components/StatTile.d.ts",
+      "default": "./dist/components/StatTile.js"
+    },
     "./components/StatusIndicator": {
       "types": "./dist/components/StatusIndicator.d.ts",
       "default": "./dist/components/StatusIndicator.js"

@@ -22,6 +22,12 @@
         }
     }
 
+    // Filled in its tone, with the tone's own text colour on it.
+    &.solid {
+        background: var(--tag-tone-solid);
+        color: var(--tag-tone-on-solid);
+    }
+
     &.clickable {
         transition: border-color var(--transition-micro-medium);
 
@@ -129,7 +135,8 @@
 // above the caps than below the baseline, which lifts the text. A browser
 // without text-box keeps the line box, as before.
 // Written out, not generated, so every class is a literal in the source.
-.hairline {
+.hairline,
+.solid {
     &.size-xs { height: var(--static-space-16); }
     &.size-s { height: var(--static-space-20); }
     &.size-m { height: var(--static-space-24); }

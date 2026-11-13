@@ -11,7 +11,7 @@
  ],
  "props": {
   "tone": "Tone",
-  "variant": "\"default\" | \"gradient\" | \"announce\" = default",
+  "variant": "\"default\" | \"gradient\" | \"announce\" | \"solid\" = default",
   "size": "TShirtSizes",
   "label": "string = \"\"",
   "prefixIcon": "IconName",
