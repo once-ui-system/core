@@ -760,6 +760,31 @@
     "preferOver": "Flex with direction=\"row\"",
     "pairsWith": ["Column", "Grid", "Text", "Button"]
   },
+  "Scene": {
+    "purpose": "Themed 3D viewport: orbit or turntable, studio lights, floor shadow (needs three)",
+    "tags": ["3d", "media", "decoration"],
+    "pairsWith": ["SceneMesh", "SceneGroup", "SceneLabel"]
+  },
+  "SceneGroup": {
+    "purpose": "3D children that move together; ref to animate",
+    "tags": ["3d"],
+    "pairsWith": ["Scene", "SceneMesh"]
+  },
+  "SceneLabel": {
+    "purpose": "HTML pinned to a 3D point",
+    "tags": ["3d", "overlay"],
+    "pairsWith": ["Scene", "Tag", "Card"]
+  },
+  "SceneMesh": {
+    "purpose": "3D shape in theme colours",
+    "tags": ["3d"],
+    "pairsWith": ["Scene", "SceneGroup"]
+  },
+  "SceneModel": {
+    "purpose": "glTF model, optionally in a theme colour",
+    "tags": ["3d", "media"],
+    "pairsWith": ["Scene", "SceneLabel"]
+  },
   "Schema": {
     "purpose": "Schema.org JSON-LD script for a page, article or organization",
     "tags": ["seo"],

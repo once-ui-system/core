@@ -47,6 +47,7 @@ export * from "./RadialGaugeExample";
 export * from "./RadioButtonExample";
 export * from "./RadioGroupExamples";
 export * from "./RangeSliderExamples";
+export * from "./SceneExample";
 export * from "./ScrubberExamples";
 export * from "./SemanticColorSection";
 export * from "./SettingExamples";

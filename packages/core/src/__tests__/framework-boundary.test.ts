@@ -81,6 +81,17 @@ describe("framework coupling boundary", () => {
     expect(offenders).toEqual(["modules/map/Map.impl.tsx"]);
   });
 
+  it("loads three only from Scene.impl, behind the lazy /scene entry", () => {
+    // `three/addons/*` counts too: the controls and the glTF loader pull in
+    // the whole library.
+    const runtime =
+      /(?:import\s+(?!type\b)[^;]*?from\s*["']three(?:\/[^"']*)?["']|(?<!typeof\s)import\s*\(\s*["']three(?:\/[^"']*)?["']|require\s*\(\s*["']three(?:\/[^"']*)?["'])/;
+    const offenders = collectSourceFiles(SRC_ROOT)
+      .filter((file) => runtime.test(readFileSync(file, "utf8")))
+      .map((file) => relative(SRC_ROOT, file).split(sep).join("/"));
+    expect(offenders).toEqual(["modules/scene/Scene.impl.tsx"]);
+  });
+
   it("imports recharts nowhere: the charts draw their own SVG since 3.0", () => {
     expect(filesImporting("recharts")).toEqual([]);
   });

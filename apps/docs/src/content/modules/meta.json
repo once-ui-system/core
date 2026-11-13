@@ -9,6 +9,7 @@
     "ai": 5,
     "social": 6,
     "map": 7,
-    "canvas": 8
+    "canvas": 8,
+    "scene": 9
   }
 }

@@ -73,6 +73,11 @@ const BARRELS = [
     group: "canvas",
     importFrom: "@once-ui-system/core/canvas",
   },
+  {
+    file: path.join(SRC, "modules", "scene", "index.ts"),
+    group: "scene",
+    importFrom: "@once-ui-system/core/scene",
+  },
   // The hooks are root exports, but no barrel above reaches them, so an
   // agent never learned `useHotkeys` or `useInViewport` existed except from
   // prose in the rules.
@@ -156,6 +161,11 @@ const ENTRY_POINTS = [
   {
     specifier: "@once-ui-system/core/canvas",
     use: "Infinite canvas for editors: pan and zoom camera, world-placed items, selection box, resize and rotate handles, snap guides",
+  },
+  {
+    specifier: "@once-ui-system/core/scene",
+    use: "Scene: a 3D viewport on three.js in theme colours, with SceneMesh, SceneGroup, SceneModel (glTF), SceneLabel (HTML pinned to a 3D point) and useSceneFrame for animation",
+    peer: "three",
   },
   {
     specifier: "@once-ui-system/core/mdx",

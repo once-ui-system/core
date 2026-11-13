@@ -46,6 +46,10 @@ const NOT_A_TYPE = new Set([
   "RefObject",
   "ComponentProps",
   "File",
+  // three.js's own classes, which an agent reads from three's docs:
+  // SceneModel's `onLoad` hands over a `Three.Object3D`.
+  "Three",
+  "Object3D",
   // literal values that happen to be capitalised
   "ANIMATION_DURATION",
   "An",
