@@ -1,0 +1,35 @@
+{
+  "check": "final",
+  "at": "2026-11-11T00:10:19.502Z",
+  "ms": 39776,
+  "files": [
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/theme.ts",
+    "components/GuestChip.tsx",
+    "components/GuestsView.tsx",
+    "components/PlanView.tsx",
+    "components/Room.tsx",
+    "components/Shell.tsx",
+    "components/TablePanel.tsx",
+    "components/room.module.css",
+    "lib/data.ts",
+    "lib/drag.tsx",
+    "lib/plan.tsx",
+    "lib/rules.ts",
+    "lib/style.ts"
+  ],
+  "passed": true,
+  "gates_passed": true,
+  "failed_gate": null,
+  "adherence": {
+    "system": 215,
+    "raw": 0,
+    "share": 1,
+    "colours": 0,
+    "cssLines": 56,
+    "ok": true,
+    "reasons": []
+  }
+}

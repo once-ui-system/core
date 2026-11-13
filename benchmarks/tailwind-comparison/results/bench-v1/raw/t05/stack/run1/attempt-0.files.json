@@ -1,0 +1,8 @@
+{
+  "files": [
+    "src/components/TeamClient.tsx",
+    "src/app/page.tsx",
+    "src/app/members/[id]/page.tsx"
+  ],
+  "rejected": []
+}

@@ -1,0 +1,227 @@
+{
+  "arm": "S",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2312
+    },
+    "build": {
+      "ok": true,
+      "ms": 34138
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 1729,
+          "height": 2673,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 1729,
+          "height": 2320,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 1753,
+          "height": 1471,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 1729,
+              "height": 2673,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1729,
+              "height": 2320,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1753,
+              "height": 1471,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/guests": {
+          "viewports": {
+            "phone": {
+              "text": 1731,
+              "height": 2402,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 2610,
+              "height": 2357,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 2634,
+              "height": 2176,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      },
+      "interaction": {
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1770,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1757,
+          "settled": true
+        },
+        "/guests phone": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/guests tablet": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/guests desktop": {
+          "ms": 1757,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 362,
+          "distinct_fontSize": 9,
+          "distinct_color": 9,
+          "distinct_background": 16,
+          "distinct_radius": 8,
+          "distinct_shadow": 1,
+          "distinct_spacing": 8,
+          "spacing_on_4px_grid": 0.804
+        },
+        "/guests": {
+          "elements": 557,
+          "distinct_fontSize": 7,
+          "distinct_color": 7,
+          "distinct_background": 4,
+          "distinct_radius": 5,
+          "distinct_shadow": 1,
+          "distinct_spacing": 8,
+          "spacing_on_4px_grid": 0.903
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 397.4,
+          "css_kb": 51,
+          "fcp_ms": 208,
+          "cls": 0.011,
+          "long_task_ms": 0
+        },
+        "/guests": {
+          "js_kb": 397.4,
+          "css_kb": 51,
+          "fcp_ms": 200,
+          "cls": 0,
+          "long_task_ms": 10
+        }
+      },
+      "views": {
+        "table-selected phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-phone.jpg"
+        },
+        "table-selected tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-tablet.jpg"
+        },
+        "table-selected desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "src/app/guests/page.tsx",
+    "src/app/page.tsx",
+    "src/components/Providers.tsx",
+    "src/components/seatwise/AppFrame.tsx",
+    "src/components/seatwise/GuestsView.tsx",
+    "src/components/seatwise/Panels.tsx",
+    "src/components/seatwise/PlanView.tsx",
+    "src/components/seatwise/RoomPlan.tsx",
+    "src/components/seatwise/party.ts",
+    "src/lib/data.ts",
+    "src/lib/seating.tsx",
+    "src/resources/custom.css"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ src/app/guests/page.tsx: no mechanical issues\n✓ src/app/page.tsx: no mechanical issues\n✓ src/components/Providers.tsx: no mechanical issues\n✗ src/components/seatwise/AppFrame.tsx: 1 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n✓ src/components/seatwise/GuestsView.tsx: no mechanical issues\n✗ src/components/seatwise/Panels.tsx: 1 issue(s)\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n✓ src/components/seatwise/PlanView.tsx: no mechanical issues\n✗ src/components/seatwise/RoomPlan.tsx: 2 issue(s)\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ src/components/seatwise/party.ts: no mechanical issues\n✓ src/lib/data.ts: no mechanical issues\n✓ src/lib/seating.tsx: no mechanical issues",
+    "validator": {
+      "package_version": "2.6.0",
+      "script_sha256": "ab274b3e6be15eb6"
+    }
+  }
+}

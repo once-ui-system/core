@@ -1,0 +1,25 @@
+{
+  "arm": "T",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/Dashboard.tsx(193,13): error TS2322: Type '{ children: Element[]; gutter: string; }' is not assignable to type 'IntrinsicAttributes & GridProps & RefAttributes<HTMLDivElement> & { component?: any; renderRoot?: ((props: Record<string, any>) => ReactNode) | undefined; }'.\n  Property 'gutter' does not exist on type 'IntrinsicAttributes & GridProps & RefAttributes<HTMLDivElement> & { component?: any; renderRoot?: ((props: Record<string, any>) => ReactNode) | undefined; }'.\ncomponents/PatientView.tsx(28,3): error TS2724: '\"@tabler/icons-react\"' has no exported member named 'IconSyringe'. Did you mean 'IconRings'?\ncomponents/PatientView.tsx(98,23): error TS2322: Type '{ children: Element[]; mt: \"md\"; gutter: string; }' is not assignable to type 'IntrinsicAttributes & GridProps & RefAttributes<HTMLDivElement> & { component?: any; renderRoot?: ((props: Record<string, any>) => ReactNode) | undefined; }'.\n  Property 'gutter' does not exist on type 'IntrinsicAttributes & GridProps & RefAttributes<HTMLDivElement> & { component?: any; renderRoot?: ((props: Record<string, any>) => ReactNode) | undefined; }'.\ncomponents/PatientView.tsx(153,13): error TS2322: Type '{ children: Element[]; gutter: string; }' is not assignable to type 'IntrinsicAttributes & GridProps & RefAttributes<HTMLDivElement> & { component?: any; renderRoot?: ((props: Record<string, any>) => ReactNode) | undefined; }'.\n  Property 'gutter' does not exist on type 'IntrinsicAttributes & GridProps & RefAttributes<HTMLDivElement> & { component?: any; renderRoot?: ((props: Record<string, any>) => ReactNode) | undefined; }'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 4338
+    }
+  },
+  "files": [
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "app/theme.ts",
+    "components/AlertBadges.tsx",
+    "components/AppFrame.tsx",
+    "components/AppState.tsx",
+    "components/BookingModal.tsx",
+    "components/Dashboard.tsx",
+    "components/PatientView.tsx",
+    "lib/data.ts"
+  ]
+}

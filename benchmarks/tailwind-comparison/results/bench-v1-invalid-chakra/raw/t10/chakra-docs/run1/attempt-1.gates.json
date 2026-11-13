@@ -1,0 +1,285 @@
+{
+  "arm": "K",
+  "passed": false,
+  "failed_gate": "render",
+  "failure_output": "[/ 375px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\n[/ 768px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\n[/ 1440px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\n[/homes/h-104 375px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\n[/homes/h-104 768px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\n[/homes/h-104 1440px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 11354
+    },
+    "build": {
+      "ok": true,
+      "ms": 20640
+    },
+    "render": {
+      "ok": false,
+      "viewports": {
+        "phone": {
+          "text": 1356,
+          "height": 4277,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": [
+            "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+          ]
+        },
+        "tablet": {
+          "text": 1383,
+          "height": 2235,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": [
+            "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+          ]
+        },
+        "desktop": {
+          "text": 1496,
+          "height": 4117,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": [
+            "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+          ]
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 1356,
+              "height": 4277,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            },
+            "tablet": {
+              "text": 1383,
+              "height": 2235,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            },
+            "desktop": {
+              "text": 1496,
+              "height": 4117,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            }
+          },
+          "axe": {
+            "rules": 5,
+            "nodes": 39,
+            "serious_or_critical": 3,
+            "ids": [
+              "color-contrast:serious:1",
+              "heading-order:moderate:1",
+              "label-content-name-mismatch:serious:24",
+              "landmark-one-main:moderate:1",
+              "nested-interactive:serious:12"
+            ]
+          }
+        },
+        "/homes/h-104": {
+          "viewports": {
+            "phone": {
+              "text": 432,
+              "height": 1921,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            },
+            "tablet": {
+              "text": 432,
+              "height": 1892,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            },
+            "desktop": {
+              "text": 432,
+              "height": 1397,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": [
+                "uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+              ]
+            }
+          },
+          "axe": {
+            "rules": 3,
+            "nodes": 5,
+            "serious_or_critical": 3,
+            "ids": [
+              "color-contrast:serious:2",
+              "label-content-name-mismatch:serious:2",
+              "nested-interactive:serious:1"
+            ]
+          }
+        }
+      },
+      "errors": [
+        "[/ 375px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+        "[/ 768px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+        "[/ 1440px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+        "[/homes/h-104 375px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+        "[/homes/h-104 768px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+        "[/homes/h-104 1440px] uncaught: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+      ],
+      "axe": {
+        "rules": 5,
+        "nodes": 39,
+        "serious_or_critical": 3,
+        "ids": [
+          "color-contrast:serious:1",
+          "heading-order:moderate:1",
+          "label-content-name-mismatch:serious:24",
+          "landmark-one-main:moderate:1",
+          "nested-interactive:serious:12"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "hover",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        },
+        "desktop": {
+          "action": "hover",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1772,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 2076,
+          "settled": true
+        },
+        "/homes/h-104 phone": {
+          "ms": 1886,
+          "settled": true
+        },
+        "/homes/h-104 tablet": {
+          "ms": 1944,
+          "settled": true
+        },
+        "/homes/h-104 desktop": {
+          "ms": 1783,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 617,
+          "distinct_fontSize": 4,
+          "distinct_color": 7,
+          "distinct_background": 14,
+          "distinct_radius": 5,
+          "distinct_shadow": 4,
+          "distinct_spacing": 12,
+          "spacing_on_4px_grid": 0.751
+        },
+        "/homes/h-104": {
+          "elements": 171,
+          "distinct_fontSize": 6,
+          "distinct_color": 8,
+          "distinct_background": 20,
+          "distinct_radius": 6,
+          "distinct_shadow": 2,
+          "distinct_spacing": 14,
+          "spacing_on_4px_grid": 0.673
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 520.6,
+          "css_kb": 9.8,
+          "fcp_ms": 152,
+          "cls": 0,
+          "long_task_ms": 1210
+        },
+        "/homes/h-104": {
+          "js_kb": 520.6,
+          "css_kb": 9.8,
+          "fcp_ms": 144,
+          "cls": 0,
+          "long_task_ms": 453
+        }
+      },
+      "views": {
+        "filters phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-filters-phone.jpg"
+        },
+        "filters tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-filters-tablet.jpg"
+        },
+        "filters desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-filters-desktop.jpg"
+        },
+        "contact-errors phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-contact-errors-phone.jpg"
+        },
+        "contact-errors tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-contact-errors-tablet.jpg"
+        },
+        "contact-errors desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-contact-errors-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/home-visual.tsx",
+    "components/save-button.tsx",
+    "components/home-card.tsx",
+    "components/home-map.tsx",
+    "components/lazy-home-map.tsx",
+    "components/search-view.tsx",
+    "app/page.tsx",
+    "components/contact-form.tsx",
+    "components/energy-rating.tsx",
+    "components/gallery-strip.tsx",
+    "components/detail-map.tsx",
+    "app/homes/[id]/page.tsx"
+  ]
+}

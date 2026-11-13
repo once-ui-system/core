@@ -238,6 +238,11 @@
     "tags": ["marketing"],
     "pairsWith": ["Sections"]
   },
+  "EmptyState": {
+    "purpose": "Empty view: visual, title, action",
+    "tags": ["feedback"],
+    "pairsWith": ["Mascot"]
+  },
   "GallerySection": {
     "purpose": "Site section: photo grid, mosaic or masonry",
     "tags": ["marketing"],
@@ -730,6 +735,16 @@
     "purpose": "Seek bar with a playhead; with tracks, an editor timeline of movable, trimmable blocks",
     "tags": ["media", "control"],
     "pairsWith": ["MediaVideoPlayer", "MediaAudioPlayer"]
+  },
+  "ScrubberFilmstrip": {
+    "purpose": "Thumbnails across a Scrubber block (block.content)",
+    "tags": ["media"],
+    "partOf": "Scrubber"
+  },
+  "ScrubberWaveform": {
+    "purpose": "Mirrored audio waveform across a Scrubber block (block.content)",
+    "tags": ["media"],
+    "partOf": "Scrubber"
   },
   "Sections": {
     "purpose": "Renders stored sections [{ type, props }]; fields in sectionSchemas",

@@ -1,16 +1,85 @@
 "use client";
 
-import { Scroller, Tag, Button, Column, Dialog, Heading, Icon, Row, Text } from "@once-ui-system/core";
-import { BlobFx, ShineFx } from "@once-ui-system/fx";
+import {
+  Scroller,
+  Button,
+  Column,
+  Dialog,
+  Grid,
+  Heading,
+  Icon,
+  IconButton,
+  Media,
+  Row,
+  SegmentedControl,
+  Tag,
+  Text,
+  useToast,
+} from "@once-ui-system/core";
+import { ShineFx } from "@once-ui-system/fx";
 import type React from "react";
 import { useEffect, useState } from "react";
-import { BlockCategories } from "../BlockCategories";
+import { blocks } from "@/resources";
+import type { BlockItem, BlockSection } from "@/types";
+import { BlockCategoryGrid } from "../BlockCategories";
+import { itemsOf } from "../blockMeta";
 import DocsLayout from "../layout";
 import { NewBlocks } from "../NewBlocks";
-import { About3, Dashboard1, Login2, Pricing1 } from "@/blocks/modules";
+import styles from "./QuickStart.module.scss";
+
+interface SectionSummary {
+  key: string;
+  title: string;
+  items: BlockItem[];
+  blockCount: number;
+}
+
+/** Every catalogue section with its categories and how many blocks they hold. */
+const sections: SectionSummary[] = (Object.entries(blocks) as Array<[string, BlockSection]>)
+  .filter(([key]) => key !== "blocks")
+  .map(([key, section]) => {
+    const items = itemsOf(section);
+    return {
+      key,
+      title: section.title,
+      items,
+      blockCount: items.reduce((sum, item) => sum + (item.examples?.length ?? 0), 0),
+    };
+  });
+
+const totalBlocks = sections.reduce((sum, section) => sum + section.blockCount, 0);
+const totalCategories = sections.reduce((sum, section) => sum + section.items.length, 0);
+
+/**
+ * Category previews for the hero's background mosaic, one per category across
+ * every section, dealt into rows that drift in alternating directions.
+ */
+const MOSAIC_ROWS = 3;
+const mosaicItems = sections.flatMap((section) => section.items).filter((item) => item.image);
+const mosaicRows: BlockItem[][] = Array.from({ length: MOSAIC_ROWS }, (_, row) =>
+  mosaicItems.filter((_, index) => index % MOSAIC_ROWS === row),
+);
+
+const steps: Array<{ title: string; body: string; code?: string }> = [
+  {
+    title: "Pick a block",
+    body: `${totalBlocks} blocks across ${totalCategories} categories, each with a live preview you can open full screen.`,
+  },
+  {
+    title: "Copy the code, or the prompt",
+    body: "Take the source as is, or hand the block to your coding agent with Copy prompt.",
+  },
+  {
+    title: "Install and make it yours",
+    body: "Brand, accent and theme live in a single config file.",
+    code: "npm i @once-ui-system/core",
+  },
+];
 
 const Docs: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState(sections[0]?.key ?? "");
+  const current = sections.find((section) => section.key === activeSection) ?? sections[0];
 
   const scrollToBlocks = () => {
     document.getElementById("blocks")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -25,25 +94,33 @@ const Docs: React.FC = () => {
 
   return (
     <DocsLayout maxWidth="xl">
-      <Column fillWidth as="section" horizontal="center">
-        <Row
+      <Column fillWidth gap="104">
+        <Column
+          as="section"
           fillWidth
-          zIndex={1}
-          border
+          minHeight="36rem"
+          center
           radius="xl"
-          padding="12"
-          s={{ direction: "column" }}
+          border
+          background="surface"
           overflow="hidden"
+          paddingX="24"
+          paddingY="80"
         >
-          <BlobFx position="absolute" top="0" left="0" translateY="50%" />
-          <Column flex={1} padding="l" gap="24" vertical="center">
-            <Tag variant="announce"
+          <Column position="absolute" top="0" left="0" fill pointerEvents="none" aria-hidden="true">
+            <HeroMosaic />
+          </Column>
+          <Column horizontal="center" gap="24" zIndex={1} maxWidth="44rem">
+            <Tag
+              variant="announce"
               effect={false}
               tabIndex={0}
               paddingY="8"
               paddingLeft="8"
-              paddingRight="24"
+              paddingRight="20"
               onBackground="brand-weak"
+              textVariant="code-default-s"
+              background="surface"
               vertical="center"
               gap="12"
               cursor="interactive"
@@ -65,15 +142,27 @@ const Docs: React.FC = () => {
                 What's new?
               </ShineFx>
             </Tag>
-            <Heading textVariant="display-default-s" style={{ lineHeight: "1.125" }}>
+            <Heading
+              as="h1"
+              align="center"
+              textVariant="display-default-l"
+              style={{ lineHeight: "1.05" }}
+            >
               Let Once UI fight
               <br /> your <Text onBackground="brand-medium">CSS battles</Text>
             </Heading>
-            <Text onBackground="neutral-weak" wrap="balance">
-              Copy-paste high quality, responsive building blocks — modular, beautiful, ready to
-              ship.
-            </Text>
-            <Row gap="12" wrap vertical="center" marginTop="8">
+            <Column maxWidth="32rem">
+              <Text
+                align="center"
+                textVariant="body-default-l"
+                onBackground="neutral-medium"
+                wrap="balance"
+              >
+                Copy-paste high quality, responsive building blocks — modular, beautiful, ready to
+                ship.
+              </Text>
+            </Column>
+            <Row gap="12" wrap horizontal="center">
               <Button arrowIcon onClick={scrollToBlocks}>
                 Browse blocks
               </Button>
@@ -82,82 +171,72 @@ const Docs: React.FC = () => {
               </Button>
             </Row>
           </Column>
-          <Column flex={2} fillWidth radius="l" border overflow="hidden" aria-hidden="true">
-            <Row fillWidth height="40" paddingX="16" gap="8" vertical="center" borderBottom>
-              <Row width="12" height="12" radius="full" border background="neutral-alpha-weak" />
-              <Row width="12" height="12" radius="full" border background="neutral-alpha-weak" />
-              <Row width="12" height="12" radius="full" border background="neutral-alpha-weak" />
-            </Row>
-            <Column fill overflow="hidden" aspectRatio="16 / 9" background="overlay">
-              <Column
-                fillWidth
-                position="absolute"
-                top="8"
-                left="0"
-                style={{ transform: "scale(0.5)", transformOrigin: "top left", width: "200%" }}
-              >
-                <Scroller auto={{ speed: "slow" }}>
-                  <Row
-                    background="page"
-                    marginRight="16"
-                    minWidth="72rem"
-                    fillWidth
-                    radius="l"
-                    overflow="hidden"
-                    border="neutral-alpha-medium"
-                  >
-                    <Dashboard1 />
-                  </Row>
-                  <Row
-                    background="page"
-                    marginRight="16"
-                    minWidth="72rem"
-                    fillWidth
-                    radius="l"
-                    padding="l"
-                    overflow="hidden"
-                    border="neutral-alpha-medium"
-                  >
-                    <Pricing1 />
-                  </Row>
-                  <Row
-                    background="page"
-                    marginRight="16"
-                    minWidth="72rem"
-                    fillWidth
-                    radius="l"
-                    overflow="hidden"
-                    border="neutral-alpha-medium"
-                  >
-                    <Login2 />
-                  </Row>
-                  <Row
-                    background="page"
-                    marginRight="16"
-                    minWidth="72rem"
-                    fillWidth
-                    radius="l"
-                    padding="l"
-                    overflow="hidden"
-                    border="neutral-alpha-medium"
-                  >
-                    <About3 />
-                  </Row>
-                </Scroller>
+        </Column>
+
+        <Column as="section" fillWidth gap="24" aria-labelledby="how-it-works">
+          <Heading id="how-it-works" as="h2" textVariant="display-strong-xs">
+            How it works
+          </Heading>
+          <Grid
+            fillWidth
+            columns="3"
+            m={{ columns: 1 }}
+            gap="1"
+            radius="l"
+            border
+            overflow="hidden"
+            background="neutral-alpha-medium"
+          >
+            {steps.map((step, index) => (
+              <Column key={step.title} background="surface" padding="24" gap="12">
+                <Text textVariant="code-default-s" onBackground="brand-medium">
+                  {String(index + 1).padStart(2, "0")}
+                </Text>
+                <Text textVariant="heading-strong-m">{step.title}</Text>
+                <Text textVariant="body-default-s" onBackground="neutral-weak">
+                  {step.body}
+                </Text>
+                {step.code && <CommandLine command={step.code} />}
               </Column>
-            </Column>
-          </Column>
-        </Row>
-        <Row
+            ))}
+          </Grid>
+        </Column>
+
+        <Column
+          as="section"
           id="blocks"
-          paddingX="l"
           fillWidth
-          data-scaling="90"
-          marginTop="xl"
+          gap="24"
+          aria-labelledby="explore-sections"
           style={{ scrollMarginTop: "80px" }}
         >
-          <BlockCategories />
-        </Row>
+          <Row fillWidth wrap gap="16" vertical="center">
+            <Row gap="12" vertical="center">
+              <Heading id="explore-sections" as="h2" textVariant="display-strong-xs">
+                Explore by section
+              </Heading>
+              <Tag size="m" tone="brand">
+                Pro
+              </Tag>
+            </Row>
+            <Row flex={1} />
+            <SegmentedControl
+              fillWidth={false}
+              value={activeSection}
+              onValueChange={setActiveSection}
+              buttons={sections.map((section) => ({ value: section.key, label: section.title }))}
+            />
+          </Row>
+          {current && (
+            <Column fillWidth gap="16">
+              <Text textVariant="label-default-s" onBackground="neutral-weak">
+                {current.items.length} {current.items.length === 1 ? "category" : "categories"} ·{" "}
+                {current.blockCount} blocks
+              </Text>
+              <BlockCategoryGrid items={current.items} />
+            </Column>
+          )}
+        </Column>
       </Column>
       <Dialog
         open={isDialogOpen}
@@ -170,5 +249,86 @@ const Docs: React.FC = () => {
     </DocsLayout>
   );
 };
+
+/**
+ * The hero's backdrop: a tilted wall of category previews, each row drifting
+ * the other way, that fades toward the centre so the headline sits on a calm
+ * surface with the catalogue moving around it. AutoScroll holds still under
+ * reduced motion.
+ */
+function HeroMosaic() {
+  return (
+    <>
+      <Column className={styles.mosaic} gap="16" vertical="center" opacity={50}>
+        {mosaicRows.map((row, index) => (
+          <Scroller auto={{ speed: "slow", hover: "none", reverse: index % 2 === 1, gap: "16" }}
+            key={row[0]?.href ?? index}
+          >
+            {row.map((item) => (
+              <Column key={item.href} width="20rem" radius="m" border overflow="hidden">
+                <Media
+                  sizes="320px"
+                  showIn="dark"
+                  src={item.image?.dark || ""}
+                  alt=""
+                  aspectRatio="960/880"
+                />
+                <Media
+                  sizes="320px"
+                  showIn="light"
+                  src={item.image?.light || ""}
+                  alt=""
+                  aspectRatio="960/880"
+                />
+              </Column>
+            ))}
+          </Scroller>
+        ))}
+      </Column>
+      <Column className={styles.fade} position="absolute" top="0" left="0" fill />
+    </>
+  );
+}
+
+/** A one-line shell command with a copy button, sized to fit a narrow card. */
+function CommandLine({ command }: { command: string }) {
+  const { addToast } = useToast();
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(command);
+      addToast({ tone: "success", message: "Command copied" });
+    } catch {
+      addToast({ tone: "danger", message: "Couldn't copy to the clipboard" });
+    }
+  };
+
+  return (
+    <Row
+      fillWidth
+      vertical="center"
+      gap="8"
+      paddingLeft="12"
+      paddingRight="4"
+      paddingY="4"
+      radius="m"
+      border
+      background="overlay"
+    >
+      <Text as="code" textVariant="code-default-xs" onBackground="neutral-strong" truncate>
+        {command}
+      </Text>
+      <Row flex={1} />
+      <IconButton
+        icon="copy"
+        size="s"
+        variant="tertiary"
+        tooltip="Copy"
+        aria-label={`Copy ${command}`}
+        onClick={copy}
+      />
+    </Row>
+  );
+}
 
 export default Docs;

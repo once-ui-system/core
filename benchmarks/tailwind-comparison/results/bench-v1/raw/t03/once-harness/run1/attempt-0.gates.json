@@ -1,0 +1,52 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "render",
+  "failure_output": "server did not start:\n",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2649
+    },
+    "build": {
+      "ok": true,
+      "ms": 8123
+    },
+    "render": {
+      "ok": false,
+      "viewports": {},
+      "routes": {},
+      "errors": [
+        "server did not start:\n"
+      ],
+      "axe": null,
+      "interaction": {},
+      "settle": {}
+    }
+  },
+  "files": [
+    "components/InviteDialog.tsx",
+    "components/AppShell.tsx",
+    "components/PageHeader.tsx",
+    "components/StatusTag.tsx",
+    "components/DashboardView.tsx",
+    "app/page.tsx",
+    "app/projects/layout.tsx",
+    "app/projects/page.tsx",
+    "components/ProjectsTable.tsx",
+    "app/members/layout.tsx",
+    "app/members/page.tsx",
+    "components/MembersTable.tsx",
+    "lib/data.ts",
+    "components/PaletteProvider.tsx",
+    "components/CommandPalette.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ components/InviteDialog.tsx: 1 issue(s)\n  [layout.primitiveProps] <Column as=\"form\"> keeps a div's event types, so an onSubmit taking FormEvent<HTMLFormElement>, and noValidate, are type errors — wrap the Column in a native <form onSubmit={…}>\n✗ components/AppShell.tsx: 1 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n✓ components/PageHeader.tsx: no mechanical issues\n✓ components/StatusTag.tsx: no mechanical issues\n✓ components/DashboardView.tsx: no mechanical issues\n✓ app/page.tsx: no mechanical issues\n✓ app/projects/layout.tsx: no mechanical issues\n✓ app/projects/page.tsx: no mechanical issues\n✓ components/ProjectsTable.tsx: no mechanical issues\n✓ app/members/layout.tsx: no mechanical issues\n✓ app/members/page.tsx: no mechanical issues\n✓ components/MembersTable.tsx: no mechanical issues\n✓ lib/data.ts: no mechanical issues\n✓ components/PaletteProvider.tsx: no mechanical issues\n✓ components/CommandPalette.tsx: no mechanical issues",
+    "validator": {
+      "package_version": "3.0.0-beta.1",
+      "script_sha256": "d8f443844780a521"
+    }
+  }
+}

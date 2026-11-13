@@ -1,0 +1,218 @@
+{
+  "arm": "C",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 6164
+    },
+    "build": {
+      "ok": true,
+      "ms": 19648
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 1616,
+          "height": 3270,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 1649,
+          "height": 2726,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 1649,
+          "height": 2288,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 1616,
+              "height": 3270,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1649,
+              "height": 2726,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1649,
+              "height": 2288,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/pricing": {
+          "viewports": {
+            "phone": {
+              "text": 1297,
+              "height": 2966,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1330,
+              "height": 2017,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1330,
+              "height": 1834,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      },
+      "interaction": {
+        "phone": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        },
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1765,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/pricing phone": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/pricing tablet": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/pricing desktop": {
+          "ms": 1758,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 125,
+          "distinct_fontSize": 7,
+          "distinct_color": 4,
+          "distinct_background": 7,
+          "distinct_radius": 1,
+          "distinct_shadow": 1,
+          "distinct_spacing": 13,
+          "spacing_on_4px_grid": 0.942
+        },
+        "/pricing": {
+          "elements": 223,
+          "distinct_fontSize": 8,
+          "distinct_color": 4,
+          "distinct_background": 10,
+          "distinct_radius": 2,
+          "distinct_shadow": 4,
+          "distinct_spacing": 10,
+          "spacing_on_4px_grid": 0.95
+        }
+      },
+      "brand": {
+        "filled_buttons": 1,
+        "brand_filled_buttons": 0,
+        "button_radius_matches": 1,
+        "heading_font": "Georgia, \"Times New Roman\", serif",
+        "heading_serif": true,
+        "body_font": "ui-sans-serif, system-ui, sans-serif",
+        "page_background": "lab(2.86026 0.45754 0.566849)",
+        "dark_first_paint": true
+      },
+      "views": {
+        "pricing-yearly phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-pricing-yearly-phone.jpg"
+        },
+        "pricing-yearly tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-pricing-yearly-tablet.jpg"
+        },
+        "pricing-yearly desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-pricing-yearly-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "app/globals.css",
+    "app/layout.tsx",
+    "components/theme-provider.tsx",
+    "components/theme-toggle.tsx",
+    "lib/data.ts",
+    "components/site-header.tsx",
+    "components/site-footer.tsx",
+    "components/site-shell.tsx",
+    "app/page.tsx",
+    "app/pricing/page.tsx",
+    "components/pricing-view.tsx"
+  ]
+}

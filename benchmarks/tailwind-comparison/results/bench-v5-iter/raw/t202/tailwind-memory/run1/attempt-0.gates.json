@@ -1,0 +1,230 @@
+{
+  "arm": "D",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 4080
+    },
+    "build": {
+      "ok": true,
+      "ms": 11404
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 3969,
+          "height": 3071,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 4029,
+          "height": 2352,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 4029,
+          "height": 1680,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 3969,
+              "height": 3071,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 4029,
+              "height": 2352,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 4029,
+              "height": 1680,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/guests": {
+          "viewports": {
+            "phone": {
+              "text": 3190,
+              "height": 5100,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 3040,
+              "height": 2678,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 3040,
+              "height": 1960,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      },
+      "interaction": {
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/guests phone": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/guests tablet": {
+          "ms": 1757,
+          "settled": true
+        },
+        "/guests desktop": {
+          "ms": 1758,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 596,
+          "distinct_fontSize": 13,
+          "distinct_color": 14,
+          "distinct_background": 27,
+          "distinct_radius": 6,
+          "distinct_shadow": 8,
+          "distinct_spacing": 11,
+          "spacing_on_4px_grid": 0.517
+        },
+        "/guests": {
+          "elements": 559,
+          "distinct_fontSize": 6,
+          "distinct_color": 12,
+          "distinct_background": 18,
+          "distinct_radius": 4,
+          "distinct_shadow": 6,
+          "distinct_spacing": 10,
+          "spacing_on_4px_grid": 0.514
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 165.4,
+          "css_kb": 16.7,
+          "fcp_ms": 148,
+          "cls": 0,
+          "long_task_ms": 11
+        },
+        "/guests": {
+          "js_kb": 165.4,
+          "css_kb": 16.7,
+          "fcp_ms": 108,
+          "cls": 0,
+          "long_task_ms": 0
+        }
+      },
+      "views": {
+        "table-selected phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-phone.jpg"
+        },
+        "table-selected tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-tablet.jpg"
+        },
+        "table-selected desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "app/globals.css",
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "components/AppShell.tsx",
+    "components/Floor.tsx",
+    "components/GuestsView.tsx",
+    "components/Panels.tsx",
+    "components/PlanProvider.tsx",
+    "components/Planner.tsx",
+    "lib/data.ts",
+    "lib/plan.ts",
+    "lib/ui.ts"
+  ],
+  "adherence": {
+    "system": 0,
+    "raw": 19,
+    "share": null,
+    "colours": 3,
+    "cssLines": 14,
+    "ok": true,
+    "reasons": []
+  },
+  "gates_passed": true
+}

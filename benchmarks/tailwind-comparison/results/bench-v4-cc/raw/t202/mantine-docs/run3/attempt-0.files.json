@@ -1,0 +1,16 @@
+{
+  "files": [
+    "lib/data.ts",
+    "lib/plan.ts",
+    "components/PlanProvider.tsx",
+    "components/ui.tsx",
+    "components/AppFrame.tsx",
+    "components/RoomPlan.tsx",
+    "components/PlanSidebar.tsx",
+    "app/page.tsx",
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/theme.ts"
+  ],
+  "rejected": []
+}

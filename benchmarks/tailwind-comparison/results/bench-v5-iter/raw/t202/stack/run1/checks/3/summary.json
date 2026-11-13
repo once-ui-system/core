@@ -1,0 +1,31 @@
+{
+  "check": "3",
+  "at": "2026-11-10T23:53:26.949Z",
+  "ms": 60261,
+  "files": [
+    "src/app/guests/page.tsx",
+    "src/app/page.tsx",
+    "src/components/Providers.tsx",
+    "src/components/seatwise/AppFrame.tsx",
+    "src/components/seatwise/GuestsView.tsx",
+    "src/components/seatwise/Panels.tsx",
+    "src/components/seatwise/PlanView.tsx",
+    "src/components/seatwise/RoomPlan.tsx",
+    "src/components/seatwise/party.ts",
+    "src/lib/data.ts",
+    "src/lib/seating.tsx",
+    "src/resources/custom.css"
+  ],
+  "passed": true,
+  "gates_passed": true,
+  "failed_gate": null,
+  "adherence": {
+    "system": 143,
+    "raw": 5,
+    "share": 0.966,
+    "colours": 0,
+    "cssLines": 64,
+    "ok": true,
+    "reasons": []
+  }
+}

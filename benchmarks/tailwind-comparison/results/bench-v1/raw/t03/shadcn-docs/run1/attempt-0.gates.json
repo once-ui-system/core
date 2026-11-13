@@ -1,0 +1,24 @@
+{
+  "arm": "C",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/(app)/layout.tsx(1,26): error TS2307: Cannot find module '@/components/app-shell' or its corresponding type declarations.\napp/page.tsx(3,26): error TS2307: Cannot find module '@/components/app-shell' or its corresponding type declarations.\ncomponents/action-buttons.tsx(5,31): error TS2307: Cannot find module '@/components/app-context' or its corresponding type declarations.\ncomponents/dashboard.tsx(18,69): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\ncomponents/dashboard.tsx(21,39): error TS7006: Parameter 'sum' implicitly has an 'any' type.\ncomponents/dashboard.tsx(21,44): error TS7006: Parameter 'p' implicitly has an 'any' type.\ncomponents/dashboard.tsx(22,43): error TS7006: Parameter 'p' implicitly has an 'any' type.\ncomponents/dashboard.tsx(23,41): error TS7006: Parameter 'm' implicitly has an 'any' type.\ncomponents/dashboard.tsx(24,42): error TS7006: Parameter 'm' implicitly has an 'any' type.\ncomponents/dashboard.tsx(68,36): error TS7006: Parameter 'project' implicitly has an 'any' type.\ncomponents/members-view.tsx(13,47): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\ncomponents/members-view.tsx(35,27): error TS7006: Parameter 'member' implicitly has an 'any' type.\ncomponents/projects-view.tsx(12,38): error TS2307: Cannot find module '@/lib/data' or its corresponding type declarations.\ncomponents/projects-view.tsx(35,28): error TS7006: Parameter 'project' implicitly has an 'any' type.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 5608
+    }
+  },
+  "files": [
+    "components/page-header.tsx",
+    "components/action-buttons.tsx",
+    "components/status-badge.tsx",
+    "components/dashboard.tsx",
+    "components/projects-view.tsx",
+    "components/members-view.tsx",
+    "app/(app)/layout.tsx",
+    "app/(app)/projects/page.tsx",
+    "app/(app)/members/page.tsx",
+    "app/page.tsx"
+  ]
+}
