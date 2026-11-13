@@ -687,6 +687,20 @@ entry below that had landed by then:
   (axe `aria-prohibited-attr`), and Lighthouse flagged it on several sites.
 - `MatrixFx` stops its animation loop while offscreen instead of waking every
   frame to skip drawing, and resumes when it scrolls back into view.
+- Dashboards spent their loading time recalculating styles. `Skeleton` pulsed
+  `background-color`, which only the main thread can animate, so every skeleton
+  cost a style recalc every frame; it now pulses `opacity` on the compositor,
+  with 40 pulses per animation iteration (React's root `animationiteration`
+  listener made Chromium tick animations around every boundary), and `Table`
+  animates its skeleton rows rather than each cell. `Flex` skips its breakpoint
+  pass when it has no breakpoint object and no longer writes its unset inline
+  styles as `""` on mount. Charts measure their plot and legend with a
+  ResizeObserver instead of forcing a layout from a layout effect, and keep
+  their size while they load. On a dashboard Overview at 4x CPU: style recalc
+  while loading 2,718 to 255 ms, range-switch INP 376 to 296 ms
+  (`benchmarks/dashboard-overview`).
+- The body keeps no browser margin: `body { margin: 0 }`, layered, for an app
+  whose body is not a Once UI `Column`.
 - **From 2.x main, carried into 3.0:** `SegmentedControl`'s rail takes its options'
   radius plus its 4px padding (`s-4`, `m-4`, `l-4`) instead of a fixed `l`; a
   Dropdown's panel clips its content to its rounded corners; `DatePicker` shows its

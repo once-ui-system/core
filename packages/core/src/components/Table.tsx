@@ -32,6 +32,7 @@ import { Pagination, type PaginationLabels } from "./Pagination.js";
 import { Row } from "./Row.js";
 import { Select } from "./Select.js";
 import { Skeleton } from "./Skeleton.js";
+import skeletonStyles from "./Skeleton.module.scss";
 import tableStyles from "./Table.module.scss";
 import { Text } from "./Text.js";
 import { VisuallyHidden } from "./VisuallyHidden.js";
@@ -466,7 +467,10 @@ const ALIGN = {
   right: { th: tableStyles.thAlignRight, td: tableStyles.tdAlignRight, row: "end" },
 } as const;
 
-const SKELETON_WIDTHS = ["8rem", "6rem", "10rem", "5rem", "7rem"] as const;
+// Shares of the cell, not lengths: a percentage adds nothing to an auto table's
+// column widths, so the headers size the columns while rows load, as the data
+// will, and the columns don't jump sideways when it arrives.
+const SKELETON_WIDTHS = ["80%", "60%", "90%", "50%", "70%"] as const;
 
 /**
  * A table of typed rows: column definitions instead of pre-rendered cells,
@@ -1094,8 +1098,14 @@ function Table<T>({
   // rows stay out of the accessibility tree rather than reading as empty.
   const skeletonRows = Array.from({ length: paged ? currentPerPage : 5 }, (_, n) => n).map(
     (rowNumber) => (
+      // The row pulses, not each cell: one animation per row instead of one per cell.
       // biome-ignore lint/a11y/noAriaHiddenOnFocusable: a table row is not focusable, and these hold no controls
-      <tr key={`skeleton-${rowNumber}`} className={tableStyles.row} aria-hidden="true">
+      <tr
+        key={`skeleton-${rowNumber}`}
+        className={classNames(tableStyles.row, skeletonStyles.group)}
+        style={{ animationDelay: `${rowNumber * 80}ms` }}
+        aria-hidden="true"
+      >
         {selectable && <td className={classNames(tableStyles.td, styles.selectCell)} />}
         {shownColumns.map(({ column, position }, columnIndex) => (
           <td key={column.key || position} className={cellClass(column)}>
@@ -1104,7 +1114,6 @@ function Table<T>({
               size="s"
               width={SKELETON_WIDTHS[(rowNumber + columnIndex) % SKELETON_WIDTHS.length]}
               maxWidth="100%"
-              delay={rowNumber * 80}
             />
           </td>
         ))}

@@ -2,6 +2,7 @@
 
 import type React from "react";
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { useDataTheme } from "../../contexts/DataThemeProvider.js";
 import styles from "./Chart.module.css";
 import { DataTooltip } from "./DataTooltip.js";
@@ -33,26 +34,91 @@ import {
  */
 export const DEFAULT_PLOT_SIZE = { width: 640, height: 320 };
 
-/** Measures `ref`'s box, starting from `fallback`, and follows it as it resizes. */
-export function usePlotSize(ref: React.RefObject<HTMLElement | null>) {
-  const [size, setSize] = useState(DEFAULT_PLOT_SIZE);
+type PlotSize = { width: number; height: number };
+
+/**
+ * The last size each chart measured, by its id. A chart's plot unmounts while
+ * it loads, so without it every load drew the plot twice: once at
+ * `DEFAULT_PLOT_SIZE`, then again at the measured size. Bounded, oldest out.
+ */
+const plotSizes = new Map<string, PlotSize>();
+
+function rememberPlotSize(key: string, size: PlotSize) {
+  plotSizes.delete(key);
+  plotSizes.set(key, size);
+  if (plotSizes.size > 200) plotSizes.delete(plotSizes.keys().next().value as string);
+}
+
+/**
+ * Measures `ref`'s box and follows it as it resizes, starting from the size
+ * the chart `key` measured last (or `DEFAULT_PLOT_SIZE`).
+ *
+ * A ResizeObserver does the measuring: it reports after the browser's own
+ * layout, so mounting a chart no longer forces a layout of the whole page
+ * from inside React's commit. Its first report is applied synchronously, so
+ * the plot is never painted at the wrong size.
+ */
+export function usePlotSize(ref: React.RefObject<HTMLElement | null>, key?: string) {
+  const [size, setSize] = useState<PlotSize>(
+    () => (key && plotSizes.get(key)) || DEFAULT_PLOT_SIZE,
+  );
   useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const read = () => {
-      // Fractional, as the box really is: rounding moved the scale by a pixel.
-      const { width, height } = el.getBoundingClientRect();
-      if (width > 0 && height > 0) {
+    // Fractional, as the box really is: rounding moved the scale by a pixel.
+    const apply = (width: number, height: number, sync: boolean) => {
+      if (!(width > 0 && height > 0)) return;
+      if (key) rememberPlotSize(key, { width, height });
+      const update = () =>
         setSize((s) => (s.width === width && s.height === height ? s : { width, height }));
-      }
+      if (sync) flushSync(update);
+      else update();
     };
-    read();
-    if (typeof ResizeObserver === "undefined") return;
-    const observer = new ResizeObserver(read);
+    if (typeof ResizeObserver === "undefined") {
+      const { width, height } = el.getBoundingClientRect();
+      apply(width, height, false);
+      return;
+    }
+    let first = true;
+    const observer = new ResizeObserver((entries) => {
+      const box = entries[entries.length - 1]?.borderBoxSize?.[0];
+      const { width, height } = box
+        ? { width: box.inlineSize, height: box.blockSize }
+        : el.getBoundingClientRect();
+      apply(width, height, first);
+      first = false;
+    });
     observer.observe(el);
     return () => observer.disconnect();
-  }, [ref]);
+  }, [ref, key]);
   return size;
+}
+
+/**
+ * An element's border-box height, followed with a ResizeObserver instead of
+ * read on every render (which forced a layout each time the chart rendered,
+ * a hover included): `fallback` until it is laid out. `on` is whether the
+ * element is rendered.
+ */
+function useElementHeight(ref: React.RefObject<HTMLElement | null>, fallback: number, on: boolean) {
+  const [height, setHeight] = useState(fallback);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!on || !el || typeof ResizeObserver === "undefined") return;
+    let first = true;
+    const observer = new ResizeObserver((entries) => {
+      const box = entries[entries.length - 1]?.borderBoxSize?.[0];
+      const next = box ? box.blockSize : el.getBoundingClientRect().height;
+      const update = () => setHeight((h) => (next > 0 && h !== next ? next : h));
+      // The first report lands before the first paint, as the old read did.
+      if (first) flushSync(update);
+      else update();
+      first = false;
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [ref, on]);
+  return height;
 }
 
 /** The CSS custom properties that time a chart's entry animation. */
@@ -170,7 +236,7 @@ export function CartesianPlot({
   } = useDataTheme();
   const ref = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
-  const { width: W, height: H } = usePlotSize(ref);
+  const { width: W, height: H } = usePlotSize(ref, id);
   const [hidden, setHidden] = useState<string[]>([]);
   const [active, setActive] = useState<{ index: number; y?: number } | null>(null);
 
@@ -191,11 +257,7 @@ export function CartesianPlot({
   // A bottom legend keeps its wrapper's height clear: 40px of static space,
   // measured once laid out, as that space scales with the density.
   const legendRef = useRef<HTMLDivElement>(null);
-  const [legendRoom, setLegendRoom] = useState(40);
-  useLayoutEffect(() => {
-    const room = legendRef.current?.getBoundingClientRect().height;
-    if (room && room !== legendRoom) setLegendRoom(room);
-  });
+  const legendRoom = useElementHeight(legendRef, 40, legend.display);
   const legendBottom = legend.display && legend.position.startsWith("bottom") ? legendRoom : 0;
   const left = reverseY ? 0 : yAxisRoom;
   const top = reverseX ? xAxisRoom : 0;
