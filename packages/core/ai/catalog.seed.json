@@ -455,12 +455,17 @@
     "pairsWith": ["VoiceVisualizer", "WorkingIndicator"]
   },
   "Map": {
-    "purpose": "Themed map on free tiles with React markers and a controlled viewport (needs maplibre-gl)",
+    "purpose": "Themed map on free tiles, React markers (needs maplibre-gl)",
     "tags": ["map", "location", "list"],
     "pairsWith": ["MapMarkers", "MapPin", "MapPopup"]
   },
   "MapCircle": {
-    "purpose": "Area in metres, e.g. an approximate address",
+    "purpose": "Area in metres, e.g. a rough address",
+    "tags": ["map", "location"],
+    "pairsWith": ["Map", "MapMarker"]
+  },
+  "MapRoute": {
+    "purpose": "Route line, solid up to progress",
     "tags": ["map", "location"],
     "pairsWith": ["Map", "MapMarker"]
   },

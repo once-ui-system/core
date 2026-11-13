@@ -8,6 +8,7 @@ export * from "./MapMarker.js";
 export * from "./MapMarkers.js";
 export * from "./MapPin.js";
 export * from "./MapPopup.js";
+export * from "./MapRoute.js";
 export { DEFAULT_MAP_STYLE } from "./mapStyles.js";
 export type {
   LngLat,

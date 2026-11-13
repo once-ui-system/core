@@ -127,12 +127,14 @@ const notRendered = new Set([
   "ToastProvider",
   "IconProvider",
   // The map components need WebGL and a MapLibre instance; map.test.tsx
-  // renders them against a stand-in maplibre-gl, on the client and server.
+  // renders them against a stand-in maplibre-gl, on the client and server
+  // (map-route.test.tsx for MapRoute).
   "Map",
   "MapCircle",
   "MapMarker",
   "MapMarkers",
   "MapPopup",
+  "MapRoute",
 ]);
 
 const isComponent = (value: unknown) => {

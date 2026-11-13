@@ -10,9 +10,10 @@ import {
   MapMarkers,
   MapPin,
   MapPopup,
+  MapRoute,
   type MapViewport,
 } from "@once-ui-system/core/map";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const BUDAPEST: LngLat = [19.0402, 47.4979];
 
@@ -125,6 +126,28 @@ export function MapAreaExample() {
   return (
     <Map height={384} defaultViewport={{ center: [19.0545, 47.5065], zoom: 14 }}>
       <MapCircle position={[19.0545, 47.5065]} radius={400} />
+    </Map>
+  );
+}
+
+const ROUTE: LngLat[] = [
+  [19.0402, 47.4979],
+  [19.0457, 47.5005],
+  [19.0512, 47.5021],
+  [19.0545, 47.5065],
+  [19.0611, 47.5089],
+];
+
+export function MapRouteExample() {
+  const [progress, setProgress] = useState(0.4);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setInterval(() => setProgress((p) => (p >= 1 ? 0 : p + 0.01)), 120);
+    return () => window.clearInterval(timer);
+  }, []);
+  return (
+    <Map height={384} defaultViewport={{ center: [19.0506, 47.5034], zoom: 14 }}>
+      <MapRoute path={ROUTE} progress={progress} />
     </Map>
   );
 }

@@ -106,9 +106,11 @@
     "MapMarkers",
     "MapPin",
     "MapPopup",
+    "MapRoute",
     "clusterPoints",
     "useMap",
-    "DEFAULT_MAP_STYLE"
+    "DEFAULT_MAP_STYLE",
+    "splitPath"
    ],
    "types": [
     "ClusterGroup",
@@ -125,6 +127,7 @@
     "MapPopupProps",
     "MapProjection",
     "MapProps",
+    "MapRouteProps",
     "MapStyle",
     "MapStyleSource",
     "MapTone",
