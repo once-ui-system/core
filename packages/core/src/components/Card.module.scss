@@ -4,6 +4,12 @@
             background-color: var(--neutral-alpha-weak);
         }
     }
+
+    // A menu opened from inside the card keeps it lit while the pointer is in
+    // the menu.
+    &:has(:global(.dropdown-trigger)[data-state="open"]) {
+        background-color: var(--neutral-alpha-weak);
+    }
 }
 
 // The hover rule above out-specifies the `background-*` utility class, so a
@@ -13,5 +19,9 @@
         &:hover {
             background-color: var(--brand-alpha-medium);
         }
+    }
+
+    &:has(:global(.dropdown-trigger)[data-state="open"]) {
+        background-color: var(--brand-alpha-medium);
     }
 }
