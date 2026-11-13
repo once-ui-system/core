@@ -1,0 +1,133 @@
+.focusable {
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.focusable:focus-visible {
+  outline: 3px solid var(--mantine-color-blue-6);
+  outline-offset: 2px;
+}
+
+.grab {
+  cursor: grab;
+  touch-action: pan-x pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.seat:hover .seatCircle {
+  stroke-width: 0.1;
+  filter: brightness(0.97);
+}
+
+.seat:hover .seatCircle[data-empty='true'] {
+  stroke: var(--mantine-color-brand-7);
+}
+
+.tableBody {
+  transition: fill 120ms ease;
+}
+
+.tableGroup:hover .tableBody {
+  fill: var(--mantine-color-gray-0);
+}
+
+.pulse {
+  animation: seatPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes seatPulse {
+  0%,
+  100% {
+    stroke-opacity: 1;
+  }
+  50% {
+    stroke-opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse {
+    animation: none;
+  }
+}
+
+.layout {
+  display: grid;
+  gap: var(--mantine-spacing-md);
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    'room'
+    'tray'
+    'table'
+    'rules';
+  align-items: start;
+}
+
+.side {
+  display: contents;
+}
+
+.room {
+  grid-area: room;
+  min-width: 0;
+}
+
+.tablePanel {
+  grid-area: table;
+  min-width: 0;
+}
+
+.tray {
+  grid-area: tray;
+  min-width: 0;
+}
+
+.rules {
+  grid-area: rules;
+  min-width: 0;
+}
+
+@media (min-width: 75em) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) 24rem;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      'room side'
+      'tray side';
+  }
+
+  .side {
+    grid-area: side;
+    display: flex;
+    flex-direction: column;
+    gap: var(--mantine-spacing-md);
+    min-width: 0;
+  }
+}
+
+.statGrid {
+  display: grid;
+  gap: var(--mantine-spacing-sm);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 48em) {
+  .statGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.guestsLayout {
+  display: grid;
+  gap: var(--mantine-spacing-md);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+@media (min-width: 64em) {
+  .guestsLayout {
+    grid-template-columns: minmax(0, 1fr) 21rem;
+  }
+}

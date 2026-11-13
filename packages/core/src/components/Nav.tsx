@@ -15,7 +15,7 @@ import {
   useState,
 } from "react";
 import { useStyle } from "../contexts/ThemeProvider.js";
-import type { SpacingToken } from "../types.js";
+import type { SpacingToken, Tone } from "../types.js";
 import type { Density } from "../utils/density.js";
 import { tokenLength } from "../utils/layoutClasses.js";
 import { Column } from "./Column.js";
@@ -30,6 +30,8 @@ interface NavStyle {
   density: NavDensity;
   variant: NavVariant;
   rail: boolean;
+  /** The palette the current row is marked in; NavItems take it unless they set their own. */
+  tone: Tone;
   /** Icons only right now: a collapsed Nav that is not expanded over the page. */
   collapsed: boolean;
 }
@@ -92,7 +94,13 @@ const DENSITY = {
   }
 >;
 
-const OUTSIDE: NavStyle = { density: "normal", variant: "solid", rail: true, collapsed: false };
+const OUTSIDE: NavStyle = {
+  density: "normal",
+  variant: "solid",
+  rail: true,
+  tone: "neutral",
+  collapsed: false,
+};
 
 /** Hover intent: a pointer crossing the rail on its way to the page does not open it. */
 const OPEN_DELAY = 150;
@@ -124,6 +132,13 @@ interface NavProps extends React.ComponentProps<typeof Column> {
    * altogether and marks the current row by weight and contrast alone.
    */
   variant?: NavVariant;
+  /**
+   * The palette the current row is marked in, for every NavItem inside.
+   * `neutral` (the default) is the grey fill; `brand` tints the current row
+   * and colours its label and icon in the brand colour, which is how most
+   * apps show the page you are on. A NavItem's own `tone` still wins.
+   */
+  tone?: Tone;
   /** The vertical line down an open NavGroup. Off, the children keep the indent. */
   rail?: boolean;
   /**
@@ -144,7 +159,7 @@ interface NavProps extends React.ComponentProps<typeof Column> {
 }
 
 /**
- * A sidebar's navigation: sets density, variant and rail once for every
+ * A sidebar's navigation: sets density, variant, tone and rail once for every
  * NavItem, NavGroup and NavSection inside it. The rows still work without it,
  * at the defaults.
  */
@@ -153,6 +168,7 @@ const Nav = ({
   density: own,
   variant = "solid",
   rail = true,
+  tone = "neutral",
   collapsed = false,
   expandOnHover = false,
   expandedWidth = 256,
@@ -167,7 +183,7 @@ const Nav = ({
   const { expanded, handlers } = useHoverExpand(collapsed && expandOnHover, column);
   const iconsOnly = collapsed && !expanded;
   return (
-    <NavContext.Provider value={{ density, variant, rail, collapsed: iconsOnly }}>
+    <NavContext.Provider value={{ density, variant, rail, tone, collapsed: iconsOnly }}>
       <Column
         ref={ref}
         as="nav"

@@ -127,6 +127,20 @@
     opacity var(--transition-micro-medium);
 }
 
+/* Holds the swirl, clipped to the orb's circle. WebKit (Safari, every iOS
+   browser) puts the spinning swirl on its own compositing layer and does not
+   clip that layer to the orb's rounded overflow, so it showed as a square. A
+   clip-path on this still element clips the whole layer in every engine. It
+   also carries the blend, so the swirl still overlays the orb's shading. */
+.voiceSwirlClip {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  clip-path: circle(50% at 50% 50%);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
 /* A slow conic swirl inside the orb; it speeds up while thinking. */
 .voiceSwirl {
   position: absolute;
@@ -139,7 +153,6 @@
     color-mix(in srgb, var(--voice-glow) 70%, black) 230deg,
     transparent 320deg
   );
-  mix-blend-mode: overlay;
   opacity: 0.7;
   /* Softened so the gradient's center never shows as a point. */
   filter: blur(calc(var(--voice-d) * 0.07));

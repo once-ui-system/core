@@ -1,0 +1,22 @@
+{
+  "files": [
+    "src/resources/seo.js",
+    "src/components/Providers.tsx",
+    "src/app/layout.tsx",
+    "src/resources/custom.css",
+    "src/lib/data.ts",
+    "src/lib/nav.ts",
+    "src/components/LumenShell.tsx",
+    "src/app/(lumen)/layout.tsx",
+    "src/app/(lumen)/page.tsx",
+    "src/app/(lumen)/projects/page.tsx",
+    "src/app/(lumen)/projects/ProjectsTable.tsx",
+    "src/app/(lumen)/settings/page.tsx",
+    "src/app/(lumen)/settings/SettingsForm.tsx",
+    "src/app/(lumen)/reports/page.tsx",
+    "src/components/Dashboard.tsx",
+    "src/app/page.tsx",
+    "src/resources/once-ui.config.js"
+  ],
+  "rejected": []
+}

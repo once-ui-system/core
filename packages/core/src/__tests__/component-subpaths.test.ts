@@ -6,11 +6,10 @@ import pkg from "../../package.json";
 /**
  * `@once-ui-system/core/components/<Name>` imports one public component file.
  *
- * Next 16 builds with Turbopack, which ignores `optimizePackageImports`: a
- * server component that imports Button from the package root ships every
- * client component to the browser (about 150 KB gzip on a page with a Button
- * and four layout components, in a measured Next 16.2 build). A subpath import
- * ships what the page uses (about 26 KB).
+ * Under Turbopack a star-export root barrel shipped every client component to
+ * a page that imported one; since the built barrels list their names
+ * (`scripts/flatten-barrels.mjs`) the root and these paths both ship only
+ * what the page uses.
  *
  * 3.0 dropped the 2.x `./components/*` wildcard because it made every file in
  * dist/components public, internals included. These are listed one by one,

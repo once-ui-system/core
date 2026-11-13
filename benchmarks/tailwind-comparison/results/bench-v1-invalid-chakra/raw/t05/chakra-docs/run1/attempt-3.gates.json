@@ -1,0 +1,26 @@
+{
+  "arm": "K",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/members/team-page.tsx(193,32): error TS2322: Type '{ children: string; as: \"th\"; scope: string; display: { base: \"none\"; md: \"table-cell\"; }; }' is not assignable to type 'IntrinsicAttributes & Omit<PatchHtmlProps<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, \"ref\">>, \"filter\" | ... 836 more ... | keyof PolymorphicProps> & Omit<...> & PolymorphicProps & { ...; }'.\n  Property 'scope' does not exist on type 'IntrinsicAttributes & Omit<PatchHtmlProps<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, \"ref\">>, \"filter\" | ... 836 more ... | keyof PolymorphicProps> & Omit<...> & PolymorphicProps & { ...; }'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 11799
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/members/member-avatar.tsx",
+    "components/site-header.tsx",
+    "components/members/member-badges.tsx",
+    "components/members/invite-dialog.tsx",
+    "components/members/change-role-dialog.tsx",
+    "components/members/remove-dialog.tsx",
+    "components/members/member-actions.tsx",
+    "components/members/team-page.tsx",
+    "app/page.tsx",
+    "app/members/[id]/page.tsx",
+    "app/members/[id]/not-found.tsx"
+  ]
+}

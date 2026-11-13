@@ -1,0 +1,254 @@
+{
+  "arm": "D",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 3565
+    },
+    "build": {
+      "ok": true,
+      "ms": 12988
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 1400,
+          "height": 4214,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 1400,
+          "height": 2208,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 1492,
+          "height": 2122,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 1400,
+              "height": 4214,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1400,
+              "height": 2208,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1492,
+              "height": 2122,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 10,
+            "serious_or_critical": 1,
+            "ids": [
+              "heading-order:moderate:1",
+              "label-content-name-mismatch:serious:9"
+            ]
+          }
+        },
+        "/homes/h-104": {
+          "viewports": {
+            "phone": {
+              "text": 582,
+              "height": 2016,
+              "width": 875,
+              "horizontal_overflow": true,
+              "errors": []
+            },
+            "tablet": {
+              "text": 582,
+              "height": 2026,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 582,
+              "height": 1411,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 1,
+            "serious_or_critical": 1,
+            "ids": [
+              "color-contrast:serious:1"
+            ]
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 2,
+        "nodes": 10,
+        "serious_or_critical": 1,
+        "ids": [
+          "heading-order:moderate:1",
+          "label-content-name-mismatch:serious:9"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "hover",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        },
+        "desktop": {
+          "action": "hover",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1921,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1941,
+          "settled": true
+        },
+        "/homes/h-104 phone": {
+          "ms": 1835,
+          "settled": true
+        },
+        "/homes/h-104 tablet": {
+          "ms": 2117,
+          "settled": true
+        },
+        "/homes/h-104 desktop": {
+          "ms": 1768,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 574,
+          "distinct_fontSize": 5,
+          "distinct_color": 7,
+          "distinct_background": 14,
+          "distinct_radius": 5,
+          "distinct_shadow": 3,
+          "distinct_spacing": 11,
+          "spacing_on_4px_grid": 0.419
+        },
+        "/homes/h-104": {
+          "elements": 182,
+          "distinct_fontSize": 6,
+          "distinct_color": 10,
+          "distinct_background": 18,
+          "distinct_radius": 5,
+          "distinct_shadow": 4,
+          "distinct_spacing": 14,
+          "spacing_on_4px_grid": 0.726
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 429.9,
+          "css_kb": 24.6,
+          "fcp_ms": 648,
+          "cls": 0,
+          "long_task_ms": 941
+        },
+        "/homes/h-104": {
+          "js_kb": 428.9,
+          "css_kb": 24.6,
+          "fcp_ms": 240,
+          "cls": 0,
+          "long_task_ms": 353
+        }
+      },
+      "views": {
+        "filters phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-filters-phone.jpg"
+        },
+        "filters tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-filters-tablet.jpg"
+        },
+        "filters desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-filters-desktop.jpg"
+        },
+        "contact-errors phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-contact-errors-phone.jpg"
+        },
+        "contact-errors tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-contact-errors-tablet.jpg"
+        },
+        "contact-errors desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-contact-errors-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "lib/css-modules.d.ts",
+    "components/Placeholder.tsx",
+    "components/Header.tsx",
+    "components/HomeMap.tsx",
+    "components/HomeCard.tsx",
+    "components/FilterBar.tsx",
+    "components/SearchView.tsx",
+    "app/page.tsx",
+    "components/DetailMap.tsx",
+    "components/DetailMapLoader.tsx",
+    "components/ContactForm.tsx",
+    "components/EnergyRating.tsx",
+    "app/homes/[id]/page.tsx",
+    "app/homes/[id]/not-found.tsx"
+  ]
+}

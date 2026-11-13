@@ -1,0 +1,207 @@
+{
+  "arm": "S",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2916
+    },
+    "build": {
+      "ok": true,
+      "ms": 22729
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 475,
+          "height": 1127,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 475,
+          "height": 1059,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 475,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 475,
+              "height": 1127,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 475,
+              "height": 1059,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 475,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/welcome": {
+          "viewports": {
+            "phone": {
+              "text": 545,
+              "height": 812,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 545,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 545,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      },
+      "interaction": {
+        "phone": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        },
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/welcome phone": {
+          "ms": 1765,
+          "settled": true
+        },
+        "/welcome tablet": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/welcome desktop": {
+          "ms": 1759,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 101,
+          "distinct_fontSize": 8,
+          "distinct_color": 6,
+          "distinct_background": 7,
+          "distinct_radius": 5,
+          "distinct_shadow": 1,
+          "distinct_spacing": 6,
+          "spacing_on_4px_grid": 1
+        },
+        "/welcome": {
+          "elements": 61,
+          "distinct_fontSize": 6,
+          "distinct_color": 4,
+          "distinct_background": 4,
+          "distinct_radius": 3,
+          "distinct_shadow": 1,
+          "distinct_spacing": 8,
+          "spacing_on_4px_grid": 1
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 391.1,
+          "css_kb": 49.4,
+          "fcp_ms": 148,
+          "cls": 0,
+          "long_task_ms": 1
+        },
+        "/welcome": {
+          "js_kb": 391.1,
+          "css_kb": 49.4,
+          "fcp_ms": 136,
+          "cls": 0,
+          "long_task_ms": 0
+        }
+      }
+    }
+  },
+  "files": [
+    "src/lib/onboarding-data.ts",
+    "src/app/page.tsx",
+    "src/components/onboarding/Wizard.tsx",
+    "src/components/onboarding/StepIndicator.tsx",
+    "src/components/onboarding/Summary.tsx",
+    "src/app/welcome/page.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ src/lib/onboarding-data.ts: no mechanical issues\n✓ src/app/page.tsx: no mechanical issues\n✗ src/components/onboarding/Wizard.tsx: 2 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✗ src/components/onboarding/StepIndicator.tsx: 1 issue(s)\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✗ src/components/onboarding/Summary.tsx: 1 issue(s)\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✗ src/app/welcome/page.tsx: 2 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "2.6.0",
+      "script_sha256": "ab274b3e6be15eb6"
+    }
+  }
+}

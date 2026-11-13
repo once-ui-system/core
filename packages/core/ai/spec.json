@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "3.0.0-beta.1",
- "generated": "2026-11-08",
+ "generated": "2026-11-13",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root; '@once-ui-system/fx' and '@once-ui-system/blocks' are packages of their own, installed beside core.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -521,6 +521,7 @@
    "size": "TShirtSizes",
    "corners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
    "variant": "\"ghost\" | \"outline\" | \"subtle\"",
+   "tone": "Tone",
    "weight": "\"default\" | \"strong\"",
    "truncate": "boolean",
    "rounded": "boolean",
@@ -882,6 +883,11 @@
    "weather",
    "particle",
    "celebration"
+  ],
+  "EmptyStateSize": [
+   "s",
+   "l",
+   "m"
   ],
   "FadeState": [
    "entering",
@@ -1860,7 +1866,22 @@
    "end": "!number",
    "label": "React.ReactNode",
    "tone": "Tone",
-   "locked": "boolean"
+   "locked": "boolean",
+   "variant": "\"solid\" | \"gap\"",
+   "badge": "React.ReactNode",
+   "content": "React.ReactNode",
+   "highlight": "boolean",
+   "description": "string"
+  },
+  "ScrubberMarker": {
+   "id": "!string",
+   "time": "!number",
+   "label": "string",
+   "tone": "Tone"
+  },
+  "ScrubberRange": {
+   "start": "!number",
+   "end": "!number"
   },
   "ScrubberTrack": {
    "id": "!string",
@@ -1869,7 +1890,8 @@
    "tone": "Tone",
    "movable": "boolean",
    "resizable": "boolean",
-   "onAdd": "(time: number) => void"
+   "onAdd": "(time: number) => void",
+   "label": "React.ReactNode"
   },
   "SectionBaseProps": {
    "layout": "string",
@@ -2965,6 +2987,7 @@
     "defaultOpen": "boolean",
     "onOpenChange": "(open: boolean) => void",
     "minHeight": "number",
+    "fillWidth": "boolean",
     "timePicker": "boolean",
     "minDate": "Date",
     "maxDate": "Date",
@@ -3093,8 +3116,30 @@
     "optionsCount": "number",
     "dropdownId": "string",
     "disableTriggerClick": "boolean",
+    "alignSelected": "boolean",
     "onFocusCapture": "React.FocusEventHandler<HTMLDivElement>",
     "onBlurCapture": "React.FocusEventHandler<HTMLDivElement>"
+   }
+  },
+  "EmptyState": {
+   "group": "components",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "visual": "ReactNode",
+    "icon": "IconName",
+    "title": "!ReactNode",
+    "description": "ReactNode",
+    "action": "ReactNode",
+    "secondaryAction": "ReactNode",
+    "size": "EmptyStateSize = m",
+    "titleAs": "\"h1\" | \"h2\" | \"h3\" | \"h4\" | \"h5\" | \"h6\" = h2"
    }
   },
   "Fade": {
@@ -3570,6 +3615,7 @@
    "props": {
     "density": "NavDensity",
     "variant": "NavVariant = solid",
+    "tone": "Tone = neutral",
     "rail": "boolean = true",
     "collapsed": "boolean = false",
     "expandOnHover": "boolean = false",
@@ -3634,7 +3680,8 @@
     "icon": "IconName",
     "prefix": "ReactNode",
     "badge": "number | ReactNode",
-    "indicator": "boolean"
+    "indicator": "boolean",
+    "truncate": "boolean = true"
    }
   },
   "NumberInput": {
@@ -3702,6 +3749,7 @@
     "description": "React.ReactNode",
     "danger": "boolean",
     "selected": "boolean",
+    "tone": "Tone = neutral",
     "disabled": "boolean = false",
     "highlighted": "boolean",
     "tabIndex": "number",
@@ -3927,6 +3975,7 @@
     "onOpenChange": "(open: boolean) => void",
     "emptyState": "ReactNode = No results",
     "placement": "Placement",
+    "alignSelected": "boolean = false",
     "searchable": "boolean = false",
     "multiple": "boolean = false",
     "labels": "SelectLabels",
@@ -4456,6 +4505,7 @@
     "label": "ReactNode",
     "selected": "boolean = false",
     "variant": "\"ghost\" | \"outline\" | \"subtle\" = ghost",
+    "tone": "Tone = neutral",
     "size": "TShirtSizes",
     "radius": "RadiusSize",
     "corners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
@@ -4612,7 +4662,7 @@
     "LeafProps"
    ],
    "props": {
-    "working": "\"cube\"",
+    "working": "\"cube\" | \"d20\"",
     "effects": "boolean | MascotEffect[]",
     "poke": "boolean",
     "state": "MascotState = idle",
@@ -5263,7 +5313,33 @@
     "onBlockContextMenu": "(event: React.MouseEvent, trackId: string, blockId: string) => void",
     "showTime": "boolean = true",
     "formatTime": "(time: number) => string = defaultFormatTime",
-    "step": "number"
+    "step": "number",
+    "ruler": "boolean = false",
+    "labelWidth": "string = 8rem",
+    "markers": "ScrubberMarker[] = []",
+    "snap": "boolean | number = false",
+    "zoom": "number",
+    "defaultZoom": "number = 1",
+    "onZoomChange": "(zoom: number) => void",
+    "maxZoom": "number = 40",
+    "range": "ScrubberRange | null = null",
+    "onRangeChange": "(range: ScrubberRange | null) => void",
+    "renderPreview": "(time: number) => React.ReactNode"
+   }
+  },
+  "ScrubberFilmstrip": {
+   "group": "media",
+   "importFrom": "@once-ui-system/core/media",
+   "props": {
+    "frames": "!string[] = []"
+   }
+  },
+  "ScrubberWaveform": {
+   "group": "media",
+   "importFrom": "@once-ui-system/core/media",
+   "props": {
+    "peaks": "!number[] = []",
+    "tone": "Tone = brand"
    }
   },
   "MediaUpload": {
@@ -6765,7 +6841,7 @@
   "useNavStyle": {
    "group": "components",
    "kind": "hook",
-   "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly rail: \"8\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: D...",
+   "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly rail: \"8\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; ... 4 more...",
    "doc": "The look the nearest Nav set, or the defaults outside one."
   },
   "photoViewerIndexFromUrl": {

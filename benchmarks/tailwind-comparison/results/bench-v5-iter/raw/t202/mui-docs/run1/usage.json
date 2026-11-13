@@ -1,0 +1,296 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 34,
+      "input_total": 4149434,
+      "input_uncached": 72,
+      "cache_creation": 138852,
+      "cache_read": 4010510,
+      "visible_output_tokens_o200k": 38179,
+      "visible_output_tokens_claudeLegacy": 40773,
+      "thinking_blocks": 27
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/README.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/theme.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/package.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/tsconfig.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/x/react-data-grid"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "."
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/x/react-data-grid/layout.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/x/react-data-grid/quickstart.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/app/theme.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/lib/data.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/lib/rules.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/lib/plan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/lib/geometry.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/components/useGuestDrag.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/components/FloorPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/components/FloorPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/components/GuestBits.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/components/PlanView.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/components/AppShell.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/components/GuestsView.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/app/guests/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/app/theme.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/lib/data.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/components/GuestBits.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/components/GuestBits.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/components/FloorPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/components/PlanView.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/components/PlanView.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/components/PlanView.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/checks/2/screenshot-desktop.jpg"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/checks/2/screenshot-tablet.jpg"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/lib/geometry.ts"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/components/FloorPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/components/FloorPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/checks/2/screenshot-guests-tablet.jpg"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/components/GuestBits.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/components/GuestsView.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/components/GuestsView.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/components/GuestsView.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/components/FloorPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/bench-v5-iter/raw/t202/mui-docs/run1/files/components/FloorPlan.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": false,
+    "violations": [
+      "disallowed tool: Bash",
+      "disallowed tool: Bash",
+      "disallowed tool: Bash",
+      "disallowed tool: Bash",
+      "disallowed tool: Bash"
+    ]
+  },
+  "arm": "M"
+}

@@ -1,0 +1,17 @@
+{
+  "files": [
+    "src/lib/data.ts",
+    "src/components/haven/haven.css",
+    "src/components/haven/Placeholder.tsx",
+    "src/components/haven/useSaved.ts",
+    "src/components/haven/SearchMap.tsx",
+    "src/components/haven/MiniMap.tsx",
+    "src/components/haven/MiniMapLoader.tsx",
+    "src/components/haven/SearchPage.tsx",
+    "src/components/haven/ContactForm.tsx",
+    "src/components/haven/HomeDetail.tsx",
+    "src/app/page.tsx",
+    "src/app/homes/[id]/page.tsx"
+  ],
+  "rejected": []
+}

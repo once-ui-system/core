@@ -200,7 +200,7 @@
     "components": ["Column", "Background"]
   },
   "layout.responsiveProps": {
-    "rule": "Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid; Text and Heading take just s={{ hide: true }}. Button and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there. Text and Heading take padding and flex but no radius or border; put those on the wrapper.",
+    "rule": "Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid; Text and Heading take just s={{ hide: true }}. Button and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there. Text and Heading take margins and flex but no padding, radius or border; put those on a Column around them.",
     "inRules": true,
     "components": ["Flex", "Row", "Column", "Grid", "Button", "Text"]
   },
@@ -239,7 +239,7 @@
     "components": ["Flex", "Row", "Column", "Grid"]
   },
   "Chart.xAxis": {
-    "rule": "The x axis reads the first key of data[0] that is not a series key (date, label, month). Put that key first in every point and list only the plotted keys in series: series={[{ key: \"visitors\" }]} with data={[{ date: \"Oct 1\", visitors: 1840 }]}.",
+    "rule": "The x axis is xKey, else the first non-series key of data[0]: pass xKey when rows carry an id. A missing value is a gap. Series color: a data hue (\"blue\"), \"brand\" (not \"brand-strong\", white in dark) or CSS; a pie slice takes color from its row.",
     "components": ["LineChart", "BarChart", "LineBarChart"]
   },
   "Map.positions": {
@@ -249,5 +249,9 @@
   "Button.submit": {
     "rule": "A Button in a form that should submit it needs type=\"submit\": with neither onClick, href nor type it renders a div, unlike a native <button>.",
     "components": ["Button", "IconButton"]
+  },
+  "field.errorTiming": {
+    "rule": "Show a field's error after it is blurred or the form is submitted, never on open: keep a touched flag per field and pass errorMessage={touched.email ? errors.email : undefined}. A form or Dialog that opens with red required-field errors reads as broken.",
+    "components": ["Input", "Textarea", "Select", "NumberInput", "Form"]
   }
 }
