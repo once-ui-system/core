@@ -1,0 +1,41 @@
+{
+  "$comment": "Brand sheets for the Bench v2 brand pilot. Each task variant gets one; fonts are system stacks so nothing loads from the network.",
+  "brands": [
+    {
+      "key": "ledger",
+      "name": "Lumen",
+      "personality": "calm, exact and trustworthy, like a well-kept ledger",
+      "brand_color": "#0F766E",
+      "neutral": "cool slate grey",
+      "radius": "2px on buttons, inputs, cards and menus",
+      "heading_font": "Georgia, \"Times New Roman\", serif",
+      "body_font": "ui-sans-serif, system-ui, sans-serif",
+      "default_theme": "light",
+      "density": "compact: tight rows and small controls, information-dense"
+    },
+    {
+      "key": "pop",
+      "name": "Lumen",
+      "personality": "friendly, upbeat and generous, made for teams who like their tools",
+      "brand_color": "#DB2777",
+      "neutral": "warm sand",
+      "radius": "16px on buttons, inputs, cards and menus",
+      "heading_font": "ui-rounded, \"SF Pro Rounded\", system-ui, sans-serif",
+      "body_font": "ui-sans-serif, system-ui, sans-serif",
+      "default_theme": "light",
+      "density": "airy: generous spacing and large touch targets"
+    },
+    {
+      "key": "signal",
+      "name": "Lumen",
+      "personality": "technical and focused, a control room for engineers",
+      "brand_color": "#E8590C",
+      "neutral": "warm stone grey",
+      "radius": "4px on buttons, inputs, cards and menus",
+      "heading_font": "ui-monospace, \"SFMono-Regular\", Menlo, monospace",
+      "body_font": "ui-sans-serif, system-ui, sans-serif",
+      "default_theme": "dark",
+      "density": "balanced: standard spacing, clear hierarchy"
+    }
+  ]
+}

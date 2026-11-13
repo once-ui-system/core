@@ -1,0 +1,84 @@
+/*
+  Lumen theme tokens. The design system reads these scheme variables, so every
+  screen follows them: brand #E8590C, warm stone neutrals, 4px corners and the
+  two font stacks. Selectors are repeated so they win over the preset scales.
+*/
+:root,
+html[data-brand],
+html[data-neutral],
+html[data-brand][data-neutral],
+html[data-theme][data-brand][data-neutral] {
+  --default-border: var(--neutral-alpha-weak);
+
+  /* fonts */
+  --font-heading: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-body: ui-sans-serif, system-ui, sans-serif;
+  --font-label: ui-sans-serif, system-ui, sans-serif;
+  --font-code: ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  /* corner radius: 4px on buttons, inputs, cards and menus */
+  --radius-xs: 4px;
+  --radius-s: 4px;
+  --radius-m: 4px;
+  --radius-l: 4px;
+  --radius-xl: 4px;
+  --static-radius-xs: 4px;
+  --static-radius-s: 4px;
+  --static-radius-m: 4px;
+  --static-radius-l: 4px;
+  --static-radius-xl: 4px;
+
+  /* brand: #E8590C sits at step 600 */
+  --scheme-brand-100: #1a0900;
+  --scheme-brand-200: #331300;
+  --scheme-brand-300: #5c2200;
+  --scheme-brand-400: #8a3407;
+  --scheme-brand-500: #b84708;
+  --scheme-brand-600: #e8590c;
+  --scheme-brand-700: #f0762f;
+  --scheme-brand-800: #f79a62;
+  --scheme-brand-900: #fbb68a;
+  --scheme-brand-1000: #fdd1b3;
+  --scheme-brand-1100: #fee6d4;
+  --scheme-brand-1200: #fff3ea;
+  --scheme-brand-600-10: rgba(232, 89, 12, 0.1);
+  --scheme-brand-600-30: rgba(232, 89, 12, 0.3);
+  --scheme-brand-600-50: rgba(232, 89, 12, 0.5);
+
+  --scheme-accent-100: #1a0900;
+  --scheme-accent-200: #331300;
+  --scheme-accent-300: #5c2200;
+  --scheme-accent-400: #8a3407;
+  --scheme-accent-500: #b84708;
+  --scheme-accent-600: #e8590c;
+  --scheme-accent-700: #f0762f;
+  --scheme-accent-800: #f79a62;
+  --scheme-accent-900: #fbb68a;
+  --scheme-accent-1000: #fdd1b3;
+  --scheme-accent-1100: #fee6d4;
+  --scheme-accent-1200: #fff3ea;
+  --scheme-accent-600-10: rgba(232, 89, 12, 0.1);
+  --scheme-accent-600-30: rgba(232, 89, 12, 0.3);
+  --scheme-accent-600-50: rgba(232, 89, 12, 0.5);
+
+  /* neutrals: warm stone grey */
+  --scheme-neutral-100: #0c0a09;
+  --scheme-neutral-200: #1c1917;
+  --scheme-neutral-300: #292524;
+  --scheme-neutral-400: #44403c;
+  --scheme-neutral-500: #57534e;
+  --scheme-neutral-600: #78716c;
+  --scheme-neutral-700: #a8a29e;
+  --scheme-neutral-800: #d6d3d1;
+  --scheme-neutral-900: #e7e5e4;
+  --scheme-neutral-1000: #f5f5f4;
+  --scheme-neutral-1100: #fafaf9;
+  --scheme-neutral-1200: #ffffff;
+  --scheme-neutral-600-10: rgba(120, 113, 108, 0.1);
+  --scheme-neutral-600-30: rgba(120, 113, 108, 0.3);
+  --scheme-neutral-600-50: rgba(120, 113, 108, 0.5);
+}
+
+html {
+  font-family: var(--font-body);
+}

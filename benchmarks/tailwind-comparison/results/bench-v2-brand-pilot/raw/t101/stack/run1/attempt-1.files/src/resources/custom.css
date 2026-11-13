@@ -1,0 +1,24 @@
+:root {
+  --default-border: var(--neutral-alpha-weak);
+
+  /* Lumen: a 2px corner radius on buttons, inputs, cards and menus. These are
+     the design system's own radius tokens, so every component follows them. */
+  --radius-xs: 2px;
+  --radius-s: 2px;
+  --radius-m: 2px;
+  --radius-l: 2px;
+  --radius-xl: 2px;
+
+  /* Compact density: a slimmer header than the 56px default. */
+  --header-height: 48px;
+}
+
+/* Focus rings use the brand colour. */
+:focus-visible {
+  outline-color: var(--brand-solid-strong);
+}
+
+/* Tabular figures keep columns of numbers aligned, like a ledger. */
+.lumen-figures {
+  font-variant-numeric: tabular-nums;
+}

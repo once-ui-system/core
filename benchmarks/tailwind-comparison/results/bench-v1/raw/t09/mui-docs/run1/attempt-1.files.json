@@ -1,0 +1,20 @@
+{
+  "files": [
+    "lib/data.ts",
+    "app/theme.ts",
+    "app/layout.tsx",
+    "components/ThemeToggle.tsx",
+    "components/SiteHeader.tsx",
+    "components/SiteFooter.tsx",
+    "components/SiteShell.tsx",
+    "components/Hero.tsx",
+    "components/CustomerLogos.tsx",
+    "components/FeatureSections.tsx",
+    "components/PricingPlans.tsx",
+    "components/ComparisonTable.tsx",
+    "components/FaqAccordion.tsx",
+    "app/page.tsx",
+    "app/pricing/page.tsx"
+  ],
+  "rejected": []
+}

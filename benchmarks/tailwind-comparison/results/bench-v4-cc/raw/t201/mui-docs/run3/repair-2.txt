@@ -1,0 +1,10 @@
+Your app failed the typecheck check. Output (truncated to 4,000 characters):
+
+```
+components/StatusChip.tsx(4,32): error TS2307: Cannot find module '@mui/icons-material/CheckCircleOutline' or its corresponding type declarations.
+```
+
+Fix the problem and reply with every file of the app again, each complete in its own fenced code block whose opening line names the file's path, and nothing else.
+
+
+As before: write the complete corrected file to /home/user/core/benchmarks/tailwind-comparison/results/bench-v4-cc/raw/t201/mui-docs/run3/attempt-2.tsx with the Write tool (no shell commands), then reply with the single word: done.

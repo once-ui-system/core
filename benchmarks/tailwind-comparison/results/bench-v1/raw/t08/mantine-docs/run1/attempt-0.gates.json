@@ -1,0 +1,20 @@
+{
+  "arm": "T",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/Onboarding.tsx(154,15): error TS2322: Type '{ children: Element[]; gutter: string; }' is not assignable to type 'IntrinsicAttributes & GridProps & RefAttributes<HTMLDivElement> & { component?: any; renderRoot?: ((props: Record<string, any>) => ReactNode) | undefined; }'.\n  Property 'gutter' does not exist on type 'IntrinsicAttributes & GridProps & RefAttributes<HTMLDivElement> & { component?: any; renderRoot?: ((props: Record<string, any>) => ReactNode) | undefined; }'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 3501
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/SummaryCard.tsx",
+    "components/Onboarding.tsx",
+    "app/page.tsx",
+    "components/WelcomeContent.tsx",
+    "app/welcome/page.tsx"
+  ]
+}

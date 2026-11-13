@@ -1,0 +1,14 @@
+{
+  "files": [
+    "lib/data.ts",
+    "components/placeholder-photo.tsx",
+    "components/home-map.tsx",
+    "components/home-map-lazy.tsx",
+    "components/home-card.tsx",
+    "components/search-page.tsx",
+    "app/page.tsx",
+    "components/contact-form.tsx",
+    "app/homes/[id]/page.tsx"
+  ],
+  "rejected": []
+}

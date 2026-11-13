@@ -1,0 +1,35 @@
+{
+  "check": "2",
+  "at": "2026-11-10T23:53:42.597Z",
+  "ms": 52012,
+  "files": [
+    "app/globals.css",
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "components/seatwise/app-header.tsx",
+    "components/seatwise/floor-plan.tsx",
+    "components/seatwise/guest-bits.tsx",
+    "components/seatwise/guest-list.tsx",
+    "components/seatwise/plan-provider.tsx",
+    "components/seatwise/rules-view.tsx",
+    "components/seatwise/side-panel.tsx",
+    "components/seatwise/stats.tsx",
+    "components/seatwise/table-panel.tsx",
+    "lib/data.ts",
+    "lib/seating.ts",
+    "lib/use-media.ts"
+  ],
+  "passed": true,
+  "gates_passed": true,
+  "failed_gate": null,
+  "adherence": {
+    "system": 75,
+    "raw": 2,
+    "share": 0.974,
+    "colours": 9,
+    "cssLines": 2,
+    "ok": true,
+    "reasons": []
+  }
+}

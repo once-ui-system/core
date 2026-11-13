@@ -1,0 +1,27 @@
+.skipLink {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
+  background: var(--mantine-color-body);
+  color: var(--mantine-color-text);
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: var(--mantine-radius-default);
+  transform: translateY(-120%);
+
+  &:focus {
+    transform: translateY(0);
+  }
+}
+
+.root {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+  outline: none;
+}

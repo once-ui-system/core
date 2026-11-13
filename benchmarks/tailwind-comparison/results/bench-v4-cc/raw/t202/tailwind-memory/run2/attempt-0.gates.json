@@ -1,0 +1,225 @@
+{
+  "arm": "D",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2666
+    },
+    "build": {
+      "ok": true,
+      "ms": 8539
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 2112,
+          "height": 2929,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 2144,
+          "height": 2327,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 2144,
+          "height": 2066,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 2112,
+              "height": 2929,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 2144,
+              "height": 2327,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 2144,
+              "height": 2066,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 1,
+            "nodes": 35,
+            "serious_or_critical": 1,
+            "ids": [
+              "label-content-name-mismatch:serious:35"
+            ]
+          }
+        },
+        "/guests": {
+          "viewports": {
+            "phone": {
+              "text": 3589,
+              "height": 5611,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 3237,
+              "height": 3078,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 3237,
+              "height": 2338,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 1,
+        "nodes": 35,
+        "serious_or_critical": 1,
+        "ids": [
+          "label-content-name-mismatch:serious:35"
+        ]
+      },
+      "interaction": {
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/guests phone": {
+          "ms": 1761,
+          "settled": true
+        },
+        "/guests tablet": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/guests desktop": {
+          "ms": 1759,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 485,
+          "distinct_fontSize": 12,
+          "distinct_color": 23,
+          "distinct_background": 21,
+          "distinct_radius": 6,
+          "distinct_shadow": 4,
+          "distinct_spacing": 10,
+          "spacing_on_4px_grid": 0.62
+        },
+        "/guests": {
+          "elements": 552,
+          "distinct_fontSize": 6,
+          "distinct_color": 18,
+          "distinct_background": 17,
+          "distinct_radius": 4,
+          "distinct_shadow": 5,
+          "distinct_spacing": 11,
+          "spacing_on_4px_grid": 0.41
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 161.7,
+          "css_kb": 15.6,
+          "fcp_ms": 152,
+          "cls": 0,
+          "long_task_ms": 12
+        },
+        "/guests": {
+          "js_kb": 161.7,
+          "css_kb": 15.6,
+          "fcp_ms": 116,
+          "cls": 0,
+          "long_task_ms": 0
+        }
+      },
+      "views": {
+        "table-selected phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-phone.jpg"
+        },
+        "table-selected tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-tablet.jpg"
+        },
+        "table-selected desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-table-selected-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "lib/plan.ts",
+    "lib/ui.ts",
+    "lib/plan-context.tsx",
+    "components/AppShell.tsx",
+    "components/plan/types.ts",
+    "components/plan/Room.tsx",
+    "components/plan/Panels.tsx",
+    "components/plan/PlanView.tsx",
+    "components/guests/GuestsView.tsx",
+    "app/guests/page.tsx",
+    "app/page.tsx",
+    "app/layout.tsx",
+    "app/globals.css"
+  ]
+}

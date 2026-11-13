@@ -1,0 +1,19 @@
+{
+  "files": [
+    "lib/data.ts",
+    "lib/sidebar-store.ts",
+    "components/AppShell.tsx",
+    "components/PageHeader.tsx",
+    "components/ProjectsTable.tsx",
+    "app/page.tsx",
+    "components/SummaryLink.tsx",
+    "app/projects/layout.tsx",
+    "app/projects/page.tsx",
+    "app/reports/layout.tsx",
+    "app/reports/page.tsx",
+    "app/settings/layout.tsx",
+    "app/settings/page.tsx",
+    "components/SettingsForm.tsx"
+  ],
+  "rejected": []
+}

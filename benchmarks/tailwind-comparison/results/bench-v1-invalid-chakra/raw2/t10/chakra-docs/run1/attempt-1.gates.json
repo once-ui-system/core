@@ -1,0 +1,30 @@
+{
+  "arm": "K",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/layout.tsx(2,33): error TS2307: Cannot find module '@/components/ui/emotion-registry' or its corresponding type declarations.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 11052
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/placeholder.tsx",
+    "components/site-header.tsx",
+    "components/home-card.tsx",
+    "components/filter-bar.tsx",
+    "components/search-map.tsx",
+    "components/search-map-lazy.tsx",
+    "components/search-view.tsx",
+    "app/page.tsx",
+    "components/detail-map.tsx",
+    "components/detail-map-lazy.tsx",
+    "components/contact-form.tsx",
+    "components/gallery.tsx",
+    "components/energy-rating.tsx",
+    "app/homes/[id]/page.tsx",
+    "app/homes/[id]/not-found.tsx"
+  ]
+}

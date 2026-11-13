@@ -1,0 +1,20 @@
+{
+  "files": [
+    "lib/data.ts",
+    "lib/rules.ts",
+    "components/use-drop.ts",
+    "components/plan-provider.tsx",
+    "components/guest-bits.tsx",
+    "components/app-shell.tsx",
+    "components/floor-plan.tsx",
+    "components/table-list.tsx",
+    "components/unseated-panel.tsx",
+    "components/rules-summary.tsx",
+    "components/table-detail.tsx",
+    "app/page.tsx",
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/globals.css"
+  ],
+  "rejected": []
+}

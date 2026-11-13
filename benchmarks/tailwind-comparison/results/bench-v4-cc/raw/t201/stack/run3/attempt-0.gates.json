@@ -1,0 +1,235 @@
+{
+  "arm": "S",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 3513
+    },
+    "build": {
+      "ok": true,
+      "ms": 20762
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 2219,
+          "height": 3791,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 2247,
+          "height": 2773,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 2247,
+          "height": 1778,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 2219,
+              "height": 3791,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 2247,
+              "height": 2773,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 2247,
+              "height": 1778,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 3,
+            "nodes": 14,
+            "serious_or_critical": 3,
+            "ids": [
+              "aria-valid-attr-value:critical:1",
+              "color-contrast:serious:8",
+              "label-content-name-mismatch:serious:5"
+            ]
+          }
+        },
+        "/patients/p-104": {
+          "viewports": {
+            "phone": {
+              "text": 1625,
+              "height": 2617,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 1653,
+              "height": 2184,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 1653,
+              "height": 1709,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 2,
+            "nodes": 2,
+            "serious_or_critical": 2,
+            "ids": [
+              "aria-valid-attr-value:critical:1",
+              "label-content-name-mismatch:serious:1"
+            ]
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 3,
+        "nodes": 14,
+        "serious_or_critical": 3,
+        "ids": [
+          "aria-valid-attr-value:critical:1",
+          "color-contrast:serious:8",
+          "label-content-name-mismatch:serious:5"
+        ]
+      },
+      "interaction": {
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1797,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1764,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1763,
+          "settled": true
+        },
+        "/patients/p-104 phone": {
+          "ms": 1766,
+          "settled": true
+        },
+        "/patients/p-104 tablet": {
+          "ms": 1773,
+          "settled": true
+        },
+        "/patients/p-104 desktop": {
+          "ms": 1758,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 372,
+          "distinct_fontSize": 8,
+          "distinct_color": 9,
+          "distinct_background": 19,
+          "distinct_radius": 8,
+          "distinct_shadow": 1,
+          "distinct_spacing": 15,
+          "spacing_on_4px_grid": 0.491
+        },
+        "/patients/p-104": {
+          "elements": 204,
+          "distinct_fontSize": 8,
+          "distinct_color": 8,
+          "distinct_background": 11,
+          "distinct_radius": 7,
+          "distinct_shadow": 1,
+          "distinct_spacing": 13,
+          "spacing_on_4px_grid": 0.566
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 397,
+          "css_kb": 53.2,
+          "fcp_ms": 316,
+          "cls": 0,
+          "long_task_ms": 75
+        },
+        "/patients/p-104": {
+          "js_kb": 397,
+          "css_kb": 53.2,
+          "fcp_ms": 236,
+          "cls": 0,
+          "long_task_ms": 0
+        }
+      },
+      "views": {
+        "new-appointment phone": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-phone.jpg"
+        },
+        "new-appointment tablet": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-tablet.jpg"
+        },
+        "new-appointment desktop": {
+          "found": true,
+          "steps": 1,
+          "errors": [],
+          "file": "view-new-appointment-desktop.jpg"
+        }
+      }
+    }
+  },
+  "files": [
+    "src/lib/data.ts",
+    "src/components/pawpoint/Alerts.tsx",
+    "src/components/pawpoint/PatientSearch.tsx",
+    "src/components/pawpoint/Shell.tsx",
+    "src/components/pawpoint/Schedule.tsx",
+    "src/components/pawpoint/WeightChart.tsx",
+    "src/app/page.tsx",
+    "src/app/patients/[id]/page.tsx",
+    "src/components/pawpoint/pawpoint.css"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ src/lib/data.ts: no mechanical issues\n✗ src/components/pawpoint/Alerts.tsx: 1 issue(s)\n  [color.svgPaint] Literal colour in inline SVG: <path stroke=\"#fff\"> (and 1 more) — paint with currentColor (set the colour with onBackground on the wrapper) or a token, var(--brand-solid-strong)\n✓ src/components/pawpoint/PatientSearch.tsx: no mechanical issues\n✗ src/components/pawpoint/Shell.tsx: 2 issue(s)\n  [color.svgPaint] Literal colour in inline SVG: <rect fill=\"#0f766e\"> (and 5 more) — paint with currentColor (set the colour with onBackground on the wrapper) or a token, var(--brand-solid-strong)\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n✗ src/components/pawpoint/Schedule.tsx: 1 issue(s)\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n✗ src/components/pawpoint/WeightChart.tsx: 1 issue(s)\n  [color.svgPaint] Literal colour in inline SVG: <line stroke=\"#dbe3e0\"> (and 7 more) — paint with currentColor (set the colour with onBackground on the wrapper) or a token, var(--brand-solid-strong)\n✓ src/app/page.tsx: no mechanical issues\n✗ src/app/patients/[id]/page.tsx: 1 issue(s)\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML",
+    "validator": {
+      "package_version": "2.6.0",
+      "script_sha256": "ab274b3e6be15eb6"
+    }
+  }
+}
