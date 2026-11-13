@@ -241,3 +241,36 @@ describe("Calendar", () => {
     expect(screen.getByRole("button", { name: /^Lunch, .*12:00/ })).toBeTruthy();
   });
 });
+
+describe("Calendar without a date", () => {
+  it("renders the same HTML whichever day the page was prerendered on", async () => {
+    const { renderToString } = await import("react-dom/server");
+    vi.useFakeTimers({ toFake: ["Date"] });
+    try {
+      vi.setSystemTime(at(11, 9));
+      const first = renderToString(wrapper({ children: <Calendar events={events} /> }));
+      vi.setSystemTime(at(12, 10));
+      const next = renderToString(wrapper({ children: <Calendar events={events} /> }));
+      expect(next).toBe(first);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("opens on today once mounted, without calling onDateChange", () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(at(11, 9));
+    try {
+      const onDateChange = vi.fn();
+      const { container } = render(
+        <Calendar events={events} defaultView="day" onDateChange={onDateChange} />,
+        { wrapper },
+      );
+      expect(screen.getByRole("button", { name: /^Standup, / })).toBeTruthy();
+      expect((container.firstElementChild as HTMLElement).style.visibility).toBe("");
+      expect(onDateChange).not.toHaveBeenCalled();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+});

@@ -81,6 +81,9 @@ export interface CalendarLabels {
   view: string;
 }
 
+/** Where a calendar with no date waits, hidden, until the browser says what today is. */
+const UNDATED_DAY = new Date(2000, 0, 3);
+
 const ENGLISH_LABELS: CalendarLabels = {
   today: "Today",
   previous: "Previous",
@@ -225,12 +228,29 @@ export function Calendar<E extends CalendarEvent = CalendarEvent>({
     defaultValue: defaultView,
     onChange: onViewChange,
   });
-  const [initialDate] = useState(() => startOfDay(defaultDate ?? new Date()));
+  // Without `date` or `defaultDate` the calendar opens on today, which only
+  // the browser can say: a page prerendered on one day and opened on the next
+  // would hydrate a different grid (React #418). Such a calendar starts on a
+  // fixed day, hidden, and moves to today once mounted, without telling
+  // `onDateChange`, since nobody changed the date.
+  const undated = dateProp === undefined && !defaultDate;
+  const [initialDate] = useState(() => startOfDay(defaultDate ?? UNDATED_DAY));
+  const placing = useRef(false);
   const [date, setDate] = useControllableState<Date>({
     value: dateProp,
     defaultValue: initialDate,
-    onChange: onDateChange,
+    onChange: (next) => {
+      if (!placing.current) onDateChange?.(next);
+    },
   });
+  const [placed, setPlaced] = useState(!undated);
+  useEffect(() => {
+    if (placed) return;
+    placing.current = true;
+    setDate(startOfDay(new Date()));
+    placing.current = false;
+    setPlaced(true);
+  }, [placed, setDate]);
 
   // The clock is read after the page loads, so the server and the first
   // render agree; it moves on every minute.
@@ -304,7 +324,7 @@ export function Calendar<E extends CalendarEvent = CalendarEvent>({
   return (
     <section
       className={classNames(styles.calendar, className)}
-      style={style}
+      style={placed ? style : { ...style, visibility: "hidden" }}
       aria-label={ariaLabel ?? title}
     >
       {toolbar && (
