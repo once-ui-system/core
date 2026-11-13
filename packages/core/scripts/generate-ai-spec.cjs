@@ -63,6 +63,11 @@ const BARRELS = [
     group: "map",
     importFrom: "@once-ui-system/core/map",
   },
+  {
+    file: path.join(SRC, "modules", "richtext", "index.ts"),
+    group: "richtext",
+    importFrom: "@once-ui-system/core/richtext",
+  },
   // The hooks are root exports, but no barrel above reaches them, so an
   // agent never learned `useHotkeys` or `useInViewport` existed except from
   // prose in the rules.
@@ -137,6 +142,11 @@ const ENTRY_POINTS = [
     specifier: "@once-ui-system/core/map",
     use: "Map with React markers, clustering, popups and areas on free OpenStreetMap tiles",
     peer: "maplibre-gl",
+  },
+  {
+    specifier: "@once-ui-system/core/richtext",
+    use: "RichTextEditor: bold, italic, headings, lists and links, with HTML in and out",
+    peer: "@tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extensions",
   },
   {
     specifier: "@once-ui-system/core/mdx",

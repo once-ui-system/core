@@ -92,6 +92,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Keyboard shortcut | `useHotkeys("mod+k", fn)` + `Kbd keys="mod+k" label="Search"` + `aria-keyshortcuts` |
 | Screen-reader text, skip link | `VisuallyHidden` (skip link: `<VisuallyHidden as="a" href="#main" focusable>`) |
 | Native attributes | Every component also takes its element's own: `aria-*`, `id`, `role`, `onClick`; `type` on `Button`; `value`, `onChange`, `type` on `Input` |
+| Formatted text (notes, descriptions, replies) | `RichTextEditor` from `/richtext` (HTML value; works in a `Field`), never `contentEditable` or Markdown in a `Textarea` |
 | MDX content | `mdxComponents` / `createMdxComponents` from `/mdx` |
 | Multi-part component | List prop (`items`, `columns`, `options`) for same-shaped data, else plain named parts (`SortableItem`, `StylePanelBrand`); never `Sortable.Item` |
 
@@ -105,6 +106,7 @@ entry and `functions.json` entry says `importFrom` when it is not the root:
 |--------|------|
 | charts, gauges, chart chrome | `@once-ui-system/core/data` |
 | `CodeBlock` | `@once-ui-system/core/code` (needs `prismjs`) |
+| `RichTextEditor` | `@once-ui-system/core/richtext` (needs `@tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extensions`) |
 | `MediaUpload` | `@once-ui-system/core/media` (needs `compressorjs`) |
 | `Map`, `MapMarker(s)`, `MapPin`, `MapPopup`, `MapCircle` | `@once-ui-system/core/map` (needs `maplibre-gl`) |
 | `mdxComponents`, `createMdxComponents`, `Mdx*` elements | `@once-ui-system/core/mdx` (needs `prismjs`) |
