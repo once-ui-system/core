@@ -47,7 +47,7 @@ describe("CodeBlock interaction", () => {
     const onInstanceChange = vi.fn();
     render(<CodeBlock codes={codes} onInstanceChange={onInstanceChange} />, { wrapper });
     await codeShows("const a = 1;");
-    await user.click(screen.getByRole("button", { name: "CSS" }));
+    await user.click(screen.getByRole("tab", { name: "CSS" }));
     expect(onInstanceChange).toHaveBeenCalledWith(1);
     await codeShows("body { color: red; }");
   });
@@ -56,7 +56,7 @@ describe("CodeBlock interaction", () => {
     const user = userEvent.setup();
     render(<CodeBlock codes={codes} />, { wrapper });
     await codeShows("const a = 1;");
-    screen.getByRole("button", { name: "CSS" }).focus();
+    screen.getByRole("tab", { name: "CSS" }).focus();
     await user.keyboard("{Enter}");
     await codeShows("body { color: red; }");
   });
