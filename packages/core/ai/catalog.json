@@ -61,6 +61,8 @@
   "Option": {"purpose":"Selectable row in a menu, dropdown or select: label, description, prefix/suffix, link or click"},
   "OTPInput": {"purpose":"One box per digit for a verification code, with paste and a completion callback"},
   "Pagination": {"purpose":"Page buttons in a nav landmark with previous/next, ellipses and an optional per-page select"},
+  "PeerCursor": {"purpose":"Collaborator's live pointer with name label, gliding"},
+  "PeerCursors": {"purpose":"Collaborators' pointers from any realtime source; usePeerPointer sends yours"},
   "PhotoViewer": {"purpose":"Full-screen viewer for photo sets: swipe, zoom, deep links"},
   "ProgressBar": {"purpose":"Linear progress bar for a value between min and max, with optional label"},
   "RadioButton": {"purpose":"Radio button with label and description for one-of-many choices"},

@@ -655,6 +655,16 @@
     "tags": ["navigation", "data"],
     "pairsWith": ["Table", "Row"]
   },
+  "PeerCursor": {
+    "purpose": "Collaborator's live pointer with name label, gliding",
+    "tags": ["collaboration", "feedback"],
+    "pairsWith": ["PeerCursors"]
+  },
+  "PeerCursors": {
+    "purpose": "Collaborators' pointers from any realtime source; usePeerPointer sends yours",
+    "tags": ["collaboration"],
+    "pairsWith": ["PeerCursor", "AvatarGroup"]
+  },
   "ParticleFx": {
     "purpose": "Drifting particles that can react to the pointer, as an ambient layer",
     "tags": ["decoration", "effect"],

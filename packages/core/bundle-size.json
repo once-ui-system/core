@@ -1,5 +1,5 @@
 {
-  ".": 205099,
+  ".": 206976,
   "./components/Accordion": 25100,
   "./components/AccordionGroup": 25538,
   "./components/Animation": 16641,
@@ -56,6 +56,7 @@
   "./components/Option": 10474,
   "./components/OTPInput": 39508,
   "./components/Pagination": 54060,
+  "./components/PeerCursor": 4473,
   "./components/PhotoViewer": 46025,
   "./components/ProgressBar": 8857,
   "./components/RadioButton": 37788,

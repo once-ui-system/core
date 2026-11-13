@@ -50,6 +50,8 @@ const fixtures: Record<string, Record<string, unknown>> = {
     renderItem: (item: string) => item,
     loadMore: async () => false,
   },
+  PeerCursor: { name: "Mira Holt", x: 10, y: 10 },
+  PeerCursors: { peers: [{ id: "1", name: "Mira Holt", x: 0.5, y: 0.5 }] },
   PhotoViewer: { items: [{ src: "/photo.jpg", alt: "A photo" }], onClose: noop },
   Reaction: { value: "❤️" },
   Reactions: { options: [{ value: "❤️" }], counts: { "❤️": 1 } },
