@@ -466,8 +466,8 @@ entry below that had landed by then:
   blocks' `Banner`, tinted danger `Option`s, and the leading-field focus fix on `Dropdown`.
 - **`Tag variant="announce"` is a compact pill with a beam.** 2.x's Badge redesign: 28px
   tall at m, `label-default-s` on the surface colour with a hairline neutral border, the
-  icon in brand, and `effect` is a short brand-to-accent beam round the edge (faster on
-  hover, still under reduced motion) instead of the sweeping shine.
+  icon in brand, and `effect` is a short brand-to-accent beam round the edge (one steady
+  pace, hover included, so it never jumps; still under reduced motion) instead of the sweeping shine.
 - **`Timeline` is drawn in hairlines.** Each step is a hairline node on a 1px rail, and a
   reached step's tone is a vivid dot inside it (the Tag's dot), not a filled disc. A marker
   sits in the node in the tone's ink. The current step (`brand`) has a soft halo, and steps
