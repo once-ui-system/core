@@ -595,8 +595,8 @@ function RowLabel({ id, children, hint }: { id?: string; children: ReactNode; hi
       id={id}
       textVariant="label-default-s"
       onBackground="neutral-strong"
-      vertical="center"
-      gap="4"
+      vertical={hint || fixed ? "center" : undefined}
+      gap={hint ? "4" : undefined}
       minWidth={fixed ? labelWidth : "3rem"}
       width={fixed ? labelWidth : undefined}
       style={fixed ? { flexShrink: 0 } : undefined}
