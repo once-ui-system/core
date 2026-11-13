@@ -131,6 +131,18 @@
     "MapViewport"
    ]
   },
+  "@once-ui-system/core/richtext": {
+   "use": "RichTextEditor: bold, italic, headings, lists and links, with HTML in and out",
+   "peer": "@tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extensions",
+   "exports": [
+    "RichTextEditor"
+   ],
+   "types": [
+    "RichTextEditorLabels",
+    "RichTextEditorProps",
+    "RichTextTool"
+   ]
+  },
   "@once-ui-system/core/mdx": {
    "use": "MDX content through Once UI: mdxComponents for next-mdx-remote or @next/mdx, createMdxComponents(overrides) to replace elements or register tags, and the Mdx* elements to wrap",
    "peer": "prismjs",

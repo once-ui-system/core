@@ -522,10 +522,6 @@
    "17",
    "18"
   ],
-  "Dispatch": [
-   "undefined",
-   "(args?: any) => any"
-  ],
   "FieldControl": {
    "id": "!string",
    "invalid": "!boolean",

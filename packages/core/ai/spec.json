@@ -1713,6 +1713,36 @@
    "dark",
    "light"
   ],
+  "RichTextEditorLabels": {
+   "toolbar": "!string",
+   "bold": "!string",
+   "italic": "!string",
+   "underline": "!string",
+   "strike": "!string",
+   "code": "!string",
+   "heading": "!string",
+   "bulletList": "!string",
+   "orderedList": "!string",
+   "link": "!string",
+   "unlink": "!string",
+   "undo": "!string",
+   "redo": "!string",
+   "linkUrl": "!string",
+   "apply": "!string"
+  },
+  "RichTextTool": [
+   "code",
+   "link",
+   "heading",
+   "bold",
+   "italic",
+   "underline",
+   "strike",
+   "bulletList",
+   "orderedList",
+   "undo",
+   "redo"
+  ],
   "ScalingSize": [
    "100",
    "90",
@@ -5410,6 +5440,38 @@
     "onClose": "() => void",
     "gap": "number = 40",
     "closeLabel": "string = Close"
+   }
+  },
+  "RichTextEditor": {
+   "group": "richtext",
+   "importFrom": "@once-ui-system/core/richtext",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "id": "string",
+    "value": "string",
+    "defaultValue": "string",
+    "onValueChange": "(html: string) => void",
+    "label": "ReactNode",
+    "placeholder": "string",
+    "tools": "RichTextTool[] | false",
+    "disabled": "boolean",
+    "readOnly": "boolean",
+    "minHeight": "string",
+    "maxHeight": "string",
+    "autoFocus": "boolean",
+    "labels": "Partial<RichTextEditorLabels>",
+    "aria-label": "string",
+    "aria-labelledby": "string",
+    "aria-describedby": "string",
+    "aria-invalid": "boolean | \"true\" | \"false\"",
+    "aria-required": "boolean | \"true\" | \"false\""
    }
   },
   "AdapterProvider": {

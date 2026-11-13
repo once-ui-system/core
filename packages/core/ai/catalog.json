@@ -144,6 +144,7 @@
   "MapMarkers": {"purpose":"Markers from data, clustered, one active","importFrom":"@once-ui-system/core/map"},
   "MapPin": {"purpose":"Marker look: label pill or dot","importFrom":"@once-ui-system/core/map"},
   "MapPopup": {"purpose":"Card above a map position; Escape closes","importFrom":"@once-ui-system/core/map"},
+  "RichTextEditor": {"purpose":"Formatted text field (bold, headings, lists, links) with an HTML value","importFrom":"@once-ui-system/core/richtext"},
   "AdapterProvider": {"purpose":"The app's link and image components for every Once UI link and image; core/next's LayoutProvider installs Next's"},
   "DataThemeProvider": {"purpose":"App-wide chart defaults (variant, mode, height, axis, ticks); read with useDataTheme"},
   "IconProvider": {"purpose":"Adds icons to the built-in set or replaces them, by name, for Icon and every icon prop"},
