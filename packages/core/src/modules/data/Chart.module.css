@@ -51,6 +51,8 @@
   left: 0;
   z-index: 1;
   pointer-events: none;
+  /* Glides to the next point as the pointer or the arrow keys move. */
+  transition: transform var(--transition-duration-micro-medium, 0.2s) cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* Lines and areas draw from left to right, bars grow from the axis, a pie sweeps round. */
@@ -152,7 +154,8 @@
   .sweep {
     animation: none;
   }
-  .legendItem {
+  .legendItem,
+  .tooltip {
     transition: none;
   }
 }

@@ -1,6 +1,6 @@
 {
  "version": "3.0.0-beta.1",
- "generated": "2026-11-08",
+ "generated": "2026-11-13",
  "iconNames": ["adjustments","arrowDown","arrowLeft","arrowRight","arrowUp","arrowUpRight","ball","banknotes","barChart","bell","bolt","book","bookmark","calendar","cart","chat","check","checkbox","chevronDoubleLeft","chevronDoubleRight","chevronDown","chevronLeft","chevronRight","chevronUp","chevronsLeftRight","clipboard","close","code","computer","copy","cube","danger","dark","dislike","document","download","edit","enter","eye","eyeDropper","eyeOff","file","filter","flag","folder","food","forward","gift","globe","grid","grip","heart","help","home","image","inbox","info","light","like","linearGauge","link","lock","logout","mail","mapPin","maximize","menu","minimize","minus","moreHorizontal","newspaper","opacity","organization","pause","paw","payment","people","person","personRemove","phone","play","plus","radialGauge","refresh","return","screen","search","security","send","settings","smiley","sparkle","star","starFill","store","symbol","tag","time","trash","trend","trendDown","trendUp","upload","video","volume","volumeOff","warning","wordmark","world"],
  "components": {
   "ScrollLock": {"purpose":"Freezes page scroll while enabled, keeping one referenced region scrollable"},
@@ -28,6 +28,7 @@
   "Dialog": {"purpose":"Modal dialog with title, description, footer and focus handling; variant=\"sheet\" is a bottom sheet (2.x Modal)"},
   "Drawer": {"purpose":"Modal sheet that slides in from any edge, with focus trap and scroll lock: mobile nav, filters, side panels"},
   "Dropdown": {"purpose":"Trigger and the floating menu it opens, with arrow keys; openOn=\"hover\" or \"contextmenu\" (2.x ContextMenu)"},
+  "EmptyState": {"purpose":"Empty view: visual, title, action"},
   "Fade": {"purpose":"Gradient fade strip at the edge of a scroll container, optionally blurred or patterned","avoid":"Wrapping content — it is an absolute edge overlay, not a container"},
   "Feedback": {"purpose":"Inline alert with variant colour, icon, title, description and optional close"},
   "Field": {"purpose":"Label, hint and error around one control, with the id and aria attributes wired for you"},

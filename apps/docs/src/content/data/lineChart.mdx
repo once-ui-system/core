@@ -1,26 +1,15 @@
 ---
 title: "LineChart"
-summary: "A line chart component for displaying trends over time with interactive hover, click events, and flexible styling."
-updatedAt: "2025-05-14"
+summary: "Draw change over time: one line per series, filled or outlined, stacked or not, with smooth or stepped curves, a numeric x axis and live data."
+updatedAt: "2026-11-12"
 docs: "once-ui/data/lineChart.mdx"
 github: "modules/data/LineChart.tsx"
 navLabel: "LineChart"
 navIcon: "lineChart"
 ---
 
-The `LineChart` component provides a way to display line charts with interactive features, including hover effects, click events, and custom styling options. It supports various customization options including different chart types, color schemes, and interactive features.
+`LineChart` draws one line per series across the rows of `data`, with the area under each filled. Use it when the reader asks how something moved over time; for comparing categories use [`BarChart`](/data/barChart). It takes the [props every chart shares](/data/setup#props-every-chart-shares) and the ones on this page.
 
-## Live (morph animation)
-
-<LineChartStreamingExample />
-
-This example uses the `useStreamingViewport` hook to smoothly pan the x-axis domain (viewport) while streaming new samples, then passes the resulting data into `LineChart`.
-
-## Live (animation disabled)
-
-<LineChartStreamingExample animation={false} />
-
-## Static example
 
 <LineChart
   marginTop="16"
@@ -205,8 +194,19 @@ at irregular times, a measurement against a continuous quantity — set
 />
 
 A fixed `xDomain` is also what keeps a streaming chart from rescaling on every
-sample — see the live example above, which drives it from
-[`useStreamingViewport`](/hooks/useStreamingViewport).
+sample: see [Live data](#live-data) below.
+
+## Live data
+
+For a chart that takes a new sample every second or so, fix the x range with `xAxisType="number"` and `xDomain`, so the axis doesn't rescale with each sample. Both examples get their samples and their moving window from [`useStreamingViewport`](/hooks/useStreamingViewport).
+
+With `animation` on and `animationDuration` equal to the sample interval (and `animationEasing="linear"`), each update eases into the next, so the line glides:
+
+<LineChartStreamingExample />
+
+With `animation={false}`, each sample snaps into place. Choose this when samples arrive faster than an animation can finish:
+
+<LineChartStreamingExample animation={false} />
 
 ## Animation
 
@@ -216,8 +216,7 @@ animation's delay, length and CSS easing (`"ease-out"`, `"linear"` or any
 
 Turn animation **off** for a chart that updates faster than the animation runs:
 each new sample restarts the transition, so a streaming line spends its time
-animating rather than showing the data. The second live example above is the
-same chart with `animation={false}`.
+animating rather than showing the data.
 
 ## API reference
 

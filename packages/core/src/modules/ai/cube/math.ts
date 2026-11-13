@@ -150,6 +150,11 @@ export function quatMultiply(a: Quat, b: Quat): Quat {
   ];
 }
 
+export function quatNormalize(q: Quat): Quat {
+  const l = Math.hypot(...q) || 1;
+  return [q[0] / l, q[1] / l, q[2] / l, q[3] / l];
+}
+
 /** Rotation by Euler angles applied in X, then Y, then Z order (as a matrix product Rx·Ry·Rz). */
 export function quatEuler(x: number, y: number, z: number): Quat {
   return quatMultiply(quatMultiply(quatAxisAngle(0, x), quatAxisAngle(1, y)), quatAxisAngle(2, z));

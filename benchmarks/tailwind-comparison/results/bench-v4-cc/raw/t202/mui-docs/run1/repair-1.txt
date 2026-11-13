@@ -1,0 +1,30 @@
+Your app failed the typecheck check. Output (truncated to 4,000 characters):
+
+```
+components/AppShell.tsx(67,12): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: { component: ElementType<any, keyof IntrinsicElements>; } & StackOwnProps & CommonProps & Omit<any, keyof CommonProps | keyof StackOwnProps>): Element | null', gave the following error.
+    Property 'component' is missing in type '{ children: Element[]; direction: "row"; alignItems: string; spacing: number; sx: { mr: { xs: number; sm: number; }; }; }' but required in type '{ component: ElementType<any, keyof IntrinsicElements>; }'.
+  Overload 2 of 2, '(props: DefaultComponentProps<StackTypeMap<{}, "div">>): Element | null', gave the following error.
+    Type '{ children: Element[]; direction: "row"; alignItems: string; spacing: number; sx: { mr: { xs: number; sm: number; }; }; }' is not assignable to type 'IntrinsicAttributes & StackOwnProps & CommonProps & Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, keyof CommonProps | keyof StackOwnProps>'.
+      Property 'alignItems' does not exist on type 'IntrinsicAttributes & StackOwnProps & CommonProps & Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, keyof CommonProps | keyof StackOwnProps>'.
+components/AppShell.tsx(124,10): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: { component: ElementType<any, keyof IntrinsicElements>; } & StackOwnProps & CommonProps & Omit<any, keyof CommonProps | keyof StackOwnProps>): Element | null', gave the following error.
+    Property 'component' is missing in type '{ children: Element[]; direction: "row"; spacing: { xs: number; md: number; }; alignItems: string; useFlexGap: true; sx: { px: { xs: number; sm: number; }; py: number; flexWrap: "wrap"; borderTop: number; borderColor: "divider"; bgcolor: string; }; }' but required in type '{ component: ElementType<any, keyof IntrinsicElements>; }'.
+  Overload 2 of 2, '(props: DefaultComponentProps<StackTypeMap<{}, "div">>): Element | null', gave the following error.
+    Type '{ children: Element[]; direction: "row"; spacing: { xs: number; md: number; }; alignItems: string; useFlexGap: true; sx: { px: { xs: number; sm: number; }; py: number; flexWrap: "wrap"; borderTop: number; borderColor: "divider"; bgcolor: string; }; }' is not assignable to type 'IntrinsicAttributes & StackOwnProps & CommonProps & Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, keyof CommonProps | keyof StackOwnProps>'.
+      Property 'alignItems' does not exist on type 'IntrinsicAttributes & StackOwnProps & CommonProps & Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, keyof CommonProps | keyof StackOwnProps>'.
+components/AppShell.tsx(141,12): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: { component: ElementType<any, keyof IntrinsicElements>; } & StackOwnProps & CommonProps & Omit<any, keyof CommonProps | keyof StackOwnProps>): Element | null', gave the following error.
+    Property 'component' is missing in type '{ children: Element[]; direction: "row"; spacing: number; alignItems: string; sx: { color: "text.secondary"; }; }' but required in type '{ component: ElementType<any, keyof IntrinsicElements>; }'.
+  Overload 2 of 2, '(props: DefaultComponentProps<StackTypeMap<{}, "div">>): Element | null', gave the following error.
+    Type '{ children: Element[]; direction: "row"; spacing: number; alignItems: string; sx: { color: "text.secondary"; }; }' is not assignable to type 'IntrinsicAttributes & StackOwnProps & CommonProps & Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, keyof CommonProps | keyof StackOwnProps>'.
+      Property 'alignItems' does not exist on type 'IntrinsicAttributes & StackOwnProps & CommonProps & Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, keyof CommonProps | keyof StackOwnProps>'.
+components/AppShell.tsx(145,12): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: { component: ElementType<any,
+…[truncated]
+```
+
+Fix the problem and reply with every file of the app again, each complete in its own fenced code block whose opening line names the file's path, and nothing else.
+
+
+As before: write the complete corrected file to /home/user/core/benchmarks/tailwind-comparison/results/bench-v4-cc/raw/t202/mui-docs/run1/attempt-1.tsx with the Write tool (no shell commands), then reply with the single word: done.

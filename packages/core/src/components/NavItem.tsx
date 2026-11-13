@@ -32,6 +32,11 @@ interface NavItemProps
   badge?: number | ReactNode;
   /** A dot at the end of the row, for unread with no number worth showing. */
   indicator?: boolean;
+  /**
+   * End a label too long for the row with an ellipsis, on one line. On by
+   * default; `false` lets a long label overflow the row as before.
+   */
+  truncate?: boolean;
 }
 
 /**
@@ -49,10 +54,13 @@ const NavItem = ({
   badge,
   indicator,
   size,
+  truncate = true,
+  tone: ownTone,
   className,
   ...toggle
 }: NavItemProps) => {
-  const { variant, density, sizes, collapsed } = useNavStyle();
+  const { variant, density, sizes, collapsed, tone: navTone } = useNavStyle();
+  const tone = ownTone ?? navTone;
   const count = typeof badge === "number" ? badge : undefined;
   // A number shows above 0, as it always did; any other badge shows unless empty.
   const showBadge =
@@ -64,6 +72,8 @@ const NavItem = ({
   // `solid` keeps today's look: every row at full contrast, the current one
   // filled. The other two dim the rest and set the current row in strong.
   const emphasis = variant !== "solid";
+  // A toned current row takes its label and icon colour from ToggleButton.
+  const toned = tone !== "neutral" && selected;
   return (
     <ToggleButton
       ref={ref}
@@ -72,6 +82,8 @@ const NavItem = ({
       size={size ?? sizes.toggle}
       radius="m"
       aria-current={toggle.href && selected ? "page" : undefined}
+      truncate={truncate}
+      tone={tone}
       className={classNames(
         variant === "minimal" && styles.quiet,
         !size && density === "spacious" && styles.spacious,
@@ -85,13 +97,17 @@ const NavItem = ({
         vertical="center"
         horizontal={trailing ? "between" : "start"}
         textVariant={`label-${emphasis && selected ? "strong" : "default"}-${sizes.text}`}
-        onBackground={emphasis ? (selected ? "neutral-strong" : "neutral-weak") : undefined}
+        onBackground={
+          emphasis && !toned ? (selected ? "neutral-strong" : "neutral-weak") : undefined
+        }
       >
-        <Row gap={sizes.iconGap} vertical="center">
+        <Row gap={sizes.iconGap} vertical="center" className={truncate ? "min-width-0" : undefined}>
           {icon && (
             <Icon
               name={icon}
-              onBackground={emphasis && selected ? "neutral-strong" : "neutral-weak"}
+              onBackground={
+                toned ? undefined : emphasis && selected ? "neutral-strong" : "neutral-weak"
+              }
               size="xs"
             />
           )}
@@ -101,9 +117,15 @@ const NavItem = ({
             </Row>
           )}
           {collapsed ? (
-            <Row opacity={0} transition="micro-medium">
-              {label}
+            <Row
+              opacity={0}
+              transition="micro-medium"
+              className={truncate ? "min-width-0" : undefined}
+            >
+              {truncate ? <span className="truncate">{label}</span> : label}
             </Row>
+          ) : truncate ? (
+            <span className="truncate">{label}</span>
           ) : (
             label
           )}
@@ -125,7 +147,14 @@ const NavItem = ({
           </Row>
         )}
         {indicator && badge === undefined && !collapsed && (
-          <Row width="8" height="8" radius="full" solid="brand-strong" aria-hidden="true" />
+          <Row
+            width="8"
+            minWidth="8"
+            height="8"
+            radius="full"
+            solid="brand-strong"
+            aria-hidden="true"
+          />
         )}
       </Row>
     </ToggleButton>

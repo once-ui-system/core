@@ -1,6 +1,6 @@
 {
  "version": "3.0.0-beta.1",
- "generated": "2026-11-08",
+ "generated": "2026-11-13",
  "imports": {
   "@once-ui-system/core": {
    "use": "Components, hooks, providers, defineConfig and types: everything not listed below"
@@ -75,14 +75,20 @@
     "MediaAudioPlayer",
     "MediaVideoPlayer",
     "Scrubber",
+    "ScrubberFilmstrip",
+    "ScrubberWaveform",
     "MediaUpload"
    ],
    "types": [
     "MediaAudioPlayerProps",
     "MediaUploadProps",
     "ScrubberBlock",
+    "ScrubberFilmstripProps",
+    "ScrubberMarker",
     "ScrubberProps",
-    "ScrubberTrack"
+    "ScrubberRange",
+    "ScrubberTrack",
+    "ScrubberWaveformProps"
    ]
   },
   "@once-ui-system/core/emoji": {

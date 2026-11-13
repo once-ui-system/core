@@ -1,0 +1,26 @@
+{
+  "arm": "T",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/PatientRecord.tsx(25,3): error TS2724: '\"@tabler/icons-react\"' has no exported member named 'IconSyringe'. Did you mean 'IconRings'?\ncomponents/PatientRecord.tsx(111,23): error TS2322: Type '{ children: Element[]; mt: \"lg\"; gutter: string; }' is not assignable to type 'IntrinsicAttributes & GridProps & RefAttributes<HTMLDivElement> & { component?: any; renderRoot?: ((props: Record<string, any>) => ReactNode) | undefined; }'.\n  Property 'gutter' does not exist on type 'IntrinsicAttributes & GridProps & RefAttributes<HTMLDivElement> & { component?: any; renderRoot?: ((props: Record<string, any>) => ReactNode) | undefined; }'.\ncomponents/PatientRecord.tsx(191,15): error TS2322: Type '{ children: Element[]; gutter: string; }' is not assignable to type 'IntrinsicAttributes & GridProps & RefAttributes<HTMLDivElement> & { component?: any; renderRoot?: ((props: Record<string, any>) => ReactNode) | undefined; }'.\n  Property 'gutter' does not exist on type 'IntrinsicAttributes & GridProps & RefAttributes<HTMLDivElement> & { component?: any; renderRoot?: ((props: Record<string, any>) => ReactNode) | undefined; }'.\ncomponents/Schedule.tsx(141,13): error TS2322: Type '{ children: Element[]; gutter: string; }' is not assignable to type 'IntrinsicAttributes & GridProps & RefAttributes<HTMLDivElement> & { component?: any; renderRoot?: ((props: Record<string, any>) => ReactNode) | undefined; }'.\n  Property 'gutter' does not exist on type 'IntrinsicAttributes & GridProps & RefAttributes<HTMLDivElement> & { component?: any; renderRoot?: ((props: Record<string, any>) => ReactNode) | undefined; }'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 5707
+    }
+  },
+  "files": [
+    "app/page.tsx",
+    "app/patients/[id]/page.tsx",
+    "app/theme.ts",
+    "components/AlertBadges.tsx",
+    "components/BookingModal.tsx",
+    "components/PatientRecord.tsx",
+    "components/PatientSearch.tsx",
+    "components/Schedule.tsx",
+    "components/Shell.tsx",
+    "components/WeightChart.tsx",
+    "lib/data.ts",
+    "lib/utils.ts"
+  ]
+}

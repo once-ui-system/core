@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@layer base {
+  :focus-visible {
+    outline: 3px solid #0f766e;
+    outline-offset: 2px;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  button:not(:disabled),
+  [role="option"],
+  select {
+    cursor: pointer;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

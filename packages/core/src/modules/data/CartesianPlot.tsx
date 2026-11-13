@@ -19,6 +19,7 @@ import { Legend } from "./Legend.js";
 import { rowsByX } from "./utils/chartSeries.js";
 import { formatDate } from "./utils/formatDate.js";
 import { annotationIndex, markStroke, thresholdValues } from "./utils/marks.js";
+import { placeTooltip } from "./utils/placeTooltip.js";
 import {
   areaPath,
   barSlots,
@@ -367,10 +368,7 @@ export function CartesianPlot({
     const c = centres[active.index] ?? 0;
     const x = (horizontal ? (active.y ?? plot.x + plot.w / 2) : c) * sx;
     const y = (horizontal ? c : (active.y ?? plot.y + padTop)) * sy;
-    let left = x + 10;
-    if (left + el.offsetWidth > box.clientWidth) left = Math.max(0, x - el.offsetWidth - 10);
-    const top = Math.max(0, Math.min(y + 10, box.clientHeight - el.offsetHeight));
-    el.style.transform = `translate(${left}px, ${top}px)`;
+    placeTooltip(el, box, x, y);
   });
 
   const gradient = (i: number) => `barGradient${id}${i}`;

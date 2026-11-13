@@ -1,0 +1,23 @@
+{
+  "files": [
+    "lib/data.ts",
+    "lib/rules.ts",
+    "lib/plan.tsx",
+    "lib/ui.ts",
+    "lib/stack.tsx",
+    "components/AppShell.tsx",
+    "components/GuestRow.tsx",
+    "components/RoomPlan.tsx",
+    "components/StatTiles.tsx",
+    "components/UnseatedList.tsx",
+    "components/TablePanel.tsx",
+    "components/RulesPanel.tsx",
+    "components/PlanView.tsx",
+    "components/GuestsView.tsx",
+    "app/page.tsx",
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/theme.ts"
+  ],
+  "rejected": []
+}

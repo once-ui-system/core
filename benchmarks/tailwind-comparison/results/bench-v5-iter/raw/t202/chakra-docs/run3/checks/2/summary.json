@@ -1,0 +1,36 @@
+{
+  "check": "2",
+  "at": "2026-11-11T00:05:47.766Z",
+  "ms": 61323,
+  "files": [
+    "app/guests/page.tsx",
+    "app/layout.tsx",
+    "app/page.tsx",
+    "components/AppShell.tsx",
+    "components/PageHeader.tsx",
+    "components/guests/GuestsView.tsx",
+    "components/plan/GuestRow.tsx",
+    "components/plan/PlanBoard.tsx",
+    "components/plan/RoomMap.tsx",
+    "components/plan/RulesList.tsx",
+    "components/plan/SidePanel.tsx",
+    "components/plan/StatsBar.tsx",
+    "components/plan/TableView.tsx",
+    "components/ui/provider.tsx",
+    "lib/data.ts",
+    "lib/plan.ts",
+    "lib/store.tsx"
+  ],
+  "passed": true,
+  "gates_passed": true,
+  "failed_gate": null,
+  "adherence": {
+    "system": 241,
+    "raw": 0,
+    "share": 1,
+    "colours": 0,
+    "cssLines": 0,
+    "ok": true,
+    "reasons": []
+  }
+}

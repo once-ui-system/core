@@ -1,0 +1,22 @@
+{
+  "arm": "M",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "components/AppShell.tsx(33,29): error TS2307: Cannot find module '@mui/icons-material/WorkOutline' or its corresponding type declarations.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 9744
+    }
+  },
+  "files": [
+    "app/theme.ts",
+    "app/layout.tsx",
+    "lib/data.ts",
+    "components/AppShell.tsx",
+    "app/page.tsx",
+    "app/reports/page.tsx",
+    "app/projects/page.tsx",
+    "app/settings/page.tsx"
+  ]
+}

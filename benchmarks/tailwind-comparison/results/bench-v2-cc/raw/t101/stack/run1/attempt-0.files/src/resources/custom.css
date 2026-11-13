@@ -1,0 +1,19 @@
+:root {
+  --default-border: var(--neutral-alpha-weak);
+
+  /* Lumen type: Georgia headings, system sans body. No network fonts. */
+  --font-heading: Georgia, "Times New Roman", serif;
+  --font-body: ui-sans-serif, system-ui, sans-serif;
+  --font-label: ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Lumen corner radius: 2px on buttons, inputs, cards and menus. */
+:root,
+:root[data-border],
+[data-border] {
+  --radius-xs: 2px;
+  --radius-s: 2px;
+  --radius-m: 2px;
+  --radius-l: 2px;
+  --radius-xl: 2px;
+}

@@ -62,6 +62,34 @@ entry below that had landed by then:
 
 ### Added
 
+- **`Select alignSelected`** (2.x main's `position="aligned"`, renamed: `position` is the CSS position in 3.0): the list opens with the selected
+  option sitting on the field and the others above and below it, as macOS draws a
+  pop-up button. Near a viewport edge, and on a searchable or multiple Select, it opens
+  as the usual dropdown. `Dropdown` takes the same behaviour as `alignSelected`.
+- **An editor-grade `Scrubber`.** Everything is a new prop, so existing timelines
+  look and behave as before. `ruler` draws round time ticks with a playhead
+  handle, and a track `label` adds a header column. Blocks take
+  `variant: "gap"` (a hatched range that is not in the output, with its reason in
+  `label` and `description`), a corner `badge`, `content` drawn behind the label
+  (new `ScrubberFilmstrip` and `ScrubberWaveform`), and `highlight`, a one-off
+  shimmer for blocks that just changed. Blocks glide to new times. The timeline
+  takes `markers`, `snap` (edges stick to edges, markers and the playhead, with
+  a guide), `zoom` / `defaultZoom` / `onZoomChange` (Ctrl or Cmd + wheel, pinch,
+  `+` and `-`, following the playhead), `range` / `onRangeChange` (Shift-drag)
+  and `renderPreview` (a frame above the hovered time).
+- **`EmptyState`.** Also in 2.8: a `visual` (Mascot, Cube Emote) or `icon`, a `title`,
+  one line of `description` and an `action`, at `size` `s`, `m` or `l`. `Table`'s own
+  empty and no-results states are built from it. `Mascot surface="flat"` no longer paints
+  the eye glint.
+- **`tone` on `Nav`**: marks the current row in a palette for every NavItem
+  inside. `<Nav tone="brand">` tints the current page and colours its label and
+  icon in the brand colour; the default stays the neutral grey fill, and a
+  NavItem's own `tone` still wins. The agent rules, AGENTS.md and the app-shell
+  example use it when an app has a brand colour.
+- `ToggleButton` and `Option` take `tone`, the palette of their selected state,
+  as on `Button`. `neutral` (the default) keeps the grey fill; `brand`,
+  `accent` and the status tones tint the fill and colour the label and icons,
+  the way a sidebar or a menu marks the current item.
 - **Nested menus: `Submenu`.** Put a `Submenu` among a Dropdown's Options (or
   a context menu's) to open a nested menu, as deep as needed. It opens when the
   pointer rests on it, on a click or tap, and with Right arrow, Enter or Space;
@@ -189,6 +217,10 @@ entry below that had landed by then:
   (the call on a photo across the page) and `StatsSection` `strip` (figures in a
   ruled band). `heroLayoutGuide` and `sectionSchemas.hero.layoutGuide` say in one
   sentence when each hero layout suits, for a model picking one.
+- **`fillWidth` on `DateInput`**, single and `range`: the field stretches to its
+  container's width like the inputs around it, and the calendar panel keeps at least
+  its own width. Before, the wrapper was always as wide as its content, so a date
+  range in a form sat narrower than the fields below it.
 - **`phone` and `mapPin` icons** in the built-in set.
 - **CodeBlock `actions`**: controls of your own in the header, before copy.
 - **`density`** in the theme (`once-ui.config` `style`, ThemeProvider, ThemeInit),
@@ -293,7 +325,48 @@ entry below that had landed by then:
   sources and `dist/styles/breakpoints.scss` only served the workspace's watch build,
   which now runs the CSS compile itself (`pnpm dev`). `sideEffects` is `["*.css"]`.
 
+### Performance
+
+- **Root imports ship only what a page uses under Turbopack.** The build now
+  rewrites every `export * from` in the emitted JavaScript as the list of
+  names it carries (`scripts/flatten-barrels.mjs`, after `tsc`). Turbopack
+  (Next 16's default build) shipped every client component, with its CSS,
+  to any page whose server component imported one component from the root;
+  with named re-exports it ships the ones imported. A Next 16 page with a
+  `Button` and a `Column`: component CSS 108 KB to 11 KB, page JavaScript
+  861 KB to 678 KB. The Stack landing page on 2.8 with the same rewrite: JS
+  451 KB to 357 KB. Every entry point exports exactly the same names (checked
+  by bundling each before and after); the `.d.ts` files and the sources keep
+  their star exports. Per-component paths (`/components/Button`) still work;
+  they are no longer needed for this.
+
 ### Changed
+
+- **Agent guidance: system parts for brand, alerts and charts, and one
+  surface level.** Agents now reach for `Logo` (with `text` and `monogram`)
+  instead of an icon beside text, `Feedback` instead of hand-built alert boxes,
+  and the `data` charts instead of hand-drawn SVG, and keep one raised surface
+  for content instead of grey cards on grey.
+  Work apps set `density: "compact"` and `border: "conservative"`, key
+  numbers are one divided strip, a screen has one primary action, and a
+  chart's `height` is a string with a `brand-strong` series.
+- **Agent guidance for apps that look designed, not stock.** From the
+  real-world bench: AGENTS.md and the rules now set the theme first (brand,
+  neutral, `solid: "color"`, a heading font), keep same-shaped records on one
+  surface with divided rows, make critical states louder than status, and set
+  a `body-default-s` floor for app text. `ai/layouts.md` gains a phone header,
+  a plan/map canvas that fits any width, and a selection pattern; a new
+  `field.errorTiming` gotcha keeps field errors until blur or submit.
+- **Alpha tokens in light mode are as visible as in dark.** `--*-alpha-weak`,
+  `-medium` and `-strong` came from step 600 in both themes, a light mid-tone
+  that stands out on a dark page but barely shows on a light one (strong:
+  2.4:1 against the page in dark, 1.6:1 in light). Light now mixes them from
+  step 400 for neutral and info and step 500 for brand, accent and the status
+  colours, at the same 15, 30 and 50%, so hairlines, hovers, tracks and
+  tinted fills in light read about as strongly as in dark. Names and dark
+  values are unchanged. The `--scheme-*-600-15/30/50` variables stay, now only
+  read by dark; custom schemes need nothing new. The token export writes these
+  as `"{function-neutral-400}/0.15"`, which `@once-ui-system/native` resolves.
 
 - **CelebrationFx and WeatherFx follow the state contract**: `active` / `defaultActive`
   / `onActiveChange`, controlled only when `active` is set, with any `trigger`;
@@ -339,8 +412,9 @@ entry below that had landed by then:
   `MissingDependency` fallback. The plot sizes itself to its container with a
   ResizeObserver, drawing at 640 × 320 until it is measured. The props are
   unchanged. New in the browser: the arrow keys (and Home, End, Escape) move
-  the tooltip through the points, a legend entry is a button that hides or
-  shows its series (or slice), and the entry animations follow
+  the tooltip through the points, the tooltip glides from point to point
+  instead of jumping, a legend entry is a button that hides or shows its
+  series (or slice), and the entry animations and the glide follow
   `prefers-reduced-motion`. The four charts' own code is 13.1 KB gzipped
   (minified, React external), where recharts alone was 126 KB. A PieChart's
   legend now lists slices in data order in their own colours (it sorted them
@@ -604,6 +678,59 @@ entry below that had landed by then:
 
 ### Fixed
 
+- **From 2.x main, carried into 3.0:** `SegmentedControl`'s rail takes its options'
+  radius plus its 4px padding (`s-4`, `m-4`, `l-4`) instead of a fixed `l`; a
+  Dropdown's panel clips its content to its rounded corners; `DatePicker` shows its
+  calendar and time panel without a second reveal and swaps them at once; the
+  `VoiceVisualizer` orb's swirl stays round on iOS Safari; a Select's highlight
+  follows the pointer only when it moves, so the arrow keys no longer lose it.
+- **`color: "brand"` paints a chart in the brand.** A bare `brand` or
+  `accent` on a series, slice, sparkline or gauge was `var(--data-brand)`,
+  which no theme defines, so it drew nothing; and `brand-strong`, the usual
+  workaround, is the brand's text colour: white in dark, black in light. In a
+  chart, `brand` and `accent` are now the theme's colours at the palette's
+  step (`var(--function-brand-400)`), matching the data hues in both themes.
+- **A chart whose request failed says so.** With `error` set and `data`
+  empty, as `data={data ?? []}` leaves it when a fetch fails, a chart showed
+  its empty message ("No data available for the selected period") instead of
+  `errorState`. `ChartStatus` now puts an error before empty: loading, then
+  error, then empty.
+- **`MediaVideoPlayer` shows a focus ring.** The player is a tab stop of its own
+  (Space plays, the arrows seek) but drew no outline, so keyboard focus on it
+  was invisible. It now draws the brand focus ring, inset.
+- **A ghost Input or Textarea gets no border on focus.** Focus gave it the
+  same darker border as a default field, so a ghost field inside a frame (a
+  chat composer, a toolbar search) showed a second box inset in that frame.
+  The frame now shows focus with `:focus-within`, or the field sets
+  `focusRing`.
+- **Mascot `working="cube"` accepts `color="var(--token)"`.** The colour
+  was painted through a canvas, which can't read custom properties, so the
+  cube came out black. A `var()` is now looked up on the element first,
+  falling back to its own fallback value.
+- **SegmentedControl's selected pill keeps its corners.** The pill copied its
+  corners from the selected option's computed style once, at mount, before
+  ThemeProvider had set the theme, so it could stay square. It now takes them
+  from the radius token in CSS. `compact` no longer joins outlined segments
+  with square inner corners: it is the same bordered track with a sliding
+  pill, 2px in from the border instead of 4px.
+- **Avatar initials are sized from the circle and centred.** They were body
+  text that filled the `m` circle and sat high in it, light grey on white.
+  They now take two fifths of the circle at every size (custom sizes too), in
+  medium weight on a soft neutral fill, trimmed to the cap height so they sit
+  in the middle.
+  They never go under 9px, so `s` stays legible at compact density.
+- **Agent bundles no longer say `Text` takes padding.** A stale gotcha told
+  agents that `Text` and `Heading` take padding, which is a type error in 3.0.
+  It now says to put padding on a `<Column>` around them, matching the
+  validator's `layout.leafProps` hint.
+- **A long `NavItem` label ends in an ellipsis.** In a narrow Nav the label ran
+  out of the row with no ellipsis, because the rows around it kept their
+  content's width. NavItem now truncates by default (`truncate={false}` keeps the
+  old overflow), and `ToggleButton`'s `truncate` prop, which did nothing, ends a
+  long text label in an ellipsis.
+- A selected `ToggleButton` keeps its fill on hover and deepens it, instead
+  of dropping to the idle-hover grey and looking deselected (`subtle` went
+  near invisible in dark).
 - CelebrationFx: switching `type` mid-flight threw; fireworks were never cleaned up
   while emitting (the list grew about three shells a second for as long as the page
   stayed open); the hover, click and manual triggers dropped a wave of confetti at
@@ -698,6 +825,72 @@ entry below that had landed by then:
 
 ### Added
 
+- **`Select` gets `position="aligned"`.** The list opens with the selected option sitting
+  exactly on the field and the others above and below it in their own order, as macOS draws
+  a pop-up button (the first option, with nothing picked). A long list shows six and a half
+  rows each side and scrolls the rest. Near a viewport edge, and on a searchable or multiple
+  Select, it opens as the usual dropdown. The default stays `"dropdown"`. `DropdownWrapper`
+  takes the same behaviour as `alignSelected`.
+
+### Fixed
+
+- **A Select's highlight stays where the arrow keys put it.** The list scrolling under a
+  resting pointer fired `mouseover`, which moved the highlight back under the pointer, so the
+  keys seemed to skip or stick. The highlight now follows the pointer only when it moves.
+
+- **`SegmentedControl`'s rail follows its options' corners.** Its radius was a fixed `l`,
+  so small options sat in a rail that was too round. It is now the options' radius plus the
+  4px padding (`s-4`, `m-4`, `l-4`), so the gap round the selected option stays even.
+- **Dropdowns clip their content to their rounded corners.** A `Background` glow behind a
+  menu's header (as in Stack's account menu) filled the panel's top corners square, past
+  the rounded edge. The panel now hides what falls outside its radius.
+
+## [2.8.0] — 2026-11-06
+
+Minor: `SegmentedControl` gets a new `sliding` prop. It is on by default, which changes how
+selection looks (an improvement that rides a minor, per RELEASING.md). Plus one `Banner` fix.
+
+### Changed
+
+- **`SegmentedControl` selection slides.** The selected background now slides along the
+  rail to the picked option, morphing its width between options of different widths. It
+  doesn't slide under reduced motion, `compact` keeps the static look, and
+  `sliding={false}` turns it off. The first paint (and server render) is unchanged.
+
+### Added
+
+- **`EmptyState`.** What a page, panel or list shows before it has anything in it: a
+  `visual` (a `Mascot`, a Cube Emote, an illustration) or an `icon`, a `title`, one line of
+  `description`, and an `action` with an optional `secondaryAction`. `size` is `s` inside a
+  table or list, `m` (default) in a card and `l` for a whole page; `titleAs` sets the
+  heading level. `DataTable`'s own empty and no-results states are now built from it, with
+  the same text and actions as before.
+
+### Fixed
+
+- **`Banner` dismiss button sits at the right edge again.** In production bundles the
+  button's own `position: relative` could load after the banner's rule and win, which put
+  the close button inline after the text instead of at the strip's right edge.
+- **`Mascot surface="flat"` is flat.** The eyes no longer keep their white glint on the
+  flat surface.
+- **`DatePicker` opens without a second animation.** The calendar no longer wipes in through
+  a blurred `RevealFx` mask after the dropdown has already faded in, and switching between
+  the calendar and the time panel is instant instead of waiting 400 ms. Inline pickers show
+  at once too.
+
+## [2.7.0] — 2026-11-05
+
+Minor: everything here adds new props, components or variants, changes the look of
+existing components without changing their props (`Badge`, `Option`), or fixes bugs. No
+consumer has to change code.
+
+### Added
+
+- **`Logo monogram`.** `<Logo text="Acme" monogram />` draws a plain mark for apps that
+  have no logo yet: one of five shapes picked from the name (the same name always gets
+  the same mark), in black on light and white on dark. Pass a string to draw those
+  characters instead. `icon` still wins. The `Logo.text` gotcha now tells agents to use
+  `monogram` instead of drawing placeholder SVGs, and the app starter's header uses it.
 - **`emphasis` on `Flex` and `Grid`.** Draws attention to an element with an animated
   brand-to-accent edge that travels round the border. Each value names a look: `edge` is
   the edge alone, `glow` (or `true`) adds a soft halo for bars and inputs, `aura` a wide
@@ -739,6 +932,10 @@ entry below that had landed by then:
   shine that swept across it every few seconds is replaced by a short brand-to-accent beam
   that travels round the border, faster on hover and still under reduced motion. Padding,
   colour and text props still override the defaults.
+- **Danger and selected `Option`s.** A danger item in a menu now hovers and takes focus
+  as a soft danger tint with danger text, instead of a solid red block. At rest, its
+  label and icon are danger-coloured too. A selected option gets a weak neutral fill
+  with no border, so it no longer looks like a pressed button.
 
 ### Fixed
 

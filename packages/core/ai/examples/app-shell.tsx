@@ -98,7 +98,7 @@ export const SideNav = ({ nav, pathname }: { nav: Item[]; pathname: string }) =>
     nav.flatMap((i) => (i.items ? i.items.map((s) => s.href) : [i.href!])),
   );
   return (
-    <Nav fill paddingX="8" aria-label="Main">
+    <Nav fill paddingX="8" tone="brand" aria-label="Main">
       {nav.map((item) =>
         item.items ? (
           <NavGroup

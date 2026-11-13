@@ -1,0 +1,208 @@
+{
+  "arm": "A",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2209
+    },
+    "build": {
+      "ok": true,
+      "ms": 6782
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 639,
+          "height": 963,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 645,
+          "height": 1024,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 645,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 639,
+              "height": 963,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 645,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 645,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/members/m-02": {
+          "viewports": {
+            "phone": {
+              "text": 637,
+              "height": 1200,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 637,
+              "height": 1027,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 637,
+              "height": 1010,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      },
+      "interaction": {
+        "phone": {
+          "action": "click > click",
+          "found": true,
+          "steps": 2,
+          "errors": []
+        },
+        "desktop": {
+          "action": "click > click",
+          "found": true,
+          "steps": 2,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/members/m-02 phone": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/members/m-02 tablet": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/members/m-02 desktop": {
+          "ms": 1757,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 260,
+          "distinct_fontSize": 6,
+          "distinct_color": 9,
+          "distinct_background": 3,
+          "distinct_radius": 4,
+          "distinct_shadow": 1,
+          "distinct_spacing": 10,
+          "spacing_on_4px_grid": 0.856
+        },
+        "/members/m-02": {
+          "elements": 56,
+          "distinct_fontSize": 9,
+          "distinct_color": 4,
+          "distinct_background": 1,
+          "distinct_radius": 4,
+          "distinct_shadow": 0,
+          "distinct_spacing": 7,
+          "spacing_on_4px_grid": 0.938
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 226.9,
+          "css_kb": 40.1,
+          "fcp_ms": 120,
+          "cls": 0.002,
+          "long_task_ms": 0
+        },
+        "/members/m-02": {
+          "js_kb": 226.9,
+          "css_kb": 40.1,
+          "fcp_ms": 104,
+          "cls": 0,
+          "long_task_ms": 0
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/MemberBadges.tsx",
+    "components/InviteDialog.tsx",
+    "components/TeamPage.tsx",
+    "components/MemberAvatar.tsx",
+    "app/page.tsx",
+    "app/members/[id]/page.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✓ lib/data.ts: no mechanical issues\n✓ components/MemberBadges.tsx: no mechanical issues\n✗ components/InviteDialog.tsx: 1 issue(s)\n  [layout.primitiveProps] <Column as=\"form\"> keeps a div's event types, so an onSubmit taking FormEvent<HTMLFormElement>, and noValidate, are type errors — wrap the Column in a native <form onSubmit={…}>\n✗ components/TeamPage.tsx: 1 issue(s)\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}\n✓ components/MemberAvatar.tsx: no mechanical issues\n✓ app/page.tsx: no mechanical issues\n✗ app/members/[id]/page.tsx: 1 issue(s)\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "3.0.0-beta.1",
+      "script_sha256": "d8f443844780a521"
+    }
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 6,
+      "input_total": 452331,
+      "input_uncached": 12,
+      "cache_creation": 74342,
+      "cache_read": 377977,
+      "visible_output_tokens_o200k": 15227,
+      "visible_output_tokens_claudeLegacy": 16397,
+      "thinking_blocks": 3
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "../../../results/bench-v4-cc/raw/t201/shadcn-docs/run2/prompt.txt"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/README.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/globals.css"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/badge.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/button.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/select.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "project/components/ui/dialog.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/sonner.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/input.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/bench-v4-cc/raw/t201/shadcn-docs/run2/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "C"
+}

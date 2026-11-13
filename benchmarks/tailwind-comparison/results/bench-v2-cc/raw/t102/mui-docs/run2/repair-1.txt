@@ -1,0 +1,12 @@
+Your app failed the typecheck check. Output (truncated to 4,000 characters):
+
+```
+app/page.tsx(87,49): error TS2353: Object literal may only specify known properties, and 'fontWeight' does not exist in type 'TypographyProps<"span", { component?: "span" | undefined; }> | ((ownerState: ListItemTextOwnerState) => TypographyProps<"span", { component?: "span" | undefined; }>)'.
+components/SidebarNav.tsx(44,80): error TS2353: Object literal may only specify known properties, and 'fontWeight' does not exist in type 'TypographyProps<"span", { component?: "span" | undefined; }> | ((ownerState: ListItemTextOwnerState) => TypographyProps<"span", { component?: "span" | undefined; }>)'.
+components/SidebarNav.tsx(94,43): error TS2353: Object literal may only specify known properties, and 'fontWeight' does not exist in type 'TypographyProps<"span", { component?: "span" | undefined; }> | ((ownerState: ListItemTextOwnerState) => TypographyProps<"span", { component?: "span" | undefined; }>)'.
+```
+
+Fix the problem and reply with every file of the app again, each complete in its own fenced code block whose opening line names the file's path, and nothing else.
+
+
+As before: write the complete corrected file to /home/user/core/benchmarks/tailwind-comparison/results/bench-v2-cc/raw/t102/mui-docs/run2/attempt-1.tsx with the Write tool (no shell commands), then reply with the single word: done.
