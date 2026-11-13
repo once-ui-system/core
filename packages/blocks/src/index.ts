@@ -7,3 +7,4 @@ export * from "./ScrollToTop.js";
 export * from "./StyleOverlay.js";
 export * from "./StylePanel.js";
 export * from "./sections/index.js";
+export * from "./settings/index.js";

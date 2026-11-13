@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useId } from "react";
+import type React from "react";
+import { useId } from "react";
 import type { CSSUnit } from "../types.js";
+import { sizeValue } from "../utils/layoutClasses.js";
 import { Column } from "./Column.js";
 import { ControlLabelContext } from "./ControlLabelContext.js";
-import { Flex } from "./Flex.js";
+import type { Flex } from "./Flex.js";
 import { Row } from "./Row.js";
 import { Text } from "./Text.js";
 import { Tooltip } from "./Tooltip.js";
@@ -96,10 +98,19 @@ const SettingRow = ({
         // With no label the control owns the row; with one it is capped so the
         // label keeps its space instead of being squeezed to nothing.
         fillWidth={!hasLabel}
-        maxWidth={hasLabel ? controlWidth : undefined}
         horizontal="end"
         vertical="center"
         gap="8"
+        // The cap is a CSS max-width, not the `maxWidth` prop, which also
+        // fills the width: a filled control area wrapped under the label in
+        // any row narrower than label plus cap, even with room to spare. And
+        // the control keeps to the row's trailing edge, also when a narrow
+        // row does wrap it: buttons are always found in one place.
+        style={{
+          marginLeft: "auto",
+          maxWidth: hasLabel ? sizeValue(controlWidth, "width") : undefined,
+          minWidth: 0,
+        }}
       >
         <ControlLabelContext.Provider value={label ? labelId : undefined}>
           {children}

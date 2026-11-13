@@ -202,6 +202,10 @@
   "Sections": {"purpose":"Renders stored sections [{ type, props }]; fields in sectionSchemas","importFrom":"@once-ui-system/blocks"},
   "StatsSection": {"purpose":"Site section: a few large figures","importFrom":"@once-ui-system/blocks"},
   "TeamSection": {"purpose":"Site section: people with photo, role and bio","importFrom":"@once-ui-system/blocks"},
-  "TestimonialsSection": {"purpose":"Site section: customer quotes","importFrom":"@once-ui-system/blocks"}
+  "TestimonialsSection": {"purpose":"Site section: customer quotes","importFrom":"@once-ui-system/blocks"},
+  "AccountSettings": {"purpose":"Settings: photo, name, email via an AccountAdapter","importFrom":"@once-ui-system/blocks"},
+  "OrganizationSettings": {"purpose":"Settings: org logo, name, leave or delete via an adapter","importFrom":"@once-ui-system/blocks"},
+  "SecuritySettings": {"purpose":"Settings: password, 2FA, devices, deletion via an AccountAdapter","importFrom":"@once-ui-system/blocks"},
+  "SettingsLayout": {"purpose":"Settings page: section tabs around the settings blocks","importFrom":"@once-ui-system/blocks"}
  }
 }

@@ -49,6 +49,7 @@ export * from "./RangeSliderExamples";
 export * from "./ScrubberExamples";
 export * from "./SemanticColorSection";
 export * from "./SettingExamples";
+export * from "./SettingsBlocksExample";
 export * from "./Sidebar";
 export * from "./SliderExamples";
 export * from "./SortableExamples";

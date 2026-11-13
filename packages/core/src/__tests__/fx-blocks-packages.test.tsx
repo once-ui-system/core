@@ -54,6 +54,8 @@ const PAGE_SECTIONS = [
   "TeamSection",
   "TestimonialsSection",
 ];
+/** The settings blocks: profile, sign-in and security, organization, and their layout. */
+const SETTINGS = ["AccountSettings", "OrganizationSettings", "SecuritySettings", "SettingsLayout"];
 /** 3.0, F11: StylePanel's sections, plain named exports of blocks. */
 const SECTIONS = [
   "Root",
@@ -81,7 +83,11 @@ const SECTIONS = [
 ].map((part) => `StylePanel${part}`);
 const PACKAGES = [
   ["@once-ui-system/fx", FX, []],
-  ["@once-ui-system/blocks", [...BLOCKS, ...PAGE_SECTIONS], SECTIONS],
+  [
+    "@once-ui-system/blocks",
+    [...BLOCKS, ...PAGE_SECTIONS, ...SETTINGS],
+    [...SECTIONS, "SettingsLabelsProvider"],
+  ],
 ] as const;
 
 type Entry = { group: string; importFrom?: string };

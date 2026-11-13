@@ -24,6 +24,11 @@ type AnyComponent = React.ComponentType<Record<string, unknown>>;
 /** Props for components whose required props make an empty render meaningless. */
 const fixtures: Record<string, Record<string, unknown>> = {
   LogoCloud: { logos: [{ wordmark: "/logo.svg" }] },
+  AccountSettings: { adapter: Blocks.createDemoAccountAdapter({ latency: 0 }) },
+  SecuritySettings: { adapter: Blocks.createDemoAccountAdapter({ latency: 0 }) },
+  OrganizationSettings: { adapter: Blocks.createDemoOrganizationAdapter({ latency: 0 }) },
+  SettingsLayout: { sections: [{ value: "a", label: "A", content: "Section A" }] },
+  SettingsLabelsProvider: { children: "Labelled" },
 };
 
 const isComponent = (value: unknown) => {

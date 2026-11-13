@@ -178,7 +178,7 @@ const ENTRY_POINTS = [
   },
   {
     specifier: "@once-ui-system/blocks",
-    use: "Compositions: Banner, Book, LogoCloud, ScrollToTop, StylePanel and StyleOverlay: a package of its own, built on core",
+    use: "Compositions: Banner, Book, LogoCloud, ScrollToTop, StylePanel, StyleOverlay, page sections and the settings blocks: a package of its own, built on core",
     install: "@once-ui-system/blocks",
   },
 ];

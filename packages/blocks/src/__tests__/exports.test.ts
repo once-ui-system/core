@@ -39,6 +39,22 @@ const PAGE_SECTIONS = [
   "testimonialsLayouts",
 ];
 
+/** The settings blocks (`settings/`): profile, sign-in and security, organization. */
+const SETTINGS = [
+  "AccountSettings",
+  "OrganizationSettings",
+  "SecuritySettings",
+  "SettingsLabelsProvider",
+  "SettingsLayout",
+  "createDemoAccountAdapter",
+  "createDemoOrganizationAdapter",
+  "defaultSettingsLabels",
+  "settingsLabelsHu",
+  "useAccount",
+  "useOrganization",
+  "useSettingsLabels",
+];
+
 /** 3.0, F11: StylePanel's sections are plain named exports, not statics on StylePanel. */
 const SECTIONS = [
   "Root",
@@ -66,13 +82,13 @@ const SECTIONS = [
 ].map((part) => `StylePanel${part}`);
 
 describe("@once-ui-system/blocks", () => {
-  it("exports the six blocks, StylePanel's sections, its hook and the page sections", () => {
+  it("exports the six blocks, StylePanel's sections, its hook, the page sections and the settings blocks", () => {
     expect(Object.keys(blocks).sort()).toEqual(
-      [...BLOCKS, ...SECTIONS, "useStylePanel", ...PAGE_SECTIONS].sort(),
+      [...BLOCKS, ...SECTIONS, "useStylePanel", ...PAGE_SECTIONS, ...SETTINGS].sort(),
     );
   });
 
-  it.each([...BLOCKS, ...SECTIONS, ...PAGE_SECTIONS, "useStylePanel"])(
+  it.each([...BLOCKS, ...SECTIONS, ...PAGE_SECTIONS, ...SETTINGS, "useStylePanel"])(
     "%s is not on @once-ui-system/core",
     (name) => {
       expect(name in core).toBe(false);
