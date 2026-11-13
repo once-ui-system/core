@@ -68,6 +68,11 @@ const BARRELS = [
     group: "richtext",
     importFrom: "@once-ui-system/core/richtext",
   },
+  {
+    file: path.join(SRC, "modules", "canvas", "index.ts"),
+    group: "canvas",
+    importFrom: "@once-ui-system/core/canvas",
+  },
   // The hooks are root exports, but no barrel above reaches them, so an
   // agent never learned `useHotkeys` or `useInViewport` existed except from
   // prose in the rules.
@@ -147,6 +152,10 @@ const ENTRY_POINTS = [
     specifier: "@once-ui-system/core/richtext",
     use: "RichTextEditor: bold, italic, headings, lists and links, with HTML in and out",
     peer: "@tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extensions",
+  },
+  {
+    specifier: "@once-ui-system/core/canvas",
+    use: "Infinite canvas for editors: pan and zoom camera, world-placed items, selection box, resize and rotate handles, snap guides",
   },
   {
     specifier: "@once-ui-system/core/mdx",

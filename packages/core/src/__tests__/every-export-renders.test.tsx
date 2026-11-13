@@ -4,6 +4,7 @@ import { createElement } from "react";
 import { renderToString } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import * as Core from "../index";
+import * as CanvasModule from "../modules/canvas/index";
 import * as Code from "../modules/code/index";
 import * as Data from "../modules/data/index";
 import * as Emoji from "../modules/emoji/index";
@@ -29,6 +30,7 @@ const exportsUnderTest: Record<string, unknown> = {
   ...MediaModule,
   ...Emoji,
   ...MapModule,
+  ...CanvasModule,
 };
 
 const noop = () => {};
@@ -36,6 +38,10 @@ const avatar = { src: "/avatar.jpg" };
 
 /** Props for components whose required props make an empty render meaningless. */
 const fixtures: Record<string, Record<string, unknown>> = {
+  CanvasAnchor: { x: 10, y: 10 },
+  CanvasItem: { x: 0, y: 0, width: 100, height: 60 },
+  SnapGuides: { guides: [{ axis: "x", at: 10, start: 0, end: 100, gap: 20 }] },
+  TransformHandles: { rect: { x: 0, y: 0, width: 100, height: 60 }, onTransform: noop },
   AvatarGroup: { avatars: [avatar, avatar, { value: "AB" }] },
   Breadcrumbs: { items: [{ label: "Home", href: "/" }, { label: "Docs" }] },
   ColorInput: { id: "color", label: "Colour", value: "#ff0000", onValueChange: noop },
@@ -110,9 +116,19 @@ const inSvg = (child: React.ReactElement) => (
     <defs>{child}</defs>
   </svg>
 );
+const inCanvas = (child: React.ReactElement) => (
+  <CanvasModule.Canvas height={400}>{child}</CanvasModule.Canvas>
+);
+
 const parents: Record<string, (child: React.ReactElement) => React.ReactElement> = {
   LinearGradient: inSvg,
   RadialGradient: inSvg,
+  CanvasAnchor: inCanvas,
+  CanvasItem: inCanvas,
+  CanvasOverlay: inCanvas,
+  SelectionBox: inCanvas,
+  SnapGuides: inCanvas,
+  TransformHandles: inCanvas,
   SortableHandle: (child) => <Core.Sortable items={["a"]}>{child}</Core.Sortable>,
   SortableItem: (child) => <Core.Sortable items={["a"]}>{child}</Core.Sortable>,
   Tab: (child) => <Core.Tabs defaultValue="a">{child}</Core.Tabs>,

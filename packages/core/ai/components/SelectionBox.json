@@ -1,0 +1,21 @@
+{
+ "name": "SelectionBox",
+ "group": "canvas",
+ "importFrom": "@once-ui-system/core/canvas",
+ "props": {
+  "rect": "!CanvasRect | null"
+ },
+ "tags": [
+  "canvas"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "CanvasRect": {
+   "x": "!number",
+   "y": "!number",
+   "width": "!number",
+   "height": "!number",
+   "rotation": "number"
+  }
+ }
+}
