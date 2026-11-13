@@ -136,7 +136,8 @@
   ],
   "SolidStyle": [
    "flat",
-   "plastic"
+   "plastic",
+   "glow"
   ],
   "SolidType": [
    "color",

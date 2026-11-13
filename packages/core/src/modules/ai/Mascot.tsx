@@ -680,6 +680,13 @@ const FlatMascot = ({
             </g>
           </g>
         </g>
+        {state === "thinking" && (
+          <g className={styles.thought}>
+            <circle cx={156} cy={34} r={7} />
+            <circle cx={174} cy={16} r={10} />
+            <circle cx={198} cy={-6} r={14} />
+          </g>
+        )}
         {state === "sleeping" && (
           <g className={styles.zzz}>
             <text x={156} y={44}>

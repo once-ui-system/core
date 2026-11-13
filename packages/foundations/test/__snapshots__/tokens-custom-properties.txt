@@ -629,6 +629,11 @@
 --solid-border-color-danger
 --solid-border-color-neutral
 --solid-border-width
+--solid-glow-far
+--solid-glow-far-mix
+--solid-glow-near
+--solid-glow-near-mix
+--solid-glow-rim
 --solid-inset-color-brand
 --solid-inset-color-danger
 --solid-inset-color-neutral

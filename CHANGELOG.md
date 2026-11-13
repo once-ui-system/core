@@ -17,6 +17,7 @@ Built on the 3.0 branch and held until 3.0.0 ships.
 
 ### Added
 
+- **Glow solid style.** `solidStyle: "glow"` (`data-solid-style="glow"`) joins flat and plastic: a solid lights its own colour into a soft two-layer halo with a light edge along the top. It applies to primary buttons and icon buttons in every tone, checked switches, checkboxes and radios, and selected Tag toggles with a tone; secondary and neutral controls never glow. Put the attribute on any element to light up one area only. The halo is static (no filter, no animation), brightens on hover, is tighter and paler in the light theme, and goes away under `prefers-contrast: more` and forced colours. New tokens `--solid-glow-near`, `--solid-glow-far`, `--solid-glow-near-mix`, `--solid-glow-far-mix` and `--solid-glow-rim`; the shared `glow.scss` mixin in foundations draws it. The Style panel's Effect row gets a Glow option.
 - **Control-room pieces**, free in core, each readable without colour:
   - **Chart thresholds and annotations.** `LineChart`, `BarChart` and
     `LineBarChart` take `thresholds` (a line at `value`, or a band from `from`

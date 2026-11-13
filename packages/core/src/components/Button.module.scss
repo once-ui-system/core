@@ -1,5 +1,6 @@
 @use "../styles/density.scss" as density;
 @use "../styles/touch.scss" as touch;
+@use "../styles/glow.scss" as glow;
 
 .button {
   display: flex;
@@ -68,8 +69,7 @@ $solid-tokens: brand, danger, neutral;
 }
 
 .primary {
-  box-shadow: inset 0 var(--solid-inset-distance) var(--solid-inset-size)
-    var(--button-solid-inset);
+  @include glow.solid-shadow(var(--button-solid), var(--button-solid-inset));
   background: var(--button-solid);
   border-style: solid;
   border-width: var(--solid-border-width);
@@ -85,6 +85,7 @@ $solid-tokens: brand, danger, neutral;
   @media (hover: hover) and (pointer: fine) {
     &:hover:not([data-disabled]) {
       background: var(--button-solid-hover);
+      @include glow.hover-boost;
     }
   }
 }
