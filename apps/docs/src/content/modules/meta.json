@@ -10,6 +10,7 @@
     "social": 6,
     "map": 7,
     "canvas": 8,
-    "scene": 9
+    "scene": 9,
+    "calendar": 10
   }
 }

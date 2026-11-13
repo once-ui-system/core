@@ -96,6 +96,7 @@ describe("the 3.0 exports map", () => {
       "./next",
       "./AGENTS.md",
       "./data",
+      "./calendar",
       "./canvas",
       "./code",
       "./emoji",

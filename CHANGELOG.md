@@ -68,6 +68,9 @@ Built on the 3.0 branch and held until 3.0.0 ships.
   `parseMascotDesign` (reads stored or AI-written values safely, never throws),
   `mascotDesignProps`, `MASCOT_DESIGN_DEFAULTS` and `MASCOT_DESIGN_RANGES`. The Mascot
   reads its defaults from the same constant.
+### Added
+
+- `Calendar` in `@once-ui-system/core/calendar`: month, week and day views of events. Overlapping events sit side by side, events of a day or more run as bars, and a crowded month day folds into "n more". `onSlotSelect` lets people drag or click empty time (or press a month day) to pick a slot, and `onEventChange` lets them drag an event to a new time or day or drag its end. There's a now line, the toolbar has its own slot for app controls, `locale` and `labels` translate it, and the month view is an ARIA grid you can move through with the keyboard. The layout helpers (`layoutDay`, `layoutSpans`, `viewDays`) are exported too.
 
 ## [3.0.0] - Unreleased
 

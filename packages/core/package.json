@@ -497,6 +497,10 @@
       "types": "./dist/modules/data/index.d.ts",
       "default": "./dist/modules/data/index.js"
     },
+    "./calendar": {
+      "types": "./dist/modules/calendar/index.d.ts",
+      "default": "./dist/modules/calendar/index.js"
+    },
     "./canvas": {
       "types": "./dist/modules/canvas/index.d.ts",
       "default": "./dist/modules/canvas/index.js"

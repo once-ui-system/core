@@ -78,6 +78,11 @@ const BARRELS = [
     group: "scene",
     importFrom: "@once-ui-system/core/scene",
   },
+  {
+    file: path.join(SRC, "modules", "calendar", "index.ts"),
+    group: "calendar",
+    importFrom: "@once-ui-system/core/calendar",
+  },
   // The hooks are root exports, but no barrel above reaches them, so an
   // agent never learned `useHotkeys` or `useInViewport` existed except from
   // prose in the rules.
@@ -166,6 +171,10 @@ const ENTRY_POINTS = [
     specifier: "@once-ui-system/core/scene",
     use: "Scene: a 3D viewport on three.js in theme colours, with SceneMesh, SceneGroup, SceneModel (glTF), SceneLabel (HTML pinned to a 3D point) and useSceneFrame for animation",
     peer: "three",
+  },
+  {
+    specifier: "@once-ui-system/core/calendar",
+    use: "Calendar: month, week and day views of events, with picking empty time and dragging events",
   },
   {
     specifier: "@once-ui-system/core/mdx",

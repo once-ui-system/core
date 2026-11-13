@@ -65,3 +65,5 @@ export * from "./TypeFxCustomExample";
 export * from "./VoiceExamples";
 export * from "./WeatherFxExample";
 export * from "./CanvasExample";
+export * from "./MapExample";
+export * from "./CalendarExample";

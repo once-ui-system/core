@@ -4,6 +4,7 @@ import { createElement } from "react";
 import { renderToString } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import * as Core from "../index";
+import * as CalendarModule from "../modules/calendar/index";
 import * as CanvasModule from "../modules/canvas/index";
 import * as Code from "../modules/code/index";
 import * as Data from "../modules/data/index";
@@ -31,6 +32,7 @@ const exportsUnderTest: Record<string, unknown> = {
   ...Emoji,
   ...MapModule,
   ...CanvasModule,
+  ...CalendarModule,
 };
 
 const noop = () => {};
@@ -42,6 +44,7 @@ const fixtures: Record<string, Record<string, unknown>> = {
   CanvasItem: { x: 0, y: 0, width: 100, height: 60 },
   SnapGuides: { guides: [{ axis: "x", at: 10, start: 0, end: 100, gap: 20 }] },
   TransformHandles: { rect: { x: 0, y: 0, width: 100, height: 60 }, onTransform: noop },
+  Calendar: { events: [], defaultDate: new Date(2026, 10, 11) },
   AvatarGroup: { avatars: [avatar, avatar, { value: "AB" }] },
   Breadcrumbs: { items: [{ label: "Home", href: "/" }, { label: "Docs" }] },
   ColorInput: { id: "color", label: "Colour", value: "#ff0000", onValueChange: noop },
