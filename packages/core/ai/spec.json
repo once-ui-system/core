@@ -5247,6 +5247,43 @@
     "onCheckedChange": "(checked: boolean) => void"
    }
   },
+  "TabBar": {
+   "group": "components",
+   "props": {
+    "aria-label": "!string",
+    "showBelow": "TabBarBreakpoint | false = s",
+    "spacer": "boolean = true",
+    "children": "!ReactNode"
+   }
+  },
+  "TabBarItem": {
+   "group": "components",
+   "props": {
+    "href": "string",
+    "onClick": "(event: React.MouseEvent<HTMLElement>) => void",
+    "icon": "!IconName",
+    "label": "!ReactNode",
+    "selected": "boolean = false",
+    "badge": "number | boolean",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "aria-haspopup": "\"dialog\" | \"menu\"",
+    "aria-expanded": "boolean"
+   }
+  },
+  "TabBarSidebarTrigger": {
+   "group": "components",
+   "props": {
+    "label": "ReactNode",
+    "icon": "IconName",
+    "style": "React.CSSProperties",
+    "className": "string",
+    "aria-expanded": "boolean",
+    "aria-haspopup": "\"dialog\" | \"menu\"",
+    "selected": "boolean",
+    "badge": "number | boolean"
+   }
+  },
   "Table": {
    "group": "components",
    "mixins": [
@@ -5313,43 +5350,6 @@
     "labels": "Partial<TableLabels>",
     "aria-label": "string",
     "aria-labelledby": "string"
-   }
-  },
-  "TabBar": {
-   "group": "components",
-   "props": {
-    "aria-label": "!string",
-    "showBelow": "TabBarBreakpoint | false = s",
-    "spacer": "boolean = true",
-    "children": "!ReactNode"
-   }
-  },
-  "TabBarItem": {
-   "group": "components",
-   "props": {
-    "href": "string",
-    "onClick": "(event: React.MouseEvent<HTMLElement>) => void",
-    "icon": "!IconName",
-    "label": "!ReactNode",
-    "selected": "boolean = false",
-    "badge": "number | boolean",
-    "className": "string",
-    "style": "React.CSSProperties",
-    "aria-haspopup": "\"dialog\" | \"menu\"",
-    "aria-expanded": "boolean"
-   }
-  },
-  "TabBarSidebarTrigger": {
-   "group": "components",
-   "props": {
-    "label": "ReactNode",
-    "icon": "IconName",
-    "style": "React.CSSProperties",
-    "className": "string",
-    "aria-expanded": "boolean",
-    "aria-haspopup": "\"dialog\" | \"menu\"",
-    "selected": "boolean",
-    "badge": "number | boolean"
    }
   },
   "Tab": {
