@@ -111,3 +111,36 @@ The tab strip, a header with the active tab's title and status, a Preview / Edit
     empty: "Drawn when no tab is open.",
   }}
 />
+
+## useElementPicker
+
+Lets the person point at part of a preview so the next message is about it: "make this shorter" then knows what "this" is. Arm it with `setPicking(true)` from a pointer button: blocks outline under the pointer, a click picks one, Escape cancels. On a page built from `<section>` elements it picks the outermost section and reports its position (`index` of `total`) and heading; on a page without sections it picks a single heading, paragraph, image or link. The picked block stays outlined until `clear()`.
+
+The frame must be same-origin. A cross-origin frame cannot be reached, and arming does nothing there. Without React, `armElementPicker(document, options)` arms one pick on any document and returns the cleanup.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`import { IconButton, useElementPicker } from "@once-ui-system/core";
+
+const frameRef = useRef<HTMLIFrameElement>(null);
+const picker = useElementPicker(frameRef, {
+  onPick: (picked) => setContext(\`Section \${picked.index} of \${picked.total}: \${picked.label}\`),
+  onMiss: (miss) => toast(miss === "outside" ? "Click inside a section" : "Nothing to point at here"),
+});
+
+<IconButton
+  icon="cursor"
+  tooltip="Point at a section"
+  aria-pressed={picker.picking}
+  onClick={() => picker.setPicking(!picker.picking)}
+/>
+<iframe ref={frameRef} src={previewUrl} title="Preview" />`,
+      language: "tsx",
+      label: "Pointer"
+    }
+  ]}
+/>
