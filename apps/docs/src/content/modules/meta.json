@@ -6,11 +6,12 @@
     "megaMenu": 2,
     "headingNav": 3,
     "chat": 4,
-    "ai": 5,
-    "social": 6,
-    "map": 7,
-    "canvas": 8,
-    "scene": 9,
-    "calendar": 10
+    "workspace": 5,
+    "ai": 6,
+    "social": 7,
+    "map": 8,
+    "canvas": 9,
+    "scene": 10,
+    "calendar": 11
   }
 }

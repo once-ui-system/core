@@ -117,6 +117,26 @@ const fixtures: Record<string, Record<string, unknown>> = {
   LinearGauge: { value: 40 },
   ChartSummary: { series: [{ key: "a" }], data: [{ label: "Jan", a: 1 }] },
   Sparkline: { data: [1, 3, 2] },
+  WorkspacePanel: {
+    workspace: {
+      state: {
+        tabs: [{ key: "site:a", title: "Site", data: null, editable: true, version: 0 }],
+        activeKey: "site:a",
+        expanded: false,
+        editing: {},
+      },
+      active: { key: "site:a", title: "Site", data: null, editable: true, version: 0 },
+      open: noop,
+      activate: noop,
+      close: noop,
+      setMode: noop,
+      modeOf: () => "preview",
+      setExpanded: noop,
+      reset: noop,
+      dispatch: noop,
+    },
+    children: () => "preview",
+  },
 };
 
 /** Components that need a parent to mean anything get it here. */

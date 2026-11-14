@@ -30,3 +30,4 @@ export type {
 export { HeadingNav, Kbar, MegaMenu } from "./navigation/index.js";
 export * from "./seo/index.js";
 export * from "./social/index.js";
+export * from "./workspace/index.js";
