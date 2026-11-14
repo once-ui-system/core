@@ -1,3 +1,13 @@
+export type { ElementPickerOptions, PickedElement, PickMiss } from "./elementPicker.js";
+export {
+  armElementPicker,
+  frameDocument,
+  markElement,
+  pageSections,
+  selectCursor,
+} from "./elementPicker.js";
+export type { ElementPicker, UseElementPickerOptions } from "./useElementPicker.js";
+export { useElementPicker } from "./useElementPicker.js";
 export type { UseWorkspaceOptions, WorkspaceController } from "./useWorkspace.js";
 export { useWorkspace } from "./useWorkspace.js";
 export type { WorkspacePanelLabels, WorkspacePanelProps } from "./WorkspacePanel.js";
