@@ -1,0 +1,176 @@
+---
+title: "Family footer"
+summary: "One footer for a family of products: the brand's own band and links, then the sibling products and a co-brand bar that look the same on every site."
+updatedAt: "2026-11-14"
+docs: "once-ui/components/familyFooter.mdx"
+github: "blocks/src/FamilyFooter.tsx"
+navLabel: "Family footer"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+When one company makes several products, each site's footer is where a
+visitor learns the others exist. `FamilyFooter` gives every site the same four
+bands in the same order:
+
+1. **Brand band.** The product's logo, its one-line promise and the primary button, plus one extra of the brand's choosing: a big wordmark, the mascot, a newsletter field.
+2. **Link columns.** Up to five, chosen per site.
+3. **Family row.** "More from Dopler": one tile per live sibling, with its mark, name and a line of four to six words. The product the footer is on is left out.
+4. **Co-brand bar.** "A product by Dopler" with the parent's mark, then the year and legal entity, the language switch, the theme switch, social links and "Built with Once UI".
+
+The first two bands are the brand's: they take its colours from the theme and
+can carry a `decoration` behind them (a glow, a drawing, a background effect).
+The family row and the co-brand bar sit on neutral tokens and keep one layout,
+so the products read as one family wherever a visitor meets them.
+
+The three previews below are one made-up family, Halden & Co, styled as three of its products.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={<FamilyFooterExample brand="fjell" />}
+  codes={[
+    {
+      code:
+`import { FamilyFooter } from "@once-ui-system/blocks";
+
+<FamilyFooter
+  current="chirio"
+  brand={{
+    name: "Chirio",
+    logo: <Logo icon="/trademarks/chirio-icon.svg" text="Chirio" href="/" />,
+    tagline: "Understand your users, agents do the chores.",
+    action: { label: "Start free", href: "/signup" },
+  }}
+  decoration={<BrandGlow />}
+  columns={[
+    { title: "Product", links: [{ label: "Pricing", href: "/pricing" }] },
+    { title: "Developers", links: [{ label: "Docs", href: "https://docs.chirio.dev" }] },
+    { title: "Legal", links: [{ label: "Privacy", href: "/privacy" }] },
+  ]}
+  legal="Dopler Kft."
+  languageSwitch={<LocaleSwitcher />}
+  social={[{ icon: "github", label: "GitHub", href: "https://github.com/…" }]}
+/>`,
+      language: "tsx",
+      label: "Footer"
+    }
+  ]}
+/>
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={<FamilyFooterExample brand="ember" />}
+  codes={[
+    {
+      code:
+`<FamilyFooter
+  current="ember"
+  brand={{
+    name: "Ember",
+    tagline: "Tables, takeaway and the week's specials, in one place.",
+    action: { label: "Open your café", href: "/start" },
+    extra: <NewsletterField />,
+  }}
+  decoration={<CounterDrawing />}
+  columns={columns}
+/>`,
+      language: "tsx",
+      label: "With an extra"
+    }
+  ]}
+/>
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={<FamilyFooterExample brand="quill" />}
+  codes={[
+    {
+      code:
+`<FamilyFooter
+  current="quill"
+  brand={{
+    name: "Quill",
+    tagline: "Contracts in plain words, signed in minutes.",
+    action: { label: "Start a contract", href: "/new" },
+  }}
+  columns={fiveColumns}
+/>`,
+      language: "tsx",
+      label: "Quiet"
+    }
+  ]}
+/>
+
+## The family
+
+`familyProducts` is the list the footer shows by default, and `familyParent`
+(Dopler) the company named in the co-brand bar. A new product added to the
+list reaches every app's footer on its next blocks bump. A product with
+`live: false` stays out of the row until it is public.
+
+The list carries no artwork. Without a `mark`, a tile draws the name's first
+letter on the product's `color`, or on the strongest neutral. An app that has
+the marks passes them in:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`import { FamilyFooter, familyProducts } from "@once-ui-system/blocks";
+
+const marks: Record<string, string> = {
+  chirio: "/trademarks/chirio-icon.svg",
+  tavilio: "/trademarks/tavilio-icon.svg",
+};
+
+<FamilyFooter
+  current="aveiro"
+  brand={brand}
+  products={familyProducts.map((product) => ({ ...product, mark: marks[product.id] }))}
+/>`,
+      language: "tsx",
+      label: "Marks"
+    }
+  ]}
+/>
+
+## Referrals
+
+Each sibling link, the parent link and the Once UI credit carry
+`ref=<current>-footer`, so each product's analytics shows which sibling sent
+the visit. A link that already has a `ref` keeps it. `familyHref(href, from)`
+is the same rule for links an app draws itself.
+
+## Languages
+
+`labels` changes every word the footer writes itself; `familyFooterLabelsHu`
+is the Hungarian set. A `productBy` label that already names the parent ("A
+Dopler terméke") is shown as it is.
+
+## Props
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `brand` | `{ name, logo?, href?, tagline?, action?, extra? }` | required |
+| `current` | `string`: the product the footer is on | |
+| `columns` | `{ title, links: { label, href, tag? }[] }[]`, up to five | `[]` |
+| `products` | `FamilyProduct[]` | `familyProducts` |
+| `parent` | `{ name, href, mark? }` | `familyParent` |
+| `legal` | `string` | the parent's name |
+| `year` | `number` | this year |
+| `social` | `{ icon, label, href }[]` | `[]` |
+| `languageSwitch` | `ReactNode` | |
+| `themeSwitch` | `boolean` | `true` |
+| `builtWith` | `boolean` | `true`, `false` on Once UI |
+| `decoration` | `ReactNode` | |
+| `width` | `"s"`, `"m"` or `"l"` | `"l"` |
+| `labels` | `FamilyFooterLabels` | |

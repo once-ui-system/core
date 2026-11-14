@@ -52,6 +52,7 @@ export * from "./SceneExample";
 export * from "./ScrubberExamples";
 export * from "./SemanticColorSection";
 export * from "./SettingExamples";
+export * from "./FamilyFooterExample";
 export * from "./SettingsBlocksExample";
 export * from "./Sidebar";
 export * from "./SliderExamples";

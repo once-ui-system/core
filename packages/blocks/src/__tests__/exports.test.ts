@@ -3,7 +3,24 @@ import { describe, expect, it } from "vitest";
 import * as blocks from "../index.js";
 
 /** 3.0, F10: the six compositions are this package's, and core's root no longer has them. */
-const BLOCKS = ["Banner", "Book", "LogoCloud", "ScrollToTop", "StyleOverlay", "StylePanel"];
+const BLOCKS = [
+  "Banner",
+  "Book",
+  "FamilyFooter",
+  "LogoCloud",
+  "ScrollToTop",
+  "StyleOverlay",
+  "StylePanel",
+];
+
+/** FamilyFooter's family: the default products and parent, and its helpers. */
+const FAMILY = [
+  "familyFooterLabelsHu",
+  "familyHref",
+  "familyParent",
+  "familyProducts",
+  "familySiblings",
+];
 
 /** The page sections and what describes them (`sections/`). */
 const PAGE_SECTIONS = [
@@ -106,6 +123,7 @@ describe("@once-ui-system/blocks", () => {
     expect(Object.keys(blocks).sort()).toEqual(
       [
         ...BLOCKS,
+        ...FAMILY,
         ...SECTIONS,
         "useStylePanel",
         ...MASCOT_PANEL,
@@ -117,6 +135,7 @@ describe("@once-ui-system/blocks", () => {
 
   it.each([
     ...BLOCKS,
+    ...FAMILY,
     ...SECTIONS,
     ...PAGE_SECTIONS,
     ...SETTINGS,
