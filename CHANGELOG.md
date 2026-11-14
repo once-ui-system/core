@@ -132,6 +132,7 @@ entry below that had landed by then:
   options as `Mascot` and a mood, every color written out, for places without React or
   CSS (Open Graph images, emails, favicons). `Mascot` and `mascotSvg` share their geometry
   from `mascotShape.ts`.
+- **Mascot face accessories.** `faceAccessory` draws your own SVG (a beak, a nose, glasses) on the face layer, so it follows the gaze, the thinking, sleeping and sad poses and a poke, as the eyes do. `mascotSvg` takes it as markup. `accessory` now leans a little toward where the mascot looks, like a head tilt; a canonical mascot's body paint stays put.
 - **Mascot accessories.** `accessory` takes a built-in one: `antenna`, `bow`,
   `beanie`, `headphones`, `sprout`, `helmet`, `crown`, `catEars` or
   `partyHat`, or a list of them. They are flat and chunky, fit any body shape,

@@ -1792,6 +1792,7 @@
    "canonical": "boolean",
    "mood": "MascotMood",
    "accessory": "string",
+   "faceAccessory": "string",
    "schemes": "Partial<Record<\"brand\" | \"accent\" | \"neutral\", string>>",
    "lookAt": "{ x: number; y: number }",
    "shadow": "boolean",

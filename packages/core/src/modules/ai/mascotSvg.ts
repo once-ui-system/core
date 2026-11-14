@@ -22,6 +22,8 @@ export interface MascotSvgOptions extends MascotLook {
   mood?: MascotMood;
   /** SVG markup drawn with the body in its 200 × 200 box: a hat, an antenna. */
   accessory?: string;
+  /** SVG markup drawn on the face in the same box (a beak, glasses): it follows `lookAt` with the eyes. */
+  faceAccessory?: string;
   /**
    * The colors `brand`, `accent` and `neutral` stand for. There is no CSS on
    * the server, so a scheme name needs one; without it the mascot is drawn in
@@ -147,6 +149,7 @@ export function mascotSvg(options: MascotSvgOptions = {}): string {
     canonical = true,
     mood = "neutral",
     accessory,
+    faceAccessory,
     schemes,
     lookAt,
     shadow = true,
@@ -287,6 +290,7 @@ export function mascotSvg(options: MascotSvgOptions = {}): string {
     eye(1),
     cheekMarks,
     mouth ? `<g transform="translate(100 ${n(mouthY)})">${mouth}</g>` : "",
+    faceAccessory ? `<g>${faceAccessory}</g>` : "",
     "</g>",
     worn.front,
     "</g></svg>",
