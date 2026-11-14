@@ -10,11 +10,14 @@
  */
 import { mixColors, parseColor } from "../../utils/colorMath.js";
 import type { MascotLook, MascotMood } from "./Mascot.js";
+import { type MascotIdentityLayer, mascotIdentity } from "./mascotIdentities.js";
 import { bodyShape, clamp, DEFAULT_LOOK, EYE_BOX, mascotLook, TILE } from "./mascotShape.js";
 
 export interface MascotSvgOptions extends MascotLook {
   /** A string or number that picks a whole look, as on `Mascot`. Options you pass win over it. */
   seed?: string | number;
+  /** Whether a seed that names a canonical mascot draws it, as on `Mascot`. On by default. */
+  canonical?: boolean;
   /** The expression. Kawaii moods draw their base mood (`love` is `happy`, with blush). */
   mood?: MascotMood;
   /** SVG markup drawn with the body in its 200 × 200 box: a hat, an antenna. */
@@ -96,6 +99,41 @@ function mouthPath(kind: MascotLook["mouth"], mood: string, ink: string) {
   return `<path d="M-11 ${n(-tilt - curve / 3)} Q0 ${curve} 11 ${n(tilt - curve / 3)}" fill="none" stroke="${ink}" stroke-width="6" stroke-linecap="round"/>`;
 }
 
+const attr = (value: string) =>
+  value.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+
+/* A canonical mascot's layers as markup, in the same three places as on `Mascot`. */
+function identitySvg(layers: readonly MascotIdentityLayer[], color: string, clip: string) {
+  const paint = (value?: string) =>
+    value === "body" ? color : value === "shade" ? mixColors(color, "#000000", 0.32) : value;
+  const path = (layer: MascotIdentityLayer) => {
+    const fill = paint(layer.fill) ?? "none";
+    const stroke = paint(layer.stroke);
+    return `<path d="${attr(layer.d)}" fill="${attr(fill)}"${
+      stroke
+        ? ` stroke="${attr(stroke)}" stroke-width="${layer.width ?? 1}" stroke-linecap="${layer.cap ?? "round"}" stroke-linejoin="round"`
+        : ""
+    }${layer.opacity !== undefined ? ` opacity="${layer.opacity}"` : ""}${
+      layer.transform ? ` transform="${attr(layer.transform)}"` : ""
+    }/>`;
+  };
+  const draw = (place: "back" | "on" | "front") => {
+    const shapes = layers.filter((layer) => (layer.place ?? "on") === place);
+    const clipped = shapes
+      .filter((layer) => layer.clip)
+      .map(path)
+      .join("");
+    return (
+      (clipped ? `<g clip-path="${clip}">${clipped}</g>` : "") +
+      shapes
+        .filter((layer) => !layer.clip)
+        .map(path)
+        .join("")
+    );
+  };
+  return { back: draw("back"), on: draw("on"), front: draw("front") };
+}
+
 /**
  * The mascot as a standalone SVG string: same look options as `Mascot`, one
  * still expression. Use it where React can't animate: Open Graph images
@@ -106,6 +144,7 @@ function mouthPath(kind: MascotLook["mouth"], mood: string, ink: string) {
 export function mascotSvg(options: MascotSvgOptions = {}): string {
   const {
     seed,
+    canonical = true,
     mood = "neutral",
     accessory,
     schemes,
@@ -120,9 +159,11 @@ export function mascotSvg(options: MascotSvgOptions = {}): string {
   const defined = Object.fromEntries(
     Object.entries(passed).filter(([, value]) => value !== undefined),
   );
+  const identity = canonical ? mascotIdentity(seed) : undefined;
+  const seeded = seed !== undefined ? mascotLook(seed, { canonical }) : {};
   const look = {
     ...DEFAULT_LOOK,
-    ...(seed !== undefined ? mascotLook(seed) : {}),
+    ...seeded,
     ...defined,
   } as typeof DEFAULT_LOOK;
 
@@ -134,8 +175,7 @@ export function mascotSvg(options: MascotSvgOptions = {}): string {
       : parseColor(scheme)
         ? scheme
         : FALLBACK;
-  const seededEyes =
-    passed.color === undefined && seed !== undefined ? mascotLook(seed).eyeColor : undefined;
+  const seededEyes = passed.color === undefined ? seeded.eyeColor : undefined;
   const ink = eyeColor ?? seededEyes ?? mixColors(color, "#0c0b12", 0.12);
   const kawaii = KAWAII_BASE[mood];
   const base = kawaii?.base ?? mood;
@@ -143,12 +183,18 @@ export function mascotSvg(options: MascotSvgOptions = {}): string {
   const cheeks = look.cheeks || Boolean(kawaii?.blush);
 
   const shape = bodyShape(look.roundness, look.aspect);
-  const body = bodyPath ? { d: bodyPath, top: 26, bottom: 182, halfWidth: 82 } : shape;
+  const outline = bodyPath ?? seeded.bodyPath;
+  const body = outline ? { d: outline, top: 26, bottom: 182, halfWidth: 82 } : shape;
   const spread = Math.min(29 * look.eyeSpacing, body.halfWidth - 22);
   const eyeY = 96 + clamp(look.eyeHeight, -1, 1) * 30;
   const gx = clamp(lookAt?.x ?? 0, -1, 1);
   const gy = clamp((lookAt?.y ?? 0) + (pose.gy ?? 0), -1, 1);
   const id = idFor(JSON.stringify([options, size]));
+  // A canonical mascot's own layers, unless an `accessory` replaces them.
+  const worn =
+    identity && accessory === undefined
+      ? identitySvg(identity.layers, color, `url(#${id}-clip)`)
+      : { back: "", on: accessory ? `<g>${accessory}</g>` : "", front: "" };
   const surface = look.surface;
   const glossy = surface === "glossy" || surface === "glass";
 
@@ -230,17 +276,20 @@ export function mascotSvg(options: MascotSvgOptions = {}): string {
       ? `<ellipse cx="100" cy="196" rx="56" ry="5" fill="${mixColors(color, "#000000", 0.35)}" fill-opacity="0.22"/>`
       : "",
     `<g transform="rotate(${pose.rotate ?? 0} 100 ${n(body.bottom)})">`,
+    worn.back,
     `<path d="${body.d}" fill="${color}" fill-opacity="${fillOpacity}"/>`,
     sheen,
     edge,
-    accessory ? `<g>${accessory}</g>` : "",
+    worn.on,
     `<g transform="translate(${n(gx * 24)} ${n(gy * 16)})">`,
     brows,
     eye(-1),
     eye(1),
     cheekMarks,
     mouth ? `<g transform="translate(100 ${n(mouthY)})">${mouth}</g>` : "",
-    "</g></g></svg>",
+    "</g>",
+    worn.front,
+    "</g></svg>",
   ].join("");
 }
 

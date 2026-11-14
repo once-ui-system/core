@@ -11,6 +11,7 @@
   "state": "MascotState = idle",
   "mood": "MascotMood = neutral",
   "seed": "string | number",
+  "canonical": "boolean",
   "accessory": "MascotAccessory | MascotAccessory[] | React.ReactNode",
   "accessoryColor": "string",
   "lookAt": "\"pointer\" | \"center\" | { x: number; y: number } = pointer",

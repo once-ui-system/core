@@ -1683,6 +1683,27 @@
    "sparkles",
    "question"
   ],
+  "MascotIdentity": {
+   "handle": "!string",
+   "name": "!string",
+   "aliases": "string[]",
+   "owner": "!string",
+   "about": "!string",
+   "seed": "!string",
+   "look": "!MascotLook",
+   "layers": "!MascotIdentityLayer[]"
+  },
+  "MascotIdentityLayer": {
+   "d": "!string",
+   "fill": "string",
+   "stroke": "string",
+   "width": "number",
+   "cap": "\"round\" | \"butt\"",
+   "opacity": "number",
+   "transform": "string",
+   "clip": "boolean",
+   "place": "\"back\" | \"on\" | \"front\""
+  },
   "MascotLook": {
    "color": "\"brand\" | \"accent\" | \"neutral\" | (string & {})",
    "roundness": "number",
@@ -1768,6 +1789,7 @@
   ],
   "MascotSvgOptions": {
    "seed": "string | number",
+   "canonical": "boolean",
    "mood": "MascotMood",
    "accessory": "string",
    "schemes": "Partial<Record<\"brand\" | \"accent\" | \"neutral\", string>>",
@@ -5660,6 +5682,7 @@
     "state": "MascotState = idle",
     "mood": "MascotMood = neutral",
     "seed": "string | number",
+    "canonical": "boolean",
     "accessory": "MascotAccessory | MascotAccessory[] | React.ReactNode",
     "accessoryColor": "string",
     "lookAt": "\"pointer\" | \"center\" | { x: number; y: number } = pointer",
@@ -8360,8 +8383,32 @@
   "mascotLook": {
    "group": "modules",
    "kind": "function",
-   "signature": "(seed: string | number) => MascotLook",
+   "signature": "(seed: string | number, options?: { canonical?: boolean }) => MascotLook",
    "doc": "A whole look from a seed: a user id, a product name, any string or number."
+  },
+  "MASCOT_IDENTITIES": {
+   "group": "modules",
+   "kind": "value",
+   "type": "readonly MascotIdentity[]",
+   "doc": "Every canonical mascot."
+  },
+  "MASCOT_IDENTITY_KEYS": {
+   "group": "modules",
+   "kind": "value",
+   "type": "readonly string[]",
+   "doc": "Every name the registry holds, as keys: for reserving them in a sign-up or a name claim."
+  },
+  "mascotIdentity": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(seed: string | number | undefined) => MascotIdentity | undefined",
+   "doc": "The canonical mascot a seed names, or `undefined` when it names none."
+  },
+  "mascotIdentityKey": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(seed: string | number) => string",
+   "doc": "A seed as the registry compares it: lowercase letters and digits only."
   },
   "mascotDataUrl": {
    "group": "modules",

@@ -260,6 +260,38 @@ readSeedWords("royal-ink-cat");
   ]}
 />
 
+### Canonical mascots
+
+Some names stand for a real identity and draw a hand-made character instead of a generated one:
+`once-ui` is the Once UI mark come alive, `quasar` is Quasar, and every Dopler product (`stack`,
+`aveiro`, `chirio`, `tavilio`, `sigilio` and the rest) has its own. Spelling, case and dashes don't
+matter ("Once UI", "onceui"), but the whole seed has to be the name, so `once-ui-fan` is generated as
+usual. Props you pass still win, so the owner of an identity can recolour or dress it.
+
+Core can't know who typed a seed. Where people choose the text (a username, an agent's name), show the
+canonical mascot only to its owner and pass `canonical={false}` to everyone else; reserve
+`MASCOT_IDENTITY_KEYS` in sign-ups so nobody else can hold the name.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Mascot seed="once-ui" />
+<Mascot seed="quasar" mood="happy" />
+
+// A name someone typed: canonical only for the identity's owner.
+const owned = mascotIdentity(agent.name)?.owner === workspace.owner;
+<Mascot seed={agent.name} canonical={owned} />
+
+mascotSvg({ seed: "sigilio" }); // the same character in an OG image`,
+      language: "tsx",
+      label: "Canonical"
+    }
+  ]}
+/>
+
 ### Accessories
 
 Nine built-in accessories, flat and chunky so they read at avatar size: `antenna`, `bow`, `beanie`,
