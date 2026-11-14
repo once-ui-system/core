@@ -1,0 +1,113 @@
+---
+title: "Workspace"
+export: "WorkspacePanel"
+summary: "The panel beside an assistant's conversation: each thing it made or touched opens as a tab, a preview that switches to its real editor. With ActionCard, the card the assistant answers with."
+updatedAt: "2026-11-14"
+docs: "once-ui/modules/workspace.mdx"
+github: "modules/workspace/WorkspacePanel.tsx"
+navLabel: "Workspace"
+navIcon: "modules"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+An assistant that does work answers with cards, not paragraphs. A card opens what it is about beside the conversation, where the person watches it change and can take over in the real editor at any point. `ActionCard` is the card, `useWorkspace` holds the open tabs, and `WorkspacePanel` draws them.
+
+The workspace never knows what a tab holds: each tab carries your own `data`, and you draw its preview and its editor.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`import {
+  ActionCard,
+  Button,
+  ChatMessage,
+  ChatMessageList,
+  Column,
+  SplitView,
+  Tag,
+  useWorkspace,
+  WorkspacePanel,
+} from "@once-ui-system/core";
+
+type Item = { kind: "site"; id: string; name: string; url: string };
+
+const workspace = useWorkspace<Item>();
+const openSite = (site: Item) =>
+  workspace.open({ key: \`site:\${site.id}\`, title: site.name, data: site, editable: true });
+
+<SplitView>
+  <ChatMessageList aria-label="Assistant">
+    <ChatMessage>
+      <ActionCard
+        icon="globe"
+        title="Fjell Bakery"
+        meta={<Tag size="s">Not published</Tag>}
+        onPreview={() => openSite(site)}
+        footer={<Button size="s" onClick={() => publish(site.id)}>Publish</Button>}
+      >
+        Ready to edit. It isn't public until you publish it.
+      </ActionCard>
+    </ChatMessage>
+  </ChatMessageList>
+  <WorkspacePanel
+    workspace={workspace}
+    tabIcon={() => "globe"}
+    editorHref={(tab) => \`/sites/\${tab.data.id}/edit\`}
+  >
+    {(tab, mode) =>
+      mode === "edit" ? <SiteEditor id={tab.data.id} /> : <SitePreview url={tab.data.url} />
+    }
+  </WorkspacePanel>
+</SplitView>`,
+      language: "tsx",
+      label: "Cards and tabs"
+    }
+  ]}
+/>
+
+## ActionCard
+
+One frame for every result: an icon for the kind of thing, a title, a status on the right, a body and a footer of actions. When the assistant proposes a write (publish, send, schedule), put it in the footer as the one primary button, so nothing happens until the person presses it. With `onPreview`, the header gets an eye button that opens the card's subject in the workspace.
+
+<PropsTable
+  component="ActionCard"
+  describe={{
+    icon: "The kind of thing the card is about.",
+    title: "What the card is about, in one line.",
+    meta: "Right of the title: a status Tag or a count.",
+    children: "The card's body.",
+    footer: "Buttons, right-aligned. A proposed write is its one primary button.",
+    onPreview: "Opens the card's subject in the workspace; shows an eye button.",
+    previewLabel: "The preview button's name.",
+  }}
+/>
+
+## useWorkspace
+
+The open tabs as state. A tab is keyed by what it shows (`site:42`), so opening the same thing twice refreshes one tab instead of adding a second. Each tab's `version` goes up on every refresh and whenever it leaves its editor, and `WorkspacePanel` remounts the preview with it. An open editor keeps its version, so a refresh never throws away unsaved edits. Past `maxTabs` (8), the oldest tab that is not in front closes.
+
+The reducer, `workspaceReducer`, is exported too, for an app that keeps the tabs in its own store or on the server.
+
+## WorkspacePanel
+
+The tab strip, a header with the active tab's title and status, a Preview / Edit switch for tabs with `editable`, a Full editor link from `editorHref`, and the tab itself from `children`. Switching to Edit expands the workspace, so the editor gets the room; on a phone, the expand button shows one panel at a time. Arrow keys move between tabs and Delete closes the one in focus.
+
+<PropsTable
+  component="WorkspacePanel"
+  describe={{
+    workspace: "From useWorkspace().",
+    children: "Draws the active tab: its preview, or with mode \"edit\" its editor.",
+    tabIcon: "The icon in front of each tab's title.",
+    meta: "Beside the title in the header: a status tag.",
+    tools: "More header controls, before the Preview / Edit switch.",
+    editorHref: "Where the tab's full editor lives. Left out, no Full editor link.",
+    expandToggle: "The expand button: on phones only (the default), always, or never.",
+    expandOnEdit: "Switching to Edit expands the workspace.",
+    labels: "Replaces the panel's words, for another language.",
+    empty: "Drawn when no tab is open.",
+  }}
+/>
