@@ -1,3 +1,5 @@
+export type { ActionCardProps } from "./ActionCard.js";
+export { ActionCard } from "./ActionCard.js";
 export type { ChatComposerMessage, ChatComposerProps } from "./ChatComposer.js";
 export { ChatComposer } from "./ChatComposer.js";
 export type { ChatMessageProps, ChatMessageStatus } from "./ChatMessage.js";

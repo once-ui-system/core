@@ -74,6 +74,7 @@ const NOT_A_TYPE = new Set([
   "Attach",
   "Message",
   "Messages",
+  "Preview",
   "Remove",
   "Retry",
   "Send",

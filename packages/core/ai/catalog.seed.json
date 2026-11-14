@@ -19,6 +19,11 @@
     "tags": ["settings", "auth"],
     "pairsWith": ["SettingsLayout", "SecuritySettings"]
   },
+  "ActionCard": {
+    "purpose": "Assistant result card: icon, title, status, body, footer actions; a proposed write waits on its one primary button",
+    "tags": ["chat", "ai"],
+    "pairsWith": ["ChatMessage", "Tag", "WorkspacePanel"]
+  },
   "AdapterProvider": {
     "purpose": "The app's link and image components for every Once UI link and image; core/next's LayoutProvider installs Next's",
     "tags": ["provider"],
@@ -1363,5 +1368,10 @@
     "purpose": "AI working line: mark loader plus cycling verbs (Imagining…)",
     "tags": ["chat", "feedback", "ai"],
     "pairsWith": ["ChatMessageList", "LogoSpinner"]
+  },
+  "WorkspacePanel": {
+    "purpose": "Tabs beside a chat: each thing the assistant made, as a preview that switches to its real editor; state from useWorkspace",
+    "tags": ["chat", "ai", "layout"],
+    "pairsWith": ["SplitView", "ChatMessageList", "ActionCard"]
   }
 }
