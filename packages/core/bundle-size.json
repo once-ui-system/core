@@ -1,5 +1,5 @@
 {
-  ".": 236859,
+  ".": 237828,
   "./components/Accordion": 25263,
   "./components/AccordionGroup": 25701,
   "./components/AlarmList": 27626,
@@ -85,6 +85,7 @@
   "./components/Submenu": 33005,
   "./components/SubmitButton": 24634,
   "./components/Switch": 38259,
+  "./components/TabBar": 45317,
   "./components/Table": 65324,
   "./components/Tabs": 24653,
   "./components/Tag": 39459,
