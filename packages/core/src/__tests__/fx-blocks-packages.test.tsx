@@ -40,6 +40,7 @@ const FX = [
 const BLOCKS = [
   "Banner",
   "Book",
+  "FamilyFooter",
   "LogoCloud",
   "MascotPanel",
   "ScrollToTop",

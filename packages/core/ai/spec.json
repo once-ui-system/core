@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "3.0.0-beta.2",
- "generated": "2026-11-13",
+ "generated": "2026-11-14",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root; '@once-ui-system/fx' and '@once-ui-system/blocks' are packages of their own, installed beside core.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -1147,6 +1147,49 @@
    "visible",
    "exiting"
   ],
+  "FamilyFooterBrand": {
+   "name": "!string",
+   "logo": "ReactNode",
+   "href": "string",
+   "tagline": "ReactNode",
+   "action": "{ label: string; href: string }",
+   "extra": "ReactNode"
+  },
+  "FamilyFooterColumn": {
+   "title": "!string",
+   "links": "!FamilyFooterLink[]"
+  },
+  "FamilyFooterLabels": {
+   "moreFrom": "string",
+   "productBy": "string",
+   "builtWith": "string",
+   "family": "string",
+   "navigation": "string"
+  },
+  "FamilyFooterLink": {
+   "label": "!string",
+   "href": "!string",
+   "tag": "string"
+  },
+  "FamilyFooterSocial": {
+   "icon": "!IconName",
+   "label": "!string",
+   "href": "!string"
+  },
+  "FamilyParent": {
+   "name": "!string",
+   "href": "!string",
+   "mark": "string | ReactNode"
+  },
+  "FamilyProduct": {
+   "id": "!string",
+   "name": "!string",
+   "line": "!string",
+   "href": "!string",
+   "mark": "string | ReactNode",
+   "color": "string",
+   "live": "boolean"
+  },
   "FieldControl": {
    "id": "!string",
    "invalid": "!boolean",
@@ -7405,6 +7448,34 @@
     "children": "React.ReactNode"
    }
   },
+  "FamilyFooter": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "brand": "!FamilyFooterBrand",
+    "current": "string",
+    "columns": "FamilyFooterColumn[] = []",
+    "products": "FamilyProduct[] = familyProducts",
+    "parent": "FamilyParent = familyParent",
+    "legal": "string",
+    "year": "number",
+    "social": "FamilyFooterSocial[] = []",
+    "languageSwitch": "ReactNode",
+    "themeSwitch": "boolean = true",
+    "builtWith": "boolean",
+    "decoration": "ReactNode",
+    "width": "\"s\" | \"m\" | \"l\" = l",
+    "labels": "FamilyFooterLabels"
+   }
+  },
   "LogoCloud": {
    "group": "blocks",
    "importFrom": "@once-ui-system/blocks",
@@ -8994,6 +9065,41 @@
    "kind": "value",
    "type": "{ readonly ops: { readonly description: \"Operations, incident, dispatch and map tools: dark first, compact, a quiet cyan brand on slate so status colours carry the meaning.\"; readonly style: { ...; }; readonly dataStyle: { ...; }; readonly fonts: { ...; }; }; readonly care: { ...; }; readonly creative: { ...; }; rea...",
    "doc": "Finished looks for the kinds of app Once UI is built for."
+  },
+  "familyFooterLabelsHu": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "FamilyFooterLabels",
+   "doc": "Hungarian labels for the Dopler family."
+  },
+  "familyHref": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "function",
+   "signature": "(href: string, from?: string) => string",
+   "doc": "The link a sibling tile points at: `href` with `ref=<from>-footer` added, so the sibling's analytics can tell which product sent the visit."
+  },
+  "familySiblings": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "function",
+   "signature": "(products: FamilyProduct[], current?: string) => FamilyProduct[]",
+   "doc": "The siblings to show: live ones, without the product the footer is on."
+  },
+  "familyParent": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "FamilyParent",
+   "doc": "The company behind the products this family footer ships with."
+  },
+  "familyProducts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "FamilyProduct[]",
+   "doc": "Every Dopler product, in the order the row shows them."
   },
   "randomMascotDesign": {
    "group": "blocks",

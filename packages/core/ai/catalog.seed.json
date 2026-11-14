@@ -258,6 +258,11 @@
     "avoid": "Wrapping content — it is an absolute edge overlay, not a container",
     "pairsWith": ["Column", "Row"]
   },
+  "FamilyFooter": {
+    "purpose": "Footer a product family shares: brand band, link columns, sibling products row and a co-brand bar",
+    "tags": ["marketing", "navigation", "layout"],
+    "pairsWith": ["Logo", "ThemeSwitcher"]
+  },
   "FaqSection": {
     "purpose": "Site section: questions and answers",
     "tags": ["marketing"],
