@@ -14,6 +14,7 @@
   "canonical": "boolean",
   "accessory": "MascotAccessory | MascotAccessory[] | React.ReactNode",
   "accessoryColor": "string",
+  "faceAccessory": "React.ReactNode",
   "lookAt": "\"pointer\" | \"center\" | { x: number; y: number } = pointer",
   "level": "number",
   "source": "AudioLevelSource | null",

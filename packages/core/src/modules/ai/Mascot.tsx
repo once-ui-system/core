@@ -117,6 +117,13 @@ export interface MascotProps extends MascotLook, Omit<LeafPropsOf<"div">, "child
   accessory?: MascotAccessory | MascotAccessory[] | React.ReactNode;
   /** One color for the built-in accessories, in place of each one's own. */
   accessoryColor?: string;
+  /**
+   * Something on the face, such as a beak, a nose, glasses or whiskers, drawn in the body's
+   * 200 × 200 box. It rides on the face layer, so it follows the gaze, the thinking, sleeping
+   * and sad poses and a poke, as the eyes and cheeks do. `accessory` moves with the body and
+   * only leans a little toward where the mascot looks.
+   */
+  faceAccessory?: React.ReactNode;
   /** `pointer` follows the cursor, `{ x, y }` from -1 to 1 looks that way, `center` looks ahead. */
   lookAt?: "pointer" | "center" | { x: number; y: number };
   /** Loudness from 0 to 1 that drives the body (and mouth) while speaking. Takes precedence over `source`. */
@@ -338,7 +345,11 @@ export function useMascotPoke(
   return { pokes, poked, onPointerDown: handler };
 }
 
-/** A canonical mascot's layers as SVG, sorted behind the body, on it and in front of the face. */
+/**
+ * A canonical mascot's layers as SVG, sorted behind the body, on it and in front of the face.
+ * `paint` holds the clipped layers on the body (a skin, a seam): they stay put while worn
+ * layers lean with the gaze.
+ */
 function identityLayers(layers: readonly MascotIdentityLayer[], clip: string) {
   const paint = (value?: string) =>
     value === "body"
@@ -346,8 +357,10 @@ function identityLayers(layers: readonly MascotIdentityLayer[], clip: string) {
       : value === "shade"
         ? "color-mix(in srgb, var(--mascot-color) 68%, #000)"
         : value;
-  const draw = (place: "back" | "on" | "front") => {
-    const shapes = layers.filter((layer) => (layer.place ?? "on") === place);
+  const draw = (place: "back" | "on" | "front", only?: (layer: MascotIdentityLayer) => boolean) => {
+    const shapes = layers.filter(
+      (layer) => (layer.place ?? "on") === place && (only ? only(layer) : true),
+    );
     if (!shapes.length) return null;
     const path = (layer: MascotIdentityLayer, i: number) => (
       <path
@@ -370,7 +383,12 @@ function identityLayers(layers: readonly MascotIdentityLayer[], clip: string) {
       </>
     );
   };
-  return { back: draw("back"), on: draw("on"), front: draw("front") };
+  return {
+    back: draw("back"),
+    paint: draw("on", (layer) => Boolean(layer.clip)),
+    on: draw("on", (layer) => !layer.clip),
+    front: draw("front"),
+  };
 }
 
 const FlatMascot = ({
@@ -400,6 +418,7 @@ const FlatMascot = ({
   personality,
   accessory,
   accessoryColor,
+  faceAccessory,
   lookAt = "pointer",
   level,
   source,
@@ -462,7 +481,12 @@ const FlatMascot = ({
   const wearing =
     accessory ?? (seed !== undefined && !identity ? readSeedWords(seed).accessory : undefined);
   const builtIn = (Array.isArray(wearing) ? wearing : [wearing]).filter(isMascotAccessory);
-  const worn = builtIn.length
+  const worn: {
+    back?: React.ReactNode;
+    paint?: React.ReactNode;
+    on?: React.ReactNode;
+    front?: React.ReactNode;
+  } = builtIn.length
     ? accessoryLayers(
         builtIn,
         {
@@ -616,6 +640,7 @@ const FlatMascot = ({
               </g>
             </g>
             <path d={body.d} className={styles.edge} />
+            {worn.paint}
             {worn.on && <g className={styles.accessory}>{worn.on}</g>}
             <g className={styles.face}>
               <g className={styles.flick}>
@@ -660,6 +685,7 @@ const FlatMascot = ({
                 >
                   <Mouth kind={look.mouth} mood={base} state={state} laugh={glyph === "laugh"} />
                 </g>
+                {faceAccessory && <g className={styles.onFace}>{faceAccessory}</g>}
               </g>
               <KawaiiLayer
                 effects={fx}
