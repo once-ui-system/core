@@ -57,6 +57,8 @@ export interface FamilyFooterLabels {
   family?: string;
   /** The link columns' landmark name. Defaults to `"Footer"`. */
   navigation?: string;
+  /** The link to the parent's shared legal page. Defaults to `"Legal"`. */
+  legal?: string;
 }
 
 export interface FamilyFooterBrand {
@@ -113,6 +115,7 @@ export const familyFooterLabelsHu: FamilyFooterLabels = {
   builtWith: "Once UI-jal készült",
   family: "További termékek",
   navigation: "Lábléc",
+  legal: "Jogi információk",
 };
 
 /** A mark from a path, a node or nothing (then the first letter), in a square of `size`. */
@@ -187,6 +190,7 @@ export function FamilyFooter({
       builtWith: "Built with Once UI",
       family: "Other products",
       navigation: "Footer",
+      legal: "Legal",
     },
     labels,
   );
@@ -347,6 +351,13 @@ export function FamilyFooter({
             <Text textVariant="label-default-s" onBackground="neutral-weak">
               © {shownYear} {legal ?? parent.name}
             </Text>
+            {parent.legalHref && (
+              <a href={parent.legalHref} className={styles.link}>
+                <Text textVariant="label-default-s" onBackground="neutral-medium">
+                  {words.legal}
+                </Text>
+              </a>
+            )}
             {languageSwitch}
             {themeSwitch && <ThemeSwitcher />}
             {social.length > 0 && (

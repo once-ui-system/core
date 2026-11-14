@@ -18,7 +18,11 @@ import {
 
 // A made-up family, so the examples show no real product's marks: Halden & Co
 // and its five products, each with its own colour for the letter mark.
-const parent: FamilyParent = { name: "Halden & Co", href: "https://halden.example" };
+const parent: FamilyParent = {
+  name: "Halden & Co",
+  href: "https://halden.example",
+  legalHref: "https://halden.example/legal",
+};
 
 const products: FamilyProduct[] = [
   {
@@ -126,8 +130,8 @@ const brands: Record<
         {
           title: "Company",
           links: [
-            { label: "About", href: "#" },
-            { label: "Journal", href: "#" },
+            { label: "About", href: "https://halden.example/about" },
+            { label: "Journal", href: "https://halden.example/journal" },
           ],
         },
         legalColumn,
@@ -236,8 +240,8 @@ const brands: Record<
         {
           title: "Company",
           links: [
-            { label: "About", href: "#" },
-            { label: "Careers", href: "#" },
+            { label: "About", href: "https://halden.example/about" },
+            { label: "Careers", href: "https://halden.example/careers" },
           ],
         },
         legalColumn,

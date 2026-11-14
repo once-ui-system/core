@@ -28,12 +28,18 @@ export interface FamilyParent {
   href: string;
   /** The parent's mark, drawn at 20 × 20; without one, the first letter. */
   mark?: string | ReactNode;
+  /**
+   * The family's shared legal page (terms and privacy that apply to every
+   * product), linked from the co-brand bar of every footer.
+   */
+  legalHref?: string;
 }
 
 /** The company behind the products this family footer ships with. */
 export const familyParent: FamilyParent = {
   name: "Dopler",
   href: "https://dopler.app",
+  legalHref: "https://dopler.app/legal",
 };
 
 /**

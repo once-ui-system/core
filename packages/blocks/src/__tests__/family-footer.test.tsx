@@ -29,7 +29,11 @@ const family = [
   { id: "ember", name: "Ember", line: "Bookings for small cafés", href: "https://ember.example/" },
   { id: "tide", name: "Tide", line: "Coming soon", href: "https://tide.example", live: false },
 ];
-const parent = { name: "Halden & Co", href: "https://halden.example" };
+const parent = {
+  name: "Halden & Co",
+  href: "https://halden.example",
+  legalHref: "https://halden.example/legal",
+};
 
 const footer = (props: Partial<React.ComponentProps<typeof FamilyFooter>> = {}) =>
   render(
@@ -119,6 +123,17 @@ describe("FamilyFooter", () => {
     footer();
     const by = screen.getByRole("link", { name: /A product by Halden & Co/ });
     expect(by).toHaveAttribute("href", "https://halden.example/?ref=fjell-footer");
+  });
+
+  it("links the family's shared legal page from the bar, and leaves it out without one", () => {
+    const { unmount } = footer();
+    expect(screen.getByRole("link", { name: "Legal" })).toHaveAttribute(
+      "href",
+      "https://halden.example/legal",
+    );
+    unmount();
+    footer({ parent: { name: "Halden & Co", href: "https://halden.example" } });
+    expect(screen.queryByRole("link", { name: "Legal" })).toBeNull();
   });
 
   it("drops the family row when there is no sibling to show", () => {

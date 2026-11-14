@@ -1237,12 +1237,14 @@
    "productBy": "string",
    "builtWith": "string",
    "family": "string",
-   "navigation": "string"
+   "navigation": "string",
+   "legal": "string"
   },
   "FamilyParent": {
    "name": "!string",
    "href": "!string",
-   "mark": "string | ReactNode"
+   "mark": "string | ReactNode",
+   "legalHref": "string"
   },
   "FamilyProduct": {
    "id": "!string",

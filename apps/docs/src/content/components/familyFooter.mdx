@@ -143,6 +143,18 @@ const marks: Record<string, string> = {
   ]}
 />
 
+## Company and legal pages
+
+The company lives in one place: About, careers, press and the terms and
+privacy that apply to every product sit on the parent's site, and each
+product's Company column links there instead of keeping its own copy. The
+co-brand bar links the parent's shared legal page (`parent.legalHref`,
+`https://dopler.app/legal` for Dopler). A product's own pages (pricing,
+docs, support, its product-specific terms) stay on its own site.
+
+The footer sets no cookies and draws no cookie banner. Pair it with
+cookieless analytics and the page needs none.
+
 ## Referrals
 
 Each sibling link, the parent link and the Once UI credit carry
@@ -164,7 +176,7 @@ Dopler terméke") is shown as it is.
 | `current` | `string`: the product the footer is on | |
 | `columns` | `{ title, links: { label, href, tag? }[] }[]`, up to five | `[]` |
 | `products` | `FamilyProduct[]` | `familyProducts` |
-| `parent` | `{ name, href, mark? }` | `familyParent` |
+| `parent` | `{ name, href, mark?, legalHref? }` | `familyParent` |
 | `legal` | `string` | the parent's name |
 | `year` | `number` | this year |
 | `social` | `{ icon, label, href }[]` | `[]` |
