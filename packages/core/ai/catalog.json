@@ -1,6 +1,6 @@
 {
  "version": "3.0.0-beta.2",
- "generated": "2026-11-13",
+ "generated": "2026-11-14",
  "iconNames": ["adjustments","arrowDown","arrowLeft","arrowRight","arrowUp","arrowUpRight","ball","banknotes","barChart","bell","bolt","book","bookmark","calendar","cart","chat","check","checkbox","chevronDoubleLeft","chevronDoubleRight","chevronDown","chevronLeft","chevronRight","chevronUp","chevronsLeftRight","clipboard","close","code","computer","copy","cube","danger","dark","dislike","document","download","edit","enter","eye","eyeDropper","eyeOff","file","filter","flag","folder","food","forward","gift","globe","grid","grip","heart","help","home","image","inbox","info","light","like","linearGauge","link","lock","logout","mail","mapPin","maximize","menu","minimize","minus","moreHorizontal","newspaper","opacity","organization","pause","paw","payment","people","person","personRemove","phone","play","plus","radialGauge","refresh","return","screen","search","security","send","settings","smiley","sparkle","star","starFill","store","symbol","tag","time","trash","trend","trendDown","trendUp","upload","video","volume","volumeOff","warning","wordmark","world"],
  "components": {
   "ScrollLock": {"purpose":"Freezes page scroll while enabled, keeping one referenced region scrollable"},
@@ -94,6 +94,7 @@
   "SubmitButton": {"purpose":"Submit Button that shows a spinner and ignores repeat presses while its Form's async onSubmit runs"},
   "Switch": {"purpose":"On/off toggle with label, description and loading state"},
   "Table": {"purpose":"Table from column definitions: sorting, search, selection, pagination, row actions, empty and loading states"},
+  "TabBar": {"purpose":"Phone bottom navigation: the four most used places in thumb reach, hidden above a breakpoint where a Sidebar takes over"},
   "Tab": {"purpose":"One tab in a TabList, matched to its TabPanel by value"},
   "TabList": {"purpose":"The row or column of Tabs inside Tabs, with arrow-key focus"},
   "TabPanel": {"purpose":"The content shown while its Tab is selected"},

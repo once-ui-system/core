@@ -409,6 +409,10 @@
       "types": "./dist/components/Table.d.ts",
       "default": "./dist/components/Table.js"
     },
+    "./components/TabBar": {
+      "types": "./dist/components/TabBar.d.ts",
+      "default": "./dist/components/TabBar.js"
+    },
     "./components/Tabs": {
       "types": "./dist/components/Tabs.d.ts",
       "default": "./dist/components/Tabs.js"

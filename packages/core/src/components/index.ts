@@ -85,6 +85,7 @@ export * from "./Submenu.js";
 export * from "./SubmitButton.js";
 export * from "./Switch.js";
 export * from "./Table.js";
+export * from "./TabBar.js";
 export * from "./Tabs.js";
 export * from "./Tag.js";
 export * from "./TagInput.js";
