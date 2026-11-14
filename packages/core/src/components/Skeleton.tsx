@@ -69,7 +69,8 @@ const Skeleton = ({
       {...props}
       ref={ref}
       style={delay !== undefined ? { animationDelay: `${delay}ms`, ...style } : style}
-      radius={shape === "line" || shape === "circle" ? "full" : undefined}
+      // A radius the caller passes wins; this only supplies the shape's default.
+      radius={props.radius ?? (shape === "line" || shape === "circle" ? "full" : undefined)}
       inline
       className={classNames(
         styles.skeleton,

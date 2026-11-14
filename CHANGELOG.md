@@ -758,6 +758,9 @@ entry below that had landed by then:
 
 ### Fixed
 
+- `Skeleton` keeps a `radius` you pass. The shape's default was set after the
+  props were spread, so a `block` dropped any radius it was given; a `line` or
+  `circle` can now take a radius other than `full` too.
 - A row keeps its hover look while a menu opened from it is open. The
   `DropdownWrapper` trigger now carries `data-state="open" | "closed"`, and
   `Accordion` headers, `Table` rows (hoverable and clickable) and `Card` stay lit
