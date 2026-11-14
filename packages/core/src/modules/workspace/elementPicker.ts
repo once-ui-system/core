@@ -42,12 +42,41 @@ export interface ElementPickerOptions {
   elementSelector?: string;
   /** Outline while hovering. Defaults to a dashed brand line. */
   hoverOutline?: string;
+  /**
+   * The cursor while armed, over everything in the document (links and
+   * buttons included). Defaults to `selectCursor()`: an arrow with a dashed
+   * selection box. Pass any CSS cursor value, such as `"crosshair"`.
+   */
+  cursor?: string;
 }
 
 const SECTION = "section";
 const ELEMENT = "h1, h2, h3, h4, h5, h6, p, li, img, figure, blockquote, a, button, table, form";
 const HOVER = "2px dashed var(--brand-solid-medium, #60a5fa)";
 const MARK = "2px solid var(--brand-solid-strong, #3b82f6)";
+
+// The arrow of the soft cursor preset, shrunk to leave room for the box.
+const WEDGE =
+  '<path d="M4.6 3.2 L23.4 10.2 Q25 10.8 23.5 11.9 L15.9 15.9 L11.9 23.5 Q10.8 25 10.2 23.4 L3.2 4.6 Q2.8 2.8 4.6 3.2 Z"/>';
+
+/**
+ * The select cursor: a dark arrow with a white rim and, at its foot, a
+ * dashed selection box in `accent`. Reads on light and dark pages alike.
+ * Returns a CSS `cursor` value with its hotspot on the arrow's tip and
+ * `crosshair` as the fallback.
+ */
+export function selectCursor(accent = "#3b82f6"): string {
+  const svg =
+    '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">' +
+    '<defs><filter id="s" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="1" stdDeviation="1.2" flood-color="#000" flood-opacity=".35"/></filter></defs>' +
+    `<g transform="translate(1 1) scale(.68)"><g filter="url(#s)" fill="#fff" stroke="#fff" stroke-width="3.4" stroke-linejoin="round">${WEDGE}</g><g fill="#111">${WEDGE}</g></g>` +
+    '<rect x="14.5" y="14.5" width="11" height="11" rx="2.6" fill="none" stroke="#fff" stroke-width="4" filter="url(#s)"/>' +
+    `<rect x="14.5" y="14.5" width="11" height="11" rx="2.6" fill="${accent}" fill-opacity=".18" stroke="${accent}" stroke-width="1.6" stroke-dasharray="2.6 2"/>` +
+    "</svg>";
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}") 3 3, crosshair`;
+}
+
+const CURSOR_STYLE_ID = "once-ui-element-picker-cursor";
 
 /** The page's top-level sections, top to bottom (a section inside a section is part of it). */
 export function pageSections(doc: Document, selector = SECTION): HTMLElement[] {
@@ -100,8 +129,11 @@ export function armElementPicker(doc: Document, options: ElementPickerOptions): 
   const elementSelector = options.elementSelector ?? ELEMENT;
   const hoverOutline = options.hoverOutline ?? HOVER;
   let hovered: HTMLElement | null = null;
-  const previousCursor = doc.body.style.cursor;
-  doc.body.style.cursor = "crosshair";
+  // A style rule, not body.style: links and buttons set their own cursor.
+  const cursorStyle = doc.createElement("style");
+  cursorStyle.id = CURSOR_STYLE_ID;
+  cursorStyle.textContent = `*, *::before, *::after { cursor: ${options.cursor ?? selectCursor()} !important; }`;
+  (doc.head ?? doc.documentElement).appendChild(cursorStyle);
 
   // Read on every event: the page's own links can move it without reloading the frame.
   const target = (event: Event): HTMLElement | null =>
@@ -152,7 +184,7 @@ export function armElementPicker(doc: Document, options: ElementPickerOptions): 
     doc.removeEventListener("keydown", onKey, true);
     outer?.removeEventListener("keydown", onKey, true);
     hover(null);
-    doc.body.style.cursor = previousCursor;
+    cursorStyle.remove();
   };
 }
 

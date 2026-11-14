@@ -1,10 +1,17 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { armElementPicker, markElement, pageSections } from "../modules/workspace/elementPicker";
+import {
+  armElementPicker,
+  markElement,
+  pageSections,
+  selectCursor,
+} from "../modules/workspace/elementPicker";
 
 afterEach(() => {
   document.body.innerHTML = "";
-  document.body.style.cursor = "";
 });
+
+const cursorRule = () =>
+  document.getElementById("once-ui-element-picker-cursor")?.textContent ?? null;
 
 const click = (el: Element) =>
   el.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
@@ -24,13 +31,19 @@ describe("armElementPicker", () => {
       "<header><a id='logo' href='/'>Logo</a></header><section><h2>Hero</h2></section><section><h2>Menu  of the week</h2><p id='p'>Rye</p></section>";
     const onPick = vi.fn();
     const disarm = armElementPicker(document, { onPick });
-    expect(document.body.style.cursor).toBe("crosshair");
+    expect(cursorRule()).toContain("data:image/svg+xml");
     click(document.getElementById("p") as HTMLElement);
     expect(onPick).toHaveBeenCalledWith(
       expect.objectContaining({ kind: "section", index: 2, total: 2, label: "Menu of the week" }),
     );
     disarm();
-    expect(document.body.style.cursor).toBe("");
+    expect(cursorRule()).toBeNull();
+  });
+
+  it("takes any cursor in place of the select cursor", () => {
+    const disarm = armElementPicker(document, { onPick: vi.fn(), cursor: "crosshair" });
+    expect(cursorRule()).toContain("cursor: crosshair !important");
+    disarm();
   });
 
   it("reports a click outside every section and keeps it from following links", () => {
@@ -70,6 +83,14 @@ describe("armElementPicker", () => {
     armElementPicker(document, { onPick: vi.fn(), onCancel });
     document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
     expect(onCancel).toHaveBeenCalled();
+  });
+});
+
+describe("selectCursor", () => {
+  it("is an SVG cursor with its hotspot and a crosshair fallback, in the accent given", () => {
+    const value = selectCursor("#ff0000");
+    expect(value).toMatch(/^url\("data:image\/svg\+xml,.+"\) 3 3, crosshair$/);
+    expect(decodeURIComponent(value)).toContain('stroke="#ff0000"');
   });
 });
 
