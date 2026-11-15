@@ -192,10 +192,22 @@
    "cheeks": "boolean",
    "personality": "\"calm\" | \"default\" | \"bouncy\"",
    "accessory": "MascotAccessory[]",
+   "layers": "MascotIdentityLayer[]",
    "accessoryColor": "string",
    "working": "\"cube\" | \"d20\"",
    "sides": "MascotSides",
    "face": "\"3d\" | \"flat\""
+  },
+  "MascotIdentityLayer": {
+   "d": "!string",
+   "fill": "string",
+   "stroke": "string",
+   "width": "number",
+   "cap": "\"round\" | \"butt\"",
+   "opacity": "number",
+   "transform": "string",
+   "clip": "boolean",
+   "place": "\"back\" | \"on\" | \"front\""
   },
   "MascotMood": [
    "neutral",

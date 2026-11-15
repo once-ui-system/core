@@ -119,6 +119,30 @@
    "signature": "(seed: string | number) => string",
    "doc": "A seed as the registry compares it: lowercase letters and digits only."
   },
+  "cleanMascotUsername": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(raw: string) => string",
+   "doc": "A username as it is stored: lowercase, no"
+  },
+  "fetchMascotSkin": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(username: string, source?: string) => Promise<MascotSkin | null>",
+   "doc": "Reads a username's skin once per page and source: later calls share the first request."
+  },
+  "MASCOT_SKIN_SOURCE": {
+   "group": "modules",
+   "kind": "value",
+   "type": "\"https://once-ui.com/api/mascot/skin\"",
+   "doc": "Where skins are read from, unless `skinSource` says otherwise."
+  },
+  "useMascotSkin": {
+   "group": "modules",
+   "kind": "hook",
+   "signature": "(username: string | undefined, source?: string) => { skin: MascotSkin | null; ready: boolean; }",
+   "doc": "A username's skin for a component: `ready` turns true when it arrived, or failed, or took longer than a moment, so the mascot never stays hidden."
+  },
   "mascotDataUrl": {
    "group": "modules",
    "kind": "function",
@@ -1423,6 +1447,7 @@
    "cheeks": "boolean",
    "personality": "\"calm\" | \"default\" | \"bouncy\"",
    "accessory": "MascotAccessory[]",
+   "layers": "MascotIdentityLayer[]",
    "accessoryColor": "string",
    "working": "\"cube\" | \"d20\"",
    "sides": "MascotSides",
@@ -1515,6 +1540,11 @@
    "mono",
    "Partial<Record<\"top\" | \"right\" | \"bottom\" | \"left\" | \"front\" | \"back\", string>>"
   ],
+  "MascotSkin": {
+   "name": "!string",
+   "design": "!MascotDesign",
+   "identity": "string"
+  },
   "MascotState": [
    "idle",
    "listening",
