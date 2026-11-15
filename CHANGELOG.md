@@ -80,8 +80,11 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 Pre-releases on npm `next` (`npm i @once-ui-system/core@next`), each with every
 entry below that had landed by then:
 
-- **3.0.0-beta.2** (2026-11-13), with `@once-ui-system/foundations`, `fx` and
-  `blocks` at 3.0.0-beta.2 too. New since beta.1: an editor-grade `Scrubber`;
+- **3.0.0-beta.3** (2026-11-15), with `@once-ui-system/foundations`, `fx` and
+  `blocks` at 3.0.0-beta.3 too. beta.2 was tagged before its version bump
+  landed, so it never reached npm; beta.3 is the first pre-release after beta.1.
+  New since beta.1: Mascot seeds that read words, `faceAccessory`, worn
+  accessories that lean with the gaze, and canonical mascots for identity names; an editor-grade `Scrubber`;
   `EmptyState` (Table's empty states use it); nested `Submenu` and
   `openOn="hover"` on Dropdown; `tone` on Nav, ToggleButton and Option; the
   hairline Tag; Select's default chevron and `alignSelected`; the d20 Mascot;
@@ -94,7 +97,7 @@ entry below that had landed by then:
   danger and selected looks); and fixes from the first real-app migrations onto
   beta.1 (ghost fields in a composer, MascotCube colours, Dropdown focus, Switch,
   FormErrorSummary, DatePicker, Avatar initials). Pulled forward from 3.1 for
-  beta.2: `Calendar` (`/calendar`), `Combobox`, the Sidebar shell,
+  beta.3: `Calendar` (`/calendar`), `Combobox`, the Sidebar shell,
   `RichTextEditor` (`/richtext`), canvas editor primitives (`/canvas`), `Scene`
   (`/scene`, three.js as an optional peer), peer cursors, Map routes, areas and
   status pins, `StatTile` and the control-room primitives, theme presets, the
