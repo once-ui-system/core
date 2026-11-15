@@ -317,6 +317,7 @@ Mixins: LeafProps.
 - seed?: string | number
 - accessory?: MascotAccessory | MascotAccessory[] | React.ReactNode
 - accessoryColor, aria-label, bodyPath, eyeColor?: string
+- faceAccessory?: React.ReactNode
 - lookAt?: "pointer" | "center" | { x: number; y: number } = pointer
 - level, roundness, aspect, eyeSize, eyeSpacing, eyeHeight?: number
 - source?: AudioLevelSource | null
