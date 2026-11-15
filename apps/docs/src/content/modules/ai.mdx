@@ -260,6 +260,38 @@ readSeedWords("royal-ink-cat");
   ]}
 />
 
+### Canonical mascots
+
+Some names stand for a real identity and draw a hand-made character instead of a generated one:
+`once-ui` is the Once UI mark come alive, `quasar` is Quasar, and every Dopler product (`stack`,
+`aveiro`, `chirio`, `tavilio`, `sigilio` and the rest) has its own. Spelling, case and dashes don't
+matter ("Once UI", "onceui"), but the whole seed has to be the name, so `once-ui-fan` is generated as
+usual. Props you pass still win, so the owner of an identity can recolour or dress it.
+
+Core can't know who typed a seed. Where people choose the text (a username, an agent's name), show the
+canonical mascot only to its owner and pass `canonical={false}` to everyone else; reserve
+`MASCOT_IDENTITY_KEYS` in sign-ups so nobody else can hold the name.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Mascot seed="once-ui" />
+<Mascot seed="quasar" mood="happy" />
+
+// A name someone typed: canonical only for the identity's owner.
+const owned = mascotIdentity(agent.name)?.owner === workspace.owner;
+<Mascot seed={agent.name} canonical={owned} />
+
+mascotSvg({ seed: "sigilio" }); // the same character in an OG image`,
+      language: "tsx",
+      label: "Canonical"
+    }
+  ]}
+/>
+
 ### Accessories
 
 Nine built-in accessories, flat and chunky so they read at avatar size: `antenna`, `bow`, `beanie`,
@@ -286,6 +318,55 @@ body's 200 × 200 box.
 <Mascot surface="flat" accessory={["crown", "bow"]} accessoryColor="#ffd24d" />`,
       language: "tsx",
       label: "Accessories",
+    },
+  ]}
+/>
+
+`accessory` moves with the body and leans a little toward where the mascot looks, like a head
+tilting. Something that belongs to the face, such as a beak, a nose, glasses or whiskers, goes in
+`faceAccessory` instead: it rides on the face layer, so it turns with the gaze, glances up while
+thinking, drops when it sleeps or is sad, and jumps with a poke, as the eyes and cheeks do. Draw it in
+the same 200 × 200 box; with the default look the eyes sit at 71,96 and 129,96.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="24" center wrap>
+      <Mascot
+        size="m"
+        surface="flat"
+        color="#5cc8ff"
+        eyes="round"
+        mouth="none"
+        faceAccessory={<path d="M88 112 Q100 106 112 112 L100 130 Z" fill="#ffb648" />}
+      />
+      <Mascot
+        size="m"
+        surface="flat"
+        color="#e8ecf2"
+        eyes="dot"
+        mouth="smile"
+        accessory="beanie"
+        faceAccessory={
+          <g fill="none" stroke="#0c0b12" strokeWidth={4}>
+            <circle cx={71} cy={96} r={19} />
+            <circle cx={129} cy={96} r={19} />
+            <path d="M90 96 Q100 90 110 96" />
+          </g>
+        }
+      />
+    </Row>
+  }
+  codes={[
+    {
+      code: `<Mascot
+  eyes="round"
+  mouth="none"
+  faceAccessory={<path d="M88 112 Q100 106 112 112 L100 130 Z" fill="#ffb648" />}
+/>`,
+      language: "tsx",
+      label: "Face accessories",
     },
   ]}
 />
@@ -444,6 +525,8 @@ the cube shows while it thinks but does not turn.
     accessory:
       "antenna, bow, beanie, headphones, sprout, helmet, crown, catEars or partyHat, a list of them, or your own SVG in the 200 × 200 box.",
     accessoryColor: "One color for the built-in accessories, in place of each one's own.",
+    faceAccessory:
+      "Your own SVG on the face (a beak, a nose, glasses), in the 200 × 200 box. Follows the gaze, poses and pokes.",
     personality: "calm, default or bouncy.",
     lookAt: "pointer, center, or a direction from -1 to 1.",
     level: "Loudness from 0 to 1 that makes the body pulse while speaking.",

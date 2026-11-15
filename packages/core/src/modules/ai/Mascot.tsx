@@ -9,6 +9,7 @@ import type { CSSUnit } from "../../types.js";
 import { tokenLength } from "../../utils/layoutClasses.js";
 import { accessoryLayers, isMascotAccessory, type MascotAccessory } from "./accessories.js";
 import { type AudioLevelSource, createAudioMeter } from "./audioLevel.js";
+import { mascotDesignProps } from "./design.js";
 import {
   baseMood,
   EyeGlyph,
@@ -21,7 +22,9 @@ import {
 } from "./kawaii.js";
 import styles from "./Mascot.module.scss";
 import { MascotCube } from "./MascotCube.js";
+import { type MascotIdentityLayer, mascotIdentity } from "./mascotIdentities.js";
 import { bodyShape, clamp, DEFAULT_LOOK, EYE_BOX, mascotLook, TILE } from "./mascotShape.js";
+import { useMascotSkin } from "./mascotSkin.js";
 import { readSeedWords } from "./mascotWords.js";
 
 export { mascotLook };
@@ -103,6 +106,12 @@ export interface MascotProps extends MascotLook, Omit<LeafPropsOf<"div">, "child
    */
   seed?: string | number;
   /**
+   * A seed that names a canonical mascot ("once-ui", "quasar", a Dopler product) draws that
+   * character instead of a generated one. On by default; pass `false` for seeds people type
+   * (usernames, agent names) unless that person owns the identity. See `mascotIdentity`.
+   */
+  canonical?: boolean;
+  /**
    * Something it wears, moving with the body. A built-in one (`antenna`, `bow`, `beanie`,
    * `headphones`, `sprout`, `helmet`, `crown`, `catEars`, `partyHat`), several at once as a
    * list, or your own SVG drawn in the body's 200 × 200 box. Built-ins fit any body shape.
@@ -110,6 +119,29 @@ export interface MascotProps extends MascotLook, Omit<LeafPropsOf<"div">, "child
   accessory?: MascotAccessory | MascotAccessory[] | React.ReactNode;
   /** One color for the built-in accessories, in place of each one's own. */
   accessoryColor?: string;
+  /**
+   * Shapes it wears as path data in the body's 200 × 200 box, sorted behind the body, on it or
+   * in front of the face (see `MascotIdentityLayer`). Drawn when `accessory` is unset; a
+   * `MascotDesign` carries them as plain JSON.
+   */
+  layers?: readonly MascotIdentityLayer[];
+  /**
+   * A Once UI username: draws that person's mascot, the one their name hatched or the one they
+   * saved in the character designer on once-ui.com, so it is the same in every app. Opt-in:
+   * only this prop fetches anything, once per name per page, and only the look comes back.
+   * Props you pass still win over it. Until it arrives (at most a moment) the mascot is
+   * hidden; if it can't be read, the name is used as a seed.
+   */
+  username?: string;
+  /** Where `username` skins are read from. Defaults to once-ui.com's public endpoint. */
+  skinSource?: string;
+  /**
+   * Something on the face, such as a beak, a nose, glasses or whiskers, drawn in the body's
+   * 200 × 200 box. It rides on the face layer, so it follows the gaze, the thinking, sleeping
+   * and sad poses and a poke, as the eyes and cheeks do. `accessory` moves with the body and
+   * only leans a little toward where the mascot looks.
+   */
+  faceAccessory?: React.ReactNode;
   /** `pointer` follows the cursor, `{ x, y }` from -1 to 1 looks that way, `center` looks ahead. */
   lookAt?: "pointer" | "center" | { x: number; y: number };
   /** Loudness from 0 to 1 that drives the body (and mouth) while speaking. Takes precedence over `source`. */
@@ -288,7 +320,33 @@ function Mouth({
  * and solves it, then shows the logo and softens back with its face.
  * `working="d20"` firms into a twenty-sided die that tumbles and lands instead.
  */
-const Mascot = (props: MascotProps) => {
+const Mascot = (props: MascotProps) =>
+  props.username !== undefined ? <SkinnedMascot {...props} /> : <MascotBody {...props} />;
+
+/** A mascot drawn from a username's skin, with the props passed on top. */
+const SkinnedMascot = ({ username, skinSource, style, ...props }: MascotProps) => {
+  const { skin, ready } = useMascotSkin(username, skinSource);
+  const fromSkin: Partial<MascotProps> = skin
+    ? {
+        ...mascotDesignProps(skin.design),
+        ...(skin.identity ? { seed: skin.identity, canonical: true } : {}),
+      }
+    : { seed: username, canonical: false };
+  // Only props actually passed win over the skin.
+  const passed = Object.fromEntries(
+    Object.entries(props).filter(([, value]) => value !== undefined),
+  ) as MascotProps;
+  return (
+    <MascotBody
+      {...fromSkin}
+      {...passed}
+      style={ready ? style : { ...style, visibility: "hidden" }}
+      aria-busy={ready ? undefined : true}
+    />
+  );
+};
+
+const MascotBody = (props: MascotProps) => {
   const {
     working,
     state = "idle",
@@ -331,6 +389,52 @@ export function useMascotPoke(
   return { pokes, poked, onPointerDown: handler };
 }
 
+/**
+ * A canonical mascot's layers as SVG, sorted behind the body, on it and in front of the face.
+ * `paint` holds the clipped layers on the body (a skin, a seam): they stay put while worn
+ * layers lean with the gaze.
+ */
+function identityLayers(layers: readonly MascotIdentityLayer[], clip: string) {
+  const paint = (value?: string) =>
+    value === "body"
+      ? "var(--mascot-color)"
+      : value === "shade"
+        ? "color-mix(in srgb, var(--mascot-color) 68%, #000)"
+        : value;
+  const draw = (place: "back" | "on" | "front", only?: (layer: MascotIdentityLayer) => boolean) => {
+    const shapes = layers.filter(
+      (layer) => (layer.place ?? "on") === place && (only ? only(layer) : true),
+    );
+    if (!shapes.length) return null;
+    const path = (layer: MascotIdentityLayer, i: number) => (
+      <path
+        key={i}
+        d={layer.d}
+        fill={paint(layer.fill) ?? "none"}
+        stroke={paint(layer.stroke)}
+        strokeWidth={layer.width}
+        strokeLinecap={layer.stroke ? (layer.cap ?? "round") : undefined}
+        strokeLinejoin={layer.stroke ? "round" : undefined}
+        opacity={layer.opacity}
+        transform={layer.transform}
+      />
+    );
+    const clipped = shapes.filter((layer) => layer.clip);
+    return (
+      <>
+        {clipped.length > 0 && <g clipPath={clip}>{clipped.map(path)}</g>}
+        {shapes.filter((layer) => !layer.clip).map(path)}
+      </>
+    );
+  };
+  return {
+    back: draw("back"),
+    paint: draw("on", (layer) => Boolean(layer.clip)),
+    on: draw("on", (layer) => !layer.clip),
+    front: draw("front"),
+  };
+}
+
 const FlatMascot = ({
   ref: forwardedRef,
   sides: _sides,
@@ -341,6 +445,7 @@ const FlatMascot = ({
   state = "idle",
   mood = "neutral",
   seed,
+  canonical = true,
   color,
   roundness,
   aspect,
@@ -357,6 +462,10 @@ const FlatMascot = ({
   personality,
   accessory,
   accessoryColor,
+  layers,
+  username: _username,
+  skinSource: _skinSource,
+  faceAccessory,
   lookAt = "pointer",
   level,
   source,
@@ -401,31 +510,47 @@ const FlatMascot = ({
       personality,
     }).filter(([, value]) => value !== undefined),
   );
+  // A seed that names a canonical mascot draws that character; otherwise the generator runs.
+  const identity = canonical ? mascotIdentity(seed) : undefined;
+  const seeded = seed !== undefined ? mascotLook(seed, { canonical }) : {};
   const look = {
     ...DEFAULT_LOOK,
-    ...(seed !== undefined ? mascotLook(seed) : {}),
+    ...seeded,
     ...passed,
   } as typeof DEFAULT_LOOK;
   // A seed with a dark colour brings light eyes, unless you pass the colour or the eyes yourself.
-  const eyeInk =
-    eyeColor ?? (color === undefined && seed !== undefined ? mascotLook(seed).eyeColor : undefined);
+  const eyeInk = eyeColor ?? (color === undefined ? seeded.eyeColor : undefined);
 
   const shape = bodyShape(look.roundness, look.aspect);
-  const body = bodyPath ? { d: bodyPath, top: 26, bottom: 182, halfWidth: 82 } : shape;
+  const outline = bodyPath ?? seeded.bodyPath;
+  const body = outline ? { d: outline, top: 26, bottom: 182, halfWidth: 82 } : shape;
   // Without an `accessory` prop, the seed's words can put some on ("royal" a crown, "dj" headphones).
-  const wearing = accessory ?? (seed !== undefined ? readSeedWords(seed).accessory : undefined);
+  const wearing =
+    accessory ??
+    (seed !== undefined && !identity && !layers?.length
+      ? readSeedWords(seed).accessory
+      : undefined);
   const builtIn = (Array.isArray(wearing) ? wearing : [wearing]).filter(isMascotAccessory);
-  const worn = builtIn.length
+  const worn: {
+    back?: React.ReactNode;
+    paint?: React.ReactNode;
+    on?: React.ReactNode;
+    front?: React.ReactNode;
+  } = builtIn.length
     ? accessoryLayers(
         builtIn,
         {
           a: body.halfWidth,
           b: (body.bottom - body.top) / 2,
-          n: bodyPath ? 3 : 2 + (1 - clamp(look.roundness, 0, 1)) * 4,
+          n: outline ? 3 : 2 + (1 - clamp(look.roundness, 0, 1)) * 4,
         },
         accessoryColor,
       )
-    : { back: null, on: wearing, front: null };
+    : layers?.length && accessory === undefined
+      ? identityLayers(layers, `url(#${id}-clip)`)
+      : identity && accessory === undefined
+        ? identityLayers(identity.layers, `url(#${id}-clip)`)
+        : { back: null, on: wearing, front: null };
   const spread = Math.min(29 * look.eyeSpacing, body.halfWidth - 22);
   const eyeY = 96 + clamp(look.eyeHeight, -1, 1) * 30;
   const tile = look.eyes === "tile";
@@ -567,6 +692,7 @@ const FlatMascot = ({
               </g>
             </g>
             <path d={body.d} className={styles.edge} />
+            {worn.paint}
             {worn.on && <g className={styles.accessory}>{worn.on}</g>}
             <g className={styles.face}>
               <g className={styles.flick}>
@@ -611,6 +737,7 @@ const FlatMascot = ({
                 >
                   <Mouth kind={look.mouth} mood={base} state={state} laugh={glyph === "laugh"} />
                 </g>
+                {faceAccessory && <g className={styles.onFace}>{faceAccessory}</g>}
               </g>
               <KawaiiLayer
                 effects={fx}

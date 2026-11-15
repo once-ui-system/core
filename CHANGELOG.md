@@ -17,7 +17,6 @@ Built on the 3.0 branch and held until 3.0.0 ships.
 
 ### Added
 
-- **FamilyFooter** (`@once-ui-system/blocks`). One footer for a family of products, the same four bands on every site: a brand band (logo, one-line promise, primary button, and an `extra` such as a big wordmark, the mascot or a newsletter field), up to five link columns, a "More from Dopler" row with one tile per live sibling, and a co-brand bar ("A product by Dopler", © year and legal entity, a link to the family's shared legal page, language and theme switches, social links, "Built with Once UI"). The first two bands take the brand's colours and a `decoration` behind them; the family row and the bar sit on neutral tokens and fixed radii so they look the same everywhere. `familyProducts` and `familyParent` are the defaults, so a new product reaches every footer on the next blocks bump; `live: false` holds one back. Every family link carries `ref=<current>-footer` (`familyHref`). Hungarian labels in `familyFooterLabelsHu`.
 - **Glow solid style.** `solidStyle: "glow"` (`data-solid-style="glow"`) joins flat and plastic: a solid lights its own colour into a soft two-layer halo with a light edge along the top. It applies to primary buttons and icon buttons in every tone, checked switches, checkboxes and radios, and selected Tag toggles with a tone; secondary and neutral controls never glow. Put the attribute on any element to light up one area only. The halo is static (no filter, no animation), brightens on hover, is tighter and paler in the light theme, and goes away under `prefers-contrast: more` and forced colours. New tokens `--solid-glow-near`, `--solid-glow-far`, `--solid-glow-near-mix`, `--solid-glow-far-mix` and `--solid-glow-rim`; the shared `glow.scss` mixin in foundations draws it. The Style panel's Effect row gets a Glow option.
 - `MapRoute` in `@once-ui-system/core/map`: a route line in a `tone`, solid for the part travelled and dashed ahead with `progress`, or dashed throughout for a planned route. It sits on a page-colour casing and follows the theme.
 - `PeerCursor` and `PeerCursors`: collaborators' pointers for multiplayer views, an arrow in each person's colour with their name (and an optional avatar or live message) that glides between positions without re-rendering. No backend: feed `peers` from any realtime source. `usePeerPointer` reports your own pointer, throttled, in the same units (a fraction of the box, px, or your own coordinates through `unproject`); `peerColor(id)` gives everyone the same hue on every screen.
@@ -81,8 +80,11 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 Pre-releases on npm `next` (`npm i @once-ui-system/core@next`), each with every
 entry below that had landed by then:
 
-- **3.0.0-beta.2** (2026-11-13), with `@once-ui-system/foundations`, `fx` and
-  `blocks` at 3.0.0-beta.2 too. New since beta.1: an editor-grade `Scrubber`;
+- **3.0.0-beta.3** (2026-11-15), with `@once-ui-system/foundations`, `fx` and
+  `blocks` at 3.0.0-beta.3 too. beta.2 was tagged before its version bump
+  landed, so it never reached npm; beta.3 is the first pre-release after beta.1.
+  New since beta.1: Mascot seeds that read words, `faceAccessory`, worn
+  accessories that lean with the gaze, and canonical mascots for identity names; an editor-grade `Scrubber`;
   `EmptyState` (Table's empty states use it); nested `Submenu` and
   `openOn="hover"` on Dropdown; `tone` on Nav, ToggleButton and Option; the
   hairline Tag; Select's default chevron and `alignSelected`; the d20 Mascot;
@@ -95,7 +97,7 @@ entry below that had landed by then:
   danger and selected looks); and fixes from the first real-app migrations onto
   beta.1 (ghost fields in a composer, MascotCube colours, Dropdown focus, Switch,
   FormErrorSummary, DatePicker, Avatar initials). Pulled forward from 3.1 for
-  beta.2: `Calendar` (`/calendar`), `Combobox`, the Sidebar shell,
+  beta.3: `Calendar` (`/calendar`), `Combobox`, the Sidebar shell,
   `RichTextEditor` (`/richtext`), canvas editor primitives (`/canvas`), `Scene`
   (`/scene`, three.js as an optional peer), peer cursors, Map routes, areas and
   status pins, `StatTile` and the control-room primitives, theme presets, the
@@ -117,7 +119,9 @@ entry below that had landed by then:
 
 ### Added
 
+- **FamilyFooter** (`@once-ui-system/blocks`). One footer for a family of products, the same four bands on every site: a brand band (logo, one-line promise, primary button, and an `extra` such as a big wordmark, the mascot or a newsletter field), up to five link columns, a "More from Dopler" row with one tile per live sibling, and a co-brand bar ("A product by Dopler", © year and legal entity, a link to the family's shared legal page, language and theme switches, social links, "Built with Once UI"). The first two bands take the brand's colours and a `decoration` behind them; the family row and the bar sit on neutral tokens and fixed radii so they look the same everywhere. `familyProducts` and `familyParent` are the defaults, so a new product reaches every footer on the next blocks bump; `live: false` holds one back. Every family link carries `ref=<current>-footer` (`familyHref`). Hungarian labels in `familyFooterLabelsHu`.
 - **Mascot seeds read words.** A `seed` is split at dashes, underscores, spaces, digits and camelCase, and the words it knows describe the mascot: colours set the hue (`red`, `mint`, `ink`, `#3fe3f2`), animals the body and ears (`fox`, `panda`, `frog`, `robot`), moods the eyes, mouth and motion (`happy`, `sleepy`, `grumpy`), objects the accessories (`royal`, `dj`, `astro`). What the words leave open still comes from the hash, so a seed with no known words looks as it did. `readSeedWords(seed)` reports what it understood and `MASCOT_SEED_WORDS` lists the vocabulary.
+- **Canonical mascots.** A seed that names a real identity draws its hand-made character instead of a generated one: `once-ui` (or "Once UI", "onceui", "once") is the Once UI mark mascot, `quasar` is Quasar, and each Dopler product (`stack`, `aveiro`, `chirio`, `tavilio`, `sigilio`, `frametic`, `worldline`, `holo-zone`, `magic-docs`, `motion`, `liverio`, `dopler`) its own mascot. Spelling, case and dashes do not matter, but the whole seed has to be the name. `Mascot`, `mascotSvg` and `mascotLook` take `canonical` (on by default); pass `canonical={false}` for seeds people type unless that person owns the identity. Props still win over the canonical look, so an owner can customise it. `MASCOT_IDENTITIES`, `mascotIdentity(seed)` and `MASCOT_IDENTITY_KEYS` (for reserving the names in a sign-up) are exported.
 - **Open Graph images: `createOgImageRoute` and `defineOgSkin`** in `@once-ui-system/core/next`.
   One route draws a 1200 × 630 card for every page in the product's skin: the title set
   large in the heading font (`*words*` in the brand color, optionally in an italic
@@ -132,6 +136,8 @@ entry below that had landed by then:
   options as `Mascot` and a mood, every color written out, for places without React or
   CSS (Open Graph images, emails, favicons). `Mascot` and `mascotSvg` share their geometry
   from `mascotShape.ts`.
+- **Mascots by username.** `<Mascot username="foxdev" />` draws that person's Once UI mascot, the one their name hatched or the one they saved in once-ui.com's character designer, so it is the same in every app. Opt-in: only `username` fetches anything, once per name per page, from a public, cached endpoint (`MASCOT_SKIN_SOURCE`, override with `skinSource`) that returns only the look, read through `parseMascotDesign`. Passed props still win; the mascot stays hidden for at most 800 ms while it loads and falls back to the name as a seed. `useMascotSkin`, `fetchMascotSkin` and `cleanMascotUsername` are exported. `layers` (on `Mascot` and in `MascotDesign`) draws worn shapes as path data, the format canonical mascots already use, so a design can carry its own hats as JSON.
+- **Mascot face accessories.** `faceAccessory` draws your own SVG (a beak, a nose, glasses) on the face layer, so it follows the gaze, the thinking, sleeping and sad poses and a poke, as the eyes do. `mascotSvg` takes it as markup. `accessory` now leans a little toward where the mascot looks, like a head tilt; a canonical mascot's body paint stays put.
 - **Mascot accessories.** `accessory` takes a built-in one: `antenna`, `bow`,
   `beanie`, `headphones`, `sprout`, `helmet`, `crown`, `catEars` or
   `partyHat`, or a list of them. They are flat and chunky, fit any body shape,
@@ -759,6 +765,9 @@ entry below that had landed by then:
 
 ### Fixed
 
+- `Skeleton` keeps a `radius` you pass. The shape's default was set after the
+  props were spread, so a `block` dropped any radius it was given; a `line` or
+  `circle` can now take a radius other than `full` too.
 - A row keeps its hover look while a menu opened from it is open. The
   `DropdownWrapper` trigger now carries `data-state="open" | "closed"`, and
   `Accordion` headers, `Table` rows (hoverable and clickable) and `Card` stay lit

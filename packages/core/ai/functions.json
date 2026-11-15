@@ -92,8 +92,56 @@
   "mascotLook": {
    "group": "modules",
    "kind": "function",
-   "signature": "(seed: string | number) => MascotLook",
+   "signature": "(seed: string | number, options?: { canonical?: boolean }) => MascotLook",
    "doc": "A whole look from a seed: a user id, a product name, any string or number."
+  },
+  "MASCOT_IDENTITIES": {
+   "group": "modules",
+   "kind": "value",
+   "type": "readonly MascotIdentity[]",
+   "doc": "Every canonical mascot."
+  },
+  "MASCOT_IDENTITY_KEYS": {
+   "group": "modules",
+   "kind": "value",
+   "type": "readonly string[]",
+   "doc": "Every name the registry holds, as keys: for reserving them in a sign-up or a name claim."
+  },
+  "mascotIdentity": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(seed: string | number | undefined) => MascotIdentity | undefined",
+   "doc": "The canonical mascot a seed names, or `undefined` when it names none."
+  },
+  "mascotIdentityKey": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(seed: string | number) => string",
+   "doc": "A seed as the registry compares it: lowercase letters and digits only."
+  },
+  "cleanMascotUsername": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(raw: string) => string",
+   "doc": "A username as it is stored: lowercase, no"
+  },
+  "fetchMascotSkin": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(username: string, source?: string) => Promise<MascotSkin | null>",
+   "doc": "Reads a username's skin once per page and source: later calls share the first request."
+  },
+  "MASCOT_SKIN_SOURCE": {
+   "group": "modules",
+   "kind": "value",
+   "type": "\"https://once-ui.com/api/mascot/skin\"",
+   "doc": "Where skins are read from, unless `skinSource` says otherwise."
+  },
+  "useMascotSkin": {
+   "group": "modules",
+   "kind": "hook",
+   "signature": "(username: string | undefined, source?: string) => { skin: MascotSkin | null; ready: boolean; }",
+   "doc": "A username's skin for a component: `ready` turns true when it arrived, or failed, or took longer than a moment, so the mascot never stays hidden."
   },
   "mascotDataUrl": {
    "group": "modules",
@@ -1457,10 +1505,32 @@
    "cheeks": "boolean",
    "personality": "\"calm\" | \"default\" | \"bouncy\"",
    "accessory": "MascotAccessory[]",
+   "layers": "MascotIdentityLayer[]",
    "accessoryColor": "string",
    "working": "\"cube\" | \"d20\"",
    "sides": "MascotSides",
    "face": "\"3d\" | \"flat\""
+  },
+  "MascotIdentity": {
+   "handle": "!string",
+   "name": "!string",
+   "aliases": "string[]",
+   "owner": "!string",
+   "about": "!string",
+   "seed": "!string",
+   "look": "!MascotLook",
+   "layers": "!MascotIdentityLayer[]"
+  },
+  "MascotIdentityLayer": {
+   "d": "!string",
+   "fill": "string",
+   "stroke": "string",
+   "width": "number",
+   "cap": "\"round\" | \"butt\"",
+   "opacity": "number",
+   "transform": "string",
+   "clip": "boolean",
+   "place": "\"back\" | \"on\" | \"front\""
   },
   "MascotLook": {
    "color": "\"brand\" | \"accent\" | \"neutral\" | (string & {})",
@@ -1528,6 +1598,11 @@
    "mono",
    "Partial<Record<\"top\" | \"right\" | \"bottom\" | \"left\" | \"front\" | \"back\", string>>"
   ],
+  "MascotSkin": {
+   "name": "!string",
+   "design": "!MascotDesign",
+   "identity": "string"
+  },
   "MascotState": [
    "idle",
    "listening",
@@ -1537,8 +1612,10 @@
   ],
   "MascotSvgOptions": {
    "seed": "string | number",
+   "canonical": "boolean",
    "mood": "MascotMood",
    "accessory": "string",
+   "faceAccessory": "string",
    "schemes": "Partial<Record<\"brand\" | \"accent\" | \"neutral\", string>>",
    "lookAt": "{ x: number; y: number }",
    "shadow": "boolean",

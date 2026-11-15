@@ -4,6 +4,7 @@
  * No React here, and no "use client", so server code can import it.
  */
 import type { MascotLook } from "./Mascot.js";
+import { mascotIdentity } from "./mascotIdentities.js";
 import { readSeedWords } from "./mascotWords.js";
 
 export const DEFAULT_LOOK: Required<Omit<MascotLook, "bodyPath" | "eyeColor" | "sides" | "face">> =
@@ -76,8 +77,17 @@ export function random(seed: string | number) {
  * mascot: "happy-red-fox", "sleepyPandaDJ" or "Royal Robot 42" set the colour,
  * the body, the face and the mood (see `MASCOT_SEED_WORDS`); whatever the words
  * leave open comes from the seed's hash, as it does for a seed with no words.
+ *
+ * A seed that names a canonical mascot ("once-ui", "quasar", a Dopler product,
+ * see `MASCOT_IDENTITIES`) gives that hand-made look instead, unless
+ * `canonical` is `false`.
  */
-export function mascotLook(seed: string | number): MascotLook {
+export function mascotLook(
+  seed: string | number,
+  options: { canonical?: boolean } = {},
+): MascotLook {
+  const identity = options.canonical === false ? undefined : mascotIdentity(seed);
+  if (identity) return { ...identity.look };
   return { ...hashedLook(seed), ...readSeedWords(seed).look };
 }
 

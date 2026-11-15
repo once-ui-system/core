@@ -311,16 +311,18 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 Mixins: LeafProps.
 - working?: "cube" | "d20"
 - effects?: boolean | MascotEffect[]
-- poke, brows, cheeks?: boolean
-- state?: MascotState = idle
-- mood?: MascotMood = neutral
+- poke, canonical, brows, cheeks?: boolean
+- state?: MascotState
+- mood?: MascotMood
 - seed?: string | number
 - accessory?: MascotAccessory | MascotAccessory[] | React.ReactNode
-- accessoryColor, aria-label, bodyPath, eyeColor?: string
-- lookAt?: "pointer" | "center" | { x: number; y: number } = pointer
+- accessoryColor, username, skinSource, aria-label, bodyPath, eyeColor?: string
+- layers?: readonly MascotIdentityLayer[]
+- faceAccessory?: React.ReactNode
+- lookAt?: "pointer" | "center" | { x: number; y: number }
 - level, roundness, aspect, eyeSize, eyeSpacing, eyeHeight?: number
 - source?: AudioLevelSource | null
-- size?: "s" | "m" | "l" | "xl" | number | CSSUnit = l
+- size?: "s" | "m" | "l" | "xl" | number | CSSUnit
 - color?: "brand" | "accent" | "neutral" | (string & {})
 - surface?: "glossy" | "matte" | "flat" | "glass"
 - eyes?: "tile" | "pill" | "round" | "wide" | "dot" | { path: string }
@@ -607,6 +609,7 @@ type LegacyToast = { variant?: Tone; tone?: Tone; children?: ReactNode; message?
 type LogoSource = "string" | { light: string; dark: string; }
 // type MascotAccessory is one of these strings: antenna bow beanie headphones sprout helmet crown catEars partyHat
 // type MascotEffect is one of these strings: heartEyes starEyes laughEyes blush sweat tears anger hearts sparkles question
+type MascotIdentityLayer = { d: string; fill?: string; stroke?: string; width?: number; cap?: "round" | "butt"; opacity?: number; transform?: string; clip?: boolean; place?: "back" | "on" | "front" }
 // type MascotMood is one of these strings: neutral happy surprised sad skeptical wink focused determined love excited laughing embarrassed crying angry confused
 type MascotState = "idle" | "listening" | "thinking" | "speaking" | "sleeping"
 // type Opacity is one of these strings: 0 10 20 30 40 50 60 70 80 90 100
