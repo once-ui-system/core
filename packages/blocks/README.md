@@ -14,6 +14,24 @@ npm install @once-ui-system/core @once-ui-system/blocks
 import { StylePanel } from "@once-ui-system/blocks";
 ```
 
+## Family footer
+
+`FamilyFooter` is the footer a family of products shares: the brand's own band
+and link columns, then "More from Dopler" (one tile per live sibling, from
+`familyProducts`) and the "A product by Dopler" bar. Pass `current` so the
+product leaves itself out and each sibling link carries `ref=<current>-footer`.
+
+```tsx
+import { FamilyFooter } from "@once-ui-system/blocks";
+
+<FamilyFooter
+  current="tavilio"
+  brand={{ name: "Tavilio", tagline: "Websites and bookings for venues", action: { label: "Start free", href: "/signup" } }}
+  columns={[{ title: "Product", links: [{ label: "Pricing", href: "/pricing" }] }]}
+  legal="Dopler Kft."
+/>
+```
+
 ## Settings
 
 `AccountSettings`, `SecuritySettings` and `OrganizationSettings` are the

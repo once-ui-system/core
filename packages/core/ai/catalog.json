@@ -208,6 +208,7 @@
   "WeatherFx": {"purpose":"Canvas rain, snow, leaves or lightning as an ambient layer","importFrom":"@once-ui-system/fx"},
   "Banner": {"purpose":"Full-width brand-coloured strip across the top of a page for an announcement","importFrom":"@once-ui-system/blocks"},
   "Book": {"purpose":"Book cover rendered in 3D with spine and page block, tilting on hover; optional link","importFrom":"@once-ui-system/blocks"},
+  "FamilyFooter": {"purpose":"Footer a product family shares: brand band, link columns, sibling products row and a co-brand bar","importFrom":"@once-ui-system/blocks"},
   "LogoCloud": {"purpose":"Grid of partner or customer logos with optional rotation — always set columns","importFrom":"@once-ui-system/blocks"},
   "MascotPanel": {"purpose":"Character designer for Mascot, editing a stored MascotDesign; or compose MascotPanelRoot and its parts","importFrom":"@once-ui-system/blocks"},
   "ScrollToTop": {"purpose":"Floating button that appears after a scroll offset and returns to the top","importFrom":"@once-ui-system/blocks"},

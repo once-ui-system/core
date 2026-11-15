@@ -775,6 +775,41 @@
    "type": "{ readonly ops: { readonly description: \"Operations, incident, dispatch and map tools: dark first, compact, a quiet cyan brand on slate so status colours carry the meaning.\"; readonly style: { ...; }; readonly dataStyle: { ...; }; readonly fonts: { ...; }; }; readonly care: { ...; }; readonly creative: { ...; }; rea...",
    "doc": "Finished looks for the kinds of app Once UI is built for."
   },
+  "familyFooterLabelsHu": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "FamilyFooterLabels",
+   "doc": "Hungarian labels for the Dopler family."
+  },
+  "familyHref": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "function",
+   "signature": "(href: string, from?: string) => string",
+   "doc": "The link a sibling tile points at: `href` with `ref=<from>-footer` added, so the sibling's analytics can tell which product sent the visit."
+  },
+  "familySiblings": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "function",
+   "signature": "(products: FamilyProduct[], current?: string) => FamilyProduct[]",
+   "doc": "The siblings to show: live ones, without the product the footer is on."
+  },
+  "familyParent": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "FamilyParent",
+   "doc": "The company behind the products this family footer ships with."
+  },
+  "familyProducts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "FamilyProduct[]",
+   "doc": "Every Dopler product, in the order the row shows them."
+  },
   "randomMascotDesign": {
    "group": "blocks",
    "importFrom": "@once-ui-system/blocks",
@@ -1245,6 +1280,29 @@
    "wide",
    "dot"
   ],
+  "FamilyFooterLabels": {
+   "moreFrom": "string",
+   "productBy": "string",
+   "builtWith": "string",
+   "family": "string",
+   "navigation": "string",
+   "legal": "string"
+  },
+  "FamilyParent": {
+   "name": "!string",
+   "href": "!string",
+   "mark": "string | ReactNode",
+   "legalHref": "string"
+  },
+  "FamilyProduct": {
+   "id": "!string",
+   "name": "!string",
+   "line": "!string",
+   "href": "!string",
+   "mark": "string | ReactNode",
+   "color": "string",
+   "live": "boolean"
+  },
   "FieldControl": {
    "id": "!string",
    "invalid": "!boolean",
