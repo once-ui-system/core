@@ -135,6 +135,7 @@ entry below that had landed by then:
   options as `Mascot` and a mood, every color written out, for places without React or
   CSS (Open Graph images, emails, favicons). `Mascot` and `mascotSvg` share their geometry
   from `mascotShape.ts`.
+- **Mascots by username.** `<Mascot username="foxdev" />` draws that person's Once UI mascot, the one their name hatched or the one they saved in once-ui.com's character designer, so it is the same in every app. Opt-in: only `username` fetches anything, once per name per page, from a public, cached endpoint (`MASCOT_SKIN_SOURCE`, override with `skinSource`) that returns only the look, read through `parseMascotDesign`. Passed props still win; the mascot stays hidden for at most 800 ms while it loads and falls back to the name as a seed. `useMascotSkin`, `fetchMascotSkin` and `cleanMascotUsername` are exported. `layers` (on `Mascot` and in `MascotDesign`) draws worn shapes as path data, the format canonical mascots already use, so a design can carry its own hats as JSON.
 - **Mascot face accessories.** `faceAccessory` draws your own SVG (a beak, a nose, glasses) on the face layer, so it follows the gaze, the thinking, sleeping and sad poses and a poke, as the eyes do. `mascotSvg` takes it as markup. `accessory` now leans a little toward where the mascot looks, like a head tilt; a canonical mascot's body paint stays put.
 - **Mascot accessories.** `accessory` takes a built-in one: `antenna`, `bow`,
   `beanie`, `headphones`, `sprout`, `helmet`, `crown`, `catEars` or

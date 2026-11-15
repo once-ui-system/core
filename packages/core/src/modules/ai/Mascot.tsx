@@ -9,6 +9,7 @@ import type { CSSUnit } from "../../types.js";
 import { tokenLength } from "../../utils/layoutClasses.js";
 import { accessoryLayers, isMascotAccessory, type MascotAccessory } from "./accessories.js";
 import { type AudioLevelSource, createAudioMeter } from "./audioLevel.js";
+import { mascotDesignProps } from "./design.js";
 import {
   baseMood,
   EyeGlyph,
@@ -23,6 +24,7 @@ import styles from "./Mascot.module.scss";
 import { MascotCube } from "./MascotCube.js";
 import { type MascotIdentityLayer, mascotIdentity } from "./mascotIdentities.js";
 import { bodyShape, clamp, DEFAULT_LOOK, EYE_BOX, mascotLook, TILE } from "./mascotShape.js";
+import { useMascotSkin } from "./mascotSkin.js";
 import { readSeedWords } from "./mascotWords.js";
 
 export { mascotLook };
@@ -117,6 +119,22 @@ export interface MascotProps extends MascotLook, Omit<LeafPropsOf<"div">, "child
   accessory?: MascotAccessory | MascotAccessory[] | React.ReactNode;
   /** One color for the built-in accessories, in place of each one's own. */
   accessoryColor?: string;
+  /**
+   * Shapes it wears as path data in the body's 200 × 200 box, sorted behind the body, on it or
+   * in front of the face (see `MascotIdentityLayer`). Drawn when `accessory` is unset; a
+   * `MascotDesign` carries them as plain JSON.
+   */
+  layers?: readonly MascotIdentityLayer[];
+  /**
+   * A Once UI username: draws that person's mascot, the one their name hatched or the one they
+   * saved in the character designer on once-ui.com, so it is the same in every app. Opt-in:
+   * only this prop fetches anything, once per name per page, and only the look comes back.
+   * Props you pass still win over it. Until it arrives (at most a moment) the mascot is
+   * hidden; if it can't be read, the name is used as a seed.
+   */
+  username?: string;
+  /** Where `username` skins are read from. Defaults to once-ui.com's public endpoint. */
+  skinSource?: string;
   /**
    * Something on the face, such as a beak, a nose, glasses or whiskers, drawn in the body's
    * 200 × 200 box. It rides on the face layer, so it follows the gaze, the thinking, sleeping
@@ -302,7 +320,33 @@ function Mouth({
  * and solves it, then shows the logo and softens back with its face.
  * `working="d20"` firms into a twenty-sided die that tumbles and lands instead.
  */
-const Mascot = (props: MascotProps) => {
+const Mascot = (props: MascotProps) =>
+  props.username !== undefined ? <SkinnedMascot {...props} /> : <MascotBody {...props} />;
+
+/** A mascot drawn from a username's skin, with the props passed on top. */
+const SkinnedMascot = ({ username, skinSource, style, ...props }: MascotProps) => {
+  const { skin, ready } = useMascotSkin(username, skinSource);
+  const fromSkin: Partial<MascotProps> = skin
+    ? {
+        ...mascotDesignProps(skin.design),
+        ...(skin.identity ? { seed: skin.identity, canonical: true } : {}),
+      }
+    : { seed: username, canonical: false };
+  // Only props actually passed win over the skin.
+  const passed = Object.fromEntries(
+    Object.entries(props).filter(([, value]) => value !== undefined),
+  ) as MascotProps;
+  return (
+    <MascotBody
+      {...fromSkin}
+      {...passed}
+      style={ready ? style : { ...style, visibility: "hidden" }}
+      aria-busy={ready ? undefined : true}
+    />
+  );
+};
+
+const MascotBody = (props: MascotProps) => {
   const {
     working,
     state = "idle",
@@ -418,6 +462,9 @@ const FlatMascot = ({
   personality,
   accessory,
   accessoryColor,
+  layers,
+  username: _username,
+  skinSource: _skinSource,
   faceAccessory,
   lookAt = "pointer",
   level,
@@ -479,7 +526,10 @@ const FlatMascot = ({
   const body = outline ? { d: outline, top: 26, bottom: 182, halfWidth: 82 } : shape;
   // Without an `accessory` prop, the seed's words can put some on ("royal" a crown, "dj" headphones).
   const wearing =
-    accessory ?? (seed !== undefined && !identity ? readSeedWords(seed).accessory : undefined);
+    accessory ??
+    (seed !== undefined && !identity && !layers?.length
+      ? readSeedWords(seed).accessory
+      : undefined);
   const builtIn = (Array.isArray(wearing) ? wearing : [wearing]).filter(isMascotAccessory);
   const worn: {
     back?: React.ReactNode;
@@ -496,9 +546,11 @@ const FlatMascot = ({
         },
         accessoryColor,
       )
-    : identity && accessory === undefined
-      ? identityLayers(identity.layers, `url(#${id}-clip)`)
-      : { back: null, on: wearing, front: null };
+    : layers?.length && accessory === undefined
+      ? identityLayers(layers, `url(#${id}-clip)`)
+      : identity && accessory === undefined
+        ? identityLayers(identity.layers, `url(#${id}-clip)`)
+        : { back: null, on: wearing, front: null };
   const spread = Math.min(29 * look.eyeSpacing, body.halfWidth - 22);
   const eyeY = 96 + clamp(look.eyeHeight, -1, 1) * 30;
   const tile = look.eyes === "tile";

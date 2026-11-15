@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "3.0.0-beta.3",
- "generated": "2026-11-14",
+ "generated": "2026-11-15",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root; '@once-ui-system/fx' and '@once-ui-system/blocks' are packages of their own, installed beside core.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -1666,6 +1666,7 @@
    "cheeks": "boolean",
    "personality": "\"calm\" | \"default\" | \"bouncy\"",
    "accessory": "MascotAccessory[]",
+   "layers": "MascotIdentityLayer[]",
    "accessoryColor": "string",
    "working": "\"cube\" | \"d20\"",
    "sides": "MascotSides",
@@ -1780,6 +1781,11 @@
    "mono",
    "Partial<Record<\"top\" | \"right\" | \"bottom\" | \"left\" | \"front\" | \"back\", string>>"
   ],
+  "MascotSkin": {
+   "name": "!string",
+   "design": "!MascotDesign",
+   "identity": "string"
+  },
   "MascotState": [
    "idle",
    "listening",
@@ -5680,17 +5686,20 @@
     "working": "\"cube\" | \"d20\"",
     "effects": "boolean | MascotEffect[]",
     "poke": "boolean",
-    "state": "MascotState = idle",
-    "mood": "MascotMood = neutral",
+    "state": "MascotState",
+    "mood": "MascotMood",
     "seed": "string | number",
     "canonical": "boolean",
     "accessory": "MascotAccessory | MascotAccessory[] | React.ReactNode",
     "accessoryColor": "string",
+    "layers": "readonly MascotIdentityLayer[]",
+    "username": "string",
+    "skinSource": "string",
     "faceAccessory": "React.ReactNode",
-    "lookAt": "\"pointer\" | \"center\" | { x: number; y: number } = pointer",
+    "lookAt": "\"pointer\" | \"center\" | { x: number; y: number }",
     "level": "number",
     "source": "AudioLevelSource | null",
-    "size": "\"s\" | \"m\" | \"l\" | \"xl\" | number | CSSUnit = l",
+    "size": "\"s\" | \"m\" | \"l\" | \"xl\" | number | CSSUnit",
     "aria-label": "string",
     "color": "\"brand\" | \"accent\" | \"neutral\" | (string & {})",
     "roundness": "number",
@@ -8411,6 +8420,30 @@
    "kind": "function",
    "signature": "(seed: string | number) => string",
    "doc": "A seed as the registry compares it: lowercase letters and digits only."
+  },
+  "cleanMascotUsername": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(raw: string) => string",
+   "doc": "A username as it is stored: lowercase, no"
+  },
+  "fetchMascotSkin": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(username: string, source?: string) => Promise<MascotSkin | null>",
+   "doc": "Reads a username's skin once per page and source: later calls share the first request."
+  },
+  "MASCOT_SKIN_SOURCE": {
+   "group": "modules",
+   "kind": "value",
+   "type": "\"https://once-ui.com/api/mascot/skin\"",
+   "doc": "Where skins are read from, unless `skinSource` says otherwise."
+  },
+  "useMascotSkin": {
+   "group": "modules",
+   "kind": "hook",
+   "signature": "(username: string | undefined, source?: string) => { skin: MascotSkin | null; ready: boolean; }",
+   "doc": "A username's skin for a component: `ready` turns true when it arrived, or failed, or took longer than a moment, so the mascot never stays hidden."
   },
   "mascotDataUrl": {
    "group": "modules",
