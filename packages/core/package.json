@@ -405,6 +405,10 @@
       "types": "./dist/components/Switch.d.ts",
       "default": "./dist/components/Switch.js"
     },
+    "./components/TabBar": {
+      "types": "./dist/components/TabBar.d.ts",
+      "default": "./dist/components/TabBar.js"
+    },
     "./components/Table": {
       "types": "./dist/components/Table.d.ts",
       "default": "./dist/components/Table.js"

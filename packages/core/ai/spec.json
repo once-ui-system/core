@@ -3062,6 +3062,12 @@
    "filled",
    "translucent"
   ],
+  "TabBarBreakpoint": [
+   "s",
+   "l",
+   "m",
+   "xs"
+  ],
   "TableAction": {
    "icon": "!string",
    "label": "string",
@@ -4920,6 +4926,7 @@
     "expandOnHover": "boolean",
     "railWidth": "number",
     "labels": "{ resize?: string; menu?: string }",
+    "mobileSide": "\"left\" | \"bottom\"",
     "defaultWidth": "number",
     "width": "number",
     "onWidthChange": "(width: number) => void",
@@ -5239,6 +5246,43 @@
     "disabled": "boolean",
     "reverse": "boolean = false",
     "onCheckedChange": "(checked: boolean) => void"
+   }
+  },
+  "TabBar": {
+   "group": "components",
+   "props": {
+    "aria-label": "!string",
+    "showBelow": "TabBarBreakpoint | false = s",
+    "spacer": "boolean = true",
+    "children": "!ReactNode"
+   }
+  },
+  "TabBarItem": {
+   "group": "components",
+   "props": {
+    "href": "string",
+    "onClick": "(event: React.MouseEvent<HTMLElement>) => void",
+    "icon": "!IconName",
+    "label": "!ReactNode",
+    "selected": "boolean = false",
+    "badge": "number | boolean",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "aria-haspopup": "\"dialog\" | \"menu\"",
+    "aria-expanded": "boolean"
+   }
+  },
+  "TabBarSidebarTrigger": {
+   "group": "components",
+   "props": {
+    "label": "ReactNode",
+    "icon": "IconName",
+    "style": "React.CSSProperties",
+    "className": "string",
+    "aria-expanded": "boolean",
+    "aria-haspopup": "\"dialog\" | \"menu\"",
+    "selected": "boolean",
+    "badge": "number | boolean"
    }
   },
   "Table": {

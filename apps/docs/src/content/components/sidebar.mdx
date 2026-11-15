@@ -126,6 +126,36 @@ the same children at full labels. The SidebarTrigger opens it, and following a
 link inside closes it. `mobileBelow={false}` keeps the desktop sidebar at
 every width.
 
+### With a tab bar
+
+An app people use on a phone puts its four most used places in a TabBar along
+the bottom edge, in thumb reach, and keeps the rest in the sidebar. A
+TabBarSidebarTrigger as the bar's last item ("More") opens the drawer, and
+`mobileSide="bottom"` makes the drawer a sheet that rises from it. The bar
+shows at and below the same `s` breakpoint and hides above it, where the
+sidebar is back. It leaves room for itself where it is rendered (`spacer`),
+so put it at the end of the scrolling column.
+
+```tsx
+<SidebarProvider>
+  <Sidebar aria-label="Workspace" mobileSide="bottom">…</Sidebar>
+  <main>
+    {children}
+    <TabBar aria-label="Product">
+      <TabBarItem href="/" icon="home" label="Overview" selected />
+      <TabBarItem href="/clients" icon="people" label="Clients" />
+      <TabBarItem href="/projects" icon="folder" label="Projects" />
+      <TabBarItem href="/inbox" icon="inbox" label="Inbox" badge={3} />
+      <TabBarSidebarTrigger label="More" />
+    </TabBar>
+  </main>
+</SidebarProvider>
+```
+
+The current item is `aria-current="page"` on a soft pill. `badge` takes a
+count (9+ past nine, read as unread) or `true` for a dot. Labels are short:
+one word fits, a longer one ends in an ellipsis.
+
 ## Keyboard
 
 The edge is a focusable separator with its width as its value.
@@ -153,6 +183,26 @@ Nav's labels fade on the micro one. Nothing animates while you drag, and with
     expandOnHover: "As a rail, open over the page on a resting mouse or keyboard focus.",
     railWidth: "The rail's width in pixels. Left out, 52 for a compact Nav and 80 for a normal one.",
     labels: "The handle's and the drawer's words, for another language.",
+    mobileSide: "The edge the phone drawer comes from: \"left\", or \"bottom\" as a sheet for a TabBar's More.",
+  }}
+/>
+
+<PropsTable
+  component="TabBar"
+  describe={{
+    showBelow: "Shown at and below this breakpoint, hidden above it. false shows it always.",
+    spacer: "Leave room for the bar where it is rendered.",
+  }}
+/>
+
+<PropsTable
+  component="TabBarItem"
+  describe={{
+    href: "Where it goes, through the app's Link adapter.",
+    icon: "The icon over the label.",
+    label: "One short word.",
+    selected: "The current page.",
+    badge: "A count (9+ past nine) or true for a dot.",
   }}
 />
 
