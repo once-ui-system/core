@@ -117,6 +117,19 @@ const fixtures: Record<string, Record<string, unknown>> = {
   LinearGauge: { value: 40 },
   ChartSummary: { series: [{ key: "a" }], data: [{ label: "Jan", a: 1 }] },
   Sparkline: { data: [1, 3, 2] },
+  Treemap: {
+    data: [
+      { label: "A", value: 2 },
+      { label: "B", value: 1 },
+    ],
+  },
+  Heatmap: { data: [{ label: "2026", Jan: 1, Feb: 2 }], columns: ["Jan", "Feb"] },
+  DivergingBars: {
+    data: [
+      { label: "A", value: 1 },
+      { label: "B", value: -1 },
+    ],
+  },
 };
 
 /** Components that need a parent to mean anything get it here. */

@@ -1,0 +1,194 @@
+/* Treemap, Heatmap and DivergingBars: charts drawn as HTML, not SVG. Gain
+   emerald and loss orange pass colour-blind separation in both themes (light
+   500/500, dark 600/500), checked with the data-viz palette validator. */
+.root {
+  --chart-gain: var(--scheme-emerald-500);
+  --chart-loss: var(--scheme-orange-500);
+  --chart-seq: var(--scheme-emerald-500);
+  --chart-zero: var(--neutral-alpha-medium);
+  position: relative;
+  width: 100%;
+}
+
+:global([data-theme="dark"]) .root {
+  --chart-gain: var(--scheme-emerald-600);
+  --chart-seq: var(--scheme-emerald-600);
+}
+
+.card {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  min-width: 140px;
+  max-width: 240px;
+  padding: var(--static-space-8) var(--static-space-12);
+  border-radius: var(--radius-m);
+  background: var(--page-background);
+  border: 1px solid var(--neutral-alpha-medium);
+  box-shadow: var(--shadow-l);
+  font-size: 13px;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.cardTitle {
+  font-weight: 600;
+  color: var(--neutral-on-background-strong);
+}
+
+.cardLine {
+  color: var(--neutral-on-background-weak);
+}
+
+/* A mark the reader can hover or tab to: it does nothing on click. */
+.mark {
+  appearance: none;
+  font: inherit;
+  margin: 0;
+  outline: none;
+  cursor: default;
+}
+
+/* Treemap: one tile per item, placed in percentages, with a hairline of surface between. */
+.treemap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.tile {
+  position: absolute;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 2px;
+  padding: 8px 10px;
+  overflow: hidden;
+  text-align: left;
+  border: 1px solid var(--page-background);
+  border-radius: var(--radius-s);
+}
+
+.tile:hover,
+.tile:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--neutral-on-background-strong);
+}
+
+.tileLabel {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--neutral-on-background-strong);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tileSub {
+  font-size: 12px;
+  color: var(--neutral-on-background-medium);
+  white-space: nowrap;
+}
+
+/* Heatmap: a grid of cells, one row per item, one column per period. */
+.heatmap {
+  display: grid;
+  gap: 3px;
+  align-items: center;
+}
+
+.cell {
+  border: 0;
+  padding: 0;
+  height: 28px;
+  border-radius: var(--radius-xs);
+}
+
+.cell:hover,
+.cell:focus-visible {
+  box-shadow: 0 0 0 2px var(--neutral-on-background-strong);
+}
+
+.axisLabel {
+  font-size: 12px;
+  color: var(--neutral-on-background-weak);
+  white-space: nowrap;
+}
+
+.scale {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+  margin-top: var(--static-space-12);
+}
+
+.scaleCell {
+  width: 16px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+/* Diverging bars: zero where the largest loss ends, gains to the right, losses to the left. */
+.diverging {
+  display: grid;
+  grid-template-columns: minmax(48px, max-content) 1fr minmax(56px, max-content);
+  column-gap: 12px;
+  row-gap: 10px;
+  align-items: center;
+}
+
+.track {
+  position: relative;
+  height: 12px;
+}
+
+.zero {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 1px;
+  background: var(--chart-zero);
+}
+
+.bar {
+  position: absolute;
+  top: 0;
+  height: 12px;
+  border: 0;
+  padding: 0;
+}
+
+.bar:hover,
+.bar:focus-visible {
+  box-shadow: 0 0 0 2px var(--neutral-on-background-strong);
+}
+
+.barGain {
+  border-radius: 0 4px 4px 0;
+  background: var(--chart-gain);
+}
+
+.barLoss {
+  border-radius: 4px 0 0 4px;
+  background: var(--chart-loss);
+}
+
+.value {
+  font-size: 13px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--neutral-on-background-strong);
+}
+
+.name {
+  font-size: 13px;
+  color: var(--neutral-on-background-strong);
+}
+
+.treemap,
+.heatmap,
+.diverging {
+  margin: 0;
+}
