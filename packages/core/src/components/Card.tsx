@@ -1,7 +1,8 @@
 "use client";
 
 import classNames from "clsx";
-import React from "react";
+import type React from "react";
+import type { Schemes, Tone } from "../types.js";
 import styles from "./Card.module.scss";
 import { ElementType } from "./ElementType.js";
 import { Flex } from "./Flex.js";
@@ -19,9 +20,20 @@ interface CardProps extends React.ComponentProps<typeof Flex> {
    * pass `background` or `border` explicitly to override either.
    */
   selected?: boolean;
+  /**
+   * The colour the card picks up on hover and keyboard focus: a faint fill
+   * and edge in that palette, instead of the neutral grey. A tone (`brand`,
+   * `accent`, `success`…) or a named hue (`cyan`, `magenta`…), so a card can
+   * light up in the colour of the product it stands for. The tint stays on
+   * while the card is `selected`. Only the card's own surface is tinted:
+   * buttons and text inside keep their colours.
+   */
+  tint?: Exclude<Tone, "neutral"> | Schemes;
   style?: React.CSSProperties;
   className?: string;
 }
+
+const TONES = new Set<string>(["brand", "accent", "info", "success", "warning", "danger"]);
 
 const Card = ({
   ref,
@@ -29,6 +41,7 @@ const Card = ({
   href,
   onClick,
   selected,
+  tint,
   style,
   className,
   fillHeight,
@@ -80,17 +93,33 @@ const Card = ({
       ref={ref}
     >
       <Flex
-        background={selected ? "brand-alpha-weak" : "surface"}
+        // A tinted card shows `selected` through its tint layer instead.
+        background={selected && !tint ? "brand-alpha-weak" : "surface"}
         onBackground="neutral-strong"
         transition="macro-medium"
-        border={selected ? "brand-medium" : "neutral-medium"}
+        border={selected && !tint ? "brand-medium" : "neutral-medium"}
         // A card with nothing to click should not promise a click.
         cursor={interactive ? "interactive" : undefined}
         align="left"
-        className={classNames(styles.card, selected && styles.selected, className)}
+        className={classNames(
+          styles.card,
+          selected && styles.selected,
+          tint && styles.tinted,
+          className,
+        )}
         style={{ ...style }}
         {...flex}
       >
+        {tint && (
+          // The tint is a layer under the content. A named hue rides on its
+          // own data-brand, so the brand tokens resolve to that hue here and
+          // nowhere else; a tone picks its tokens by class.
+          <span
+            aria-hidden="true"
+            className={classNames(styles.tint, TONES.has(tint) && styles[`tint-${tint}`])}
+            data-brand={TONES.has(tint) ? undefined : tint}
+          />
+        )}
         {children}
       </Flex>
     </ElementType>

@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "3.0.0-beta.3",
- "generated": "2026-11-15",
+ "generated": "2026-11-16",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root; '@once-ui-system/fx' and '@once-ui-system/blocks' are packages of their own, installed beside core.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -2014,13 +2014,6 @@
    "generate": "!string"
   },
   "OgSchemeName": [
-   "slate",
-   "sand",
-   "gray",
-   "rose",
-   "mint",
-   "dusk",
-   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -2032,7 +2025,14 @@
    "moss",
    "green",
    "emerald",
-   "aqua"
+   "aqua",
+   "cyan",
+   "slate",
+   "sand",
+   "gray",
+   "rose",
+   "mint",
+   "dusk"
   ],
   "OgServiceConfig": {
    "proxyImageUrl": "(url: string) => string",
@@ -2173,7 +2173,6 @@
    "idle": "boolean"
   },
   "PeerCursorScheme": [
-   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -2185,7 +2184,8 @@
    "moss",
    "green",
    "emerald",
-   "aqua"
+   "aqua",
+   "cyan"
   ],
   "PhotoViewerItem": {
    "src": "!string",
@@ -2496,7 +2496,6 @@
    "1100"
   ],
   "Schemes": [
-   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -2508,7 +2507,8 @@
    "moss",
    "green",
    "emerald",
-   "aqua"
+   "aqua",
+   "cyan"
   ],
   "SchemeScale": "Partial< Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string> >",
   "SchemeScaleByTheme": {
@@ -2850,13 +2850,6 @@
    "tone": "\"success\" | \"danger\" | \"warning\" | \"neutral\""
   },
   "StatusIndicatorScheme": [
-   "slate",
-   "sand",
-   "gray",
-   "rose",
-   "mint",
-   "dusk",
-   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -2868,7 +2861,14 @@
    "moss",
    "green",
    "emerald",
-   "aqua"
+   "aqua",
+   "cyan",
+   "slate",
+   "sand",
+   "gray",
+   "rose",
+   "mint",
+   "dusk"
   ],
   "StreamingOptions": {
    "initialData": "!T[]",
@@ -3744,6 +3744,7 @@
     "onClick": "() => void",
     "fillHeight": "boolean",
     "selected": "boolean",
+    "tint": "Exclude<Tone, \"neutral\"> | Schemes",
     "style": "React.CSSProperties",
     "className": "string"
    }

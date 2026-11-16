@@ -254,6 +254,7 @@ Avoid: Static panels (pricing tiers, testimonials, stats) — use Column + surfa
 - href, className?: string
 - onClick?: () => void
 - fillHeight, selected?: boolean
+- tint?: Exclude<Tone, "neutral"> | Schemes
 - style?: React.CSSProperties
 
 ### Column
@@ -514,6 +515,7 @@ type OptionProps = Option props
 type Placement = "top" | "right" | "bottom" | "left" | `${"top" | "right" | "bottom" | "left"}-${"end" | "start"}`
 type RadiusNest = "4" | "8"
 // type RadiusSize is one of these strings: s xl l m xs none full
+// type Schemes is one of these strings: blue indigo violet magenta pink red orange yellow moss green emerald aqua cyan
 type ScrollTrackControlPlacement = `${"top" | "bottom"}-${"end" | "start" | "center" | "between"}`
 type ScrollerAuto = { speed?: Speed; hover?: "slow" | "pause" | "none"; reverse?: boolean; gap?: number | string }
 type ScrollerLabels = { previous?: string; next?: string }
@@ -524,7 +526,7 @@ type SolidType = "color" | "contrast" | "inverse"
 // type SpacingToken is one of these strings: s xl l m xs 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
 type Speed = "number" | "medium" | "slow" | "fast"
 // type StaticSpacingToken is one of these strings: 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
-// type StatusIndicatorScheme is one of these strings: slate sand gray rose mint dusk cyan blue indigo violet magenta pink red orange yellow moss green emerald aqua
+// type StatusIndicatorScheme is one of these strings: blue indigo violet magenta pink red orange yellow moss green emerald aqua cyan slate sand gray rose mint dusk
 type SurfaceStyle = "filled" | "translucent"
 type TShirtSizes = "s" | "xl" | "l" | "m" | "xs"
 type TextBreakpointHide = { hide?: boolean }
