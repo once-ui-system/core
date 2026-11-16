@@ -23,7 +23,15 @@ import {
 import styles from "./Mascot.module.scss";
 import { MascotCube } from "./MascotCube.js";
 import { type MascotIdentityLayer, mascotIdentity } from "./mascotIdentities.js";
-import { bodyShape, clamp, DEFAULT_LOOK, EYE_BOX, mascotLook, TILE } from "./mascotShape.js";
+import {
+  accessoryBody,
+  bodyShape,
+  clamp,
+  DEFAULT_LOOK,
+  EYE_BOX,
+  mascotLook,
+  TILE,
+} from "./mascotShape.js";
 import { useMascotSkin } from "./mascotSkin.js";
 import { readSeedWords } from "./mascotWords.js";
 
@@ -119,6 +127,8 @@ export interface MascotProps extends MascotLook, Omit<LeafPropsOf<"div">, "child
   accessory?: MascotAccessory | MascotAccessory[] | React.ReactNode;
   /** One color for the built-in accessories, in place of each one's own. */
   accessoryColor?: string;
+  /** The soft shadow on the floor under the mascot. On by default; `false` hides it. */
+  shadow?: boolean;
   /**
    * Shapes it wears as path data in the body's 200 × 200 box, sorted behind the body, on it or
    * in front of the face (see `MascotIdentityLayer`). Drawn when `accessory` is unset; a
@@ -462,6 +472,7 @@ const FlatMascot = ({
   personality,
   accessory,
   accessoryColor,
+  shadow = true,
   layers,
   username: _username,
   skinSource: _skinSource,
@@ -537,15 +548,7 @@ const FlatMascot = ({
     on?: React.ReactNode;
     front?: React.ReactNode;
   } = builtIn.length
-    ? accessoryLayers(
-        builtIn,
-        {
-          a: body.halfWidth,
-          b: (body.bottom - body.top) / 2,
-          n: outline ? 3 : 2 + (1 - clamp(look.roundness, 0, 1)) * 4,
-        },
-        accessoryColor,
-      )
+    ? accessoryLayers(builtIn, accessoryBody(body, outline, look.roundness), accessoryColor)
     : layers?.length && accessory === undefined
       ? identityLayers(layers, `url(#${id}-clip)`)
       : identity && accessory === undefined
@@ -671,7 +674,7 @@ const FlatMascot = ({
             <path d={body.d} />
           </clipPath>
         </defs>
-        <ellipse cx={100} cy={196} rx={56} ry={5} className={styles.shadow} />
+        {shadow && <ellipse cx={100} cy={196} rx={56} ry={5} className={styles.shadow} />}
         <g className={styles.float}>
           <g
             key={`${changes.current.count}-${prod.pokes}`}
