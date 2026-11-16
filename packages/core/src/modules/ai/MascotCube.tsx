@@ -161,6 +161,7 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
     face,
     accessory: _accessory,
     accessoryColor: _accessoryColor,
+    shadow: _shadow,
     faceAccessory: _faceAccessory,
     layers: _layers,
     username: _username,

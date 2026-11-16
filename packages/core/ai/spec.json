@@ -5747,6 +5747,7 @@
     "canonical": "boolean",
     "accessory": "MascotAccessory | MascotAccessory[] | React.ReactNode",
     "accessoryColor": "string",
+    "shadow": "boolean",
     "layers": "readonly MascotIdentityLayer[]",
     "username": "string",
     "skinSource": "string",

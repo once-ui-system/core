@@ -311,7 +311,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 Mixins: LeafProps.
 - working?: "cube" | "d20"
 - effects?: boolean | MascotEffect[]
-- poke, canonical, brows, cheeks?: boolean
+- poke, canonical, shadow, brows, cheeks?: boolean
 - state?: MascotState
 - mood?: MascotMood
 - seed?: string | number

@@ -296,7 +296,8 @@ mascotSvg({ seed: "sigilio" }); // the same character in an OG image`,
 
 Nine built-in accessories, flat and chunky so they read at avatar size: `antenna`, `bow`, `beanie`,
 `headphones`, `sprout`, `helmet`, `crown`, `catEars` and `partyHat`. Each one is placed from the body's
-own outline, so it fits a block as well as a circle, and moves and squashes with it. Pass a list to wear
+own outline, a drawn `bodyPath` included, so it fits a block, an egg or a circle (ears grow out of the
+head instead of floating over it), and moves and squashes with it. Pass a list to wear
 several, and `accessoryColor` to tint them all one color. Your own SVG still works: draw it in the
 body's 200 × 200 box.
 
@@ -525,6 +526,7 @@ the cube shows while it thinks but does not turn.
     accessory:
       "antenna, bow, beanie, headphones, sprout, helmet, crown, catEars or partyHat, a list of them, or your own SVG in the 200 × 200 box.",
     accessoryColor: "One color for the built-in accessories, in place of each one's own.",
+    shadow: "The soft floor shadow under the mascot. On by default; false hides it.",
     faceAccessory:
       "Your own SVG on the face (a beak, a nose, glasses), in the 200 × 200 box. Follows the gaze, poses and pokes.",
     personality: "calm, default or bouncy.",
