@@ -1765,13 +1765,6 @@
    "generate": "!string"
   },
   "OgSchemeName": [
-   "slate",
-   "sand",
-   "gray",
-   "rose",
-   "mint",
-   "dusk",
-   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -1783,7 +1776,14 @@
    "moss",
    "green",
    "emerald",
-   "aqua"
+   "aqua",
+   "cyan",
+   "slate",
+   "sand",
+   "gray",
+   "rose",
+   "mint",
+   "dusk"
   ],
   "OgSkin": {
    "name": "!string",
@@ -1883,7 +1883,6 @@
    "delete": "(() => Promise<void>) | undefined"
   },
   "PeerCursorScheme": [
-   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -1895,7 +1894,8 @@
    "moss",
    "green",
    "emerald",
-   "aqua"
+   "aqua",
+   "cyan"
   ],
   "PhotoViewerItem": {
    "src": "!string",
@@ -2033,7 +2033,6 @@
    "dark": "SchemeScale"
   },
   "Schemes": [
-   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -2045,7 +2044,8 @@
    "moss",
    "green",
    "emerald",
-   "aqua"
+   "aqua",
+   "cyan"
   ],
   "SectionField": {
    "key": "!string",

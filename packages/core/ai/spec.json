@@ -2018,13 +2018,6 @@
    "generate": "!string"
   },
   "OgSchemeName": [
-   "slate",
-   "sand",
-   "gray",
-   "rose",
-   "mint",
-   "dusk",
-   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -2036,7 +2029,14 @@
    "moss",
    "green",
    "emerald",
-   "aqua"
+   "aqua",
+   "cyan",
+   "slate",
+   "sand",
+   "gray",
+   "rose",
+   "mint",
+   "dusk"
   ],
   "OgServiceConfig": {
    "proxyImageUrl": "(url: string) => string",
@@ -2177,7 +2177,6 @@
    "idle": "boolean"
   },
   "PeerCursorScheme": [
-   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -2189,7 +2188,8 @@
    "moss",
    "green",
    "emerald",
-   "aqua"
+   "aqua",
+   "cyan"
   ],
   "PhotoViewerItem": {
    "src": "!string",
@@ -2506,7 +2506,6 @@
    "1100"
   ],
   "Schemes": [
-   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -2518,7 +2517,8 @@
    "moss",
    "green",
    "emerald",
-   "aqua"
+   "aqua",
+   "cyan"
   ],
   "SchemeScale": "Partial< Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string> >",
   "SchemeScaleByTheme": {
@@ -2860,13 +2860,6 @@
    "tone": "\"success\" | \"danger\" | \"warning\" | \"neutral\""
   },
   "StatusIndicatorScheme": [
-   "slate",
-   "sand",
-   "gray",
-   "rose",
-   "mint",
-   "dusk",
-   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -2878,7 +2871,14 @@
    "moss",
    "green",
    "emerald",
-   "aqua"
+   "aqua",
+   "cyan",
+   "slate",
+   "sand",
+   "gray",
+   "rose",
+   "mint",
+   "dusk"
   ],
   "StreamingOptions": {
    "initialData": "!T[]",
@@ -3754,6 +3754,7 @@
     "onClick": "() => void",
     "fillHeight": "boolean",
     "selected": "boolean",
+    "tint": "\"brand\" | \"accent\" | \"info\" | \"success\" | \"warning\" | \"danger\" | Schemes",
     "style": "React.CSSProperties",
     "className": "string"
    }
