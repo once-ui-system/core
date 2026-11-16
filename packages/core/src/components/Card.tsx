@@ -2,7 +2,7 @@
 
 import classNames from "clsx";
 import type React from "react";
-import type { Schemes, Tone } from "../types.js";
+import type { Schemes } from "../types.js";
 import styles from "./Card.module.scss";
 import { ElementType } from "./ElementType.js";
 import { Flex } from "./Flex.js";
@@ -28,7 +28,7 @@ interface CardProps extends React.ComponentProps<typeof Flex> {
    * while the card is `selected`. Only the card's own surface is tinted:
    * buttons and text inside keep their colours.
    */
-  tint?: Exclude<Tone, "neutral"> | Schemes;
+  tint?: "brand" | "accent" | "info" | "success" | "warning" | "danger" | Schemes;
   style?: React.CSSProperties;
   className?: string;
 }

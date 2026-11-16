@@ -15,7 +15,7 @@
   "onClick": "() => void",
   "fillHeight": "boolean",
   "selected": "boolean",
-  "tint": "Exclude<Tone, \"neutral\"> | Schemes",
+  "tint": "\"brand\" | \"accent\" | \"info\" | \"success\" | \"warning\" | \"danger\" | Schemes",
   "style": "React.CSSProperties",
   "className": "string"
  },
@@ -163,15 +163,6 @@
    "emerald",
    "aqua",
    "cyan"
-  ],
-  "Tone": [
-   "neutral",
-   "brand",
-   "accent",
-   "info",
-   "danger",
-   "warning",
-   "success"
   ]
  }
 }

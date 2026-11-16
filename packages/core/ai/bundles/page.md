@@ -254,7 +254,7 @@ Avoid: Static panels (pricing tiers, testimonials, stats) — use Column + surfa
 - href, className?: string
 - onClick?: () => void
 - fillHeight, selected?: boolean
-- tint?: Exclude<Tone, "neutral"> | Schemes
+- tint?: "brand" | "accent" | "info" | "success" | "warning" | "danger" | Schemes
 - style?: React.CSSProperties
 
 ### Column
