@@ -48,7 +48,6 @@
  },
  "types": {
   "PeerCursorScheme": [
-   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -60,7 +59,8 @@
    "moss",
    "green",
    "emerald",
-   "aqua"
+   "aqua",
+   "cyan"
   ]
  }
 }

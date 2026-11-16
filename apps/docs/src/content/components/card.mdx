@@ -143,6 +143,47 @@ still wins.
   ]}
 />
 
+## Tint
+
+`tint` gives the card a colour of its own on hover and keyboard focus: a faint
+fill and edge in that palette instead of the neutral grey. It takes a tone
+(`brand`, `accent`, `success`…) or a named hue (`cyan`, `magenta`…), so each
+card in a product grid can light up in its product's colour. Only the card's
+surface is tinted: buttons and text inside keep theirs. A tinted card shows
+`selected` in its tint too.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={
+    <Row fillWidth gap="12" s={{direction: "column"}}>
+      <Card href="#" tint="green" radius="l" padding="20" direction="column" gap="4">
+        <Text textVariant="label-strong-s">Fjell</Text>
+        <Text textVariant="body-default-s" onBackground="neutral-weak">Hover me</Text>
+      </Card>
+      <Card href="#" tint="cyan" radius="l" padding="20" direction="column" gap="4">
+        <Text textVariant="label-strong-s">Halden & Co</Text>
+        <Text textVariant="body-default-s" onBackground="neutral-weak">Hover me</Text>
+      </Card>
+      <Card href="#" tint="magenta" radius="l" padding="20" direction="column" gap="4">
+        <Text textVariant="label-strong-s">Ember</Text>
+        <Text textVariant="body-default-s" onBackground="neutral-weak">Hover me</Text>
+      </Card>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Card href="/fjell" tint="green">Fjell</Card>
+<Card href="/halden" tint="cyan">Halden & Co</Card>
+<Card href="/ember" tint="magenta">Ember</Card>`,
+      language: "tsx",
+      label: "Tint"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
@@ -152,6 +193,7 @@ still wins.
     href: "Makes it a link.",
     onClick: "Makes it a button. Without either, it is a static panel and a Column may suit better.",
     selected: "Mark as the chosen one in a set. Repaints the border and background, and announces a clickable card as a pressed toggle.",
+    tint: "The palette the card picks up on hover, focus and selected: a tone (brand, accent, success…) or a named hue (cyan, magenta…). Only the card's own surface is tinted.",
     fillHeight: "Fill the parent's height, for cards that should match in a row.",
   }}
   content={[

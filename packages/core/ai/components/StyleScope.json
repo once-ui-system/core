@@ -176,7 +176,6 @@
    "dark": "SchemeScale"
   },
   "Schemes": [
-   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -188,7 +187,8 @@
    "moss",
    "green",
    "emerald",
-   "aqua"
+   "aqua",
+   "cyan"
   ],
   "SolidStyle": [
    "flat",

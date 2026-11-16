@@ -15,6 +15,7 @@
   "onClick": "() => void",
   "fillHeight": "boolean",
   "selected": "boolean",
+  "tint": "\"brand\" | \"accent\" | \"info\" | \"success\" | \"warning\" | \"danger\" | Schemes",
   "style": "React.CSSProperties",
   "className": "string"
  },
@@ -146,5 +147,22 @@
    "themeSurface": "SurfaceStyle",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`"
   }
+ },
+ "types": {
+  "Schemes": [
+   "blue",
+   "indigo",
+   "violet",
+   "magenta",
+   "pink",
+   "red",
+   "orange",
+   "yellow",
+   "moss",
+   "green",
+   "emerald",
+   "aqua",
+   "cyan"
+  ]
  }
 }

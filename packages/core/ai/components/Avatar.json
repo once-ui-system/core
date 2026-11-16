@@ -185,13 +185,6 @@
    "world"
   ],
   "StatusIndicatorScheme": [
-   "slate",
-   "sand",
-   "gray",
-   "rose",
-   "mint",
-   "dusk",
-   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -203,7 +196,14 @@
    "moss",
    "green",
    "emerald",
-   "aqua"
+   "aqua",
+   "cyan",
+   "slate",
+   "sand",
+   "gray",
+   "rose",
+   "mint",
+   "dusk"
   ],
   "TShirtSizes": [
    "s",
