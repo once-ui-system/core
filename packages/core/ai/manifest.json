@@ -14,15 +14,21 @@
     "ChartStatus",
     "ChartSummary",
     "DataTooltip",
+    "DivergingBars",
     "LinearGradient",
     "RadialGradient",
+    "Heatmap",
     "Legend",
     "LinearGauge",
     "LineBarChart",
     "LineChart",
     "PieChart",
     "RadialGauge",
-    "Swatch"
+    "Swatch",
+    "Treemap",
+    "divergingScale",
+    "heatmapStep",
+    "squarify"
    ],
    "types": [
     "BarChartProps",
@@ -41,6 +47,9 @@
     "DataPoint",
     "DataTooltipProps",
     "DateConfig",
+    "DivergingBarsProps",
+    "HeatmapColumn",
+    "HeatmapProps",
     "LegendProps",
     "LineBarChartProps",
     "LineChartProps",
@@ -53,6 +62,7 @@
     "SparklineCurve",
     "SparklineProps",
     "SwatchProps",
+    "TreemapProps",
     "ValueFormat",
     "curveType"
    ]

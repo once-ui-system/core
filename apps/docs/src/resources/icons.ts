@@ -57,6 +57,7 @@ import {
   HiOutlineSparkles,
   HiOutlineSquare3Stack3D,
   HiOutlineSquares2X2,
+  HiOutlineTableCells,
   HiOutlineTrophy,
   HiOutlineUser,
 } from "react-icons/hi2";
@@ -135,6 +136,9 @@ export const iconLibrary = {
   linearGauge: HiOutlineChartBar,
   radialGauge: HiOutlineChartPie,
   sparkline: HiOutlineArrowTrendingUp,
+  treemap: HiOutlineSquares2X2,
+  heatmap: HiOutlineTableCells,
+  divergingBars: LuChevronsLeftRight,
   basics: HiOutlineCube,
 
   // The names the blocks (src/blocks) and the MDX pages use. They compiled

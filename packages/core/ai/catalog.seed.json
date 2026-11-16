@@ -232,6 +232,11 @@
     "tags": ["overlay", "auth"],
     "pairsWith": ["Button", "Column", "OTPInput"]
   },
+  "DivergingBars": {
+    "purpose": "Signed value per item on one shared zero: gains right, losses left, each value written",
+    "tags": ["data", "chart", "dashboard"],
+    "pairsWith": ["Treemap", "Heatmap", "BarChart"]
+  },
   "Drawer": {
     "purpose": "Modal sheet that slides in from any edge, with focus trap and scroll lock: mobile nav, filters, side panels",
     "tags": ["overlay", "navigation"],
@@ -353,6 +358,11 @@
     "purpose": "Auto-generated table of contents from the page's headings, highlighting the section in view",
     "tags": ["navigation", "docs"],
     "pairsWith": ["HeadingLink", "Column"]
+  },
+  "Heatmap": {
+    "purpose": "Grid of rows by columns, each cell's size in one hue (months by year, hours by day)",
+    "tags": ["data", "chart", "dashboard"],
+    "pairsWith": ["DivergingBars", "Treemap", "BarChart"]
   },
   "HeroSection": {
     "purpose": "Site section: h1, lead, buttons, picture",
@@ -1333,6 +1343,11 @@
     "purpose": "Short hint on hover or focus of its children; with content and no children, an info icon (2.x InfoTip)",
     "tags": ["overlay", "basics"],
     "pairsWith": ["IconButton", "Text", "Setting"]
+  },
+  "Treemap": {
+    "purpose": "Tiles sized by value, coloured by a signed tone (holdings, spend by category)",
+    "tags": ["data", "chart", "dashboard"],
+    "pairsWith": ["DivergingBars", "Heatmap", "PieChart"]
   },
   "TypeFx": {
     "purpose": "Typewriter that types and deletes a list of words; `mode=\"fade\"` fades letters in instead",

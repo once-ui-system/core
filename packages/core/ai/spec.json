@@ -1434,6 +1434,10 @@
    "preview",
    "accessories"
   ],
+  "HeatmapColumn": {
+   "key": "!SeriesKey<DataPoint>",
+   "label": "string"
+  },
   "IconButtonProps": "IconButton props",
   "IconComponent": [
    "ComponentClass<SVGProps<SVGSVGElement>, any>",
@@ -2294,6 +2298,12 @@
    "{ password: string; }",
    "{ recentSignIn: true; }"
   ],
+  "Rect": {
+   "left": "!number",
+   "top": "!number",
+   "width": "!number",
+   "height": "!number"
+  },
   "ResizeHandle": [
    "s",
    "n",
@@ -6096,6 +6106,35 @@
     "formatValue": "(value: number, dataKey?: string) => string"
    }
   },
+  "DivergingBars": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "title": "React.ReactNode",
+    "description": "React.ReactNode",
+    "valueFormat": "ValueFormat",
+    "locale": "string",
+    "tooltip": "boolean = true",
+    "loading": "boolean",
+    "error": "boolean",
+    "emptyState": "React.ReactNode",
+    "errorState": "React.ReactNode",
+    "aria-label": "string",
+    "data": "!readonly DataPoint[]",
+    "dataKey": "SeriesKey<DataPoint> = \"value\" as SeriesKey<T>",
+    "nameKey": "SeriesKey<DataPoint> = \"label\" as SeriesKey<T>",
+    "gainColor": "ColorValue",
+    "lossColor": "ColorValue"
+   }
+  },
   "LinearGradient": {
    "group": "data",
    "importFrom": "@once-ui-system/core/data",
@@ -6123,6 +6162,35 @@
     "fy": "string = 50%",
     "stops": "GradientStop[]",
     "variant": "ChartVariant"
+   }
+  },
+  "Heatmap": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "title": "React.ReactNode",
+    "description": "React.ReactNode",
+    "valueFormat": "ValueFormat",
+    "locale": "string",
+    "tooltip": "boolean = true",
+    "loading": "boolean",
+    "error": "boolean",
+    "emptyState": "React.ReactNode",
+    "errorState": "React.ReactNode",
+    "aria-label": "string",
+    "data": "!readonly DataPoint[]",
+    "columns": "!readonly (SeriesKey<DataPoint> | HeatmapColumn<DataPoint>)[]",
+    "rowKey": "SeriesKey<DataPoint> = \"label\" as SeriesKey<T>",
+    "color": "ColorValue",
+    "legend": "{ display?: boolean; less?: string; more?: string }"
    }
   },
   "Legend": {
@@ -6284,6 +6352,39 @@
     "color": "!string",
     "size": "\"s\" | \"m\" = m",
     "variant": "ChartVariant"
+   }
+  },
+  "Treemap": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "title": "React.ReactNode",
+    "description": "React.ReactNode",
+    "valueFormat": "ValueFormat",
+    "locale": "string",
+    "tooltip": "boolean = true",
+    "loading": "boolean",
+    "error": "boolean",
+    "emptyState": "React.ReactNode",
+    "errorState": "React.ReactNode",
+    "aria-label": "string",
+    "data": "!readonly DataPoint[]",
+    "dataKey": "SeriesKey<DataPoint> = \"value\" as SeriesKey<T>",
+    "nameKey": "SeriesKey<DataPoint> = \"label\" as SeriesKey<T>",
+    "toneKey": "SeriesKey<DataPoint>",
+    "toneMax": "number",
+    "toneFormat": "ValueFormat",
+    "subKey": "SeriesKey<DataPoint>",
+    "gainColor": "ColorValue",
+    "lossColor": "ColorValue"
    }
   },
   "CodeBlock": {
@@ -8554,6 +8655,27 @@
    "kind": "function",
    "signature": "(option: Pick<ReactionOption, \"value\" | \"emoji\" | \"src\" | \"motion\">) => ReactionMotion",
    "doc": "The gesture a reaction plays: its own `motion`, else one that suits the emoji."
+  },
+  "divergingScale": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "kind": "function",
+   "signature": "(values: readonly number[]) => { zero: number; span: number }",
+   "doc": "Where zero sits across the track, in percent: where the largest loss ends, so a list with no losses uses the whole width and one with only losses grows leftward."
+  },
+  "heatmapStep": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "kind": "function",
+   "signature": "(value: number, max: number) => number",
+   "doc": "The step a value falls in, 0 to 4, against the largest value in the grid."
+  },
+  "squarify": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "kind": "function",
+   "signature": "(values: readonly number[], box: Rect) => Rect[]",
+   "doc": "Squarified treemap (Bruls, Huizing, van Wijk): rows of tiles kept close to square."
   },
   "clusterPoints": {
    "group": "map",
