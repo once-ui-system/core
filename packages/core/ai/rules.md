@@ -108,7 +108,7 @@ That default is for a landing page. For an app (signed-in, records, forms), the 
 8e. Use the system's parts for brand, alerts and charts; hand-built versions read as off-brand:
 - The product mark is a `Logo`: `<Logo text="Seatwise" monogram href="/" />` without a designed mark, or `icon`/`wordmark` sources when there are files. Never an `Icon` beside a `Text`.
 - An inline alert or notice is a `Feedback` (`tone`, `icon`, `title`, children), never a `Column role="alert"` with a tinted background.
-- A chart is `LineChart`, `BarChart`, `LineBarChart`, `PieChart` or `Sparkline` from `@once-ui-system/core/data`, never hand-drawn SVG. They take the theme's data palette, tooltips and axes.
+- A chart is `LineChart`, `BarChart`, `LineBarChart`, `PieChart`, `Sparkline`, `Treemap`, `Heatmap` or `DivergingBars` from `@once-ui-system/core/data`, never hand-drawn SVG. They take the theme's data palette, tooltips and axes.
 - Give a single-series chart the brand: series `color: "brand"` (not `"brand-strong"`, a text colour: white in dark). Its `height` is a string (`height="16rem"`): `height={16}` is the 1rem token and collapses the chart to a line.
 
 8f. Work apps are dense and quiet. An app people use all day (a front desk, a planner, an admin) sets `density: "compact"` and `border: "conservative"` in the config `style`; spacious and rounded oversize every control and corner. Key numbers are one bordered strip of divided cells (label, then value, a `StatusIndicator` for state), not a row of grey tiles. One screen has one primary action: the same "Book appointment" in the header and on the page is one too many.

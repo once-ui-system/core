@@ -134,12 +134,15 @@ import { CodeBlock } from "@once-ui-system/core/code";
 import {
   BarChart,
   ChartHeader,
+  DivergingBars,
+  Heatmap,
   LinearGauge,
   LineBarChart,
   LineChart,
   PieChart,
   RadialGauge,
   Sparkline,
+  Treemap,
 } from "@once-ui-system/core/data";
 import { EmojiPicker } from "@once-ui-system/core/emoji";
 import { createMdxComponents } from "@once-ui-system/core/mdx";
@@ -509,6 +512,9 @@ const mdxComponents = createMdxComponents({
   RadialGauge,
   LinearGauge,
   Sparkline,
+  Treemap,
+  Heatmap,
+  DivergingBars,
   ChartHeader,
 
   // ─── Product components ───
