@@ -17,7 +17,9 @@ const THEME = readFileSync(join(__dirname, "..", "scss", "tokens", "theme.scss")
 /** The declarations of the first rule whose selector list is exactly `selector`. */
 const block = (selector: string): Record<string, string> => {
   const escaped = selector.replace(/[[\]"=]/g, "\\$&");
-  const match = THEME.match(new RegExp(`(?:^|\\n)${escaped}(?:,[^{]*)?\\s*\\{([^}]*)\\}`));
+  const match = THEME.match(
+    new RegExp(`(?:^|\\n)${escaped}(?:,(?:#\\{[^}]*\\}|[^{])*)?\\s*\\{([^}]*)\\}`),
+  );
   if (!match) throw new Error(`no rule for ${selector}`);
   return Object.fromEntries(
     [...match[1].matchAll(/(--[\w-]+):\s*([^;]+);/g)].map((m) => [m[1], m[2].trim()]),
