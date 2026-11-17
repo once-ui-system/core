@@ -4197,6 +4197,21 @@
     "masonry": "boolean"
    }
   },
+  "HeaderMenu": {
+   "group": "components",
+   "props": {
+    "children": "ReactNode",
+    "footer": "ReactNode",
+    "open": "boolean",
+    "defaultOpen": "boolean = false",
+    "onOpenChange": "(open: boolean) => void",
+    "below": "\"xs\" | \"s\" | \"m\" | \"l\" | false = m",
+    "label": "string = Menu",
+    "background": "React.ComponentProps<typeof Column>[\"background\"] = page",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
   "Heading": {
    "group": "components",
    "mixins": [

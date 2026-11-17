@@ -34,6 +34,7 @@ export * from "./FocusTrap.js";
 export * from "./Form.js";
 export * from "./FormErrorSummary.js";
 export * from "./Grid.js";
+export * from "./HeaderMenu.js";
 export * from "./Heading.js";
 export * from "./HoverCard.js";
 export * from "./Icon.js";

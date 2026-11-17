@@ -1,0 +1,22 @@
+.panel {
+    animation: header-menu-in 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+    border-top: 1px solid var(--neutral-alpha-weak);
+}
+
+.footer {
+    border-top: 1px solid var(--neutral-alpha-weak);
+    padding-bottom: max(var(--static-space-16), var(--safe-area-bottom, 0px));
+}
+
+@keyframes header-menu-in {
+    from {
+        opacity: 0;
+        transform: translateY(calc(-1 * var(--static-space-8)));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .panel {
+        animation: none;
+    }
+}

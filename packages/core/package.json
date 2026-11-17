@@ -209,6 +209,10 @@
       "types": "./dist/components/Grid.d.ts",
       "default": "./dist/components/Grid.js"
     },
+    "./components/HeaderMenu": {
+      "types": "./dist/components/HeaderMenu.d.ts",
+      "default": "./dist/components/HeaderMenu.js"
+    },
     "./components/Heading": {
       "types": "./dist/components/Heading.d.ts",
       "default": "./dist/components/Heading.js"

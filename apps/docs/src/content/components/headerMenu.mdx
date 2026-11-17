@@ -1,0 +1,52 @@
+---
+title: "HeaderMenu"
+summary: "The phone menu of a landing page header: the hamburger turns into a cross in place and the menu opens under the header."
+updatedAt: "2026-11-17"
+docs: "once-ui/components/headerMenu.mdx"
+github: "components/HeaderMenu.tsx"
+navLabel: "HeaderMenu"
+navIcon: "components"
+---
+
+One pattern for every landing page on a phone. Put `HeaderMenu` where the menu button goes, on the left of the header. The header never moves: the button's lines fold into a cross in the same spot, and the menu opens as a panel under the header that fills the rest of the screen. `footer` pins the page's main call to action to the panel's foot.
+
+Following a link, Escape, or the button again closes it, and so does a window wide enough for the header's own links (`below`, default `"m"`). The panel keeps the look of the StyleScope the header sits in.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`"use client";
+
+import { Button, HeaderMenu, Logo, MegaMenu, Row } from "@once-ui-system/core";
+
+export function Header() {
+  return (
+    <Row as="header" position="sticky" top="0" zIndex={9} fillWidth padding="12" gap="8" vertical="center" background="page">
+      <HeaderMenu footer={<Button fillWidth label="Sign up" href="/signup" />}>
+        <MegaMenu collapseBelow="always" menuGroups={menu} />
+      </HeaderMenu>
+      <Logo href="/" icon="/trademarks/icon.svg" />
+      <Row fillWidth m={{ hide: true }} horizontal="center">
+        <MegaMenu menuGroups={menu} />
+      </Row>
+      <Button size="s" label="Sign up" href="/signup" />
+    </Row>
+  );
+}`,
+      language: "tsx",
+      label: "Header.tsx"
+    }
+  ]}
+/>
+
+## Behaviour
+
+- **In place:** the menu button is the cross. A second button in the corner, or a header redrawn inside a drawer, makes the close control jump; this does not.
+- **Under the header:** the panel starts at the bottom of the nearest `header` element and covers the page below it, with page scroll locked.
+- **Keyboard:** opening moves focus to the first link, Tab off either end returns to the button, Escape closes and returns focus.
+- **Controlled or not:** `open` / `defaultOpen` / `onOpenChange`.
+
+For a dashboard on a phone, use `Sidebar`: below `mobileBelow` it becomes a left drawer on its own.
