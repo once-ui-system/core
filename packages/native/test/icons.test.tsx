@@ -23,7 +23,7 @@ const { rem } = createTheme({ ...defaultSettings, theme: "light" }, Dimensions.g
 describe("icons", () => {
   it("ships exactly core's built-in icon names", () => {
     const core = readFileSync(join(__dirname, "../../core/src/icons/data.ts"), "utf8");
-    const names = [...core.matchAll(/^ {2}(\w+): \{ tag: "svg"/gm)].map((m) => m[1]);
+    const names = [...core.matchAll(/^ {2}(\w+): \{$/gm)].map((m) => m[1]);
     expect(Object.keys(iconData).sort()).toEqual(names.sort());
   });
 

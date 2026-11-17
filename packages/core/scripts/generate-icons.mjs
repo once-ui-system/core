@@ -15,6 +15,7 @@
  * Run: pnpm generate-icons --from <path to a built clone of once-ui-system/icons>
  *      (or set ONCE_ICONS_DIR). Then run `pnpm --filter @once-ui-system/native sync:icons`.
  */
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -63,4 +64,9 @@ ${body}
 } satisfies Record<string, IconNode>;
 `,
 );
+// Written in Biome's format, so the lint gate stays at its baseline.
+execFileSync("npx", ["biome", "format", "--write", "src/icons/data.ts"], {
+  cwd: path.join(ROOT, ".."),
+  stdio: "ignore",
+});
 console.log(`Generated ${names.length} icons from ${path.relative(process.cwd(), entry)}`);
