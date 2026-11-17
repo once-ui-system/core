@@ -94,7 +94,7 @@
   "Option": {"purpose":"Selectable row in a menu, dropdown or select: label, description, prefix/suffix, link or click"},
   "OTPInput": {"purpose":"One box per digit for a verification code, with paste and a completion callback"},
   "Pagination": {"purpose":"Page buttons in a nav landmark with previous/next, ellipses and an optional per-page select — paged lists and tables"},
-  "ParticleFx": {"purpose":"Drifting particles that can react to the pointer, as an ambient layer"},
+  "ParticleFx": {"purpose":"Ambient particles that gather into a shape and react to the pointer"},
   "PasswordInput": {"purpose":"Input with a show/hide toggle for passwords"},
   "ProgressBar": {"purpose":"Linear progress bar for a value between min and max, with optional label"},
   "Pulse": {"purpose":"Coloured dot with a pulsing ring — live or attention state"},
