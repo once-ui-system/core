@@ -774,6 +774,7 @@ entry below that had landed by then:
 
 ### Fixed
 
+- Charts read and write dates the same way on the server and in the browser, so a page no longer throws a hydration error (React #418) for readers outside UTC. A date-only string (`"2025-01-01"`) is midnight UTC, as `new Date("2025-01-01")` reads it, so a `date.start` and rows written either way line up: in Budapest the January row was dropped from a range starting on 1 January. A calendar day is written as that day in every time zone, so `new Date("1980-01-01")` no longer reads as 1979 west of Greenwich; dates with a time still show in the reader's time zone.
 - `Skeleton` keeps a `radius` you pass. The shape's default was set after the
   props were spread, so a `block` dropped any radius it was given; a `line` or
   `circle` can now take a radius other than `full` too.
