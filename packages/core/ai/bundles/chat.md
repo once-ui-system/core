@@ -584,6 +584,7 @@ type BlendMode = "color" | "screen" | "normal" | "multiply" | "overlay" | "darke
 type BlurSize = "s" | "xl" | "l" | "m" | "xs"
 type BorderStyle = "rounded" | "conservative" | "playful" | "sharp"
 type BreakpointKey = "s" | "xl" | "l" | "m" | "xs"
+type BuiltInIconName = keyof typeof iconData
 // type ButtonVariant is one of these strings: link ghost subtle primary secondary tertiary
 type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}ch` | `${number}%` | `${number}vh` | `${number}vw` | `${number}dvh` | `${number}dvw` | `${number}svh` | `${number}svw` | `${number}lvh` | `${number}lvw` | `${number}vmin` | `${number}vmax` | `${number}cqw` | `${number}cqh` | `calc(${string})` | `min(${string})` | `max(${string})` | `clamp(${string})` | `var(${string})`
 type ChatComposerMessage = { text: string; files: File[] }
@@ -598,13 +599,12 @@ type DropdownProps = Dropdown props
 // type FieldSize is one of these strings: s xl l m xs xxs
 // type FlexBreakpointProps: an object of these Flex props, all optional (padding* is padding, paddingX, paddingTop and the rest):
 // center style direction horizontal vertical wrap flex textVariant background solid border* radius shadow padding* margin* gap top right bottom left width height maxWidth minWidth minHeight maxHeight fit* fill* aspectRatio onBackground onSolid align hide pointerEvents position overflow* scrollbar transition opacity zIndex
-// type FlexValue is one of these strings: 0 1 10 2 3 4 9 12 5 8 6 7 11
+// type FlexValue is one of these strings: 0 1 2 3 4 8 12 5 6 7 9 10 11
 // type GridBreakpointProps: an object of these Grid props, all optional (padding* is padding, paddingX, paddingTop and the rest):
 // style textVariant background solid border* radius shadow padding* margin* gap top right bottom left width height maxWidth minWidth minHeight maxHeight fit* fill* aspectRatio onBackground onSolid align hide pointerEvents position overflow* scrollbar transition opacity zIndex columns rows
-// type GridSize is one of these strings: 1 10 2 3 4 9 12 5 8 6 7 11
+// type GridSize is one of these strings: 1 2 3 4 8 12 5 6 7 9 10 11
 type IconButtonProps = IconButton props
-// type IconName is one of these names, and only these:
-// symbol code link menu search time video filter image security opacity download info danger warning adjustments arrowDown arrowLeft arrowRight arrowUp arrowUpRight ball banknotes barChart bell bolt book bookmark calendar cart chat check checkbox chevronDoubleLeft chevronDoubleRight chevronDown chevronLeft chevronRight chevronUp chevronsLeftRight clipboard close computer copy cube dark dislike document edit enter eye eyeDropper eyeOff file flag folder food forward gift globe grid grip heart help home inbox light like linearGauge lock logout mail mapPin maximize minimize minus moreHorizontal newspaper organization pause paw payment people person personRemove phone play plus radialGauge refresh return screen send settings smiley sparkle star starFill store tag trash trend trendDown trendUp upload volume volumeOff wordmark world
+type IconName = BuiltInIconName | Extract<keyof IconLibraryOverrides, string>
 type LegacyToast = { variant?: Tone; tone?: Tone; children?: ReactNode; message?: ReactNode; action?: ReactNode; duration?: number }
 type LogoSource = "string" | { light: string; dark: string; }
 // type MascotAccessory is one of these strings: antenna bow beanie headphones sprout helmet crown catEars partyHat
@@ -618,8 +618,8 @@ type RadiusNest = "4" | "8"
 // type RadiusSize is one of these strings: s xl l m xs none full
 type ShadowSize = "s" | "xl" | "l" | "m" | "xs"
 type SolidType = "color" | "contrast" | "inverse"
-// type SpacingToken is one of these strings: s xl l m xs 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
-// type StaticSpacingToken is one of these strings: 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
+// type SpacingToken is one of these strings: s xl l m xs 0 1 2 4 8 12 16 20 24 32 40 48 56 64 72 80 104 128 160
+// type StaticSpacingToken is one of these strings: 0 1 2 4 8 12 16 20 24 32 40 48 56 64 72 80 104 128 160
 // type StatusIndicatorScheme is one of these strings: blue indigo violet magenta pink red orange yellow moss green emerald aqua cyan slate sand gray rose mint dusk
 type SurfaceStyle = "filled" | "translucent"
 type TShirtSizes = "s" | "xl" | "l" | "m" | "xs"

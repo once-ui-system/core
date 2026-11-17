@@ -80,6 +80,12 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 Pre-releases on npm `next` (`npm i @once-ui-system/core@next`), each with every
 entry below that had landed by then:
 
+- **3.0.0-rc.0** (2026-11-17), with `@once-ui-system/foundations`, `fx` and
+  `blocks` at 3.0.0-rc.0 too. The first release candidate. New since beta.3: `Treemap`, `Heatmap` and
+  `DivergingBars` in the data module; `tint` on Card, a coloured hover in a
+  tone or named hue; Mascot `shadow`, accessories that sit on a drawn body's
+  real outline, and username skins and layers as data; and in blocks
+  `FamilyFooter`, one footer for a family of products.
 - **3.0.0-beta.3** (2026-11-15), with `@once-ui-system/foundations`, `fx` and
   `blocks` at 3.0.0-beta.3 too. beta.2 was tagged before its version bump
   landed, so it never reached npm; beta.3 is the first pre-release after beta.1.
@@ -776,6 +782,10 @@ entry below that had landed by then:
 
 ### Fixed
 
+- In the rounded border style, a dropdown's highlighted first and last options nest in the panel's corners. The panel took radius l (28px) while a one-line option can round to only 17px, so a gap opened towards the curve; a panel with radius l now rounds to at most 22px, and options follow it. A panel given another radius keeps it.
+- A dropdown on a field with a description or error message opens from the field itself and covers the helper text, instead of opening below it. Select, Combobox and every other trigger with a field box (`data-surface="field"`) anchor to that box.
+- A section in another theme takes the brand solids of its own theme. A dark `StyleScope` with `solid: "contrast"` on a light page kept light's black primary buttons, because the page's `[data-theme="light"] [data-solid]` rules matched the scope as strongly as its own and came later. The brand solids now follow the nearest `data-theme` and the nearest `data-solid` (three levels deep, `invert` included), and a section without a `data-solid` of its own takes the page's in its own theme.
+- Charts read and write dates the same way on the server and in the browser, so a page no longer throws a hydration error (React #418) for readers outside UTC. A date-only string (`"2025-01-01"`) is midnight UTC, as `new Date("2025-01-01")` reads it, so a `date.start` and rows written either way line up: in Budapest the January row was dropped from a range starting on 1 January. A calendar day is written as that day in every time zone, so `new Date("1980-01-01")` no longer reads as 1979 west of Greenwich; dates with a time still show in the reader's time zone.
 - `Skeleton` keeps a `radius` you pass. The shape's default was set after the
   props were spread, so a `block` dropped any radius it was given; a `line` or
   `circle` can now take a radius other than `full` too.
