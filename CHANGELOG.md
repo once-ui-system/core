@@ -448,6 +448,20 @@ entry below that had landed by then:
 
 ### Changed
 
+- **Agent guidance: a product's landing page starts from its world.** The
+  marketing-hero bundle now opens with a "find the world first" step (recipes.md
+  #9): a direction card, three worlds with the name pun and the house default
+  (charcoal, one orange, a Fraunces headline, a tilted card) dropped, a first
+  screen that shows the product's work, and the swap test. The template hero
+  (text-effect headline, CTA pair, logo cloud, glow) is one option, no longer
+  the default. Hex is allowed in seeds and in a hero scene's artwork, in named
+  classes in one scoped sheet, and that scene is outside the one-ambient-layer
+  budget. Two new gotchas: a display face reaches `Heading` only through
+  `--font-heading` (never `heading: "var(--font-heading)"`), and `StyleScope`
+  paints no background, so a light paper card needs `background="page"`. The
+  validator no longer flags a `StyleScope` config's hex seeds when a `style`
+  value earlier in the file is cast (`{ "--i": i } as CSSProperties`), nor a
+  `Mascot`'s `color`.
 - **Agent guidance: system parts for brand, alerts and charts, and one
   surface level.** Agents now reach for `Logo` (with `text` and `monogram`)
   instead of an icon beside text, `Feedback` instead of hand-built alert boxes,

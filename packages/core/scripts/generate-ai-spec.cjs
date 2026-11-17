@@ -1715,6 +1715,13 @@ function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody, functions = 
       ...(example ? ["a gold example"] : []),
     ])}. Write the page from it; reading the rules, catalog, gotchas, manifest or examples again only adds cost. Open \`components/<Name>.json\` only for a component not listed here, and then every one you need in a single step.`,
     "",
+    // A step that comes before any code (the brand-world direction card for a
+    // landing page) goes first, not with the recipes at the end, where an
+    // agent reaches it after the template hero has already been written.
+    ...(task.first ?? []).flatMap((id) => {
+      const section = markdownSection("recipes.md", id);
+      return section ? [section.replace(/^### (?:\d+\. )?/, "## Start here: "), ""] : [];
+    }),
     "## Rules",
     "",
     rulesBody.trim().replace(/^## /gm, "### "),

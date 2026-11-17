@@ -40,7 +40,7 @@ Static panel recipe (pricing tiers, stats, settings sections):
 
 - Bare `border`/`borderTop` = the default border. Name a colour only to deviate: `border="brand-alpha-medium"`.
 - `Card` = interactive only (`href` or `onClick`). Static panels = Column + surface recipe.
-- Colors: `{tone}-{weight}` or `{tone}-alpha-{weight}`. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`.
+- Colors: `{tone}-{weight}` or `{tone}-alpha-{weight}`. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`. Hex only in seeds (`brandSeed`, `pageBackground`, a Mascot's `color`) and in artwork: a hero scene's cast, props and textures, in classes named for what they draw, in one sheet scoped under the page class.
 - `background` also: `surface | overlay | page | transparent`
 - Same-shaped records: one surface, divided rows (`borderTop={i > 0}`), or a `Table` (row link: a link in a `cell`, not `onRowClick`); never a card per row
 - One raised `surface` for content on `page`; sections inside are spacing + `borderTop`, not grey cards
@@ -66,7 +66,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 - Gradient `width`: quarter-percent (400 = 100%). Glows: 100–200.
 - Glow colors: `brand-alpha-medium`, not `brand-background-weak`
 - Ambient layers on full-bleed section wrapper, outside `maxWidth` column
-- Budget: one ambient layer per section; motion in hero + one CTA max
+- Budget: one ambient layer per section; motion in hero + one CTA max. A hero scene that shows the product's work is artwork, outside this budget
 
 ### Motion
 
@@ -552,3 +552,4 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - Leaf components (Button, IconButton, ToggleButton, the fields, Switch, Checkbox, RadioButton, Text, Heading, Icon, Avatar, Spinner, StatusIndicator, Kbd, InlineCode, ProgressBar, Logo, SmartLink, NavIcon) take only margins, flex, fillWidth, position, top/right/bottom/left, className and style besides their own props. Padding, background, border, radius, sizes, hide and breakpoints go on a Row around it (a Column around Text or Heading; <Row fit> for an Icon's box).
 - A Button in a form that should submit it needs type="submit": with neither onClick, href nor type it renders a div, unlike a native <button>.
 - Show a field's error after it is blurred or the form is submitted, never on open: keep a touched flag per field and pass errorMessage={touched.email ? errors.email : undefined}. A form or Dialog that opens with red required-field errors reads as broken.
+- A display face reaches Heading only through --font-heading: load it with next/font as variable: "--font-x", put that class on the StyleScope or above it, and pass fonts={{ heading: "var(--font-x)" }}. Never heading: "var(--font-heading)" (a variable that names itself is invalid, and headings fall back to the body sans). Check the first screenshot: are the headings in the display face?

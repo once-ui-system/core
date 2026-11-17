@@ -284,16 +284,45 @@ function hasLiteralColor(source) {
   const SVG_PAINT =
     /^(?:fill|stroke|stopColor|stop-color|floodColor|flood-color|lightingColor|lighting-color)$/;
 
-  for (const block of source.match(/style=\{\{[\s\S]*?\}\}/g) || []) {
-    if (LITERAL.test(block)) return true;
+  // The style value up to its own closing brace. A non-greedy `\}\}` ran on
+  // past `style={{ "--i": i } as CSSProperties}` to the next `}}` in the
+  // file, usually a StyleScope `config={{ brandSeed: "#…" }}`, and flagged
+  // the seed, which has to be a hex.
+  for (const m of source.matchAll(/style=\{/g)) {
+    if (LITERAL.test(balancedBlock(source, m.index + m[0].length - 1))) return true;
   }
 
-  for (const [, name, value] of source.matchAll(/([A-Za-z-]+)=\{?["']([^"']*)["']/g)) {
-    if (SVG_PAINT.test(name)) continue;
-    if (!/colou?r|background|border|shadow|gradient/i.test(name)) continue;
-    if (LITERAL.test(value)) return true;
+  // A seed is a colour the theme derives every shade from, so a literal is
+  // the only thing it takes: `brandSeed`, and a Mascot's `color`.
+  for (const el of jsxElements(source)) {
+    for (const [, name, value] of ownProps(el.attrs).matchAll(
+      /([A-Za-z-]+)=\{?["']([^"']*)["']/g,
+    )) {
+      if (SVG_PAINT.test(name)) continue;
+      if (/Seed$/.test(name) || (el.name === "Mascot" && name === "color")) continue;
+      if (!/colou?r|background|border|shadow|gradient/i.test(name)) continue;
+      if (LITERAL.test(value)) return true;
+    }
   }
   return false;
+}
+
+/** `{ … }` from the brace at `at` to its match, skipping braces in strings. */
+function balancedBlock(source, at) {
+  let depth = 0;
+  let quote = null;
+  for (let i = at; i < source.length; i++) {
+    const ch = source[i];
+    if (quote) {
+      if (ch === "\\") i++;
+      else if (ch === quote) quote = null;
+      continue;
+    }
+    if (ch === '"' || ch === "'" || ch === "`") quote = ch;
+    else if (ch === "{") depth++;
+    else if (ch === "}" && --depth === 0) return source.slice(at, i + 1);
+  }
+  return source.slice(at);
 }
 
 const LITERAL_PAINT = /#[0-9a-fA-F]{3,8}\b|(?:rgb|hsl)a?\s*\(/;
