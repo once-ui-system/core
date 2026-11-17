@@ -22,6 +22,11 @@ export interface MascotSvgOptions extends MascotLook {
   mood?: MascotMood;
   /** SVG markup drawn with the body in its 200 × 200 box: a hat, an antenna. */
   accessory?: string;
+  /**
+   * Shapes it wears as path data, as on `Mascot` and in a `MascotDesign` (a saved look from the
+   * character designer). Drawn still: `motion` is for the animated component.
+   */
+  layers?: readonly MascotIdentityLayer[];
   /** SVG markup drawn on the face in the same box (a beak, glasses): it follows `lookAt` with the eyes. */
   faceAccessory?: string;
   /**
@@ -149,6 +154,7 @@ export function mascotSvg(options: MascotSvgOptions = {}): string {
     canonical = true,
     mood = "neutral",
     accessory,
+    layers,
     faceAccessory,
     schemes,
     lookAt,
@@ -193,11 +199,13 @@ export function mascotSvg(options: MascotSvgOptions = {}): string {
   const gx = clamp(lookAt?.x ?? 0, -1, 1);
   const gy = clamp((lookAt?.y ?? 0) + (pose.gy ?? 0), -1, 1);
   const id = idFor(JSON.stringify([options, size]));
-  // A canonical mascot's own layers, unless an `accessory` replaces them.
+  // Your layers, else a canonical mascot's own, unless an `accessory` replaces them.
   const worn =
-    identity && accessory === undefined
-      ? identitySvg(identity.layers, color, `url(#${id}-clip)`)
-      : { back: "", on: accessory ? `<g>${accessory}</g>` : "", front: "" };
+    accessory === undefined && layers?.length
+      ? identitySvg(layers, color, `url(#${id}-clip)`)
+      : identity && accessory === undefined
+        ? identitySvg(identity.layers, color, `url(#${id}-clip)`)
+        : { back: "", on: accessory ? `<g>${accessory}</g>` : "", front: "" };
   const surface = look.surface;
   const glossy = surface === "glossy" || surface === "glass";
 

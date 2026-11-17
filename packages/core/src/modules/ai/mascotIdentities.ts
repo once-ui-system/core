@@ -35,7 +35,18 @@ export interface MascotIdentityLayer {
   clip?: boolean;
   /** `back` behind the body, `on` over it (default), `front` over the face. */
   place?: "back" | "on" | "front";
+  /**
+   * A small loop: `float` drifts up and down, `bob` nods, `sway` rocks around `origin`,
+   * `spin` turns around `origin`, `pulse` breathes in size, `flicker` flutters like a flame.
+   * Off for people who ask for reduced motion, and in `mascotSvg` (a still).
+   */
+  motion?: MascotLayerMotion;
+  /** The point `spin`, `sway` and `pulse` turn or grow around, as `"x y"` in the 200 × 200 box. The body's centre by default. */
+  origin?: string;
 }
+
+export const MASCOT_LAYER_MOTIONS = ["float", "bob", "sway", "spin", "pulse", "flicker"] as const;
+export type MascotLayerMotion = (typeof MASCOT_LAYER_MOTIONS)[number];
 
 export interface MascotIdentity {
   /** The name it answers to, lowercase with dashes. */
