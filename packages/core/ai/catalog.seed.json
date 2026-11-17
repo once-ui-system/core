@@ -703,7 +703,7 @@
     "pairsWith": ["Table", "DataTable", "Row"]
   },
   "ParticleFx": {
-    "purpose": "Drifting particles that can react to the pointer, as an ambient layer",
+    "purpose": "Drifting, twinkling particles on a canvas that can gather into a shape (star, ring, diamond, custom points) and react to the pointer, as an ambient layer",
     "tags": ["decoration", "effect"],
     "pairsWith": ["Background", "Effect"]
   },
