@@ -1332,6 +1332,51 @@ export function transformDataStyle(src) {
 }
 
 /**
+ * D2 at the other reads of the config's chart height. transformDataStyle
+ * makes `dataStyle.height` the string "24rem", so arithmetic on it in the
+ * app (`dataStyle.height + 4`) concatenated ("24rem4") and multiplication
+ * gave NaN. An arithmetic read takes the number back out with parseFloat;
+ * a read inside a template literal, which would now say "24remrem", is
+ * reported. The DataThemeProvider prop is dataStyleHeight's.
+ */
+export function transformDataStyleReads(src, { file = null } = {}) {
+  const hits = [];
+  const warnings = [];
+  const edits = [];
+  if (!/\bdataStyle\b/.test(src)) return { out: src, hits, warnings };
+  const code = codeOnly(src);
+  const read = /\bdataStyle\s*(?:\?\.|\.)\s*height\b/g;
+  let ctx = null;
+  let m;
+  while ((m = read.exec(code))) {
+    const at = m.index;
+    const end = at + m[0].length;
+    if (/[\w$.]$/.test(code.slice(0, at))) continue; // `x.dataStyle.height`
+    const before = code.slice(Math.max(0, at - 40), at);
+    const after = code.slice(end, end + 40);
+    if (/parseFloat\(\s*$|Number\(\s*$/.test(before)) continue;
+    if (/height=\{\s*$/.test(before)) continue; // DataThemeProvider: dataStyleHeight
+    const arithmetic = /(?:^|[^+\-])[-+*/%]\s*$/.test(before) || /^\s*[-+*/%](?![=+\-])/.test(after);
+    const template = /\$\{\s*$/.test(before);
+    if (!arithmetic && !template) continue;
+    ctx ??= contextFor(file, src);
+    const atoms = evaluate(ctx, at, at + "dataStyle".length);
+    const config = atoms.length && atoms.every((x) => x.t === "obj" && x.decl?.name === "dataStyle" && !x.decl.annotated);
+    if (!config) continue;
+    if (template) {
+      warnings.push(located('dataStyle.height is "Nrem" in 3.0: this template adds a unit to a string that has one; use parseFloat(dataStyle.height) for the number', src, at));
+      continue;
+    }
+    const text = src.slice(at, end);
+    edits.push({ at, end, text: `parseFloat(${text})` });
+    hits.push('dataStyle.height in arithmetic: "Nrem" now → parseFloat(dataStyle.height)');
+  }
+  let out = src;
+  for (const e of edits.sort((a, b) => b.at - a.at)) out = out.slice(0, e.at) + e.text + out.slice(e.end);
+  return { out, hits, warnings };
+}
+
+/**
  * The D2–D5 pass on its own: units on Once UI elements, durations in ms,
  * and `speed` renames. `isCore(source)` decides which imports are Once UI
  * (core's own sources pass a predicate that accepts their relative imports).
@@ -2410,6 +2455,7 @@ function transformFile(src, { file = null, devLogger = null, strings = true, tai
   run(transformUnits(out, { file }), out);
   run(warnLocalSizes(out, { file }), out);
   run(transformDataStyle(out), out);
+  run(transformDataStyleReads(out, { file }), out);
   // F1, F2, F4, F5: components that merged. Last, so the passes above read the
   // 2.x names they know; see the section below.
   run(transformMerges(out, { remProps: REM_PROPS, breakpointProps: BREAKPOINT_PROPS }), out);

@@ -700,6 +700,11 @@ CSS, so look for these:
 
 - An override that was losing on purpose now wins. Most often that is a rule
   written before Once UI's styles took over, which never showed until now.
+  Check the rules that set type or spacing on an element that also has a Once
+  UI class (`letter-spacing`, `line-height`, `font-size`, `padding`, `gap`): a
+  hero's `.title { letter-spacing: -0.035em }` used to lose to the display
+  class's -0.05em and now wins, which widens the line and can clip gradient
+  text at its edge.
 - An app `!important` against one of Once UI's own `!important` declarations
   (a handful, on Button, Dialog, EmojiPicker, Input, Switch, Table and link
   underlines) now loses: inside layers, `!important` runs the other way. Drop

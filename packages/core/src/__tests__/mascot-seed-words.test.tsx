@@ -78,7 +78,9 @@ describe("seed words", () => {
   it("gives a Mascot with a dark seed light eyes, unless you pass a colour", () => {
     const wrap = (node: React.ReactNode) => render(<LayoutProvider>{node}</LayoutProvider>);
     const eye = (node: React.ReactNode) =>
-      (wrap(node).container.firstElementChild as HTMLElement).style.getPropertyValue("--mascot-eye");
+      (wrap(node).container.firstElementChild as HTMLElement).style.getPropertyValue(
+        "--mascot-eye",
+      );
     expect(eye(<Mascot seed="ink-cat" />)).toBe("#ffffff");
     expect(eye(<Mascot seed="ink-cat" color="#ffd54d" />)).toBe("");
   });
