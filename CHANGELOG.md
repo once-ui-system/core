@@ -80,6 +80,12 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 Pre-releases on npm `next` (`npm i @once-ui-system/core@next`), each with every
 entry below that had landed by then:
 
+- **3.0.0-rc.0** (2026-11-17), with `@once-ui-system/foundations`, `fx` and
+  `blocks` at 3.0.0-rc.0 too. The first release candidate. New since beta.3: `Treemap`, `Heatmap` and
+  `DivergingBars` in the data module; `tint` on Card, a coloured hover in a
+  tone or named hue; Mascot `shadow`, accessories that sit on a drawn body's
+  real outline, and username skins and layers as data; and in blocks
+  `FamilyFooter`, one footer for a family of products.
 - **3.0.0-beta.3** (2026-11-15), with `@once-ui-system/foundations`, `fx` and
   `blocks` at 3.0.0-beta.3 too. beta.2 was tagged before its version bump
   landed, so it never reached npm; beta.3 is the first pre-release after beta.1.
