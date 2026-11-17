@@ -12,7 +12,7 @@ import { ChartPlot } from "./ChartPlot.js";
 import { ChartStatus } from "./ChartStatus.js";
 import type { ChartProps, ChartVariant, DataPoint, SeriesKey } from "./interfaces.js";
 import { PiePlot } from "./PiePlot.js";
-
+import { toChartDate } from "./utils/chartDate.js";
 import { chartFormatters } from "./utils/chartSeries.js";
 
 export interface PieChartProps<T extends object = DataPoint> extends Omit<ChartProps<T>, "xKey"> {
@@ -96,7 +96,8 @@ const PieChart = ({
           return true;
         }
 
-        const itemDate = typeof item.date === "string" ? new Date(item.date) : item.date;
+        const itemDate = toChartDate(item.date);
+        if (!itemDate) return true;
 
         return itemDate >= selectedDateRange.startDate && itemDate <= selectedDateRange.endDate;
       } catch (e) {

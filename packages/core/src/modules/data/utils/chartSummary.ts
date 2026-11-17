@@ -6,6 +6,7 @@ import type {
   SeriesConfig,
   ValueFormat,
 } from "../interfaces.js";
+import { isCalendarDay } from "./chartDate.js";
 import { chartSeries, DEFAULT_CHART_LOCALE, makeValueFormatter } from "./chartSeries.js";
 import { formatDate } from "./formatDate.js";
 import { marksSummary } from "./marks.js";
@@ -53,7 +54,11 @@ function xText(value: unknown, row: DataPoint, date: DateConfig | undefined, loc
   const written = formatDate(value, date, row) as unknown;
   if (written instanceof Date) {
     try {
-      return new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(written);
+      return new Intl.DateTimeFormat(locale, {
+        dateStyle: "medium",
+        // A calendar day reads as that day in every time zone (see chartDate.ts).
+        ...(isCalendarDay(written) ? { timeZone: "UTC" } : {}),
+      }).format(written);
     } catch {
       return written.toISOString().slice(0, 10);
     }
