@@ -1,6 +1,6 @@
 import React from "react";
 
-/** One node of an SVG tree: the shape react-icons emits, which the generator copies. */
+/** One node of an SVG tree, as scripts/generate-icons.mjs writes it. */
 export interface IconNode {
   tag: string;
   attr: Record<string, string | number | undefined>;
@@ -31,6 +31,15 @@ const toElements = (nodes: IconNode[]): React.ReactNode =>
  * defaults.
  */
 export const createIcon = (data: IconNode): IconComponent => {
+  // Line icons take their caps and joins from the theme: round by default,
+  // square under `data-border="conservative"` (foundations' border tokens).
+  const themed =
+    data.attr.strokeLinecap !== undefined
+      ? {
+          strokeLinecap: `var(--icon-linecap, ${data.attr.strokeLinecap})`,
+          strokeLinejoin: `var(--icon-linejoin, ${data.attr.strokeLinejoin ?? "round"})`,
+        }
+      : undefined;
   const Icon: IconComponent = (props) =>
     React.createElement(
       "svg",
@@ -43,6 +52,7 @@ export const createIcon = (data: IconNode): IconComponent => {
         width: "1em",
         xmlns: "http://www.w3.org/2000/svg",
         ...props,
+        style: themed ? { ...themed, ...props.style } : props.style,
       },
       toElements(data.child),
     );

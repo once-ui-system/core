@@ -838,6 +838,22 @@ Tailwind CSS in its package.json it reports them instead, since there `p-4`
 already meant Tailwind's. `node scripts/codemod-3.0-class-names.mjs <dir>`
 runs this step on its own.
 
+### 15. Icons are Once UI's own
+
+The built-in icons are redrawn (same names, one consistent stroke), and two
+names changed what they draw:
+
+| Name | 2.x drew | 3.0 draws | To keep the 2.x look |
+| --- | --- | --- | --- |
+| `check` | a check in a circle | the plain check mark | `checkCircle` |
+| `checkbox` | the plain check mark | a ticked box | `check` |
+
+The codemod reports each use (in `<Icon name>`, in `icon`, `prefixIcon` and
+`suffixIcon` props and in `icon: "…"` config entries) without rewriting it:
+the plain mark is often what a 2.x `check` meant, so choose per site.
+`document` now draws a page; `text` draws the lines it used to. An icon you
+registered yourself is untouched.
+
 ---
 
 ## 1.8.x → 2.0

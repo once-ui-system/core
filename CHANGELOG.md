@@ -125,6 +125,14 @@ entry below that had landed by then:
 
 ### Added
 
+- **Once UI's own icons.** The built-in icons are now drawn in-house
+  ([once-ui-system/icons](https://github.com/once-ui-system/icons), MIT): one
+  24 grid, 1.5 stroke, and 178 names, up from 107 (the 71 new ones cover what
+  apps registered themselves: `briefcase`, `camera`, `rocket`, `truck`,
+  `checkCircle`, `text` and more). `data-border="conservative"` squares their
+  caps and joins through new `--icon-linecap` and `--icon-linejoin` tokens.
+  Core no longer carries Heroicons, Ionicons, Lucide or Phosphor data.
+
 - **`Card` `tint`.** A card can pick up its own colour on hover, keyboard focus, an open menu and `selected`: a faint fill and edge in a tone (`brand`, `accent`, `success`…) or a named hue (`cyan`, `magenta`…), drawn on a layer under the content so buttons and text inside keep their colours. Without `tint` nothing changes.
 - **`Treemap`, `Heatmap` and `DivergingBars`** in `@once-ui-system/core/data`, moved from Sigilio's portfolio. `Treemap` sizes tiles by `dataKey` and colours them by a signed `toneKey` (gain emerald, loss orange, stronger further from zero). `Heatmap` draws rows by `columns` in five steps of one hue, with a Less to More scale. `DivergingBars` puts gains right and losses left of one shared zero and writes each value with its sign. All three are HTML, render on the server, take the chart card, `valueFormat`, `locale`, `loading`, `error` and the empty and error states, and make every mark a focusable button whose name carries its value, with a hover card on hover and focus.
 - **FamilyFooter** (`@once-ui-system/blocks`). One footer for a family of products, the same four bands on every site: a brand band (logo, one-line promise, primary button, and an `extra` such as a big wordmark, the mascot or a newsletter field), up to five link columns, a "More from Dopler" row with one tile per live sibling, and a co-brand bar ("A product by Dopler", © year and legal entity, a link to the family's shared legal page, language and theme switches, social links, "Built with Once UI"). The first two bands take the brand's colours and a `decoration` behind them; the family row and the bar sit on neutral tokens and fixed radii so they look the same everywhere. `familyProducts` and `familyParent` are the defaults, so a new product reaches every footer on the next blocks bump; `live: false` holds one back. Every family link carries `ref=<current>-footer` (`familyHref`). Hungarian labels in `familyFooterLabelsHu`.

@@ -33,7 +33,7 @@ interface ToastProps {
 }
 
 const iconMap: Partial<Record<Tone, IconName>> = {
-  success: "check",
+  success: "checkCircle",
   danger: "danger",
   warning: "warning",
   info: "info",
