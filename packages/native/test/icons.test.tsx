@@ -23,7 +23,7 @@ const { rem } = createTheme({ ...defaultSettings, theme: "light" }, Dimensions.g
 describe("icons", () => {
   it("ships exactly core's built-in icon names", () => {
     const core = readFileSync(join(__dirname, "../../core/src/icons/data.ts"), "utf8");
-    const names = [...core.matchAll(/^ {2}(\w+): \{$/gm)].map((m) => m[1]);
+    const names = [...core.matchAll(/^ {2}(\w+): \{ tag: "svg"/gm)].map((m) => m[1]);
     expect(Object.keys(iconData).sort()).toEqual(names.sort());
   });
 
@@ -35,7 +35,7 @@ describe("icons", () => {
     );
     const svg = container.querySelector("svg");
     expect(svg?.getAttribute("width")).toBe(String(2 * rem));
-    expect(container.querySelector("path")?.getAttribute("d")).toContain("M13.5 4.5");
+    expect(container.querySelector("path")?.getAttribute("d")).toContain("M5.25 12L17.75 12");
   });
 
   it("takes icon names on Button and Tag, as core does", () => {

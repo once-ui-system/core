@@ -44,6 +44,7 @@ import { ONE_X_MESSAGE, detectOneX } from "./codemod-3.0-detect.mjs";
 import { transformJsonStrings } from "./codemod-3.0-json.mjs";
 import { transformPartNames } from "./codemod-3.0-part-names.mjs";
 import { transformClassNames, usesTailwind } from "./codemod-3.0-class-names.mjs";
+import { transformIconNames } from "./codemod-3.0-icons.mjs";
 
 /** component → { oldProp: newProp } */
 const TRANSFORMS = {
@@ -2426,6 +2427,9 @@ function transformFile(src, { file = null, devLogger = null, strings = true, tai
   // G6: spacing, offset and grid-column classes written by hand
   // (./codemod-3.0-class-names.mjs); reported instead in a Tailwind project.
   run(transformClassNames(out, { tailwind }), out);
+  // H1: icon names whose drawing changed meaning with the own icon set
+  // (./codemod-3.0-icons.mjs).
+  run(transformIconNames(out), out);
   // Strings that generate Once UI source: reported, never rewritten.
   if (strings && !/\.mdx$/.test(file ?? "")) run(reportCodeStrings(out), out);
   const warnings = reports.map((r) => (r.line === null ? r.text : `${r.text} (line ${r.line})`));

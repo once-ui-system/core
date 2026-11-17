@@ -10,8 +10,8 @@
   "y": "!number",
   "smooth": "boolean = true",
   "name": "!string",
-  "scheme": "PeerCursorScheme",
   "message": "string",
+  "scheme": "PeerCursorScheme",
   "avatar": "string",
   "idle": "boolean = false"
  },

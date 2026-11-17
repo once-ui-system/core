@@ -1159,9 +1159,14 @@ async function main() {
   // to know which icons exist and guessed — which is how the shipped examples
   // ended up asking for "email", "loading" and "github", none of which were
   // registered, each rendering nothing. The vocabulary is listed explicitly.
-  const iconNames = Object.keys(
-    JSON.parse(fs.readFileSync(path.join(__dirname, "icon-manifest.json"), "utf8")),
-  ).sort();
+  const iconNames = [
+    ...fs
+      .readFileSync(path.join(ROOT, "src", "icons", "data.ts"), "utf8")
+      .matchAll(/^ {2}(\w+): \{ tag: "svg"/gm),
+  ]
+    .map((m) => m[1])
+    .sort();
+  if (iconNames.length < 100) throw new Error(`Read only ${iconNames.length} icon names from src/icons/data.ts`);
 
   const types = collectTypeAliases(
     ts,
