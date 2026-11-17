@@ -1456,6 +1456,8 @@
         "border": "conservative"
       },
       "tokens": {
+        "icon-linecap": "square",
+        "icon-linejoin": "miter",
         "radius-xs": "0.125rem",
         "radius-xs-nest-4": "0.25rem",
         "radius-xs-nest-8": "0.375rem",
