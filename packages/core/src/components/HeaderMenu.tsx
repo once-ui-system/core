@@ -49,10 +49,12 @@ interface HeaderMenuProps {
 /**
  * The phone menu of a landing page header.
  *
- * Put it where the menu button goes, inside the header (the hamburger on the
- * left). The header stays put: the button's lines fold into a cross in the
- * same spot, and the menu opens as a panel under the header, filling the rest
- * of the screen, with `footer` (the main call to action) pinned at its foot.
+ * Put it where the menu button goes, inside the header, usually at the right
+ * end of the bar. The header stays put: the button's lines fold into a cross
+ * in the same spot, and the menu grows down out of the header as a panel
+ * filling the rest of the screen, rows arriving one after another, with
+ * `footer` (the main call to action) pinned at its foot. Closing folds it back
+ * up into the header.
  * Following a link in it, Escape, or the button again closes it.
  *
  * It is a disclosure, not a dialog: the header stays reachable, page scroll is
@@ -85,6 +87,25 @@ const HeaderMenu = ({
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const scope = useScopeAttributes(triggerRef, open);
+  // Kept on screen while it folds away after closing; reduced motion has no
+  // fold, so it goes at once.
+  const [rendered, setRendered] = useState(open);
+  useEffect(() => {
+    if (open) {
+      setRendered(true);
+      return;
+    }
+    const reduce =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) {
+      setRendered(false);
+      return;
+    }
+    // In case no animation end arrives (a hidden tab, a test DOM).
+    const timer = setTimeout(() => setRendered(false), 400);
+    return () => clearTimeout(timer);
+  }, [open]);
 
   // The panel starts where the header ends: the nearest <header> (or the
   // button's row) holding the button, measured while open.
@@ -184,10 +205,10 @@ const HeaderMenu = ({
         />
       </Row>
       {mounted &&
-        open &&
+        (open || rendered) &&
         createPortal(
           <>
-            <ScrollLock enabled allowScrollInElement={panelRef} />
+            {open && <ScrollLock enabled allowScrollInElement={panelRef} />}
             <Column
               {...scope}
               ref={panelRef}
@@ -201,13 +222,25 @@ const HeaderMenu = ({
               zIndex={8}
               background={background}
               className={classNames(styles.panel)}
+              data-state={open ? "open" : "closed"}
+              aria-hidden={open ? undefined : true}
               style={{ top }}
+              onAnimationEnd={(event: React.AnimationEvent<HTMLDivElement>) => {
+                if (!open && event.target === event.currentTarget) setRendered(false);
+              }}
               onKeyDown={onPanelKeyDown}
               onClickCapture={(event: React.MouseEvent<HTMLDivElement>) => {
                 if ((event.target as HTMLElement).closest?.("a[href]")) close(false);
               }}
             >
-              <Column fillWidth flex={1} overflowY="auto" padding="12" gap="4">
+              <Column
+                fillWidth
+                flex={1}
+                overflowY="auto"
+                padding="12"
+                gap="4"
+                className={styles.body}
+              >
                 {children}
               </Column>
               {footer && (

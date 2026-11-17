@@ -133,8 +133,9 @@ entry below that had landed by then:
   caps and joins through new `--icon-linecap` and `--icon-linejoin` tokens.
   Core no longer carries Heroicons, Ionicons, Lucide or Phosphor data.
 - **One phone nav.** `HeaderMenu` is a landing header's phone menu: the
-  hamburger turns into the cross in the same spot and the menu opens as a
-  panel under the header, with the main call to action at its foot. `NavIcon`
+  hamburger turns into the cross in the same spot and the menu grows down
+  out of the header as a panel, rows arriving one after another, with the
+  main call to action at its foot; closing folds it back up. `NavIcon`
   now draws the built-in `menu` icon and folds it into `close`. A `Drawer`
   (and so `Sidebar`'s phone drawer) keeps the look of the StyleScope it was
   opened from instead of dropping it in the portal.

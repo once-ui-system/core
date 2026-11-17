@@ -38,6 +38,20 @@ describe("HeaderMenu", () => {
     expect(screen.getByRole("link", { name: "Sign up" }).closest("footer")).not.toBeNull();
   });
 
+  it("folds the panel away on close, then removes it", async () => {
+    const user = userEvent.setup();
+    render(<Page />, { wrapper });
+    const button = screen.getByRole("button", { name: "Menu" });
+    await user.click(button);
+    const panel = screen.getByRole("region", { name: "Menu" });
+    expect(panel).toHaveAttribute("data-state", "open");
+    await user.click(button);
+    expect(panel).toHaveAttribute("data-state", "closed");
+    expect(panel).toHaveAttribute("aria-hidden", "true");
+    await act(() => new Promise((resolve) => setTimeout(resolve, 450)));
+    expect(panel.isConnected).toBe(false);
+  });
+
   it("keeps the button in place: the same element is the cross", async () => {
     const user = userEvent.setup();
     render(<Page />, { wrapper });
