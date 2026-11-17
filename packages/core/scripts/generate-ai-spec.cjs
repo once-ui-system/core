@@ -1162,11 +1162,12 @@ async function main() {
   const iconNames = [
     ...fs
       .readFileSync(path.join(ROOT, "src", "icons", "data.ts"), "utf8")
-      .matchAll(/^ {2}(\w+): \{ tag: "svg"/gm),
+      .matchAll(/^ {2}(\w+): \{$/gm),
   ]
     .map((m) => m[1])
     .sort();
-  if (iconNames.length < 100) throw new Error(`Read only ${iconNames.length} icon names from src/icons/data.ts`);
+  if (iconNames.length < 100)
+    throw new Error(`Read only ${iconNames.length} icon names from src/icons/data.ts`);
 
   const types = collectTypeAliases(
     ts,

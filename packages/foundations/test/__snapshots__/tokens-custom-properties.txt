@@ -238,6 +238,8 @@
 --function-warning-800
 --function-warning-900
 --header-height
+--icon-linecap
+--icon-linejoin
 --info-alpha-medium
 --info-alpha-strong
 --info-alpha-weak
