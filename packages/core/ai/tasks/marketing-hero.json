@@ -1,7 +1,8 @@
 {
   "id": "marketing-hero",
   "title": "Marketing hero",
-  "description": "Headline with text effect, CTA pair, social proof logos, background effect",
+  "description": "A product's landing page or hero: find the product's world first; the template hero (text-effect headline, CTA pair, logo cloud, background effect) is one option",
+  "first": ["brand-world"],
   "components": [
     "Column",
     "Row",
@@ -13,7 +14,8 @@
     "LetterFx",
     "LogoCloud",
     "Grid",
-    "Line"
+    "Line",
+    "StyleScope"
   ],
   "recipes": ["hero-glow-dots", "reveal-stagger"],
   "example": "examples/marketing-hero.tsx",
@@ -33,11 +35,14 @@
     "size.rem",
     "spacing.tokens",
     "layout.noSpanOrType",
-    "RevealFx.primaryContent"
+    "RevealFx.primaryContent",
+    "StyleScope.headingFont",
+    "StyleScope.paint"
   ],
   "quality": {
     "sectionGap": "104",
     "heroHeading": "display-strong-l",
-    "eyebrow": "label-default-s onBackground=\"brand-medium\""
+    "eyebrow": "label-default-s onBackground=\"brand-medium\"",
+    "world": "A direction card and a world before code; the gold example below is the template hero, one option, not the default"
   }
 }
