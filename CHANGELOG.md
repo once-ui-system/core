@@ -774,6 +774,7 @@ entry below that had landed by then:
 
 ### Fixed
 
+- A dropdown on a field with a description or error message opens from the field itself and covers the helper text, instead of opening below it. Select, Combobox and every other trigger with a field box (`data-surface="field"`) anchor to that box.
 - A section in another theme takes the brand solids of its own theme. A dark `StyleScope` with `solid: "contrast"` on a light page kept light's black primary buttons, because the page's `[data-theme="light"] [data-solid]` rules matched the scope as strongly as its own and came later. The brand solids now follow the nearest `data-theme` and the nearest `data-solid` (three levels deep, `invert` included), and a section without a `data-solid` of its own takes the page's in its own theme.
 - Charts read and write dates the same way on the server and in the browser, so a page no longer throws a hydration error (React #418) for readers outside UTC. A date-only string (`"2025-01-01"`) is midnight UTC, as `new Date("2025-01-01")` reads it, so a `date.start` and rows written either way line up: in Budapest the January row was dropped from a range starting on 1 January. A calendar day is written as that day in every time zone, so `new Date("1980-01-01")` no longer reads as 1979 west of Greenwich; dates with a time still show in the reader's time zone.
 - `Skeleton` keeps a `radius` you pass. The shape's default was set after the

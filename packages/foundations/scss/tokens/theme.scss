@@ -755,9 +755,9 @@
     @if $theme == "dark" {
         $other: "light";
     }
-    $t: '[data-theme="#{$theme}"]';
-    $o: '[data-theme="#{$other}"]';
-    $x: '[data-solid="#{$solid}"]';
+    $t: '[data-theme=#{$theme}]';
+    $o: '[data-theme=#{$other}]';
+    $x: '[data-solid=#{$solid}]';
     $ox: '[data-solid]:not(#{$x})';
     @return ':where(:root, [data-theme], [data-solid], [data-brand], [data-neutral]):where(#{solid-nearest($t, $o)}):where(#{solid-nearest($x, $ox)})';
 }
