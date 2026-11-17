@@ -39,7 +39,7 @@ import { LEAVES, elementsOf, transformLeaf } from "./codemod-3.0-leaf.mjs";
 import { consumesProp, forwardsProp, isAliasSource, readSource, resolveOwn } from "./codemod-3.0-own.mjs";
 import { transformMerges } from "./codemod-3.0-merges.mjs";
 import { transformTypes } from "./codemod-3.0-types.mjs";
-import { dependencyReports, nearestPackage } from "./codemod-3.0-deps.mjs";
+import { coreRange, dependencyReports, nearestPackage, packageSkipReason } from "./codemod-3.0-deps.mjs";
 import { ONE_X_MESSAGE, detectOneX } from "./codemod-3.0-detect.mjs";
 import { transformJsonStrings } from "./codemod-3.0-json.mjs";
 import { transformPartNames } from "./codemod-3.0-part-names.mjs";
@@ -2643,13 +2643,25 @@ const invokedDirectly =
 if (invokedDirectly) {
   const [dir, ...flags] = process.argv.slice(2);
   if (!dir) {
-    console.error("usage: codemod-3.0.mjs <dir> [--dry] [--force]");
+    console.error("usage: codemod-3.0.mjs <dir> [--dry] [--force] [--all-packages]");
     process.exit(1);
   }
   const dry = flags.includes("--dry");
   const files = [];
   const jsonFiles = [];
+  // A nested package that is not on core, or pins another major of it, is left alone (--all-packages walks it too).
+  const rootPackage = nearestPackage(dir);
+  const targetRange = rootPackage ? coreRange(rootPackage.pkg) : null;
+  const skippedPackages = [];
   (function walk(d) {
+    if (d !== dir && !flags.includes("--all-packages") && fs.existsSync(path.join(d, "package.json"))) {
+      let pkg = null;
+      try {
+        pkg = JSON.parse(fs.readFileSync(path.join(d, "package.json"), "utf8"));
+      } catch {}
+      const reason = pkg ? packageSkipReason(pkg, targetRange) : null;
+      if (reason) return skippedPackages.push(`${d}: ${reason}`);
+    }
     for (const e of fs.readdirSync(d, { withFileTypes: true })) {
       if (e.name === "node_modules" || e.name === ".next" || e.name === ".git" || e.name === "dist") continue;
       const p = path.join(d, e.name);
@@ -2658,6 +2670,9 @@ if (invokedDirectly) {
       else if (e.name.endsWith(".json") && !/^(package-lock|tsconfig.*|jsconfig)\.json$/.test(e.name)) jsonFiles.push(p);
     }
   })(dir);
+
+  if (skippedPackages.length)
+    console.log(`Skipped ${skippedPackages.length} package${skippedPackages.length === 1 ? "" : "s"} (--all-packages to include):\n${skippedPackages.map((s) => `   ${s}`).join("\n")}\n`);
 
   // On a 1.x tree the 2.x renames would land on the wrong names: stop first.
   const oneX = flags.includes("--force") ? null : detectOneX(dir, files);

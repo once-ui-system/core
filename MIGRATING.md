@@ -34,7 +34,9 @@ node scripts/codemod-3.0.mjs src
 
 It only touches Once UI's own components (found through your imports, or by
 name in MDX), never a same-named component of yours, and running it twice
-changes nothing. Run it once, before you write 3.0 code: it reads every bare
+changes nothing. Run on a repository root, it skips (and lists) a nested
+package that does not depend on `@once-ui-system/core` or pins another major
+of it; `--all-packages` includes them. Run it once, before you write 3.0 code: it reads every bare
 number as 2.x did, so on a size you wrote the 3.0 way (`width={200}`) it would
 write `"200rem"`. Lines marked `!` are for you to fix by hand, one per site,
 each with its file and line. Code you have
