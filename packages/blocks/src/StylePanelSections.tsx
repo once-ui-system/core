@@ -5,7 +5,7 @@ import {
   type BodySize,
   type BorderStyle,
   type DataStyle as ChartMode,
-  ColorInput,
+  ColorButton,
   Column,
   type Density,
   Flex,
@@ -235,11 +235,14 @@ export interface StylePanelSwatchLabels {
 export interface StylePanelCustomLabels {
   /** The custom swatch's accessible name. Defaults to `Brand colour: custom` (`Accent colour: custom`). */
   swatch?: (row: StylePanelSchemeRow) => string;
-  /** The colour field's label. Defaults to `Custom brand colour` (`Custom accent colour`). */
+  /** The colour button's text and accessible name. Defaults to `Custom brand colour` (`Custom accent colour`). */
   picker?: (row: StylePanelSchemeRow) => string;
   /** Text under the colour field, from the current seed: a contrast hint, say. None by default. */
   description?: (seed: string, row: StylePanelSchemeRow) => ReactNode;
-  /** The colour field's clear button. Defaults to ColorInput's `"Remove"`. */
+  /**
+   * @deprecated Since 3.1 the custom colour is a ColorButton, which has no
+   * clear button; the value is ignored.
+   */
   remove?: string;
 }
 
@@ -993,19 +996,30 @@ function schemeRow(key: StylePanelSchemeRow) {
             </StyleRowLabelContext.Provider>
           </Flex>
           {chosen && (
-            <ColorInput
-              id={pickerId}
-              label={labels.custom.picker(key)}
-              value={fieldColor(seed)}
-              onValueChange={(next) => {
-                // The clear button reports "": keep the seed rather than
-                // leave the scheme pointing at nothing.
-                if (isFieldColor(next)) set({ [key]: "custom", [seedKey]: next });
-              }}
-              description={description}
-              aria-describedby={description ? `${pickerId}-description` : undefined}
-              labels={{ remove: labels.custom.remove }}
-            />
+            <Column fillWidth horizontal="end" gap="8">
+              <ColorButton
+                id={pickerId}
+                label={labels.custom.picker(key)}
+                value={fieldColor(seed)}
+                aria-describedby={description ? `${pickerId}-description` : undefined}
+                onValueChange={(next) => {
+                  if (isFieldColor(next)) set({ [key]: "custom", [seedKey]: next });
+                }}
+                onValueCommit={(next) => {
+                  if (isFieldColor(next)) set({ [key]: "custom", [seedKey]: next });
+                }}
+              />
+              {description && (
+                <Text
+                  id={`${pickerId}-description`}
+                  textVariant="body-default-xs"
+                  onBackground="neutral-weak"
+                  align="right"
+                >
+                  {description}
+                </Text>
+              )}
+            </Column>
           )}
         </Column>
       </Row>

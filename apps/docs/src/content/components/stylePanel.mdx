@@ -256,9 +256,11 @@ A row's `label` and a group's `title` and `description` still win over
 your own, such as a site's brand colour. It is painted with the current seed,
 and shows a plus while there is none. Choosing it reports
 `{ brand: "custom", brandSeed }` — the seed already in `value`, or `#5a93fc`
-if there is none — and while it is chosen a colour field under the swatches
-edits the seed. Every colour picked there comes through `onValueChange`, in both
-`next` and `changed`.
+if there is none — and while it is chosen a compact
+[ColorButton](/once-ui/form-controls/colorButton) under the swatches edits the
+seed: a swatch and the hex that open the browser's colour picker. Every colour
+picked there comes through `onValueChange`, in both `next` and `changed`, as the
+person drags.
 
 ```tsx
 const [draft, setDraft] = useState<StylePanelValue>({
@@ -275,7 +277,7 @@ const [draft, setDraft] = useState<StylePanelValue>({
   }}
   labels={{
     custom: {
-      // Shown under the field and read with it.
+      // Shown under the button and read with it.
       description: () => t("custom.hint"), // "Buttons and links use this colour."
     },
   }}
@@ -291,18 +293,16 @@ does not render there and the rows look as they always have.
 
 Choosing a named scheme afterwards keeps the seed in the value, so the custom
 swatch goes on showing it and one click brings it back; the seed only takes
-effect while the row is `"custom"`. The field's clear button is not reported:
-the panel keeps the last colour rather than leave the scheme with nothing to
-point at. The field shows a hex seed; a seed in another format (`rgb()`,
-`oklch()`) still paints the swatch but leaves the field empty until a colour is
-picked.
+effect while the row is `"custom"`. The button shows a hex seed; a seed in
+another format (`rgb()`, `oklch()`) still paints the swatch, and the button
+shows its label until a colour is picked.
 
 | `labels.custom` | Default |
 | --- | --- |
 | `swatch(row)` | The swatch's accessible name: `Brand colour: custom` (`Accent colour: custom`). |
-| `picker(row)` | The field's label: `Custom brand colour` (`Custom accent colour`). |
-| `description(seed, row)` | None. Text under the field, wired to its `aria-describedby`. |
-| `remove` | The field's clear button: `Remove`. |
+| `picker(row)` | The colour button's text and accessible name: `Custom brand colour` (`Custom accent colour`). |
+| `description(seed, row)` | None. Text under the button, wired to its `aria-describedby`. |
+| `remove` | Deprecated in 3.1: the button has no clear control, and the value is ignored. |
 
 ### Rendering the colour
 

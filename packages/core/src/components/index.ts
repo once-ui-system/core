@@ -14,6 +14,7 @@ export * from "./Button.js";
 export * from "./Card.js";
 export * from "./Carousel.js";
 export * from "./Checkbox.js";
+export * from "./ColorButton.js";
 export * from "./ColorInput.js";
 export * from "./Column.js";
 export * from "./Combobox.js";

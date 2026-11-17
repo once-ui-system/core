@@ -1,6 +1,6 @@
 {
  "version": "3.0.0-beta.1",
- "generated": "2026-11-13",
+ "generated": "2026-11-17",
  "iconNames": ["adjustments","arrowDown","arrowLeft","arrowRight","arrowUp","arrowUpRight","ball","banknotes","barChart","bell","bolt","book","bookmark","calendar","cart","chat","check","checkbox","chevronDoubleLeft","chevronDoubleRight","chevronDown","chevronLeft","chevronRight","chevronUp","chevronsLeftRight","clipboard","close","code","computer","copy","cube","danger","dark","dislike","document","download","edit","enter","eye","eyeDropper","eyeOff","file","filter","flag","folder","food","forward","gift","globe","grid","grip","heart","help","home","image","inbox","info","light","like","linearGauge","link","lock","logout","mail","mapPin","maximize","menu","minimize","minus","moreHorizontal","newspaper","opacity","organization","pause","paw","payment","people","person","personRemove","phone","play","plus","radialGauge","refresh","return","screen","search","security","send","settings","smiley","sparkle","star","starFill","store","symbol","tag","time","trash","trend","trendDown","trendUp","upload","video","volume","volumeOff","warning","wordmark","world"],
  "components": {
   "ScrollLock": {"purpose":"Freezes page scroll while enabled, keeping one referenced region scrollable"},
@@ -20,6 +20,7 @@
   "Card": {"purpose":"Interactive surface — a clickable or linked panel with hover feedback; requires href or onClick","avoid":"Static panels (pricing tiers, testimonials, stats) — use Column + surface recipe"},
   "Carousel": {"purpose":"Image slideshow with arrows, dots or thumbnails and autoplay; mode=\"snap\" is a touch track (2.x Swiper)"},
   "Checkbox": {"purpose":"Checkbox with label and description, including an indeterminate state"},
+  "ColorButton": {"purpose":"Compact colour trigger: a button with a swatch and the hex that opens the native picker, committing when it closes"},
   "ColorInput": {"purpose":"Colour picker field showing the hex value and a swatch, with optional alpha"},
   "Column": {"purpose":"Vertical flex layout — default direction column","preferOver":"Flex with direction=\"column\""},
   "Combobox": {"purpose":"Free-text field with suggestions"},
