@@ -139,6 +139,24 @@ function blocks(css) {
   return out;
 }
 
+/** A selector list split at its own commas, not those inside `:where(…)` or `:not(…)`. */
+function topLevel(list) {
+  const out = [];
+  let depth = 0;
+  let start = 0;
+  for (let i = 0; i < list.length; i++) {
+    const ch = list[i];
+    if (ch === "(") depth++;
+    else if (ch === ")") depth--;
+    else if (ch === "," && depth === 0) {
+      out.push(list.slice(start, i).trim());
+      start = i + 1;
+    }
+  }
+  out.push(list.slice(start).trim());
+  return out;
+}
+
 /** `[data-theme="dark"] [data-solid="color"]` → { theme: "dark", solid: "color" }. */
 function conditions(selector) {
   if (selector === ":root") return {};
@@ -179,7 +197,7 @@ function layers(css) {
       }
       const tokens = declarations(body);
       if (Object.keys(tokens).length === 0) continue;
-      for (const selector of prelude.split(",").map((s) => s.trim())) {
+      for (const selector of topLevel(prelude)) {
         const when = conditions(selector);
         if (!when) continue;
         out.push({ when, ...(media ? { maxWidth: media } : {}), tokens });

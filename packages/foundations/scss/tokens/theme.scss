@@ -730,13 +730,39 @@
     --surface-border:        var(--static-transparent);
 }
 
-/* The solids again on a nested data-brand or data-neutral, from its nearest
-   data-solid: one on <html> is outweighed by one on a section between them,
-   and an element with its own data-solid keeps the rule that names it. */
+/* The brand solids, from the nearest data-theme and the nearest data-solid.
+   Each is declared on every element that can change them (a theme, a
+   data-solid, a nested data-brand or data-neutral) under a condition that
+   weighs nothing and that only one theme-and-solid pair meets, so the
+   nearest ones win whatever the order of the rules: a dark StyleScope with
+   data-solid="contrast" on a light page gets dark's contrast, and a section
+   without a data-solid of its own takes the page's in its own theme. The
+   nesting is followed three levels deep (light page, dark section, light
+   card). The plain `[data-theme][data-solid]` selector names the pair for
+   the token export. */
+@function solid-in($attr) {
+    @return "#{$attr}, #{$attr} *";
+}
+
+/* At or under `$a`, and not under an `$b` below it unless an `$a` is below
+   that again. */
+@function solid-nearest($a, $b) {
+    @return ":where(#{solid-in($a)}):not(:where(#{solid-in('#{$a} #{$b}')}):not(:where(#{solid-in('#{$a} #{$b} #{$a}')})))";
+}
+
+@function solid-nearest-selector($theme, $solid) {
+    $other: "dark";
+    @if $theme == "dark" {
+        $other: "light";
+    }
+    $t: '[data-theme=#{$theme}]';
+    $o: '[data-theme=#{$other}]';
+    $x: '[data-solid=#{$solid}]';
+    $ox: '[data-solid]:not(#{$x})';
+    @return ':where(:root, [data-theme], [data-solid], [data-brand], [data-neutral]):where(#{solid-nearest($t, $o)}):where(#{solid-nearest($x, $ox)})';
+}
 [data-theme="dark"][data-solid="color"],
-[data-theme="dark"] [data-solid="color"],
-[data-theme="dark"][data-solid="color"] :is([data-brand], [data-neutral]):not([data-solid]),
-[data-theme="dark"] :not(:root)[data-solid="color"] :is([data-brand], [data-neutral]):not([data-solid]) {
+#{solid-nearest-selector("dark", "color")} {
     --brand-solid-strong:         var(--function-brand-500);
     --brand-solid-medium:         var(--function-brand-400);
     --brand-solid-weak:           var(--function-brand-300);
@@ -747,9 +773,7 @@
 }
 
 [data-theme="dark"][data-solid="contrast"],
-[data-theme="dark"] [data-solid="contrast"],
-[data-theme="dark"][data-solid="contrast"] :is([data-brand], [data-neutral]):not([data-solid]),
-[data-theme="dark"] :not(:root)[data-solid="contrast"] :is([data-brand], [data-neutral]):not([data-solid]) {
+#{solid-nearest-selector("dark", "contrast")} {
     --brand-solid-strong:         var(--function-neutral-1000);
     --brand-solid-medium:         var(--static-white);
     --brand-solid-weak:           var(--function-neutral-900);
@@ -760,9 +784,7 @@
 }
 
 [data-theme="dark"][data-solid="inverse"],
-[data-theme="dark"] [data-solid="inverse"],
-[data-theme="dark"][data-solid="inverse"] :is([data-brand], [data-neutral]):not([data-solid]),
-[data-theme="dark"] :not(:root)[data-solid="inverse"] :is([data-brand], [data-neutral]):not([data-solid]) {
+#{solid-nearest-selector("dark", "inverse")} {
     --brand-solid-strong:         var(--function-brand-800);
     --brand-solid-medium:         var(--function-brand-700);
     --brand-solid-weak:           var(--function-brand-600);
@@ -775,9 +797,7 @@
 }
 
 [data-theme="light"][data-solid="color"],
-[data-theme="light"] [data-solid="color"],
-[data-theme="light"][data-solid="color"] :is([data-brand], [data-neutral]):not([data-solid]),
-[data-theme="light"] :not(:root)[data-solid="color"] :is([data-brand], [data-neutral]):not([data-solid]) {
+#{solid-nearest-selector("light", "color")} {
     /* Step 500, the same as dark: white text on step 600 measures 3:1,
        below WCAG AA for button labels. */
     --brand-solid-strong:         var(--function-brand-500);
@@ -790,9 +810,7 @@
 }
 
 [data-theme="light"][data-solid="contrast"],
-[data-theme="light"] [data-solid="contrast"],
-[data-theme="light"][data-solid="contrast"] :is([data-brand], [data-neutral]):not([data-solid]),
-[data-theme="light"] :not(:root)[data-solid="contrast"] :is([data-brand], [data-neutral]):not([data-solid]) {
+#{solid-nearest-selector("light", "contrast")} {
     --brand-solid-strong:         var(--function-neutral-300);
     --brand-solid-medium:         var(--static-black);
     --brand-solid-weak:           var(--function-neutral-400);
@@ -834,9 +852,7 @@
 }
 
 [data-theme="light"][data-solid="inverse"],
-[data-theme="light"] [data-solid="inverse"],
-[data-theme="light"][data-solid="inverse"] :is([data-brand], [data-neutral]):not([data-solid]),
-[data-theme="light"] :not(:root)[data-solid="inverse"] :is([data-brand], [data-neutral]):not([data-solid]) {
+#{solid-nearest-selector("light", "inverse")} {
     --brand-solid-strong:         var(--function-brand-900);
     --brand-solid-medium:         var(--function-brand-800);
     --brand-solid-weak:           var(--function-brand-700);

@@ -490,11 +490,17 @@ const DropdownMenu = ({
 
   useEffect(() => {
     if (wrapperRef.current) {
-      refs.setReference(wrapperRef.current);
+      // A field trigger opens from the field's own box, not from its
+      // description or error message below it: the panel covers the helper
+      // text instead of opening under it.
+      const anchor =
+        wrapperRef.current.querySelector<HTMLElement>('[data-surface="field"]') ??
+        wrapperRef.current;
+      refs.setReference(anchor);
 
       // Store the reference element's width for fillWidth calculation
       if (fillWidth) {
-        setReferenceWidth(wrapperRef.current.getBoundingClientRect().width);
+        setReferenceWidth(anchor.getBoundingClientRect().width);
       }
     }
   }, [refs, mounted, fillWidth]);
