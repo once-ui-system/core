@@ -129,6 +129,10 @@
       "types": "./dist/components/Checkbox.d.ts",
       "default": "./dist/components/Checkbox.js"
     },
+    "./components/ColorButton": {
+      "types": "./dist/components/ColorButton.d.ts",
+      "default": "./dist/components/ColorButton.js"
+    },
     "./components/ColorInput": {
       "types": "./dist/components/ColorInput.d.ts",
       "default": "./dist/components/ColorInput.js"
