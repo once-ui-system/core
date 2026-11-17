@@ -12,7 +12,7 @@ When the request doesn't specify design intent, ask these five questions first (
 4. **Decoration** — gradients, MatrixFx, animated blobs, none?
 5. **Imagery** — placeholder images, or avatars/logos/icons only?
 
-If you can't ask (or the user says "you decide"), default to: restrained, centered with `maxWidth="m"` content, single brand accent, one subtle gradient (recipes.md #1), no placeholder images (use `Avatar`, `Logo`, `Icon`).
+For a product's own landing page or homepage, find its world first (recipes.md #9, brand world): a direction card and three worlds before any code. For any other marketing page, or when the person asks for a plain one: if you can't ask (or the user says "you decide"), default to: restrained, centered with `maxWidth="m"` content, single brand accent, one subtle gradient (recipes.md #1), no placeholder images (use `Avatar`, `Logo`, `Icon`).
 
 That default is for a landing page. For an app (signed-in, records, forms), the first build step is the theme, not a page: set it from the theme preset for the app's domain, in `once-ui.config` or in the props of `ThemeInit`, `ThemeProvider` and `DataThemeProvider` wherever the app mounts them, `themePreset("ops" | "care" | "creative" | "commerce")` (rule 30c), which sets page and surface in both themes, brand, accent, solids, corners, density and the faces to load with `next/font`. Change only what is the product's own, usually `brandSeed`. One brand accent, no ambient layers or effects. Shipping the starter's gray/blue/contrast unchanged reads as unbranded.
 
@@ -76,7 +76,7 @@ That default is for a landing page. For an app (signed-in, records, forms), the 
 
 ## Color and surfaces
 
-7. Colors are semantic tokens, never hex/rgb: `{tone}-{weight}` or `{tone}-alpha-{weight}` where tone = `neutral | brand | accent | info | danger | warning | success` and weight = `weak | medium | strong`. A component's palette is its `tone` prop (Button, IconButton, Tag, Feedback, Toast, `addToast`, `StatusIndicator pulse`, gauges, Timeline items); `scheme` is a palette hue (`blue`, `green`…) on the plain StatusIndicator dot and Avatar's `statusIndicator`.
+7. Colors are semantic tokens, never hex/rgb: `{tone}-{weight}` or `{tone}-alpha-{weight}` where tone = `neutral | brand | accent | info | danger | warning | success` and weight = `weak | medium | strong`. A component's palette is its `tone` prop (Button, IconButton, Tag, Feedback, Toast, `addToast`, `StatusIndicator pulse`, gauges, Timeline items); `scheme` is a palette hue (`blue`, `green`…) on the plain StatusIndicator dot and Avatar's `statusIndicator`. Two exceptions: a seed, which only takes a colour (`brandSeed`, `accentSeed`, `pageBackground`, `surfaceBackground`, a Mascot's `color`), and artwork: the cast, props and textures of a hero scene, drawn in classes named for what they draw (`.emChair`) in one sheet scoped under the page class. Nowhere else.
    - `background` also accepts `surface | overlay | page | transparent`
    - `onBackground` colors text/icons on a background
    - Inline SVG paint too: `fill="currentColor"` (colour the wrapper with `onBackground`) or a token, `stroke="var(--brand-solid-strong)"` — never `fill="#15D9EF"`
@@ -283,7 +283,7 @@ Siblings holding content get `zIndex={1}`. That layer and its content sibling ar
 25. `LogoCloud` extends `Grid` — always set `columns` (and responsive overrides), or logos stack in one column: `columns="4" m={{ columns: 3 }} s={{ columns: 2 }}`.
    A logo that changes with the theme is one `Logo` with a source per theme — `<Logo wordmark={{ light: "/logo-light.svg", dark: "/logo-dark.svg" }} />`, and `icon` takes the same pair — not a `<Logo showIn="dark">` beside a `<Logo showIn="light">`. Keep `showIn` for a logo that should only appear in one theme.
 
-26. Use decoration recipes from `recipes.md` verbatim, then adjust. Application shells — a dashboard with a sidebar, a data-driven nav, a two-pane editor, a phone header, a plan or map canvas, a selection with a details panel — come from `layouts.md` the same way. Budget: at most one ambient background layer per section, ambient motion in at most the hero and final CTA, one accent color family per page.
+26. Use decoration recipes from `recipes.md` verbatim, then adjust. Application shells — a dashboard with a sidebar, a data-driven nav, a two-pane editor, a phone header, a plan or map canvas, a selection with a details panel — come from `layouts.md` the same way. Budget: at most one ambient background layer per section, ambient motion in at most the hero and final CTA, one accent color family per page. A hero scene that shows the product's work (recipes.md #9) is artwork, outside that budget; every other section keeps it.
 
 ## Motion
 
