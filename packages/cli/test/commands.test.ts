@@ -131,6 +131,19 @@ describe("create", () => {
     });
   });
 
+  it("sends the app's languages, default first", async () => {
+    await create(createClient(base, null), join(tmp(), "a"), {
+      surfaces: "docs",
+      locales: "hu, en,de",
+    });
+    expect(requests.at(-1)?.body).toEqual({
+      surfaces: ["docs"],
+      slices: [],
+      name: "a",
+      locales: ["hu", "en", "de"],
+    });
+  });
+
   it("will not unpack into a directory that has files in it", async () => {
     const dir = tmp();
     writeFileSync(join(dir, "keep.txt"), "mine");
