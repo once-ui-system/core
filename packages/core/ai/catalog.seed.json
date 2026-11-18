@@ -734,6 +734,11 @@
     "tags": ["navigation", "action"],
     "pairsWith": ["MegaMenu", "Row"]
   },
+  "HeaderMenu": {
+    "purpose": "Landing header's phone menu: hamburger becomes X in place, panel under the header",
+    "tags": ["navigation"],
+    "pairsWith": ["MegaMenu", "Button"]
+  },
   "NavItem": {
     "purpose": "One sidebar navigation row: label, icon, selected state, count badge or unread dot",
     "tags": ["navigation"],

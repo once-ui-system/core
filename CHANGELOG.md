@@ -133,6 +133,13 @@ entry below that had landed by then:
   `checkCircle`, `text` and more). `data-border="conservative"` squares their
   caps and joins through new `--icon-linecap` and `--icon-linejoin` tokens.
   Core no longer carries Heroicons, Ionicons, Lucide or Phosphor data.
+- **One phone nav.** `HeaderMenu` is a landing header's phone menu: the
+  hamburger turns into the cross in the same spot and the menu grows down
+  out of the header as a panel, rows arriving one after another, with the
+  main call to action at its foot; closing folds it back up. `NavIcon`
+  now draws the built-in `menu` icon and folds it into `close`. A `Drawer`
+  (and so `Sidebar`'s phone drawer) keeps the look of the StyleScope it was
+  opened from instead of dropping it in the portal.
 
 - **`Card` `tint`.** A card can pick up its own colour on hover, keyboard focus, an open menu and `selected`: a faint fill and edge in a tone (`brand`, `accent`, `success`…) or a named hue (`cyan`, `magenta`…), drawn on a layer under the content so buttons and text inside keep their colours. Without `tint` nothing changes.
 - **`Treemap`, `Heatmap` and `DivergingBars`** in `@once-ui-system/core/data`, moved from Sigilio's portfolio. `Treemap` sizes tiles by `dataKey` and colours them by a signed `toneKey` (gain emerald, loss orange, stronger further from zero). `Heatmap` draws rows by `columns` in five steps of one hue, with a Less to More scale. `DivergingBars` puts gains right and losses left of one shared zero and writes each value with its sign. All three are HTML, render on the server, take the chart card, `valueFormat`, `locale`, `loading`, `error` and the empty and error states, and make every mark a focusable button whose name carries its value, with a hover card on hover and focus.

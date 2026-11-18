@@ -1,0 +1,78 @@
+// The panel grows down out of the header: a clip that opens from the
+// header's edge, so the menu reads as the header extending, not a sheet
+// sliding over the page. Rows follow a beat later, one after another, and the
+// call to action lands last. Closing folds it back up, faster.
+.panel {
+    --header-menu-ease: cubic-bezier(0.32, 0.72, 0, 1);
+    border-top: 1px solid var(--neutral-alpha-weak);
+    animation: header-menu-open 0.38s var(--header-menu-ease) both;
+
+    &[data-state="closed"] {
+        animation: header-menu-close 0.22s cubic-bezier(0.4, 0, 1, 1) both;
+        pointer-events: none;
+    }
+}
+
+.body > * {
+    animation: header-menu-row 0.32s var(--header-menu-ease) both;
+    animation-delay: calc(0.06s + var(--header-menu-index, 8) * 0.03s);
+}
+
+@for $i from 1 through 8 {
+    .body > :nth-child(#{$i}) {
+        --header-menu-index: #{$i - 1};
+    }
+}
+
+.footer {
+    border-top: 1px solid var(--neutral-alpha-weak);
+    padding-bottom: max(var(--static-space-16), var(--safe-area-bottom, 0px));
+    animation: header-menu-row 0.36s var(--header-menu-ease) 0.16s both;
+}
+
+.panel[data-state="closed"] .body > *,
+.panel[data-state="closed"] .footer {
+    animation: header-menu-fade 0.14s linear both;
+}
+
+@keyframes header-menu-open {
+    from {
+        clip-path: inset(0 0 100% 0);
+    }
+    to {
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+@keyframes header-menu-close {
+    from {
+        clip-path: inset(0 0 0 0);
+    }
+    to {
+        clip-path: inset(0 0 100% 0);
+    }
+}
+
+@keyframes header-menu-row {
+    from {
+        opacity: 0;
+        transform: translateY(calc(-1 * var(--static-space-8)));
+    }
+}
+
+@keyframes header-menu-fade {
+    to {
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .panel,
+    .panel[data-state="closed"],
+    .body > *,
+    .footer,
+    .panel[data-state="closed"] .body > *,
+    .panel[data-state="closed"] .footer {
+        animation: none;
+    }
+}
