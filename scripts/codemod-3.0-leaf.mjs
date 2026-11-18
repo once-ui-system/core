@@ -108,7 +108,9 @@ export const LEAVES = {
 };
 
 /** The leaves that hand an unknown prop to a native <input> or <textarea>. */
-const NATIVE_FIELDS = new Set(["Input", "NumberInput", "ColorInput", "Textarea"]);
+// Select too: 2.x Select handed what it did not take to its Input, which put
+// it on the native <input>, so a 1.x-style `height="s"` there did nothing.
+const NATIVE_FIELDS = new Set(["Input", "NumberInput", "ColorInput", "Textarea", "Select"]);
 /** The leaves that render a Text or Heading: padding becomes inline style where no wrapper can take it. */
 const TEXT_LEAVES = new Set(["Text", "Heading", "ListItem", "CountFx", "ShineFx", "TypeFx"]);
 /** Those a Column may wrap: ListItem is an <li>, and the effects are best left in their own element. */
@@ -601,7 +603,7 @@ function leafRound(src, isCore) {
 			const inert = image ? [] : dropped.filter((a) => a.name === "height");
 			if (inert.length) {
 				for (const a of inert) ops.push({ ...remove(src, a), text: "" });
-				done.push(`<${tag}> height dropped (2.x passed it to the native <${tag === "Textarea" ? "textarea" : "input"}>, where it did nothing; the size prop is \`size\`)`);
+				done.push(`<${tag}> height dropped (2.x passed it to the native <${tag === "Textarea" ? "textarea" : "input"}>, where it did nothing, so the field was the default m; for a smaller one, \`size="s"\` or \`size="xs"\`)`);
 				dropped = dropped.filter((a) => !inert.includes(a));
 				if (!dropped.length) {
 					finish();

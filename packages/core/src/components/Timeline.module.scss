@@ -1,3 +1,4 @@
+@use "../styles/nearest-theme.scss" as theme;
 // Timeline: hairline nodes on a hairline rail, with the tone as a vivid dot
 // (the Tag's dot), not a filled disc. A step not reached is an empty node on a
 // dashed rail; the current step (`brand`) carries a soft halo.
@@ -200,7 +201,7 @@
 @mixin tone($tone) {
     --timeline-dot: var(--function-#{$tone}-600);
 
-    :global([data-theme="light"]) & {
+    @include theme.in-theme(light) {
         --timeline-dot: var(--function-#{$tone}-500);
     }
 }

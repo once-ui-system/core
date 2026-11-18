@@ -10,7 +10,8 @@
   "max": "number = 100",
   "showLabel": "boolean = true",
   "labelPosition": "\"top\" | \"bottom\" | \"left\" | \"right\" = bottom",
-  "barBackground": "StyleProps[\"solid\"] = brand-strong"
+  "barBackground": "StyleProps[\"solid\"] = brand-strong",
+  "size": "\"s\" | \"m\" = m"
  },
  "tags": [
   "data",

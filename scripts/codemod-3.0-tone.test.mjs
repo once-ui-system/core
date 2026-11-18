@@ -238,3 +238,14 @@ describe("E/F3 is idempotent", () => {
 		assert.deepEqual(twice.hits, []);
 	});
 });
+
+describe("E1: addToast shorthand variant", () => {
+	it("renames a shorthand variant with space before the brace whole", () => {
+		const imports = 'import { useToast } from "@once-ui-system/core";\n';
+		const src = "const { addToast } = useToast();\naddToast({ message, variant });\naddToast({\n  message,\n  variant,\n});\n";
+		assert.equal(
+			body(run(src, imports).out, imports),
+			"const { addToast } = useToast();\naddToast({ message, tone: variant });\naddToast({\n  message,\n  tone: variant,\n});\n",
+		);
+	});
+});

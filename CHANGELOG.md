@@ -125,6 +125,7 @@ entry below that had landed by then:
 
 ### Added
 
+- `ProgressBar` `size`: `"s"` draws a 4px track for a thin bar in a row or a card; `"m"`, 8px, stays the default.
 - **Once UI's own icons.** The built-in icons are now drawn in-house
   ([once-ui-system/icons](https://github.com/once-ui-system/icons), MIT): one
   24 grid, 1.5 stroke, and 178 names, up from 107 (the 71 new ones cover what
@@ -796,6 +797,9 @@ entry below that had landed by then:
 
 ### Fixed
 
+- A Tag, a Timeline dot, an Input and a RichTextEditor in a dark scope on a light page take the dark look. Their light-only rules matched any light ancestor, and `<html>` always carries the app's theme, so a dark StyleScope's unselected Tag toggles went white with near-white text. They now follow the element's nearest theme, as the brand solids do since rc.0.
+- 3.0 codemod: a shorthand `variant` before a space and the closing brace (`addToast({ message, variant })`) became `vtone: variant`; it is `tone: variant`. Arithmetic on the config's `dataStyle.height`, now a "24rem" string, is rewritten to `parseFloat(dataStyle.height)` (it concatenated to "24rem4"), and a template that would add a second unit is reported. A Select's 1.x-style `height` is dropped like an Input's, since 2.x passed it to the native input, where it did nothing.
+- 3.0 codemod: run on a repository root, it rewrote sub-packages that are not on Once UI core (a native app's Toast `variant`) or pin another major of it (a tool still on 2.x). A nested package whose package.json does not depend on `@once-ui-system/core`, or pins a different major than the package the codemod runs in, is now skipped and listed; `--all-packages` walks them too.
 - In the rounded border style, a dropdown's highlighted first and last options nest in the panel's corners. The panel took radius l (28px) while a one-line option can round to only 17px, so a gap opened towards the curve; a panel with radius l now rounds to at most 22px, and options follow it. A panel given another radius keeps it.
 - A dropdown on a field with a description or error message opens from the field itself and covers the helper text, instead of opening below it. Select, Combobox and every other trigger with a field box (`data-surface="field"`) anchor to that box.
 - A section in another theme takes the brand solids of its own theme. A dark `StyleScope` with `solid: "contrast"` on a light page kept light's black primary buttons, because the page's `[data-theme="light"] [data-solid]` rules matched the scope as strongly as its own and came later. The brand solids now follow the nearest `data-theme` and the nearest `data-solid` (three levels deep, `invert` included), and a section without a `data-solid` of its own takes the page's in its own theme.
