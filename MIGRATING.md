@@ -34,7 +34,9 @@ node scripts/codemod-3.0.mjs src
 
 It only touches Once UI's own components (found through your imports, or by
 name in MDX), never a same-named component of yours, and running it twice
-changes nothing. Run it once, before you write 3.0 code: it reads every bare
+changes nothing. Run on a repository root, it skips (and lists) a nested
+package that does not depend on `@once-ui-system/core` or pins another major
+of it; `--all-packages` includes them. Run it once, before you write 3.0 code: it reads every bare
 number as 2.x did, so on a size you wrote the 3.0 way (`width={200}`) it would
 write `"200rem"`. Lines marked `!` are for you to fix by hand, one per site,
 each with its file and line. Code you have
@@ -700,6 +702,11 @@ CSS, so look for these:
 
 - An override that was losing on purpose now wins. Most often that is a rule
   written before Once UI's styles took over, which never showed until now.
+  Check the rules that set type or spacing on an element that also has a Once
+  UI class (`letter-spacing`, `line-height`, `font-size`, `padding`, `gap`): a
+  hero's `.title { letter-spacing: -0.035em }` used to lose to the display
+  class's -0.05em and now wins, which widens the line and can clip gradient
+  text at its edge.
 - An app `!important` against one of Once UI's own `!important` declarations
   (a handful, on Button, Dialog, EmojiPicker, Input, Switch, Table and link
   underlines) now loses: inside layers, `!important` runs the other way. Drop

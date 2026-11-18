@@ -1,3 +1,5 @@
+@use "../../styles/nearest-theme.scss" as theme;
+
 // The frame matches Input: a tinted well in dark mode, a white field with a
 // firmer edge in light mode, the border darkening on focus.
 .frame {
@@ -12,9 +14,11 @@
   }
 }
 
-:global([data-theme="light"]) .frame:not(.invalid) {
-  background-color: var(--neutral-background-weak);
-  border-color: var(--neutral-border-strong);
+.frame:not(.invalid) {
+  @include theme.in-theme(light) {
+    background-color: var(--neutral-background-weak);
+    border-color: var(--neutral-border-strong);
+  }
 }
 
 .invalid {

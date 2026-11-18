@@ -1,6 +1,7 @@
 @use "../styles/density.scss" as density;
 @use "../styles/touch.scss" as touch;
 @use "../styles/glow.scss" as glow;
+@use "../styles/nearest-theme.scss" as theme;
 
 .tag {
     white-space: nowrap;
@@ -17,7 +18,7 @@
     &.hairline {
         background: transparent;
 
-        :global([data-theme="light"]) & {
+        @include theme.in-theme(light) {
             background: var(--static-white);
         }
     }
@@ -108,7 +109,7 @@
 
     // A soft highlight along the top edge in dark mode, so the pill reads as
     // raised glass.
-    :global([data-theme="dark"]) &::after {
+    @include theme.in-theme(dark, "::after") {
         content: "";
         position: absolute;
         inset: 0;
@@ -173,7 +174,7 @@
     --tag-tone-solid: var(--#{$tone}-solid-strong);
     --tag-tone-on-solid: var(--#{$tone}-on-solid-strong);
 
-    :global([data-theme="light"]) & {
+    @include theme.in-theme(light) {
         --tag-dot: var(--function-#{$tone}-500);
     }
 }
@@ -212,7 +213,7 @@
         background: transparent;
         color: var(--neutral-on-background-medium);
 
-        :global([data-theme="light"]) & {
+        @include theme.in-theme(light) {
             background: var(--static-white);
         }
 

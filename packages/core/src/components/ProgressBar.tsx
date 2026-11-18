@@ -15,6 +15,8 @@ interface ProgressBarProps extends LeafPropsOf<"div"> {
   showLabel?: boolean;
   labelPosition?: "top" | "bottom" | "left" | "right";
   barBackground?: StyleProps["solid"];
+  /** Track thickness: `s` 4px for a thin line in a row or a card, `m` 8px (the default). */
+  size?: "s" | "m";
 }
 
 const ProgressBar = ({
@@ -25,6 +27,7 @@ const ProgressBar = ({
   showLabel = true,
   labelPosition = "bottom",
   barBackground = "brand-strong",
+  size = "m",
   className,
   style,
   "aria-label": ariaLabel,
@@ -41,7 +44,7 @@ const ProgressBar = ({
       fillWidth
       radius="full"
       overflow="hidden"
-      height="8"
+      height={size === "s" ? "4" : "8"}
       role="progressbar"
       // A progressbar needs a name (axe: aria-progressbar-name). The label
       // props land here rather than on the wrapper that has no role.
