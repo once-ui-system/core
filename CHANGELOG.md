@@ -80,6 +80,18 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 Pre-releases on npm `next` (`npm i @once-ui-system/core@next`), each with every
 entry below that had landed by then:
 
+- **3.0.0-rc.1** (2026-11-18), with `@once-ui-system/foundations`, `fx` and
+  `blocks` at 3.0.0-rc.1 too. New since rc.0: Once UI's own icons (178 names,
+  one line set; `check` and `checkbox` swap meanings, see MIGRATING § 15);
+  `HeaderMenu`, the landing header's phone menu, with `NavIcon` folding into
+  the cross in place and `Drawer` keeping the nearest StyleScope's look;
+  `ProgressBar` `size="s"`; the marketing-hero bundle starting from the
+  product's world. Fixes from apps moving to rc.0: dark StyleScope solids,
+  Tag, Timeline, Input and RichTextEditor follow the nearest theme on a light
+  page; dropdowns open from the field and their options nest in the panel's
+  corners; charts read dates the same on the server and in the browser; and
+  the codemod's `tone` shorthand, `dataStyle.height` arithmetic, Select
+  height and nested packages.
 - **3.0.0-rc.0** (2026-11-17), with `@once-ui-system/foundations`, `fx` and
   `blocks` at 3.0.0-rc.0 too. The first release candidate. New since beta.3: `Treemap`, `Heatmap` and
   `DivergingBars` in the data module; `tint` on Card, a coloured hover in a
