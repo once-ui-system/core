@@ -2,13 +2,26 @@
 // frozen module proxy rejects a namespace import here.
 
 import {
+  AboutSection,
   Banner,
   Book,
+  ContactSection,
+  CtaSection,
+  FaqSection,
+  FeaturesSection,
+  GallerySection,
+  HeroSection,
   LogoCloud,
+  LogosSection,
   MascotPanel,
+  PricingSection,
   ScrollToTop,
+  Sections,
+  StatsSection,
   StyleOverlay,
   StylePanel,
+  TeamSection,
+  TestimonialsSection,
 } from "@once-ui-system/blocks";
 import {
   Accordion,
@@ -129,8 +142,19 @@ import {
   VisuallyHidden,
   VoiceVisualizer,
   WorkingIndicator,
+  Combobox,
+  StatTile,
 } from "@once-ui-system/core";
 import { CodeBlock } from "@once-ui-system/core/code";
+import { IconGallery } from "@/product/IconGallery";
+import {
+  ComboboxControlledExample,
+  ComboboxFilterExample,
+  ComboboxServerExample,
+  RichTextEditorControlledExample,
+  RichTextEditorFieldExample,
+} from "@/product/NewPagesExamples";
+import { RichTextEditor } from "@once-ui-system/core/richtext";
 import {
   BarChart,
   ChartHeader,
@@ -661,6 +685,28 @@ const mdxComponents = createMdxComponents({
   DataTableToolbarExample,
   RadioGroupControlledExample,
   RangeSliderPriceExample,
+  IconGallery,
+  Combobox,
+  StatTile,
+  RichTextEditor,
+  ComboboxControlledExample,
+  ComboboxFilterExample,
+  ComboboxServerExample,
+  RichTextEditorControlledExample,
+  RichTextEditorFieldExample,
+  AboutSection,
+  ContactSection,
+  CtaSection,
+  FaqSection,
+  FeaturesSection,
+  GallerySection,
+  HeroSection,
+  LogosSection,
+  PricingSection,
+  Sections,
+  StatsSection,
+  TeamSection,
+  TestimonialsSection,
 });
 
 type MDXComponents = React.ComponentProps<typeof MDXRemote>["components"];
