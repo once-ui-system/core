@@ -830,7 +830,15 @@ const CodeBlock = ({
         </Row>
       )}
       {preview && (
-        <Row key={refreshKey} paddingX="4" paddingBottom="4" paddingTop={compact ? "4" : "0"} fill>
+        <Row
+          key={refreshKey}
+          paddingX="4"
+          paddingBottom="4"
+          paddingTop={compact ? "4" : "0"}
+          fill
+          // Headings inside a demo belong to the demo, not to the page's outline.
+          data-exclude-nav=""
+        >
           <Row
             fill
             background="overlay"
