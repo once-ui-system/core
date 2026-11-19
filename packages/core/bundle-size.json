@@ -1,5 +1,5 @@
 {
-  ".": 243556,
+  ".": 246624,
   "./components/Accordion": 26224,
   "./components/AccordionGroup": 26660,
   "./components/AlarmList": 28571,
@@ -105,7 +105,7 @@
   "./tailwind.css": 3636,
   "./config": 1097,
   "./server": 6035,
-  "./next": 22272,
+  "./next": 26190,
   "./data": 99135,
   "./calendar": 53581,
   "./canvas": 45608,
