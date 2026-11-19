@@ -20,6 +20,10 @@ item (see `ROADMAP.md`, Week 4).
   because the control area was only as wide as its content. The area now grows into
   the row's free space up to `controlWidth`; wrapping and the trailing-edge placement
   of buttons are unchanged.
+- `SegmentedControl`: the rail's corners now nest round the options at every size,
+  padding and border style: the options' radius plus the padding and the border.
+  A `compact` rail always took the l radius (16px round 8px options in playful), and
+  in conservative the rail added 2px for 4px of padding.
 
 ## [3.0.0] - 2026-11-19
 
