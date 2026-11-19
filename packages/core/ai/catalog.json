@@ -201,6 +201,7 @@
   "Effect": {"purpose":"One slot for the interchangeable ambient effects (blob, matrix, weather, particle, celebration)","importFrom":"@once-ui-system/fx"},
   "FlipFx": {"purpose":"Card that flips between a front and back face on click, timer or control","importFrom":"@once-ui-system/fx"},
   "GlitchFx": {"purpose":"Glitch distortion on any block, on hover or continuous","importFrom":"@once-ui-system/fx"},
+  "GradientFx": {"purpose":"Animated grain gradient behind its children","importFrom":"@once-ui-system/fx"},
   "HoloFx": {"purpose":"Holographic sheen and texture over an image or card, following the pointer","importFrom":"@once-ui-system/fx"},
   "LetterFx": {"purpose":"Scrambles text through random characters before settling on it","importFrom":"@once-ui-system/fx"},
   "MatrixFx": {"purpose":"Canvas dot-matrix field with reveal, flicker and an optional bulge wave","importFrom":"@once-ui-system/fx"},
