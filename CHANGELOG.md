@@ -144,6 +144,12 @@ entry below that had landed by then:
   now draws the built-in `menu` icon and folds it into `close`. A `Drawer`
   (and so `Sidebar`'s phone drawer) keeps the look of the StyleScope it was
   opened from instead of dropping it in the portal.
+- **Drill-in phone menu.** `MegaMenu` takes `collapseAs="drill"`: collapsed,
+  it lists the groups, and tapping one replaces the list with that group's
+  links under a back row, sliding in from the side it came from. Links are
+  thumb-sized rows (label, description, icon), section titles are small
+  labels, and focus moves to the back row and returns to the group. For large
+  menus inside `HeaderMenu`; `"accordion"` stays the default.
 
 - **`Card` `tint`.** A card can pick up its own colour on hover, keyboard focus, an open menu and `selected`: a faint fill and edge in a tone (`brand`, `accent`, `success`…) or a named hue (`cyan`, `magenta`…), drawn on a layer under the content so buttons and text inside keep their colours. Without `tint` nothing changes.
 - **`Treemap`, `Heatmap` and `DivergingBars`** in `@once-ui-system/core/data`, moved from Sigilio's portfolio. `Treemap` sizes tiles by `dataKey` and colours them by a signed `toneKey` (gain emerald, loss orange, stronger further from zero). `Heatmap` draws rows by `columns` in five steps of one hue, with a Less to More scale. `DivergingBars` puts gains right and losses left of one shared zero and writes each value with its sign. All three are HTML, render on the server, take the chart card, `valueFormat`, `locale`, `loading`, `error` and the empty and error states, and make every mark a focusable button whose name carries its value, with a hover card on hover and focus.
