@@ -14,9 +14,11 @@ const HELP = `once-ui — scaffold apps from Stack surfaces and add Once UI bloc
 
 Usage
   once-ui create <dir> [--surfaces landing,docs] [--slices billing] [--name my-app] [--url https://…]
-                [--targets desktop,mobile] [--app-id com.my.app]
+                [--targets desktop,mobile] [--app-id com.my.app] [--locales en,hu]
                                 Desktop (Electron) and mobile (Capacitor) apps load
-                                the deployed site, so --targets needs --url
+                                the deployed site, so --targets needs --url.
+                                --locales sets the languages, default first; two or
+                                more add language URLs (/hu) and a switcher
   once-ui add <block…> [--overwrite] [--no-install]
   once-ui update [block…] [--dry-run] [--force] [--no-install]
                                 Bring added blocks up to date; files you edited are kept
@@ -51,6 +53,7 @@ async function main(argv: string[]) {
       url: { type: "string" },
       targets: { type: "string" },
       "app-id": { type: "string" },
+      locales: { type: "string" },
       overwrite: { type: "boolean" },
       css: { type: "boolean" },
       force: { type: "boolean" },

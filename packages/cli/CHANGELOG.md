@@ -9,6 +9,8 @@ Changes to `@once-ui-system/cli`. Releases are tagged `cli-vX.Y.Z`.
 - **`once-ui create --targets desktop,mobile`** ships the app to macOS, Windows and
   Linux (Electron) and to iOS and Android (Capacitor) as well as the web. Both shells
   load the deployed site, so `--targets` needs `--url`; `--app-id` sets the bundle id.
+- **`once-ui create --locales en,hu`** sets the app's languages, default first. Two or
+  more add language URLs (`/hu/...`) and a language switcher (the Languages slice).
 
 ## [0.2.0]
 
