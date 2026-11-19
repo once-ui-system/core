@@ -11,71 +11,13 @@ Entries before 1.7.13 are reconstructed from GitHub releases and git history and
 incomplete; reconciling them against actual npm release history is a scheduled roadmap
 item (see `ROADMAP.md`, Week 4).
 
-## [3.1.0] - Unreleased
-
-Built on the 3.0 branch and held until 3.0.0 ships.
-
-### Added
-
-- **Glow solid style.** `solidStyle: "glow"` (`data-solid-style="glow"`) joins flat and plastic: a solid lights its own colour into a soft two-layer halo with a light edge along the top. It applies to primary buttons and icon buttons in every tone, checked switches, checkboxes and radios, and selected Tag toggles with a tone; secondary and neutral controls never glow. Put the attribute on any element to light up one area only. The halo is static (no filter, no animation), brightens on hover, is tighter and paler in the light theme, and goes away under `prefers-contrast: more` and forced colours. New tokens `--solid-glow-near`, `--solid-glow-far`, `--solid-glow-near-mix`, `--solid-glow-far-mix` and `--solid-glow-rim`; the shared `glow.scss` mixin in foundations draws it. The Style panel's Effect row gets a Glow option.
-- `MapRoute` in `@once-ui-system/core/map`: a route line in a `tone`, solid for the part travelled and dashed ahead with `progress`, or dashed throughout for a planned route. It sits on a page-colour casing and follows the theme.
-- `PeerCursor` and `PeerCursors`: collaborators' pointers for multiplayer views, an arrow in each person's colour with their name (and an optional avatar or live message) that glides between positions without re-rendering. No backend: feed `peers` from any realtime source. `usePeerPointer` reports your own pointer, throttled, in the same units (a fraction of the box, px, or your own coordinates through `unproject`); `peerColor(id)` gives everyone the same hue on every screen.
-- `Canvas` in `@once-ui-system/core/canvas`: an infinite canvas for editors. The camera pans and zooms (wheel, ⌘/Ctrl + wheel, pinch, Space or middle-button drag, zoom controls, fit) without re-rendering the items on it. `CanvasItem` places anything in world units, `onSelectionBox` draws a drag-to-select box, `TransformHandles` resizes (Shift keeps the ratio, Alt from the centre) and rotates in screen space with keyboard support, `SnapGuides` shows alignment lines and gaps from `snapRect`, `useCanvasDrag` reports drags in world units, and `CanvasAnchor` pins screen-sized content such as cursors or comments to a world point. The geometry (`resizeRect`, `rotateRect`, `snapRect`, `mapRect`, `rectsBounds`, `fitView` and more) is exported.
-- `@once-ui-system/core/scene`: `Scene`, a 3D viewport on three.js that wears the
-  theme, with `SceneMesh`, `SceneGroup`, `SceneModel` (glTF), `SceneLabel` (HTML pinned
-  to a 3D point), `useSceneFrame` and `useScene`. Token colours (`color="brand-strong"`)
-  follow the brand, accent and neutral; lights, floor shadow and grid follow light and
-  dark. Orbit, turntable or fixed camera; draws on demand and pauses off screen, in hidden
-  tabs and for reduced motion. `three` is an optional peer, loaded only when a scene
-  renders. Non-breaking.
-- **Control-room pieces**, free in core, each readable without colour:
-  - **Chart thresholds and annotations.** `LineChart`, `BarChart` and
-    `LineBarChart` take `thresholds` (a line at `value`, or a band from `from`
-    to `to`) and `annotations` (a moment on the x axis), labelled in the plot.
-    `danger` is a heavy solid line over a hatched band, `warning` a dashed line,
-    the other tones a dotted one. The value axis stretches to every limit, and
-    `yDomain` zooms it. The chart's summary says which series crossed which
-    limit, how often and first when.
-  - **Alarms: `useAlarms`, `Annunciator`, `AlarmList`, `AlarmMark`.** The model
-    follows ISA-18.2 (new, standing, cleared unseen, normal, shelved) as a hook
-    and as the pure `alarmsReducer`. `Annunciator` is a lightbox panel, a tile
-    per point, and `AlarmList` the alarms in working order with Acknowledge and
-    Acknowledge all; incoming alarms are announced. Priorities are numbered
-    shapes, states are written out and drawn as patterns (flash or double
-    outline, dashed edge, hatch).
-  - **`Schematic`.** Parts (vessel, tank, pump, valve, exchanger, turbine,
-    sensor, box) and the lines between them, from data. Flowing lines run
-    dashes in their direction with an arrow; a pump turns while running. Parts
-    are buttons with `onNodeSelect`, and a screen reader hears each part's
-    reading and state, then the flows.
-  - **`ConfirmButton`.** For actions that are hard to take back: press twice
-    (the first press arms it, a double click never confirms) or hold to
-    confirm. Escape, blur or the timeout disarms it.
-### Added
-
-- **`MascotPanel`** in `@once-ui-system/blocks`: a character designer for the Mascot,
-  built like StylePanel. Body, eyes, face, accessories (several at once), working style
-  (`cube`, `d20`) and personality. Pickers are scrolling rows of tiles, each showing the
-  mascot with that option on. The preview tries every state and mood without saving it,
-  and its "more" menu holds Randomize, Reset and the free exports: Copy JSON, Copy JSX,
-  SVG and PNG. The `exports` slot adds a product's own menu items. Composable from
-  `MascotPanelRoot` and its parts, with `value`/`onValueChange` or `defaultValue` and
-  `storageKey`, `labels`, `visibility`, `stacked`, `size` and `preview` (`side`, `top`,
-  `none`).
-- **StylePanel `size`**: `s` tightens rows and groups for apps where the default
-  spacing is too much; `m` is the default.
-- **`MascotDesign`** in core: the designed part of a Mascot as plain JSON (`v: 1`), with
-  `parseMascotDesign` (reads stored or AI-written values safely, never throws),
-  `mascotDesignProps`, `MASCOT_DESIGN_DEFAULTS` and `MASCOT_DESIGN_RANGES`. The Mascot
-  reads its defaults from the same constant.
-### Added
-
-- `Calendar` in `@once-ui-system/core/calendar`: month, week and day views of events. Overlapping events sit side by side, events of a day or more run as bars, and a crowded month day folds into "n more". `onSlotSelect` lets people drag or click empty time (or press a month day) to pick a slot, and `onEventChange` lets them drag an event to a new time or day or drag its end. There's a now line, the toolbar has its own slot for app controls, `locale` and `labels` translate it, and the month view is an ARIA grid you can move through with the keyboard. The layout helpers (`layoutDay`, `layoutSpans`, `viewDays`) are exported too.
-
-## [3.0.0] - Unreleased
+## [3.0.0] - 2026-11-19
 
 Breaking. Built on the `feat/3-0-breaking-cleanup` branch; [MIGRATING.md](MIGRATING.md#2x--30)
 lists what to do and `scripts/codemod-3.0.mjs` does most of it.
+
+`@once-ui-system/foundations`, `fx` and `blocks` are 3.0.0 too. Everything below,
+including what was first held for 3.1, ships in 3.0.0.
 
 Pre-releases on npm `next` (`npm i @once-ui-system/core@next`), each with every
 entry below that had landed by then:
@@ -137,6 +79,56 @@ entry below that had landed by then:
 
 ### Added
 
+- **Glow solid style.** `solidStyle: "glow"` (`data-solid-style="glow"`) joins flat and plastic: a solid lights its own colour into a soft two-layer halo with a light edge along the top. It applies to primary buttons and icon buttons in every tone, checked switches, checkboxes and radios, and selected Tag toggles with a tone; secondary and neutral controls never glow. Put the attribute on any element to light up one area only. The halo is static (no filter, no animation), brightens on hover, is tighter and paler in the light theme, and goes away under `prefers-contrast: more` and forced colours. New tokens `--solid-glow-near`, `--solid-glow-far`, `--solid-glow-near-mix`, `--solid-glow-far-mix` and `--solid-glow-rim`; the shared `glow.scss` mixin in foundations draws it. The Style panel's Effect row gets a Glow option.
+- `MapRoute` in `@once-ui-system/core/map`: a route line in a `tone`, solid for the part travelled and dashed ahead with `progress`, or dashed throughout for a planned route. It sits on a page-colour casing and follows the theme.
+- `PeerCursor` and `PeerCursors`: collaborators' pointers for multiplayer views, an arrow in each person's colour with their name (and an optional avatar or live message) that glides between positions without re-rendering. No backend: feed `peers` from any realtime source. `usePeerPointer` reports your own pointer, throttled, in the same units (a fraction of the box, px, or your own coordinates through `unproject`); `peerColor(id)` gives everyone the same hue on every screen.
+- `Canvas` in `@once-ui-system/core/canvas`: an infinite canvas for editors. The camera pans and zooms (wheel, ⌘/Ctrl + wheel, pinch, Space or middle-button drag, zoom controls, fit) without re-rendering the items on it. `CanvasItem` places anything in world units, `onSelectionBox` draws a drag-to-select box, `TransformHandles` resizes (Shift keeps the ratio, Alt from the centre) and rotates in screen space with keyboard support, `SnapGuides` shows alignment lines and gaps from `snapRect`, `useCanvasDrag` reports drags in world units, and `CanvasAnchor` pins screen-sized content such as cursors or comments to a world point. The geometry (`resizeRect`, `rotateRect`, `snapRect`, `mapRect`, `rectsBounds`, `fitView` and more) is exported.
+- `@once-ui-system/core/scene`: `Scene`, a 3D viewport on three.js that wears the
+  theme, with `SceneMesh`, `SceneGroup`, `SceneModel` (glTF), `SceneLabel` (HTML pinned
+  to a 3D point), `useSceneFrame` and `useScene`. Token colours (`color="brand-strong"`)
+  follow the brand, accent and neutral; lights, floor shadow and grid follow light and
+  dark. Orbit, turntable or fixed camera; draws on demand and pauses off screen, in hidden
+  tabs and for reduced motion. `three` is an optional peer, loaded only when a scene
+  renders. Non-breaking.
+- **Control-room pieces**, free in core, each readable without colour:
+  - **Chart thresholds and annotations.** `LineChart`, `BarChart` and
+    `LineBarChart` take `thresholds` (a line at `value`, or a band from `from`
+    to `to`) and `annotations` (a moment on the x axis), labelled in the plot.
+    `danger` is a heavy solid line over a hatched band, `warning` a dashed line,
+    the other tones a dotted one. The value axis stretches to every limit, and
+    `yDomain` zooms it. The chart's summary says which series crossed which
+    limit, how often and first when.
+  - **Alarms: `useAlarms`, `Annunciator`, `AlarmList`, `AlarmMark`.** The model
+    follows ISA-18.2 (new, standing, cleared unseen, normal, shelved) as a hook
+    and as the pure `alarmsReducer`. `Annunciator` is a lightbox panel, a tile
+    per point, and `AlarmList` the alarms in working order with Acknowledge and
+    Acknowledge all; incoming alarms are announced. Priorities are numbered
+    shapes, states are written out and drawn as patterns (flash or double
+    outline, dashed edge, hatch).
+  - **`Schematic`.** Parts (vessel, tank, pump, valve, exchanger, turbine,
+    sensor, box) and the lines between them, from data. Flowing lines run
+    dashes in their direction with an arrow; a pump turns while running. Parts
+    are buttons with `onNodeSelect`, and a screen reader hears each part's
+    reading and state, then the flows.
+  - **`ConfirmButton`.** For actions that are hard to take back: press twice
+    (the first press arms it, a double click never confirms) or hold to
+    confirm. Escape, blur or the timeout disarms it.
+- **`MascotPanel`** in `@once-ui-system/blocks`: a character designer for the Mascot,
+  built like StylePanel. Body, eyes, face, accessories (several at once), working style
+  (`cube`, `d20`) and personality. Pickers are scrolling rows of tiles, each showing the
+  mascot with that option on. The preview tries every state and mood without saving it,
+  and its "more" menu holds Randomize, Reset and the free exports: Copy JSON, Copy JSX,
+  SVG and PNG. The `exports` slot adds a product's own menu items. Composable from
+  `MascotPanelRoot` and its parts, with `value`/`onValueChange` or `defaultValue` and
+  `storageKey`, `labels`, `visibility`, `stacked`, `size` and `preview` (`side`, `top`,
+  `none`).
+- **StylePanel `size`**: `s` tightens rows and groups for apps where the default
+  spacing is too much; `m` is the default.
+- **`MascotDesign`** in core: the designed part of a Mascot as plain JSON (`v: 1`), with
+  `parseMascotDesign` (reads stored or AI-written values safely, never throws),
+  `mascotDesignProps`, `MASCOT_DESIGN_DEFAULTS` and `MASCOT_DESIGN_RANGES`. The Mascot
+  reads its defaults from the same constant.
+- `Calendar` in `@once-ui-system/core/calendar`: month, week and day views of events. Overlapping events sit side by side, events of a day or more run as bars, and a crowded month day folds into "n more". `onSlotSelect` lets people drag or click empty time (or press a month day) to pick a slot, and `onEventChange` lets them drag an event to a new time or day or drag its end. There's a now line, the toolbar has its own slot for app controls, `locale` and `labels` translate it, and the month view is an ARIA grid you can move through with the keyboard. The layout helpers (`layoutDay`, `layoutSpans`, `viewDays`) are exported too.
 - `ProgressBar` `size`: `"s"` draws a 4px track for a thin bar in a row or a card; `"m"`, 8px, stays the default.
 - **Once UI's own icons.** The built-in icons are now drawn in-house
   ([once-ui-system/icons](https://github.com/once-ui-system/icons), MIT): one

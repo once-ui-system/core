@@ -1,6 +1,6 @@
 {
   "name": "@once-ui-system/foundations",
-  "version": "3.0.0-rc.1",
+  "version": "3.0.0",
   "description": "Once UI design foundations — design tokens and utility styles. Framework-agnostic: no React, no JS runtime.",
   "keywords": [
     "once-ui",
@@ -35,8 +35,7 @@
     "tokens"
   ],
   "publishConfig": {
-    "access": "public",
-    "tag": "next"
+    "access": "public"
   },
   "scripts": {
     "prebuild": "node ../../scripts/check-node.mjs",
