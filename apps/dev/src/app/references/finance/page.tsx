@@ -136,9 +136,10 @@ function PanelTitle({ children, action }: { children: string; action?: React.Rea
       fillWidth
       vertical="center"
       horizontal="between"
-      paddingX="20"
-      paddingTop="16"
-      paddingBottom="12"
+      paddingLeft="12"
+      paddingRight="4"
+      paddingY="4"
+      minHeight="40"
       gap="8"
     >
       <Text
@@ -303,7 +304,7 @@ export default function FinanceReference() {
         </Column>
 
         {/* Main */}
-        <Column fill>
+        <Column fill background="surface">
           <Row paddingX="24" paddingY="12" vertical="center" horizontal="between" borderBottom>
             <Row gap="8" vertical="center">
               <Icon name="grid" size="s" onBackground="neutral-weak" />
@@ -383,10 +384,9 @@ export default function FinanceReference() {
             <Grid columns="3" gap="12" m={{ columns: "1" }}>
               <Column
                 style={{ gridColumn: "span 2" }}
-                background="surface"
-                border
+                background="neutral-alpha-weak"
                 radius="l"
-                overflow="hidden"
+                padding="4"
               >
                 <PanelTitle
                   action={
@@ -413,7 +413,16 @@ export default function FinanceReference() {
                 >
                   MRR growth
                 </PanelTitle>
-                <Column paddingX="20" paddingBottom="16" gap="8">
+                <Column
+                  fillWidth
+                  flex={1}
+                  background="surface"
+                  border
+                  radius="m"
+                  paddingX="20"
+                  paddingY="16"
+                  gap="8"
+                >
                   <Row gap="8" style={{ alignItems: "baseline" }}>
                     <Text textVariant="display-strong-xs">+$70,320</Text>
                     <Text textVariant="body-default-s" onBackground="neutral-weak">
@@ -439,7 +448,7 @@ export default function FinanceReference() {
                 </Column>
               </Column>
 
-              <Column background="surface" border radius="l" overflow="hidden">
+              <Column background="neutral-alpha-weak" radius="l" padding="4">
                 <PanelTitle
                   action={
                     <Button variant="secondary" size="s" suffixIcon="arrowUpRight" label="Plans" />
@@ -447,7 +456,16 @@ export default function FinanceReference() {
                 >
                   Revenue by plan
                 </PanelTitle>
-                <Column paddingX="20" paddingBottom="16" gap="12">
+                <Column
+                  fillWidth
+                  flex={1}
+                  background="surface"
+                  border
+                  radius="m"
+                  paddingX="20"
+                  paddingY="16"
+                  gap="12"
+                >
                   <PieChart
                     height="12rem"
                     border={false}
@@ -483,7 +501,7 @@ export default function FinanceReference() {
             </Grid>
 
             <Grid columns="3" gap="12" m={{ columns: "1" }}>
-              <Column background="surface" border radius="l" overflow="hidden">
+              <Column background="neutral-alpha-weak" radius="l" padding="4">
                 <PanelTitle
                   action={
                     <IconButton
@@ -497,7 +515,16 @@ export default function FinanceReference() {
                 >
                   MRR movement
                 </PanelTitle>
-                <Column paddingX="20" paddingBottom="16" gap="8">
+                <Column
+                  fillWidth
+                  flex={1}
+                  background="surface"
+                  border
+                  radius="m"
+                  paddingX="20"
+                  paddingY="16"
+                  gap="8"
+                >
                   <Row gap="8" style={{ alignItems: "baseline" }}>
                     <Text textVariant="display-strong-xs">+$14,860</Text>
                     <Text textVariant="body-default-s" onBackground="neutral-weak">
@@ -526,9 +553,17 @@ export default function FinanceReference() {
                 </Column>
               </Column>
 
-              <Column background="surface" border radius="l" overflow="hidden">
+              <Column background="neutral-alpha-weak" radius="l" padding="4">
                 <PanelTitle>Cohort retention</PanelTitle>
-                <Column paddingX="20" paddingBottom="16">
+                <Column
+                  fillWidth
+                  flex={1}
+                  background="surface"
+                  border
+                  radius="m"
+                  paddingX="20"
+                  paddingY="16"
+                >
                   <Heatmap
                     data={cohorts}
                     columns={["m0", "m1", "m2", "m3", "m4", "m5"].map((key, i) => ({
@@ -543,7 +578,7 @@ export default function FinanceReference() {
                 </Column>
               </Column>
 
-              <Column background="surface" border radius="l" overflow="hidden">
+              <Column background="neutral-alpha-weak" radius="l" padding="4">
                 <PanelTitle
                   action={
                     <IconButton
@@ -557,7 +592,15 @@ export default function FinanceReference() {
                 >
                   AI insights
                 </PanelTitle>
-                <Column paddingX="20" paddingBottom="8">
+                <Column
+                  fillWidth
+                  flex={1}
+                  background="surface"
+                  border
+                  radius="m"
+                  paddingX="20"
+                  paddingY="4"
+                >
                   {insights.map((ins, i) => (
                     <Row key={ins.title} gap="12" paddingY="16" borderTop={i > 0}>
                       <Icon name={ins.icon} size="s" onBackground="neutral-medium" />

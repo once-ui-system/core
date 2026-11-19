@@ -28,6 +28,13 @@ export interface PieChartProps<T extends object = DataPoint> extends Omit<ChartP
   /** The row key that names each slice. */
   nameKey?: SeriesKey<T>;
   origo?: { x: number; y: number };
+  /**
+   * Room between a ring's slices, in px, and the radius their corners round
+   * by. A ring (`ring.inner` above 0) draws with a 2px gap and 4px corners;
+   * set both to 0 for touching, square slices. A full pie ignores them.
+   */
+  gap?: number;
+  cornerRadius?: number;
 }
 
 const PieChart = ({
@@ -46,6 +53,8 @@ const PieChart = ({
   border = "neutral-alpha-weak",
   variant: variantProp,
   ring = { inner: 0, outer: 80 },
+  gap = 2,
+  cornerRadius = 4,
   dataKey = "value",
   nameKey = "name",
   valueFormat,
@@ -167,6 +176,8 @@ const PieChart = ({
             date={date}
             formatValue={format.tooltip}
             ring={ring}
+            gap={gap}
+            cornerRadius={cornerRadius}
             origo={origo}
             gradientId={getGradientId}
           />
