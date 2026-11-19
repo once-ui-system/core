@@ -13,6 +13,7 @@
   "menuGroups": "!MenuGroup[]",
   "className": "string",
   "collapseBelow": "Breakpoint | \"always\"",
+  "collapseAs": "\"accordion\" | \"drill\" = accordion",
   "onClose": "() => void"
  },
  "tags": [
