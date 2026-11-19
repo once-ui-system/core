@@ -20,7 +20,14 @@ import {
   Tag,
   Text,
 } from "@once-ui-system/core";
-import { BarChart, Heatmap, LineChart, PieChart, Sparkline } from "@once-ui-system/core/data";
+import {
+  BarChart,
+  Heatmap,
+  LineChart,
+  PieChart,
+  Sparkline,
+  Swatch,
+} from "@once-ui-system/core/data";
 import { useState } from "react";
 
 /**
@@ -36,6 +43,9 @@ const growth = months.map((month, i) => ({
   lastYear: Math.round(62000 + i * 4300),
 }));
 
+// Plans are identities, not amounts: three distinct data hues in fixed order.
+const planColors = ["aqua", "yellow", "blue"] as const;
+
 const plans = [
   { name: "Pro", value: 96900, share: "52.6%" },
   { name: "Scale", value: 49020, share: "26.6%" },
@@ -44,11 +54,11 @@ const plans = [
 
 // A waterfall drawn as stacked bars: an invisible base lifts each step.
 const movement = [
-  { step: "New", base: 0, up: 18400, down: 0 },
-  { step: "Expand", base: 18400, up: 6200, down: 0 },
-  { step: "Contract", base: 22500, up: 0, down: 2100 },
-  { step: "Churn", base: 14900, up: 0, down: 7600 },
-  { step: "Net", base: 0, up: 14860, down: 0 },
+  { step: "New", base: 0, up: 18400, down: 0, net: 0 },
+  { step: "Expand", base: 18400, up: 6200, down: 0, net: 0 },
+  { step: "Contract", base: 22500, up: 0, down: 2100, net: 0 },
+  { step: "Churn", base: 14900, up: 0, down: 7600, net: 0 },
+  { step: "Net", base: 0, up: 0, down: 0, net: 14860 },
 ];
 
 const cohortRows = [
@@ -66,7 +76,10 @@ const cohortRows = [
 const cohorts = cohortRows.map((row, i) => {
   const out: { label: string; [k: string]: string | number | undefined } = { label: months[i] };
   row.forEach((v, m) => {
-    out[`m${m}`] = v;
+    // Heatmap scales from 0 to the max, so 82–100% would all draw dark.
+    // Shift the values to the 80–100 band and add 80 back when writing them;
+    // a Heatmap `domain` prop (3.1) replaces this.
+    out[`m${m}`] = v - 80;
   });
   return out;
 });
@@ -186,32 +199,59 @@ export default function FinanceReference() {
             <Icon name="chevronUpDown" size="s" onBackground="neutral-weak" />
           </Row>
 
-          <Nav variant="subtle" rail={false} gap="2">
+          <Nav variant="subtle" density="compact" rail={false} gap="2">
             <NavItem icon="search" label="Search" onClick={() => {}} />
-            <NavItem icon="inbox" label="Inbox" badge={3} href="#" />
+            <NavItem
+              icon="inbox"
+              truncate={false}
+              label={
+                <Row width="12rem" horizontal="between" vertical="center">
+                  Inbox
+                  <Text textVariant="label-default-s" onBackground="neutral-weak">
+                    3
+                  </Text>
+                </Row>
+              }
+              href="#"
+            />
           </Nav>
-          <Nav variant="subtle" rail={false} gap="2" borderTop paddingTop="12">
+          <Nav variant="subtle" density="compact" rail={false} gap="2" borderTop paddingTop="12">
             <NavItem icon="grid" label="Overview" href="#" selected />
             <NavItem icon="trendUp" label="Revenue" href="#" />
-            <NavItem icon="people" label="Customers" badge="1,096" href="#" />
+            <NavItem
+              icon="people"
+              truncate={false}
+              label={
+                <Row width="12rem" horizontal="between" vertical="center">
+                  Customers
+                  <Text textVariant="label-default-s" onBackground="neutral-weak">
+                    1,096
+                  </Text>
+                </Row>
+              }
+              href="#"
+            />
             <NavItem icon="layers" label="Plans" href="#" />
             <NavItem icon="table" label="Cohorts" href="#" />
             <NavItem
               icon="personRemove"
-              label="Churn"
-              badge={
-                <Row gap="4" vertical="center">
-                  <StatusIndicator tone="danger" size="s" />
-                  <Text textVariant="label-default-s" onBackground="danger-medium">
-                    23
-                  </Text>
+              truncate={false}
+              label={
+                <Row width="12rem" horizontal="between" vertical="center">
+                  Churn
+                  <Row gap="4" vertical="center">
+                    <StatusIndicator tone="danger" size="s" />
+                    <Text textVariant="label-default-s" onBackground="danger-medium">
+                      23
+                    </Text>
+                  </Row>
                 </Row>
               }
               href="#"
             />
             <NavItem icon="report" label="Reports" href="#" />
           </Nav>
-          <Nav variant="subtle" rail={false} gap="2" borderTop paddingTop="12">
+          <Nav variant="subtle" density="compact" rail={false} gap="2" borderTop paddingTop="12">
             <NavSection label="Views">
               <NavItem icon="folder" label="Board packs" href="#" />
               <NavItem icon="folder" label="Pro churn watch" href="#" />
@@ -246,7 +286,7 @@ export default function FinanceReference() {
             />
           </Column>
 
-          <Nav variant="subtle" rail={false} gap="2">
+          <Nav variant="subtle" density="compact" rail={false} gap="2">
             <NavItem icon="settings" label="Settings" href="#" />
             <NavItem icon="help" label="Help & docs" href="#" />
           </Nav>
@@ -411,25 +451,21 @@ export default function FinanceReference() {
                   <PieChart
                     height="12rem"
                     border={false}
-                    ring={{ inner: 62, outer: 78 }}
+                    ring={{ inner: 66, outer: 80 }}
+                    variant="flat"
                     legend={{ display: false }}
                     valueFormat={usd}
                     series={{ key: "value", label: "MRR" }}
                     data={plans.map((p, i) => ({
                       name: p.name,
                       value: p.value,
-                      color: ["emerald", "aqua", "mint"][i],
+                      color: planColors[i],
                     }))}
                   />
                   <Column>
                     {plans.map((p, i) => (
                       <Row key={p.name} paddingY="8" gap="8" vertical="center" borderTop={i > 0}>
-                        <Row
-                          width="8"
-                          height="8"
-                          radius="xs"
-                          background={(["brand-strong", "brand-medium", "brand-weak"] as const)[i]}
-                        />
+                        <Swatch size="s" variant="flat" color={`var(--data-${planColors[i]})`} />
                         <Text textVariant="body-default-s" style={{ flex: 1 }}>
                           {p.name}
                         </Text>
@@ -474,14 +510,17 @@ export default function FinanceReference() {
                     xKey="step"
                     stack
                     variant="flat"
+                    barWidth="m"
+                    yDomain={[0, 30000]}
                     grid="y"
                     border={false}
                     legend={{ display: false }}
                     valueFormat={usdK}
                     series={[
                       { key: "base", label: "Base", color: "transparent" },
-                      { key: "up", label: "Added", color: "brand" },
-                      { key: "down", label: "Lost", color: "danger-medium" },
+                      { key: "up", label: "Added", color: "emerald" },
+                      { key: "down", label: "Lost", color: "red" },
+                      { key: "net", label: "Net", color: "cyan" },
                     ]}
                   />
                 </Column>
@@ -497,7 +536,7 @@ export default function FinanceReference() {
                       label: `M${i}`,
                     }))}
                     color="brand"
-                    valueFormat={(v) => `${v}%`}
+                    valueFormat={(v) => `${v + 80}%`}
                     legend={{ display: true, less: "Low", more: "High" }}
                     aria-label="Cohort retention by signup month"
                   />

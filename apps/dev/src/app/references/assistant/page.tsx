@@ -111,7 +111,7 @@ export default function AssistantReference() {
               />
             </Row>
 
-            <Nav variant="subtle" rail={false} gap="2">
+            <Nav variant="subtle" density="compact" rail={false} gap="2">
               <NavItem icon="plus" label="New session" onClick={() => {}} />
               <NavItem icon="barChart" label="Analytics" href="#" />
               <NavItem icon="list" label="Plan" href="#" />
@@ -127,7 +127,7 @@ export default function AssistantReference() {
               />
             </Nav>
 
-            <Nav variant="subtle" rail={false}>
+            <Nav variant="subtle" density="compact" rail={false}>
               <NavSection label="Tools">
                 {tools.map((t) => (
                   <NavItem
@@ -140,7 +140,7 @@ export default function AssistantReference() {
               </NavSection>
             </Nav>
 
-            <Nav variant="subtle" rail={false}>
+            <Nav variant="subtle" density="compact" rail={false}>
               <NavSection label="Chats">
                 <Row paddingX="12" paddingY="8">
                   <Text textVariant="label-default-s" onBackground="neutral-weak">

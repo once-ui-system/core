@@ -156,7 +156,7 @@ export default function SettingsReference() {
               onClick={() => {}}
             />
           </Row>
-          <Nav variant="subtle" density="normal" rail={false} gap="12">
+          <Nav variant="subtle" density="compact" rail={false} gap="12">
             {appNav.map((group, i) => (
               <Column
                 key={group[0].label}
@@ -207,7 +207,7 @@ export default function SettingsReference() {
                 placeholder="Search…"
                 prefix={<Icon name="search" size="s" onBackground="neutral-weak" />}
               />
-              <Nav variant="subtle" rail={false} gap="2">
+              <Nav variant="subtle" density="compact" rail={false} gap="2">
                 {sections.map((s) => (
                   <NavItem
                     key={s.label}
