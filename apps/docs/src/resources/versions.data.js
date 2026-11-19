@@ -8,14 +8,13 @@
  * docs.once-ui.com/v1) by a rewrite to its `origin`. A mounted build runs
  * with `basePath` set to the same path, so its links, assets and API calls
  * stay inside it. A version that is not mounted yet is served at the root of
- * its own `origin` (the 3.0 beta at next.docs.once-ui.com), so its build has
- * no `basePath`: see `basePath` below.
+ * its own `origin`, so its build has no `basePath`: see `basePath` below.
  *
  * This file is plain JavaScript because next.config.mjs reads it to set
  * `basePath` and the rewrites. `versions.ts` adds the types.
  *
  * `CURRENT_VERSION` says which entry this build is. It is the one line a
- * version branch changes: the 3.0 branch sets it to "3".
+ * version branch changes: main is "3", the stable 3.0 docs.
  */
 
 /** The public address of the docs. Every version is reached through it. */
@@ -25,19 +24,7 @@ export const SITE_URL = process.env.NEXT_PUBLIC_DOCS_SITE_URL || "https://docs.o
 export const VERSIONS = [
   {
     id: "3",
-    label: "3.0 beta",
-    npmTag: "next",
-    status: "beta",
-    path: "/beta",
-    origin: "https://next.docs.once-ui.com",
-    branch: "feat/3-0-breaking-cleanup",
-    published: true,
-    mounted: false,
-    samePaths: true,
-  },
-  {
-    id: "2",
-    label: "2.x",
+    label: "3.0",
     npmTag: "latest",
     status: "stable",
     path: "",
@@ -45,6 +32,19 @@ export const VERSIONS = [
     branch: "main",
     published: true,
     mounted: true,
+    samePaths: true,
+  },
+  {
+    // 2.x docs have no deployment of their own yet: listed, not pickable,
+    // until a build from the 2.x line is up at `origin`.
+    id: "2",
+    label: "2.x",
+    status: "legacy",
+    path: "/v2",
+    origin: "https://v2.docs.once-ui.com",
+    branch: "v2",
+    published: false,
+    mounted: false,
     samePaths: true,
   },
   {
