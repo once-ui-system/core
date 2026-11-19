@@ -148,11 +148,22 @@ export default function SettingsReference() {
         <Column width="16rem" fillHeight borderRight paddingX="12" paddingY="16" gap="16">
           <Row paddingX="8" paddingY="4" vertical="center" horizontal="between">
             <Logo text="Halden" monogram="H" size="s" />
-            <IconButton icon="sidebar" variant="ghost" size="s" tooltip="Collapse" onClick={() => {}} />
+            <IconButton
+              icon="sidebar"
+              variant="ghost"
+              size="s"
+              tooltip="Collapse"
+              onClick={() => {}}
+            />
           </Row>
           <Nav variant="subtle" density="normal" rail={false} gap="12">
             {appNav.map((group, i) => (
-              <Column key={group[0].label} gap="2" borderTop={i > 0} paddingTop={i > 0 ? "12" : "0"}>
+              <Column
+                key={group[0].label}
+                gap="2"
+                borderTop={i > 0}
+                paddingTop={i > 0 ? "12" : "0"}
+              >
                 {group.map((item) => (
                   <NavItem
                     key={item.label}
@@ -180,7 +191,15 @@ export default function SettingsReference() {
 
           <Row fill padding="16" gap="8" overflow="hidden">
             {/* Section nav */}
-            <Column width="18rem" fillHeight background="surface" border radius="l" padding="12" gap="12">
+            <Column
+              width="18rem"
+              fillHeight
+              background="surface"
+              border
+              radius="l"
+              padding="12"
+              gap="12"
+            >
               <Input
                 id="settings-search"
                 size="xxs"
@@ -246,7 +265,10 @@ export default function SettingsReference() {
 
                   <GroupLabel>Products and orders</GroupLabel>
                   <Row_ label="Allow vendors to update order status">
-                    <Switch checked={values.orderStatus} onCheckedChange={(c) => set("orderStatus", c)} />
+                    <Switch
+                      checked={values.orderStatus}
+                      onCheckedChange={(c) => set("orderStatus", c)}
+                    />
                   </Row_>
                   <Row_ label="Open product creation in a popup">
                     <Switch checked={values.popup} onCheckedChange={(c) => set("popup", c)} />
@@ -270,11 +292,27 @@ export default function SettingsReference() {
                 </Column>
               </Column>
               {dirty && (
-                <Row paddingX="24" paddingY="16" gap="8" horizontal="end" vertical="center" borderTop>
-                  <Text textVariant="label-default-s" onBackground="neutral-weak" marginRight="auto">
+                <Row
+                  paddingX="24"
+                  paddingY="16"
+                  gap="8"
+                  horizontal="end"
+                  vertical="center"
+                  borderTop
+                >
+                  <Text
+                    textVariant="label-default-s"
+                    onBackground="neutral-weak"
+                    marginRight="auto"
+                  >
                     Unsaved changes
                   </Text>
-                  <Button variant="secondary" size="s" label="Discard" onClick={() => setValues(saved)} />
+                  <Button
+                    variant="secondary"
+                    size="s"
+                    label="Discard"
+                    onClick={() => setValues(saved)}
+                  />
                   <Button size="s" label="Apply changes" onClick={() => setValues(values)} />
                 </Row>
               )}

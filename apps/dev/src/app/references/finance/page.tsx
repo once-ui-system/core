@@ -1,5 +1,6 @@
 "use client";
 
+import type { IconName } from "@once-ui-system/core";
 import {
   Avatar,
   Button,
@@ -20,7 +21,6 @@ import {
   Text,
 } from "@once-ui-system/core";
 import { BarChart, Heatmap, LineChart, PieChart, Sparkline } from "@once-ui-system/core/data";
-import type { IconName } from "@once-ui-system/core";
 import { useState } from "react";
 
 /**
@@ -119,8 +119,20 @@ const insights: {
 
 function PanelTitle({ children, action }: { children: string; action?: React.ReactNode }) {
   return (
-    <Row fillWidth vertical="center" horizontal="between" paddingX="20" paddingTop="16" paddingBottom="12" gap="8">
-      <Text textVariant="label-strong-xs" onBackground="neutral-weak" style={{ letterSpacing: "0.08em" }}>
+    <Row
+      fillWidth
+      vertical="center"
+      horizontal="between"
+      paddingX="20"
+      paddingTop="16"
+      paddingBottom="12"
+      gap="8"
+    >
+      <Text
+        textVariant="label-strong-xs"
+        onBackground="neutral-weak"
+        style={{ letterSpacing: "0.08em" }}
+      >
         {children.toUpperCase()}
       </Text>
       {action}
@@ -150,7 +162,15 @@ export default function FinanceReference() {
         surfaceBackground: "#ffffff",
       }}
     >
-      <Row marginX="auto" maxWidth="100rem" background="page" border radius="xl" overflow="hidden" shadow="l">
+      <Row
+        marginX="auto"
+        maxWidth="100rem"
+        background="page"
+        border
+        radius="xl"
+        overflow="hidden"
+        shadow="l"
+      >
         {/* Sidebar */}
         <Column width="17rem" borderRight paddingX="12" paddingY="16" gap="16">
           <Row background="surface" border radius="l" padding="8" gap="12" vertical="center">
@@ -217,7 +237,13 @@ export default function FinanceReference() {
             <Text textVariant="body-default-s" onBackground="neutral-medium">
               Ask why revenue moved and get the accounts behind it.
             </Text>
-            <Button fillWidth size="s" prefixIcon="sparkle" suffixIcon="arrowRight" label="Run AI insights" />
+            <Button
+              fillWidth
+              size="s"
+              prefixIcon="sparkle"
+              suffixIcon="arrowRight"
+              label="Run AI insights"
+            />
           </Column>
 
           <Nav variant="subtle" rail={false} gap="2">
@@ -249,7 +275,12 @@ export default function FinanceReference() {
             </Row>
             <Row gap="8" vertical="center">
               <Button variant="secondary" size="s" prefixIcon="sparkle" label="3 new AI insights" />
-              <IconButton variant="secondary" icon="bell" tooltip="Notifications" onClick={() => {}} />
+              <IconButton
+                variant="secondary"
+                icon="bell"
+                tooltip="Notifications"
+                onClick={() => {}}
+              />
               <IconButton variant="secondary" icon="dark" tooltip="Theme" onClick={() => {}} />
             </Row>
           </Row>
@@ -278,7 +309,16 @@ export default function FinanceReference() {
                 value="$184,320"
                 delta={{ label: "8.8%", direction: "up", tone: "success" }}
                 hint="vs $169,460 in Sep"
-                chart={<Sparkline data={growth} valueKey="thisYear" variant="area" color="brand" height={36} showLast />}
+                chart={
+                  <Sparkline
+                    data={growth}
+                    valueKey="thisYear"
+                    variant="area"
+                    color="brand"
+                    height={36}
+                    showLast
+                  />
+                }
               />
               <StatTile
                 label="Net new MRR"
@@ -301,7 +341,13 @@ export default function FinanceReference() {
             </Grid>
 
             <Grid columns="3" gap="12" m={{ columns: "1" }}>
-              <Column style={{ gridColumn: "span 2" }} background="surface" border radius="l" overflow="hidden">
+              <Column
+                style={{ gridColumn: "span 2" }}
+                background="surface"
+                border
+                radius="l"
+                overflow="hidden"
+              >
                 <PanelTitle
                   action={
                     <Row gap="8" vertical="center">
@@ -316,7 +362,12 @@ export default function FinanceReference() {
                           { value: "year", label: "Year" },
                         ]}
                       />
-                      <Button variant="secondary" size="s" suffixIcon="arrowUpRight" label="View report" />
+                      <Button
+                        variant="secondary"
+                        size="s"
+                        suffixIcon="arrowUpRight"
+                        label="View report"
+                      />
                     </Row>
                   }
                 >
@@ -349,7 +400,11 @@ export default function FinanceReference() {
               </Column>
 
               <Column background="surface" border radius="l" overflow="hidden">
-                <PanelTitle action={<Button variant="secondary" size="s" suffixIcon="arrowUpRight" label="Plans" />}>
+                <PanelTitle
+                  action={
+                    <Button variant="secondary" size="s" suffixIcon="arrowUpRight" label="Plans" />
+                  }
+                >
                   Revenue by plan
                 </PanelTitle>
                 <Column paddingX="20" paddingBottom="16" gap="12">
@@ -393,7 +448,17 @@ export default function FinanceReference() {
 
             <Grid columns="3" gap="12" m={{ columns: "1" }}>
               <Column background="surface" border radius="l" overflow="hidden">
-                <PanelTitle action={<IconButton variant="secondary" size="s" icon="moreHorizontal" tooltip="More" onClick={() => {}} />}>
+                <PanelTitle
+                  action={
+                    <IconButton
+                      variant="secondary"
+                      size="s"
+                      icon="moreHorizontal"
+                      tooltip="More"
+                      onClick={() => {}}
+                    />
+                  }
+                >
                   MRR movement
                 </PanelTitle>
                 <Column paddingX="20" paddingBottom="16" gap="8">
@@ -427,7 +492,10 @@ export default function FinanceReference() {
                 <Column paddingX="20" paddingBottom="16">
                   <Heatmap
                     data={cohorts}
-                    columns={["m0", "m1", "m2", "m3", "m4", "m5"].map((key, i) => ({ key, label: `M${i}` }))}
+                    columns={["m0", "m1", "m2", "m3", "m4", "m5"].map((key, i) => ({
+                      key,
+                      label: `M${i}`,
+                    }))}
                     color="brand"
                     valueFormat={(v) => `${v}%`}
                     legend={{ display: true, less: "Low", more: "High" }}
@@ -437,7 +505,17 @@ export default function FinanceReference() {
               </Column>
 
               <Column background="surface" border radius="l" overflow="hidden">
-                <PanelTitle action={<IconButton variant="secondary" size="s" icon="chat" tooltip="Ask" onClick={() => {}} />}>
+                <PanelTitle
+                  action={
+                    <IconButton
+                      variant="secondary"
+                      size="s"
+                      icon="chat"
+                      tooltip="Ask"
+                      onClick={() => {}}
+                    />
+                  }
+                >
                   AI insights
                 </PanelTitle>
                 <Column paddingX="20" paddingBottom="8">
@@ -463,7 +541,6 @@ export default function FinanceReference() {
                 </Column>
               </Column>
             </Grid>
-
           </Column>
         </Column>
       </Row>

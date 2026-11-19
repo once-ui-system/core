@@ -1,5 +1,6 @@
 "use client";
 
+import type { IconName } from "@once-ui-system/core";
 import {
   Button,
   ChatComposer,
@@ -18,7 +19,6 @@ import {
   Text,
   ToggleButton,
 } from "@once-ui-system/core";
-import type { IconName } from "@once-ui-system/core";
 
 /**
  * Reference rebuild: an assistant-first home (workspace switcher, Home /
@@ -64,7 +64,16 @@ export default function AssistantReference() {
         surfaceBackground: "#1c1c1c",
       }}
     >
-      <Row marginX="auto" maxWidth="90rem" height="54rem" background="page" border radius="xl" overflow="hidden" shadow="l">
+      <Row
+        marginX="auto"
+        maxWidth="90rem"
+        height="54rem"
+        background="page"
+        border
+        radius="xl"
+        overflow="hidden"
+        shadow="l"
+      >
         {/* Sidebar */}
         <Column width="18rem" fillHeight borderRight background="surface">
           <Column fill paddingX="12" paddingY="16" gap="20">
@@ -72,8 +81,20 @@ export default function AssistantReference() {
               <Logo text="Ember Studio" monogram="E" size="s" tone="brand" />
               <Icon name="chevronUpDown" size="xs" onBackground="neutral-weak" />
               <Row flex={1} />
-              <IconButton icon="search" variant="ghost" size="s" tooltip="Search" onClick={() => {}} />
-              <IconButton icon="sidebar" variant="ghost" size="s" tooltip="Hide sidebar" onClick={() => {}} />
+              <IconButton
+                icon="search"
+                variant="ghost"
+                size="s"
+                tooltip="Search"
+                onClick={() => {}}
+              />
+              <IconButton
+                icon="sidebar"
+                variant="ghost"
+                size="s"
+                tooltip="Hide sidebar"
+                onClick={() => {}}
+              />
             </Row>
 
             <Row gap="4" vertical="center">
@@ -109,7 +130,12 @@ export default function AssistantReference() {
             <Nav variant="subtle" rail={false}>
               <NavSection label="Tools">
                 {tools.map((t) => (
-                  <NavItem key={t.label} prefix={<ToolIcon icon={t.icon} tone={t.tone} />} label={t.label} href="#" />
+                  <NavItem
+                    key={t.label}
+                    prefix={<ToolIcon icon={t.icon} tone={t.tone} />}
+                    label={t.label}
+                    href="#"
+                  />
                 ))}
               </NavSection>
             </Nav>
@@ -126,7 +152,16 @@ export default function AssistantReference() {
 
             <Column flex={1} />
 
-            <Row background="page" border radius="l" paddingX="12" paddingY="12" gap="12" vertical="center" shadow="s">
+            <Row
+              background="page"
+              border
+              radius="l"
+              paddingX="12"
+              paddingY="12"
+              gap="12"
+              vertical="center"
+              shadow="s"
+            >
               <Column fillWidth gap="8">
                 <Row horizontal="between" vertical="center">
                   <Text textVariant="label-strong-s">Getting started</Text>
@@ -150,7 +185,16 @@ export default function AssistantReference() {
         {/* Main */}
         <Column fill>
           <Row paddingX="24" paddingY="16" horizontal="end">
-            <Row border radius="full" paddingLeft="12" paddingRight="4" paddingY="4" gap="8" vertical="center" background="surface">
+            <Row
+              border
+              radius="full"
+              paddingLeft="12"
+              paddingRight="4"
+              paddingY="4"
+              gap="8"
+              vertical="center"
+              background="surface"
+            >
               <Icon name="light" size="xs" onBackground="neutral-medium" />
               <Text textVariant="label-default-s">Free plan</Text>
               <Button variant="tertiary" size="s" label="Upgrade" />
@@ -160,7 +204,13 @@ export default function AssistantReference() {
           <Column fill center paddingX="40" paddingBottom="80">
             <Column maxWidth="40rem" gap="24">
               <Row gap="16" center>
-                <Mascot size={44} color="brand" face="flat" state="idle" aria-label="Ember assistant" />
+                <Mascot
+                  size={44}
+                  color="brand"
+                  face="flat"
+                  state="idle"
+                  aria-label="Ember assistant"
+                />
                 <Text as="h1" textVariant="display-strong-xs">
                   How can I help you today?
                 </Text>
