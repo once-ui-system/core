@@ -844,3 +844,8 @@
   fill: #fff;
   opacity: 0.78;
 }
+
+/* `medium="fur"`: the dark undercoat between the tufts. */
+.undercoat {
+  fill: color-mix(in oklab, var(--mascot-color), black 32%);
+}

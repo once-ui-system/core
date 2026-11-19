@@ -8,10 +8,11 @@
 import type React from "react";
 import { createElement } from "react";
 import { type OutlinePoint, outlinePoints } from "./mascotOutline.js";
+import { random } from "./mascotShape.js";
 
 /**
  * How the mascot is drawn. `vector` (default) is the flat mascot. `fur` grows a soft coat on the
- * body, `plush` a felt one, `clay` models it in plasticine, `pixel` turns it into a sprite,
+ * body (drawn hairs in clumped tufts), `plush` a felt one, `clay` models it in plasticine, `pixel` turns it into a sprite,
  * `lowpoly` cuts the body into lit facets and `toon` inks an outline around cel shading.
  */
 export type MascotMedium = "vector" | "fur" | "plush" | "clay" | "pixel" | "lowpoly" | "toon";
@@ -32,7 +33,6 @@ export const isMascotMedium = (value: unknown): value is MascotMedium =>
 /** Which part of the mascot a medium's filter wraps. */
 export function mediumTarget(medium: MascotMedium): "none" | "skin" | "body" | "all" {
   switch (medium) {
-    case "fur":
     case "plush":
       return "skin";
     case "clay":
@@ -77,65 +77,21 @@ const merge = (...inputs: string[]): Primitive => [
  */
 export function mediumPrimitives(medium: MascotMedium, cell = 8): readonly Primitive[] {
   switch (medium) {
-    case "fur":
-      return [
-        // The fringe: coarse noise pushes the silhouette out in tufts, fine noise frays the tips.
-        noise("0.07", 2, 7, "clumps"),
-        noise("0.42", 2, 3, "fray"),
-        displace("SourceGraphic", "clumps", 12, "tufted"),
-        displace("tufted", "fray", 11, "fringe", "G", "B"),
-        // The coat keeps the body's own light, fading into the fringe at the edge.
-        ["feMorphology", { in: "SourceAlpha", operator: "erode", radius: 5, result: "inner" }],
-        ["feGaussianBlur", { in: "inner", stdDeviation: 3.5, result: "innerSoft" }],
-        ["feComposite", { in: "SourceGraphic", in2: "innerSoft", operator: "in", result: "coat" }],
-        // Strands: noise stretched along y, a faint comb of darker and lighter hairs.
-        noise("0.85 0.07", 2, 11, "strands"),
-        displace("strands", "clumps", 10, "combed"),
-        [
-          "feColorMatrix",
-          {
-            in: "combed",
-            type: "matrix",
-            values: "0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 -1.4 0 0.72",
-            result: "dark",
-          },
-        ],
-        [
-          "feColorMatrix",
-          {
-            in: "combed",
-            type: "matrix",
-            values: "0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 1.2 0 -0.6",
-            result: "bright",
-          },
-        ],
-        [
-          "feMerge",
-          { result: "furred" },
-          [
-            ["feMergeNode", { in: "fringe" }],
-            ["feMergeNode", { in: "coat" }],
-          ],
-        ],
-        ["feComposite", { in: "dark", in2: "furred", operator: "in", result: "darkIn" }],
-        ["feComposite", { in: "bright", in2: "furred", operator: "in", result: "brightIn" }],
-        merge("furred", "darkIn", "brightIn"),
-      ];
     case "plush":
       return [
-        // Short felt: a fuzzy edge, then a fine nap lit from the top left.
+        // Short felt: a fuzzy edge, then a nap over the whole front, lit from the top left.
         noise("0.7", 2, 5, "nap"),
         displace("SourceGraphic", "nap", 5, "felt"),
         ["feGaussianBlur", { in: "SourceAlpha", stdDeviation: 9, result: "puff" }],
         [
           "feComposite",
-          { in: "puff", in2: "nap", operator: "arithmetic", k2: 1, k3: 0.18, result: "height" },
+          { in: "puff", in2: "nap", operator: "arithmetic", k2: 1, k3: 0.4, result: "height" },
         ],
         [
           "feDiffuseLighting",
           {
             in: "height",
-            surfaceScale: 5,
+            surfaceScale: 6,
             diffuseConstant: 1.05,
             lightingColor: "#fff",
             result: "lit",
@@ -146,7 +102,30 @@ export function mediumPrimitives(medium: MascotMedium, cell = 8): readonly Primi
           "feComposite",
           { in: "felt", in2: "lit", operator: "arithmetic", k1: 1.08, result: "shaded" },
         ],
-        ["feComposite", { in: "shaded", in2: "felt", operator: "in" }],
+        // Fibres: fine noise, darker and lighter flecks everywhere on the felt, face included.
+        noise("1.1 0.8", 2, 13, "fibres"),
+        [
+          "feColorMatrix",
+          {
+            in: "fibres",
+            type: "matrix",
+            values: "0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 -1.8 0 0.85",
+            result: "dark",
+          },
+        ],
+        [
+          "feColorMatrix",
+          {
+            in: "fibres",
+            type: "matrix",
+            values: "0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 2 0 -1",
+            result: "bright",
+          },
+        ],
+        ["feComposite", { in: "shaded", in2: "felt", operator: "in", result: "cloth" }],
+        ["feComposite", { in: "dark", in2: "cloth", operator: "in", result: "darkIn" }],
+        ["feComposite", { in: "bright", in2: "cloth", operator: "in", result: "brightIn" }],
+        merge("cloth", "darkIn", "brightIn"),
       ];
     case "clay":
       return [
@@ -456,4 +435,145 @@ export function facetFill(light: number) {
   return light >= 0
     ? `color-mix(in oklab, var(--mascot-color), white ${Math.round(light * 30)}%)`
     : `color-mix(in oklab, var(--mascot-color), black ${Math.round(-light * 26)}%)`;
+}
+
+/* ---------------------------------------------------------------------- fur */
+
+export interface FurLayer {
+  /** Many tapered hairs in one path, all of the same shade. */
+  d: string;
+  /** -1 (in shade) to 1 (in full light), as for facets. */
+  light: number;
+}
+
+const SHADES = 8;
+/** One decimal, without a leading zero or a trailing ".0". */
+const f1 = (value: number) => String(Math.round(value * 10) / 10).replace(/^(-?)0\./, "$1.");
+
+/**
+ * The body as fur: clumped tufts of tapered hairs that flow out from a crown on the top of the
+ * head and fall with gravity, with longer tufts sticking out past the silhouette. Each hair is a
+ * thin curved wedge; hairs of one shade and one depth share a path, so a coat is a few dozen
+ * paths. Lower tufts are drawn first, so the hairs above fall over their roots. Plain math on the
+ * path, seeded by it, so the coat is the same on every render and on the server.
+ */
+export function furStrands(d: string, density = 1): FurLayer[] {
+  const shape = outlinePoints(d).sort((a, b) => b.length - a.length)[0];
+  if (!shape || shape.length < 3) return [];
+  const rim = resample(shape, 160);
+  const xs = rim.map((p) => p[0]);
+  const ys = rim.map((p) => p[1]);
+  const left = Math.min(...xs);
+  const right = Math.max(...xs);
+  const top = Math.min(...ys);
+  const bottom = Math.max(...ys);
+  const cx = (left + right) / 2;
+  const cy = (top + bottom) / 2;
+  const hw = (right - left) / 2;
+  const hh = (bottom - top) / 2;
+  const rand = random(d);
+  const crown: OutlinePoint = [cx - hw * 0.05, top + hh * 0.35];
+
+  const unit = (x: number, y: number): OutlinePoint => {
+    const l = Math.hypot(x, y) || 1;
+    return [x / l, y / l];
+  };
+  const flow = (x: number, y: number) => {
+    const [ox, oy] = unit(x - crown[0], y - crown[1]);
+    return unit(ox, oy + 0.75);
+  };
+  const shadeAt = (x: number, y: number) => {
+    const u = (x - cx) / hw;
+    const v = (y - cy) / hh;
+    const n: P3 = [u * 0.8, v * 0.8, Math.sqrt(Math.max(0.05, 1 - (u * u + v * v) * 0.64))];
+    const len = Math.hypot(...n);
+    return ((n[0] * LIGHT[0] + n[1] * LIGHT[1] + n[2] * LIGHT[2]) / len - 0.55) * 2.2;
+  };
+
+  type Tuft = { x: number; y: number; dx: number; dy: number; length: number; rim: boolean };
+  const tufts: Tuft[] = [];
+  // Tufts along the outline lean outward, so the silhouette is hair.
+  const perimeter = rim.reduce(
+    (sum, p, i) =>
+      sum + Math.hypot(p[0] - rim[(i + 1) % rim.length][0], p[1] - rim[(i + 1) % rim.length][1]),
+    0,
+  );
+  const edge = resample(shape, Math.round(perimeter / (6 / density)));
+  edge.forEach(([x, y], i) => {
+    const [ax, ay] = edge[(i + edge.length - 1) % edge.length];
+    const [bx, by] = edge[(i + 1) % edge.length];
+    let [nx, ny] = unit(by - ay, -(bx - ax));
+    // Outward is away from the middle, whichever way the path winds.
+    if (nx * (x - cx) + ny * (y - cy) < 0) [nx, ny] = [-nx, -ny];
+    const [fx, fy] = flow(x, y);
+    const [dx, dy] = unit(nx * 0.5 + fx * 0.5, ny * 0.5 + fy * 0.5);
+    tufts.push({ x: x - dx * 5, y: y - dy * 5, dx, dy, length: 13 + rand() * 8, rim: true });
+  });
+  // Tufts over the body, on a jittered grid.
+  const step = 9 / density;
+  for (let y = top + step / 2; y < bottom; y += step) {
+    for (let x = left + step / 2; x < right; x += step) {
+      const px = x + (rand() - 0.5) * step * 0.8;
+      const py = y + (rand() - 0.5) * step * 0.8;
+      if (!inside([px, py], rim)) continue;
+      const [fx, fy] = flow(px, py);
+      const [dx, dy] = unit(fx + (rand() - 0.5) * 0.35, fy + (rand() - 0.5) * 0.35);
+      tufts.push({ x: px, y: py, dx, dy, length: 15 + rand() * 7, rim: false });
+    }
+  }
+
+  // Depth: rim tufts at the back, then the body from the bottom up.
+  const BANDS = 6;
+  const layers = new Map<string, string[]>();
+  const add = (band: number, shade: number, hair: string) => {
+    const key = `${band}:${shade}`;
+    const list = layers.get(key);
+    if (list) list.push(hair);
+    else layers.set(key, [hair]);
+  };
+  for (const tuft of tufts) {
+    const band = tuft.rim
+      ? 0
+      : 1 + Math.min(BANDS - 1, Math.floor(((bottom - tuft.y) / (bottom - top)) * BANDS));
+    const tipX = tuft.x + tuft.dx * tuft.length;
+    const tipY = tuft.y + tuft.dy * tuft.length;
+    const bend = (rand() - 0.5) * 8;
+    const base = shadeAt(tuft.x, tuft.y) + 0.25 - (tuft.rim ? 0.15 : 0);
+    const hairs = 9;
+    for (let h = 0; h < hairs; h++) {
+      const a = rand() * Math.PI * 2;
+      const r = Math.sqrt(rand()) * 4.5;
+      const rx = tuft.x + Math.cos(a) * r;
+      const ry = tuft.y + Math.sin(a) * r;
+      // Tips gather toward the tuft's point, as wet or brushed fur clumps.
+      const tx = tipX + (rand() - 0.5) * 4;
+      const ty = tipY + (rand() - 0.5) * 4;
+      const [ux, uy] = unit(tx - rx, ty - ry);
+      const w = 0.45 + rand() * 0.5;
+      const mx = (rx + tx) / 2 - uy * bend;
+      const my = (ry + ty) / 2 + ux * bend;
+      // Relative after the first point: shorter numbers, a lighter path.
+      const lx = rx - uy * w;
+      const ly = ry + ux * w;
+      const hair = `M${f1(lx)} ${f1(ly)}q${f1(mx - lx)} ${f1(my - ly)} ${f1(tx - lx)} ${f1(ty - ly)}q${f1(mx - tx)} ${f1(my - ty)} ${f1(rx + uy * w - tx)} ${f1(ry - ux * w - ty)}z`;
+      const light = Math.max(-1, Math.min(1, base + (rand() - 0.5) * 0.6));
+      add(band, Math.round(((light + 1) / 2) * (SHADES - 1)), hair);
+    }
+  }
+
+  const out: FurLayer[] = [];
+  for (let band = 0; band <= BANDS; band++) {
+    for (let shade = 0; shade < SHADES; shade++) {
+      const hairs = layers.get(`${band}:${shade}`);
+      if (hairs) out.push({ d: hairs.join(""), light: (shade / (SHADES - 1)) * 2 - 1 });
+    }
+  }
+  return out;
+}
+
+/** A hair's colour: lighter and darker than facets, as fur has deep gaps and bright tips. */
+export function hairFill(light: number) {
+  return light >= 0
+    ? `color-mix(in oklab, var(--mascot-color), white ${Math.round(light * 30)}%)`
+    : `color-mix(in oklab, var(--mascot-color), black ${Math.round(-light * 38)}%)`;
 }

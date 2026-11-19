@@ -11,7 +11,7 @@
 import { mixColors, parseColor } from "../../utils/colorMath.js";
 import type { MascotLook, MascotMood } from "./Mascot.js";
 import { type MascotIdentityLayer, mascotIdentity } from "./mascotIdentities.js";
-import { lowPolyFacets, mediumFilterMarkup, mediumTarget } from "./mascotMedium.js";
+import { furStrands, lowPolyFacets, mediumFilterMarkup, mediumTarget } from "./mascotMedium.js";
 import { bodyShape, clamp, DEFAULT_LOOK, EYE_BOX, mascotLook, TILE } from "./mascotShape.js";
 
 export interface MascotSvgOptions extends MascotLook {
@@ -279,6 +279,16 @@ export function mascotSvg(options: MascotSvgOptions = {}): string {
         return `<polygon points="${facet.points}" fill="${fill}" stroke="${fill}" stroke-width="0.6" stroke-linejoin="round"/>`;
       })
       .join("");
+  } else if (medium === "fur") {
+    skin = `<path d="${body.d}" fill="${mixColors(color, "#000000", 0.68)}"/>${furStrands(body.d)
+      .map((layer) => {
+        const fill =
+          layer.light >= 0
+            ? mixColors(color, "#ffffff", 1 - layer.light * 0.3)
+            : mixColors(color, "#000000", 1 + layer.light * 0.38);
+        return `<path d="${layer.d}" fill="${fill}"/>`;
+      })
+      .join("")}`;
   } else if (medium === "toon") {
     skin = `<path d="${body.d}" fill="${mixColors(color, "#000000", 0.74)}"/><g clip-path="url(#${id}-clip)"><path d="${body.d}" transform="translate(-9 -12)" fill="${color}"/><ellipse cx="${n(66 - gx * 9)}" cy="${n(body.top + 24 - gy * 7)}" rx="15" ry="8" transform="rotate(-28 66 ${n(body.top + 24)})" fill="#fff" fill-opacity="0.78"/></g>`;
   } else if (target === "skin") {

@@ -25,6 +25,8 @@ import { MascotCube } from "./MascotCube.js";
 import { type MascotIdentityLayer, mascotIdentity } from "./mascotIdentities.js";
 import {
   facetFill,
+  furStrands,
+  hairFill,
   lowPolyFacets,
   type MascotMedium,
   MediumFilter,
@@ -582,6 +584,7 @@ const FlatMascot = ({
     () => (medium === "lowpoly" ? lowPolyFacets(body.d) : []),
     [medium, body.d],
   );
+  const coat = useMemo(() => (medium === "fur" ? furStrands(body.d) : []), [medium, body.d]);
 
   // A quick squash whenever the expression changes, never on the first render.
   const prod = useMascotPoke(poke, onPointerDown);
@@ -721,6 +724,18 @@ const FlatMascot = ({
                         key={facet.points}
                         points={facet.points}
                         style={{ fill: facetFill(facet.light), stroke: facetFill(facet.light) }}
+                      />
+                    ))}
+                  </g>
+                ) : medium === "fur" ? (
+                  // Hairs over a dark undercoat, which shows in the gaps between tufts.
+                  <g>
+                    <path d={body.d} className={styles.undercoat} />
+                    {coat.map((layer) => (
+                      <path
+                        key={layer.d.slice(0, 24) + layer.light}
+                        d={layer.d}
+                        style={{ fill: hairFill(layer.light) }}
                       />
                     ))}
                   </g>

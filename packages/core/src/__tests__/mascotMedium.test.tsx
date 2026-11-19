@@ -4,7 +4,12 @@ import { describe, expect, it } from "vitest";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { parseMascotDesign } from "../modules/ai/design";
 import { Mascot } from "../modules/ai/Mascot";
-import { lowPolyFacets, MASCOT_MEDIUMS, mediumFilterMarkup } from "../modules/ai/mascotMedium";
+import {
+  furStrands,
+  lowPolyFacets,
+  MASCOT_MEDIUMS,
+  mediumFilterMarkup,
+} from "../modules/ai/mascotMedium";
 import { bodyShape } from "../modules/ai/mascotShape";
 import { mascotSvg } from "../modules/ai/mascotSvg";
 
@@ -21,7 +26,7 @@ describe("Mascot medium", () => {
   });
 
   it("puts each filter medium's filter in use", () => {
-    for (const medium of ["fur", "plush", "clay", "pixel", "toon"] as const) {
+    for (const medium of ["plush", "clay", "pixel", "toon"] as const) {
       const { container, unmount } = render(<Mascot medium={medium} />);
       const filter = container.querySelector("filter");
       expect(filter, medium).not.toBeNull();
@@ -43,12 +48,22 @@ describe("Mascot medium", () => {
     expect(container.querySelectorAll("polygon").length).toBe(facets.length);
   });
 
+  it("grows fur as tufts of hairs, the same on every render", () => {
+    const d = bodyShape(0.7, 1).d;
+    const coat = furStrands(d);
+    expect(coat.length).toBeGreaterThan(10);
+    expect(furStrands(d)).toEqual(coat);
+    const { container } = render(<Mascot medium="fur" />);
+    expect(container.querySelector("filter")).toBeNull();
+    expect(container.querySelector("[data-medium=fur]")).not.toBeNull();
+  });
+
   it("draws the same media in a still SVG, with hyphenated presentation attributes", () => {
     for (const medium of MASCOT_MEDIUMS) {
       const svg = mascotSvg({ medium, color: "#e86a5a" });
       expect(svg.startsWith("<svg")).toBe(true);
       expect(svg.includes("filter=")).toBe(
-        ["fur", "plush", "clay", "pixel", "toon"].includes(medium),
+        ["plush", "clay", "pixel", "toon"].includes(medium),
       );
     }
     expect(mediumFilterMarkup("x", "toon")).toContain('flood-color="#111318"');
