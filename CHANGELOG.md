@@ -21,6 +21,18 @@ item (see `ROADMAP.md`, Week 4).
   rows each side and scrolls the rest. Near a viewport edge, and on a searchable or multiple
   Select, it opens as the usual dropdown. The default stays `"dropdown"`. `DropdownWrapper`
   takes the same behaviour as `alignSelected`.
+- **`ParticleFx` draws on a canvas and can gather into a mark.** `shape` (`"star"`,
+  `"ring"`, `"diamond"` or your own points in a -1…1 box) gathers the `gather` share of the
+  field around `focus`; `sparks` and `sparkColor` light a few of them up, and `glow`,
+  `orbits` and `entrance` (particles fly in from scattered) finish the scene. Particles now
+  twinkle by default (`twinkle={false}` to turn it off). Existing props keep their meaning;
+  `intensity` is the pointer's reach as a percentage of the smaller side, as before.
+
+### Changed
+
+- **`ParticleFx` renders one canvas instead of a div per particle,** so a field of a
+  thousand stays smooth, and draws square, slightly varied particles. Under reduced motion
+  it now draws every particle, still, instead of capping at 30.
 
 ### Fixed
 

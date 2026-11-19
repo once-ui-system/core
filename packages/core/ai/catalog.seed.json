@@ -703,7 +703,7 @@
     "pairsWith": ["Table", "DataTable", "Row"]
   },
   "ParticleFx": {
-    "purpose": "Drifting particles that can react to the pointer, as an ambient layer",
+    "purpose": "Ambient particles that gather into a shape and react to the pointer",
     "tags": ["decoration", "effect"],
     "pairsWith": ["Background", "Effect"]
   },

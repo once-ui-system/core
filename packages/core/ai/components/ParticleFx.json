@@ -22,6 +22,15 @@
   "intensity": "number = 20",
   "opacity": "DisplayProps[\"opacity\"] = 100",
   "reducedMotion": "boolean | \"auto\" = auto",
+  "shape": "ParticleShape",
+  "gather": "number = 0.6",
+  "focus": "ParticleFocus",
+  "sparks": "number = 0",
+  "sparkColor": "ColorValue = accent-on-background-weak",
+  "twinkle": "boolean = true",
+  "glow": "boolean = false",
+  "orbits": "boolean = false",
+  "entrance": "boolean = false",
   "className": "string",
   "style": "React.CSSProperties",
   "children": "React.ReactNode"
@@ -225,6 +234,20 @@
    "90",
    "100"
   ],
+  "ParticleFocus": {
+   "x": "number",
+   "y": "number",
+   "radius": "number"
+  },
+  "ParticleShape": [
+   "star",
+   "ring",
+   "diamond",
+   "readonly ShapePoint[]"
+  ],
+  "ShapePoint": {
+   "[key: number]": "number"
+  },
   "SpacingToken": [
    "xl",
    "l",

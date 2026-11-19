@@ -1,7 +1,7 @@
 ---
 title: "ParticleFx"
-summary: "The ParticleFx component fills its area with drifting particles that can react to the pointer."
-updatedAt: "2026-09-23"
+summary: "The ParticleFx component fills its area with drifting, twinkling particles that can gather into a mark and react to the pointer."
+updatedAt: "2026-11-17"
 docs: "once-ui/effects/particleFx.mdx"
 github: "components/ParticleFx.tsx"
 navLabel: "ParticleFx"
@@ -252,9 +252,58 @@ The `opacity` prop controls the opacity of the particles.
   ]}
 />
 
+## Shape
+
+Set `shape` to gather part of the field into a mark: `"star"` (four points), `"ring"`, `"diamond"`, or your own points in a -1 to 1 box, such as a logo traced to a few hundred points. `gather` is the share of particles that form it, and `focus` places it as fractions of the area: `x`, `y` and a `radius` of the smaller side.
+
+`sparks` draws that share of the shape's particles larger in `sparkColor`. `glow` puts a soft light in the same colour behind the shape, and `orbits` draws faint rings around it. With `entrance`, the particles start scattered and gather into place the first time the area shows.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <ParticleFx
+      fill
+      interactive
+      height={32}
+      density={700}
+      shape="star"
+      gather={0.65}
+      focus={{ x: 0.5, y: 0.5, radius: 0.42 }}
+      sparks={0.05}
+      sparkColor="brand-solid-strong"
+      glow
+      orbits
+      entrance
+    />
+  }
+  codes={[
+    {
+      code:
+`<ParticleFx
+    fill
+    interactive
+    height={32}
+    density={700}
+    shape="star"
+    gather={0.65}
+    focus={{ x: 0.5, y: 0.5, radius: 0.42 }}
+    sparks={0.05}
+    sparkColor="brand-solid-strong"
+    glow
+    orbits
+    entrance
+/>`,
+      language: "tsx",
+      label: "Shape"
+    }
+  ]}
+/>
+
 ## Performance
 
-ParticleFx automatically detects low-end devices and the `prefers-reduced-motion` system setting. When either is detected, particles are placed statically without animation. The animation also pauses when the element is outside the viewport. You can override this with the `reducedMotion` prop.
+ParticleFx draws every particle on one canvas, so a field of a thousand stays smooth. It automatically detects low-end devices and the `prefers-reduced-motion` system setting. When either is detected, particles are placed statically without animation. The animation also pauses when the element is outside the viewport. You can override this with the `reducedMotion` prop.
 
 See [useReducedMotion](/hooks/useReducedMotion) for details.
 
@@ -269,9 +318,18 @@ See [useReducedMotion](/hooks/useReducedMotion) for details.
     speed: "Drift multiplier. Not a duration.",
     interactive: "React to the pointer.",
     mode: "Whether the pointer pushes particles away or pulls them in.",
-    intensity: "How strongly the pointer acts, when interactive.",
+    intensity: "The pointer's reach, as a percentage of the area's smaller side.",
     opacity: "Layer opacity, in steps of 10.",
     reducedMotion: "\"auto\" follows the reader's system setting, which is the right default for anything ambient.",
+    shape: "Gathers part of the field into a mark: \"star\", \"ring\", \"diamond\", or your own points in a -1 to 1 box.",
+    gather: "Share of the particles that form the shape, 0 to 1.",
+    focus: "Where the shape sits, as fractions of the area: x, y and radius.",
+    sparks: "Share of the shape's particles drawn larger in sparkColor, 0 to 1.",
+    sparkColor: "Colour of the sparks and the glow.",
+    twinkle: "Particles slowly brighten and dim.",
+    glow: "A soft light behind the shape.",
+    orbits: "Faint orbit rings around the shape.",
+    entrance: "Particles start scattered and gather into place the first time the area shows.",
     children: "Content drawn above the particles.",
   }}
   content={[

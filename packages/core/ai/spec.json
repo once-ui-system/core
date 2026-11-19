@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "2.8.0",
- "generated": "2026-11-10",
+ "generated": "2026-11-17",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -1589,6 +1589,17 @@
    "last": "!string",
    "perPage": "!string"
   },
+  "ParticleFocus": {
+   "x": "number",
+   "y": "number",
+   "radius": "number"
+  },
+  "ParticleShape": [
+   "star",
+   "ring",
+   "diamond",
+   "readonly ShapePoint[]"
+  ],
   "Placement": [
    "top",
    "right",
@@ -1754,6 +1765,9 @@
    "s",
    "xs"
   ],
+  "ShapePoint": {
+   "[key: number]": "number"
+  },
   "SideContent": {
    "src": "!string | React.ReactNode",
    "alt": "string"
@@ -4335,6 +4349,15 @@
     "intensity": "number = 20",
     "opacity": "DisplayProps[\"opacity\"] = 100",
     "reducedMotion": "boolean | \"auto\" = auto",
+    "shape": "ParticleShape",
+    "gather": "number = 0.6",
+    "focus": "ParticleFocus",
+    "sparks": "number = 0",
+    "sparkColor": "ColorValue = accent-on-background-weak",
+    "twinkle": "boolean = true",
+    "glow": "boolean = false",
+    "orbits": "boolean = false",
+    "entrance": "boolean = false",
     "className": "string",
     "style": "React.CSSProperties",
     "children": "React.ReactNode"
