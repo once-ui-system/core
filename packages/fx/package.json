@@ -1,6 +1,6 @@
 {
   "name": "@once-ui-system/fx",
-  "version": "3.0.0-rc.1",
+  "version": "3.0.0",
   "description": "Once UI effects: RevealFx, CountFx, MatrixFx and the other motion and decoration components, on top of @once-ui-system/core.",
   "keywords": [
     "once-ui",
@@ -22,8 +22,7 @@
   },
   "homepage": "https://docs.once-ui.com",
   "publishConfig": {
-    "access": "public",
-    "tag": "next"
+    "access": "public"
   },
   "type": "module",
   "sideEffects": [

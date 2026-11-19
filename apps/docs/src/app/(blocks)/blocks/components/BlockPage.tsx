@@ -17,6 +17,7 @@ import { harness } from "@/resources/prompts";
 import { basePath } from "@/resources/versions";
 import { dev } from "@/utils/dev-logger";
 import { useBlockDocsLinks } from "./BlockDocsLinks";
+import { BlockErrorBoundary } from "./BlockErrorBoundary";
 import { BlockFilmstrip } from "./BlockFilmstrip";
 import styles from "./BlockPage.module.scss";
 import { BlockTitle } from "./BlockTitle";
@@ -118,7 +119,7 @@ ${sources}`;
  * don't collapse, and centering; other groups frame themselves.
  */
 function renderBlock(example: BlockExampleDef, framed: boolean, isFixed: boolean) {
-  const rendered = example.render();
+  const rendered = <BlockErrorBoundary key={example.id}>{example.render()}</BlockErrorBoundary>;
   if (!framed) return rendered;
   return (
     <Row

@@ -10,6 +10,25 @@
   pointer-events: none;
 }
 
+// With reduced motion the halo does not grow: it sits at half size and fades
+// in and out, so the dot still reads as live without anything moving.
+@media (prefers-reduced-motion: reduce) {
+  .dot {
+    animation: pulse-fade 2.4s infinite ease-in-out;
+    transform: scale(0.6);
+  }
+}
+
+@keyframes pulse-fade {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
 @keyframes pulse {
   0% {
     transform: scale(0);
