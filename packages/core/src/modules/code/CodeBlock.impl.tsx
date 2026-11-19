@@ -10,9 +10,8 @@ import { Flex } from "../../components/Flex.js";
 import { Icon } from "../../components/Icon.js";
 import { IconButton } from "../../components/IconButton.js";
 import { Row } from "../../components/Row.js";
-import { Scroller } from "../../components/Scroller.js";
+import { SegmentedControl } from "../../components/SegmentedControl.js";
 import { Text } from "../../components/Text.js";
-import { ToggleButton } from "../../components/ToggleButton.js";
 import { VisuallyHidden } from "../../components/VisuallyHidden.js";
 import type { IconName } from "../../icons.js";
 import { copyText } from "../../internal/copyText.js";
@@ -672,13 +671,6 @@ const CodeBlock = ({
     setRefreshKey((prev) => prev + 1);
   };
 
-  const handleContent = (selectedLabel: string) => {
-    const index = codes.findIndex((instance) => instance.label === selectedLabel);
-    if (index !== -1) {
-      setSelectedInstance(index);
-    }
-  };
-
   const toggleFullscreen = () => {
     if (isFullscreen) {
       // When exiting fullscreen, first remove animation class, then remove portal after transition
@@ -735,29 +727,33 @@ const CodeBlock = ({
           style={{ backgroundColor: styleBackgroundColor }}
         >
           {codes.length > 1 ? (
-            <Scroller paddingX="8">
-              <Row data-scaling="90" fitWidth fillHeight vertical="center" paddingY="4" gap="2">
-                {codes.map((instance, index) => (
-                  <ToggleButton
-                    key={index}
-                    weight="default"
-                    prefixIcon={instance.prefixIcon}
-                    selected={selectedInstance === index}
-                    onClick={() => {
-                      setSelectedInstance(index);
-                      onInstanceChange?.(index);
-                      handleContent(instance.label);
-                    }}
-                  >
-                    <Text
-                      onBackground={selectedInstance === index ? "neutral-strong" : "neutral-weak"}
-                    >
-                      {instance.label}
-                    </Text>
-                  </ToggleButton>
-                ))}
-              </Row>
-            </Scroller>
+            // A SegmentedControl, so the selected background slides from one
+            // file to the next instead of jumping.
+            <Row
+              data-scaling="90"
+              minWidth={0}
+              paddingX="8"
+              paddingY="4"
+              vertical="center"
+              className={styles.tabs}
+            >
+              <SegmentedControl
+                fillWidth={false}
+                aria-label="Files"
+                value={String(selectedInstance)}
+                onValueChange={(value) => {
+                  const index = Number(value);
+                  setSelectedInstance(index);
+                  onInstanceChange?.(index);
+                }}
+                buttons={codes.map((instance, index) => ({
+                  value: String(index),
+                  label: instance.label,
+                  prefixIcon: instance.prefixIcon,
+                  weight: "default",
+                }))}
+              />
+            </Row>
           ) : (
             <Row
               paddingY="12"

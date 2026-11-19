@@ -47,3 +47,9 @@
     height: calc(100% - var(--fullscreen-top) - var(--fullscreen-bottom)) !important;
     z-index: 9;
 }
+// The file tabs sit in the block's header, inside the block's own border:
+// the control's rail drops its border so it does not read as a box in a box.
+// The sliding selected background stays.
+.tabs [role="tablist"] {
+    border-color: transparent;
+}
