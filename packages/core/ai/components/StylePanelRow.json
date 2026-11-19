@@ -13,7 +13,9 @@
   "StyleProps"
  ],
  "props": {
-  "label": "ReactNode | false"
+  "label": "ReactNode | false",
+  "hint": "ReactNode | false",
+  "hintFor": "keyof StylePanelRowLabels"
  },
  "tags": [
   "settings",
@@ -138,6 +140,24 @@
    "themeSolid": "SolidType",
    "themeSurface": "SurfaceStyle",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`"
+  }
+ },
+ "types": {
+  "StylePanelRowLabels": {
+   "theme": "ReactNode",
+   "shape": "ReactNode",
+   "brand": "ReactNode",
+   "accent": "ReactNode",
+   "neutral": "ReactNode",
+   "solid": "ReactNode",
+   "effect": "ReactNode",
+   "surface": "ReactNode",
+   "density": "ReactNode",
+   "scaling": "ReactNode",
+   "transition": "ReactNode",
+   "dataStyle": "ReactNode",
+   "bodySize": "ReactNode",
+   "bodyLineHeight": "ReactNode"
   }
  }
 }

@@ -18,6 +18,7 @@ export type {
   StylePanelGroupLabels,
   StylePanelHeading,
   StylePanelLabels,
+  StylePanelLabelWidth,
   StylePanelNameLabels,
   StylePanelOptionLabels,
   StylePanelRootProps,

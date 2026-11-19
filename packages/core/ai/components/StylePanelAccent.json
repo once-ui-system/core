@@ -14,7 +14,8 @@
  ],
  "props": {
   "custom": "boolean",
-  "label": "ReactNode | false"
+  "label": "ReactNode | false",
+  "hint": "ReactNode | false"
  },
  "tags": [
   "settings",
