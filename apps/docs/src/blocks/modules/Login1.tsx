@@ -16,7 +16,7 @@ export const Login1 = () => {
     <Row fill>
       <Row m={{ hide: true }} fill maxWidth="48rem" padding="8">
         <Row fill radius="l" overflow="hidden" background="page" theme="dark">
-          <Row fill position="absolute">
+          <Row fill position="absolute" top="0" left="0">
             <Background3 />
           </Row>
           <Row

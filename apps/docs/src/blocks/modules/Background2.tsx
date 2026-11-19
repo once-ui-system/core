@@ -2,7 +2,7 @@ import { Background, Row } from "@once-ui-system/core";
 
 export const Background2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (
-    <Row position="absolute" fill {...flex}>
+    <Row position="absolute" top="0" left="0" fill {...flex}>
       <Background
         mask={{
           x: "60%",

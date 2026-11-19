@@ -33,6 +33,8 @@ export const Login5 = () => {
     <Column fill center padding="24" overflow="hidden">
       <Background
         position="absolute"
+        top="0"
+        left="0"
         fill
         dots={{ display: true, size: "2", color: "brand-background-strong" }}
         mask={{ x: "50%", y: "40%", radius: "40vh" }}
@@ -64,7 +66,12 @@ export const Login5 = () => {
           <Heading textVariant="display-strong-xs" align="center" marginTop="8">
             {step === "email" ? "Sign in with a magic link" : "Check your inbox"}
           </Heading>
-          <Text textVariant="body-default-s" onBackground="neutral-weak" align="center" wrap="balance">
+          <Text
+            textVariant="body-default-s"
+            onBackground="neutral-weak"
+            align="center"
+            wrap="balance"
+          >
             {step === "email"
               ? "Enter your email and we'll send a one-time code — or use your passkey."
               : `We sent a 6-digit code to ${email || "your email"}.`}
@@ -141,7 +148,12 @@ export const Login5 = () => {
           </Column>
         )}
 
-        <Text textVariant="label-default-xs" onBackground="neutral-weak" align="center" wrap="balance">
+        <Text
+          textVariant="label-default-xs"
+          onBackground="neutral-weak"
+          align="center"
+          wrap="balance"
+        >
           By continuing, you agree to our <SmartLink href="#">Terms</SmartLink> and{" "}
           <SmartLink href="#">Privacy Policy</SmartLink>.
         </Text>
