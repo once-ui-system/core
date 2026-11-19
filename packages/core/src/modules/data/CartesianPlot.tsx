@@ -183,6 +183,8 @@ export interface CartesianPlotProps {
   /** Bar thickness in px, or `"fill"` for the band. */
   barSize?: number | "fill";
   barRadius?: (topmost: boolean) => Corners;
+  /** Room between a stack's segments, in px. Each segment then rounds on its own. */
+  stackGap?: number;
   /** The category axis draws its line (the line and composed charts' x axis does). */
   categoryAxisLine?: boolean;
   /** The category x axis' height, and the room between it and its labels. */
@@ -234,6 +236,7 @@ export function CartesianPlot({
   xDomain,
   barSize = 40,
   barRadius = () => [6, 6, 6, 6],
+  stackGap = 2,
   categoryAxisLine = true,
   xAxisHeight = 32,
   xTickMargin = 6,
@@ -474,17 +477,46 @@ export function CartesianPlot({
       const b = bands[series.findIndex((x) => x.key === s.key)];
       const slot = slots[stack ? 0 : bars.findIndex((x) => x.key === s.key)];
       const corners = barRadius(!stack || s.key === topmostBar);
+      const segment = (i: number) => {
+        const [v0, v1] = b[i];
+        if (!isNum(v1) || v0 === v1 || !slot) return null;
+        const from = catStart + band * i + slot.offset;
+        if (!stack || stackGap <= 0) {
+          const a = value(v0);
+          const z = value(v1);
+          return horizontal
+            ? roundedRect(Math.min(a, z), from, Math.abs(z - a), slot.size, corners)
+            : roundedRect(from, Math.min(a, z), slot.size, Math.abs(z - a), corners);
+        }
+        // A gapped stack: every segment is its own rounded bar. An end on the
+        // baseline stays square; an end that meets another segment steps back
+        // half the gap.
+        const r = Math.max(...barRadius(true));
+        const meets = (v: number) =>
+          visible.some((o) => {
+            if (o.key === s.key || o.kind !== "bar") return false;
+            const [o0, o1] = bands[series.findIndex((x) => x.key === o.key)][i];
+            return isNum(o1) && o0 !== o1 && (o0 === v || o1 === v);
+          });
+        const end = (v: number) => {
+          const px = value(v);
+          if (v === 0) return { px, r: 0 };
+          return { px, r, inset: meets(v) ? stackGap / 2 : 0 };
+        };
+        const [p, q] = [end(v0), end(v1)].sort((x, y) => x.px - y.px);
+        const lo = p.px + (p.inset ?? 0);
+        const hi = q.px - (q.inset ?? 0);
+        if (hi <= lo) return null;
+        // p is the left (horizontal) or top (vertical) end on screen.
+        return horizontal
+          ? roundedRect(lo, from, hi - lo, slot.size, [p.r, q.r, q.r, p.r])
+          : roundedRect(from, lo, slot.size, hi - lo, [p.r, p.r, q.r, q.r]);
+      };
       return (
         <g key={s.key} transform={shift}>
           {rows.map((_, i) => {
-            const [v0, v1] = b[i];
-            if (!isNum(v1) || v0 === v1 || !slot) return null;
-            const a = value(v0);
-            const z = value(v1);
-            const from = catStart + band * i + slot.offset;
-            const d = horizontal
-              ? roundedRect(Math.min(a, z), from, Math.abs(z - a), slot.size, corners)
-              : roundedRect(from, Math.min(a, z), slot.size, Math.abs(z - a), corners);
+            const d = segment(i);
+            if (!d) return null;
             return (
               <path
                 // biome-ignore lint/suspicious/noArrayIndexKey: a bar's place is its row.

@@ -6290,6 +6290,8 @@
     "dataKey": "SeriesKey<DataPoint> = value",
     "nameKey": "SeriesKey<DataPoint> = name",
     "origo": "{ x: number; y: number } = { x: 50, y: 50 }",
+    "gap": "number = 2",
+    "cornerRadius": "number = 4",
     "legend": "LegendConfig = {}",
     "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak",
     "error": "boolean = false",
