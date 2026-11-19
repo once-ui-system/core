@@ -9,6 +9,8 @@ navIcon: "components"
 ---
 
 The `EmojiPicker` component allows you to select and insert emojis from categories.
+It carries its emoji dataset, so it has its own entry point and stays out of the
+root bundle: `import { EmojiPicker } from "@once-ui-system/core/emoji";`
 
 <CodeBlock
   marginTop="16"
@@ -54,7 +56,7 @@ You can pass a `style` prop to the component to override the default styles.
   marginTop="16"
   marginBottom="24"
   preview={
-    <ClientEmojiPicker background="surface" border="neutral-medium" padding="8" radius="l" height={24}/>
+    <ClientEmojiPicker background="surface" border="neutral-medium" padding="8" radius="l" height="24rem"/>
   }
   codes={[
     {
@@ -64,7 +66,7 @@ You can pass a `style` prop to the component to override the default styles.
     border="neutral-medium"
     padding="8"
     radius="l"
-    height={24}
+    height="24rem"
     onSelect={(emoji) => console.log(emoji)}
 />`,
       language: "tsx",
@@ -72,6 +74,225 @@ You can pass a `style` prop to the component to override the default styles.
     }
   ]}
 />
+
+## From a trigger
+
+With `trigger`, the picker opens in a Dropdown from it and closes itself after a pick, controlled with `open` and `onOpenChange` or not at all. `placement` and `closeAfterClick` set where it opens and whether it closes; other Dropdown props go in `dropdownProps`. It was `EmojiPickerDropdown` in 2.x.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <BasicEmojiPickerDropdown />
+  }
+  codes={[
+    {
+      code:
+`const [selectedEmoji, setSelectedEmoji] = useState("");
+
+<Row gap="16" vertical="center">
+  <EmojiPicker
+    trigger={<Button label="Select Emoji" />}
+    onSelect={(emoji) => setSelectedEmoji(emoji)}
+  />
+  {selectedEmoji && (
+    <Text textVariant="heading-default-xl">
+      Selected: {selectedEmoji}
+    </Text>
+  )}
+</Row>`,
+      language: "tsx",
+      label: "EmojiPickerDropdown"
+    }
+  ]}
+/>
+
+### With IconButton trigger
+
+You can use an `IconButton` as the trigger for a more compact UI.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <IconButtonEmojiPickerDropdown />
+  }
+  codes={[
+    {
+      code:
+`const [selectedEmoji, setSelectedEmoji] = useState("");
+
+<Row gap="16" vertical="center">
+  <EmojiPicker
+    trigger={<IconButton icon="smiley" variant="secondary" />}
+    onSelect={(emoji) => setSelectedEmoji(emoji)}
+  />
+  {selectedEmoji && (
+    <Text textVariant="heading-default-xl">
+      {selectedEmoji}
+    </Text>
+  )}
+</Row>`,
+      language: "tsx",
+      label: "With IconButton"
+    }
+  ]}
+/>
+
+### Columns
+
+You can customize the number of columns in the emoji grid.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <CustomColumnsEmojiPickerDropdown />
+  }
+  codes={[
+    {
+      code:
+`const [selectedEmoji, setSelectedEmoji] = useState("");
+
+<Row gap="16" vertical="center">
+  <EmojiPicker
+    trigger={<Button label="Select Emoji (10 columns)" />}
+    onSelect={(emoji) => setSelectedEmoji(emoji)}
+    columns="10"
+  />
+  {selectedEmoji && (
+    <Text textVariant="heading-default-xl">
+      {selectedEmoji}
+    </Text>
+  )}
+</Row>`,
+      language: "tsx",
+      label: "Custom columns"
+    }
+  ]}
+/>
+
+### Placement
+
+Control where the dropdown appears relative to the trigger using the `placement` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <PlacementEmojiPickerDropdown />
+  }
+  codes={[
+    {
+      code:
+`const [selectedEmoji, setSelectedEmoji] = useState("");
+
+<Row gap="16" wrap vertical="center">
+  <EmojiPicker
+    trigger={<Button label="Top" />}
+    onSelect={(emoji) => setSelectedEmoji(emoji)}
+    placement="top"
+  />
+  <EmojiPicker
+    trigger={<Button label="Bottom" />}
+    onSelect={(emoji) => setSelectedEmoji(emoji)}
+    placement="bottom"
+  />
+  <EmojiPicker
+    trigger={<Button label="Left" />}
+    onSelect={(emoji) => setSelectedEmoji(emoji)}
+    placement="left"
+  />
+  <EmojiPicker
+    trigger={<Button label="Right" />}
+    onSelect={(emoji) => setSelectedEmoji(emoji)}
+    placement="right"
+  />
+  {selectedEmoji && (
+    <Text textVariant="heading-default-xl">
+      {selectedEmoji}
+    </Text>
+  )}
+</Row>`,
+      language: "tsx",
+      label: "Placement"
+    }
+  ]}
+/>
+
+### Custom background
+
+Customize the dropdown background color.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <CustomBackgroundEmojiPickerDropdown />
+  }
+  codes={[
+    {
+      code:
+`const [selectedEmoji, setSelectedEmoji] = useState("");
+
+<Row gap="16" vertical="center">
+  <EmojiPicker
+    trigger={<Button label="Custom Background" />}
+    onSelect={(emoji) => setSelectedEmoji(emoji)}
+    background="neutral-weak"
+  />
+  {selectedEmoji && (
+    <Text textVariant="heading-default-xl">
+      {selectedEmoji}
+    </Text>
+  )}
+</Row>`,
+      language: "tsx",
+      label: "Custom background"
+    }
+  ]}
+/>
+
+### Controlled state
+
+Control the open/close state externally using `open` and `onOpenChange`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <ControlledEmojiPickerDropdown />
+  }
+  codes={[
+    {
+      code:
+`const [isOpen, setIsOpen] = useState(false);
+const [selectedEmoji, setSelectedEmoji] = useState("");
+
+<Row gap="16" vertical="center">
+  <EmojiPicker
+    trigger={<Button label="Controlled Dropdown" />}
+    onSelect={(emoji) => setSelectedEmoji(emoji)}
+    open={isOpen}
+    onOpenChange={setIsOpen}
+  />
+  <Button 
+    variant="secondary" 
+    label={isOpen ? "Close" : "Open"} 
+    onClick={() => setIsOpen(!isOpen)}
+  />
+  {selectedEmoji && (
+    <Text textVariant="heading-default-xl">
+      {selectedEmoji}
+    </Text>
+  )}
+</Row>`,
+      language: "tsx",
+      label: "Controlled state"
+    }
+  ]}
+/>
+
 
 ## API reference
 
@@ -82,6 +303,13 @@ You can pass a `style` prop to the component to override the default styles.
     onClose: "Called when the picker is dismissed.",
     background: "Surface colour behind the grid.",
     columns: "Emoji per row.",
+    trigger: "Open the picker from this element, in a Dropdown (2.x EmojiPickerDropdown).",
+    open: "With trigger: controlled open state.",
+    defaultOpen: "With trigger: open on first render.",
+    onOpenChange: "With trigger: called with the next open state.",
+    placement: "With trigger: where it opens.",
+    closeAfterClick: "With trigger: close after a pick.",
+    dropdownProps: "With trigger: further Dropdown props.",
   }}
   content={[
     ["style"],

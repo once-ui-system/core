@@ -4,8 +4,6 @@ import { dirname, join, relative, resolve } from "node:path";
 import { renderToString } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { Avatar } from "../components/Avatar";
-import { Badge } from "../components/Badge";
-import { Banner } from "../components/Banner";
 import { InlineCode } from "../components/InlineCode";
 import { Line } from "../components/Line";
 import { List } from "../components/List";
@@ -32,10 +30,10 @@ import { LayoutProvider } from "../contexts/LayoutProvider";
  * `LayoutProvider` an app puts at its root: a `style` object sends `Flex`
  * down its client path, which reads the layout context.
  */
+// Banner, one of these until 3.0, is in @once-ui-system/blocks (F10), which
+// checks it the same way.
 const SERVER_COMPONENTS = [
   "Avatar",
-  "Badge",
-  "Banner",
   "InlineCode",
   "Line",
   "List",
@@ -112,17 +110,16 @@ describe("components with nothing client-side render as server components", () =
     const html = renderToString(
       <LayoutProvider>
         <Line />
-        <Banner>Banner</Banner>
         <List>
           <ListItem>Item</ListItem>
         </List>
         <InlineCode>code</InlineCode>
         <Skeleton shape="line" />
         <ProgressBar value={40} />
-        <Timeline items={[{ label: "Step one", state: "success" }, { label: "Step two" }]} />
-        <Badge title="New" href="/changelog" />
+        <Timeline items={[{ label: "Step one", tone: "success" }, { label: "Step two" }]} />
+        <Tag variant="announce" label="New" href="/changelog" />
         <Tag label="Live" prefixIcon="check" />
-        <Avatar value="AB" statusIndicator={{ color: "green" }} />
+        <Avatar value="AB" statusIndicator={{ scheme: "green" }} />
         <Avatar loading />
         <User
           name="Ada"
@@ -133,17 +130,7 @@ describe("components with nothing client-side render as server components", () =
       </LayoutProvider>,
     );
 
-    for (const text of [
-      "Banner",
-      "Item",
-      "code",
-      "Step one",
-      "New",
-      "Live",
-      "AB",
-      "Ada",
-      "Admin",
-    ]) {
+    for (const text of ["Item", "code", "Step one", "New", "Live", "AB", "Ada", "Admin"]) {
       expect(html).toContain(text);
     }
     expect(html).toContain('role="progressbar"');

@@ -21,7 +21,7 @@ codes={[
 export function Summary() {
   return (
     <Card padding="20" gap="8" fillWidth>
-      <Heading variant="heading-strong-s">Morning Coffee</Heading>
+      <Heading textVariant="heading-strong-s">Morning Coffee</Heading>
       <Text onBackground="neutral-weak">7 of 10 stamps collected.</Text>
     </Card>
   );
@@ -75,7 +75,7 @@ export function Plans() {
     <Column gap="8" fillWidth>
       {plans.map((name) => (
         <Card key={name} padding="16" selected={plan === name} onPress={() => setPlan(name)}>
-          <Text variant="label-strong-m">{name}</Text>
+          <Text textVariant="label-strong-m">{name}</Text>
         </Card>
       ))}
     </Column>

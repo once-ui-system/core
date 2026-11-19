@@ -57,7 +57,7 @@ The `CodeBlock` component provides a way to display code snippets with syntax hi
         shadow="m"
         fillWidth
         radius="m"
-        height={12}
+        height="12rem"
         border="neutral-alpha-medium"
       />
     </Row>
@@ -78,7 +78,7 @@ The `CodeBlock` component provides a way to display code snippets with syntax hi
 					shadow="m"
 					fillWidth
 					radius="m"
-					height={12}
+					height="12rem"
 					border="neutral-alpha-medium"
 				/>
 			</Row>
@@ -102,7 +102,7 @@ The `CodeBlock` can display multiple code examples with tabs for easy navigation
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  codeHeight={20}
+  codeHeight="20rem"
   preview={
     <CodeBlock
         copyButton={false}
@@ -280,7 +280,7 @@ Use the `highlight` prop to highlight specific lines of code. The value should b
 
 <CodeBlock
   marginTop="16"
-  isCollapsible={false}
+  collapsible={false}
   marginBottom="24"
   codes={[
     {
@@ -322,7 +322,7 @@ Display Git-style diffs by setting the language to "diff". Numbering can be used
   preview={
     <CodeBlock
       copyButton={false}
-      isCollapsible={false}
+      collapsible={false}
       codes={[
         {
           language: "diff",
@@ -383,7 +383,7 @@ You can enable syntax highlighting by specifying a similar array as the language
     preview={
         <CodeBlock
             copyButton={false}
-            isCollapsible={false}
+            collapsible={false}
             codes={[
                 {
                     language: [ "diff", "typescript" ],
@@ -438,14 +438,18 @@ export function subtract(a: number, b: number): number {
 
 ## Extras
 
-The `CodeBlock` component supports additional features like fullscreen mode and style customization.
+The `CodeBlock` component supports additional features like fullscreen mode, and `actions` takes controls of your own for its header, such as a `StyleOverlay` from `@once-ui-system/blocks` (3.0 replaces the built-in `styleButton` with it).
 
 <CodeBlock
   marginTop="16"
-  isCollapsible={false}
+  collapsible={false}
   marginBottom="24"
   fullscreenButton
-  styleButton
+  actions={
+    <StyleOverlay>
+      <IconButton variant="tertiary" icon="sparkle" aria-label="Open the style panel" />
+    </StyleOverlay>
+  }
   codes={[
     {
       language: "tsx",
@@ -453,7 +457,11 @@ The `CodeBlock` component supports additional features like fullscreen mode and 
       code:
 `<CodeBlock
 		fullscreenButton
-		styleButton
+		actions={
+			<StyleOverlay>
+				<IconButton variant="tertiary" icon="sparkle" aria-label="Open the style panel" />
+			</StyleOverlay>
+		}
 		reloadButton
 		codes={[
 			{
@@ -472,15 +480,15 @@ renderResults(data);"
 
 ## Collapsible
 
-Use `maxLines` to limit code height and show a "View code" overlay for expandable code blocks. `isCollapsible` must be enabled for the overlay to appear.
+Use `maxLines` to limit code height and show a "View code" overlay for expandable code blocks. `collapsible` must be enabled for the overlay to appear.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  isCollapsible
+  collapsible
   preview={
     <CodeBlock
-      isCollapsible
+      collapsible
       maxLines={3}
       codes={[
         {
@@ -495,7 +503,7 @@ Use `maxLines` to limit code height and show a "View code" overlay for expandabl
     {
       code:
 `<CodeBlock
-    isCollapsible
+    collapsible
     maxLines={3}
     codes={[
       {

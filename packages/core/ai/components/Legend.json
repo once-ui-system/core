@@ -9,7 +9,11 @@
   "reverseY": "boolean",
   "direction": "\"row\" | \"column\"",
   "position": "\"top-left\" | \"top-right\" | \"bottom-left\" | \"bottom-right\" | \"top-center\" | \"bottom-center\" = top-left",
-  "variant": "ChartVariant"
+  "variant": "ChartVariant",
+  "axisWidth": "number = 64",
+  "hidden": "readonly boolean[]",
+  "defaultHidden": "readonly boolean[] = []",
+  "onHiddenChange": "(hidden: boolean[]) => void"
  },
  "tags": [
   "data",

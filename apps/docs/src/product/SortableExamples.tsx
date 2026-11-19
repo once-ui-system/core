@@ -10,6 +10,8 @@ import {
   NavSection,
   Row,
   Sortable,
+  SortableHandle,
+  SortableItem,
   type SortablePosition,
   Tag,
   Text,
@@ -19,12 +21,12 @@ import { useState } from "react";
 export function SortableListExample() {
   const [rows, setRows] = useState(["Inbox", "Drafts", "Sent", "Archive", "Spam"]);
   return (
-    <Column maxWidth={20} padding="8" radius="l" border="neutral-alpha-medium">
+    <Column maxWidth="20rem" padding="8" radius="l" border="neutral-alpha-medium">
       <Sortable items={rows} onReorder={setRows} gap="4">
         {rows.map((row) => (
-          <Sortable.Item key={row} id={row}>
+          <SortableItem key={row} id={row}>
             <NavItem href={`#${row.toLowerCase()}`} label={row} />
-          </Sortable.Item>
+          </SortableItem>
         ))}
       </Sortable>
     </Column>
@@ -71,19 +73,19 @@ export function SortableSidebarExample() {
       onMove={move}
     >
       {chats[name].map((chat) => (
-        <Sortable.Item key={chat} id={chat}>
+        <SortableItem key={chat} id={chat}>
           <NavItem
             href={`#${chat}`}
             icon={name === "archive" ? undefined : CHAT_ICONS[name]}
             label={chat}
           />
-        </Sortable.Item>
+        </SortableItem>
       ))}
     </Sortable>
   );
 
   return (
-    <Column maxWidth={20} padding="8" radius="l" border="neutral-alpha-medium">
+    <Column maxWidth="20rem" padding="8" radius="l" border="neutral-alpha-medium">
       <Nav density="compact" gap="16">
         <NavSection label="Pinned">{list("pinned", "Pinned")}</NavSection>
         <NavSection label="Projects">{list("projects", "Projects")}</NavSection>
@@ -103,7 +105,7 @@ export function SortableHandleExample() {
     { id: "post", label: "Schedule the post", done: false },
   ]);
   return (
-    <Column maxWidth={24} padding="8" radius="l" border="neutral-alpha-medium">
+    <Column maxWidth="24rem" padding="8" radius="l" border="neutral-alpha-medium">
       <Sortable
         handle
         gap="4"
@@ -111,18 +113,18 @@ export function SortableHandleExample() {
         onReorder={(_, { from, to }) => setTasks((current) => arrayMove(current, from, to))}
       >
         {tasks.map((task) => (
-          <Sortable.Item key={task.id} id={task.id} label={task.label} vertical="center" gap="8">
-            <Sortable.Handle />
+          <SortableItem key={task.id} id={task.id} label={task.label} vertical="center" gap="8">
+            <SortableHandle />
             <Checkbox
               label={task.label}
               checked={task.done}
-              onToggle={() =>
+              onCheckedChange={() =>
                 setTasks((current) =>
                   current.map((t) => (t.id === task.id ? { ...t, done: !t.done } : t)),
                 )
               }
             />
-          </Sortable.Item>
+          </SortableItem>
         ))}
       </Sortable>
     </Column>
@@ -148,7 +150,7 @@ export function SortableBoardExample() {
       {COLUMNS.map(({ name, label }) => (
         <Column key={name} flex={1} gap="8" padding="8" radius="l" background="neutral-alpha-weak">
           <Row paddingX="8" paddingTop="4" gap="8" vertical="center">
-            <Text variant="label-default-s">{label}</Text>
+            <Text textVariant="label-default-s">{label}</Text>
             <Tag size="s">{board[name].length}</Tag>
           </Row>
           <Sortable
@@ -161,7 +163,7 @@ export function SortableBoardExample() {
             onMove={(id, to, from) => setBoard((current) => moveBetween(current, id, to, from))}
           >
             {board[name].map((card) => (
-              <Sortable.Item
+              <SortableItem
                 key={card}
                 id={card}
                 padding="12"
@@ -169,8 +171,8 @@ export function SortableBoardExample() {
                 background="surface"
                 border="neutral-alpha-medium"
               >
-                <Text variant="body-default-s">{card}</Text>
-              </Sortable.Item>
+                <Text textVariant="body-default-s">{card}</Text>
+              </SortableItem>
             ))}
           </Sortable>
         </Column>

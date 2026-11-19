@@ -57,7 +57,7 @@ export function BlocksClient({ category }: BlocksClientProps) {
   const Component = categoryPages[category as keyof typeof categoryPages];
 
   return (
-    <Flex fill minHeight={20} center>
+    <Flex fill minHeight="20rem" center>
       {Component ? (
         <Component />
       ) : (

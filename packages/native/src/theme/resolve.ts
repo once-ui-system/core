@@ -3,6 +3,7 @@ import type {
   BodyLineHeight,
   BodySize,
   BorderStyle,
+  Density,
   DeviceFontSize,
   NeutralColor,
   ScalingSize,
@@ -48,6 +49,8 @@ export interface StyleSettings {
   border: BorderStyle;
   surface: SurfaceStyle;
   scaling: ScalingSize;
+  /** The controls' default size: compact s, normal m, spacious l. */
+  density: Density;
   bodySize: BodySize;
   bodyLineHeight: BodyLineHeight;
   desktopSize?: DeviceFontSize;
@@ -65,11 +68,19 @@ export const defaultSettings: Omit<StyleSettings, "theme"> = {
   border: "playful",
   surface: "filled",
   scaling: "100",
+  density: "normal",
   bodySize: "100",
   bodyLineHeight: "100",
 };
 
 export const tokens = tokenFile as unknown as TokenFile;
+
+/** What each density sets, as core's `DENSITIES`: a control's default size, and the scaling a theme with none takes. */
+export const DENSITIES: Record<Density, { size: "s" | "m" | "l"; scaling: ScalingSize }> = {
+  compact: { size: "s", scaling: "95" },
+  normal: { size: "m", scaling: "100" },
+  spacious: { size: "l", scaling: "105" },
+};
 
 /**
  * Every token for these settings on a screen `width` points wide, with
@@ -108,10 +119,12 @@ export function resolveTokens(
     if (name in resolved) return resolved[name];
     let value = raw[name];
     if (typeof value === "string") {
-      const ref = value.match(/^\{([\w-]+)\}$/);
+      // `{x}` is token x; `{x}/0.15` is colour token x at 15% opacity.
+      const ref = value.match(/^\{([\w-]+)\}(?:\/([\d.]+))?$/);
       if (ref) {
         if (seen.includes(ref[1])) return undefined;
         value = follow(ref[1], [...seen, name]) as TokenValue;
+        if (ref[2] !== undefined) value = withAlpha(value, Number(ref[2])) as TokenValue;
       }
     }
     if (value !== undefined) resolved[name] = value;
@@ -119,6 +132,16 @@ export function resolveTokens(
   };
   for (const name of Object.keys(raw)) follow(name, [name]);
   return resolved;
+}
+
+/** A hex colour at `alpha` times its own opacity, as `color-mix(in srgb, x N%, transparent)`. */
+export function withAlpha(value: TokenValue | undefined, alpha: number): TokenValue | undefined {
+  if (typeof value !== "string") return undefined;
+  const m = value.match(/^#([0-9a-f]{6})([0-9a-f]{2})?$/i);
+  if (!m) return undefined;
+  const own = m[2] === undefined ? 1 : Number.parseInt(m[2], 16) / 255;
+  const a = Math.round(Math.min(1, Math.max(0, own * alpha)) * 255);
+  return `#${m[1].toLowerCase()}${a.toString(16).padStart(2, "0")}`;
 }
 
 /** The root font size in px for a screen `width` points wide (`--font-scaling-*`). */

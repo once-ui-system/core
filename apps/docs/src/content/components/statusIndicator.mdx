@@ -1,6 +1,6 @@
 ---
 title: "StatusIndicator"
-summary: "StatusIndicator is a compact visual cue used to represent status or state with customizable size and color."
+summary: "StatusIndicator is a compact visual cue used to represent status or state with customizable size and palette hue."
 updatedAt: "2025-05-09"
 docs: "once-ui/components/statusIndicator.mdx"
 github: "components/StatusIndicator.tsx"
@@ -15,17 +15,17 @@ Use `StatusIndicator` to show online/offline presence, availability, or categori
   marginBottom="24"
   preview={
     <Row gap="16" horizontal="center">
-      <StatusIndicator color="green" />
-      <StatusIndicator color="red" />
-      <StatusIndicator color="yellow" />
+      <StatusIndicator scheme="green" />
+      <StatusIndicator scheme="red" />
+      <StatusIndicator scheme="yellow" />
     </Row>
   }
   codes={[
     {
       code:
-`<StatusIndicator color="green" />
-<StatusIndicator color="red" />
-<StatusIndicator color="yellow" />`,
+`<StatusIndicator scheme="green" />
+<StatusIndicator scheme="red" />
+<StatusIndicator scheme="yellow" />`,
       language: "tsx",
       label: "StatusIndicator"
     }
@@ -41,17 +41,17 @@ Choose from small, medium, or large to fit the surrounding layout.
   marginBottom="24"
   preview={
     <Row gap="16" center>
-      <StatusIndicator size="s" color="blue" />
-      <StatusIndicator size="m" color="blue" />
-      <StatusIndicator size="l" color="blue" />
+      <StatusIndicator size="s" scheme="blue" />
+      <StatusIndicator size="m" scheme="blue" />
+      <StatusIndicator size="l" scheme="blue" />
     </Row>
   }
   codes={[
     {
       code:
-`<StatusIndicator size="s" color="blue" />
-<StatusIndicator size="m" color="blue" />
-<StatusIndicator size="l" color="blue" />`,
+`<StatusIndicator size="s" scheme="blue" />
+<StatusIndicator size="m" scheme="blue" />
+<StatusIndicator size="l" scheme="blue" />`,
       language: "tsx",
       label: "Sizes"
     }
@@ -72,18 +72,18 @@ Supports full Once UI palette for flexibility.
         "red", "orange", "yellow", "moss", "green",
         "emerald", "aqua", "cyan", "gray"
       ].map((color) => (
-        <StatusIndicator key={color} color={color} />
+        <StatusIndicator key={color} scheme={color} />
       ))}
     </Row>
   }
   codes={[
     {
       code:
-`<StatusIndicator color="blue" />
-<StatusIndicator color="indigo" />
-<StatusIndicator color="violet" />
+`<StatusIndicator scheme="blue" />
+<StatusIndicator scheme="indigo" />
+<StatusIndicator scheme="violet" />
 ...
-<StatusIndicator color="gray" />`,
+<StatusIndicator scheme="gray" />`,
       language: "tsx",
       label: "Colors"
     }
@@ -92,33 +92,137 @@ Supports full Once UI palette for flexibility.
 
 ## Theme roles
 
-A role (`brand`, `accent`, `neutral`, `info`, `danger`, `warning`, `success`) takes the colour
-the theme assigns it, so `danger` follows the app's danger scheme. A palette name stays that
-fixed colour; `rose`, `mint`, `dusk`, `sand` and `slate` are there as well.
+`tone` takes a theme role (`brand`, `accent`, `neutral`, `info`, `danger`, `warning`, `success`) and follows the colour the theme assigns it, so `danger` stays the app's danger colour. `scheme` takes a fixed palette colour; `rose`, `mint`, `dusk`, `sand` and `slate` are there as well.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
     <Row gap="12" vertical="center">
-      <StatusIndicator color="success" ariaLabel="Online" />
-      <StatusIndicator color="warning" ariaLabel="Degraded" />
-      <StatusIndicator color="danger" ariaLabel="Down" />
-      <StatusIndicator color="brand" ariaLabel="Syncing" />
-      <StatusIndicator color="sand" ariaLabel="Archived" />
+      <StatusIndicator tone="success" aria-label="Online" />
+      <StatusIndicator tone="warning" aria-label="Degraded" />
+      <StatusIndicator tone="danger" aria-label="Down" />
+      <StatusIndicator tone="brand" aria-label="Syncing" />
+      <StatusIndicator scheme="sand" aria-label="Archived" />
     </Row>
   }
   codes={[
     {
       code:
-`<StatusIndicator color="success" ariaLabel="Online" />
-<StatusIndicator color="warning" ariaLabel="Degraded" />
-<StatusIndicator color="danger" ariaLabel="Down" />
-<StatusIndicator color="brand" ariaLabel="Syncing" />
-<StatusIndicator color="sand" ariaLabel="Archived" />`,
+`<StatusIndicator tone="success" aria-label="Online" />
+<StatusIndicator tone="warning" aria-label="Degraded" />
+<StatusIndicator tone="danger" aria-label="Down" />
+<StatusIndicator tone="brand" aria-label="Syncing" />
+<StatusIndicator scheme="sand" aria-label="Archived" />`,
       language: "tsx",
       label: "Roles"
     }
+  ]}
+/>
+
+## Pulse
+
+With `pulse`, the dot sits in a ring that keeps pulsing outward, to draw the eye to something live (2.x's `Pulse`). A pulsing dot takes its palette from `tone` (default `"brand"`) rather than `scheme`, and `pulseSize` overrides the ring's size. It is decorative unless you give it an `aria-label`, which makes it an image like the plain dot.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="40" fillWidth center>
+      <StatusIndicator pulse size="s" />
+      <StatusIndicator pulse size="m" tone="danger" />
+      <StatusIndicator pulse size="l" tone="success" />
+    </Row>
+  }
+  codes={[
+    {
+      code: `<StatusIndicator pulse size="s"/>
+<StatusIndicator pulse size="m" tone="danger"/>
+<StatusIndicator pulse size="l" tone="success"/>`,
+      language: "tsx",
+      label: "Pulse",
+    },
+  ]}
+/>
+
+### Tone
+
+Set the palette of the pulse with `tone`; 2.x's Pulse called it `scheme`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="40" fillWidth center>
+      <StatusIndicator pulse tone="brand" />
+      <StatusIndicator pulse tone="accent" />
+      <StatusIndicator pulse tone="neutral" />
+      <StatusIndicator pulse tone="info" />
+      <StatusIndicator pulse tone="warning" />
+      <StatusIndicator pulse tone="danger" />
+      <StatusIndicator pulse tone="success" />
+    </Row>
+  }
+  codes={[
+    {
+      code: `<StatusIndicator pulse tone="brand"/>
+<StatusIndicator pulse tone="accent"/>
+<StatusIndicator pulse tone="neutral"/>
+<StatusIndicator pulse tone="info"/>
+<StatusIndicator pulse tone="warning"/>
+<StatusIndicator pulse tone="danger"/>
+<StatusIndicator pulse tone="success"/>`,
+      language: "tsx",
+      label: "Color",
+    },
+  ]}
+/>
+
+### Pulse dot size
+
+Set the size of the pulse using the `size` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="40" fillWidth center>
+      <StatusIndicator pulse size="s" />
+      <StatusIndicator pulse size="m" />
+      <StatusIndicator pulse size="l" />
+    </Row>
+  }
+  codes={[
+    {
+      code: `<StatusIndicator pulse size="s"/>
+<StatusIndicator pulse size="m"/>
+<StatusIndicator pulse size="l"/>`,
+      language: "tsx",
+      label: "Size",
+    },
+  ]}
+/>
+
+### Pulse size
+
+Customize the pulse ring dimensions with the `pulseSize` prop, accepting a number or string value.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="40" fillWidth center>
+      <StatusIndicator pulse size="m" pulseSize={80} />
+      <StatusIndicator pulse size="m" pulseSize="4rem" />
+    </Row>
+  }
+  codes={[
+    {
+      code: `<StatusIndicator pulse size="m" pulseSize={80} />
+<StatusIndicator pulse size="m" pulseSize="4rem" />`,
+      language: "tsx",
+      label: "Pulse size",
+    },
   ]}
 />
 
@@ -127,12 +231,15 @@ fixed colour; `rose`, `mint`, `dusk`, `sand` and `slate` are there as well.
 <PropsTable
   component="StatusIndicator"
   describe={{
-    color: "Which state it shows: a palette name, or a theme role such as danger or brand.",
+    pulse: "Pulse a ring out from the dot. Decorative unless aria-label is set.",
+    tone: "The pulsing dot's palette. Only with pulse; the plain dot takes scheme.",
+    pulseSize: "How far the ring travels, overriding the size's default. Only with pulse.",
+    scheme: "The dot's colour: a palette name, or a theme role such as danger or brand (2.x called it color).",
     size: "Dot size.",
-    ariaLabel: "What assistive tech announces. Set it to the meaning, not the colour.",
   }}
   content={[
     ["className"],
-    ["style"]
+    ["style"],
+    ["aria-label", "string", "-", "What assistive tech announces. Set it to the meaning, not the colour."]
   ]}
 />

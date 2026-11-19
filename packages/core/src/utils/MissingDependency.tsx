@@ -1,16 +1,16 @@
 "use client";
 
 import React from "react";
-import { Column } from "../components/Column";
-import { Icon } from "../components/Icon";
-import { Text } from "../components/Text";
+import { Column } from "../components/Column.js";
+import { Icon } from "../components/Icon.js";
+import { Text } from "../components/Text.js";
 
 export interface MissingDependencyProps {
   component: string;
   packageName: string;
 }
 
-export const MissingDependency: React.FC<MissingDependencyProps> = ({ component, packageName }) => (
+export const MissingDependency = ({ component, packageName }: MissingDependencyProps) => (
   <Column
     fillWidth
     minHeight="160"
@@ -23,12 +23,12 @@ export const MissingDependency: React.FC<MissingDependencyProps> = ({ component,
   >
     <Icon name="warning" size="l" onBackground="warning-medium" />
     <Column center gap="4">
-      <Text variant="body-strong-s" onBackground="neutral-strong">
+      <Text textVariant="body-strong-s" onBackground="neutral-strong">
         {`<${component} />`} requires {`"${packageName}"`}
       </Text>
-      <Text variant="body-default-xs" onBackground="neutral-weak">
+      <Text textVariant="body-default-xs" onBackground="neutral-weak">
         Install it with:{" "}
-        <Text as="code" variant="code-default-xs">{`npm install ${packageName}`}</Text>
+        <Text as="code" textVariant="code-default-xs">{`npm install ${packageName}`}</Text>
       </Text>
     </Column>
   </Column>

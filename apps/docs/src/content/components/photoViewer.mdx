@@ -1,0 +1,127 @@
+---
+title: "PhotoViewer"
+summary: "A full-screen viewer for a set of photos: swipe between them, pinch to zoom, and close back into the tile it opened from."
+updatedAt: "2026-10-28"
+docs: "once-ui/components/photoViewer.mdx"
+github: "components/PhotoViewer.tsx"
+navLabel: "PhotoViewer"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "success"
+---
+
+`PhotoViewer` shows a set of photos full screen, the way a phone's photo app does. A photo
+grows out of the tile it opened from and shrinks back into it on close. Swipe or use the
+arrows to move between photos, with a little resistance at either end; swipe down to close;
+pinch, double-tap or double-click to zoom and drag to pan. Escape closes it and focus goes
+back to the tile. Under reduced motion every animation becomes a short fade.
+
+It is a modal dialog on the same overlay core as [`Dialog`](/components/dialog) and
+[`Drawer`](/components/drawer): the page behind it is inert and does not scroll, and Tab
+stays inside. Render it while it is open and unmount it in `onClose`. For a single image,
+`Media enlarge` is still the lighter choice; `Media` never loads the viewer.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<PhotoViewerExample />}
+  codes={[
+    {
+      code:
+`const [open, setOpen] = useState<number | null>(null);
+const gridRef = useRef<HTMLDivElement>(null);
+
+<Grid ref={gridRef} columns={3} gap="8">
+  {photos.map((photo, index) => (
+    <Media
+      key={photo.src}
+      src={photo.src}
+      alt={photo.alt}
+      aspectRatio="1 / 1"
+      role="button"
+      tabIndex={0}
+      aria-label={\`View \${photo.alt}\`}
+      data-photo-index={index}
+      onClick={() => setOpen(index)}
+    />
+  ))}
+</Grid>
+{open !== null && (
+  <PhotoViewer
+    items={photos}
+    defaultIndex={open}
+    getOrigin={(i) => gridRef.current?.querySelector<HTMLElement>(\`[data-photo-index="\${i}"]\`) ?? null}
+    onClose={() => setOpen(null)}
+  />
+)}`,
+      language: "tsx",
+      label: "Gallery"
+    }
+  ]}
+/>
+
+## Items
+
+Each item is `{ src, alt }`, plus an optional `title` shown above the counter and a
+`caption` shown after it ("3 / 12 · 2024"). Give `width` and `height` when you know them, so
+the photo opens at its real proportions; without them the viewer measures each photo as it
+loads. Images render through the Image adapter, like `Media`, so a Next.js app gets
+`next/image` and `unoptimized` skips it.
+
+## Which photo
+
+`index`, `defaultIndex` and `onIndexChange` follow the usual pattern: leave `index` out and
+the viewer keeps its own, starting at `defaultIndex`, or control it to keep your page in step
+(scrolling the grid along, for example).
+
+## Deep links
+
+Pass `deepLink="photo"` to keep the open photo in the URL (`?photo=<file name>`), so a photo
+can be shared, and so Back closes the viewer. To open on a shared photo when the page loads,
+read the URL with `photoViewerIndexFromUrl`:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`useEffect(() => {
+  const index = photoViewerIndexFromUrl(photos, "photo");
+  if (index >= 0) setOpen(index);
+}, []);
+
+{open !== null && (
+  <PhotoViewer items={photos} defaultIndex={open} deepLink="photo" onClose={() => setOpen(null)} />
+)}`,
+      language: "tsx",
+      label: "Deep link"
+    }
+  ]}
+/>
+
+Without `deepLink` the viewer leaves the URL and history alone.
+
+## Closing
+
+`getOrigin(index)` returns the element a photo opens from and closes into, usually its tile.
+Focus goes back to it on close. If the tile has scrolled off screen, the viewer fades out where
+it is; set `scrollToOrigin` to scroll the page to the tile instead, which suits a gallery page.
+
+## API reference
+
+<PropsTable
+  component="PhotoViewer"
+  describe={{
+    items: "The photos, in order: { src, alt, title?, caption?, width?, height? }.",
+    index: "The photo on screen, controlled.",
+    defaultIndex: "The first photo of an uncontrolled viewer.",
+    onIndexChange: "Called with the photo the viewer moves to.",
+    onClose: "Called with the photo it closed on, once the closing animation has finished. Unmount the viewer here.",
+    getOrigin: "The element photo `index` opens from and closes into. Focus returns to it.",
+    scrollToOrigin: "On close, scroll the page so the tile is in view instead of fading out.",
+    deepLink: "Keep the open photo in this search parameter; Back closes the viewer.",
+    unoptimized: "Skip the framework's image optimization.",
+    labels: "The viewer's own words (dialog, close, previous, next, counter, error, retry), for a translated interface.",
+  }}
+/>

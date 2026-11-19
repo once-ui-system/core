@@ -11,12 +11,11 @@ import {
   Line,
   Logo,
   Media,
-  PasswordInput,
-  RevealFx,
   Row,
   SmartLink,
   Text,
 } from "@once-ui-system/core";
+import { RevealFx } from "@once-ui-system/fx";
 import { useState } from "react";
 
 export const Login4 = () => {
@@ -51,13 +50,13 @@ export const Login4 = () => {
                 <Row background="page" radius="m">
                   <IconButton icon="chevronLeft" variant="secondary" tooltip="Back" />
                 </Row>
-                <Text variant="label-default-s" onSolid="neutral-strong">
+                <Text textVariant="label-default-s" onSolid="neutral-strong">
                   Back
                 </Text>
               </Row>
               <Fade
                 fillWidth
-                height={28}
+                height="28rem"
                 to="top"
                 position="absolute"
                 bottom="0"
@@ -76,7 +75,7 @@ export const Login4 = () => {
                 </RevealFx>
                 <RevealFx horizontal="start">
                   <Heading
-                    variant="display-default-xs"
+                    textVariant="display-default-xs"
                     marginLeft="4"
                     onBackground="neutral-strong"
                   >
@@ -94,7 +93,7 @@ export const Login4 = () => {
               icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
               size="l"
             />
-            <Heading variant="display-default-xs" align="center" marginTop="20">
+            <Heading textVariant="display-default-xs" align="center" marginTop="20">
               {isSignup ? "Create your account" : "Sign in to Once UI"}
             </Heading>
             <Row textVariant="body-default-s" onBackground="neutral-medium">
@@ -153,24 +152,24 @@ export const Login4 = () => {
 
             <Column fillWidth gap="-1">
               <Input corners="top" placeholder="Email" id="email" name="email" />
-              <PasswordInput
+              <Input
                 corners={isSignup ? "none" : "bottom"}
                 placeholder="Password"
                 id="password"
-                name="password"
+                name="password" type="password"
               />
               {isSignup && (
-                <PasswordInput
+                <Input
                   corners="bottom"
                   placeholder="Confirm password"
                   id="confirm-password"
-                  name="confirm-password"
+                  name="confirm-password" type="password"
                 />
               )}
             </Column>
 
             {isSignup && (
-              <Checkbox checked onToggle={() => {}} label="Subscribe to Design Engineers Weekly" />
+              <Checkbox checked onCheckedChange={() => {}} label="Subscribe to Design Engineers Weekly" />
             )}
 
             {!isSignup && (
@@ -184,7 +183,7 @@ export const Login4 = () => {
             </Button>
 
             <Text
-              variant="label-default-s"
+              textVariant="label-default-s"
               onBackground="neutral-weak"
               align="center"
               wrap="balance"

@@ -2,7 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { describe, expect, it, vi } from "vitest";
-import { DateRangeInput } from "../components/DateRangeInput";
+import { DateInput } from "../components/DateInput";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
@@ -34,7 +34,8 @@ describe("DateRangeInput: interaction", () => {
   it.each([["{Enter}"], [" "], ["{ArrowDown}"]])("opens from the field with %s", async (key) => {
     const user = userEvent.setup();
     render(
-      <DateRangeInput
+      <DateInput
+        range
         id="trip"
         startLabel="From"
         endLabel="To"
@@ -52,7 +53,7 @@ describe("DateRangeInput: interaction", () => {
   it("picks a range from the keyboard, uncontrolled, and hands focus back", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<DateRangeInput id="trip" startLabel="From" endLabel="To" onChange={onChange} />, {
+    render(<DateInput range id="trip" startLabel="From" endLabel="To" onValueChange={onChange} />, {
       wrapper: wrap,
     });
     await user.tab();
@@ -81,7 +82,8 @@ describe("DateRangeInput: interaction", () => {
     const onClick = vi.fn();
     const onKeyDown = vi.fn((event: React.KeyboardEvent) => event.preventDefault());
     render(
-      <DateRangeInput
+      <DateInput
+        range
         id="trip"
         startLabel="From"
         endLabel="To"
@@ -103,9 +105,12 @@ describe("DateRangeInput: interaction", () => {
   // start and end fields were both announced as the group's name.
   it("names the dialog with aria-label and keeps each field's own name", async () => {
     const user = userEvent.setup();
-    render(<DateRangeInput id="trip" startLabel="From" endLabel="To" aria-label="Travel dates" />, {
-      wrapper: wrap,
-    });
+    render(
+      <DateInput range id="trip" startLabel="From" endLabel="To" aria-label="Travel dates" />,
+      {
+        wrapper: wrap,
+      },
+    );
     expect(start()).toBeInTheDocument();
     expect(end()).toBeInTheDocument();
     await user.click(start());
@@ -114,7 +119,7 @@ describe("DateRangeInput: interaction", () => {
 
   it("is not opened from a disabled field", async () => {
     const user = userEvent.setup();
-    render(<DateRangeInput id="trip" startLabel="From" endLabel="To" disabled />, {
+    render(<DateInput range id="trip" startLabel="From" endLabel="To" disabled />, {
       wrapper: wrap,
     });
     expect(start()).toBeDisabled();

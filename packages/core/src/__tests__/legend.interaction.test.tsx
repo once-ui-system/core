@@ -63,7 +63,12 @@ describe("Legend", () => {
   it("clears the y axis labels at top-left unless the axis is reversed", () => {
     const { container, rerender } = render(<Legend payload={payload} />, { wrapper });
     const root = () => container.firstElementChild as HTMLElement;
-    expect(root().style.paddingLeft).toBe("var(--static-space-80)");
+    // Past the 64px value axis, plus 16px: the legend starts where the plot does.
+    expect(root().style.left).toBe("64px");
+    expect(root().style.paddingLeft).toBe("var(--static-space-16)");
+    // A wider axis (a currency, horizontal bars' names) moves it with the plot.
+    rerender(<Legend payload={payload} axisWidth={120} />);
+    expect(root().style.left).toBe("120px");
     rerender(<Legend payload={payload} reverseY />);
     expect(root().style.paddingLeft).toBe("var(--static-space-20)");
     rerender(<Legend payload={payload} labels="x" />);

@@ -1284,6 +1284,36 @@
   pointer-events: all;
 }
 
+:where(.reset-list) {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+:where(.reset-button) {
+  appearance: none;
+  background: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+:where(.reset-button:disabled) {
+  cursor: default;
+}
+
+.list-disc {
+  list-style-type: disc;
+}
+
+.list-decimal {
+  list-style-type: decimal;
+}
+
 .cursor-interactive {
   cursor: var(--cursor-interactive);
 }

@@ -4,17 +4,18 @@ import type { Map as MapLibreMap, MapOptions } from "maplibre-gl";
 import * as maplibre from "maplibre-gl";
 import type React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Column } from "../../components/Column";
-import { Icon } from "../../components/Icon";
-import { IconButton } from "../../components/IconButton";
-import { Text } from "../../components/Text";
-import { useTheme } from "../../contexts/ThemeProvider";
-import { useReducedMotion } from "../../hooks/useReducedMotion";
+import { Column } from "../../components/Column.js";
+import { Icon } from "../../components/Icon.js";
+import { IconButton } from "../../components/IconButton.js";
+import { Text } from "../../components/Text.js";
+import { useTheme } from "../../contexts/ThemeProvider.js";
+import { elementTheme, useElementTheme } from "../../hooks/useElementTheme.js";
+import { useReducedMotion } from "../../hooks/useReducedMotion.js";
 import styles from "./Map.module.scss";
-import { MapContext, type MapContextValue } from "./MapContext";
-import { DEFAULT_MAP_STYLE } from "./mapStyles";
-import { applyScene } from "./scene";
-import { tokenColor } from "./tokenColor";
+import { MapContext, type MapContextValue } from "./MapContext.js";
+import { DEFAULT_MAP_STYLE } from "./mapStyles.js";
+import { applyScene } from "./scene.js";
+import { tokenColor } from "./tokenColor.js";
 import type {
   LngLat,
   MapBuildings,
@@ -22,7 +23,7 @@ import type {
   MapStyle,
   MapStyleSource,
   MapViewport,
-} from "./types";
+} from "./types.js";
 
 export interface MapLabels {
   /** The map's accessible name. Default "Map". */
@@ -166,17 +167,57 @@ function ensureWorker(workerUrl?: string) {
   );
 }
 
-/** Paints the style's background layers with the page background token. */
-function tintStyle(map: MapLibreMap) {
+/**
+ * Land use, land cover, parks and buildings: the fills that patch a dark
+ * basemap. Names from the OpenMapTiles schema (OpenFreeMap, MapTiler) and the
+ * Protomaps one (CARTO's GL styles).
+ */
+const LAND_LAYERS = new Set(["landuse", "landcover", "park", "natural", "buildings"]);
+/** Roads and rails: bright lines on a dark basemap that outshine the data. */
+const ROAD_LAYERS = new Set(["transportation", "roads"]);
+
+const sourceLayer = (layer: { "source-layer"?: unknown }) =>
+  "source-layer" in layer ? String(layer["source-layer"]) : "";
+
+/**
+ * Paints the style's background layers with the page background token. On a
+ * dark page it also re-tints the rest from the theme, so any basemap reads as
+ * a quiet ground for the data, a light one included (an app handed a single
+ * light style URL still gets a dark map): land-use fills fade, water takes a
+ * neutral step, roads take the border colour, and labels the weak text colour
+ * with a halo in the page colour.
+ */
+function tintStyle(map: MapLibreMap, dark: boolean) {
   const background = tokenColor("--page-background");
+  const colors = dark
+    ? {
+        water: tokenColor("--neutral-background-medium"),
+        road: tokenColor("--neutral-border-medium"),
+        label: tokenColor("--neutral-on-background-weak"),
+      }
+    : null;
   for (const layer of map.getStyle()?.layers ?? []) {
     if (layer.type === "background") {
       map.setPaintProperty(layer.id, "background-color", background);
+      continue;
+    }
+    if (!colors) continue;
+    const source = sourceLayer(layer as { "source-layer"?: unknown });
+    if (layer.type === "fill" && LAND_LAYERS.has(source)) {
+      map.setPaintProperty(layer.id, "fill-opacity", 0.12);
+    } else if (layer.type === "fill" && source === "water") {
+      map.setPaintProperty(layer.id, "fill-color", colors.water);
+    } else if (layer.type === "line" && ROAD_LAYERS.has(source)) {
+      map.setPaintProperty(layer.id, "line-color", colors.road);
+      map.setPaintProperty(layer.id, "line-opacity", 0.7);
+    } else if (layer.type === "symbol" && layer.layout && "text-field" in layer.layout) {
+      map.setPaintProperty(layer.id, "text-color", colors.label);
+      map.setPaintProperty(layer.id, "text-halo-color", background);
     }
   }
 }
 
-const MapImpl: React.FC<MapProps> = ({
+const MapImpl = ({
   viewport,
   defaultViewport,
   onViewportChange,
@@ -200,10 +241,13 @@ const MapImpl: React.FC<MapProps> = ({
   children,
   className,
   ...flex
-}) => {
+}: MapProps) => {
   const labels = { ...DEFAULT_LABELS, ...labelsProp };
   const container = useRef<HTMLDivElement>(null);
-  const { resolvedTheme } = useTheme();
+  // The theme the map is drawn in: a nested or inverted `data-theme` around
+  // it wins over the page's.
+  const { resolvedTheme: pageTheme } = useTheme();
+  const resolvedTheme = useElementTheme(container);
   const { shouldAnimate } = useReducedMotion();
   const reducedMotion = !shouldAnimate;
   const [map, setMap] = useState<MapLibreMap | null>(null);
@@ -211,8 +255,15 @@ const MapImpl: React.FC<MapProps> = ({
   const [failed, setFailed] = useState(false);
 
   // Callbacks and options the long-lived listeners read without re-binding.
-  const latest = useRef({ onViewportChange, onMapClick, onMapLoad, tint, reducedMotion });
-  latest.current = { onViewportChange, onMapClick, onMapLoad, tint, reducedMotion };
+  const latest = useRef({
+    onViewportChange,
+    onMapClick,
+    onMapLoad,
+    tint,
+    reducedMotion,
+    resolvedTheme,
+  });
+  latest.current = { onViewportChange, onMapClick, onMapLoad, tint, reducedMotion, resolvedTheme };
   const appliedStyle = useRef<MapStyleSource | null>(null);
   const boundsKey = bounds && bounds.length > 0 ? JSON.stringify(bounds) : "";
   const framedKey = useRef("");
@@ -237,7 +288,7 @@ const MapImpl: React.FC<MapProps> = ({
   // biome-ignore lint/correctness/useExhaustiveDependencies: created once; later prop changes go through the effects below
   useEffect(() => {
     if (!container.current) return;
-    const style = pickStyle(mapStyle, resolvedTheme);
+    const style = pickStyle(mapStyle, elementTheme(container.current, pageTheme));
     const start = viewport ?? defaultViewport;
     let instance: MapLibreMap;
     try {
@@ -277,7 +328,7 @@ const MapImpl: React.FC<MapProps> = ({
     framedKey.current = boundsKey;
 
     instance.on("style.load", () => {
-      if (latest.current.tint) tintStyle(instance);
+      if (latest.current.tint) tintStyle(instance, latest.current.resolvedTheme === "dark");
       setStyleVersion((version) => version + 1);
     });
     instance.once("load", () => latest.current.onMapLoad?.(instance));
@@ -311,11 +362,11 @@ const MapImpl: React.FC<MapProps> = ({
       // fires no style.load: re-tint and re-add shapes once it settles.
       map.setStyle(next);
       map.once("idle", () => {
-        if (latest.current.tint) tintStyle(map);
+        if (latest.current.tint) tintStyle(map, latest.current.resolvedTheme === "dark");
         setStyleVersion((version) => version + 1);
       });
     } else if (tint && map.isStyleLoaded()) {
-      tintStyle(map);
+      tintStyle(map, resolvedTheme === "dark");
       setStyleVersion((version) => version + 1);
     }
   }, [map, mapStyle, resolvedTheme, tint]);
@@ -381,11 +432,18 @@ const MapImpl: React.FC<MapProps> = ({
       className={[styles.map, className].filter(Boolean).join(" ")}
       {...flex}
     >
-      <div ref={container} className={styles.canvas} />
+      <div
+        ref={container}
+        className={styles.canvas}
+        // Inline, so an app that also imports maplibre-gl.css (unlayered, and
+        // so ahead of these layered styles) cannot turn this back into
+        // position: relative with no height: a blank map.
+        style={{ position: "absolute", inset: 0 }}
+      />
       {failed ? (
         <Column fill center gap="8" padding="24" className={styles.fallback}>
           <Icon name="world" onBackground="neutral-weak" />
-          <Text variant="body-default-s" onBackground="neutral-weak" align="center">
+          <Text textVariant="body-default-s" onBackground="neutral-weak" align="center">
             {labels.unavailable}
           </Text>
         </Column>

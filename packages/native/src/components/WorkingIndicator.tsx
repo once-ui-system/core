@@ -4,7 +4,7 @@ import { mixColors } from "../theme/colorScheme";
 import { useTheme } from "../theme/ThemeProvider";
 import { type FlexProps, Row } from "./Flex";
 import { LogoSpinner } from "./LogoSpinner";
-import { useFrameTime, useReduceMotion } from "./motion";
+import { nativeDriver, useFrameTime, useReduceMotion } from "./motion";
 import { Text } from "./Text";
 import { workingVerbs } from "./workingVerbs";
 
@@ -29,7 +29,7 @@ export interface WorkingIndicatorProps extends Omit<FlexProps, "children"> {
   loader?: ReactNode | false;
   size?: "s" | "m" | "l";
   /** What screen readers announce. The cycling words are not read out. */
-  ariaLabel?: string;
+  "aria-label"?: string;
 }
 
 const TEXT_VARIANT = {
@@ -75,10 +75,10 @@ function Shimmer({
   const letters = Array.from(text);
   const levels = shimmerLevels(letters.length, time);
   return (
-    <Text variant={variant} truncate onBackground="neutral-weak">
+    <Text textVariant={variant} truncate onBackground="neutral-weak">
       {letters.map((letter, i) => (
         // biome-ignore lint/suspicious/noArrayIndexKey: letters of one fixed string
-        <Text key={i} variant={variant} style={{ color: mixColors(strong, weak, levels[i]) }}>
+        <Text key={i} textVariant={variant} style={{ color: mixColors(strong, weak, levels[i]) }}>
           {letter}
         </Text>
       ))}
@@ -91,7 +91,11 @@ function Enter({ children, still }: { children: ReactNode; still: boolean }) {
   const progress = useRef(new Animated.Value(still ? 1 : 0)).current;
   useEffect(() => {
     if (still) return;
-    const run = Animated.timing(progress, { toValue: 1, duration: 320, useNativeDriver: true });
+    const run = Animated.timing(progress, {
+      toValue: 1,
+      duration: 320,
+      useNativeDriver: nativeDriver,
+    });
     run.start();
     return () => run.stop();
   }, [progress, still]);
@@ -130,7 +134,7 @@ export function WorkingIndicator({
   detail,
   loader,
   size = "m",
-  ariaLabel = "Working",
+  "aria-label": ariaLabel = "Working",
   ...flex
 }: WorkingIndicatorProps) {
   const reduceMotion = useReduceMotion();
@@ -180,7 +184,8 @@ export function WorkingIndicator({
       {...flex}
     >
       {loader === undefined ? (
-        <LogoSpinner size={LOADER_SIZE[size]} ariaLabel="" />
+        // biome-ignore lint/a11y/useValidAriaValues: an empty label keeps the loader out of the row's announcement
+        <LogoSpinner size={LOADER_SIZE[size]} aria-label="" />
       ) : (
         loader || null
       )}
@@ -189,14 +194,14 @@ export function WorkingIndicator({
           {typeof line === "string" && shimmer && !reduceMotion ? (
             <Shimmer text={line} variant={variant} />
           ) : (
-            <Text variant={variant} onBackground="neutral-medium" truncate>
+            <Text textVariant={variant} onBackground="neutral-medium" truncate>
               {line}
             </Text>
           )}
         </Enter>
         {quiet.length > 0 && (
           <View style={{ flexShrink: 0 }}>
-            <Text variant={variant} onBackground="neutral-weak" numberOfLines={1}>
+            <Text textVariant={variant} onBackground="neutral-weak" numberOfLines={1}>
               {quiet.map((part, i) => (
                 // biome-ignore lint/suspicious/noArrayIndexKey: at most two fixed slots
                 <Fragment key={i}>

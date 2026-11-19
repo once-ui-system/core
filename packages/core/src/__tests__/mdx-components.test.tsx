@@ -251,8 +251,8 @@ describe("element spacing", () => {
     const [defaults, custom] = Array.from(container.querySelectorAll("h2")).map(
       (heading) => heading.parentElement?.className ?? "",
     );
-    expect(defaults).toMatch(/\bmt-24\b/);
-    expect(custom).toMatch(/\bmy-64\b/);
-    expect(custom).not.toMatch(/\bmt-24\b/);
+    expect(defaults).toMatch(/(^|\s)margin-top-24(\s|$)/);
+    expect(custom).toMatch(/(^|\s)margin-y-64(\s|$)/);
+    expect(custom).not.toMatch(/(^|\s)margin-top-24(\s|$)/);
   });
 });

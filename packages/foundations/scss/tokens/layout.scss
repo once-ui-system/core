@@ -1,6 +1,15 @@
 @use "../styles/breakpoints.scss" as breakpoints;
 
 :root {
+    /* The theme's scaling as a factor: 1 here, and what `[data-scaling]` sets
+       below. Every static step is multiplied by it, and so is a number on a
+       size, spacing or offset prop, which core writes as n/16 rem times this
+       (`300` reads `var(--ou-n-300)`, which the element declares as
+       `calc(18.75rem * var(--scaling, 1))`): `40` and `"40"` render the same at
+       every scaling. A `[data-density]` without a `[data-scaling]`
+       picks one: compact 95, spacious 105. */
+    --scaling: 1;
+
     --static-space-0:   0;
     --static-space-1:   1px;
     --static-space-2:   0.125rem;
@@ -130,6 +139,8 @@
 }
 
 [data-scaling="110"] {
+    --scaling: 1.1;
+
     --static-space-1:   calc(0.0625rem * 1.1);
     --static-space-2:   calc(0.125rem * 1.1);
     --static-space-4:   calc(0.25rem * 1.1);
@@ -171,7 +182,10 @@
     --static-height-160: calc(10rem * 1.1);
 }
 
-[data-scaling="105"] {
+[data-scaling="105"],
+[data-density="spacious"]:not([data-scaling]) {
+    --scaling: 1.05;
+
     --static-space-1:   calc(0.0625rem * 1.05);
     --static-space-2:   calc(0.125rem * 1.05);
     --static-space-4:   calc(0.25rem * 1.05);
@@ -213,7 +227,10 @@
     --static-height-160: calc(10rem * 1.05);
 }
 
-[data-scaling="95"] {
+[data-scaling="95"],
+[data-density="compact"]:not([data-scaling]) {
+    --scaling: 0.95;
+
     --static-space-1:   calc(0.0625rem * 0.95);
     --static-space-2:   calc(0.125rem * 0.95);
     --static-space-4:   calc(0.25rem * 0.95);
@@ -256,6 +273,8 @@
 }
 
 [data-scaling="90"] {
+    --scaling: 0.9;
+
     --static-space-1:   calc(0.0625rem * 0.9);
     --static-space-2:   calc(0.125rem * 0.9);
     --static-space-4:   calc(0.25rem * 0.9);

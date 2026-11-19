@@ -10,6 +10,9 @@
  * Run:  pnpm lint:gate            compare with the baseline (CI does this)
  *       pnpm lint:gate --update   record a lower count after fixing errors
  *
+ * fx and blocks run this same script against their own folder and baseline
+ * (`--root .`): their code moved out of core with its old errors.
+ *
  * `--update` refuses to raise the baseline. Accepting more errors is a
  * decision for review, so it has to be a visible hand edit of the JSON file.
  */
@@ -20,7 +23,12 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const require = createRequire(import.meta.url);
-const PACKAGE_ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+const rootFlag = process.argv.indexOf("--root");
+const PACKAGE_ROOT =
+  rootFlag === -1
+    ? path.dirname(path.dirname(fileURLToPath(import.meta.url)))
+    : path.resolve(process.argv[rootFlag + 1]);
+const PACKAGE_NAME = path.relative(path.dirname(path.dirname(PACKAGE_ROOT)), PACKAGE_ROOT);
 const BASELINE_FILE = path.join(PACKAGE_ROOT, "lint-baseline.json");
 const update = process.argv.includes("--update");
 
@@ -65,8 +73,7 @@ function readBaseline() {
 
 function writeBaseline(current) {
   const content = {
-    $comment:
-      "Biome error count for packages/core. CI fails if it rises. After fixing errors, run `pnpm lint:gate --update` to record the lower count.",
+    $comment: `Biome error count for ${PACKAGE_NAME}. CI fails if it rises. After fixing errors, run \`pnpm lint:gate --update\` to record the lower count.`,
     ...current,
   };
   fs.writeFileSync(BASELINE_FILE, `${JSON.stringify(content, null, 2)}\n`);
@@ -96,7 +103,7 @@ if (!baseline) {
 if (current.errors > baseline.errors) {
   console.error(
     `lint-gate: ${current.errors} Biome errors, above the baseline of ${baseline.errors}. ` +
-      "This change adds lint errors; run `pnpm lint` in packages/core to see them.",
+      `This change adds lint errors; run \`pnpm lint\` in ${PACKAGE_NAME} to see them.`,
   );
   // The per-rule counts point at what got worse, even when another rule's
   // count fell in the same change.

@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { useState } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { ScrollContainer } from "../components/ScrollContainer";
+import { Scroller } from "../components/Scroller";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
 
@@ -39,7 +39,7 @@ beforeEach(() => {
  */
 describe("ScrollContainer: controls", () => {
   it("renders the items with named controls and passes axe", async () => {
-    const { container } = render(<ScrollContainer items={items} markers />, { wrapper });
+    const { container } = render(<Scroller markers>{items}</Scroller>, { wrapper });
     expect(screen.getByText("Three")).toBeInTheDocument();
     expect(previous()).toBeDisabled();
     expect(next()).toBeEnabled();
@@ -50,7 +50,7 @@ describe("ScrollContainer: controls", () => {
   it("moves one step per Next and Previous, and stops at the end", async () => {
     const user = userEvent.setup();
     const onActiveChange = vi.fn();
-    render(<ScrollContainer items={items} onActiveChange={onActiveChange} />, { wrapper });
+    render(<Scroller onActiveChange={onActiveChange}>{items}</Scroller>, { wrapper });
     await user.click(next());
     expect(offset()).toBe("-100");
     await user.click(next());
@@ -64,7 +64,7 @@ describe("ScrollContainer: controls", () => {
 
   it("moves by `step`", async () => {
     const user = userEvent.setup();
-    render(<ScrollContainer items={items} step={2} />, { wrapper });
+    render(<Scroller step={2}>{items}</Scroller>, { wrapper });
     await user.click(next());
     expect(offset()).toBe("-200");
   });
@@ -72,7 +72,7 @@ describe("ScrollContainer: controls", () => {
   it("answers ArrowLeft and ArrowRight on the focused track", async () => {
     const user = userEvent.setup();
     const onActiveChange = vi.fn();
-    render(<ScrollContainer items={items} onActiveChange={onActiveChange} />, { wrapper });
+    render(<Scroller onActiveChange={onActiveChange}>{items}</Scroller>, { wrapper });
     track().focus();
     await user.keyboard("{ArrowRight}{ArrowRight}");
     expect(onActiveChange).toHaveBeenLastCalledWith(2);
@@ -84,7 +84,7 @@ describe("ScrollContainer: controls", () => {
 
   it("does not report on mount", () => {
     const onActiveChange = vi.fn();
-    render(<ScrollContainer items={items} onActiveChange={onActiveChange} />, { wrapper });
+    render(<Scroller onActiveChange={onActiveChange}>{items}</Scroller>, { wrapper });
     expect(onActiveChange).not.toHaveBeenCalled();
   });
 });
@@ -92,7 +92,7 @@ describe("ScrollContainer: controls", () => {
 describe("ScrollContainer: markers and `active`", () => {
   it("marks the front item and jumps to a marker", async () => {
     const user = userEvent.setup();
-    render(<ScrollContainer items={items} markers="bottom" />, { wrapper });
+    render(<Scroller markers="bottom">{items}</Scroller>, { wrapper });
     const marker = (n: number) => screen.getByRole("button", { name: `Go to item ${n} of 4` });
     expect(marker(1)).toHaveAttribute("aria-current", "true");
     await user.click(marker(3));
@@ -107,7 +107,9 @@ describe("ScrollContainer: markers and `active`", () => {
       const [active, setActive] = useState(0);
       return (
         <>
-          <ScrollContainer items={items} active={active} onActiveChange={setActive} />
+          <Scroller active={active} onActiveChange={setActive}>
+            {items}
+          </Scroller>
           <button type="button" onClick={() => setActive(3)}>
             Last
           </button>
@@ -126,14 +128,13 @@ describe("ScrollContainer: markers and `active`", () => {
 describe("ScrollContainer: infinite", () => {
   it("never disables the controls, and hides and disables the copies", async () => {
     const { container } = render(
-      <ScrollContainer
-        infinite
-        items={["One", "Two"].map((n) => (
+      <Scroller infinite>
+        {["One", "Two"].map((n) => (
           <a key={n} href={`#${n}`}>
             {n}
           </a>
         ))}
-      />,
+      </Scroller>,
       { wrapper },
     );
     expect(previous()).toBeEnabled();
@@ -150,9 +151,14 @@ describe("ScrollContainer: infinite", () => {
   it("wraps from the first item back to the last", async () => {
     const user = userEvent.setup();
     const onActiveChange = vi.fn();
-    render(<ScrollContainer infinite items={items} onActiveChange={onActiveChange} />, {
-      wrapper,
-    });
+    render(
+      <Scroller infinite onActiveChange={onActiveChange}>
+        {items}
+      </Scroller>,
+      {
+        wrapper,
+      },
+    );
     await user.click(previous());
     expect(onActiveChange).toHaveBeenLastCalledWith(3);
     // Still in the copy before the real run until the transition ends.
@@ -178,14 +184,14 @@ describe("ScrollContainer: drag", () => {
 
   it("advances when dragged left past the commit distance", () => {
     const onActiveChange = vi.fn();
-    render(<ScrollContainer items={items} onActiveChange={onActiveChange} />, { wrapper });
+    render(<Scroller onActiveChange={onActiveChange}>{items}</Scroller>, { wrapper });
     dragBy(-60);
     expect(onActiveChange).toHaveBeenLastCalledWith(1);
   });
 
   it("ignores a mostly vertical gesture", () => {
     const onActiveChange = vi.fn();
-    render(<ScrollContainer items={items} onActiveChange={onActiveChange} />, { wrapper });
+    render(<Scroller onActiveChange={onActiveChange}>{items}</Scroller>, { wrapper });
     const el = track();
     fireEvent.pointerDown(el, { button: 0, clientX: 200, clientY: 0 });
     fireEvent.pointerMove(el, { clientX: 205, clientY: 80 });
@@ -195,9 +201,14 @@ describe("ScrollContainer: drag", () => {
 
   it("does not move with draggable={false}", () => {
     const onActiveChange = vi.fn();
-    render(<ScrollContainer items={items} draggable={false} onActiveChange={onActiveChange} />, {
-      wrapper,
-    });
+    render(
+      <Scroller draggable={false} onActiveChange={onActiveChange}>
+        {items}
+      </Scroller>,
+      {
+        wrapper,
+      },
+    );
     dragBy(-80);
     expect(onActiveChange).not.toHaveBeenCalled();
   });

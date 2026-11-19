@@ -47,12 +47,13 @@ const keptBy = (file: string) =>
 
 describe("sideEffects", () => {
   it("is a list of file-name globs", () => {
-    expect(patterns.length).toBeGreaterThan(0);
+    // 3.0 ships compiled CSS only (B5), so the stylesheets are all `.css`.
+    expect(patterns).toEqual(["*.css"]);
     expect(patterns.filter((pattern) => pattern.includes("/"))).toEqual([]);
   });
 
   it("keeps every stylesheet the build emits", () => {
-    const stylesheets = walk(DIST).filter((file) => /\.s?css$/.test(file));
+    const stylesheets = walk(DIST).filter((file) => /\.s?[ac]ss$/.test(file));
     expect(stylesheets.length).toBeGreaterThan(0);
     expect(stylesheets.filter((file) => !keptBy(file)).map((file) => relative(DIST, file))).toEqual(
       [],

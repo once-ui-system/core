@@ -1,0 +1,76 @@
+{
+  "name": "@once-ui-system/site-editor",
+  "version": "0.1.0-beta.0",
+  "description": "Once UI site editor kit: one way to edit a website, with a section list, fields from schemas, a live preview, undo and autosave, on top of @once-ui-system/core and blocks.",
+  "keywords": [
+    "once-ui",
+    "react",
+    "nextjs",
+    "site builder",
+    "page editor",
+    "blocks"
+  ],
+  "author": "Once UI",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/once-ui-system/core.git",
+    "directory": "packages/site-editor"
+  },
+  "bugs": {
+    "url": "https://github.com/once-ui-system/core/issues"
+  },
+  "homepage": "https://docs.once-ui.com",
+  "publishConfig": {
+    "access": "public",
+    "tag": "next"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "pnpm clean && tsc --project tsconfig.build.json",
+    "clean": "rimraf dist",
+    "prepare": "pnpm build",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "check:package": "publint && attw --pack . --profile esm-only",
+    "prepack": "pnpm build"
+  },
+  "peerDependencies": {
+    "@once-ui-system/blocks": "^3.0.0-0",
+    "@once-ui-system/core": "^3.0.0-0",
+    "react": ">=19",
+    "react-dom": ">=19"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@biomejs/biome": "2.5.6",
+    "@once-ui-system/blocks": "workspace:*",
+    "@once-ui-system/core": "workspace:*",
+    "@testing-library/jest-dom": "^7.0.0",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "26.1.2",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "jsdom": "^30.0.0",
+    "publint": "^0.3.23",
+    "rimraf": "^6.1.3",
+    "typescript": "6.0.3",
+    "vitest": "^4.1.10"
+  }
+}

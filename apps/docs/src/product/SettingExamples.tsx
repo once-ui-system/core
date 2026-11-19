@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  Setting,
-  SettingAxes,
-  SettingGroup,
-  Column,
-  SegmentedControl,
-  Slider,
-  Switch,
-  Text,
-} from "@once-ui-system/core";
+import { Column, SegmentedControl, Setting, Slider, Switch, Text } from "@once-ui-system/core";
 import { useState } from "react";
 
 export function SettingBasicExample() {
@@ -17,12 +8,12 @@ export function SettingBasicExample() {
   const [loop, setLoop] = useState(false);
 
   return (
-    <Column fillWidth gap="8" maxWidth={32}>
+    <Column fillWidth gap="8" maxWidth="32rem">
       <Setting label="Autoplay" description="Start playing on load">
-        <Switch checked={autoplay} onToggle={() => setAutoplay(!autoplay)} />
+        <Switch checked={autoplay} onCheckedChange={() => setAutoplay(!autoplay)} />
       </Setting>
       <Setting label="Loop" info="Restarts from the beginning when it reaches the end.">
-        <Switch checked={loop} onToggle={() => setLoop(!loop)} />
+        <Switch checked={loop} onCheckedChange={() => setLoop(!loop)} />
       </Setting>
     </Column>
   );
@@ -34,30 +25,30 @@ export function SettingGroupExample() {
   const [position, setPosition] = useState("bottom-right");
 
   return (
-    <Column fillWidth gap="8" maxWidth={32}>
-      <SettingGroup
+    <Column fillWidth gap="8" maxWidth="32rem">
+      <Setting
         label="Watermark"
-        control={<Switch checked={enabled} onToggle={() => setEnabled(!enabled)} />}
+        control={<Switch checked={enabled} onCheckedChange={() => setEnabled(!enabled)} />}
         open={enabled}
       >
         <Setting label="Opacity">
-          <Slider value={opacity} min={0} max={100} onChange={setOpacity} />
-          <Text wrap="nowrap" variant="label-default-xs" onBackground="neutral-weak">
+          <Slider value={opacity} min={0} max={100} onValueChange={setOpacity} />
+          <Text wrap="nowrap" textVariant="label-default-xs" onBackground="neutral-weak">
             {opacity}%
           </Text>
         </Setting>
-        <Setting label="Position" controlWidth={18}>
+        <Setting label="Position" controlWidth="18rem">
           <SegmentedControl
             fillWidth
             value={position}
-            onChange={setPosition}
+            onValueChange={setPosition}
             buttons={[
               { value: "bottom-left", label: "Left" },
               { value: "bottom-right", label: "Right" },
             ]}
           />
         </Setting>
-      </SettingGroup>
+      </Setting>
     </Column>
   );
 }
@@ -66,8 +57,8 @@ export function SettingAxesExample() {
   const [tilt, setTilt] = useState({ x: 12, y: -6 });
 
   return (
-    <Column fillWidth maxWidth={32}>
-      <SettingAxes
+    <Column fillWidth maxWidth="32rem">
+      <Setting
         label="Tilt"
         info="Rotates the frame in 3D. Both axes are degrees."
         axes={[
@@ -78,7 +69,7 @@ export function SettingAxesExample() {
                 value={tilt.x}
                 min={-45}
                 max={45}
-                onChange={(x) => setTilt((t) => ({ ...t, x }))}
+                onValueChange={(x) => setTilt((t) => ({ ...t, x }))}
               />
             ),
           },
@@ -89,7 +80,7 @@ export function SettingAxesExample() {
                 value={tilt.y}
                 min={-45}
                 max={45}
-                onChange={(y) => setTilt((t) => ({ ...t, y }))}
+                onValueChange={(y) => setTilt((t) => ({ ...t, y }))}
               />
             ),
           },

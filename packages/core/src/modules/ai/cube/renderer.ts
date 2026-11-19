@@ -1,8 +1,8 @@
 /* A tiny WebGL 1 renderer: one shader, lit, unlit or a soft round glow. Enough for the cube
    mascot and nothing more, so core stays free of a 3D dependency. */
 
-import type { MeshData } from "./geometry";
-import { type Mat4, normalMatrix } from "./math";
+import type { MeshData } from "./geometry.js";
+import { type Mat4, normalMatrix } from "./math.js";
 
 export type RGB = [number, number, number];
 

@@ -52,33 +52,33 @@ export const Features14 = (flex: React.ComponentProps<typeof Row>) => {
       <Row flex={1} minWidth="16" borderY />
       <Column maxWidth="xl">
         <Column fillWidth borderX borderTop gap="8" padding="l">
-          <Heading as="h2" variant="display-strong-m">
+          <Heading as="h2" textVariant="display-strong-m">
             Make an irresistible offer
           </Heading>
-          <Text onBackground="neutral-weak" variant="heading-default-xl" wrap="balance">
+          <Text onBackground="neutral-weak" textVariant="heading-default-xl" wrap="balance">
             Turn months of prompting into days of delivery
           </Text>
         </Column>
         <Grid fillWidth columns={3} m={{ columns: 2 }} xs={{ columns: 1 }} borderTop borderLeft>
           {features.map((feature, index) => (
             <Column key={index} fillWidth padding="l" borderBottom borderRight gap="8">
-              <Icon
-                name={feature.icon}
-                size="s"
+              <Row
+                fit
                 border="brand-alpha-weak"
                 background="brand-alpha-weak"
-                onBackground="brand-weak"
                 radius="m"
                 padding="8"
                 marginBottom="12"
-              />
-              <Heading as="h3" variant="heading-strong-m">
+              >
+                <Icon name={feature.icon} size="s" onBackground="brand-weak" />
+              </Row>
+              <Heading as="h3" textVariant="heading-strong-m">
                 {feature.title}{" "}
                 <Text marginLeft="8" onBackground="brand-weak" weight="default">
                   {feature.time}
                 </Text>
               </Heading>
-              <Text onBackground="neutral-weak" variant="body-default-s" wrap="balance">
+              <Text onBackground="neutral-weak" textVariant="body-default-s" wrap="balance">
                 {feature.description}
               </Text>
             </Column>

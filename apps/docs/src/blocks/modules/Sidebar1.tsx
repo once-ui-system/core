@@ -3,7 +3,7 @@ import { Column, Icon, IconButton, Line, Row, Tag, Text, ToggleButton } from "@o
 export const Sidebar1: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }) => {
   return (
     <Column
-      maxWidth={16}
+      maxWidth="16rem"
       fillHeight
       paddingX="16"
       paddingY="24"
@@ -15,7 +15,7 @@ export const Sidebar1: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
       <Column fill gap="m">
         <Column fillWidth gap="4">
           <Text
-            variant="body-default-xs"
+            textVariant="body-default-xs"
             onBackground="neutral-weak"
             marginBottom="8"
             marginLeft="16"
@@ -46,7 +46,7 @@ export const Sidebar1: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
         <Line />
 
         <Column fillWidth gap="4">
-          <Text variant="body-default-xs" onBackground="neutral-weak" marginY="8" marginLeft="16">
+          <Text textVariant="body-default-xs" onBackground="neutral-weak" marginY="8" marginLeft="16">
             Management
           </Text>
           <ToggleButton fillWidth horizontal="start">
@@ -73,7 +73,7 @@ export const Sidebar1: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
 
         <Column fill gap="4">
           <Row fillWidth horizontal="between" vertical="center" paddingY="8" paddingX="16">
-            <Text variant="body-default-xs" onBackground="neutral-weak">
+            <Text textVariant="body-default-xs" onBackground="neutral-weak">
               Projects
             </Text>
             <IconButton tooltip="Create" variant="secondary" icon="plus" size="s" />

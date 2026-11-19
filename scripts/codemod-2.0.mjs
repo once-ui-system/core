@@ -144,7 +144,7 @@ const SKELETON_LINE_WIDTH = { xs: "25%", s: "33%", m: "50%", l: "75%", xl: "100%
 const SCALE = /^["'](xs|s|m|l|xl)["']$/;
 
 /** The literal behind `"m"` or `{"m"}`, or null when it is not a literal. */
-function literal(raw) {
+export function literal(raw) {
   if (raw === null || raw === undefined) return null;
   const inner = String(raw).trim().replace(/^\{|\}$/g, "").trim();
   return SCALE.test(inner) || /^["'][^"']*["']$/.test(inner) ? inner.slice(1, -1) : null;
@@ -152,7 +152,7 @@ function literal(raw) {
 
 /** Widen an edit's start to swallow the whitespace before it, so removing an
  *  attribute does not leave a double space or a dangling newline. */
-const withLeadingSpace = (src, at) => {
+export const withLeadingSpace = (src, at) => {
   let i = at;
   while (i > 0 && /[ \t]/.test(src[i - 1])) i--;
   if (src[i - 1] === "\n" && /^\s*$/.test(src.slice(i, at))) i--;
@@ -322,6 +322,43 @@ export function skipComment(src, i) {
   if (src[i + 1] === "*") {
     const close = src.indexOf("*/", i + 2);
     return close < 0 ? src.length : close + 2;
+  }
+  return skipRegex(src, i);
+}
+
+/**
+ * If a regular expression literal starts at `i`, the index just past it
+ * (flags included), else `i`. `/^https?:\/\//` holds a `//` and a quote
+ * may sit in one (`/"/g`): read as a comment or a string, either would
+ * unbalance the scanner for the rest of the file. A `/` opens a regex only
+ * after an operator or an opening bracket (never after a name, a number, a
+ * closing bracket or `<`, where it is a division or a closing tag), and the
+ * literal ends on the same line.
+ */
+export function skipRegex(src, i) {
+  if (src[i] !== "/") return i;
+  let p = i - 1;
+  while (p >= 0 && (src[p] === " " || src[p] === "\t")) p--;
+  const prev = p < 0 ? "" : src[p];
+  const keyword = /\b(return|typeof|case|in|of|void|delete|throw)$/.test(src.slice(Math.max(0, p - 7), p + 1));
+  if (!keyword && !(prev === "" || "(,=:[!&|?{;+-*%~^".includes(prev))) return i;
+  let j = i + 1;
+  let inClass = false;
+  if (src[j] === "/" || src[j] === "*" || src[j] === " " || src[j] === "\n") return i;
+  while (j < src.length && src[j] !== "\n") {
+    const c = src[j];
+    if (c === "\\") {
+      j += 2;
+      continue;
+    }
+    if (c === "[") inClass = true;
+    else if (c === "]") inClass = false;
+    else if (c === "/" && !inClass) {
+      j++;
+      while (/[a-z]/.test(src[j] ?? "")) j++;
+      return j;
+    }
+    j++;
   }
   return i;
 }
@@ -519,7 +556,7 @@ export function attributesOf(src, from, to) {
  * and they also carry aliases: `{ Modal as Sheet }` means `<Sheet>` is the
  * element to migrate and `<Modal>` is not.
  */
-function importBindings(src) {
+export function importBindings(src) {
   const bindings = new Map();
   const re = /import\s+(?:type\s+)?(?:\{([^}]*)\}|(\w+)|\*\s+as\s+(\w+))\s*from\s*["']([^"']+)["']/g;
   let m;
@@ -535,10 +572,17 @@ function importBindings(src) {
       bindings.set(name, { source, canonical: name });
     }
   }
+  // Components the file declares itself (`const InfoTip = …`, `function
+  // Button()`): not Once UI's, even with no import of that name. Template
+  // literals (code samples) are skipped: a declaration there is sample text.
+  const code = src.replace(/`(?:\\.|[^`\\])*`/g, "``");
+  bindings.declared = new Set(
+    [...code.matchAll(/(?<![\w$.])(?:const|let|var|function|class)\s+([A-Z][\w$]*)(?![\w$])/g)].map((d) => d[1]),
+  );
   return bindings;
 }
 
-const isCoreSource = (source) => /^@once-ui-system\/core(\/|$)/.test(source);
+export const isCoreSource = (source) => /^@once-ui-system\/core(\/|$)/.test(source);
 
 /**
  * The element names in this file that mean Once UI's `tag`.
@@ -549,12 +593,12 @@ const isCoreSource = (source) => /^@once-ui-system\/core(\/|$)/.test(source);
  * imported at all (migrate it by name, which is what MDX depends on, since
  * there components arrive through the provider rather than an import).
  */
-function localNamesFor(tag, bindings) {
+export function localNamesFor(tag, bindings) {
   const aliases = [];
   for (const [local, { source, canonical }] of bindings)
     if (canonical === tag && isCoreSource(source)) aliases.push(local);
   if (aliases.length) return aliases;
-  return bindings.has(tag) ? [] : [tag];
+  return bindings.has(tag) || bindings.declared?.has(tag) ? [] : [tag];
 }
 
 /**
@@ -590,7 +634,7 @@ const MOVED_TO = new Map(
  * text. An inline `type` modifier stays in the text but not in the name, or
  * `{ type ChartMode, DataThemeProvider }` would never match a moved export.
  */
-function specifiersOf(clause) {
+export function specifiersOf(clause) {
   return clause
     .split(",")
     .map((raw) => raw.trim())

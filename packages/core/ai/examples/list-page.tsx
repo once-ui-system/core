@@ -6,6 +6,10 @@
  * filter, a searchable, sortable, paginated Table with status tags and row
  * actions, and an empty state that offers a way back.
  *
+ * The role filter is a toolbar picker: a secondary Button that opens a
+ * Dropdown of Options and names the current choice. Select is for a form
+ * value with a label (a timezone, a country), not for a view control.
+ *
  * Table searches and sorts by the text inside each cell, so a cell that is a
  * component (the name with its email, the status Tag) should carry its text as
  * children, not only in a prop.
@@ -13,7 +17,9 @@
 import {
   Button,
   Column,
+  Dropdown,
   Heading,
+  Option,
   Row,
   SegmentedControl,
   Table,
@@ -77,7 +83,12 @@ export function ListPageExample({
   onRemove?: (member: Member) => void;
 }) {
   const [filter, setFilter] = useState<Filter>("all");
-  const visible = members.filter((member) => filter === "all" || member.status === filter);
+  const [role, setRole] = useState("all");
+  const roles = [...new Set(members.map((member) => member.role))];
+  const visible = members.filter(
+    (member) =>
+      (filter === "all" || member.status === filter) && (role === "all" || member.role === role),
+  );
 
   return (
     <Column as="main" fillWidth horizontal="center" paddingY="48" paddingX="24">
@@ -90,10 +101,10 @@ export function ListPageExample({
           s={{ direction: "column", horizontal: "start" }}
         >
           <Column gap="8">
-            <Heading as="h1" variant="display-strong-xs">
+            <Heading as="h1" textVariant="display-strong-xs">
               Members
             </Heading>
-            <Text variant="body-default-s" onBackground="neutral-weak">
+            <Text textVariant="body-default-s" onBackground="neutral-weak">
               Everyone with access to this workspace.
             </Text>
           </Column>
@@ -102,67 +113,93 @@ export function ListPageExample({
           </Button>
         </Row>
 
-        <SegmentedControl
-          fillWidth={false}
-          value={filter}
-          onChange={(value) => setFilter(value as Filter)}
-          buttons={[
-            { value: "all", label: "All" },
-            { value: "active", label: "Active" },
-            { value: "invited", label: "Invited" },
-            { value: "suspended", label: "Suspended" },
-          ]}
-        />
+        <Row gap="8" vertical="center" wrap>
+          <SegmentedControl
+            fillWidth={false}
+            value={filter}
+            onValueChange={(value) => setFilter(value as Filter)}
+            buttons={[
+              { value: "all", label: "All" },
+              { value: "active", label: "Active" },
+              { value: "invited", label: "Invited" },
+              { value: "suspended", label: "Suspended" },
+            ]}
+          />
+          <Dropdown
+            selectedOption={role}
+            onSelect={setRole}
+            trigger={
+              <Button variant="secondary" suffixIcon="chevronDown">
+                {role === "all" ? "All roles" : role}
+              </Button>
+            }
+          >
+            <Column padding="4" gap="2">
+              <Option value="all" label="All roles" />
+              {roles.map((name) => (
+                <Option key={name} value={name} label={name} />
+              ))}
+            </Column>
+          </Dropdown>
+        </Row>
 
         <Table
           searchable
           searchPlaceholder="Search members"
           paginated
-          defaultPageSize={10}
-          data={{
-            headers: [
-              { content: "Name", key: "name", sortable: true },
-              { content: "Role", key: "role", sortable: true },
-              { content: "Status", key: "status", sortable: true },
-              { content: "Last active", key: "lastActive", sortable: true, align: "right" },
-            ],
-            rows: visible.map((member) => [
-              <Column key="name" gap="4">
-                <Text variant="label-default-s">{member.name}</Text>
-                <Text variant="body-default-xs" onBackground="neutral-weak">
-                  {member.email}
-                </Text>
-              </Column>,
-              member.role,
-              <Tag key="status" size="s" scheme={statusTag[member.status].scheme}>
-                {statusTag[member.status].label}
-              </Tag>,
-              member.lastActive,
-            ]),
-          }}
-          actions={[
-            {
-              icon: "edit",
-              tooltip: "Edit member",
-              onClick: (row) => onEdit?.(visible[row]),
-            },
-            {
-              icon: "trash",
-              tooltip: "Remove member",
-              variant: "danger",
-              onClick: (row) => onRemove?.(visible[row]),
-            },
-          ]}
+          defaultPerPage={10}
           emptyState={
             <Column center gap="12" padding="32">
-              <Text variant="body-default-s" onBackground="neutral-weak">
+              <Text textVariant="body-default-s" onBackground="neutral-weak">
                 No members match this filter.
               </Text>
-              <Button size="s" variant="secondary" onClick={() => setFilter("all")}>
+              <Button
+                size="s"
+                variant="secondary"
+                onClick={() => {
+                  setFilter("all");
+                  setRole("all");
+                }}
+              >
                 Show everyone
               </Button>
             </Column>
           }
+          columns={[
+            { header: "Name", key: "name", sortable: true },
+            { header: "Role", key: "role", sortable: true },
+            { header: "Status", key: "status", sortable: true },
+            { header: "Last active", key: "lastActive", sortable: true, align: "right" },
+          ]}
+          rows={visible.map((member) => [
+            <Column key="name" gap="4">
+              <Text textVariant="label-default-s">{member.name}</Text>
+              <Text textVariant="body-default-s" onBackground="neutral-weak">
+                {member.email}
+              </Text>
+            </Column>,
+            member.role,
+            <Tag key="status" size="s" tone={statusTag[member.status].scheme}>
+              {statusTag[member.status].label}
+            </Tag>,
+            member.lastActive,
+          ])}
+          perPageOptions={[5, 10, 20, 50]}
+          showFirstLast
+          actions={[
+            {
+              icon: "edit",
+              tooltip: "Edit member",
+              onClick: (_row, index) => onEdit?.(visible[index]),
+            },
+            {
+              icon: "trash",
+              tooltip: "Remove member",
+              variant: "primary",
+              tone: "danger",
+              onClick: (_row, index) => onRemove?.(visible[index]),
+            },
+          ]}
         />
       </Column>
     </Column>

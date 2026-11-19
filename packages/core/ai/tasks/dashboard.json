@@ -48,6 +48,7 @@
   "quality": {
     "statCard": "Column surface recipe — not Card",
     "kpiNumber": "CountFx or display-strong-s with viewport latch",
-    "shell": "Inside an app: the layouts.md shell — the pane scrolls with height=\"below-header\", the sidebar hides at s and a Drawer holds the same nav on a phone"
+    "shell": "Inside an app: the layouts.md shell — the pane scrolls with height=\"below-header\", the sidebar hides at s and a Drawer holds the same nav on a phone",
+    "states": "Every view that loads data shows loading (Skeleton shaped like the content), empty (title, one line, the action that fills it), error (Feedback tone=\"danger\" with Retry) and filled, through a typed lib/ data layer of async functions over mock data — even when the brief never mentions data"
   }
 }

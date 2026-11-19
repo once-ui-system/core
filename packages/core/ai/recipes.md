@@ -1,7 +1,8 @@
 # Once UI — decoration and restraint recipes
 
 Curated patterns that keep pages premium without going over the top: decorative
-layers that carry a section, and controls that earn their room back. Use them
+layers that carry a section, controls that earn their room back, and the brand
+world a product's own landing page starts from (#9). Use them
 verbatim, then adjust values. All units follow rules.md #21–24.
 
 ## Budget (hard limits)
@@ -25,13 +26,13 @@ Placement matters: the wrapper is **full-bleed** (`fillWidth`, outside any `maxW
       display: true,
       colorStart: "brand-alpha-medium",
       colorEnd: "static-transparent",
-      x: 50, y: 0,
-      width: 150, height: 80,
+      x: "50%", y: 0,
+      width: "150%", height: "80%",
       opacity: 60,
     }}
     dots={{ display: true, color: "neutral-alpha-weak", size: "2", opacity: 40 }}
   />
-  <Column zIndex={1} horizontal="center" gap="24" maxWidth={48}>
+  <Column zIndex={1} horizontal="center" gap="24" maxWidth="48rem">
     {/* hero content */}
   </Column>
 </Column>
@@ -47,11 +48,11 @@ Animated matrix field behind a hero, faded into the page with a `page-background
     position="absolute" top="0" left="0" fill
     flicker size={1.5} spacing={8}
     colors={["brand-solid-strong"]}
-    bulge={{ type: "wave", duration: 3, intensity: 20, repeat: true }}
+    bulge={{ type: "wave", duration: 3000, intensity: 20, repeat: true }}
   />
   <Background
     position="absolute" top="0" left="0" fill pointerEvents="none"
-    gradient={{ display: true, colorStart: "page-background", x: 0, y: 50, width: 150, height: 300 }}
+    gradient={{ display: true, colorStart: "page-background", x: 0, y: "50%", width: "150%", height: "300%" }}
   />
   <Column zIndex={1} center gap="16" padding="48">
     {/* hero content */}
@@ -71,8 +72,8 @@ For the emphasized item in a set (e.g. "most popular" pricing tier). Border + to
       display: true,
       colorStart: "brand-alpha-medium",
       colorEnd: "static-transparent",
-      x: 50, y: 0,
-      width: 200, height: 60,
+      x: "50%", y: 0,
+      width: "200%", height: "60%",
       opacity: 50,
     }}
   />
@@ -180,6 +181,27 @@ Use it for theme, density, or view-mode switchers in a header or a footer. Do
 not use it for anything a visitor needs to *see* the state of at a glance across
 options, for primary navigation, or for a destructive action — a control that
 hides until pointed at is a control nobody finds.
+
+## 9. Brand world (find the world first)
+
+For a product's own landing page or homepage hero. The template hero (a text-effect headline, a CTA pair, a logo cloud, a glow behind it) is what every product has: it is one option, not the default. Make a first screen that would look wrong with a competitor's logo on it.
+
+**Direction card, before any code.** A world is one place the product's work already happens in, taken from what the product does, never from its category (launch videos: a film set at the start of a screening; venue bookings: a kitchen's ticket rail). One line each:
+
+- **World:** the place, in five words. **Vibe:** its light and mood.
+- **Type:** one display face with character (condensed, rounded, serif, extended) and a mono for metadata, never only the default sans.
+- **Palette:** a ground (near-black, a tinted dark, or paper) and ONE hot focal colour; a second only as a small accent.
+- **Layout:** the first screen as a picture. **Cast:** who acts in the scene (a mascot family, or the product's own objects: tickets, posters, cards), each with a job. **Signature motion:** one loop that shows the work happening.
+
+**Write three worlds and pick on purpose.** Drop the name pun (Ember: a fire, a hearth); every model reaches for it first. Drop the house default: a charcoal ground, one orange, a Fraunces headline and a tilted paper card. Prefer the world with the most objects to turn sections into, or show the person all three.
+
+**The first screen is a scene of the work:** believable content (questions and answers, file names, times, prices, statuses) with mono metadata under each item. The headline is a split poster: the plain half in the text colour, the promise in the focal colour, up to 10–12vw, tight leading. Under it, one plain sentence of what the product does and for whom, and a small price or free-plan line.
+
+**Carry the world through the page:** its language in the nav, eyebrows, pricing and closing CTA; each section an object of the world (examples as posters, how-it-works as a storyboard, plans as tickets), not a three-card grid; one texture per section. Cast members keep their proportions: vary size, never scaleX/scaleY.
+
+**Build it with the system.** One `StyleScope` (or the app's config) holds the look: `brandSeed` = the focal colour, `pageBackground`/`surfaceBackground` = the ground, `fonts` with the display face on `heading` and the mono on `code`/`label`, loaded with `next/font`. Re-tune the display tokens inside that scope in one sheet (`--font-size-display-xl: clamp(64px, 12vw, 180px); --line-height-display-xl: 0.8em;`). Layout, type, buttons and lists stay components and props. Custom CSS only for artwork (the cast, the world's props, textures, keyframes): classes named for what they draw (`.emChair`, `.emStrip`) in that one sheet, scoped under the page class, the one place hex is fine. The scene is artwork, outside the one-ambient-layer budget; every other section keeps it.
+
+**Check it like a designer:** screenshot 1440 and 390 wide (the scene still reads on a phone, nothing scrolls sideways); headings really in the display face; a light paper scope really light; the swap test (cover the name: could it be a competitor's?); the category test (does it read as "an AI SaaS landing page"?); the focal colour only on the promise, the primary button and one thing in the scene.
 
 ## Anti-patterns
 

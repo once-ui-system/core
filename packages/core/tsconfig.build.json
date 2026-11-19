@@ -3,18 +3,17 @@
   "compilerOptions": {
     "outDir": "dist",
     "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
     "noEmit": false,
-    "module": "ES2022",
-    "moduleResolution": "bundler",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "rootDir": "src",
     "jsx": "react-jsx",
+    "types": ["node"],
     "skipLibCheck": true,
     "isolatedModules": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.test.*", "**/*.stories.*"]
+  "exclude": ["node_modules", "dist", "src/__tests__", "src/test", "**/*.test.*", "**/*.stories.*"]
 }

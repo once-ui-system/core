@@ -1,0 +1,56 @@
+---
+title: "ConfirmButton"
+summary: "A button for an action that is hard to take back: press it twice, or hold it, to confirm."
+updatedAt: "2026-11-08"
+docs: "once-ui/components/confirmButton.mdx"
+github: "components/ConfirmButton.tsx"
+navLabel: "ConfirmButton"
+navIcon: "components"
+---
+
+One press of a `ConfirmButton` never acts. In the default `"twice"` mode the
+first press arms it: the label asks for a second press, the button turns
+`armedTone` (danger by default) and a bar runs down the time left. A second
+press within `timeout` runs `onConfirm`. Escape, moving focus away or the time
+running out disarms it, and a double click's second press is ignored, so a
+double click never confirms by accident.
+
+Reach for it where a dialog would be too slow and one press too easy: a manual
+trip, stopping a deploy, deleting a row in a dense table.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <ConfirmButtonExample />
+  }
+  codes={[
+    {
+      code:
+`<ConfirmButton
+  label="Manual trip"
+  labels={{ confirm: "Press again to trip" }}
+  onConfirm={trip}
+/>
+<ConfirmButton mode="hold" label="Hold to silence" onConfirm={silence} />`,
+      language: "tsx",
+      label: "ConfirmButton"
+    }
+  ]}
+/>
+
+## Hold
+
+`mode="hold"` fills the button while it is held, by pointer or by Space or
+Enter, and acts when it is full (`holdDuration`, 1.5 s by default). Letting go
+early cancels.
+
+## Accessibility
+
+Every change is in words: the label changes as the button arms or fills, and a
+status line tells a screen reader how to confirm or cancel. The bar and the
+colour only repeat what the label says.
+
+## API reference
+
+<PropsTable component="ConfirmButton" />

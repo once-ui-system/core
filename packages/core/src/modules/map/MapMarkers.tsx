@@ -2,11 +2,11 @@
 
 import type React from "react";
 import { useEffect, useMemo, useState } from "react";
-import { type ClusterGroup, clusterPoints, type MapClusterOptions } from "./cluster";
-import { useMap } from "./MapContext";
-import { MapMarker } from "./MapMarker";
-import { MapPin } from "./MapPin";
-import type { LngLat } from "./types";
+import { type ClusterGroup, clusterPoints, type MapClusterOptions } from "./cluster.js";
+import { useMap } from "./MapContext.js";
+import { MapMarker } from "./MapMarker.js";
+import { MapPin } from "./MapPin.js";
+import type { LngLat } from "./types.js";
 
 export interface MapMarkerItem {
   id: string;

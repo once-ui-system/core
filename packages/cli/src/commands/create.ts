@@ -18,6 +18,8 @@ export type CreateFlags = {
   targets?: string;
   /** Bundle id for the desktop and mobile apps. */
   appId?: string;
+  /** The app's languages, comma-separated, default first: `en,hu`. */
+  locales?: string;
 };
 
 const split = (value: string | undefined) =>
@@ -47,6 +49,8 @@ export async function create(client: ApiClient, dir: string | undefined, flags: 
     );
   }
 
+  const locales = split(flags.locales);
+
   let surfaces = split(flags.surfaces);
   if (!surfaces.length) {
     const catalog = await getCatalog(client);
@@ -69,6 +73,7 @@ export async function create(client: ApiClient, dir: string | undefined, flags: 
       ...(flags.url ? { url: flags.url } : {}),
       ...(targets.length ? { targets } : {}),
       ...(targets.length && flags.appId ? { appId: flags.appId } : {}),
+      ...(locales.length ? { locales } : {}),
     }),
   });
   if (!res.ok) throw await failureFrom(res);

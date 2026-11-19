@@ -8,6 +8,8 @@ navLabel: "CompareImage"
 navIcon: "components"
 ---
 
+Import it from the media entry point: `import { CompareImage } from "@once-ui-system/core/media";`
+
 <CodeBlock
   marginTop="16"
   marginBottom="24"
@@ -50,8 +52,8 @@ The `CompareImage` component supports `ReactNode` for the content.
       border
       overflow="hidden"
       aspectRatio="16 / 9"
-      leftContent={{src: <Background center fill gradient={{display: true, x: 0, y: 50, colorStart: "brand-background-strong", colorEnd: "accent-background-weak"}}><Row zIndex="1">Left</Row></Background>}}
-      rightContent={{src: <Background center fill gradient={{display: true, x: 0, y: 50, colorStart: "accent-background-strong", colorEnd: "brand-background-weak"}}><Row zIndex="1">Right</Row></Background>}}
+      leftContent={{src: <Background center fill gradient={{display: true, x: 0, y: "50%", colorStart: "brand-background-strong", colorEnd: "accent-background-weak"}}><Row zIndex="1">Left</Row></Background>}}
+      rightContent={{src: <Background center fill gradient={{display: true, x: 0, y: "50%", colorStart: "accent-background-strong", colorEnd: "brand-background-weak"}}><Row zIndex="1">Right</Row></Background>}}
     />
   }
   codes={[

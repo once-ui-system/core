@@ -9,7 +9,7 @@ import { expectNoAxeViolations } from "../test/axe";
 
 /**
  * TagInput is controlled: `value` is the tag list and every change goes
- * through `onChange`. Enter or a comma commits the trimmed text as a tag and
+ * through `onValueChange`. Enter or a comma commits the trimmed text as a tag and
  * clears the field; blank text commits nothing; each tag has a remove button.
  */
 
@@ -19,7 +19,7 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 
 const ControlledTagInput = ({
   initial = [],
-  onChange,
+  onValueChange,
   ...props
 }: { initial?: string[] } & Partial<React.ComponentProps<typeof TagInput>>) => {
   const [tags, setTags] = useState(initial);
@@ -28,9 +28,9 @@ const ControlledTagInput = ({
       id="tags"
       label="Tags"
       value={tags}
-      onChange={(next) => {
+      onValueChange={(next) => {
         setTags(next);
-        onChange?.(next);
+        onValueChange?.(next);
       }}
       {...props}
     />
@@ -49,33 +49,33 @@ describe("TagInput", () => {
 
   it("commits the trimmed text as a tag on Enter and clears the field", async () => {
     const user = userEvent.setup();
-    const onChange = vi.fn();
-    render(<ControlledTagInput initial={["react"]} onChange={onChange} />, { wrapper });
+    const onValueChange = vi.fn();
+    render(<ControlledTagInput initial={["react"]} onValueChange={onValueChange} />, { wrapper });
 
     await user.type(field(), "  svelte  {Enter}");
-    expect(onChange).toHaveBeenLastCalledWith(["react", "svelte"]);
+    expect(onValueChange).toHaveBeenLastCalledWith(["react", "svelte"]);
     expect(field().value).toBe("");
     expect(screen.getByText("svelte")).toBeInTheDocument();
   });
 
   it("commits on a comma, which never reaches the field", async () => {
     const user = userEvent.setup();
-    const onChange = vi.fn();
-    render(<ControlledTagInput onChange={onChange} />, { wrapper });
+    const onValueChange = vi.fn();
+    render(<ControlledTagInput onValueChange={onValueChange} />, { wrapper });
 
     await user.type(field(), "solid,qwik,");
-    expect(onChange).toHaveBeenNthCalledWith(1, ["solid"]);
-    expect(onChange).toHaveBeenNthCalledWith(2, ["solid", "qwik"]);
+    expect(onValueChange).toHaveBeenNthCalledWith(1, ["solid"]);
+    expect(onValueChange).toHaveBeenNthCalledWith(2, ["solid", "qwik"]);
     expect(field().value).toBe("");
   });
 
   it("commits nothing for blank text", async () => {
     const user = userEvent.setup();
-    const onChange = vi.fn();
-    render(<ControlledTagInput onChange={onChange} />, { wrapper });
+    const onValueChange = vi.fn();
+    render(<ControlledTagInput onValueChange={onValueChange} />, { wrapper });
 
     await user.type(field(), "   {Enter},");
-    expect(onChange).not.toHaveBeenCalled();
+    expect(onValueChange).not.toHaveBeenCalled();
   });
 
   it("does not submit the surrounding form on Enter", async () => {
@@ -93,25 +93,28 @@ describe("TagInput", () => {
 
   it("removes the tag whose remove button is pressed", async () => {
     const user = userEvent.setup();
-    const onChange = vi.fn();
-    render(<ControlledTagInput initial={["react", "vue", "svelte"]} onChange={onChange} />, {
-      wrapper,
-    });
+    const onValueChange = vi.fn();
+    render(
+      <ControlledTagInput initial={["react", "vue", "svelte"]} onValueChange={onValueChange} />,
+      {
+        wrapper,
+      },
+    );
 
     expect(screen.getAllByRole("button", { name: /^Remove tag / })).toHaveLength(3);
     await user.click(screen.getByRole("button", { name: "Remove tag vue" }));
-    expect(onChange).toHaveBeenLastCalledWith(["react", "svelte"]);
+    expect(onValueChange).toHaveBeenLastCalledWith(["react", "svelte"]);
     expect(screen.queryByText("vue")).toBeNull();
   });
 
-  it("only changes through onChange: without a state update the tags stay as given", async () => {
+  it("only changes through onValueChange: without a state update the tags stay as given", async () => {
     const user = userEvent.setup();
-    const onChange = vi.fn();
-    render(<TagInput id="tags" label="Tags" value={["react"]} onChange={onChange} />, {
+    const onValueChange = vi.fn();
+    render(<TagInput id="tags" label="Tags" value={["react"]} onValueChange={onValueChange} />, {
       wrapper,
     });
     await user.type(field(), "vue{Enter}");
-    expect(onChange).toHaveBeenCalledWith(["react", "vue"]);
+    expect(onValueChange).toHaveBeenCalledWith(["react", "vue"]);
     expect(screen.queryByText("vue")).toBeNull();
   });
 
@@ -122,7 +125,7 @@ describe("TagInput", () => {
 
   it("forwards its ref to the text field", () => {
     const ref = createRef<HTMLInputElement>();
-    render(<TagInput ref={ref} id="tags" label="Tags" value={[]} onChange={vi.fn()} />, {
+    render(<TagInput ref={ref} id="tags" label="Tags" value={[]} onValueChange={vi.fn()} />, {
       wrapper,
     });
     expect(ref.current).toBe(field());

@@ -124,7 +124,7 @@ export function Message({ locked }: { locked: boolean }) {
 | `closeAfterClick` | `boolean` | `true` | Closes the menu when an `Option` is pressed. |
 | `disabled` | `boolean` | `false` | Ignores long presses and dims the children. |
 | `fillWidth` | `boolean` | `false` | The region around the children fills its container's width. |
-| `minWidth` | `number` | `12` | The menu's minimum width, in rem. |
-| `maxWidth` | `number` | | The menu's maximum width, in rem. |
+| `minWidth` | `number \| Length` | `"12rem"` | The menu's minimum width: a number is points. |
+| `maxWidth` | `number \| Length` | | The menu's maximum width, as `minWidth`. |
 | `minHeight` | `number` | | The menu's minimum height, in points. |
 | `style` | `StyleProp<ViewStyle>` | | Style for the region around the children. |

@@ -63,11 +63,11 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan, ...rest }) => {
               position="absolute"
               mask={{
                 cursor: true,
-                radius: 75,
+                radius: "75vh",
               }}
               gradient={{
-                x: 50,
-                y: 100,
+                x: "50%",
+                y: "100%",
                 opacity: 70,
                 display: true,
                 colorStart: "accent-background-strong",
@@ -80,13 +80,13 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan, ...rest }) => {
               left="0"
               position="absolute"
               mask={{
-                x: 50,
-                y: 100,
-                radius: 75,
+                x: "50%",
+                y: "100%",
+                radius: "75vh",
               }}
               gradient={{
-                x: 50,
-                y: 100,
+                x: "50%",
+                y: "100%",
                 opacity: 50,
                 display: true,
                 colorStart: gradientColor,
@@ -97,17 +97,17 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan, ...rest }) => {
         )}
         <Column fill gap="4">
           <Column fillWidth gap="8" marginBottom="12">
-            <Heading as="h3" align="left" onBackground={textColor} variant="heading-default-l">
+            <Heading as="h3" align="left" onBackground={textColor} textVariant="heading-default-l">
               {plan.name}
             </Heading>
-            <Text align="left" variant="heading-default-xl">
+            <Text align="left" textVariant="heading-default-xl">
               {plan.price.original !== plan.price.discounted && (
                 <Text onBackground="neutral-weak" style={{ textDecoration: "line-through" }}>
                   ${plan.price.original}
                 </Text>
               )}{" "}
               ${plan.price.discounted}{" "}
-              <Text onBackground="neutral-strong" variant="body-default-s">
+              <Text onBackground="neutral-strong" textVariant="body-default-s">
                 / year
               </Text>
             </Text>
@@ -116,7 +116,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan, ...rest }) => {
             {plan.features.map((feature, index) => (
               <Row key={index} vertical="center" gap="12">
                 <Icon name="check" size="s" onBackground={textColor} />
-                <Text align="left" onBackground="neutral-medium" variant="body-default-s">
+                <Text align="left" onBackground="neutral-medium" textVariant="body-default-s">
                   {feature}
                 </Text>
               </Row>
@@ -151,10 +151,10 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan, ...rest }) => {
 export const Plans2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (
     <Row fillWidth gap="-1" overflowX="auto" {...flex}>
-      <Row fillWidth paddingY="24" minWidth={20}>
+      <Row fillWidth paddingY="24" minWidth="20rem">
         <PlanCard id="free" plan={plans.free} radius={undefined} leftRadius="l" />
       </Row>
-      <PlanCard id="pro" plan={plans.pro} zIndex={1} minWidth={20} />
+      <PlanCard id="pro" plan={plans.pro} zIndex={1} minWidth="20rem" />
     </Row>
   );
 };

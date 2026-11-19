@@ -1,0 +1,34 @@
+{
+  "id": "app-shell",
+  "title": "App shell",
+  "description": "The providers at the root, safe areas, a screen header and a bottom tab bar, for a new app or its navigation",
+  "components": [
+    "ThemeProvider",
+    "ToastProvider",
+    "Column",
+    "Row",
+    "Heading",
+    "Text",
+    "IconButton",
+    "Card",
+    "Icon",
+    "Line"
+  ],
+  "example": "examples/app-shell.tsx",
+  "gotchas": [
+    "safeArea.edges",
+    "web.nav",
+    "web.scroller",
+    "web.link",
+    "border.side",
+    "press.onPress",
+    "icon.names",
+    "color.tokens"
+  ],
+  "quality": {
+    "providers": "SafeAreaProvider, then ThemeProvider insets={useSafeAreaInsets()} with the web app's style options, then ToastProvider: once, at the root",
+    "edges": "safeArea={[\"top\"]} on the screen, safeArea={[\"bottom\"]} on the tab bar; nothing pads for the notch by hand",
+    "tabBar": "Three to five tabs, each an Icon over a one-word label-default-xs Text in a Card with flex={1}, brand-strong for the current tab, on background=\"surface\" under a Line",
+    "header": "The screen title as Heading heading-strong-xl on the left, at most two IconButtons (variant=\"tertiary\", aria-label) on the right"
+  }
+}

@@ -35,7 +35,7 @@ export function DataTooltip({
     >
       {label ? (
         <Row paddingX="12">
-          <Text variant="label-default-s" onBackground="neutral-strong">
+          <Text textVariant="label-default-s" onBackground="neutral-strong">
             {label}
           </Text>
         </Row>
@@ -45,11 +45,11 @@ export function DataTooltip({
           <Row key={entry.name} horizontal="between" vertical="center" gap="16">
             <Row vertical="center" gap="8">
               {showSwatches && <Swatch color={entry.color} size="s" variant={variant} />}
-              <Text variant="label-default-s" onBackground="neutral-weak">
+              <Text textVariant="label-default-s" onBackground="neutral-weak">
                 {entry.name}
               </Text>
             </Row>
-            <Text variant="label-default-s" onBackground="neutral-strong">
+            <Text textVariant="label-default-s" onBackground="neutral-strong">
               {typeof entry.value === "number"
                 ? formatNumber(entry.value)
                 : entry.value instanceof Date

@@ -2,7 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { describe, expect, it } from "vitest";
-import { InfoTip } from "../components/InfoTip";
+import { Tooltip } from "../components/Tooltip";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
 import { failOnConsoleError } from "../test/failOnConsoleError";
@@ -25,7 +25,7 @@ const tip = () => screen.queryByRole("tooltip");
  */
 describe("InfoTip", () => {
   it("renders a named icon with no tip, and no axe violations, by default", async () => {
-    const { container } = render(<InfoTip>{text}</InfoTip>, { wrapper: wrap });
+    const { container } = render(<Tooltip content={text} />, { wrapper: wrap });
     expect(icon()).toHaveAttribute("tabindex", "0");
     expect(tip()).toBeNull();
     expect(icon()).not.toHaveAccessibleDescription(text);
@@ -34,7 +34,7 @@ describe("InfoTip", () => {
 
   it("opens on hover and closes on unhover", async () => {
     const user = userEvent.setup();
-    render(<InfoTip>{text}</InfoTip>, { wrapper: wrap });
+    render(<Tooltip content={text} />, { wrapper: wrap });
     await user.hover(icon());
     expect(await screen.findByRole("tooltip")).toHaveTextContent(text);
     expect(icon()).toHaveAccessibleDescription(text);
@@ -44,12 +44,7 @@ describe("InfoTip", () => {
 
   it("puts layout props on the tip box", async () => {
     const user = userEvent.setup();
-    render(
-      <InfoTip maxWidth={30} data-testid="box">
-        {text}
-      </InfoTip>,
-      { wrapper: wrap },
-    );
+    render(<Tooltip maxWidth="30rem" data-testid="box" content={text} />, { wrapper: wrap });
     await user.hover(icon());
     const box = await screen.findByRole("tooltip");
     expect(box).toHaveAttribute("data-testid", "box");
@@ -60,8 +55,8 @@ describe("InfoTip", () => {
     const user = userEvent.setup();
     render(
       <>
-        <InfoTip aria-label="About names">Your legal name.</InfoTip>
-        <InfoTip aria-label="About emails">Where receipts go.</InfoTip>
+        <Tooltip aria-label="About names" content="Your legal name." />
+        <Tooltip aria-label="About emails" content="Where receipts go." />
       </>,
       { wrapper: wrap },
     );
@@ -80,7 +75,7 @@ describe("InfoTip", () => {
 
   it("toggles the tip on Enter and Space, as a button should", async () => {
     const user = userEvent.setup();
-    render(<InfoTip>{text}</InfoTip>, { wrapper: wrap });
+    render(<Tooltip content={text} />, { wrapper: wrap });
     await user.tab();
     await screen.findByRole("tooltip");
     await user.keyboard("{Enter}");

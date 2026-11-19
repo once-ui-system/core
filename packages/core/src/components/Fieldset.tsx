@@ -1,11 +1,11 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, type ReactNode, useId } from "react";
-import { FieldsetDisabledContext, useFieldsetDisabled } from "../internal/fieldsetDisabled";
+import React, { type ReactNode, useId } from "react";
+import { FieldsetDisabledContext, useFieldsetDisabled } from "../internal/fieldsetDisabled.js";
 import styles from "./Fieldset.module.scss";
-import { Form, type FormProps } from "./Form";
-import { Text } from "./Text";
+import { Form, type FormProps } from "./Form.js";
+import { Text } from "./Text.js";
 
 /**
  * Fieldset — a titled section of a form.
@@ -18,7 +18,7 @@ import { Text } from "./Text";
  * unless the section sets its own.
  */
 interface FieldsetProps
-  extends Omit<FormProps, "as" | "onSubmit" | "pending" | "title">,
+  extends Omit<FormProps, "as" | "onSubmit" | "pending" | "title" | "ref">,
     Pick<React.FieldsetHTMLAttributes<HTMLFieldSetElement>, "disabled" | "name"> {
   /** The section's name, rendered as its `<legend>`. */
   legend?: ReactNode;
@@ -26,75 +26,72 @@ interface FieldsetProps
   description?: ReactNode;
   /** How many columns to occupy inside an outer `Form` grid. */
   span?: number;
+  ref?: React.Ref<HTMLFieldSetElement>;
 }
 
 const renders = (node: ReactNode) =>
   node !== undefined && node !== null && node !== false && node !== "";
 
-const Fieldset = forwardRef<HTMLFieldSetElement, FieldsetProps>(
-  (
-    {
-      legend,
-      description,
-      disabled,
-      name,
-      // Consumed by an outer `Form`, never rendered.
-      span,
-      density,
-      columns,
-      size,
-      className,
-      style,
-      children,
-      ...rest
-    },
-    ref,
-  ) => {
-    const descriptionId = `fieldset-${useId().replace(/:/g, "")}-description`;
-    const hasDescription = renders(description);
-    // A Fieldset inside a disabled one is disabled too, as the browser does.
-    const disabledHere = useFieldsetDisabled(disabled);
+const Fieldset = ({
+  ref,
+  legend,
+  description,
+  disabled,
+  name,
+  // Consumed by an outer `Form`, never rendered.
+  span,
+  density,
+  columns,
+  size,
+  className,
+  style,
+  children,
+  ...rest
+}: FieldsetProps) => {
+  const descriptionId = `fieldset-${useId().replace(/:/g, "")}-description`;
+  // A Fieldset inside a disabled one is disabled too, as the browser does.
+  const disabledHere = useFieldsetDisabled(disabled);
+  const hasDescription = renders(description);
 
-    return (
-      <fieldset
-        ref={ref}
-        disabled={disabled}
-        name={name}
-        aria-describedby={hasDescription ? descriptionId : undefined}
-        className={classNames(styles.fieldset, className)}
-        style={style}
-        {...(rest as React.FieldsetHTMLAttributes<HTMLFieldSetElement>)}
-      >
-        {renders(legend) && (
-          <Text
-            as="legend"
-            variant="heading-strong-s"
-            onBackground="neutral-strong"
-            className={styles.legend}
-          >
-            {legend}
-          </Text>
-        )}
-        {hasDescription && (
-          <Text
-            as="p"
-            id={descriptionId}
-            variant="body-default-s"
-            onBackground="neutral-weak"
-            className={styles.description}
-          >
-            {description}
-          </Text>
-        )}
-        <FieldsetDisabledContext.Provider value={disabledHere}>
-          <Form density={density} columns={columns} size={size}>
-            {children}
-          </Form>
-        </FieldsetDisabledContext.Provider>
-      </fieldset>
-    );
-  },
-);
+  return (
+    <fieldset
+      ref={ref}
+      disabled={disabled}
+      name={name}
+      aria-describedby={hasDescription ? descriptionId : undefined}
+      className={classNames(styles.fieldset, className)}
+      style={style}
+      {...(rest as React.FieldsetHTMLAttributes<HTMLFieldSetElement>)}
+    >
+      {renders(legend) && (
+        <Text
+          as="legend"
+          textVariant="heading-strong-s"
+          onBackground="neutral-strong"
+          className={styles.legend}
+        >
+          {legend}
+        </Text>
+      )}
+      {hasDescription && (
+        <Text
+          as="p"
+          id={descriptionId}
+          textVariant="body-default-s"
+          onBackground="neutral-weak"
+          className={styles.description}
+        >
+          {description}
+        </Text>
+      )}
+      <FieldsetDisabledContext.Provider value={disabledHere}>
+        <Form density={density} columns={columns} size={size}>
+          {children}
+        </Form>
+      </FieldsetDisabledContext.Provider>
+    </fieldset>
+  );
+};
 
 Fieldset.displayName = "Fieldset";
 

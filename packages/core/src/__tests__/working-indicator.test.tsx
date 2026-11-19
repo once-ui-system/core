@@ -15,16 +15,16 @@ const render = (ui: ReactElement) => baseRender(ui, { wrapper });
 
 describe("LogoSpinner", () => {
   it("is a named status that keeps moving under reduced motion", () => {
-    render(<LogoSpinner ariaLabel="Thinking" />);
+    render(<LogoSpinner aria-label="Thinking" />);
     const status = screen.getByRole("status", { name: "Thinking" });
     expect(status.getAttribute("data-motion")).toBe("essential");
     expect(status.querySelectorAll("path")).toHaveLength(4);
   });
 
-  it("takes a scheme's foreground, or the text color with inherit", () => {
-    const { rerender } = render(<LogoSpinner color="accent" />);
+  it("takes a tone's foreground, or the text color with inherit", () => {
+    const { rerender } = render(<LogoSpinner tone="accent" />);
     expect(screen.getByRole("status").style.color).toBe("var(--function-accent-500)");
-    rerender(<LogoSpinner color="inherit" />);
+    rerender(<LogoSpinner tone="inherit" />);
     expect(screen.getByRole("status").style.color).toBe("");
   });
 
@@ -35,6 +35,13 @@ describe("LogoSpinner", () => {
 });
 
 describe("WorkingIndicator", () => {
+  it("marks itself while the verb cycles, so the visual check can hide it", () => {
+    const { rerender } = render(<WorkingIndicator />);
+    expect(screen.getByRole("status").hasAttribute("data-working-cycling")).toBe(true);
+    rerender(<WorkingIndicator label="Searching the docs" />);
+    expect(screen.getByRole("status").hasAttribute("data-working-cycling")).toBe(false);
+  });
+
   beforeEach(() => vi.useFakeTimers());
   afterEach(() => vi.useRealTimers());
 
@@ -99,7 +106,7 @@ describe("WorkingIndicator", () => {
   });
 
   it("announces one fixed label, not each verb", () => {
-    render(<WorkingIndicator ariaLabel="Claude is working" />);
+    render(<WorkingIndicator aria-label="Claude is working" />);
     const status = screen.getByRole("status");
     expect(status.textContent).toContain("Claude is working");
     // The only status region: the loader inside is hidden from assistive tech.

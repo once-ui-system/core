@@ -15,7 +15,7 @@ const copy = readFileSync(source, "utf8")
     "// Copied from packages/core/src/icons/data.ts by scripts/sync-icons.mjs — do not edit by hand.",
   )
   .replace("./ATTRIBUTION.md", "packages/core/src/icons/ATTRIBUTION.md")
-  .replace('from "./renderIcon"', 'from "./types"');
+  .replace(/from "\.\/renderIcon(\.js)?"/, 'from "./types"');
 
 if (process.argv.includes("--check")) {
   let current = "";

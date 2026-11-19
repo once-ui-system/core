@@ -3,10 +3,10 @@
  "group": "components",
  "props": {
   "children": "ReactNode",
-  "as": "React.ElementType = span",
   "focusable": "boolean = false",
   "className": "string",
-  "style": "React.CSSProperties"
+  "style": "React.CSSProperties",
+  "as": "ElementType = span"
  },
  "tags": [
   "accessibility"

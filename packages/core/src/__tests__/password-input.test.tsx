@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { createRef, useState } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { PasswordInput } from "../components/PasswordInput";
+import { Input } from "../components/Input";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
 
@@ -17,10 +17,11 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
 );
 
-const ControlledPassword = (props: Partial<React.ComponentProps<typeof PasswordInput>>) => {
+const ControlledPassword = (props: Partial<React.ComponentProps<typeof Input>>) => {
   const [value, setValue] = useState("");
   return (
-    <PasswordInput
+    <Input
+      type="password"
       id="password"
       label="Password"
       value={value}
@@ -94,7 +95,7 @@ describe("PasswordInput", () => {
 
   it("forwards its ref to the input", () => {
     const ref = createRef<HTMLInputElement>();
-    render(<PasswordInput ref={ref} id="password" label="Password" />, { wrapper });
+    render(<Input type="password" ref={ref} id="password" label="Password" />, { wrapper });
     expect(ref.current).toBe(field());
   });
 

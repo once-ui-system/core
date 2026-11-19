@@ -1,0 +1,112 @@
+---
+title: "Scene"
+summary: "A 3D viewport on three.js that wears the theme: token colours, studio lights, a floor shadow, pinned HTML labels, and a loop that pauses when nobody is looking."
+updatedAt: "2026-11-08"
+github: "modules/scene/Scene.tsx"
+docs: "once-ui/modules/scene.mdx"
+navLabel: "Scene"
+navIcon: "cube"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+`Scene` draws a 3D view with [three.js](https://threejs.org/) inside a Once UI frame. Shapes take token colours like any component, so `color="brand-strong"` follows the brand you pick. The lights, the floor shadow and the grid follow light and dark. You don't write a render loop: the scene draws when something changes, animates only while something asks it to, and stops when it scrolls out of view or the tab is hidden.
+
+<SceneBasicExample />
+
+## Installation
+
+`three` is an optional peer dependency, like `maplibre-gl` for `Map`. Install it next to Once UI and import the scene from its own entry point, so an app without a 3D view never loads it:
+
+```bash
+npm install three
+```
+
+```tsx
+import { Scene, SceneMesh } from "@once-ui-system/core/scene";
+
+<Scene height={384} controls="turntable" floor>
+  <SceneMesh geometry="torus" args={[0.6, 0.18]} position={[0, 0.9, 0]} color="brand-strong" />
+</Scene>
+```
+
+The scene renders on the client only. On the server and until three.js loads it draws an empty frame of the same size, so the page does not shift. Without WebGL it says so in the frame instead of failing.
+
+## Build, animate and label
+
+Group shapes with `SceneGroup` to move them together, and animate them with `useSceneFrame`, which runs before every frame. `SceneLabel` pins ordinary HTML to a point, so a status tag follows the robot's head as it turns. Click handlers work on meshes and groups.
+
+<SceneRobotExample />
+
+```tsx
+function Robot({ battery, onSelect }) {
+  const head = useRef<Group>(null);
+  useSceneFrame(({ elapsed }) => {
+    if (head.current) head.current.rotation.y = Math.sin(elapsed * 1.2) * 0.35;
+  });
+  return (
+    <SceneGroup onClick={onSelect}>
+      <SceneMesh args={[1.1, 1, 0.9]} position={[0, 1.2, 0]} color="neutral-medium" />
+      <SceneGroup ref={head} position={[0, 1.95, 0]}>
+        <SceneMesh args={[0.8, 0.5, 0.6]} color="neutral-medium" />
+        <SceneMesh args={[0.6, 0.16, 0.02]} position={[0, 0.02, 0.31]} color="brand-strong" emissive="brand-strong" />
+        <SceneLabel position={[0, 0.85, 0]}>
+          <Tag tone={battery < 30 ? "warning" : "neutral"} label={`${battery}%`} />
+        </SceneLabel>
+      </SceneGroup>
+    </SceneGroup>
+  );
+}
+
+<Scene height={448} floor="grid" camera={{ position: [4.5, 3.2, 5.5], target: [0, 1.1, 0] }}>
+  <Robot battery={82} onSelect={() => setSelected(true)} />
+</Scene>
+```
+
+## Models
+
+`SceneModel` loads a `.glb` or `.gltf` file. The loader comes with `three` and loads the first time a model is placed. Each file is fetched once per scene, however many copies you place. `color` repaints a plain model in a theme colour; leave it out to keep the model's own materials.
+
+```tsx
+<Scene height={384} controls="turntable" floor>
+  <SceneModel src="/models/rover.glb" scale={0.5} color="neutral-medium">
+    <SceneLabel position={[0, 1.4, 0]}>
+      <Tag label="Rover" />
+    </SceneLabel>
+  </SceneModel>
+</Scene>
+```
+
+## Colours
+
+A colour is a token pair, a custom property or any CSS colour.
+
+| Value | Reads |
+| --- | --- |
+| `"brand-strong"`, `"accent-medium"`, `"neutral-weak"` | The tone's own hue: full strength for `strong`, lighter for `medium` and `weak`. It follows the brand, accent and neutral set around the scene, and ignores `data-solid`, so a brand part stays brand-coloured on a contrast theme. |
+| `"--page-background"` | Any custom property, read where the scene sits. |
+| `"#ff8800"` | A fixed colour. |
+
+`emissive` makes a part glow regardless of the lights: visors, status lights, screens.
+
+## Camera and lights
+
+| Prop | What it does |
+| --- | --- |
+| `controls` | `"orbit"` (drag to rotate, scroll to zoom, arrows to pan), `"turntable"` (turns on its own, drag to rotate) or `"none"`. |
+| `camera` | `{ position, target, fov }`. Changing it moves the camera. |
+| `zoom` | Scroll and pinch zoom. On for `"orbit"`, off otherwise, so the page scrolls past a turntable. |
+| `lighting` | `"studio"` (fill, key light and a brand rim light), `"neutral"` (no rim) or `"none"`. |
+| `floor` | `true` or `"shadow"` for a soft shadow on an invisible floor, `"grid"` to add a grid. |
+
+## Behaviour you get without asking
+
+- **Theme:** token colours are read again when the theme, brand, accent or neutral changes anywhere above the scene, including a `data-theme` section.
+- **Performance:** the canvas draws on demand. It runs continuously only while a `useSceneFrame` callback is mounted, the turntable turns, or a drag is settling, and stops off screen and in hidden tabs. The pixel ratio is capped at 2 (`maxPixelRatio`).
+- **Reduced motion:** the turntable stands still and frame callbacks get a zero `delta`, so animation pauses but the scene still draws.
+- **Cleanup:** geometry, materials and the WebGL context are released when the scene unmounts.
+- **Accessibility:** the canvas is an image named by `labels.scene`. Describe what it shows, and put anything a person must read or act on in the page or in a `SceneLabel`, not only in the 3D view.
+
+## Going further
+
+`useScene()` returns the three.js `scene`, `camera` and `renderer`, the loaded `three` module, `invalidate()` to draw after changing something yourself, and `color()` to read a token as a `THREE.Color`. `onSceneLoad` hands over the same object once the scene starts. Post-processing, shaders and particle effects belong in `@once-ui-system/fx`.

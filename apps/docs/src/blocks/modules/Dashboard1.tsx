@@ -51,7 +51,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, change, positive = tr
 
   return (
     <Card
-      minWidth={12}
+      minWidth="12rem"
       href={href}
       paddingX="20"
       paddingTop="20"
@@ -68,7 +68,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, change, positive = tr
         opacity={30}
         left="0"
         bottom="0"
-        height={6}
+        height="6rem"
         border="transparent"
         axis="none"
         tooltip={false}
@@ -84,10 +84,10 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, change, positive = tr
           </Row>
           <Row gap="8" vertical="center" onBackground={positive ? "success-weak" : "danger-weak"}>
             <Icon size="xs" name={positive ? "trendUp" : "trendDown"} />
-            <Text variant="body-default-xs">{change}</Text>
+            <Text textVariant="body-default-xs">{change}</Text>
           </Row>
         </Row>
-        <Heading variant="display-strong-xs">{value}</Heading>
+        <Heading textVariant="display-strong-xs">{value}</Heading>
       </Column>
     </Card>
   );
@@ -113,10 +113,10 @@ const ActivityItem: React.FC<ActivityItemProps> = ({ avatar, action, time, href,
     >
       <Row fillWidth horizontal="between" paddingX="24" height="64" vertical="center">
         <Column fillWidth gap="8">
-          <Text variant="body-default-s">{action}</Text>
+          <Text textVariant="body-default-s">{action}</Text>
           <Row vertical="center" gap="12" data-scaling="90">
             <Avatar size="xs" src={avatar} />
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               {time}
             </Text>
           </Row>
@@ -140,13 +140,13 @@ const StatusItem: React.FC<StatusItemProps> = ({ name, status, icon, href = "#" 
       <Row fillWidth horizontal="between" height="64" vertical="center" paddingX="24">
         <Row vertical="center" gap="12">
           <Icon name={icon} size="xs" onBackground="neutral-weak" />
-          <Text variant="body-default-s">{name}</Text>
+          <Text textVariant="body-default-s">{name}</Text>
         </Row>
         <Row vertical="center" gap="12">
-          <Text variant="body-default-xs" onBackground="neutral-weak">
+          <Text textVariant="body-default-xs" onBackground="neutral-weak">
             {status}
           </Text>
-          <StatusIndicator color={getStatusVariant(status)} />
+          <StatusIndicator scheme={getStatusVariant(status)} />
         </Row>
       </Row>
     </Card>
@@ -222,39 +222,39 @@ export const Dashboard1: React.FC = () => {
   const orderColumns: TableColumn<Order>[] = [
     {
       key: "order",
-      title: <Text variant="label-default-s">Order</Text>,
+      title: <Text textVariant="label-default-s">Order</Text>,
       render: (item) => (
         <Row gap="12" vertical="center">
-          <Text variant="label-default-s">{item.id}</Text>
+          <Text textVariant="label-default-s">{item.id}</Text>
         </Row>
       ),
     },
     {
       key: "customer",
-      title: <Text variant="label-default-s">Customer</Text>,
+      title: <Text textVariant="label-default-s">Customer</Text>,
       render: (item) => (
         <Row gap="12" vertical="center">
           <Avatar size="xs" src={item.customer?.avatar} />
-          <Text variant="label-default-s">{item.customer?.name}</Text>
+          <Text textVariant="label-default-s">{item.customer?.name}</Text>
         </Row>
       ),
     },
     {
       key: "date",
-      title: <Text variant="label-default-s">Date</Text>,
+      title: <Text textVariant="label-default-s">Date</Text>,
       render: (item) => (
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           {item.date}
         </Text>
       ),
     },
     {
       key: "shipping",
-      title: <Text variant="label-default-s">Shipping</Text>,
+      title: <Text textVariant="label-default-s">Shipping</Text>,
       render: (item) => (
         <Row gap="8" vertical="center">
-          <Text variant="label-default-s">{item.shipping}</Text>
-          <Text variant="body-default-xs" onBackground="neutral-weak">
+          <Text textVariant="label-default-s">{item.shipping}</Text>
+          <Text textVariant="body-default-xs" onBackground="neutral-weak">
             {item.method}
           </Text>
         </Row>
@@ -262,9 +262,9 @@ export const Dashboard1: React.FC = () => {
     },
     {
       key: "total",
-      title: <Text variant="label-default-s">Total</Text>,
+      title: <Text textVariant="label-default-s">Total</Text>,
       align: "end",
-      render: (item) => <Text variant="label-default-s">{item.total}</Text>,
+      render: (item) => <Text textVariant="label-default-s">{item.total}</Text>,
     },
   ];
 
@@ -272,7 +272,7 @@ export const Dashboard1: React.FC = () => {
     <Column fill>
       <Header1 authenticated avatar="/images/creators/lorant.jpg" borderBottom="transparent" />
       <Row fill>
-        <Row m={{ hide: true }} maxWidth={16} horizontal="center">
+        <Row m={{ hide: true }} maxWidth="16rem" horizontal="center">
           <Sidebar1 background="transparent" radius={undefined} fitHeight />
         </Row>
         <Row fill padding="8">
@@ -288,7 +288,7 @@ export const Dashboard1: React.FC = () => {
               <Column fitHeight gap="m" maxWidth="xl">
                 <Column fillWidth gap="4" paddingTop="l" paddingX="16">
                   <Row vertical="center" fillWidth horizontal="between" gap="8" wrap>
-                    <Heading variant="display-strong-s">Dashboard</Heading>
+                    <Heading textVariant="display-strong-s">Dashboard</Heading>
                     <Button prefixIcon="plus" size="s" data-border="rounded">
                       New{" "}
                       <Row s={{ hide: true }} marginLeft="4">
@@ -296,7 +296,7 @@ export const Dashboard1: React.FC = () => {
                       </Row>
                     </Button>
                   </Row>
-                  <Text variant="body-default-m" onBackground="neutral-medium">
+                  <Text textVariant="body-default-m" onBackground="neutral-medium">
                     Welcome back, Alex! Here's what's happening today.
                   </Text>
                 </Column>
@@ -322,7 +322,7 @@ export const Dashboard1: React.FC = () => {
                 </Scroller>
 
                 <LineChart
-                  minHeight={20}
+                  minHeight="20rem"
                   border
                   axis="x"
                   grid="y"
@@ -360,7 +360,7 @@ export const Dashboard1: React.FC = () => {
                 />
 
                 <Grid columns="2" m={{ columns: 1 }} gap="m" fillWidth>
-                  <Column fillWidth border radius="l" overflow="hidden" height={20}>
+                  <Column fillWidth border radius="l" overflow="hidden" height="20rem">
                     <Row
                       vertical="center"
                       horizontal="between"
@@ -371,7 +371,7 @@ export const Dashboard1: React.FC = () => {
                       gap="m"
                       wrap
                     >
-                      <Heading wrap="nowrap" variant="heading-strong-s">
+                      <Heading wrap="nowrap" textVariant="heading-strong-s">
                         Project status
                       </Heading>
                       <Row gap="4">
@@ -414,7 +414,7 @@ export const Dashboard1: React.FC = () => {
                     </Column>
                   </Column>
 
-                  <Column border radius="l" fillWidth overflow="hidden" height={20}>
+                  <Column border radius="l" fillWidth overflow="hidden" height="20rem">
                     <Row
                       fillWidth
                       vertical="center"
@@ -425,7 +425,7 @@ export const Dashboard1: React.FC = () => {
                       gap="16"
                       wrap
                     >
-                      <Heading wrap="nowrap" variant="heading-strong-s">
+                      <Heading wrap="nowrap" textVariant="heading-strong-s">
                         Recent activity
                       </Heading>
                       <Button
@@ -489,7 +489,7 @@ export const Dashboard1: React.FC = () => {
                 </Grid>
                 <Table1
                   background="surface"
-                  heading={<Text variant="label-default-m">Orders & Shipping</Text>}
+                  heading={<Text textVariant="label-default-m">Orders & Shipping</Text>}
                   data={ordersData}
                   columns={orderColumns}
                   selectable

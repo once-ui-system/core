@@ -16,7 +16,7 @@ const formValues = (container: HTMLElement, name: string) =>
   new FormData(container.querySelector("form") as HTMLFormElement).getAll(name);
 
 /**
- * Switch required `checked` and `onToggle`, and TagInput required `value` and
+ * Switch required `checked` and `onCheckedChange`, and TagInput required `value` and
  * `onChange`, so a settings form that only reads the values on submit still
  * had to hold state for every control. Each now takes a starting value and
  * keeps its own state when the controlled prop is left out.
@@ -39,13 +39,15 @@ describe("Switch defaultChecked", () => {
     expect(screen.getByRole("switch", { name: "Wi-Fi" })).not.toBeChecked();
   });
 
-  it("still reports each change to onToggle", async () => {
+  it("still reports each change to onCheckedChange", async () => {
     const user = userEvent.setup();
-    const onToggle = vi.fn();
-    render(<Switch label="Wi-Fi" defaultChecked onToggle={onToggle} />, { wrapper: wrap });
+    const onCheckedChange = vi.fn();
+    render(<Switch label="Wi-Fi" defaultChecked onCheckedChange={onCheckedChange} />, {
+      wrapper: wrap,
+    });
 
     await user.click(screen.getByText("Wi-Fi"));
-    expect(onToggle).toHaveBeenLastCalledWith(false);
+    expect(onCheckedChange).toHaveBeenLastCalledWith(false);
     expect(screen.getByRole("switch", { name: "Wi-Fi" })).not.toBeChecked();
   });
 
@@ -65,15 +67,18 @@ describe("Switch defaultChecked", () => {
 
   it("ignores defaultChecked once checked is set", async () => {
     const user = userEvent.setup();
-    const onToggle = vi.fn();
-    render(<Switch label="Wi-Fi" checked={false} defaultChecked onToggle={onToggle} />, {
-      wrapper: wrap,
-    });
+    const onCheckedChange = vi.fn();
+    render(
+      <Switch label="Wi-Fi" checked={false} defaultChecked onCheckedChange={onCheckedChange} />,
+      {
+        wrapper: wrap,
+      },
+    );
 
     const control = screen.getByRole("switch", { name: "Wi-Fi" });
     expect(control).not.toBeChecked();
     await user.click(control);
-    expect(onToggle).toHaveBeenCalledWith(true);
+    expect(onCheckedChange).toHaveBeenCalledWith(true);
     expect(control).not.toBeChecked();
   });
 });
@@ -81,18 +86,18 @@ describe("Switch defaultChecked", () => {
 describe("Checkbox and RadioButton defaultChecked", () => {
   it("Checkbox starts ticked and keeps its own state while reporting it", async () => {
     const user = userEvent.setup();
-    const onToggle = vi.fn();
-    render(<Checkbox label="Remember me" defaultChecked onToggle={onToggle} />, {
+    const onCheckedChange = vi.fn();
+    render(<Checkbox label="Remember me" defaultChecked onCheckedChange={onCheckedChange} />, {
       wrapper: wrap,
     });
 
     const checkbox = screen.getByRole("checkbox", { name: "Remember me" });
     expect(checkbox).toBeChecked();
     await user.click(checkbox);
-    expect(onToggle).toHaveBeenLastCalledWith(false);
+    expect(onCheckedChange).toHaveBeenLastCalledWith(false);
     expect(checkbox).not.toBeChecked();
     await user.click(checkbox);
-    expect(onToggle).toHaveBeenLastCalledWith(true);
+    expect(onCheckedChange).toHaveBeenLastCalledWith(true);
     expect(checkbox).toBeChecked();
   });
 
@@ -108,12 +113,14 @@ describe("Checkbox and RadioButton defaultChecked", () => {
 
   it("a controlled Checkbox stays where checked puts it", async () => {
     const user = userEvent.setup();
-    const onToggle = vi.fn();
-    render(<Checkbox label="Locked" checked onToggle={onToggle} />, { wrapper: wrap });
+    const onCheckedChange = vi.fn();
+    render(<Checkbox label="Locked" checked onCheckedChange={onCheckedChange} />, {
+      wrapper: wrap,
+    });
 
     const checkbox = screen.getByRole("checkbox", { name: "Locked" });
     await user.click(checkbox);
-    expect(onToggle).toHaveBeenCalledWith(false);
+    expect(onCheckedChange).toHaveBeenCalledWith(false);
     expect(checkbox).toBeChecked();
   });
 
@@ -144,7 +151,7 @@ describe("TagInput defaultValue", () => {
   it("reports each change to onChange while uncontrolled", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<TagInput id="tags" label="Tags" defaultValue={["react"]} onChange={onChange} />, {
+    render(<TagInput id="tags" label="Tags" defaultValue={["react"]} onValueChange={onChange} />, {
       wrapper: wrap,
     });
 

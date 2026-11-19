@@ -41,13 +41,13 @@ export const Contact4 = (flex: React.ComponentProps<typeof Row>) => {
 
   return (
     <Row fillWidth gap="xl" m={{ direction: "column" }} {...flex}>
-      <Column fill minWidth={28} m={{ minWidth: 0 }} gap="24">
+      <Column fill minWidth="28rem" m={{ minWidth: 0 }} gap="24">
         <Column gap="8">
-          <Tag scheme="brand" size="s">
+          <Tag tone="brand" size="s">
             Sales
           </Tag>
-          <Heading variant="display-strong-s">Talk to the team building Once UI</Heading>
-          <Text variant="body-default-l" onBackground="neutral-weak" wrap="balance">
+          <Heading textVariant="display-strong-s">Talk to the team building Once UI</Heading>
+          <Text textVariant="body-default-l" onBackground="neutral-weak" wrap="balance">
             Whether you're scoping a frontend system or evaluating Pro for your org, we'll connect
             you with the right person.
           </Text>
@@ -69,11 +69,11 @@ export const Contact4 = (flex: React.ComponentProps<typeof Row>) => {
               <Row gap="16" vertical="center">
                 <Avatar src={member.avatar} />
                 <Column gap="2">
-                  <Text variant="label-strong-s">{member.name}</Text>
-                  <Text variant="body-default-s" onBackground="neutral-weak">
+                  <Text textVariant="label-strong-s">{member.name}</Text>
+                  <Text textVariant="body-default-s" onBackground="neutral-weak">
                     {member.role}
                   </Text>
-                  <Text variant="code-default-xs" onBackground="neutral-weak">
+                  <Text textVariant="code-default-xs" onBackground="neutral-weak">
                     {member.timezone}
                   </Text>
                 </Column>
@@ -86,10 +86,10 @@ export const Contact4 = (flex: React.ComponentProps<typeof Row>) => {
         </Grid>
       </Column>
 
-      <Column fill minWidth={22} gap="16" padding="24" radius="xl" background="surface" border>
+      <Column fill minWidth="22rem" gap="16" padding="24" radius="xl" background="surface" border>
         <Column gap="4">
-          <Heading variant="heading-strong-s">Send an inquiry</Heading>
-          <Text variant="body-default-s" onBackground="neutral-weak">
+          <Heading textVariant="heading-strong-s">Send an inquiry</Heading>
+          <Text textVariant="body-default-s" onBackground="neutral-weak">
             We'll respond within one business day.
           </Text>
         </Column>
@@ -107,7 +107,7 @@ export const Contact4 = (flex: React.ComponentProps<typeof Row>) => {
               <Icon name="check" size="s" />
               Inquiry received
             </Row>
-            <Text variant="body-default-s" onBackground="neutral-weak">
+            <Text textVariant="body-default-s" onBackground="neutral-weak">
               Thanks for reaching out. A team member will follow up shortly.
             </Text>
           </Column>

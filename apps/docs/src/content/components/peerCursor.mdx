@@ -1,0 +1,124 @@
+---
+title: "PeerCursor"
+summary: "Collaborators' pointers for multiplayer views: an arrow in each person's colour with their name, gliding between the positions your realtime layer sends."
+updatedAt: "2026-11-12"
+docs: "once-ui/components/peerCursor.mdx"
+github: "components/PeerCursor.tsx"
+navLabel: "PeerCursor"
+navIcon: "components"
+---
+
+PeerCursor draws what other people are pointing at: an arrow in their colour, a label with their name, and, if they type one, a short message. It has no backend. Feed `PeerCursors` the positions from whatever carries them (Supabase Realtime, Liveblocks, a WebSocket) and send your own with `usePeerPointer`.
+
+Positions from the network arrive 20 to 30 times a second. Each cursor glides to the latest one by writing `transform` every frame, without a React render, so a full room costs nothing between updates. Under reduced motion they jump.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<PeerCursorExample />}
+  codes={[
+    {
+      code:
+`const ref = useRef<HTMLDivElement>(null);
+const { peers, move } = usePresence("doc-42"); // your realtime layer
+
+// Send your pointer, throttled to 25 a second; null when it leaves.
+usePeerPointer(ref, move);
+
+<Column ref={ref} fillWidth height={320} style={{ position: "relative" }}>
+  {/* the shared surface */}
+  <PeerCursors peers={peers} />
+</Column>`,
+      language: "tsx",
+      label: "Live"
+    }
+  ]}
+/>
+
+## Positions
+
+`PeerCursors` fills its positioned parent and reads `x` and `y` as a fraction of it by default (`units="fraction"`), so people on screens of different widths point at the same spot of a fluid layout. Use `units="px"` for a fixed-size surface. `usePeerPointer` reports in the same units.
+
+On a canvas that pans and zooms, there are two ways:
+
+- Put `PeerCursors` inside the world layer, with `units="px"` in world coordinates and `scale={1 / zoom}` so the cursors keep their size. Panning moves them with the layer for free.
+- Put it in a screen overlay and pass `project` (world to screen), with `unproject` (screen to world) on `usePeerPointer`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<div style={{ transform: \`translate(\${pan.x}px, \${pan.y}px) scale(\${zoom})\` }}>
+  {/* items */}
+  <PeerCursors units="px" scale={1 / zoom} peers={peers} />
+</div>`,
+      language: "tsx",
+      label: "World layer"
+    }
+  ]}
+/>
+
+## Colour, label and message
+
+Each person keeps the same hue on every screen: left out, `scheme` comes from `peerColor(id)`, a hash of the id over the palette. Light hues take dark text.
+
+- `message`: a live line of text in a bubble under the pointer (cursor chat).
+- `avatar`: a small picture before the name.
+- `idle`: set it when someone has not moved for a while; the label folds away and only the arrow stays.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth height={160} style={{ position: "relative" }}>
+      <PeerCursor id="mira" name="Mira Holt" x={40} y={30} smooth={false} />
+      <PeerCursor id="teo" name="Teo Varga" x={240} y={24} scheme="cyan" message="This heading could be bigger" smooth={false} />
+      <PeerCursor id="ines" name="Ines Ferro" x={480} y={40} scheme="violet" idle smooth={false} />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<PeerCursor id="mira" name="Mira Holt" x={40} y={30} />
+<PeerCursor id="teo" name="Teo Varga" x={240} y={24} scheme="cyan" message="This heading could be bigger" />
+<PeerCursor id="ines" name="Ines Ferro" x={480} y={40} scheme="violet" idle />`,
+      language: "tsx",
+      label: "Looks"
+    }
+  ]}
+/>
+
+## Accessibility
+
+Cursors are decorative and hidden from screen readers. Say who is here in a way that reads, such as an `AvatarGroup` of the people in the room.
+
+## API
+
+### PeerCursors
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `peers` | `PeerCursorData[]` | | Everyone else's pointer: `{ id, name, x, y, scheme?, message?, avatar?, idle? }`. |
+| `units` | `"fraction" \| "px"` | `"fraction"` | What `x` and `y` mean. |
+| `project` | `(x, y) => { x, y }` | | Maps a position to px in the layer, after `units`. |
+| `scale` | `number` | | Cursor scale about the tip; also `--peer-cursor-scale`. |
+| `smooth` | `boolean` | `true` | Glide between positions. |
+
+### PeerCursor
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `name` | `string` | | The label. |
+| `x`, `y` | `number` | | Px from the top left of the positioned parent. |
+| `id` | `string` | | Picks the default colour. |
+| `scheme` | `Schemes` | `peerColor(id)` | The hue. |
+| `message` | `string` | | A bubble under the pointer. |
+| `avatar` | `string` | | A picture before the name. |
+| `idle` | `boolean` | `false` | Folds the label away. |
+| `smooth` | `boolean` | `true` | Glide between positions. |
+
+### usePeerPointer(ref, onMove, options)
+
+Calls `onMove({ x, y })` as the pointer moves over `ref`'s element, at most once per `interval` ms (default 40) with the last move always sent, and `onMove(null)` when it leaves. Options: `interval`, `units`, `unproject`, `disabled`. Touch is left out.

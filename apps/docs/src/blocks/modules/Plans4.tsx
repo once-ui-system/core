@@ -61,20 +61,20 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan, ...rest }) => {
   const textColor = `${plan.color}-weak` as const;
 
   return (
-    <Column id={plan.name} border minWidth={16} fillWidth {...rest}>
+    <Column id={plan.name} border minWidth="16rem" fillWidth {...rest}>
       <Column fill>
         <Column paddingX="l" paddingY="24" gap="4" fillWidth borderBottom>
-          <Heading as="h3" align="left" onBackground={textColor} variant="heading-default-xs">
+          <Heading as="h3" align="left" onBackground={textColor} textVariant="heading-default-xs">
             {plan.name}
           </Heading>
-          <Text align="left" variant="heading-default-xl">
+          <Text align="left" textVariant="heading-default-xl">
             {plan.price.original !== plan.price.discounted && (
               <Text onBackground="neutral-weak" style={{ textDecoration: "line-through" }}>
                 ${plan.price.original}
               </Text>
             )}{" "}
             ${plan.price.discounted}{" "}
-            <Text onBackground="neutral-strong" variant="body-default-s">
+            <Text onBackground="neutral-strong" textVariant="body-default-s">
               / year
             </Text>
           </Text>
@@ -83,7 +83,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan, ...rest }) => {
           {plan.features.map((feature, index) => (
             <Row key={index} vertical="center" gap="12">
               <Icon name="check" size="s" onBackground={textColor} />
-              <Text align="left" onBackground="neutral-medium" variant="body-default-s">
+              <Text align="left" onBackground="neutral-medium" textVariant="body-default-s">
                 {feature}
               </Text>
             </Row>

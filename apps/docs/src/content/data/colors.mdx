@@ -1,0 +1,222 @@
+---
+title: "Colors and styling"
+export: false
+summary: "How Once UI charts pick colours: the data palette, series colours, the categorical, divergent and sequential modes, the three variants, and sizing and styling the chart card."
+updatedAt: "2026-11-12"
+docs: "once-ui/data/colors.mdx"
+github: "packages/foundations/scss/tokens/data.scss"
+navLabel: "Colors and styling"
+navIcon: "style"
+---
+
+Charts draw from their own palette, the `--data-*` tokens, tuned so neighbouring series stay apart in light and dark. You rarely need to pick colours: leave `color` off and the chart assigns them. When a colour carries meaning (a brand, a status, "this year"), set it per series.
+
+## Automatic colours
+
+Without `color`, series take hues spread around the palette, as far apart as the count allows:
+
+| Series | Colours |
+| --- | --- |
+| 1 | blue |
+| 2 | blue, orange |
+| 3 | blue, orange, cyan |
+| 4 | blue, orange, green, magenta |
+| 5 or more | spaced evenly across the 13 hues |
+
+Pie slices follow the same rule, counted by slice.
+
+## Series colours
+
+`series[].color` takes four kinds of value:
+
+- **A palette hue**, such as `"blue"`, `"emerald"` or `"contrast"`: the palette's colour. It follows the theme and the chart's mode.
+- **Your theme**, `"brand"` or `"accent"`: the theme's brand or accent colour, at the same step as the palette hues, so it sits with them in light and dark.
+- **A token**, such as `"danger-medium"` or `"--my-colour"`: that token. A tone with a weight is that role's text colour.
+- **Any CSS colour**, such as `"#6E56CF"` or `"oklch(70% 0.15 160)"`: exactly that, in light and dark alike.
+
+The palette hues are `blue`, `indigo`, `violet`, `magenta`, `pink`, `red`, `orange`, `yellow`, `moss`, `green`, `emerald`, `aqua`, `cyan`, plus `gray` and `contrast` (white in dark, black in light) for a reference series.
+
+A single-series chart in `"brand"` is the usual way to make a dashboard feel like the product. Write `"brand"`, not `"brand-strong"`: a tone with a weight is that role's text colour, which is white in dark and black in light.
+
+<BarChart
+  marginTop="16"
+  marginBottom="24"
+  title="Weekly active users"
+  height="18rem"
+  axis="x"
+  legend={{ display: false }}
+  xKey="week"
+  series={{ key: "users", label: "Users", color: "brand" }}
+  data={[
+    { week: "W1", users: 1840 },
+    { week: "W2", users: 2120 },
+    { week: "W3", users: 2010 },
+    { week: "W4", users: 2460 },
+    { week: "W5", users: 2790 },
+    { week: "W6", users: 3120 }
+  ]}
+/>
+
+Prefer palette hues and tokens to raw CSS colours. A hex value looks the same in light and dark, and on one of them it usually loses contrast.
+
+## Modes
+
+A mode decides what the palette hues mean. Set it for the app in `dataStyle.mode` (see [Setup](/data/setup#config)), or for one chart with the `data-viz-style` prop.
+
+- **`categorical`** (default): distinct hues for things that have no order, such as channels, teams or products.
+- **`divergent`**: a run from red through yellow to cyan, for values on either side of a midpoint, such as change against last year or sentiment.
+- **`sequential`**: steps of the brand colour, for ordered things where more is more, such as age bands or price tiers.
+
+<Grid fillWidth columns="3" s={{ columns: 1 }} gap="16" marginTop="16" marginBottom="24">
+  <BarChart
+    data-viz-style="categorical"
+    title="categorical"
+    height="16rem"
+    axis="none"
+    legend={{ display: false }}
+    xKey="q"
+    series={[{ key: "a" }, { key: "b" }, { key: "c" }, { key: "d" }]}
+    data={[
+      { q: "Q1", a: 12, b: 18, c: 9, d: 14 },
+      { q: "Q2", a: 15, b: 16, c: 12, d: 17 }
+    ]}
+  />
+  <BarChart
+    data-viz-style="divergent"
+    title="divergent"
+    height="16rem"
+    axis="none"
+    legend={{ display: false }}
+    xKey="q"
+    series={[{ key: "a" }, { key: "b" }, { key: "c" }, { key: "d" }]}
+    data={[
+      { q: "Q1", a: 12, b: 18, c: 9, d: 14 },
+      { q: "Q2", a: 15, b: 16, c: 12, d: 17 }
+    ]}
+  />
+  <BarChart
+    data-viz-style="sequential"
+    title="sequential"
+    height="16rem"
+    axis="none"
+    legend={{ display: false }}
+    xKey="q"
+    series={[{ key: "a" }, { key: "b" }, { key: "c" }, { key: "d" }]}
+    data={[
+      { q: "Q1", a: 12, b: 18, c: 9, d: 14 },
+      { q: "Q2", a: 15, b: 16, c: 12, d: 17 }
+    ]}
+  />
+</Grid>
+
+A mode works by redefining the palette hues inside the chart. In `divergent`, `blue` is a red and `cyan` is the far end of the run. So in divergent and sequential charts, **leave `color` off** and let the series take their places in order; a hue name you set means "this step of the run", not that colour. Tokens and CSS colours ignore the mode.
+
+## Variants
+
+`variant` sets how areas and bars are filled. Set it for the app in `dataStyle.variant`, or per chart.
+
+<Grid fillWidth columns="3" s={{ columns: 1 }} gap="16" marginTop="16" marginBottom="24">
+  <LineChart
+    variant="gradient"
+    title="gradient (default)"
+    height="16rem"
+    axis="none"
+    legend={{ display: false }}
+    xKey="m"
+    series={[{ key: "a", color: "cyan" }, { key: "b", color: "magenta" }]}
+    data={[
+      { m: "Jan", a: 12, b: 6 },
+      { m: "Feb", a: 15, b: 9 },
+      { m: "Mar", a: 13, b: 12 },
+      { m: "Apr", a: 19, b: 11 },
+      { m: "May", a: 22, b: 15 }
+    ]}
+  />
+  <LineChart
+    variant="flat"
+    title="flat"
+    height="16rem"
+    axis="none"
+    legend={{ display: false }}
+    xKey="m"
+    series={[{ key: "a", color: "cyan" }, { key: "b", color: "magenta" }]}
+    data={[
+      { m: "Jan", a: 12, b: 6 },
+      { m: "Feb", a: 15, b: 9 },
+      { m: "Mar", a: 13, b: 12 },
+      { m: "Apr", a: 19, b: 11 },
+      { m: "May", a: 22, b: 15 }
+    ]}
+  />
+  <LineChart
+    variant="outline"
+    title="outline"
+    height="16rem"
+    axis="none"
+    legend={{ display: false }}
+    xKey="m"
+    series={[{ key: "a", color: "cyan" }, { key: "b", color: "magenta" }]}
+    data={[
+      { m: "Jan", a: 12, b: 6 },
+      { m: "Feb", a: 15, b: 9 },
+      { m: "Mar", a: 13, b: 12 },
+      { m: "Apr", a: 19, b: 11 },
+      { m: "May", a: 22, b: 15 }
+    ]}
+  />
+</Grid>
+
+`outline` draws only the lines and bar edges, which keeps overlapping series readable; `flat` fills without the fade.
+
+## The card
+
+Every chart is a `Column`, a card with a border and a radius, and takes the [Flex props](/components/flex): spacing, `background`, `border`, `radius`, `shadow` and so on.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="l"
+  preview={
+    <BarChart
+      background="brand-alpha-weak"
+      border="brand-alpha-medium"
+      radius="xl"
+      height="16rem"
+      title="Signups"
+      axis="x"
+      legend={{ display: false }}
+      xKey="day"
+      series={{ key: "signups", color: "brand" }}
+      data={[
+        { day: "Mon", signups: 42 },
+        { day: "Tue", signups: 58 },
+        { day: "Wed", signups: 51 },
+        { day: "Thu", signups: 66 },
+        { day: "Fri", signups: 73 }
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<BarChart
+  background="brand-alpha-weak"
+  border="brand-alpha-medium"
+  radius="xl"
+  height="16rem"
+  title="Signups"
+  axis="x"
+  legend={{ display: false }}
+  xKey="day"
+  series={{ key: "signups", color: "brand" }}
+  data={rows}
+/>`,
+      language: "tsx",
+      label: "Card"
+    }
+  ]}
+/>
+
+- **No card:** `border="transparent"` (or `border={false}`) and no `background`, to set a chart inside your own `Card` or tile.
+- **Height:** charts are `dataStyle.height` tall, `24rem` by default. Set `height` as a string, `height="16rem"`. A number is on the spacing token scale, so `height={16}` is 1rem and flattens the chart to a line. The title and description take their room from that height; the plot gets the rest.
+- **Width:** charts fill their container. Put them in a `Grid` or a `Row` to lay several out; they resize with it.

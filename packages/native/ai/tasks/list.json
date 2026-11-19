@@ -1,0 +1,39 @@
+{
+  "id": "list",
+  "title": "List screen",
+  "description": "A title, a search field and a filter over a FlatList of records with status tags, pull to refresh, a details sheet and an empty state",
+  "components": [
+    "Column",
+    "Row",
+    "Heading",
+    "Text",
+    "Input",
+    "SegmentedControl",
+    "Avatar",
+    "Tag",
+    "Card",
+    "Line",
+    "Icon",
+    "Button",
+    "Dialog"
+  ],
+  "example": "examples/list.tsx",
+  "gotchas": [
+    "list.flatlist",
+    "web.table",
+    "Card.direction",
+    "Tag.badgeChip",
+    "state.names",
+    "tone.variant",
+    "web.scroller",
+    "text.wrap",
+    "color.tokens"
+  ],
+  "quality": {
+    "rows": "Each row a Card direction=\"row\" with radius=\"none\" border=\"transparent\" background=\"transparent\", paddingX=\"20\" paddingY=\"12\": Avatar or icon, a Column flex={1} of a truncated label-strong-m and a body-default-s subline, the value and a size=\"s\" Tag at the end",
+    "chrome": "Title, search and filter above the FlatList, not inside it, with a Line under them",
+    "search": "Input type=\"search\" size=\"s\" with a search Icon as prefix; the filter a SegmentedControl of two to four options",
+    "empty": "ListEmptyComponent: an icon, one line of text and the action that fills or resets the list",
+    "refresh": "RefreshControl tinted with theme.color(\"neutral-on-background-weak\")"
+  }
+}

@@ -1,4 +1,9 @@
 .statusIndicator {
+    &.xs {
+        width: var(--static-space-2);
+        height: var(--static-space-2);
+    }
+
     &.s {
         width: var(--static-space-4);
         height: var(--static-space-4);
@@ -12,6 +17,11 @@
     &.l {
         width: var(--static-space-16);
         height: var(--static-space-16);
+    }
+
+    &.xl {
+        width: var(--static-space-24);
+        height: var(--static-space-24);
     }
 
     &.gray {

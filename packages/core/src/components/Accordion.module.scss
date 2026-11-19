@@ -5,4 +5,10 @@
             background: var(--neutral-alpha-weak);
         }
     }
+
+    // A menu opened from the header (a row's "more" button) keeps the row lit
+    // while the pointer is in the menu.
+    &:has(:global(.dropdown-trigger)[data-state="open"]) {
+        background: var(--neutral-alpha-weak);
+    }
 }

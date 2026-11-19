@@ -167,6 +167,32 @@ const handleClear = () => {
   ]}
 />
 
+## Password
+
+With `type="password"`, Input adds a button in the suffix that switches the field between masked and visible, so a password can be checked without being retyped (2.x's `PasswordInput`). The button is named "Show password" or "Hide password" as it toggles, and a `suffix` of your own sits before it. Pass `reveal={false}` for a plain masked field.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<PasswordInputExample />}
+  codes={[
+    {
+      code:
+`const [password, setPassword] = useState<string>("");
+
+<Input
+    id="password"
+    label="Password"
+    type="password"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+/>`,
+      language: "tsx",
+      label: "Password"
+    }
+  ]}
+/>
+
 ## Placeholder
 
 Use the `placeholder` prop to use placeholder instead of label. The placeholder disappears when the input has value.
@@ -288,7 +314,7 @@ The Input component supports six sizes, from `xxs` (32px) through `xs` (40px), `
 
 Field heights run a step above the button scale: an `xs` field is 40px, as tall as an `m` Button. For a toolbar or a filter row, where every control should be the height of a `size="s"` Button, use `size="xxs"`. It is 32px, rounded at `radius-m` like the button, with its prefix and suffix 8px in from the edge.
 
-A 32px field has no room for a floating label. At `xxs` the `label` shows as the placeholder, unless you pass a `placeholder` of your own, and stays the field's accessible name through a visually hidden `<label>`. Every field built on Input (Select, NumberInput, DateInput, DateRangeInput, PasswordInput, ColorInput, TagInput) and Textarea take `xxs` the same way, and `Form size="xxs"` passes it to every field inside.
+A 32px field has no room for a floating label. At `xxs` the `label` shows as the placeholder, unless you pass a `placeholder` of your own, and stays the field's accessible name through a visually hidden `<label>`. Every field built on Input (Select, NumberInput, DateInput and its `range`, ColorInput, TagInput), `type="password"` (its reveal toggle keeps its 24px) and Textarea take `xxs` the same way, and `Form size="xxs"` passes it to every field inside.
 
 <CodeBlock
   marginTop="16"
@@ -314,7 +340,7 @@ const [status, setStatus] = useState("all");
         size="xxs"
         label="Status"
         value={status}
-        onSelect={(next) => setStatus(next as string)}
+        onValueChange={(next) => setStatus(next as string)}
         options={[
             { label: "All statuses", value: "all" },
             { label: "Paid", value: "paid" },
@@ -444,13 +470,12 @@ takes keyboard input, however that field was focused.
 
 ## Built on Input
 
-Four components build on `Input`. They keep everything on this page and add one
+Three components build on `Input`. They keep everything on this page and add one
 thing each, so they live on pages of their own:
 
-- [NumberInput](/form-controls/numberInput) — steppers, `min`/`max`/`step`, and a numeric `onChange`
+- [NumberInput](/form-controls/numberInput) — steppers, `min`/`max`/`step`, and a numeric `onValueChange`
 - [OTPInput](/form-controls/otpInput) — one box per digit, with paste and an `onComplete`
-- [PasswordInput](/form-controls/passwordInput) — a reveal toggle
-- [TagInput](/form-controls/tagInput) — an array of removable chips instead of a string
+- [TagInput](/form-controls/tagInput) — an array of removable tags instead of a string
 
 ## API reference
 
@@ -471,12 +496,14 @@ thing each, so they live on pages of their own:
     variant: "\"ghost\" drops the border and background, for a field inside a surface that already has them.",
     characterCount: "Show how much has been typed, against maxLength.",
     cursor: "Set \"interactive\" for a read-only field that opens something on click.",
-    validate: "Run on a debounce; return a message to show, or null to clear.",
+    onValueChange: "Called with the field's text after every change, after the native onChange. Controlled only when value is set.",
+    validate: "Run on a debounce, controlled or not; return a message to show, or null to clear.",
     loading: "Show a spinner in the suffix while something resolves.",
-    className: "",
-    style: "",
+    reveal: "With type=\"password\", show the button that unmasks the value. Default true.",
   }}
   content={[
-    ["...InputHTMLAttributes"]
+    ["...InputHTMLAttributes"],
+    ["className", "string", "-", ""],
+    ["style", "CSSProperties", "-", ""]
   ]}
 />

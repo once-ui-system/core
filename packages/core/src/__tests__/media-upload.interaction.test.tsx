@@ -152,7 +152,7 @@ describe("MediaUpload: interaction", () => {
   });
 
   it("shows the preview it starts with", async () => {
-    render(<MediaUpload initialPreviewImage="/avatar.png" />, { wrapper: wrap });
+    render(<MediaUpload defaultPreviewImage="/avatar.png" />, { wrapper: wrap });
     const image = await screen.findByAltText("Preview of uploaded image");
     expect(image.getAttribute("src")).toContain("avatar.png");
   });

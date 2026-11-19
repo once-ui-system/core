@@ -1,25 +1,25 @@
 import type { ElementType } from "react";
-import { Accordion } from "../../components/Accordion";
-import { AccordionGroup } from "../../components/AccordionGroup";
-import { BlockQuote } from "../../components/BlockQuote";
-import { Button } from "../../components/Button";
-import { Card } from "../../components/Card";
-import { Column } from "../../components/Column";
-import { Feedback } from "../../components/Feedback";
-import { Grid } from "../../components/Grid";
-import { Heading } from "../../components/Heading";
-import { Icon } from "../../components/Icon";
-import { InlineCode } from "../../components/InlineCode";
-import { Line } from "../../components/Line";
-import { List } from "../../components/List";
-import { ListItem } from "../../components/ListItem";
-import { Media } from "../../components/Media";
-import { OgCard } from "../../components/OgCard";
-import { Row } from "../../components/Row";
-import { SmartLink } from "../../components/SmartLink";
-import { Table } from "../../components/Table";
-import { Text } from "../../components/Text";
-import { CodeBlock } from "../code/CodeBlock";
+import { Accordion } from "../../components/Accordion.js";
+import { AccordionGroup } from "../../components/AccordionGroup.js";
+import { BlockQuote } from "../../components/BlockQuote.js";
+import { Button } from "../../components/Button.js";
+import { Card } from "../../components/Card.js";
+import { Column } from "../../components/Column.js";
+import { Feedback } from "../../components/Feedback.js";
+import { Grid } from "../../components/Grid.js";
+import { Heading } from "../../components/Heading.js";
+import { Icon } from "../../components/Icon.js";
+import { InlineCode } from "../../components/InlineCode.js";
+import { Line } from "../../components/Line.js";
+import { List } from "../../components/List.js";
+import { ListItem } from "../../components/ListItem.js";
+import { Media } from "../../components/Media.js";
+import { OgCard } from "../../components/OgCard.js";
+import { Row } from "../../components/Row.js";
+import { SmartLink } from "../../components/SmartLink.js";
+import { Table } from "../../components/Table.js";
+import { Text } from "../../components/Text.js";
+import { CodeBlock } from "../code/CodeBlock.js";
 import {
   MdxBlockQuote,
   MdxCodeBlock,
@@ -35,7 +35,7 @@ import {
   MdxParagraph,
   MdxTable,
   type MdxTag,
-} from "./MdxElements";
+} from "./MdxElements.js";
 
 /**
  * A component map for MDX content, as `next-mdx-remote`'s `components` prop

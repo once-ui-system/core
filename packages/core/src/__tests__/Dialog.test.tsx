@@ -2,11 +2,12 @@ import { act, createEvent, fireEvent, render, screen } from "@testing-library/re
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { Dialog, DialogProvider } from "../components/Dialog";
+import { Dialog } from "../components/Dialog";
 import styles from "../components/Dialog.module.scss";
 import { resetScrollLockState } from "../components/ScrollLock";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { resetDialogState } from "../test/dialogTestUtils";
+import { tokenLength as t } from "../utils/layoutClasses";
 
 vi.mock("../components", async () => {
   const actual = await vi.importActual<typeof import("../components")>("../components");
@@ -35,10 +36,18 @@ const TestProviders = ({ children }: { children: React.ReactNode }) => (
 const renderDialog = (props: Partial<React.ComponentProps<typeof Dialog>> = {}) =>
   render(<Dialog {...defaultProps} {...props} />, { wrapper: TestProviders });
 
+/** The panel: the box FocusTrap's container (the first `tabindex="-1"`) sits in. */
 const getDialogPanel = (root: ParentNode = document.body) =>
-  root.querySelector('[tabindex="-1"]') as HTMLElement | null;
+  (root.querySelector('[tabindex="-1"]')?.parentElement ?? null) as HTMLElement | null;
 
-const getOverlay = () => screen.getByRole("dialog");
+/** The overlay: the portal's child of `document.body` the dialog sits in. */
+const overlayOf = (dialog: HTMLElement) => {
+  let node = dialog;
+  while (node.parentElement && node.parentElement !== document.body) node = node.parentElement;
+  return node;
+};
+
+const getOverlay = () => overlayOf(screen.getByRole("dialog"));
 
 const advanceTimers = (ms: number) => {
   act(() => {
@@ -71,15 +80,33 @@ describe("Dialog", () => {
       expect(document.body).toContainElement(getOverlay());
     });
 
-    it("sets aria-modal on the dialog overlay", () => {
-      renderDialog();
+    it("puts role, aria-modal and className on the panel, not the overlay", () => {
+      renderDialog({ className: "my-dialog" });
+      const dialog = screen.getByRole("dialog");
 
-      expect(getOverlay()).toHaveAttribute("aria-modal", "true");
+      expect(dialog).toHaveAttribute("aria-modal", "true");
+      expect(dialog).toHaveClass("my-dialog");
+      expect(dialog).not.toBe(getOverlay());
+      expect(getOverlay()).not.toHaveAttribute("role");
+    });
+
+    it("lets aria-label name the dialog instead of the title", () => {
+      renderDialog({ title: <nav>Tabs</nav>, "aria-label": "Settings" });
+
+      expect(screen.getByRole("dialog", { name: "Settings" })).toBeInTheDocument();
+      expect(screen.getByRole("dialog")).not.toHaveAttribute("aria-labelledby");
+    });
+
+    it("renders a string title as an h2, so the page keeps its only h1", () => {
+      renderDialog({ title: "Simple title" });
+
+      expect(screen.getByRole("heading", { level: 2, name: "Simple title" })).toBeInTheDocument();
+      expect(screen.queryByRole("heading", { level: 1 })).not.toBeInTheDocument();
     });
 
     it("has a valid aria-labelledby pointing to an element in the DOM", () => {
       renderDialog();
-      const overlay = getOverlay();
+      const overlay = screen.getByRole("dialog");
       const labelledBy = overlay.getAttribute("aria-labelledby");
 
       expect(labelledBy).toBeTruthy();
@@ -116,7 +143,7 @@ describe("Dialog", () => {
     it("labels the dialog correctly when title is a ReactNode", () => {
       renderDialog({ title: <span>Custom title node</span> });
 
-      const overlay = getOverlay();
+      const overlay = screen.getByRole("dialog");
       const labelledBy = overlay.getAttribute("aria-labelledby");
 
       expect(labelledBy).toBeTruthy();
@@ -319,6 +346,44 @@ describe("Dialog", () => {
       expect(onClose).not.toHaveBeenCalled();
     });
 
+    it("closes only the top dialog when a click lands in a stacked one", () => {
+      vi.useFakeTimers();
+      const onBaseClose = vi.fn();
+      const onTopClose = vi.fn();
+      render(
+        <>
+          <Dialog {...defaultProps} title="Lower dialog" onClose={onBaseClose} />
+          <Dialog {...defaultProps} title="Top dialog" onClose={onTopClose}>
+            <button type="button">Top action</button>
+          </Dialog>
+        </>,
+        { wrapper: TestProviders },
+      );
+
+      advanceTimers(10);
+      fireEvent.mouseDown(screen.getByRole("button", { name: "Top action" }), { button: 0 });
+
+      expect(onBaseClose).not.toHaveBeenCalled();
+      expect(onTopClose).not.toHaveBeenCalled();
+    });
+
+    it("leaves an exempt region (the Toaster) clickable and not outside", () => {
+      vi.useFakeTimers();
+      const onClose = vi.fn();
+      const toaster = document.createElement("div");
+      toaster.setAttribute("data-overlay-exempt", "");
+      const undo = document.createElement("button");
+      toaster.appendChild(undo);
+      document.body.appendChild(toaster);
+      renderDialog({ onClose });
+
+      expect(toaster.inert).toBe(false);
+      advanceTimers(10);
+      fireEvent.mouseDown(undo, { button: 0 });
+
+      expect(onClose).not.toHaveBeenCalled();
+    });
+
     it("calls onClose when the close button is clicked", async () => {
       const onClose = vi.fn();
       const user = userEvent.setup();
@@ -360,8 +425,9 @@ describe("Dialog", () => {
       const last = buttons[buttons.length - 1];
 
       last.focus();
+      expect(panel).toContainElement(last);
       act(() => {
-        fireEvent.keyDown(panel as HTMLElement, { key: "Tab" });
+        fireEvent.keyDown(last, { key: "Tab" });
       });
 
       expect(document.activeElement).toBe(first);
@@ -383,8 +449,9 @@ describe("Dialog", () => {
       const last = buttons[buttons.length - 1];
 
       first.focus();
+      expect(panel).toContainElement(first);
       act(() => {
-        fireEvent.keyDown(panel as HTMLElement, { key: "Tab", shiftKey: true });
+        fireEvent.keyDown(first, { key: "Tab", shiftKey: true });
       });
 
       expect(document.activeElement).toBe(last);
@@ -418,7 +485,7 @@ describe("Dialog", () => {
       }
     });
 
-    it("restores focus to the opener after the close animation completes", () => {
+    it("restores focus to the opener as soon as it closes, while it animates out", () => {
       vi.useFakeTimers();
       const opener = document.createElement("button");
       opener.textContent = "Open dialog";
@@ -431,10 +498,12 @@ describe("Dialog", () => {
 
         rerender(<Dialog {...defaultProps} open={false} />);
 
-        expect(document.activeElement).not.toBe(opener);
+        // The overlay core (shared with Drawer) hands focus back on close, not
+        // after the exit transition: the closing dialog is already inert.
+        expect(document.activeElement).toBe(opener);
+        expect(overlayOf(screen.getByRole("dialog", { hidden: true })).inert).toBe(true);
 
         advanceTimers(299);
-        expect(document.activeElement).not.toBe(opener);
 
         advanceTimers(1);
         expect(document.activeElement).toBe(opener);
@@ -487,7 +556,7 @@ describe("Dialog", () => {
       renderDialog({ title: "Base dialog", base: true });
       renderDialog({ title: "Stacked dialog", stack: true });
 
-      const [baseOverlay] = screen.getAllByRole("dialog");
+      const baseOverlay = overlayOf(screen.getAllByRole("dialog")[0]);
       const basePanel = getDialogPanel(baseOverlay);
 
       expect(baseOverlay.inert).toBe(true);
@@ -497,7 +566,7 @@ describe("Dialog", () => {
       vi.useFakeTimers();
       renderDialog({ title: "Base dialog", base: true });
       const stacked = renderDialog({ title: "Stacked dialog", stack: true });
-      const [baseOverlay] = screen.getAllByRole("dialog");
+      const baseOverlay = overlayOf(screen.getAllByRole("dialog")[0]);
       const basePanel = getDialogPanel(baseOverlay) as HTMLElement;
 
       stacked.rerender(<Dialog {...defaultProps} title="Stacked dialog" open={false} stack />);
@@ -591,15 +660,17 @@ describe("Dialog", () => {
 
   describe("minHeight prop", () => {
     it("applies minHeight inline style when provided", () => {
-      renderDialog({ minHeight: 480 });
+      // A step of the scale: jsdom 30 throws computing a calc() that holds
+      // a var(), which a number between the steps renders as.
+      renderDialog({ minHeight: 160 });
 
-      expect(getDialogPanel()).toHaveStyle({ minHeight: "480px" });
+      expect(getDialogPanel()).toHaveStyle({ minHeight: t(160) });
     });
 
     it("does not apply minHeight style when omitted", () => {
       renderDialog();
 
-      expect(getDialogPanel()).not.toHaveStyle({ minHeight: "480px" });
+      expect(getDialogPanel()).not.toHaveStyle({ minHeight: t(160) });
     });
   });
 
@@ -625,15 +696,35 @@ describe("Dialog", () => {
     });
   });
 
-  describe("DialogProvider", () => {
-    it("renders children correctly", () => {
-      render(
-        <DialogProvider>
-          <div>Provider child</div>
-        </DialogProvider>,
+  describe("stacking without a provider", () => {
+    // 3.0 made DialogProvider implicit: a stacked dialog makes the one
+    // beneath it inert on its own, with nothing wrapping the app.
+    it("makes the base dialog inert while a stacked dialog is open", () => {
+      const { rerender } = render(
+        <>
+          <Dialog {...defaultProps} title="Base dialog" base />
+          <Dialog {...defaultProps} title="Stacked dialog" stack open={false} />
+        </>,
+        { wrapper: TestProviders },
       );
+      const baseOverlay = overlayOf(screen.getAllByRole("dialog")[0]);
+      expect(baseOverlay.inert).toBe(false);
 
-      expect(screen.getByText("Provider child")).toBeInTheDocument();
+      rerender(
+        <>
+          <Dialog {...defaultProps} title="Base dialog" base />
+          <Dialog {...defaultProps} title="Stacked dialog" stack open />
+        </>,
+      );
+      expect(baseOverlay.inert).toBe(true);
+
+      rerender(
+        <>
+          <Dialog {...defaultProps} title="Base dialog" base />
+          <Dialog {...defaultProps} title="Stacked dialog" stack open={false} />
+        </>,
+      );
+      expect(baseOverlay.inert).toBe(false);
     });
   });
 

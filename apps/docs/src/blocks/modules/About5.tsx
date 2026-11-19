@@ -6,17 +6,16 @@ import {
   Button,
   Card,
   Column,
-  CountFx,
   Grid,
   Heading,
-  Hover,
-  LetterFx,
+  HoverCard,
   Line,
   Logo,
   Media,
   Row,
   Text,
 } from "@once-ui-system/core";
+import { CountFx, LetterFx } from "@once-ui-system/fx";
 import { useEffect, useRef, useState } from "react";
 
 const stats = [
@@ -63,7 +62,7 @@ function SwagCard({ href, image, label }: { href: string; image: string; label: 
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <Hover
+      <HoverCard placement="cover"
         fillWidth
         trigger={
           <Card
@@ -77,9 +76,7 @@ function SwagCard({ href, image, label }: { href: string; image: string; label: 
               <Media aspectRatio="1/1" src={image} sizes="400px" alt={label} />
             </Animation>
           </Card>
-        }
-        overlay={
-          <Row fill padding="4">
+        }><Row fill padding="4">
             <Row fill border="neutral-alpha-medium" radius="l" vertical="end" overflow="hidden">
               <Row fillWidth height="32">
                 <Background
@@ -93,7 +90,7 @@ function SwagCard({ href, image, label }: { href: string; image: string; label: 
                   }}
                 />
                 <Button data-border="sharp" size="s" suffixIcon="chevronRight">
-                  <Text variant="code-default-s">
+                  <Text textVariant="code-default-s">
                     <LetterFx
                       charset={["x", "y", "z", "0", "/", "!", "u", "o"]}
                       trigger="custom"
@@ -117,9 +114,7 @@ function SwagCard({ href, image, label }: { href: string; image: string; label: 
                 />
               </Row>
             </Row>
-          </Row>
-        }
-      />
+          </Row></HoverCard>
     </Row>
   );
 }
@@ -143,11 +138,11 @@ export const About5 = () => {
 
           <Row fillWidth borderBottom background="page">
             <Column fillWidth paddingY="80" paddingX="32" gap="16">
-              <Text variant="code-default-s" onBackground="brand-weak">
+              <Text textVariant="code-default-s" onBackground="brand-weak">
                 Community
               </Text>
-              <Heading variant="display-strong-s">Powering creative minds.</Heading>
-              <Text variant="body-default-m" onBackground="neutral-weak" wrap="balance">
+              <Heading textVariant="display-strong-s">Powering creative minds.</Heading>
+              <Text textVariant="body-default-m" onBackground="neutral-weak" wrap="balance">
                 Used by professionals working at companies that value craft, curiosity, and
                 independent creation.
               </Text>
@@ -165,11 +160,11 @@ export const About5 = () => {
                 background="page"
                 borderRight={index < stats.length - 1 ? "neutral-alpha-weak" : undefined}
               >
-                <Heading variant="display-strong-xs">
-                  <CountFx value={stat.value} speed={800} separator="," />
+                <Heading textVariant="display-strong-xs">
+                  <CountFx value={stat.value} duration={800} separator="," />
                   {stat.suffix}
                 </Heading>
-                <Text variant="label-default-s" onBackground="neutral-weak">
+                <Text textVariant="label-default-s" onBackground="neutral-weak">
                   {stat.label}
                 </Text>
               </Column>
@@ -185,7 +180,7 @@ export const About5 = () => {
                 padding="24"
                 borderRight={index % 2 === 0 ? "neutral-alpha-weak" : undefined}
                 borderBottom={index < 2 ? "neutral-alpha-weak" : undefined}
-                minHeight={4}
+                minHeight="4rem"
               >
                 <Logo wordmark={{ light: partner.light, dark: partner.dark }} />
               </Row>
@@ -195,9 +190,11 @@ export const About5 = () => {
           <Row fillWidth borderBottom>
             <Row flex={1} borderRight m={{ hide: true }} />
             <Column flex={3} background="page">
-              <Heading as="h2" variant="heading-strong-l" padding="24">
-                Swag designed for makers.
-              </Heading>
+              <Column padding="24">
+                <Heading as="h2" textVariant="heading-strong-l">
+                  Swag designed for makers.
+                </Heading>
+              </Column>
             </Column>
           </Row>
 

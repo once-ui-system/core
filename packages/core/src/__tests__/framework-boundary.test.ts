@@ -6,8 +6,8 @@ import { describe, expect, it } from "vitest";
  * Guards the framework-coupling boundary described in
  * rfcs/2026-08-once-ui-2-architecture.md (§4).
  *
- * The 2.0 split moves every `next/*` import into @once-ui-system/nextjs and
- * every `recharts` import into @once-ui-system/data. Until then, this test
+ * The 2.0 split moves every `next/*` import into @once-ui-system/nextjs (the
+ * charts left recharts for their own renderer in 3.0). Until then, this test
  * pins the coupling surface to the exact files below so it cannot silently
  * grow. If you add a file here, you are widening the framework boundary —
  * make sure that's a deliberate decision (and update the RFC inventory).
@@ -23,15 +23,17 @@ const NEXT_IMPORT_ALLOWLIST = [
   // subpath's index re-exports it next to the OG route factories, which need
   // no next/* import: they take a standard Request and return a Response.)
   //
-  // This list is one entry on purpose. Meta.tsx, Schema.tsx and
+  // This list holds only files behind the ./next subpath, on purpose. Meta.tsx, Schema.tsx and
   // server/og-utils.ts were removed from it when core became installable
   // without Next (`next` is an optional peer): Meta declares its own return
   // type, Schema emits a plain <script>, og-utils returns a standard Response.
   // Adding a file back here means Next is a hard requirement again.
   "next/adapters.tsx",
+  // The OG image route draws with next/og's ImageResponse. It sits behind the
+  // same ./next subpath, so an app that never imports that subpath never
+  // resolves next/og, and it moves to @once-ui-system/nextjs with the adapters.
+  "next/ogImage.tsx",
 ];
-
-const RECHARTS_ALLOWED_DIR = "modules/data";
 
 const SKIPPED_DIRS = new Set(["__tests__", "test", "node_modules"]);
 
@@ -79,10 +81,18 @@ describe("framework coupling boundary", () => {
     expect(offenders).toEqual(["modules/map/Map.impl.tsx"]);
   });
 
-  it("imports recharts only from modules/data", () => {
-    const offenders = filesImporting("recharts").filter(
-      (file) => !file.startsWith(`${RECHARTS_ALLOWED_DIR}/`),
-    );
-    expect(offenders).toEqual([]);
+  it("loads three only from Scene.impl, behind the lazy /scene entry", () => {
+    // `three/addons/*` counts too: the controls and the glTF loader pull in
+    // the whole library.
+    const runtime =
+      /(?:import\s+(?!type\b)[^;]*?from\s*["']three(?:\/[^"']*)?["']|(?<!typeof\s)import\s*\(\s*["']three(?:\/[^"']*)?["']|require\s*\(\s*["']three(?:\/[^"']*)?["'])/;
+    const offenders = collectSourceFiles(SRC_ROOT)
+      .filter((file) => runtime.test(readFileSync(file, "utf8")))
+      .map((file) => relative(SRC_ROOT, file).split(sep).join("/"));
+    expect(offenders).toEqual(["modules/scene/Scene.impl.tsx"]);
+  });
+
+  it("imports recharts nowhere: the charts draw their own SVG since 3.0", () => {
+    expect(filesImporting("recharts")).toEqual([]);
   });
 });

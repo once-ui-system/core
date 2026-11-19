@@ -1,0 +1,64 @@
+---
+title: "Calendar"
+summary: "A scheduling calendar: a month of days, or a week or day of hours, with overlapping events side by side, picking empty time and dragging events."
+updatedAt: "2026-11-11"
+github: "modules/calendar/Calendar.tsx"
+docs: "once-ui/modules/calendar.mdx"
+navLabel: "Calendar"
+navIcon: "calendar"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+`Calendar` shows events the way calendar apps do. Overlapping events sit side by side in the week and day views, events that last a day or more run as bars, and a crowded month day folds into "n more". The calendar does not store events: picking empty time, dragging an event and opening one all call back to your app, which keeps the list.
+
+<CalendarExample />
+
+## Import
+
+`Calendar` has its own entry point, so it costs nothing in apps that don't use it. It has no dependencies.
+
+```tsx
+import { Calendar, type CalendarEvent } from "@once-ui-system/core/calendar";
+
+const events: CalendarEvent[] = [
+  { id: "1", title: "Design review", start: new Date(2026, 10, 12, 14), end: new Date(2026, 10, 12, 15) },
+];
+
+<Calendar events={events} defaultView="week" onEventSelect={(event) => open(event)} />;
+```
+
+An event's `end` is exclusive: an event from 9:00 to 10:00 ends at 10:00, and an all-day event on 12 November ends at midnight on 13 November. `tone` gives an event its palette (the default is `brand`), and `description` adds a second line in the week and day views, such as a room or a client.
+
+## Booking and rescheduling
+
+- `onSlotSelect` makes empty time pickable. In the week and day views, people drag down the hours to pick a stretch, or click to pick `defaultDuration` minutes. In the month view, they press a day. Both snap to `snapMinutes`.
+- `onEventChange` lets people drag an event to another time or day, or drag its bottom edge to change when it ends. The calendar shows the new place while they drag, then hands you the new `start` and `end`. The event moves once you pass the changed list back, so you can save it first or refuse the change.
+- `editable: false` on an event keeps it in place.
+
+## Views and dates
+
+`view` and `date` are controlled like any other 3.0 state (`view` / `defaultView` / `onViewChange`, `date` / `defaultDate` / `onDateChange`). `views` sets which views are on the switch, and with one view the switch is hidden. `dayStartHour` and `dayEndHour` limit the hours drawn, and `scrollToHour` sets where the week and day views open. `toolbar={false}` hides the header, and `toolbarEnd` adds your own controls to it, such as a "New event" button.
+
+## Language
+
+`locale` names the months, the weekdays and the times, and sets the first day of the week unless you give `weekStartsOn`. `labels` translates the calendar's own words: Today, the view names, All day and "n more".
+
+```tsx
+<Calendar
+  events={events}
+  locale="hu-HU"
+  labels={{ today: "Ma", month: "Hónap", week: "Hét", day: "Nap", allDay: "Egész nap", more: (n) => `még ${n}` }}
+/>
+```
+
+## Accessibility
+
+- The month view is an ARIA grid. The arrow keys move between days, Home and End go to the ends of the week, and Page Up and Page Down change the month. Enter picks the day, or opens it in the day view when `onSlotSelect` isn't set.
+- Every event is a button whose name gives its title, date and time.
+- Each day in the week and day views is a named group.
+- The title above the grid announces the period whenever it changes.
+
+## Layout helpers
+
+The layouts are exported too, for a list beside the grid or for counting on the server. `layoutDay(events, day)` gives a day's timed blocks with their lanes, `layoutSpans(events, days)` gives bars across a row of days, and `viewDays(view, date, weekStartsOn)` gives the days a view shows.

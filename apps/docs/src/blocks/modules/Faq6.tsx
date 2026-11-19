@@ -94,17 +94,17 @@ export const Faq6 = (flex: React.ComponentProps<typeof Column>) => {
 
   return (
     <Column fillWidth horizontal="center" gap="48" {...flex}>
-      <Column maxWidth={48} gap="8" paddingX="l">
-        <Heading as="h2" variant="display-strong-m">
+      <Column maxWidth="48rem" gap="8" paddingX="l">
+        <Heading as="h2" textVariant="display-strong-m">
           Questions, answered
         </Heading>
-        <Text variant="body-default-l" onBackground="neutral-weak" wrap="balance">
+        <Text textVariant="body-default-l" onBackground="neutral-weak" wrap="balance">
           Browse by topic or jump straight to what you need to know before getting started.
         </Text>
       </Column>
 
       <Row maxWidth="l" gap="24" paddingX="l" s={{ direction: "column" }}>
-        <Column minWidth={16} maxWidth={20} gap="8">
+        <Column minWidth="16rem" maxWidth="20rem" gap="8">
           {categories.map((category) => (
             <Row
               key={category.id}
@@ -124,8 +124,8 @@ export const Faq6 = (flex: React.ComponentProps<typeof Column>) => {
                 onBackground={activeCategory === category.id ? "brand-medium" : "neutral-weak"}
               />
               <Column gap="2" flex={1}>
-                <Text variant="label-default-s">{category.label}</Text>
-                <Text variant="label-default-xs" onBackground="neutral-weak">
+                <Text textVariant="label-default-s">{category.label}</Text>
+                <Text textVariant="label-default-xs" onBackground="neutral-weak">
                   {category.items.length} questions
                 </Text>
               </Column>
@@ -138,15 +138,15 @@ export const Faq6 = (flex: React.ComponentProps<typeof Column>) => {
         <Column fillWidth flex={1} gap="16">
           <Row gap="8" vertical="center">
             <Tag size="s">{active.label}</Tag>
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               {active.items.length} answers
             </Text>
           </Row>
           <Column fillWidth gap="8">
             {active.items.map((item) => (
               <Column key={item.title} fillWidth border radius="l" padding="4" background="overlay">
-                <Accordion title={<Text variant="body-default-s">{item.title}</Text>}>
-                  <Text variant="body-default-s" onBackground="neutral-medium">
+                <Accordion title={<Text textVariant="body-default-s">{item.title}</Text>}>
+                  <Text textVariant="body-default-s" onBackground="neutral-medium">
                     {item.content}
                   </Text>
                 </Accordion>

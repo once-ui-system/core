@@ -6,7 +6,7 @@ import { ElementType } from "../components/ElementType";
 import { IconButton } from "../components/IconButton";
 import { SmartLink } from "../components/SmartLink";
 import { LayoutProvider } from "../contexts/LayoutProvider";
-import { MobileMegaMenu } from "../modules/navigation/MobileMegaMenu";
+import { MegaMenu } from "../modules/navigation/MegaMenu";
 
 /**
  * A link runs the `onClick` it is given. ElementType passed `onClick` only to
@@ -82,10 +82,11 @@ describe("ElementType link clicks", () => {
     expect(onClick).toHaveBeenCalledTimes(3);
   });
 
-  it("closes MobileMegaMenu when one of its section links is followed", () => {
+  it("closes a collapsed MegaMenu when one of its section links is followed", () => {
     const onClose = vi.fn();
     render(
-      <MobileMegaMenu
+      <MegaMenu
+        collapseBelow="always"
         onClose={onClose}
         menuGroups={[
           {

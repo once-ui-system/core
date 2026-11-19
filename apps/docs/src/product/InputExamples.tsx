@@ -1,39 +1,38 @@
 "use client";
 
-import React, { useState } from "react";
-import { useNowState } from "./useNow";
 import {
-  Input,
+  ColorInput,
+  Column,
+  DateInput,
   Icon,
   IconButton,
-  ColorInput,
-  DateInput,
+  Input,
+  Kbd,
   NumberInput,
   OTPInput,
-  PasswordInput,
   TagInput,
   Text,
-  Kbd,
   useToast,
-  Column,
   Row,
   Button,
   Select,
   type FieldSize,
 } from "@once-ui-system/core";
+import React, { useState } from "react";
+import { useNowState } from "./useNow";
 
 // Search input with managed state and conditional clear button
 export function SearchInput({ size }: { size?: FieldSize } = {}) {
   const [searchValue, setSearchValue] = useState<string>("");
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
-  
+
   const handleClear = () => {
     setSearchValue("");
   };
-  
+
   return (
     <Input
       id={size ? `search-input-${size}` : "search-input"}
@@ -64,12 +63,12 @@ export function ValidationInputExample() {
 
   const validateEmail = (email: any) => {
     if (!email) return null;
-    
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return "Please enter a valid email address";
     }
-    
+
     return null;
   };
 
@@ -86,11 +85,11 @@ export function ValidationInputExample() {
 
 export function CharacterCountExample() {
   const [bio, setBio] = useState<string>("");
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBio(e.target.value);
   };
-  
+
   return (
     <Input
       id="character-count-input"
@@ -106,18 +105,18 @@ export function CharacterCountExample() {
 // Color input example with managed state
 export function ColorInputExample({ size }: { size?: FieldSize } = {}) {
   const [colorValue, setColorValue] = useState("#4287f5");
-  
+
   const handleColorChange = (value: string) => {
     setColorValue(value);
   };
-  
+
   return (
     <ColorInput
       id={size ? `color-input-example-${size}` : "color-input-example"}
       size={size}
       label="Brand Color"
       value={colorValue}
-      onChange={handleColorChange}
+      onValueChange={handleColorChange}
     />
   );
 }
@@ -125,17 +124,17 @@ export function ColorInputExample({ size }: { size?: FieldSize } = {}) {
 // Color input with alpha support
 export function ColorInputAlphaExample() {
   const [colorValue, setColorValue] = useState("rgba(66, 135, 245, 0.8)");
-  
+
   const handleColorChange = (value: string) => {
     setColorValue(value);
   };
-  
+
   return (
     <ColorInput
       id="color-input-alpha-example"
       label="Brand Color"
       value={colorValue}
-      onChange={handleColorChange}
+      onValueChange={handleColorChange}
       supportAlpha
     />
   );
@@ -148,7 +147,7 @@ export function DateInputExample({ size }: { size?: FieldSize } = {}) {
   const handleDateChange = (newDate: Date) => {
     setDate(newDate);
   };
-  
+
   return (
     <DateInput
       prefix={<Icon marginLeft="4" name="calendar" size="xs" />}
@@ -156,7 +155,7 @@ export function DateInputExample({ size }: { size?: FieldSize } = {}) {
       size={size}
       placeholder="Select date"
       value={date}
-      onChange={handleDateChange}
+      onValueChange={handleDateChange}
     />
   );
 }
@@ -168,13 +167,13 @@ export function DateTimeInputExample() {
   const handleDateTimeChange = (newDateTime: Date) => {
     setDateTime(newDateTime);
   };
-  
+
   return (
     <DateInput
       id="date-time-input-example"
       label="Date & Time"
       value={dateTime}
-      onChange={handleDateTimeChange}
+      onValueChange={handleDateTimeChange}
       timePicker
     />
   );
@@ -183,18 +182,18 @@ export function DateTimeInputExample() {
 // NumberInput example with min, max, and step
 export function NumberInputExample({ size = "xl" }: { size?: FieldSize } = {}) {
   const [value, setValue] = useState<number>(0);
-  
+
   const handleChange = (newValue: number) => {
     setValue(newValue);
   };
-  
+
   return (
     <NumberInput
       id={size === "xl" ? "number-input-example" : `number-input-example-${size}`}
       label="Quantity"
       size={size}
       value={value}
-      onChange={handleChange}
+      onValueChange={handleChange}
       min={0}
       max={100}
       step={1}
@@ -204,17 +203,22 @@ export function NumberInputExample({ size = "xl" }: { size?: FieldSize } = {}) {
 
 export function OTPInputExample({ autoFocus = true }: { autoFocus?: boolean }) {
   const { addToast } = useToast();
-  
+
   const handleComplete = (code: string) => {
     addToast({
-      variant: "success",
-      message: `Verification code ${code} submitted successfully`
+      tone: "success",
+      message: `Verification code ${code} submitted successfully`,
     });
   };
-  
+
   return (
     <Column gap="16">
-      <Text as="label" htmlFor="otp-input-example" variant="label-default-s" onBackground="neutral-weak">
+      <Text
+        as="label"
+        htmlFor="otp-input-example"
+        textVariant="label-default-s"
+        onBackground="neutral-weak"
+      >
         Verification Code
       </Text>
       <OTPInput
@@ -234,14 +238,15 @@ export function PasswordInputExample({ size }: { size?: FieldSize } = {}) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
-  
+
   return (
-    <PasswordInput
+    <Input
       id={size ? `password-input-example-${size}` : "password-input-example"}
       size={size}
+      label="Password"
+      type="password"
       value={password}
       onChange={handleChange}
-      placeholder="Password"
     />
   );
 }
@@ -253,13 +258,13 @@ export function TagInputExample({ size }: { size?: FieldSize } = {}) {
   const handleChange = (newTags: string[]) => {
     setTags(newTags);
   };
-  
+
   return (
     <TagInput
       id={size ? `tag-input-example-${size}` : "tag-input-example"}
       size={size}
       value={tags}
-      onChange={handleChange}
+      onValueChange={handleChange}
       placeholder="Add interest"
       suffix={
         // The hint does not fit a 32px field beside the chips.
@@ -294,7 +299,7 @@ export function ToolbarFieldsExample() {
         size="xxs"
         label="Status"
         value={status}
-        onSelect={(next) => setStatus(next as string)}
+        onValueChange={(next) => setStatus(next as string)}
         options={[
           { label: "All statuses", value: "all" },
           { label: "Paid", value: "paid" },

@@ -11,12 +11,12 @@ navTagVariant: "cyan"
 ---
 
 `Sortable` makes a list reorderable. Wrap the list, wrap each row in
-`Sortable.Item`, and apply the new order in `onReorder`. The rows themselves
+`SortableItem`, and apply the new order in `onReorder`. The rows themselves
 stay whatever they were: NavItems, Cards, task rows.
 
 - **Mouse and pen:** the drag starts after a 4px move, so a click still clicks.
 - **Touch:** press and hold a row for 200ms, so a tap still taps and a swipe
-  still scrolls. A `Sortable.Handle` drags at once.
+  still scrolls. A `SortableHandle` drags at once.
 - **Keyboard:** Space picks a row up, the arrow keys move it, Space drops it
   and Escape puts it back. Screen readers hear "Picked up Launch plan, 1 of 5"
   and every step after.
@@ -37,9 +37,9 @@ order `items` holds, so the order lives in your state, next to the data.
 
 <Sortable items={rows} onReorder={setRows}>
   {rows.map((row) => (
-    <Sortable.Item key={row} id={row}>
+    <SortableItem key={row} id={row}>
       <NavItem href={\`/\${row.toLowerCase()}\`} label={row} />
-    </Sortable.Item>
+    </SortableItem>
   ))}
 </Sortable>`,
       language: "tsx",
@@ -75,9 +75,9 @@ closed NavGroup opens when a row is held over it.
     <Sortable group="chats" name="pinned" label="Pinned"
       items={pinned} onReorder={setPinned} onMove={move}>
       {pinned.map((chat) => (
-        <Sortable.Item key={chat.id} id={chat.id}>
+        <SortableItem key={chat.id} id={chat.id}>
           <NavItem href={chat.href} icon="star" label={chat.title} />
-        </Sortable.Item>
+        </SortableItem>
       ))}
     </Sortable>
   </NavSection>
@@ -120,7 +120,7 @@ not the only one.
 
 ## Handles
 
-With `handle`, a row drags only from its `Sortable.Handle`. Use it when the
+With `handle`, a row drags only from its `SortableHandle`. Use it when the
 rows hold their own controls, such as a checkbox, or text people select. The
 handle is a button named "Reorder" plus the row's `label`, and on a touch
 screen it drags straight away with no press and hold.
@@ -139,10 +139,10 @@ screen it drags straight away with no press and hold.
   onReorder={(_, { from, to }) => setTasks((tasks) => arrayMove(tasks, from, to))}
 >
   {tasks.map((task) => (
-    <Sortable.Item key={task.id} id={task.id} label={task.label} vertical="center" gap="8">
-      <Sortable.Handle />
-      <Checkbox label={task.label} checked={task.done} onToggle={() => toggle(task.id)} />
-    </Sortable.Item>
+    <SortableItem key={task.id} id={task.id} label={task.label} vertical="center" gap="8">
+      <SortableHandle />
+      <Checkbox label={task.label} checked={task.done} onCheckedChange={() => toggle(task.id)} />
+    </SortableItem>
   ))}
 </Sortable>`,
       language: "tsx",
@@ -153,7 +153,7 @@ screen it drags straight away with no press and hold.
 
 ## A board
 
-The same `group` works for columns side by side. A `Sortable.Item` takes the
+The same `group` works for columns side by side. A `SortableItem` takes the
 Flex props, so a row can be the card itself. Use `direction="row"` for a
 horizontal list, such as a strip of media.
 
@@ -168,14 +168,14 @@ horizontal list, such as a strip of media.
 `<Row fillWidth gap="12">
   {columns.map(({ name, label }) => (
     <Column key={name} flex={1} gap="8" padding="8" radius="l" background="neutral-alpha-weak">
-      <Text variant="label-default-s">{label}</Text>
+      <Text textVariant="label-default-s">{label}</Text>
       <Sortable group="board" name={name} label={label} gap="8"
         items={board[name]} onReorder={(items) => reorder(name, items)} onMove={move}>
         {board[name].map((card) => (
-          <Sortable.Item key={card} id={card} padding="12" radius="m"
+          <SortableItem key={card} id={card} padding="12" radius="m"
             background="surface" border="neutral-alpha-medium">
-            <Text variant="body-default-s">{card}</Text>
-          </Sortable.Item>
+            <Text textVariant="body-default-s">{card}</Text>
+          </SortableItem>
         ))}
       </Sortable>
     </Column>
@@ -210,13 +210,13 @@ every pick up, move, drop and cancel. Pass `labels` to translate them:
 <PropsTable
   component="Sortable"
   describe={{
-    items: "The rows' ids in their current order, the same ids the Sortable.Items carry.",
+    items: "The rows' ids in their current order, the same ids the SortableItems carry.",
     onReorder: "Called with the new order of ids and the move, `{ id, from, to }`, when a row is dropped somewhere new in this list.",
     group: "Lists with the same group trade rows.",
     name: "This list's name in onMove. Set it on every list of a group.",
     onMove: "Called when a row lands in this list from another list of its group, with `(id, to, from)`, each `{ list, index }`.",
     direction: "`row` for a horizontal list.",
-    handle: "Drag only from a Sortable.Handle in each row.",
+    handle: "Drag only from a SortableHandle in each row.",
     disabled: "Turns dragging off for the whole list.",
     label: "The list's name for screen readers when a row moves into it.",
     labels: "The instructions and announcements, for a translated interface.",

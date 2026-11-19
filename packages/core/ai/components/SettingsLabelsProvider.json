@@ -1,0 +1,33 @@
+{
+ "name": "SettingsLabelsProvider",
+ "partOf": "SettingsLayout",
+ "purpose": "One labels object for the settings blocks below it (settingsLabelsHu: Hungarian)",
+ "group": "blocks",
+ "importFrom": "@once-ui-system/blocks",
+ "props": {
+  "labels": "SettingsLabelsInput",
+  "children": "!ReactNode"
+ },
+ "tags": [
+  "settings"
+ ],
+ "pairsWith": [
+  "SettingsLayout"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "SettingsLabelsInput": {
+   "common": "{ edit: string; add: string; save: string; cancel: string; close: string; next: string; back: string; notSet: string; saved: string; failed: string; copy: string; copied: string; currentPassword: string; /** Shown instead of the password field when the account has none. */ recentSignInNote: string; nav: string; }",
+   "sections": "{ profile: string; security: string; organization: string; }",
+   "profile": "{ title: string; description: string; photo: string; photoDescription: string; upload: string; remove: string; photoSaved: string; photoRemoved: string; name: string; nameDescription: string; username: string; usernameDescription: string; email: string; emailDescription: string; verified: string; unverified: string; pending: (address: string) => string; change: string; }",
+   "email": "{ title: string; description: string; newEmail: string; send: string; sent: (address: string) => string; cancelChange: string; changeCancelled: string; }",
+   "password": "{ row: string; rowDescription: (changedAt?: string) => string; set: string; change: string; title: string; description: string; newPassword: string; tooShort: string; signOutOthers: string; changed: string; }",
+   "twoFactor": "{ row: string; rowDescription: string; on: string; off: string; setUp: string; turnOff: string; step: (step: number, of: number) => string; scanTitle: string; scanDescription: string; qrAlt: string; orEnterKey: string; codeTitle: string; codeDescription: string; verify: string; wrongCode: string; backupTitle: string; backupDescription: string; done: string; enabled: string; disableTitle: string; disableDescription: string; disabled: string; }",
+   "identities": "{ title: string; connect: string; disconnect: string; notConnected: string; connectedSince: (date: string) => string; disconnected: string; lastMethod: string; }",
+   "sessions": "{ title: string; thisDevice: string; signOut: string; signOutOthers: string; signOutOthersDescription: string; signedOut: string; othersSignedOut: string; }",
+   "danger": "{ title: string; deleteAccount: string; deleteAccountDescription: string; deleteAccountTitle: string; deleteAccountBody: string; deleteAccountConfirm: string; }",
+   "organization": "{ title: string; description: string; readOnly: string; logo: string; logoDescription: string; name: string; nameDescription: string; address: string; addressDescription: string; leave: string; leaveDescription: string; leaveTitle: string; leaveBody: string; delete: string; deleteDescription: string; deleteTitle: string; deleteBody: string; typeToConfirm: (slug: string) => string; }",
+   "formatDate": "(iso: string) => string"
+  }
+ }
+}

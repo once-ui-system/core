@@ -17,25 +17,25 @@ The Heading component is used for displaying titles and section headings through
   marginBottom="24"
   preview={
     <Column gap="16" fillWidth>
-      <Heading variant="heading-strong-xl">Heading 1</Heading>
-      <Heading variant="heading-strong-l">Heading 2</Heading>
-      <Heading variant="heading-strong-m">Heading 3</Heading>
-      <Heading variant="heading-strong-s">Heading 4</Heading>
+      <Heading textVariant="heading-strong-xl">Heading 1</Heading>
+      <Heading textVariant="heading-strong-l">Heading 2</Heading>
+      <Heading textVariant="heading-strong-m">Heading 3</Heading>
+      <Heading textVariant="heading-strong-s">Heading 4</Heading>
     </Column>
   }
   codes={[
     {
       code:
-`<Heading variant="heading-strong-xl">
+`<Heading textVariant="heading-strong-xl">
     Heading 1
 </Heading>
-<Heading variant="heading-strong-l" as="h2">
+<Heading textVariant="heading-strong-l" as="h2">
     Heading 2
 </Heading>
-<Heading variant="heading-strong-m" as="h3">
+<Heading textVariant="heading-strong-m" as="h3">
     Heading 3
 </Heading>
-<Heading variant="heading-strong-s" as="h4">
+<Heading textVariant="heading-strong-s" as="h4">
     Heading 4
 </Heading>`,
       language: "tsx",
@@ -53,38 +53,38 @@ Heading components can be styled using the `variant` prop which combines font ty
   marginBottom="24"
   preview={
     <Column gap="16">
-      <Heading variant="display-strong-xl">Display Strong XL</Heading>
-      <Heading variant="display-strong-l">Display Strong L</Heading>
-      <Heading variant="display-strong-m">Display Strong M</Heading>
-      <Heading variant="display-strong-s">Display Strong S</Heading>
-      <Heading variant="display-strong-xs">Display Strong XS</Heading>
+      <Heading textVariant="display-strong-xl">Display Strong XL</Heading>
+      <Heading textVariant="display-strong-l">Display Strong L</Heading>
+      <Heading textVariant="display-strong-m">Display Strong M</Heading>
+      <Heading textVariant="display-strong-s">Display Strong S</Heading>
+      <Heading textVariant="display-strong-xs">Display Strong XS</Heading>
 
-      <Heading variant="display-default-xl">Display Default XL</Heading>
-      <Heading variant="display-default-l">Display Default L</Heading>
-      <Heading variant="display-default-m">Display Default M</Heading>
-      <Heading variant="display-default-s">Display Default S</Heading>
-      <Heading variant="display-default-xs">Display Default XS</Heading>
+      <Heading textVariant="display-default-xl">Display Default XL</Heading>
+      <Heading textVariant="display-default-l">Display Default L</Heading>
+      <Heading textVariant="display-default-m">Display Default M</Heading>
+      <Heading textVariant="display-default-s">Display Default S</Heading>
+      <Heading textVariant="display-default-xs">Display Default XS</Heading>
 
-      <Heading variant="heading-strong-xl">Heading Strong XL</Heading>
-      <Heading variant="heading-strong-l">Heading Strong L</Heading>
-      <Heading variant="heading-strong-m">Heading Strong M</Heading>
-      <Heading variant="heading-strong-s">Heading Strong S</Heading>
-      <Heading variant="heading-strong-xs">Heading Strong XS</Heading>
+      <Heading textVariant="heading-strong-xl">Heading Strong XL</Heading>
+      <Heading textVariant="heading-strong-l">Heading Strong L</Heading>
+      <Heading textVariant="heading-strong-m">Heading Strong M</Heading>
+      <Heading textVariant="heading-strong-s">Heading Strong S</Heading>
+      <Heading textVariant="heading-strong-xs">Heading Strong XS</Heading>
 
-      <Heading variant="heading-default-xl">Heading Default XL</Heading>
-      <Heading variant="heading-default-l">Heading Default L</Heading>
-      <Heading variant="heading-default-m">Heading Default M</Heading>
-      <Heading variant="heading-default-s">Heading Default S</Heading>
-      <Heading variant="heading-default-xs">Heading Default XS</Heading>
+      <Heading textVariant="heading-default-xl">Heading Default XL</Heading>
+      <Heading textVariant="heading-default-l">Heading Default L</Heading>
+      <Heading textVariant="heading-default-m">Heading Default M</Heading>
+      <Heading textVariant="heading-default-s">Heading Default S</Heading>
+      <Heading textVariant="heading-default-xs">Heading Default XS</Heading>
     </Column>
   }
   codes={[
     {
       code:
-`<Heading variant="display-strong-xl">
+`<Heading textVariant="display-strong-xl">
     Display Strong XL
 </Heading>
-<Heading variant="heading-default-m">
+<Heading textVariant="heading-default-m">
     Heading Default M
 </Heading>`,
       language: "tsx",
@@ -102,7 +102,7 @@ You can override the default `font-family` that comes with the variant with the 
   marginBottom="24"
   preview={
     <Column gap="16">
-      <Heading variant="display-strong-m" family="code">
+      <Heading textVariant="display-strong-m" family="code">
         Display Strong M, but monospace
       </Heading>
     </Column>
@@ -110,7 +110,7 @@ You can override the default `font-family` that comes with the variant with the 
   codes={[
     {
       code:
-`<Heading variant="display-strong-m" family="code">
+`<Heading textVariant="display-strong-m" family="code">
     Display Strong M, but monospace
 </Heading>`,
       language: "tsx",
@@ -128,7 +128,7 @@ You can override the default `font-weight` inside a variant with the `weight` pr
   marginBottom="24"
   preview={
     <Column gap="16">
-      <Heading variant="heading-strong-xl">
+      <Heading textVariant="heading-strong-xl">
         Heading Strong XL, <Text weight="default">but this is default</Text>
       </Heading>
     </Column>
@@ -136,7 +136,7 @@ You can override the default `font-weight` inside a variant with the `weight` pr
   codes={[
     {
       code:
-`<Heading variant="heading-strong-xl">
+`<Heading textVariant="heading-strong-xl">
     Heading Strong XL, <Text weight="default">but this is default</Text>
 </Heading>`,
       language: "tsx",
@@ -257,7 +257,7 @@ Control how text wraps with the `wrap` prop. By default, the `wrap` prop is set 
   marginTop="16"
   marginBottom="24"
   preview={
-    <Column gap="16" maxWidth={32}>
+    <Column gap="16" maxWidth="32rem">
       <Heading>This text uses balance wrapping for optimal readability</Heading>
       <Heading wrap="normal">This text uses normal wrapping behavior</Heading>
     </Column>
@@ -279,7 +279,7 @@ Control how text wraps with the `wrap` prop. By default, the `wrap` prop is set 
 
 ## Spacing
 
-Headings support various spacing props for margin and padding.
+Headings take margins. Padding, like every other layout prop, goes on a `Column` around the heading.
 
 <CodeBlock
   marginTop="16"
@@ -289,9 +289,11 @@ Headings support various spacing props for margin and padding.
       <Heading marginLeft="40">
           With left margin
       </Heading>
-      <Heading padding="8">
-          With padding
-      </Heading>
+      <Column padding="8">
+        <Heading>
+            With padding
+        </Heading>
+      </Column>
       <Heading marginTop="16" marginBottom="16">
           With top and bottom margin
       </Heading>
@@ -303,9 +305,11 @@ Headings support various spacing props for margin and padding.
 `<Heading marginLeft="40">
     With left margin
 </Heading>
-<Heading padding="8">
-    With padding
-</Heading>
+<Column padding="8">
+    <Heading>
+        With padding
+    </Heading>
+</Column>
 <Heading marginTop="16" marginBottom="16">
     With top and bottom margin
 </Heading>`,
@@ -324,11 +328,11 @@ Use the `as` prop to control the underlying HTML element while maintaining consi
   marginBottom="24"
   preview={
     <Column gap="16" fillWidth>
-      <Heading variant="heading-strong-xl">This is an h1 element</Heading>
-      <Heading variant="heading-strong-l">This is an h2 element</Heading>
-      <Heading variant="heading-strong-m">This is an h3 element</Heading>
-      <Heading variant="heading-strong-s">This is an h4 element</Heading>
-      <Heading variant="heading-strong-xs">This is an h5 element</Heading>
+      <Heading textVariant="heading-strong-xl">This is an h1 element</Heading>
+      <Heading textVariant="heading-strong-l">This is an h2 element</Heading>
+      <Heading textVariant="heading-strong-m">This is an h3 element</Heading>
+      <Heading textVariant="heading-strong-s">This is an h4 element</Heading>
+      <Heading textVariant="heading-strong-xs">This is an h5 element</Heading>
     </Column>
   }
   codes={[
@@ -364,8 +368,7 @@ Use the `as` prop to control the underlying HTML element while maintaining consi
   }}
   content={[
     ["as", ["h1", "h2", "h3", "h4", "h5", "h6"], "h1"],
-    ["variant", "TextVariant"],
-    ["size", ["xs", "s", "m", "l", "xl"], "m"],
+    ["textVariant", "TextVariant"],
     ["weight", ["default", "normal", "medium", "strong"], "strong"],
     ["family", ["display", "heading", "body", "label", "code"]],
     ["onBackground", "`${ColorScheme}-${ColorWeight}`"],

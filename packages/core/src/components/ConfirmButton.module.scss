@@ -1,0 +1,53 @@
+// The armed button's time left, and the hold's fill: a bar along the bottom
+// edge. The label says the same in words, so the bar is only a help.
+.confirm {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background: currentColor;
+    opacity: 0.6;
+    transform: scaleX(0);
+    transform-origin: left;
+    pointer-events: none;
+  }
+}
+
+.armed::after {
+  animation: confirm-drain var(--confirm-timeout) linear forwards;
+}
+
+.holding::after {
+  animation: confirm-fill var(--confirm-hold) linear forwards;
+}
+
+.holding {
+  &::after {
+    height: 100%;
+    opacity: 0.25;
+  }
+}
+
+@keyframes confirm-drain {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes confirm-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}

@@ -3,16 +3,16 @@
 import type { GeoJSONSource } from "maplibre-gl";
 import type React from "react";
 import { useEffect, useId, useMemo } from "react";
-import { useMap } from "./MapContext";
-import { tokenColor } from "./tokenColor";
-import type { LngLat, MapColor } from "./types";
+import { useMap } from "./MapContext.js";
+import { tokenColor, toneVars } from "./tokenColor.js";
+import type { LngLat, MapTone } from "./types.js";
 
 export interface MapCircleProps {
   position: LngLat;
   /** Radius in metres. */
   radius: number;
   /** The token colour family. Default "brand". */
-  color?: MapColor;
+  tone?: MapTone;
   /** Fill opacity, 0 to 1. Default 0.2. */
   opacity?: number;
 }
@@ -41,12 +41,7 @@ function circlePolygon([lng, lat]: LngLat, metres: number): PolygonFeature {
  * delivery radius. It scales with the map, unlike a marker, and re-adds
  * itself when the theme swaps the basemap.
  */
-const MapCircle: React.FC<MapCircleProps> = ({
-  position,
-  radius,
-  color = "brand",
-  opacity = 0.2,
-}) => {
+const MapCircle = ({ position, radius, tone = "brand", opacity = 0.2 }: MapCircleProps) => {
   const { map, styleVersion, theme } = useMap();
   const id = `once-ui-circle-${useId().replace(/:/g, "")}`;
   const [lng, lat] = position;
@@ -55,7 +50,7 @@ const MapCircle: React.FC<MapCircleProps> = ({
   // biome-ignore lint/correctness/useExhaustiveDependencies: theme re-reads the token colours
   useEffect(() => {
     if (styleVersion === 0) return;
-    const solid = tokenColor(`--${color}-solid-strong`);
+    const solid = tokenColor(toneVars(tone).solid);
     if (!map.getSource(id)) map.addSource(id, { type: "geojson", data });
     if (!map.getLayer(`${id}-fill`)) {
       map.addLayer({ id: `${id}-fill`, type: "fill", source: id, paint: {} });
@@ -67,7 +62,7 @@ const MapCircle: React.FC<MapCircleProps> = ({
     map.setPaintProperty(`${id}-fill`, "fill-opacity", opacity);
     map.setPaintProperty(`${id}-line`, "line-color", solid);
     map.setPaintProperty(`${id}-line`, "line-width", 2);
-  }, [map, id, styleVersion, theme, color, opacity]);
+  }, [map, id, styleVersion, theme, tone, opacity]);
 
   useEffect(() => {
     (map.getSource(id) as GeoJSONSource | undefined)?.setData(data);

@@ -1,14 +1,14 @@
 ---
 title: "PieChart"
-summary: "A versatile component for displaying pie charts with interactive features, including hover effects, click events, and custom styling options. It supports various customization options including different chart types, color schemes, and interactive features."
-updatedAt: "2025-05-14"
+summary: "Show parts of a whole as a pie or a donut: slices from name and value rows, per-slice colours, ring size and position, and a legend beside it."
+updatedAt: "2026-11-12"
 docs: "once-ui/data/pieChart.mdx"
 github: "modules/data/PieChart.tsx"
 navLabel: "PieChart"
 navIcon: "pieChart"
 ---
 
-The `PieChart` component provides a way to display pie charts with interactive features, including hover effects, click events, and custom styling options. It supports various customization options including different chart types, color schemes, and interactive features.
+`PieChart` draws one slice per row of `data`, sized by its value and named by its name. Use it for the share of a few parts in one whole: two to five slices. Past that the small ones become slivers, so keep the biggest and group the rest as "Other" ([recipe](/data/recipes#top-n-and-other)), or use a horizontal [`BarChart`](/data/barChart). It takes the [props every chart shares](/data/setup#props-every-chart-shares) except `xKey`, `axis` and `grid`, and the ones on this page.
 
 <PieChart
   marginTop="16"
@@ -35,20 +35,52 @@ The `PieChart` component provides a way to display pie charts with interactive f
 />
 
       
-<PieChart
+## Slice colours
+
+Slices take the palette in order, spread as far apart as their count allows. To colour a slice yourself, give its row a `color`: a palette hue, a token or any CSS colour. Useful when a slice has a meaning, such as `"gray"` for "Other" or the brand for your own product. `series.color` doesn't colour a pie.
+
+<CodeBlock
   marginTop="16"
   marginBottom="24"
-  series={{
-    key: "value",
-    color: "green"
-  }}
-  data = {[
-    { name: 'Category A', value: 400 },
-    { name: 'Category B', value: 300 },
-    { name: 'Category C', value: 300 },
-    { name: 'Category D', value: 200 }
+  previewPadding="none"
+  preview={
+    <PieChart
+      border="transparent"
+      title="Market share"
+      height="20rem"
+      ring={{ inner: 55, outer: 70 }}
+      legend={{ display: true, position: "top-left", direction: "column" }}
+      valueFormat="percent"
+      series={{ key: "value", label: "Share" }}
+      data={[
+        { name: "Us", value: 0.38, color: "brand" },
+        { name: "Competitor A", value: 0.27, color: "blue" },
+        { name: "Competitor B", value: 0.21, color: "orange" },
+        { name: "Other", value: 0.14, color: "gray" }
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<PieChart
+  title="Market share"
+  ring={{ inner: 55, outer: 70 }}
+  valueFormat="percent"
+  series={{ key: "value", label: "Share" }}
+  data={[
+    { name: "Us", value: 0.38, color: "brand" },
+    { name: "Competitor A", value: 0.27, color: "blue" },
+    { name: "Competitor B", value: 0.21, color: "orange" },
+    { name: "Other", value: 0.14, color: "gray" },
+  ]}
+/>`,
+      language: "tsx",
+      label: "Slice colours"
+    }
   ]}
 />
+
 ## Ring
 
 `ring` sets the inner and outer radius as percentages of the available space.

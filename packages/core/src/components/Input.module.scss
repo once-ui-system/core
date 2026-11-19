@@ -1,3 +1,5 @@
+@use "../styles/nearest-theme.scss" as theme;
+
 /* Field metrics
    ----------------------------------------------------------------------------
    The floating label and the value are placed by where their INK falls — cap
@@ -55,11 +57,15 @@
 }
 
 /* Without the ring a focused field still has to look different from the
-   others, not only show a caret (WCAG 2.4.7): its border darkens, and a ghost
-   field gains one. Quiet enough to keep the native look; an error keeps its
-   colour, one step stronger. */
-.base:has(.input:focus-visible),
-.focused .base {
+   others, not only show a caret (WCAG 2.4.7): its border darkens. Quiet enough
+   to keep the native look; an error keeps its colour, one step stronger.
+
+   A ghost field is left alone: it sits inside a frame that draws the chrome (a
+   chat composer, a toolbar search), so a border of its own showed up as a
+   second box inset in that frame. The frame shows focus instead, with
+   `:focus-within`, or the field opts into `focusRing`. */
+.base:not(.ghost):has(.input:focus-visible),
+.focused .base:not(.ghost) {
   border-color: var(--neutral-border-strong);
 }
 
@@ -130,13 +136,18 @@
 /* Light theme: a white field with a firmer edge, as native text fields are.
    The tinted fill that reads as a well in dark mode reads as disabled on a
    light page. Matched on the utility classes the default variant sets, so the
-   ghost variant and the error state below keep their own colours. */
-:global([data-theme="light"]) :not(.error) > .base:global(.neutral-background-alpha-weak) {
-  background-color: var(--neutral-background-weak);
+   ghost variant and the error state below keep their own colours. Light is
+   the field's nearest theme, so a dark scope on a light page keeps the well. */
+:not(.error) > .base:global(.neutral-background-alpha-weak) {
+  @include theme.in-theme(light) {
+    background-color: var(--neutral-background-weak);
+  }
 }
 
-:global([data-theme="light"]) :not(.error) > .base:global(.neutral-border-medium) {
-  border-color: var(--neutral-border-strong);
+:not(.error) > .base:global(.neutral-border-medium) {
+  @include theme.in-theme(light) {
+    border-color: var(--neutral-border-strong);
+  }
 }
 
 @media (hover: none) and (pointer: coarse) {
@@ -310,6 +321,24 @@
   padding: 0 calc(var(--fld-inset) - var(--fld-well));
   outline: none;
   border-radius: var(--radius-s);
+  /* An app's own element styles (`input:focus { box-shadow }`, a min-height
+     on every input) must not reach inside the field: the field draws its own
+     ring, size and spacing. Once UI's layer sits above an app's layered CSS,
+     so stating each one here is enough. */
+  box-shadow: none;
+  margin: 0;
+  min-width: 0;
+  min-height: 0;
+  max-height: none;
+  font-family: inherit;
+  letter-spacing: inherit;
+  text-transform: none;
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
 
   &.textarea {
     height: auto;

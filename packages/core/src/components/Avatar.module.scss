@@ -46,10 +46,36 @@
 .l .icon { font-size: var(--static-space-24); }
 .xl .icon { font-size: var(--static-space-64); }
 
+// Initials take two fifths of the circle at every size, on a line height of
+// one so they sit in its middle. The t-shirt sizes set it outright; the
+// container units also cover a custom size.
 .value {
     white-space: nowrap;
-    overflow: hidden;
+    // Not clipped: the trimmed box below cuts through the curve of a B or O.
     user-select: none;
+    line-height: 1;
+    // Capitals have no descenders: centre the cap height, not the line box,
+    // or the initials sit high in the circle.
+    text-box: trim-both cap alphabetic;
+    letter-spacing: 0.01em;
+    font-size: var(--static-space-12);
+}
+
+.xs .value { font-size: 8px; }
+.s .value { font-size: 10px; }
+.m .value { font-size: 13px; }
+.l .value { font-size: 19px; }
+.xl .value { font-size: 64px; }
+
+@supports (container-type: size) {
+    .avatar:has(> .value) {
+        container-type: size;
+    }
+
+    .avatar .value {
+        // Never under 9px, or s at compact density drops to about 7px.
+        font-size: max(9px, 38cqmin);
+    }
 }
 
 .indicator {

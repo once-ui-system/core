@@ -1,0 +1,87 @@
+---
+title: "Schematic"
+summary: "A process schematic from data: vessels, pumps, valves, exchangers and the lines that show what flows where."
+updatedAt: "2026-11-08"
+docs: "once-ui/components/schematic.mdx"
+github: "components/Schematic.tsx"
+navLabel: "Schematic"
+navIcon: "components"
+---
+
+`Schematic` draws parts and the lines between them from two lists, so a plant,
+a network or a pipeline is data, not a drawing. Dashes run along a line in the
+direction of its `flow` as dots in the brand colour, at its speed, with an arrow that shows the direction
+even when motion is reduced. A pump turns while it runs.
+
+Parts are outlined in the neutral scale and only take a tone when something is
+wrong. A part's state reads without colour: `warning` has a dashed outline,
+`alarm` a heavy one, `off` is dashed and struck through, and each writes its
+state under the part. Parts fill with the page colour; on a panel, set
+`--schematic-background` on an ancestor to the panel's colour, such as
+`var(--surface-background)`. A screen reader hears every part with its reading and state, and
+then the flows.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Schematic
+      aria-label="Primary loop"
+      nodes={[
+        { id: "core", kind: "vessel", x: 80, y: 130, label: "Reactor", value: "312 °C" },
+        { id: "sg", kind: "exchanger", x: 280, y: 70, label: "Steam generator" },
+        { id: "pump", kind: "pump", x: 280, y: 180, label: "Pump B", running: false, state: "alarm", value: "0 rpm" },
+        { id: "valve", kind: "valve", x: 420, y: 70, label: "Steam valve", open: true },
+        { id: "turbine", kind: "turbine", x: 540, y: 70, label: "Turbine", value: "77 MWe" }
+      ]}
+      links={[
+        { from: "core", to: "sg", via: [[80, 40], [280, 40]], flow: 1.2, label: "Hot leg" },
+        { from: "sg", to: "pump", flow: 0 },
+        { from: "pump", to: "core", via: [[80, 180]], flow: 0, state: "alarm", label: "Cold leg" },
+        { from: "sg", to: "valve", flow: 1.5 },
+        { from: "valve", to: "turbine", flow: 1.5, label: "Steam" }
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Schematic
+  aria-label="Primary loop"
+  nodes={[
+    { id: "core", kind: "vessel", x: 80, y: 130, label: "Reactor", value: "312 °C" },
+    { id: "pump", kind: "pump", x: 280, y: 180, label: "Pump B", running: false, state: "alarm" },
+    // …
+  ]}
+  links={[
+    { from: "core", to: "sg", via: [[80, 40], [280, 40]], flow: 1.2, label: "Hot leg" },
+    // …
+  ]}
+  onNodeSelect={setSelected}
+  selected={selected}
+/>`,
+      language: "tsx",
+      label: "Schematic"
+    }
+  ]}
+/>
+
+## Parts
+
+`vessel`, `tank`, `pump`, `valve`, `exchanger`, `turbine`, `sensor` (an
+instrument bubble with its `tag`) and `box`. Positions are in the drawing's own
+units; the `viewBox` is fitted to the parts unless you give one.
+
+## Selecting
+
+With `onNodeSelect`, every part is a button (Enter or Space presses it), and
+`selected` draws a ring round one.
+
+## Phones
+
+Below `minWidth` (560 px by default) the drawing scrolls sideways instead of
+shrinking its text out of reach.
+
+## API reference
+
+<PropsTable component="Schematic" />

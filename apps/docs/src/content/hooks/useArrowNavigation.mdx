@@ -10,7 +10,7 @@ navIcon: "code"
 
 The `useArrowNavigation` hook provides keyboard navigation for interactive elements using arrow keys. It supports row, column, and grid layouts with customizable behavior.
 
-**Used in components:** [DropdownWrapper](/components/dropdownWrapper), [EmojiPicker](/components/emojiPicker), [Select](/form-controls/select), [ContextMenu](/components/contextMenu), [MegaMenu](/modules/megaMenu)
+**Used in components:** [Dropdown](/components/dropdown), [EmojiPicker](/components/emojiPicker), [Select](/form-controls/select), [Dropdown openOn="contextmenu"](/components/dropdown#context-menu), [MegaMenu](/modules/megaMenu)
 
 <Feedback marginTop="16" marginBottom="24" description="Most of the time you don't need to use this hook directly. Components like DropdownWrapper, Select, and MegaMenu already provide built-in keyboard navigation. Use this hook when building custom navigable interfaces that aren't covered by existing components."/>
 
@@ -31,7 +31,7 @@ Add arrow navigation to a list:
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  codeHeight={32}
+  codeHeight="32rem"
   lineNumbers
   codes={[
     {
@@ -75,7 +75,7 @@ Navigate a grid with arrow keys:
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  codeHeight={36}
+  codeHeight="36rem"
   lineNumbers
   codes={[
     {
@@ -127,7 +127,7 @@ Navigate horizontally:
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  codeHeight={28}
+  codeHeight="28rem"
   lineNumbers
   codes={[
     {
@@ -207,7 +207,7 @@ have reached as the selected one.
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  codeHeight={16}
+  codeHeight="16rem"
   lineNumbers
   codes={[
     {
@@ -241,7 +241,7 @@ Use the `focusedIndex` to style the focused item:
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  codeHeight={24}
+  codeHeight="24rem"
   lineNumbers
   codes={[
     {
@@ -289,7 +289,7 @@ For best accessibility, add appropriate ARIA attributes:
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  codeHeight={20}
+  codeHeight="20rem"
   lineNumbers
   codes={[
     {
@@ -324,5 +324,5 @@ This hook is used internally by:
 - EmojiPicker
 - Dropdown
 - Select
-- ContextMenu
+- Dropdown with openOn="contextmenu"
 - MegaMenu

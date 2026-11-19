@@ -1,0 +1,238 @@
+.canvas {
+  --canvas-grid-color: var(--neutral-alpha-medium);
+  /* The scale itself, not the solid tokens: those go black or white when a
+     theme draws solids in contrast, and a selection has to read as one. */
+  --canvas-accent: var(--function-brand-500, var(--brand-border-strong));
+  --canvas-accent-on: var(--static-white);
+  --canvas-guide: var(--function-accent-500, var(--accent-border-strong));
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  min-height: 0;
+  background-color: var(--page-background);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  outline: none;
+  isolation: isolate;
+}
+
+.canvas:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--canvas-accent);
+}
+
+.grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-size: var(--canvas-grid-size) var(--canvas-grid-size);
+  background-position: var(--canvas-grid-x) var(--canvas-grid-y);
+}
+
+.dots {
+  background-image: radial-gradient(
+    circle at calc(var(--canvas-grid-size) / 2) calc(var(--canvas-grid-size) / 2),
+    var(--canvas-grid-color) 1px,
+    transparent 1.25px
+  );
+  background-position: calc(var(--canvas-grid-x) - var(--canvas-grid-size) / 2)
+    calc(var(--canvas-grid-y) - var(--canvas-grid-size) / 2);
+}
+
+.lines {
+  background-image:
+    linear-gradient(to right, var(--canvas-grid-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--canvas-grid-color) 1px, transparent 1px);
+}
+
+.world {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  transform-origin: 0 0;
+}
+
+.item {
+  position: absolute;
+  box-sizing: border-box;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: auto;
+}
+
+.controls {
+  position: absolute;
+  right: var(--static-space-16);
+  bottom: var(--static-space-16);
+  pointer-events: auto;
+  /* Nested radius: the buttons' radius plus the padding around them. */
+  border-radius: calc(var(--radius-m) + var(--static-space-2));
+}
+
+.controls .zoomLabel {
+  min-width: 2.75rem;
+  border-radius: var(--radius-m);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Selection box */
+
+.selectionBox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px solid var(--canvas-accent);
+  background: color-mix(in srgb, var(--canvas-accent) 10%, transparent);
+  pointer-events: none;
+}
+
+/* Transform handles */
+
+.frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  box-shadow: 0 0 0 1px var(--canvas-accent);
+}
+
+.handle {
+  position: absolute;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  pointer-events: auto;
+  touch-action: none;
+  outline: none;
+}
+
+.corner {
+  width: 1rem;
+  height: 1rem;
+  translate: -50% -50%;
+}
+
+.corner::after {
+  content: "";
+  position: absolute;
+  inset: 0.25rem;
+  border-radius: 2px;
+  background: var(--static-white);
+  box-shadow:
+    0 0 0 1px var(--canvas-accent),
+    var(--shadow-s, 0 1px 2px rgb(0 0 0 / 0.2));
+}
+
+.edge {
+  translate: -50% -50%;
+}
+
+.edgeX {
+  width: 0.5rem;
+  height: calc(100% - 1rem);
+}
+
+.edgeY {
+  width: calc(100% - 1rem);
+  height: 0.5rem;
+}
+
+.rotate {
+  width: 1.25rem;
+  height: 1.25rem;
+  translate: -50% -50%;
+  cursor: grab;
+}
+
+.rotate::after {
+  content: "";
+  position: absolute;
+  inset: 0.25rem;
+  border-radius: 50%;
+  background: var(--static-white);
+  box-shadow:
+    0 0 0 1px var(--canvas-accent),
+    var(--shadow-s, 0 1px 2px rgb(0 0 0 / 0.2));
+}
+
+.rotate:active {
+  cursor: grabbing;
+}
+
+.stem {
+  position: absolute;
+  left: 50%;
+  width: 1px;
+  background: var(--canvas-accent);
+  pointer-events: none;
+}
+
+.handle:focus-visible::after,
+.handle:focus-visible {
+  box-shadow: 0 0 0 2px var(--canvas-accent);
+}
+
+.edge:focus-visible {
+  background: color-mix(in srgb, var(--canvas-accent) 40%, transparent);
+}
+
+.sizeLabel {
+  position: absolute;
+  left: 50%;
+  translate: -50% 0;
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--radius-xs, 4px);
+  background: var(--canvas-accent);
+  color: var(--canvas-accent-on);
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Snap guides */
+
+.guides {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.guideLine {
+  stroke: var(--canvas-guide);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.guideGap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  translate: -50% -50%;
+  padding: 0 0.25rem;
+  border-radius: var(--radius-xs, 4px);
+  background: var(--canvas-guide);
+  color: var(--static-white);
+  font-size: 0.625rem;
+  line-height: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}

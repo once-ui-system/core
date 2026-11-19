@@ -1,27 +1,26 @@
 "use client";
 
 import React, { useState } from "react";
-import { 
+import {
   Button,
   Column,
-  EmojiPicker,
-  EmojiPickerDropdown,
   IconButton,
   Row,
   Text,
 } from "@once-ui-system/core";
+import { EmojiPicker } from "@once-ui-system/core/emoji";
 
 export function BasicEmojiPickerDropdown() {
   const [selectedEmoji, setSelectedEmoji] = useState("");
   
   return (
     <Row gap="16" vertical="center">
-      <EmojiPickerDropdown
+      <EmojiPicker
         trigger={<Button label="Select Emoji" />}
         onSelect={(emoji) => setSelectedEmoji(emoji)}
       />
       {selectedEmoji && (
-        <Text variant="heading-default-xl">
+        <Text textVariant="heading-default-xl">
           Selected: {selectedEmoji}
         </Text>
       )}
@@ -34,12 +33,12 @@ export function IconButtonEmojiPickerDropdown() {
   
   return (
     <Row gap="16" vertical="center">
-      <EmojiPickerDropdown
+      <EmojiPicker
         trigger={<IconButton icon="smiley" variant="secondary" aria-label="Pick an emoji" />}
         onSelect={(emoji) => setSelectedEmoji(emoji)}
       />
       {selectedEmoji && (
-        <Text variant="heading-default-xl">
+        <Text textVariant="heading-default-xl">
           {selectedEmoji}
         </Text>
       )}
@@ -52,13 +51,13 @@ export function CustomColumnsEmojiPickerDropdown() {
   
   return (
     <Row gap="16" vertical="center">
-      <EmojiPickerDropdown
+      <EmojiPicker
         trigger={<Button label="Select Emoji (10 columns)" />}
         onSelect={(emoji) => setSelectedEmoji(emoji)}
         columns="10"
       />
       {selectedEmoji && (
-        <Text variant="heading-default-xl">
+        <Text textVariant="heading-default-xl">
           {selectedEmoji}
         </Text>
       )}
@@ -71,28 +70,28 @@ export function PlacementEmojiPickerDropdown() {
   
   return (
     <Row gap="16" wrap vertical="center">
-      <EmojiPickerDropdown
+      <EmojiPicker
         trigger={<Button label="Top" />}
         onSelect={(emoji) => setSelectedEmoji(emoji)}
         placement="top"
       />
-      <EmojiPickerDropdown
+      <EmojiPicker
         trigger={<Button label="Bottom" />}
         onSelect={(emoji) => setSelectedEmoji(emoji)}
         placement="bottom"
       />
-      <EmojiPickerDropdown
+      <EmojiPicker
         trigger={<Button label="Left" />}
         onSelect={(emoji) => setSelectedEmoji(emoji)}
         placement="left"
       />
-      <EmojiPickerDropdown
+      <EmojiPicker
         trigger={<Button label="Right" />}
         onSelect={(emoji) => setSelectedEmoji(emoji)}
         placement="right"
       />
       {selectedEmoji && (
-        <Text variant="heading-default-xl">
+        <Text textVariant="heading-default-xl">
           {selectedEmoji}
         </Text>
       )}
@@ -105,13 +104,13 @@ export function CustomBackgroundEmojiPickerDropdown() {
   
   return (
     <Row gap="16" vertical="center">
-      <EmojiPickerDropdown
+      <EmojiPicker
         trigger={<Button label="Custom Background" />}
         onSelect={(emoji) => setSelectedEmoji(emoji)}
         background="neutral-weak"
       />
       {selectedEmoji && (
-        <Text variant="heading-default-xl">
+        <Text textVariant="heading-default-xl">
           {selectedEmoji}
         </Text>
       )}
@@ -125,7 +124,7 @@ export function ControlledEmojiPickerDropdown() {
   
   return (
     <Row gap="16" vertical="center">
-      <EmojiPickerDropdown
+      <EmojiPicker
         trigger={<Button label="Controlled Dropdown" />}
         onSelect={(emoji) => setSelectedEmoji(emoji)}
         open={isOpen}
@@ -137,7 +136,7 @@ export function ControlledEmojiPickerDropdown() {
         onClick={() => setIsOpen(!isOpen)}
       />
       {selectedEmoji && (
-        <Text variant="heading-default-xl">
+        <Text textVariant="heading-default-xl">
           {selectedEmoji}
         </Text>
       )}
@@ -153,7 +152,7 @@ export function ClientEmojiPicker(props: Omit<React.ComponentProps<typeof EmojiP
   return (
     <Column gap="12" horizontal="center">
       <EmojiPicker {...props} onSelect={setSelectedEmoji} />
-      <Text variant="body-default-s" onBackground="neutral-weak">
+      <Text textVariant="body-default-s" onBackground="neutral-weak">
         {selectedEmoji ? `Selected: ${selectedEmoji}` : "Pick an emoji"}
       </Text>
     </Column>

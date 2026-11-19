@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { RangeSlider } from "../components/RangeSlider";
+import { Slider } from "../components/Slider";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
 
@@ -38,7 +38,7 @@ describe("RangeSlider: interaction", () => {
     const user = userEvent.setup();
     render(
       <>
-        <RangeSlider label="Price" defaultValue={[10, 90]} />
+        <Slider range label="Price" defaultValue={[10, 90]} />
         <button type="button">Apply</button>
       </>,
       { wrapper: wrap },
@@ -56,7 +56,8 @@ describe("RangeSlider: interaction", () => {
   it("keeps the readout and value text in step with the keys", async () => {
     const user = userEvent.setup();
     render(
-      <RangeSlider
+      <Slider
+        range
         label="Budget"
         showValue
         defaultValue={[100, 500]}
@@ -81,13 +82,14 @@ describe("RangeSlider: interaction", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
-      <RangeSlider
+      <Slider
+        range
         label="Size"
         min={5}
         max={95}
         step={10}
         defaultValue={[5, 95]}
-        onChange={onChange}
+        onValueChange={onChange}
       />,
       { wrapper: wrap },
     );
@@ -102,7 +104,7 @@ describe("RangeSlider: interaction", () => {
       const [value, setValue] = useState<[number, number]>([20, 60]);
       return (
         <>
-          <RangeSlider label="Range" value={value} onChange={setValue} />
+          <Slider range label="Range" value={value} onValueChange={setValue} />
           <output>{value.join("-")}</output>
         </>
       );
@@ -124,7 +126,7 @@ describe("RangeSlider: interaction", () => {
   it("ignores keys it does not own", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<RangeSlider label="Price" defaultValue={[20, 80]} onChange={onChange} />, {
+    render(<Slider range label="Price" defaultValue={[20, 80]} onValueChange={onChange} />, {
       wrapper: wrap,
     });
     await user.tab();
@@ -134,17 +136,17 @@ describe("RangeSlider: interaction", () => {
   });
 
   it("re-clamps to new bounds when min and max change", () => {
-    const { rerender } = render(<RangeSlider label="Price" defaultValue={[20, 80]} />, {
+    const { rerender } = render(<Slider range label="Price" defaultValue={[20, 80]} />, {
       wrapper: wrap,
     });
-    rerender(<RangeSlider label="Price" defaultValue={[20, 80]} min={30} max={70} />);
+    rerender(<Slider range label="Price" defaultValue={[20, 80]} min={30} max={70} />);
     expect(thumb("Minimum")).toHaveAttribute("aria-valuenow", "30");
     expect(thumb("Maximum")).toHaveAttribute("aria-valuenow", "70");
   });
 
   it("has no axe violations with a readout and custom thumb names", async () => {
     const { container } = render(
-      <RangeSlider label="Hours" showValue thumbLabels={["Opens", "Closes"]} min={0} max={24} />,
+      <Slider range label="Hours" showValue thumbLabels={["Opens", "Closes"]} min={0} max={24} />,
       { wrapper: wrap },
     );
     expect(thumb("Opens")).toBeInTheDocument();

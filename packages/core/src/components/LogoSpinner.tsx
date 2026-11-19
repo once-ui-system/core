@@ -1,14 +1,14 @@
 import classNames from "clsx";
 import type React from "react";
-import { forwardRef } from "react";
-import type { TShirtSizes } from "../types";
-import { Flex } from "./Flex";
+import type { LeafPropsOf } from "../interfaces.js";
+import type { TShirtSizes } from "../types.js";
+import { Flex } from "./Flex.js";
 import styles from "./LogoSpinner.module.scss";
 
-/** The colors the mark takes: the brand or accent hue, the strongest neutral text, or the surrounding text color. */
-export type LogoSpinnerColor = "brand" | "accent" | "neutral" | "inherit";
+/** The tones the mark takes: the brand or accent hue, the strongest neutral text, or the surrounding text color. */
+export type LogoSpinnerTone = "brand" | "accent" | "neutral" | "inherit";
 
-export interface LogoSpinnerProps extends Omit<React.ComponentProps<typeof Flex>, "children"> {
+export interface LogoSpinnerProps extends Omit<LeafPropsOf<"div">, "children"> {
   size?: TShirtSizes;
   /**
    * `twist`: the four tiles part, turn a quarter and click back together.
@@ -16,15 +16,16 @@ export interface LogoSpinnerProps extends Omit<React.ComponentProps<typeof Flex>
    */
   variant?: "twist" | "wave";
   /** `brand` by default, so it takes a chat theme's color inside a themed scope. */
-  color?: LogoSpinnerColor;
+  tone?: LogoSpinnerTone;
   /** Seconds per cycle. */
   speed?: number;
-  ariaLabel?: string;
+  /** What assistive tech announces; "Loading" by default. */
+  "aria-label"?: string;
 }
 
 /* The hue at full strength whatever `data-solid` says (brand and accent),
    the way --brand-color-strong is; neutral is the strongest text color. */
-const COLOR: Record<Exclude<LogoSpinnerColor, "inherit">, string> = {
+const TONE: Record<Exclude<LogoSpinnerTone, "inherit">, string> = {
   brand: "var(--brand-color-strong)",
   accent: "var(--function-accent-500)",
   neutral: "var(--neutral-on-background-strong)",
@@ -65,64 +66,59 @@ const TILES = [
  * With reduced motion the tiles stop moving and fade in turn instead, so the
  * loader still says something is happening.
  */
-const LogoSpinner = forwardRef<HTMLDivElement, LogoSpinnerProps>(
-  (
-    {
-      size = "m",
-      variant = "twist",
-      color = "brand",
-      speed,
-      ariaLabel = "Loading",
-      "aria-label": nativeAriaLabel,
-      className,
-      style,
-      ...rest
-    },
-    ref,
-  ) => {
-    return (
-      <Flex
-        ref={ref}
-        center
-        role="status"
-        aria-label={nativeAriaLabel ?? ariaLabel}
-        data-motion="essential"
-        className={classNames(styles.root, styles[size], styles[variant], className)}
-        style={
-          {
-            ...(color !== "inherit" && { color: COLOR[color] }),
-            ...(speed && { "--logo-spinner-duration": `${speed}s` }),
-            ...style,
-          } as React.CSSProperties
-        }
-        {...rest}
+const LogoSpinner = ({
+  ref,
+  size = "m",
+  variant = "twist",
+  tone = "brand",
+  speed,
+  "aria-label": ariaLabel = "Loading",
+  className,
+  style,
+  ...rest
+}: LogoSpinnerProps) => {
+  return (
+    <Flex
+      ref={ref}
+      center
+      role="status"
+      aria-label={ariaLabel}
+      data-motion="essential"
+      className={classNames(styles.root, styles[size], styles[variant], className)}
+      style={
+        {
+          ...(tone !== "inherit" && { color: TONE[tone] }),
+          ...(speed && { "--logo-spinner-duration": `${speed}s` }),
+          ...style,
+        } as React.CSSProperties
+      }
+      {...rest}
+    >
+      <svg
+        className={styles.mark}
+        viewBox="0 0 590 589"
+        fill="currentColor"
+        aria-hidden="true"
+        focusable="false"
       >
-        <svg
-          className={styles.mark}
-          viewBox="0 0 590 589"
-          fill="currentColor"
-          aria-hidden="true"
-          focusable="false"
-        >
-          {TILES.map((tile, index) => (
-            <path
-              key={tile.d}
-              d={tile.d}
-              className={styles.tile}
-              style={
-                {
-                  "--tile-x": tile.dx,
-                  "--tile-y": tile.dy,
-                  "--tile-index": index,
-                } as React.CSSProperties
-              }
-            />
-          ))}
-        </svg>
-      </Flex>
-    );
-  },
-);
+        {TILES.map((tile, index) => (
+          <path
+            key={tile.d}
+            d={tile.d}
+            className={styles.tile}
+            style={
+              {
+                "--tile-x": tile.dx,
+                "--tile-y": tile.dy,
+                "--tile-index": index,
+              } as React.CSSProperties
+            }
+          />
+        ))}
+      </svg>
+    </Flex>
+  );
+};
 
 LogoSpinner.displayName = "LogoSpinner";
 

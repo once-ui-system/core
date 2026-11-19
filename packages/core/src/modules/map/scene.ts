@@ -1,6 +1,6 @@
 import type { ExpressionSpecification, Map as MapLibreMap } from "maplibre-gl";
-import { tokenColor } from "./tokenColor";
-import type { MapBuildings, MapProjection } from "./types";
+import { tokenColor } from "./tokenColor.js";
+import type { MapBuildings, MapProjection } from "./types.js";
 
 const BUILDINGS_3D = "once-buildings-3d";
 

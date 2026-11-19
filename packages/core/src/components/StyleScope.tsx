@@ -1,15 +1,15 @@
-import { forwardRef, useId } from "react";
-import type { OnceUIStyleConfig } from "../contexts/ThemeProvider";
-import { cssColor } from "../internal/cssColor";
+import { useId } from "react";
+import type { OnceUIStyleConfig } from "../contexts/ThemeProvider.js";
+import { cssColor } from "../internal/cssColor.js";
 import {
   type CustomScheme,
   type CustomSchemeSeeds,
   type CustomSchemeThemedScales,
   customSchemeThemeProperties,
   type ThemedSchemeScale,
-} from "../utils/colorScheme";
-import { type ThemeColor, themeCssValue } from "../utils/themeCss";
-import { Flex } from "./Flex";
+} from "../utils/colorScheme.js";
+import { type ThemeColor, themeCssValue, themeSelector } from "../utils/themeCss.js";
+import { Flex } from "./Flex.js";
 
 /** A font per role, as a CSS `font-family` value or a `var(--…)` from next/font. */
 export type StyleScopeFonts = Partial<Record<"heading" | "body" | "label" | "code", string>>;
@@ -37,8 +37,12 @@ export type StyleScopeConfig = Pick<
   | "pageBackground"
   | "surfaceBackground"
 > & {
-  /** `"light"` or `"dark"` pins the subtree's theme; unset, it follows the page. */
-  theme?: "light" | "dark" | "system";
+  /**
+   * `"light"` or `"dark"` pins the subtree's theme; `"invert"` takes the
+   * opposite of the theme around it (light on a dark page, dark on a light
+   * one); unset, it follows the page.
+   */
+  theme?: "light" | "dark" | "invert" | "system";
 };
 
 export interface StyleScopeProps extends Omit<React.ComponentProps<typeof Flex>, "style"> {
@@ -113,101 +117,99 @@ const colorFor = (color: ThemeColor | undefined, theme: "light" | "dark") => {
  * </StyleScope>
  * ```
  */
-const StyleScope = forwardRef<HTMLDivElement, StyleScopeProps>(
-  ({ config = {}, fonts, style, children, ...rest }, ref) => {
-    const id = useId().replace(/[^a-zA-Z0-9_-]/g, "");
-    const scope = `[data-style-scope="${id}"]`;
+const StyleScope = ({ ref, config = {}, fonts, style, children, ...rest }: StyleScopeProps) => {
+  const id = useId().replace(/[^a-zA-Z0-9_-]/g, "");
+  const scope = `[data-style-scope="${id}"]`;
 
-    const seeds: CustomSchemeSeeds = {
-      brand: config.brandSeed,
-      accent: config.accentSeed,
-      neutral: config.neutralSeed,
-    };
-    const scales: CustomSchemeThemedScales = {
-      brand: config.brandScale as ThemedSchemeScale | undefined,
-      accent: config.accentScale as ThemedSchemeScale | undefined,
-      neutral: config.neutralScale as ThemedSchemeScale | undefined,
-    };
-    const { root, light, dark, byTheme } = customSchemeThemeProperties(seeds, scales);
-    const perTheme = { light, dark };
+  const seeds: CustomSchemeSeeds = {
+    brand: config.brandSeed,
+    accent: config.accentSeed,
+    neutral: config.neutralSeed,
+  };
+  const scales: CustomSchemeThemedScales = {
+    brand: config.brandScale as ThemedSchemeScale | undefined,
+    accent: config.accentScale as ThemedSchemeScale | undefined,
+    neutral: config.neutralScale as ThemedSchemeScale | undefined,
+  };
+  const { root, light, dark, byTheme } = customSchemeThemeProperties(seeds, scales);
+  const perTheme = { light, dark };
 
-    const schemes: CustomScheme[] = SCHEMES.filter(
-      (scheme) => root[`--scheme-${scheme}-600`] || byTheme.includes(scheme),
+  const schemes: CustomScheme[] = SCHEMES.filter(
+    (scheme) => root[`--scheme-${scheme}-600`] || byTheme.includes(scheme),
+  );
+
+  const attributes: Record<string, string> = {};
+  for (const key of ATTRIBUTES) {
+    const value = config[key];
+    if (typeof value === "string" && value) attributes[`data-${toKebab(key)}`] = value;
+  }
+  // A seed or scale implies "custom" when the scheme is not named.
+  for (const scheme of schemes) {
+    if (!attributes[`data-${scheme}`]) attributes[`data-${scheme}`] = "custom";
+  }
+  if (config.theme === "light" || config.theme === "dark" || config.theme === "invert") {
+    attributes["data-theme"] = config.theme;
+  }
+
+  // Flat schemes and fonts go on the scope's own rule rather than an inline
+  // style, which would turn the Flex into a client component; foundations'
+  // `[data-brand="custom"]` reads them on this element.
+  const inline: Record<string, string> = {};
+  for (const [property, value] of Object.entries(root)) {
+    const safe = themeCssValue(value);
+    if (safe) inline[property] = safe;
+  }
+  for (const [role, family] of Object.entries(fonts ?? {})) {
+    const safe = themeCssValue(family);
+    if (safe) inline[`--font-${role}`] = safe;
+  }
+
+  // Per-theme scales and backgrounds key off the theme the scope is in: its
+  // own `data-theme`, or the page's when it has none.
+  const rules: string[] = [block(scope, inline)];
+  for (const theme of THEMES) {
+    const properties: Record<string, string> = { ...perTheme[theme] };
+    const page = colorFor(config.pageBackground, theme);
+    if (page) properties["--page-background"] = page;
+    const surface = colorFor(config.surfaceBackground, theme);
+    if (surface) properties["--surface-background"] = surface;
+    rules.push(
+      block(
+        `${scope}${themeSelector(theme)},:root[data-theme="${theme}"] ${scope}:not([data-theme]),${scope} ${themeSelector(theme)}`,
+        properties,
+      ),
     );
+  }
+  // A nested `data-theme` re-resolves the function steps from foundations'
+  // palette; point them back at this scope's custom ramp.
+  for (const scheme of schemes) {
+    const remap: Record<string, string> = {};
+    for (const step of STEPS) {
+      remap[`--function-${scheme}-${step}`] = `var(--scheme-${scheme}-${step})`;
+    }
+    rules.push(block(`${scope} [data-theme]`, remap));
+  }
+  const css = rules.join("");
 
-    const attributes: Record<string, string> = {};
-    for (const key of ATTRIBUTES) {
-      const value = config[key];
-      if (typeof value === "string" && value) attributes[`data-${toKebab(key)}`] = value;
-    }
-    // A seed or scale implies "custom" when the scheme is not named.
-    for (const scheme of schemes) {
-      if (!attributes[`data-${scheme}`]) attributes[`data-${scheme}`] = "custom";
-    }
-    if (config.theme === "light" || config.theme === "dark") {
-      attributes["data-theme"] = config.theme;
-    }
-
-    // Flat schemes and fonts go on the scope's own rule rather than an inline
-    // style, which would turn the Flex into a client component; foundations'
-    // `[data-brand="custom"]` reads them on this element.
-    const inline: Record<string, string> = {};
-    for (const [property, value] of Object.entries(root)) {
-      const safe = themeCssValue(value);
-      if (safe) inline[property] = safe;
-    }
-    for (const [role, family] of Object.entries(fonts ?? {})) {
-      const safe = themeCssValue(family);
-      if (safe) inline[`--font-${role}`] = safe;
-    }
-
-    // Per-theme scales and backgrounds key off the theme the scope is in: its
-    // own `data-theme`, or the page's when it has none.
-    const rules: string[] = [block(scope, inline)];
-    for (const theme of THEMES) {
-      const properties: Record<string, string> = { ...perTheme[theme] };
-      const page = colorFor(config.pageBackground, theme);
-      if (page) properties["--page-background"] = page;
-      const surface = colorFor(config.surfaceBackground, theme);
-      if (surface) properties["--surface-background"] = surface;
-      rules.push(
-        block(
-          `${scope}[data-theme="${theme}"],:root[data-theme="${theme}"] ${scope}:not([data-theme]),${scope} [data-theme="${theme}"]`,
-          properties,
-        ),
-      );
-    }
-    // A nested `data-theme` re-resolves the function steps from foundations'
-    // palette; point them back at this scope's custom ramp.
-    for (const scheme of schemes) {
-      const remap: Record<string, string> = {};
-      for (const step of STEPS) {
-        remap[`--function-${scheme}-${step}`] = `var(--scheme-${scheme}-${step})`;
-      }
-      rules.push(block(`${scope} [data-theme]`, remap));
-    }
-    const css = rules.join("");
-
-    return (
-      <Flex
-        ref={ref}
-        direction="column"
-        data-style-scope={id}
-        {...attributes}
-        style={style}
-        {...rest}
-      >
-        {css && (
-          <style
-            // biome-ignore lint/security/noDangerouslySetInnerHtml: generated scheme values and config colours that themeCssValue has checked
-            dangerouslySetInnerHTML={{ __html: css }}
-          />
-        )}
-        {children}
-      </Flex>
-    );
-  },
-);
+  return (
+    <Flex
+      ref={ref}
+      direction="column"
+      data-style-scope={id}
+      {...attributes}
+      style={style}
+      {...rest}
+    >
+      {css && (
+        <style
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: generated scheme values and config colours that themeCssValue has checked
+          dangerouslySetInnerHTML={{ __html: css }}
+        />
+      )}
+      {children}
+    </Flex>
+  );
+};
 
 StyleScope.displayName = "StyleScope";
 

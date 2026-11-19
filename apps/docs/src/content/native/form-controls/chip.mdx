@@ -1,37 +1,28 @@
 ---
 title: "Chip"
-summary: "A rounded, selectable label that can be removed, for filters and choices, for React Native."
+summary: "Chip is Tag in Once UI 3.0, on React Native as on the web: a Tag with selected, onClick or onRemove."
 updatedAt: "2026-10-18"
 docs: "once-ui/native/form-controls/chip.mdx"
-github: "packages/native/src/components/Chip.tsx"
+github: "packages/native/src/components/Tag.tsx"
 navLabel: "Chip"
 navIcon: "switch"
 ---
 
-`Chip` is a rounded label for filters, tags and choices. It is drawn in the brand colour when `selected`, which is the default, and becomes a button when it has `onPress`. See the [web Chip](/form-controls/chip) for the same component in the browser.
-
-## State
-
-Toggle `selected` in `onPress` to use chips as filters.
+`Chip` folded into [Tag](/native/components/tag) in Once UI 3.0, as it did on the [web](/form-controls/chip), and `@once-ui-system/native` no longer exports it. A Tag given `selected`, `onClick` (or `onPress`) or `onRemove` is the same toggle, with a remove button when it has `onRemove`. `selected` now defaults to false.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
   {
     code:
-`import { useState } from "react";
-import { Chip, Row } from "@once-ui-system/native";
-
-const FILTERS = ["Vegan", "Spicy", "Gluten free"];
+`import { Row, Tag } from "@once-ui-system/native";
+import { useState } from "react";
 
 export function Filters() {
-  const [on, setOn] = useState<string[]>(["Vegan"]);
-  const toggle = (f: string) =>
-    setOn(on.includes(f) ? on.filter((x) => x !== f) : [...on, f]);
+  const [on, setOn] = useState(true);
   return (
-    <Row gap="8" wrap>
-      {FILTERS.map((f) => (
-        <Chip key={f} label={f} selected={on.includes(f)} onPress={() => toggle(f)} />
-      ))}
+    <Row gap="8">
+      <Tag label="Design" selected={on} onPress={() => setOn(!on)} />
+      <Tag label="Removable" onRemove={() => {}} />
     </Row>
   );
 }`,
@@ -39,69 +30,3 @@ export function Filters() {
     label: "Filters.tsx"
   }
 ]} />
-
-## Prefix icon
-
-`prefixIcon` takes an icon name, or any element.
-
-<CodeBlock marginTop="8" marginBottom="24"
-codes={[
-  {
-    code:
-`import { Chip } from "@once-ui-system/native";
-
-export function Verified() {
-  return <Chip label="Verified" prefixIcon="check" />;
-}`,
-    language: "tsx",
-    label: "Verified.tsx"
-  }
-]} />
-
-## Removable
-
-`onRemove` adds a close button labelled "Remove" and the chip's label.
-
-<CodeBlock marginTop="8" marginBottom="24"
-codes={[
-  {
-    code:
-`import { useState } from "react";
-import { Chip, Row } from "@once-ui-system/native";
-
-export function Recipients() {
-  const [people, setPeople] = useState(["Ana", "Ben", "Chen"]);
-  return (
-    <Row gap="8" wrap>
-      {people.map((p) => (
-        <Chip
-          key={p}
-          label={p}
-          selected={false}
-          onRemove={() => setPeople(people.filter((x) => x !== p))}
-        />
-      ))}
-    </Row>
-  );
-}`,
-    language: "tsx",
-    label: "Recipients.tsx"
-  }
-]} />
-
-## Differences from the web
-
-- `onPress` and core's `onClick` both work. A chip with neither is not a button.
-- There is no `iconButtonProps`.
-
-## API reference
-
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `label` | `string` | | The chip's text. Required. |
-| `selected` | `boolean` | `true` | Draws the chip in the brand colour. |
-| `prefixIcon` | `IconSlot` | | An icon name, or any element, before the label. |
-| `onRemove` | `() => void` | | Shows a remove button. |
-| `onPress` | `() => void` | | Makes the chip a button. |
-| `onClick` | `() => void` | | Core's name for `onPress`. Used when `onPress` is not set. |
-| `style` | `ViewStyle` | | Style for the chip. |

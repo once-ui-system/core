@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useOgRoutes } from "../contexts/OgRoutesProvider";
-import { buildOgRouteUrl } from "../utils/ogRoutes";
+import { useOgRoutes } from "../contexts/OgRoutesProvider.js";
+import { buildOgRouteUrl } from "../utils/ogRoutes.js";
 
 interface OgData {
   title: string;

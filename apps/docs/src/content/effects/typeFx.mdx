@@ -8,7 +8,7 @@ navLabel: "TypeFx"
 navIcon: "sparkle"
 ---
 
-TypeFx creates a realistic typewriter animation that types out text character-by-character. When multiple words are provided, it automatically types, holds, deletes, and cycles through them.
+TypeFx creates a realistic typewriter animation that types out text character-by-character. When multiple words are provided, it automatically types, holds, deletes, and cycles through them. With `mode="fade"` it [fades the letters in](#fade-mode) instead.
 
 <CodeBlock
   marginTop="16"
@@ -17,7 +17,7 @@ TypeFx creates a realistic typewriter animation that types out text character-by
     <Row gap="8" vertical="center">
       <TypeFx
         words={["amazing products", "stunning websites", "modern apps"]}
-        speed={80}
+        charDuration={80}
         hold={2000}
         trigger="instant"
       >Build{" "}</TypeFx>
@@ -27,12 +27,12 @@ TypeFx creates a realistic typewriter animation that types out text character-by
     {
       code:
 `<Row gap="8" vertical="center">
-  <Text variant="heading-default-l">
+  <Text textVariant="heading-default-l">
     Build
   </Text>
   <TypeFx
     words={["amazing products", "stunning websites", "modern apps"]}
-    speed={80}
+    charDuration={80}
     hold={2000}
     trigger="instant"
   />
@@ -54,7 +54,7 @@ TypeFx can also display a single word that types out once without looping.
   preview={
     <TypeFx
       words="Welcome to the future"
-      speed={100}
+      charDuration={100}
       delay={500}
       trigger="instant"
     />
@@ -64,7 +64,7 @@ TypeFx can also display a single word that types out once without looping.
       code:
 `<TypeFx
   words="Welcome to the future"
-  speed={100}
+  charDuration={100}
   delay={500}
   trigger="instant"
 />`,
@@ -96,7 +96,7 @@ Use the `custom` trigger to programmatically control when the typing animation s
     <>
       <TypeFx
         words={["Click the button", "to start typing", "this animation"]}
-        speed={60}
+        charDuration={60}
         hold={1500}
         trigger="custom"
         onTrigger={(fn) => {
@@ -115,14 +115,153 @@ Use the `custom` trigger to programmatically control when the typing animation s
   ]}
 />
 
+## Fade mode
+
+With `mode="fade"`, TypeFx shows the whole text at once and fades it in letter by letter, from blur to focus, instead of typing it (2.x's `FadingLettersFx`). `state` plays a phase, `delay` offsets the start and `charDuration` sets the gap between letters; an array of `words` is joined with spaces.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  reloadButton
+  preview={
+    <TypeFx mode="fade"
+      align="center"
+      words="Welcome to Once UI"
+      state="entering"
+      textVariant="display-strong-m"
+    />
+  }
+  codes={[
+    {
+      code:
+`<TypeFx mode="fade"
+    align="center"
+    words="Welcome to Once UI"
+    state="entering"
+    textVariant="display-strong-l" />`,
+      language: "tsx",
+      label: "Fade"
+    }
+  ]}
+/>
+
+### States
+
+`state` takes one of three phases, and the parent drives it: `entering` (the default), `visible` and `exiting`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  reloadButton
+  preview={
+    <Column fillWidth gap="16">
+      <Row fillWidth><TypeFx mode="fade" words="Entering Animation" state="entering" textVariant="heading-strong-m" /></Row>
+      <Row fillWidth><TypeFx mode="fade" words="Visible State" state="visible" textVariant="heading-strong-m" /></Row>
+      <Row fillWidth><TypeFx mode="fade" words="Exiting Animation" state="exiting" textVariant="heading-strong-m" /></Row>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Column gap="16">
+    <TypeFx mode="fade" words="Entering Animation" state="entering" textVariant="heading-strong-m" />
+    <TypeFx mode="fade" words="Visible State" state="visible" textVariant="heading-strong-m" />
+    <TypeFx mode="fade" words="Exiting Animation" state="exiting" textVariant="heading-strong-m" />
+</Column>`,
+      language: "tsx",
+      label: "Animation States"
+    }
+  ]}
+/>
+
+#### Entering
+Letters fade in sequentially with a blur-to-focus effect and scale transformation. Each letter has a calculated delay based on its position in the word and message.
+
+#### Visible
+Letters remain static without animation. Use this state when no animation is active.
+
+#### Exiting
+Letters fade out with blur and scale effects. Each letter has a random exit delay for an organic dissolution effect.
+
+### Staggering
+
+Stagger several messages with `delay`. 2.x's `messageIdx` added 2500ms per step, so `messageIdx={n}` is `delay={n * 2500}`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  reloadButton
+  preview={
+    <Column fillWidth gap="12">
+      <Row fillWidth><TypeFx mode="fade" words="First message appears" state="entering" textVariant="body-default-l" /></Row>
+      <Row fillWidth><TypeFx mode="fade" words="Second message appears" state="entering" textVariant="body-default-l" delay={2500} /></Row>
+      <Row fillWidth><TypeFx mode="fade" words="Third message appears" state="entering" textVariant="body-default-l" delay={5000} /></Row>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Column gap="12">
+    <TypeFx mode="fade" words="First message appears" state="entering" textVariant="body-default-l" />
+    <TypeFx mode="fade" words="Second message appears" state="entering" textVariant="body-default-l" delay={2500} />
+    <TypeFx mode="fade" words="Third message appears" state="entering" textVariant="body-default-l" delay={5000} />
+</Column>`,
+      language: "tsx",
+      label: "Staggering"
+    }
+  ]}
+/>
+
+### Styling
+
+Fade mode takes every Text prop, as typing does: variants, colors and custom styles.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  reloadButton
+  preview={
+    <TypeFx mode="fade"
+      words="Custom styled text"
+      state="entering"
+      textVariant="display-strong-s"
+      onBackground="brand-weak"
+    />
+  }
+  codes={[
+    {
+      code:
+`<TypeFx mode="fade"
+    words="Custom styled text"
+    state="entering"
+    textVariant="display-strong-s"
+    onBackground="brand-weak" />`,
+      language: "tsx",
+      label: "Custom Styling"
+    }
+  ]}
+/>
+
+### Timing
+
+Each letter's entry delay adds up from:
+
+- **Start**: `delay`
+- **Word**: `wordIdx × 200ms`
+- **Letter**: `letterIdx × charDuration` (default 40ms in fade mode)
+
+Exiting, each letter waits a random 0 to 400ms.
+
 ## API reference
 
 <PropsTable
   component="TypeFx"
   describe={{
+    mode: "\"fade\" fades the whole text in letter by letter instead of typing it.",
+    state: "Fade mode: entering, visible or exiting. The parent drives it.",
     words: "One string to type, or several to cycle through.",
-    speed: "Milliseconds per character.",
-    delay: "Milliseconds before typing starts.",
+    charDuration: "Milliseconds per character (higher is slower). Was speed until 3.0. In fade mode, the gap between letters.",
+    delay: "Milliseconds before typing starts, or before the first letter fades in.",
     hold: "Milliseconds a finished word stays before the next one.",
     loop: "Cycle back to the first word instead of stopping.",
     trigger: "\"custom\" waits for the function handed to onTrigger.",

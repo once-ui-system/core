@@ -1,26 +1,15 @@
 ---
 title: "LineChart"
-summary: "A line chart component for displaying trends over time with interactive hover, click events, and flexible styling."
-updatedAt: "2025-05-14"
+summary: "Draw change over time: one line per series, filled or outlined, stacked or not, with smooth or stepped curves, a numeric x axis and live data."
+updatedAt: "2026-11-12"
 docs: "once-ui/data/lineChart.mdx"
 github: "modules/data/LineChart.tsx"
 navLabel: "LineChart"
 navIcon: "lineChart"
 ---
 
-The `LineChart` component provides a way to display line charts with interactive features, including hover effects, click events, and custom styling options. It supports various customization options including different chart types, color schemes, and interactive features.
+`LineChart` draws one line per series across the rows of `data`, with the area under each filled. Use it when the reader asks how something moved over time; for comparing categories use [`BarChart`](/data/barChart). It takes the [props every chart shares](/data/setup#props-every-chart-shares) and the ones on this page.
 
-## Live (morph animation)
-
-<LineChartStreamingExample />
-
-This example uses the `useStreamingViewport` hook to smoothly pan the x-axis domain (viewport) while streaming new samples, then passes the resulting data into `LineChart`.
-
-## Live (animation disabled)
-
-<LineChartStreamingExample animation={false} />
-
-## Static example
 
 <LineChart
   marginTop="16"
@@ -63,9 +52,98 @@ This example uses the `useStreamingViewport` hook to smoothly pan the x-axis dom
     { date: "2025-01-01", "Area (km²)": 1.2, "Temp Anomaly (°C)": 1.4 }
   ]}
 />
+## Labels and numbers
+
+`xKey` names the column on the x axis; without it, the first key that is not a
+series is. A series' `label` is the name the legend and tooltip show, so the
+data can keep short keys. `valueFormat` writes the numbers on the axis and in
+the tooltip: `"compact"`, `"percent"`, any `Intl.NumberFormatOptions` (a
+currency, a unit), or a function. `locale` sets the language they are written
+in; it defaults to `en-US`, so the server and every browser agree.
+
+<LineChart
+  marginTop="16"
+  marginBottom="24"
+  title="Revenue in forints"
+  xKey="month"
+  locale="hu-HU"
+  valueFormat={{ style: "currency", currency: "HUF", maximumFractionDigits: 0 }}
+  series={[
+    { key: "web", label: "Web shop", color: "blue" },
+    { key: "store", label: "In store", color: "orange" }
+  ]}
+  data={[
+    { month: "Jan", web: 1240000, store: 880000 },
+    { month: "Feb", web: 1310000, store: 910000 },
+    { month: "Mar", web: 1580000, store: 860000 },
+    { month: "Apr", web: 1720000, store: 940000 },
+    { month: "May", web: 1950000, store: 990000 }
+  ]}
+/>
+
+## Stacked
+
+`stack` puts each series on top of the one before it, for parts that add up to
+a total. `stack="percent"` shows each as its share of the total instead.
+
+<LineChart
+  marginTop="16"
+  marginBottom="24"
+  title="Share of sessions by device"
+  stack="percent"
+  xKey="month"
+  series={[
+    { key: "desktop", label: "Desktop", color: "blue" },
+    { key: "mobile", label: "Mobile", color: "green" },
+    { key: "tablet", label: "Tablet", color: "violet" }
+  ]}
+  data={[
+    { month: "Jan", desktop: 520, mobile: 410, tablet: 70 },
+    { month: "Feb", desktop: 500, mobile: 450, tablet: 60 },
+    { month: "Mar", desktop: 480, mobile: 520, tablet: 65 },
+    { month: "Apr", desktop: 470, mobile: 580, tablet: 55 }
+  ]}
+/>
+
+## Thresholds and annotations
+
+`thresholds` draws limits across the value axis: a line at `value`, or a band
+from `from` to `to` (leave an end out for "above" or "below"). `annotations`
+marks moments on the x axis. Each is labelled in the plot and drawn so it reads
+without colour: `danger` is a heavy solid line over a hatched band, `warning` a
+dashed line, the other tones a thin dotted one. The summary a screen reader
+hears says which series crossed each limit, how often and first when.
+`yDomain` zooms the value axis to the range that matters.
+
+<LineChart
+  marginTop="16"
+  marginBottom="24"
+  title="Core outlet temperature"
+  xKey="time"
+  yDomain={[280, 350]}
+  curve="monotone"
+  valueFormat={{ style: "unit", unit: "celsius", maximumFractionDigits: 0 }}
+  series={[{ key: "outlet", label: "Outlet", color: "orange" }]}
+  thresholds={[
+    { from: 340, label: "Trip", tone: "danger" },
+    { value: 325, label: "High alarm", tone: "warning" }
+  ]}
+  annotations={[{ x: "14:04", label: "Pump B trip", tone: "danger" }]}
+  data={[
+    { time: "14:00", outlet: 302 },
+    { time: "14:01", outlet: 305 },
+    { time: "14:02", outlet: 311 },
+    { time: "14:03", outlet: 322 },
+    { time: "14:04", outlet: 331 },
+    { time: "14:05", outlet: 336 },
+    { time: "14:06", outlet: 318 },
+    { time: "14:07", outlet: 309 }
+  ]}
+/>
+
 ## Curve
 
-`curve` is Recharts' interpolation, and it is a claim about the data between
+`curve` is how the line runs between points (d3's curve names), and it is a claim about the data between
 your points. `natural` and `monotone` draw a smooth line, which implies the
 value moved continuously; `step` holds each value until the next reading, which
 is honest for something that changes in jumps — a price tier, a headcount, a
@@ -116,18 +194,29 @@ at irregular times, a measurement against a continuous quantity — set
 />
 
 A fixed `xDomain` is also what keeps a streaming chart from rescaling on every
-sample — see the live example above, which drives it from
-[`useStreamingViewport`](/hooks/useStreamingViewport).
+sample: see [Live data](#live-data) below.
+
+## Live data
+
+For a chart that takes a new sample every second or so, fix the x range with `xAxisType="number"` and `xDomain`, so the axis doesn't rescale with each sample. Both examples get their samples and their moving window from [`useStreamingViewport`](/hooks/useStreamingViewport).
+
+With `animation` on and `animationDuration` equal to the sample interval (and `animationEasing="linear"`), each update eases into the next, so the line glides:
+
+<LineChartStreamingExample />
+
+With `animation={false}`, each sample snaps into place. Choose this when samples arrive faster than an animation can finish:
+
+<LineChartStreamingExample animation={false} />
 
 ## Animation
 
-Animation is on by default. The three `animation*` props are passed through to
-Recharts, so they take its values.
+Animation is on by default. The three `animation*` props set the entry
+animation's delay, length and CSS easing (`"ease-out"`, `"linear"` or any
+`cubic-bezier()`). It is skipped under `prefers-reduced-motion`.
 
 Turn animation **off** for a chart that updates faster than the animation runs:
 each new sample restarts the transition, so a streaming line spends its time
-animating rather than showing the data. The second live example above is the
-same chart with `animation={false}`.
+animating rather than showing the data.
 
 ## API reference
 
@@ -135,13 +224,14 @@ same chart with `animation={false}`.
   component="LineChart"
   exclude={["data-viz-style"]}
   describe={{
-    curve: "Recharts interpolation: natural, linear, step, stepBefore, stepAfter, monotone, basis, bump and their variants.",
+    stack: "Stack the series: true sums them, \"percent\" shows each as its share of the total.",
+    curve: "Interpolation between points: natural, linear, step, stepBefore, stepAfter, monotone, basis, bump and their variants (d3's curve names).",
     xAxisType: "Treat x values as numbers rather than equally spaced categories.",
     xDomain: "Visible x range. Requires xAxisType=\"number\".",
-    animation: "Animate the line on data change. Turn it off for a chart that updates faster than the animation runs.",
+    animation: "Draw the lines in from the left when the chart mounts. Readers who ask for reduced motion never see it.",
     animationBegin: "Delay before the animation starts, in milliseconds.",
     animationDuration: "Animation length, in milliseconds.",
-    animationEasing: "Recharts easing name.",
+    animationEasing: "A CSS easing: ease, ease-in-out, linear or a cubic-bezier().",
     reverseX: "Move the x axis to the top.",
     reverseY: "Move the y axis to the right.",
     grid: "Which grid lines to draw.",
@@ -152,4 +242,9 @@ same chart with `animation={false}`.
     error: "Render the error state instead of the chart.",
     border: "Panel border colour. false removes it.",
   }}
+  content={[
+    ["thresholds", "ChartThreshold[]", "-", "Limits across the value axis: { value } for a line, { from, to } for a band, with a label, a tone and the side that is out of limits."],
+    ["annotations", "ChartAnnotation[]", "-", "Moments on the x axis: { x, label, tone }."],
+    ["yDomain", "[number, number]", "-", "The value axis' range, [min, max], in place of zero to the data's top."],
+  ]}
 />

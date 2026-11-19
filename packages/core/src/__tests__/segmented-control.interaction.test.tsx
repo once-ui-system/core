@@ -35,7 +35,7 @@ describe("SegmentedControl: interaction", () => {
           aria-label="View"
           buttons={views}
           defaultValue="grid"
-          onChange={vi.fn()}
+          onValueChange={vi.fn()}
         />
         <button type="button">After</button>
       </>,
@@ -51,7 +51,7 @@ describe("SegmentedControl: interaction", () => {
   });
 
   it("selects the first segment without value or defaultValue", () => {
-    render(<SegmentedControl aria-label="View" buttons={views} onChange={vi.fn()} />, {
+    render(<SegmentedControl aria-label="View" buttons={views} onValueChange={vi.fn()} />, {
       wrapper: wrap,
     });
     expect(tab("List")).toHaveAttribute("aria-selected", "true");
@@ -60,7 +60,7 @@ describe("SegmentedControl: interaction", () => {
   it("moves focus with the arrows, wrapping, and selects only on Enter or Space", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<SegmentedControl aria-label="View" buttons={views} onChange={onChange} />, {
+    render(<SegmentedControl aria-label="View" buttons={views} onValueChange={onChange} />, {
       wrapper: wrap,
     });
     await user.tab();
@@ -84,7 +84,7 @@ describe("SegmentedControl: interaction", () => {
   it("reports a click with its value and the click event", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<SegmentedControl aria-label="View" buttons={views} onChange={onChange} />, {
+    render(<SegmentedControl aria-label="View" buttons={views} onValueChange={onChange} />, {
       wrapper: wrap,
     });
     await user.click(tab("Board"));
@@ -99,7 +99,12 @@ describe("SegmentedControl: interaction", () => {
       const [value, setValue] = useState("list");
       return (
         <>
-          <SegmentedControl aria-label="View" buttons={views} value={value} onChange={setValue} />
+          <SegmentedControl
+            aria-label="View"
+            buttons={views}
+            value={value}
+            onValueChange={setValue}
+          />
           <button type="button" onClick={() => setValue("board")}>
             Reset to board
           </button>
@@ -122,7 +127,7 @@ describe("SegmentedControl: interaction", () => {
       <SegmentedControl
         aria-label="View"
         buttons={[views[0], { ...views[1], disabled: true }, views[2]]}
-        onChange={onChange}
+        onValueChange={onChange}
       />,
       { wrapper: wrap },
     );
@@ -147,7 +152,7 @@ describe("SegmentedControl: interaction", () => {
       <SegmentedControl
         aria-label="View"
         buttons={[views[0], { ...views[1], onClick }]}
-        onChange={onChange}
+        onValueChange={onChange}
       />,
       { wrapper: wrap },
     );
@@ -166,7 +171,7 @@ describe("SegmentedControl: interaction", () => {
         aria-label="Density"
         buttons={views}
         defaultValue="grid"
-        onChange={onChange}
+        onValueChange={onChange}
       />,
       { wrapper: wrap },
     );

@@ -8,7 +8,7 @@ import {
   Icon,
   type IconName,
   Line,
-  Pulse,
+  StatusIndicator,
   Row,
   Schemes,
   Skeleton,
@@ -152,6 +152,14 @@ const NavigationItemComponent: React.FC<{
   // This ensures the section is open when arriving at a page within this section
   const shouldBeOpen = isSelected || hasActiveChild || isParentPath || isPathWithinSection;
 
+  // Opens when navigation lands inside the section, and the reader can still
+  // fold it away. (In 2.x a bare `open` on Accordion did both; in 3.0 `open`
+  // controls it, so the state lives here.)
+  const [open, setOpen] = useState(shouldBeOpen);
+  useEffect(() => {
+    setOpen(shouldBeOpen);
+  }, [shouldBeOpen]);
+
   if (item.children) {
     return (
       <Row
@@ -172,7 +180,8 @@ const NavigationItemComponent: React.FC<{
               paddingRight="16"
               size="s"
               radius="s"
-              open={shouldBeOpen}
+              open={open}
+              onOpenChange={setOpen}
               title={
                 <Row fillWidth vertical="center" textVariant="label-default-m" paddingLeft="4">
                   {item.title}
@@ -238,7 +247,7 @@ const NavigationItemComponent: React.FC<{
           if (item.status) {
             const { tag, scheme } = AVAILABILITY[item.status];
             return (
-              <Tag scheme={scheme} size="s">
+              <Tag tone={scheme} size="s">
                 {tag}
               </Tag>
             );
@@ -254,8 +263,8 @@ const NavigationItemComponent: React.FC<{
              says which it is. */
           const recency = (variant: ColorScheme | undefined) => (
             <Row gap="4" vertical="center" flex={0}>
-              <Pulse scheme={variant} size="s" />
-              <Text variant="label-default-xs" onBackground="neutral-medium">
+              <StatusIndicator pulse tone={variant} size="s" />
+              <Text textVariant="label-default-xs" onBackground="neutral-medium">
                 {item.navTag}
               </Text>
             </Row>
@@ -322,8 +331,8 @@ const ResourceLinkComponent: React.FC<{
       </Row>
       {tag && (
         <Row gap="4" vertical="center" flex={0}>
-          <Pulse scheme="brand" size="s" />
-          <Text variant="label-default-xs" onBackground="neutral-medium">
+          <StatusIndicator pulse tone="brand" size="s" />
+          <Text textVariant="label-default-xs" onBackground="neutral-medium">
             {tag}
           </Text>
         </Row>

@@ -1,0 +1,119 @@
+// The sidebar is two boxes. The outer one is its footprint in the layout and
+// animates between the open width, the rail and nothing. The panel inside it
+// is what you see: as wide as the footprint, except while a rail peeks, when
+// it opens to the full width over the page and the footprint stays a rail, so
+// nothing beside it moves.
+.sidebar {
+    // 52 = a compact Nav's 36px icon column plus SidebarContent's 8px a side;
+    // 80 = a normal Nav's 64px column. The icons sit centred either way.
+    --sidebar-rail-width: 52px;
+    position: relative;
+    flex: none;
+    width: var(--sidebar-width);
+    min-width: 0;
+    transition: width var(--transition-duration-macro-medium) var(--transition-eased);
+
+    &:has(nav[data-density="normal"]),
+    &:has(nav[data-density="spacious"]) {
+        --sidebar-rail-width: 80px;
+    }
+
+    &[data-state="rail"] {
+        width: var(--sidebar-rail-width);
+    }
+
+    &[data-state="hidden"] {
+        width: 0;
+        overflow: hidden;
+    }
+
+    &[data-resizing],
+    &[data-resizing] .panel {
+        transition: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        &,
+        .panel {
+            transition: none;
+        }
+    }
+}
+
+.panel {
+    position: absolute;
+    inset: 0 auto 0 0;
+    z-index: 2;
+    width: var(--sidebar-width);
+    display: flex;
+    flex-direction: column;
+    border-radius: 0 var(--radius-l) var(--radius-l) 0;
+    transition:
+        width var(--transition-duration-macro-medium) var(--transition-eased),
+        background-color var(--transition-duration-macro-medium) var(--transition-eased),
+        box-shadow var(--transition-duration-macro-medium) var(--transition-eased);
+
+    &[data-icons] {
+        width: var(--sidebar-rail-width);
+    }
+
+    &[data-peek] {
+        background-color: var(--surface-background);
+        backdrop-filter: var(--backdrop-filter);
+        box-shadow: var(--shadow-l);
+    }
+}
+
+// Header and footer clip to the rail rather than wrap: their leading mark
+// stays where it was and the rest slides under the edge.
+.edge {
+    flex: none;
+    overflow: hidden;
+}
+
+.content {
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+// A 9px grab area on the panel's edge, with a 2px line that shows on hover,
+// on focus and while dragging.
+.handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: -5px;
+    width: 9px;
+    cursor: col-resize;
+    touch-action: none;
+    z-index: 3;
+    outline: none;
+
+    &::after {
+        content: "";
+        position: absolute;
+        top: var(--static-space-12);
+        bottom: var(--static-space-12);
+        left: 3px;
+        width: 2px;
+        border-radius: 2px;
+        background: transparent;
+        transition: background-color var(--transition-duration-micro-medium) var(--transition-eased);
+    }
+
+    &:focus-visible::after,
+    [data-resizing] &::after {
+        background: var(--brand-solid-medium);
+    }
+
+    @media (hover: hover) {
+        &:hover::after {
+            background: var(--brand-solid-medium);
+        }
+    }
+
+    &:focus-visible::after {
+        box-shadow: 0 0 0 2px var(--brand-alpha-medium);
+    }
+}

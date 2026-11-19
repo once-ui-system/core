@@ -1,0 +1,29 @@
+{
+ "name": "SidebarProvider",
+ "partOf": "Sidebar",
+ "purpose": "Holds a Sidebar's width and collapse for triggers and useSidebar outside it; persists them in a cookie",
+ "group": "components",
+ "props": {
+  "children": "ReactNode",
+  "defaultWidth": "number = 256",
+  "width": "number",
+  "onWidthChange": "(width: number) => void",
+  "defaultCollapsed": "boolean = false",
+  "collapsed": "boolean",
+  "onCollapsedChange": "(collapsed: boolean) => void",
+  "minWidth": "number = 200",
+  "maxWidth": "number = 400",
+  "persist": "string",
+  "shortcut": "string | false = mod+b",
+  "mobileBelow": "\"xs\" | \"s\" | \"m\" | \"l\" | false = s"
+ },
+ "tags": [
+  "navigation",
+  "layout"
+ ],
+ "pairsWith": [
+  "Sidebar",
+  "SidebarTrigger"
+ ],
+ "mixinsRef": []
+}

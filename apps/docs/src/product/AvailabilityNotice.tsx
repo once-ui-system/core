@@ -26,7 +26,7 @@ export function AvailabilityNotice({ status }: { status: Availability }) {
       border={`${copy.scheme}-alpha-weak`}
       background={`${copy.scheme}-alpha-weak`}
     >
-      <Tag scheme={copy.scheme} size="s">
+      <Tag tone={copy.scheme} size="s">
         {copy.tag}
       </Tag>
       {/* One `Text`, not a `Row` of two: a Row is a flex container, so the
@@ -34,7 +34,7 @@ export function AvailabilityNotice({ status }: { status: Availability }) {
           their own column rather than reading as one sentence. Nesting keeps
           them in a single inline flow, with the headline coloured. */}
       <Text
-        variant="label-default-s"
+        textVariant="label-default-s"
         onBackground="neutral-strong"
         style={{ flex: 1, minWidth: "12rem" }}
       >

@@ -135,7 +135,6 @@ describe("mobile-ready core", () => {
     // Fixed, and fine without: say why.
     const exempt: Record<string, string> = {
       "components/Cursor.tsx": "follows the pointer",
-      "components/CursorCard.tsx": "follows the pointer",
       "components/ContextMenu.tsx": "opens at the pointer",
       "components/Media.tsx": "a full-bleed backdrop behind the enlarged image",
     };
@@ -169,8 +168,8 @@ describe("mobile-ready core", () => {
       ["components/ToggleButton.module.scss", ".button"], // ToggleButton, SegmentedControl, Pagination
       ["components/SharedInteractiveStyles.module.scss", ".element"], // Checkbox, RadioButton
       ["components/Switch.module.scss", ".switch"],
-      ["components/Chip.module.scss", '.chip[role="button"]'],
-      ["components/Chip.module.scss", ".action"],
+      ["components/Tag.module.scss", '.toggle[role="button"]'], // Tag toggle (2.x Chip)
+      ["components/Tag.module.scss", ".action"], // a removable Tag's toggle
       ["components/NavIcon.module.scss", ".navIcon"],
       ["components/Carousel.module.scss", ".indicator"],
       ["components/MediaVideoPlayer.module.scss", ".progressTrack"],

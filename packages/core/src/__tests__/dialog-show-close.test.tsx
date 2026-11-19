@@ -8,8 +8,7 @@ import { resetDialogState } from "../test/dialogTestUtils";
 
 /**
  * Booleans that toggle visibility read `showX` (MIGRATING.md), and `Drawer`
- * shipped with `showClose`. Dialog's `hideClose` was the one inverted name
- * left; `showClose` joins it, and `hideClose` keeps working until 3.0.
+ * shipped with `showClose`. Dialog's inverted `hideClose` was removed in 3.0.
  */
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -47,15 +46,5 @@ describe("Dialog showClose", () => {
     unmount();
     renderDialog({ flush: true, showClose: false });
     expect(closeButton()).toBeNull();
-  });
-
-  it("still honours the deprecated hideClose", () => {
-    renderDialog({ hideClose: true });
-    expect(closeButton()).toBeNull();
-  });
-
-  it("lets showClose win when both are set", () => {
-    renderDialog({ hideClose: true, showClose: true });
-    expect(closeButton()).toBeInTheDocument();
   });
 });

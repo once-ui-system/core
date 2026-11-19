@@ -48,7 +48,7 @@ export function ChartFrame({
   const { style, rest, userStyle, hidden } = flexStyle(theme, {
     direction: "column",
     fillWidth: true,
-    height: 24,
+    height: "24rem",
     radius: "l",
     border: "neutral-alpha-weak",
     overflow: "hidden",

@@ -2,6 +2,7 @@ import { render as baseRender, screen, waitFor } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { describe, expect, it } from "vitest";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import { icosaGrid } from "../modules/ai/cube/geometry";
 import {
   compose,
   normalMatrix,
@@ -165,6 +166,59 @@ describe("Mascot working=cube", () => {
 
   it("falls back to the flat mascot where WebGL is missing", async () => {
     const { container } = render(<Mascot working="cube" state="thinking" />);
+    await waitFor(() => expect(container.querySelector("svg")).toBeTruthy());
+    expect(screen.getByRole("img", { name: "Assistant, thinking" })).toBeTruthy();
+  });
+});
+
+describe("Mascot working=d20", () => {
+  const die = (state: CubeInput["state"], extra: Partial<CubeInput> = {}) =>
+    input(state, { shape: "d20", ...extra });
+  const atRest = (motion: CubeMotion) => Math.abs(motion.die[3]) > 0.9999;
+
+  it("firms into the die with no face and tumbles while thinking", () => {
+    const motion = new CubeMotion(seeded());
+    run(motion, 4, die("thinking"));
+    expect(motion.morph).toBe(1);
+    expect(motion.face).toBe(0);
+    expect(atRest(motion)).toBe(false);
+    // the cube's layers never turn on the die
+    expect(motion.history).toHaveLength(0);
+  });
+
+  it("lands face on when it stops, holds a beat, then softens back with its face", () => {
+    const motion = new CubeMotion(seeded());
+    run(motion, 4, die("thinking"));
+    let landed = false;
+    for (let t = 0; t < 6; t += 1 / 60) {
+      motion.update(1 / 60, die("idle"));
+      if (motion.mode === "idle" && motion.hold > 0 && atRest(motion)) landed = true;
+    }
+    expect(landed).toBe(true);
+    // face on, not the cube's 45° logo turn
+    expect(Math.abs(motion.rot.spin)).toBeLessThan(0.01);
+    expect(motion.morph).toBe(0);
+    expect(motion.face).toBe(1);
+  });
+
+  it("holds the die still under reduced motion", () => {
+    const motion = new CubeMotion(seeded());
+    run(motion, 4, die("thinking", { reduced: true }));
+    expect(motion.morph).toBe(1);
+    expect(atRest(motion)).toBe(true);
+  });
+
+  it("builds twenty faces, the first toward the viewer with its point up", () => {
+    const grid = icosaGrid(4);
+    expect(grid.groups).toHaveLength(20);
+    expect(grid.faceNormals[2]).toBeCloseTo(1);
+    // the front face's first corner sits straight above its center
+    expect(grid.positions[0]).toBeCloseTo(0);
+    expect(grid.positions[1]).toBeGreaterThan(0);
+  });
+
+  it("falls back to the flat mascot where WebGL is missing", async () => {
+    const { container } = render(<Mascot working="d20" state="thinking" />);
     await waitFor(() => expect(container.querySelector("svg")).toBeTruthy());
     expect(screen.getByRole("img", { name: "Assistant, thinking" })).toBeTruthy();
   });

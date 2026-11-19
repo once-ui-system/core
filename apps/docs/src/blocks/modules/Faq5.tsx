@@ -79,10 +79,10 @@ export const Faq5 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" gap="32" {...flex}>
       <Column maxWidth="xs" horizontal="center" gap="8" align="center">
-        <Heading as="h2" variant="display-strong-s" align="center">
+        <Heading as="h2" textVariant="display-strong-s" align="center">
           Frequently asked questions
         </Heading>
-        <Text onBackground="neutral-medium" variant="body-default-l" align="center">
+        <Text onBackground="neutral-medium" textVariant="body-default-l" align="center">
           Search our knowledge base or browse by topic.
         </Text>
       </Column>
@@ -99,7 +99,7 @@ export const Faq5 = (flex: React.ComponentProps<typeof Column>) => {
             <Tag
               key={topic}
               size="l"
-              scheme={query.toLowerCase() === topic.toLowerCase() ? "brand" : "neutral"}
+              tone={query.toLowerCase() === topic.toLowerCase() ? "brand" : "neutral"}
               onClick={() => setQuery(query.toLowerCase() === topic.toLowerCase() ? "" : topic)}
               style={{ cursor: "pointer" }}
             >
@@ -111,8 +111,8 @@ export const Faq5 = (flex: React.ComponentProps<typeof Column>) => {
           <Column fillWidth gap="8">
             {filtered.map((item) => (
               <Column key={item.title} fillWidth border radius="l" padding="4" background="overlay">
-                <Accordion title={<Text variant="body-default-s">{item.title}</Text>}>
-                  <Text variant="body-default-s" onBackground="neutral-medium">
+                <Accordion title={<Text textVariant="body-default-s">{item.title}</Text>}>
+                  <Text textVariant="body-default-s" onBackground="neutral-medium">
                     {item.content}
                   </Text>
                 </Accordion>
@@ -122,7 +122,7 @@ export const Faq5 = (flex: React.ComponentProps<typeof Column>) => {
         ) : (
           <Column fillWidth border radius="l" padding="40" gap="8" horizontal="center">
             <Icon name="search" onBackground="neutral-weak" />
-            <Text variant="body-default-s" onBackground="neutral-weak" align="center">
+            <Text textVariant="body-default-s" onBackground="neutral-weak" align="center">
               No questions found for "{query}"
             </Text>
           </Column>

@@ -52,15 +52,15 @@ describe("Accordion", () => {
     expect(header).toHaveAttribute("aria-expanded", "false");
   });
 
-  it("defers to onToggle in controlled mode instead of toggling itself", async () => {
+  it("defers to onOpenChange in controlled mode instead of toggling itself", async () => {
     const user = userEvent.setup();
-    const onToggle = vi.fn();
-    renderAccordion({ open: false, onToggle });
+    const onOpenChange = vi.fn();
+    renderAccordion({ open: false, onOpenChange });
 
     const header = screen.getByRole("button", { name: /section title/i });
     await user.click(header);
 
-    expect(onToggle).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledExactlyOnceWith(true);
     expect(header).toHaveAttribute("aria-expanded", "false");
   });
 });
@@ -76,61 +76,67 @@ describe("Checkbox", () => {
     expect(checkbox).toBeChecked();
   });
 
-  it("calls onToggle without mutating state when controlled", async () => {
+  it("calls onCheckedChange without mutating state when controlled", async () => {
     const user = userEvent.setup();
-    const onToggle = vi.fn();
-    renderWithProviders(<Checkbox label="Controlled" checked={false} onToggle={onToggle} />);
+    const onCheckedChange = vi.fn();
+    renderWithProviders(
+      <Checkbox label="Controlled" checked={false} onCheckedChange={onCheckedChange} />,
+    );
 
     const checkbox = screen.getByRole("checkbox", { name: /controlled/i });
     await user.click(checkbox);
 
-    expect(onToggle).toHaveBeenCalledTimes(1);
+    expect(onCheckedChange).toHaveBeenCalledTimes(1);
     expect(checkbox).not.toBeChecked();
   });
 
   it("ignores interaction when disabled", async () => {
     const user = userEvent.setup();
-    const onToggle = vi.fn();
-    renderWithProviders(<Checkbox label="Disabled" disabled onToggle={onToggle} />);
+    const onCheckedChange = vi.fn();
+    renderWithProviders(<Checkbox label="Disabled" disabled onCheckedChange={onCheckedChange} />);
 
     await user.click(screen.getByRole("checkbox", { name: /disabled/i }));
-    expect(onToggle).not.toHaveBeenCalled();
+    expect(onCheckedChange).not.toHaveBeenCalled();
   });
 });
 
 describe("Switch", () => {
-  it("fires onToggle from pointer and keyboard", async () => {
+  it("fires onCheckedChange from pointer and keyboard", async () => {
     const user = userEvent.setup();
-    const onToggle = vi.fn();
-    renderWithProviders(<Switch checked={false} onToggle={onToggle} ariaLabel="Enable feature" />);
+    const onCheckedChange = vi.fn();
+    renderWithProviders(
+      <Switch checked={false} onCheckedChange={onCheckedChange} aria-label="Enable feature" />,
+    );
 
     const control = screen.getByRole("switch", { name: /enable feature/i });
     await user.click(control);
-    expect(onToggle).toHaveBeenCalledTimes(1);
+    expect(onCheckedChange).toHaveBeenCalledTimes(1);
 
     // The role="switch" element is the one that takes focus and handles keys,
     // so the click above already left focus on it.
     expect(control).toHaveFocus();
     await user.keyboard("{Enter}");
-    expect(onToggle).toHaveBeenCalledTimes(2);
+    expect(onCheckedChange).toHaveBeenCalledTimes(2);
   });
 
   it("reflects the controlled isChecked value", () => {
     const { rerender } = renderWithProviders(
-      <Switch checked={false} onToggle={() => {}} ariaLabel="State" />,
+      <Switch checked={false} onCheckedChange={() => {}} aria-label="State" />,
     );
     expect(screen.getByRole("switch", { name: /state/i })).not.toBeChecked();
 
-    rerender(<Switch checked onToggle={() => {}} ariaLabel="State" />);
+    rerender(<Switch checked onCheckedChange={() => {}} aria-label="State" />);
     expect(screen.getByRole("switch", { name: /state/i })).toBeChecked();
   });
 
-  it("does not fire onToggle when disabled", async () => {
+  it("does not fire onCheckedChange when disabled", async () => {
     const user = userEvent.setup();
-    const onToggle = vi.fn();
-    renderWithProviders(<Switch checked={false} onToggle={onToggle} disabled ariaLabel="Locked" />);
+    const onCheckedChange = vi.fn();
+    renderWithProviders(
+      <Switch checked={false} onCheckedChange={onCheckedChange} disabled aria-label="Locked" />,
+    );
 
     await user.click(screen.getByRole("switch", { name: /locked/i }));
-    expect(onToggle).not.toHaveBeenCalled();
+    expect(onCheckedChange).not.toHaveBeenCalled();
   });
 });

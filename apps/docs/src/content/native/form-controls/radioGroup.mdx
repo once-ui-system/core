@@ -12,7 +12,7 @@ navIcon: "switch"
 
 ## Uncontrolled
 
-Pass `defaultValue` to pick the first choice. `onChange` gets the new value.
+Pass `defaultValue` to pick the first choice. `onValueChange` gets the new value.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -26,7 +26,7 @@ export function Plan() {
       label="Plan"
       description="You can change it any time."
       defaultValue="monthly"
-      onChange={(value) => console.log(value)}
+      onValueChange={(value) => console.log(value)}
       options={[
         { value: "monthly", label: "Monthly", description: "9 EUR a month" },
         { value: "yearly", label: "Yearly", description: "90 EUR a year" },
@@ -54,7 +54,7 @@ export function Size() {
     <RadioGroup
       label="Size"
       value={size}
-      onChange={setSize}
+      onValueChange={setSize}
       options={[
         { value: "s", label: "Small" },
         { value: "m", label: "Medium" },
@@ -138,7 +138,7 @@ export function Milk() {
 | `options` | `RadioGroupOption[]` | `[]` | The choices. |
 | `value` | `string` | | The chosen value, when the screen owns it. |
 | `defaultValue` | `string` | | The first choice when the group keeps its own state. |
-| `onChange` | `(value: string) => void` | | Called with the newly chosen value. |
+| `onValueChange` | `(value: string) => void` | | Called with the newly chosen value. |
 | `label` | `ReactNode` | | A label for the group. |
 | `description` | `ReactNode` | | A line under the group label. |
 | `disabled` | `boolean` | `false` | Turns off every option. |
@@ -150,7 +150,7 @@ export function Milk() {
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `value` | `string` | | What `onChange` reports. Required. |
+| `value` | `string` | | What `onValueChange` reports. Required. |
 | `label` | `ReactNode` | | Text beside the radio. Required. |
 | `description` | `ReactNode` | | A line under the label. |
 | `disabled` | `boolean` | | Turns off this option. |

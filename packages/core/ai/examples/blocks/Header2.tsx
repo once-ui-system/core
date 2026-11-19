@@ -8,7 +8,7 @@ import {
   Row,
   SmartLink,
   ToggleButton,
-  UserMenu,
+  User,
 } from "@once-ui-system/core";
 
 interface HeaderProps extends React.ComponentProps<typeof Row> {
@@ -31,7 +31,7 @@ export const Header2: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
         fillWidth
         position="absolute"
         top="0"
-        height={8}
+        height="8rem"
         pattern={{ display: true, size: "2" }}
       />
       <Row
@@ -72,14 +72,14 @@ export const Header2: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
                 <ToggleButton label="Resources" />
               </Row>
             </Row>
-            <UserMenu
+            <User
               placement="bottom-end"
               avatarProps={{
                 value: avatar ? undefined : "L",
                 src: avatar,
               }}
               dropdown={
-                <Column gap="2" padding="4" width={8}>
+                <Column gap="2" padding="4" width="8rem">
                   <Option label="Profile" value="profile" />
                   <Option label="Settings" value="settings" />
                   <Option label="Log out" value="logout" />

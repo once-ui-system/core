@@ -1,0 +1,90 @@
+{
+ "name": "Calendar",
+ "group": "calendar",
+ "importFrom": "@once-ui-system/core/calendar",
+ "props": {
+  "events": "!CalendarEvent[]",
+  "view": "CalendarView",
+  "defaultView": "CalendarView = month",
+  "onViewChange": "(view: CalendarView) => void",
+  "views": "CalendarView[] = [\"month\", \"week\", \"day\"]",
+  "date": "Date",
+  "defaultDate": "Date",
+  "onDateChange": "(date: Date) => void",
+  "locale": "string",
+  "weekStartsOn": "number",
+  "dayStartHour": "number = 0",
+  "dayEndHour": "number = 24",
+  "scrollToHour": "number = 8",
+  "snapMinutes": "number = 15",
+  "defaultDuration": "number = 60",
+  "maxEventsPerDay": "number = 3",
+  "height": "string = 36rem",
+  "onEventSelect": "(event: CalendarEvent) => void",
+  "onSlotSelect": "(slot: CalendarSlot) => void",
+  "onEventChange": "(change: CalendarEventChange<CalendarEvent>) => void",
+  "renderEvent": "(event: CalendarEvent, context: { view: CalendarView; timeLabel: string }) => ReactNode",
+  "toolbar": "boolean = true",
+  "toolbarEnd": "ReactNode",
+  "labels": "Partial<CalendarLabels>",
+  "now": "Date",
+  "className": "string",
+  "style": "CSSProperties",
+  "aria-label": "string"
+ },
+ "tags": [
+  "calendar",
+  "schedule"
+ ],
+ "pairsWith": [
+  "Dialog"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "CalendarEvent": {
+   "id": "!string",
+   "title": "!string",
+   "start": "!Date",
+   "end": "!Date",
+   "allDay": "boolean",
+   "tone": "Tone",
+   "description": "string",
+   "editable": "boolean"
+  },
+  "CalendarEventChange": {
+   "event": "!CalendarEvent",
+   "start": "!Date",
+   "end": "!Date"
+  },
+  "CalendarLabels": {
+   "today": "!string",
+   "previous": "!string",
+   "next": "!string",
+   "month": "!string",
+   "week": "!string",
+   "day": "!string",
+   "allDay": "!string",
+   "more": "!(count: number) => string",
+   "view": "!string"
+  },
+  "CalendarSlot": {
+   "start": "!Date",
+   "end": "!Date",
+   "allDay": "!boolean"
+  },
+  "CalendarView": [
+   "month",
+   "week",
+   "day"
+  ],
+  "Tone": [
+   "neutral",
+   "brand",
+   "accent",
+   "info",
+   "danger",
+   "warning",
+   "success"
+  ]
+ }
+}

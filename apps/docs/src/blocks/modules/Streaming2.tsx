@@ -3,19 +3,19 @@
 import {
   Button,
   Column,
-  CountFx,
   Fade,
   Heading,
   IconButton,
   Media,
   ProgressBar,
-  Pulse,
+  StatusIndicator,
   Row,
   Scroller,
   SegmentedControl,
   Tag,
   Text,
 } from "@once-ui-system/core";
+import { CountFx } from "@once-ui-system/fx";
 import { useState } from "react";
 import { Footer2, Header3 } from ".";
 
@@ -86,12 +86,12 @@ export const Streaming2 = () => {
           wrap
         >
           <Row gap="8" vertical="center">
-            <Pulse size="s" scheme="danger" />
-            <Tag scheme="danger" size="s" label="Live now" />
-            <Text variant="label-default-s">Design Systems Summit — Keynote</Text>
+            <StatusIndicator pulse size="s" tone="danger" />
+            <Tag tone="danger" size="s" label="Live now" />
+            <Text textVariant="label-default-s">Design Systems Summit — Keynote</Text>
           </Row>
           <Row gap="8" vertical="center">
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               <CountFx value={2847} separator="," /> watching
             </Text>
             <Button size="s" variant="secondary">
@@ -101,7 +101,7 @@ export const Streaming2 = () => {
         </Row>
 
         <Row fillWidth gap="16" s={{ direction: "column" }}>
-          <Column fill minWidth={24} gap="12">
+          <Column fill minWidth="24rem" gap="12">
             <Column fillWidth radius="l" overflow="hidden" border>
               <Media
                 aspectRatio="16/9"
@@ -119,12 +119,12 @@ export const Streaming2 = () => {
                 vertical="end"
                 horizontal="between"
               >
-                <Fade fillWidth height={16} to="top" position="absolute" bottom="0" left="0" />
+                <Fade fillWidth height="16rem" to="top" position="absolute" bottom="0" left="0" />
                 <Column gap="4" fillWidth>
-                  <Heading variant="heading-strong-l" onSolid="neutral-strong">
+                  <Heading textVariant="heading-strong-l" onSolid="neutral-strong">
                     {featured.title}
                   </Heading>
-                  <Text variant="body-default-s" onSolid="neutral-weak">
+                  <Text textVariant="body-default-s" onSolid="neutral-weak">
                     {featured.episode} · {featured.duration} remaining
                   </Text>
                 </Column>
@@ -138,7 +138,7 @@ export const Streaming2 = () => {
           </Column>
 
           <Column
-            minWidth={20}
+            minWidth="20rem"
             fill
             gap="8"
             padding="12"
@@ -147,7 +147,7 @@ export const Streaming2 = () => {
             background="page"
             fillWidth
           >
-            <Heading variant="heading-strong-s">Up next</Heading>
+            <Heading textVariant="heading-strong-s">Up next</Heading>
             {queue.slice(1).map((item) => (
               <Row
                 key={item.title}
@@ -167,8 +167,8 @@ export const Streaming2 = () => {
                   style={{ width: "5rem" }}
                 />
                 <Column gap="4" fillWidth>
-                  <Text variant="label-default-s">{item.title}</Text>
-                  <Text variant="label-default-s" onBackground="neutral-weak">
+                  <Text textVariant="label-default-s">{item.title}</Text>
+                  <Text textVariant="label-default-s" onBackground="neutral-weak">
                     {item.episode} · {item.duration}
                   </Text>
                   {item.progress > 0 && <ProgressBar showLabel={false} value={item.progress} />}
@@ -180,18 +180,18 @@ export const Streaming2 = () => {
 
         <Column fillWidth gap="16">
           <Row fillWidth horizontal="between" vertical="center" wrap gap="12">
-            <Heading variant="heading-strong-m">Because you watched {featured.title}</Heading>
+            <Heading textVariant="heading-strong-m">Because you watched {featured.title}</Heading>
             <SegmentedControl
               buttons={genres.map((genre) => ({ label: genre.label, value: genre.value }))}
               value={selectedGenre}
-              onChange={(value) => setSelectedGenre(value)}
+              onValueChange={(value) => setSelectedGenre(value)}
             />
           </Row>
 
           <Scroller fitWidth style={{ maxWidth: "100%" }}>
             <Row fitWidth gap="12">
               {recommendations.map((item) => (
-                <Column key={item.title} minWidth={16} gap="8" cursor="interactive">
+                <Column key={item.title} minWidth="16rem" gap="8" cursor="interactive">
                   <Media
                     aspectRatio="16/9"
                     src={item.image}
@@ -199,7 +199,7 @@ export const Streaming2 = () => {
                     sizes="200px"
                     radius="l"
                   />
-                  <Text variant="label-default-s">{item.title}</Text>
+                  <Text textVariant="label-default-s">{item.title}</Text>
                 </Column>
               ))}
             </Row>

@@ -8,7 +8,7 @@ navLabel: "Text"
 navIcon: "components"
 ---
 
-`Text` renders a React Native `Text` with a Once UI type style and colour. Set the style with one `variant`, such as `"body-default-m"`, or with `family`, `size` and `weight`. Without any of them it is `body-default-m` in `neutral-strong`. See the [web Text page](/components/text) for the full set of variants.
+`Text` renders a React Native `Text` with a Once UI type style and colour. Set the style with one `textVariant`, such as `"body-default-m"`; `family` and `weight` swap its family and weight. Without any of them it is `body-default-m` in `neutral-strong`. See the [web Text page](/components/text) for the full set of variants.
 
 ## Variants
 
@@ -23,11 +23,11 @@ codes={[
 export function Variants() {
   return (
     <Column gap="8">
-      <Text variant="display-strong-s">Display</Text>
-      <Text variant="heading-strong-m">Heading</Text>
-      <Text variant="body-default-m">Body text</Text>
-      <Text variant="label-default-s">Label</Text>
-      <Text variant="code-default-s">npm install</Text>
+      <Text textVariant="display-strong-s">Display</Text>
+      <Text textVariant="heading-strong-m">Heading</Text>
+      <Text textVariant="body-default-m">Body text</Text>
+      <Text textVariant="label-default-s">Label</Text>
+      <Text textVariant="code-default-s">npm install</Text>
     </Column>
   );
 }`,
@@ -36,7 +36,7 @@ export function Variants() {
   }
 ]} />
 
-When `variant` is not set, `family`, `size` and `weight` build one. They default to `body`, `m` and `default`.
+`family` and `weight` swap the preset's family and weight and keep its size, as in core. `textVariant` defaults to `body-default-m`.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -46,7 +46,7 @@ codes={[
 
 export function Parts() {
   return (
-    <Text family="label" size="s" weight="strong">
+    <Text textVariant="body-default-s" family="label" weight="strong">
       Strong small label
     </Text>
   );
@@ -120,10 +120,9 @@ export function Caption() {
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `variant` | `TextVariant` | | A type style such as `"body-default-m"`. Wins over `family`, `size` and `weight`. |
-| `family` | `"body" \| "heading" \| "display" \| "label" \| "code"` | `"body"` | Used when `variant` is not set. |
-| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | `"m"` | Used when `variant` is not set. |
-| `weight` | `"default" \| "normal" \| "medium" \| "strong"` | `"default"` | Used when `variant` is not set. |
+| `textVariant` | `TextVariant` | `"body-default-m"` | A type style such as `"body-default-m"`. |
+| `family` | `"body" \| "heading" \| "display" \| "label" \| "code"` | | Swaps the preset's family and keeps its size and weight. |
+| `weight` | `"default" \| "normal" \| "medium" \| "strong"` | | Swaps the preset's weight and keeps the rest. |
 | `onBackground` | `"<scheme>-<weight>"` | `"neutral-strong"` | Text colour on a background. |
 | `onSolid` | `"<scheme>-<weight>"` | | Text colour on a solid surface. Wins over `onBackground`. |
 | `align` | `"left" \| "center" \| "right" \| "justify"` | | Text alignment. |

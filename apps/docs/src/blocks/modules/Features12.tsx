@@ -56,7 +56,7 @@ export const Features12 = (flex: React.ComponentProps<typeof Column>) => {
             height="80dvh"
             radius="l"
             border
-            maxHeight={44}
+            maxHeight="44rem"
             center
             align="center"
             gap="xl"
@@ -73,10 +73,10 @@ export const Features12 = (flex: React.ComponentProps<typeof Column>) => {
               gradient={{
                 display: true,
                 colorStart: "brand-solid-weak",
-                x: 40,
-                y: 100,
-                width: 75,
-                height: 75,
+                x: "40%",
+                y: "100%",
+                width: "75%",
+                height: "75%",
               }}
             />
             <Background
@@ -87,18 +87,18 @@ export const Features12 = (flex: React.ComponentProps<typeof Column>) => {
               gradient={{
                 display: true,
                 colorStart: "accent-solid-weak",
-                x: 60,
-                y: 100,
-                width: 75,
-                height: 75,
+                x: "60%",
+                y: "100%",
+                width: "75%",
+                height: "75%",
               }}
             />
             <Column fillWidth center padding="xl">
               <Column maxWidth="m" gap="24">
-                <Heading as="h2" variant="display-strong-m">
+                <Heading as="h2" textVariant="display-strong-m">
                   {card.title}
                 </Heading>
-                <Text onBackground="neutral-weak" variant="heading-default-xl" wrap="balance">
+                <Text onBackground="neutral-weak" textVariant="heading-default-xl" wrap="balance">
                   {card.description}
                 </Text>
               </Column>

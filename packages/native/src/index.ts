@@ -5,14 +5,17 @@ export {
 } from "./components/Accordion";
 export { Avatar, type AvatarProps } from "./components/Avatar";
 export { AvatarGroup, type AvatarGroupProps } from "./components/AvatarGroup";
-export { Badge, type BadgeProps } from "./components/Badge";
 export { Banner, type BannerProps } from "./components/Banner";
 export { BlockQuote, type BlockQuoteProps } from "./components/BlockQuote";
 export { type BreadcrumbItem, Breadcrumbs, type BreadcrumbsProps } from "./components/Breadcrumbs";
-export { Button, type ButtonProps, type ButtonVariant } from "./components/Button";
+export {
+  Button,
+  type ButtonCorners,
+  type ButtonProps,
+  type ButtonVariant,
+} from "./components/Button";
 export { Card, type CardProps } from "./components/Card";
 export { Checkbox, type CheckboxProps } from "./components/Checkbox";
-export { Chip, type ChipProps } from "./components/Chip";
 export { CodeBlock, type CodeBlockProps, type CodeInstance } from "./components/CodeBlock";
 export { ContextMenu, type ContextMenuProps } from "./components/ContextMenu";
 export { BarChart, type BarChartProps } from "./components/charts/BarChart";
@@ -88,14 +91,20 @@ export {
 export { IconButton, type IconButtonProps } from "./components/IconButton";
 export { InfoTip, type InfoTipProps } from "./components/InfoTip";
 export { InlineCode, type InlineCodeProps } from "./components/InlineCode";
-export { Input, type InputProps, Textarea, type TextareaProps } from "./components/Input";
+export {
+  Input,
+  type InputProps,
+  type InputType,
+  Textarea,
+  type TextareaProps,
+} from "./components/Input";
 export { Kbd, type KbdProps } from "./components/Kbd";
 export { Line, type LineProps } from "./components/Line";
 export { List, ListItem, type ListItemProps, type ListProps } from "./components/List";
 export {
   LogoSpinner,
-  type LogoSpinnerColor,
   type LogoSpinnerProps,
+  type LogoSpinnerTone,
 } from "./components/LogoSpinner";
 export {
   Markdown,
@@ -156,6 +165,7 @@ export {
 export { Scroller, type ScrollerProps, type ScrollerRef } from "./components/Scroller";
 export { SearchInput, type SearchInputProps } from "./components/SearchInput";
 export {
+  type ButtonOption,
   SegmentedControl,
   type SegmentedControlButton,
   type SegmentedControlProps,
@@ -166,6 +176,7 @@ export { Slider, type SliderProps } from "./components/Slider";
 export { Spinner, type SpinnerProps } from "./components/Spinner";
 export { StatusIndicator, type StatusIndicatorProps } from "./components/StatusIndicator";
 export { Switch, type SwitchProps } from "./components/Switch";
+export type { Length, SpacingValue } from "./components/spacing";
 export {
   extractText,
   Table,
@@ -191,7 +202,6 @@ export {
   type ToastOptions,
   type ToastProps,
   ToastProvider,
-  type ToastVariant,
   useToast,
 } from "./components/Toast";
 export { ToggleButton, type ToggleButtonProps } from "./components/ToggleButton";

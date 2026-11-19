@@ -72,48 +72,48 @@ export const Role1 = () => {
             >
               View all positions
             </Button>
-            <Heading variant="display-strong-s" marginTop="8">
+            <Heading textVariant="display-strong-s" marginTop="8">
               {roleDetails.title}
             </Heading>
             <Grid fillWidth columns="1" s={{ columns: 2 }} gap="24">
               <Row gap="8" vertical="center">
                 <Icon name="europe" size="s" onBackground="neutral-weak" />
-                <Text variant="body-default-s" onBackground="neutral-medium">
+                <Text textVariant="body-default-s" onBackground="neutral-medium">
                   {roleDetails.location}
                 </Text>
               </Row>
               <Row gap="8" vertical="center">
                 <Icon name="time" size="s" onBackground="neutral-weak" />
-                <Text variant="body-default-s" onBackground="neutral-medium">
+                <Text textVariant="body-default-s" onBackground="neutral-medium">
                   {roleDetails.type}
                 </Text>
               </Row>
               <Row gap="8" vertical="center">
                 <Icon name="tag" size="s" onBackground="neutral-weak" />
-                <Text variant="body-default-s" onBackground="neutral-medium">
+                <Text textVariant="body-default-s" onBackground="neutral-medium">
                   {roleDetails.department}
                 </Text>
               </Row>
               <Row gap="8" vertical="center">
                 <Icon name="banknotes" size="s" onBackground="neutral-weak" />
-                <Text variant="body-default-s" onBackground="neutral-medium">
+                <Text textVariant="body-default-s" onBackground="neutral-medium">
                   {roleDetails.salary}
                 </Text>
               </Row>
             </Grid>
           </Column>
 
-          <Text variant="body-default-l" onBackground="neutral-medium">
+          <Text textVariant="body-default-l" onBackground="neutral-medium">
             {roleDetails.description}
           </Text>
 
           <Column gap="16">
-            <Heading variant="heading-strong-l">Responsibilities</Heading>
+            <Heading textVariant="heading-strong-l">Responsibilities</Heading>
             <Column gap="8">
               {roleDetails.responsibilities.map((item, index) => (
                 <Row key={index} gap="12" vertical="center">
                   <Icon name="check" size="s" onBackground="brand-weak" />
-                  <Text variant="body-default-s" onBackground="neutral-medium">
+                  <Text textVariant="body-default-s" onBackground="neutral-medium">
                     {item}
                   </Text>
                 </Row>
@@ -122,12 +122,12 @@ export const Role1 = () => {
           </Column>
 
           <Column gap="16">
-            <Heading variant="heading-strong-l">Requirements</Heading>
+            <Heading textVariant="heading-strong-l">Requirements</Heading>
             <Column gap="8">
               {roleDetails.requirements.map((item, index) => (
                 <Row key={index} gap="12" vertical="center">
                   <Icon name="check" size="s" onBackground="brand-weak" />
-                  <Text variant="body-default-s" onBackground="neutral-medium">
+                  <Text textVariant="body-default-s" onBackground="neutral-medium">
                     {item}
                   </Text>
                 </Row>
@@ -146,8 +146,8 @@ export const Role1 = () => {
           gap="24"
         >
           <Column gap="8">
-            <Heading variant="heading-strong-l">Apply for this position</Heading>
-            <Text variant="body-default-s" onBackground="neutral-medium">
+            <Heading textVariant="heading-strong-l">Apply for this position</Heading>
+            <Text textVariant="body-default-s" onBackground="neutral-medium">
               Fill out the form below and we'll get back to you as soon as possible.
             </Text>
           </Column>

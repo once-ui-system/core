@@ -46,13 +46,13 @@ describe("NavGroup", () => {
 
   it("opens with Enter, then Tab reaches the rows", async () => {
     const user = userEvent.setup();
-    const onToggle = vi.fn();
-    render(<Settings onToggle={onToggle} />, { wrapper });
+    const onOpenChange = vi.fn();
+    render(<Settings onOpenChange={onOpenChange} />, { wrapper });
     await user.tab();
     expect(header()).toHaveFocus();
     await user.keyboard("{Enter}");
     expect(header()).toHaveAttribute("aria-expanded", "true");
-    expect(onToggle).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledWith(true);
     await user.tab();
     expect(screen.getByRole("link", { name: "Profile" })).toHaveFocus();
   });
@@ -67,12 +67,12 @@ describe("NavGroup", () => {
 
   it("follows `open` when controlled and reports toggles", async () => {
     const user = userEvent.setup();
-    const onToggle = vi.fn();
-    const { rerender } = render(<Settings open={false} onToggle={onToggle} />, { wrapper });
+    const onOpenChange = vi.fn();
+    const { rerender } = render(<Settings open={false} onOpenChange={onOpenChange} />, { wrapper });
     await user.click(header());
-    expect(onToggle).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledWith(true);
     expect(header()).toHaveAttribute("aria-expanded", "false");
-    rerender(<Settings open onToggle={onToggle} />);
+    rerender(<Settings open onOpenChange={onOpenChange} />);
     expect(header()).toHaveAttribute("aria-expanded", "true");
   });
 
@@ -83,10 +83,10 @@ describe("NavGroup", () => {
       const toggle = (id: string) => () => setOpen((o) => (o === id ? null : id));
       return (
         <>
-          <NavGroup label="One" open={open === "one"} onToggle={toggle("one")}>
+          <NavGroup label="One" open={open === "one"} onOpenChange={toggle("one")}>
             <NavItem href="/1" label="Row 1" />
           </NavGroup>
-          <NavGroup label="Two" open={open === "two"} onToggle={toggle("two")}>
+          <NavGroup label="Two" open={open === "two"} onOpenChange={toggle("two")}>
             <NavItem href="/2" label="Row 2" />
           </NavGroup>
         </>
@@ -111,8 +111,8 @@ describe("NavGroup", () => {
   // The rail runs down the centre of the header's 16px icon: header inset + 8,
   // less the Accordion's content padding (16 for "m", 12 for "s").
   it.each([
-    ["normal", "pl-16"],
-    ["compact", "pl-8"],
+    ["normal", "padding-left-16"],
+    ["compact", "padding-left-8"],
   ] as const)("centres the rail under the header icon in a %s nav", (density, inset) => {
     render(
       <Nav density={density} aria-label="Main">
@@ -121,6 +121,6 @@ describe("NavGroup", () => {
       { wrapper },
     );
     const rows = panel()?.querySelector(".g-8");
-    expect(rows).toHaveClass(inset, "pr-12");
+    expect(rows).toHaveClass(inset, "padding-right-12");
   });
 });

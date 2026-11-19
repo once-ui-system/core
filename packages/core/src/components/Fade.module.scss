@@ -1,6 +1,40 @@
+// The fade is painted on a layer behind the children, not on the Fade
+// itself: a mask on the Fade also faded whatever was put inside it (a
+// Scroller's arrow buttons came out half transparent), so content had to sit
+// beside it instead. The Fade is its own stacking context, so the layer's
+// negative z-index keeps it above whatever the Fade covers.
 .mask {
-    backdrop-filter: blur(0.5rem);
-    background: linear-gradient(var(--gradient-direction), var(--base-color), transparent);
-    mask-image: linear-gradient(var(--gradient-direction), black 20%, transparent 100%);
-    mask-size: 100% 100%;
+    isolation: isolate;
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        border-radius: inherit;
+        background: linear-gradient(var(--gradient-direction), var(--base-color), transparent);
+        // Unprefixed only: next to a -webkit- twin holding a `var()`, Next's
+        // CSS build (Lightning CSS) kept just the prefixed one, which
+        // Chromium ignores. That build adds the prefix for Safari itself.
+        backdrop-filter: blur(var(--fade-blur, 0.5rem));
+        mask-image: linear-gradient(var(--gradient-direction), black 20%, transparent 100%);
+        mask-size: 100% 100%;
+    }
+}
+
+// `blur={0}`: no filter at all, not a zero-radius one, which still costs a
+// layer and a read-back of what is behind it every frame.
+.flat::before {
+    backdrop-filter: none;
+}
+
+// `pattern`: a dot screen over the gradient.
+.pattern::before {
+    background-image:
+        linear-gradient(var(--gradient-direction), var(--base-color), transparent),
+        radial-gradient(transparent 1px, var(--base-color) 1px);
+    background-size:
+        100% 100%,
+        var(--fade-pattern-size) var(--fade-pattern-size);
 }

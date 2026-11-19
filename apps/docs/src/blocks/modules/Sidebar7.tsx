@@ -7,12 +7,12 @@ import {
   Card,
   Column,
   Icon,
-  MatrixFx,
   Row,
   Tag,
   Text,
   ToggleButton,
 } from "@once-ui-system/core";
+import { MatrixFx } from "@once-ui-system/fx";
 import { usePathname } from "next/navigation";
 
 const navigation = [
@@ -55,7 +55,7 @@ export function Sidebar7() {
   const pathname = usePathname();
 
   return (
-    <Column fillHeight width={16} minWidth={16} paddingY="4">
+    <Column fillHeight width="16rem" minWidth="16rem" paddingY="4">
       <Column
         position="sticky"
         fillHeight
@@ -120,7 +120,7 @@ export function Sidebar7() {
                                 transform: "scale(0.8)",
                                 transformOrigin: "right center",
                               }}
-                              scheme="brand"
+                              tone="brand"
                               size="s"
                             >
                               {child.navTag}
@@ -211,14 +211,14 @@ export function Sidebar7() {
                 display: true,
                 colorStart: "neutral-background-weak",
                 y: 0,
-                width: 300,
-                height: 300,
+                width: "300%",
+                height: "300%",
               }}
               pointerEvents="none"
             />
             <Column fillWidth padding="20" gap="12">
-              <Text variant="heading-strong-s">Get Once UI Pro</Text>
-              <Text variant="label-default-s" onBackground="neutral-weak" marginBottom="8">
+              <Text textVariant="heading-strong-s">Get Once UI Pro</Text>
+              <Text textVariant="label-default-s" onBackground="neutral-weak" marginBottom="8">
                 Build a digital presence with deployment-ready apps
               </Text>
               <Button rounded size="s" id="get-pro-banner" arrowIcon>

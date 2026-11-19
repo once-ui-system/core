@@ -6,8 +6,8 @@ import type React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, expectTypeOf, it, vi } from "vitest";
 import { Column } from "../components/Column";
-import { DateRangeInput } from "../components/DateRangeInput";
-import { DateRangePicker } from "../components/DateRangePicker";
+import { DateInput } from "../components/DateInput";
+import { DatePicker } from "../components/DatePicker";
 import { Heading } from "../components/Heading";
 import { Row } from "../components/Row";
 import { ServerFlex } from "../components/ServerFlex";
@@ -26,7 +26,8 @@ import { expectNoAxeViolations } from "../test/axe";
  * - `marginLeft="auto"` (3 runs): margin props took tokens and numbers only.
  * - chart `data` typed with an `interface` (3 runs): `DataPoint` has an index
  *   signature, which an interface never satisfies.
- * - a DateRange `value` typed `{ startDate?: Date; endDate?: Date }`, or `{}`
+ * - a DateRange `value` (`<DateInput range>`, `<DatePicker range>`; 2.x's
+ *   DateRangeInput and DateRangePicker) typed `{ startDate?: Date; endDate?: Date }`, or `{}`
  *   for no range (2 runs).
  */
 
@@ -38,10 +39,10 @@ const classesOf = (el: React.ReactElement) => {
 
 describe('margin="auto"', () => {
   it("is a class on Row, Column, Text and Heading", () => {
-    expect(classesOf(<Row marginLeft="auto">x</Row>)).toContain("ml-auto");
-    expect(classesOf(<Column marginX="auto">x</Column>)).toContain("mx-auto");
-    expect(classesOf(<Text marginTop="auto">x</Text>)).toContain("mt-auto");
-    expect(classesOf(<Heading margin="auto">x</Heading>)).toContain("m-auto");
+    expect(classesOf(<Row marginLeft="auto">x</Row>)).toContain("margin-left-auto");
+    expect(classesOf(<Column marginX="auto">x</Column>)).toContain("margin-x-auto");
+    expect(classesOf(<Text marginTop="auto">x</Text>)).toContain("margin-top-auto");
+    expect(classesOf(<Heading margin="auto">x</Heading>)).toContain("margin-auto");
   });
 
   it("works at a breakpoint, both ways", () => {
@@ -50,7 +51,9 @@ describe('margin="auto"', () => {
         x
       </ServerFlex>,
     );
-    expect(classes).toEqual(expect.arrayContaining(["ml-auto", "s-ml-0", "m-my-auto"]));
+    expect(classes).toEqual(
+      expect.arrayContaining(["margin-left-auto", "s-margin-left-0", "m-margin-y-auto"]),
+    );
   });
 
   it("has a class behind every margin prop, at the base and at every breakpoint", () => {
@@ -58,7 +61,15 @@ describe('margin="auto"', () => {
       join(__dirname, "../../../foundations/scss/styles/spacing.generated.scss"),
       "utf8",
     );
-    for (const prefix of ["m", "mx", "my", "mt", "mr", "mb", "ml"]) {
+    for (const prefix of [
+      "margin",
+      "margin-x",
+      "margin-y",
+      "margin-top",
+      "margin-right",
+      "margin-bottom",
+      "margin-left",
+    ]) {
       expect(css).toContain(`.${prefix}-auto {`);
       for (const bp of ["xl", "l", "m", "s", "xs"])
         expect(css).toContain(`.${bp}-${prefix}-auto {`);
@@ -91,22 +102,30 @@ interface RevenuePoint {
 
 describe("chart data typed with an interface", () => {
   it("is accepted by every chart, readonly arrays too", () => {
-    expectTypeOf<RevenuePoint[]>().toExtend<LineChartProps["data"]>();
-    expectTypeOf<readonly RevenuePoint[]>().toExtend<LineChartProps["data"]>();
-    expectTypeOf<RevenuePoint[]>().toExtend<BarChartProps["data"]>();
-    expectTypeOf<RevenuePoint[]>().toExtend<PieChartProps["data"]>();
+    // 3.0's charts are generic over the row type, inferred from `data`.
+    expectTypeOf<RevenuePoint[]>().toExtend<LineChartProps<RevenuePoint>["data"]>();
+    expectTypeOf<readonly RevenuePoint[]>().toExtend<LineChartProps<RevenuePoint>["data"]>();
+    expectTypeOf<RevenuePoint[]>().toExtend<BarChartProps<RevenuePoint>["data"]>();
+    expectTypeOf<RevenuePoint[]>().toExtend<PieChartProps<RevenuePoint>["data"]>();
     // Still rows, not bare values.
     expectTypeOf<number[]>().not.toExtend<LineChartProps["data"]>();
   });
 
-  it("draws the same chart as the index-signature rows", () => {
-    const rows: RevenuePoint[] = [
+  it("draws the same chart as the index-signature rows", async () => {
+    const rows: readonly RevenuePoint[] = [
       { month: "Jan", revenue: 10 },
       { month: "Feb", revenue: 20 },
     ];
-    const { container } = render(
-      <LineChart title="Revenue" height={24} series={{ key: "revenue" }} data={rows} />,
-    );
+    // Typed as the public, generic props; the impl takes them as DataPoint rows.
+    const props: LineChartProps<RevenuePoint> = {
+      title: "Revenue",
+      height: "24rem",
+      series: { key: "revenue" },
+      data: rows,
+    };
+    const { container } = render(<LineChart {...(props as unknown as LineChartProps)} />, {
+      wrapper: wrap,
+    });
     expect(screen.getByText("Revenue")).toBeTruthy();
     expect((container.firstElementChild as HTMLElement).style.height).toBe("24rem");
   });
@@ -125,12 +144,13 @@ describe("a DateRange value with optional ends", () => {
     const onChange = vi.fn();
     const empty: Range = {};
     const { container, rerender } = render(
-      <DateRangeInput
+      <DateInput
+        range
         id="stay"
         startLabel="Check-in"
         endLabel="Check-out"
         value={empty}
-        onChange={onChange}
+        onValueChange={onChange}
       />,
       { wrapper: wrap },
     );
@@ -142,12 +162,13 @@ describe("a DateRange value with optional ends", () => {
 
     const startOnly: Range = { startDate: new Date(2026, 0, 5) };
     rerender(
-      <DateRangeInput
+      <DateInput
+        range
         id="stay"
         startLabel="Check-in"
         endLabel="Check-out"
         value={startOnly}
-        onChange={onChange}
+        onValueChange={onChange}
       />,
     );
     await waitFor(() => expect(start().value).toBe("Jan 5, 2026"));
@@ -166,8 +187,8 @@ describe("a DateRange value with optional ends", () => {
     expect(Object.keys(picked).sort()).toEqual(["endDate", "startDate"]);
   });
 
-  it("is accepted by DateRangePicker too", () => {
-    const { container } = render(<DateRangePicker value={{}} onChange={() => {}} />, {
+  it("is accepted by DatePicker range too", () => {
+    const { container } = render(<DatePicker range value={{}} onValueChange={() => {}} />, {
       wrapper: wrap,
     });
     expect(container.firstElementChild).toBeTruthy();

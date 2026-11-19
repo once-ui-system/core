@@ -1,8 +1,7 @@
 "use client";
 
 import {
-  AutoScroll,
-  Badge,
+  Scroller,
   Button,
   Column,
   Dialog,
@@ -13,11 +12,11 @@ import {
   Media,
   Row,
   SegmentedControl,
-  ShineFx,
   Tag,
   Text,
   useToast,
 } from "@once-ui-system/core";
+import { ShineFx } from "@once-ui-system/fx";
 import type React from "react";
 import { useEffect, useState } from "react";
 import { blocks } from "@/resources";
@@ -99,7 +98,7 @@ const Docs: React.FC = () => {
         <Column
           as="section"
           fillWidth
-          minHeight={36}
+          minHeight="36rem"
           center
           radius="xl"
           border
@@ -111,8 +110,9 @@ const Docs: React.FC = () => {
           <Column position="absolute" top="0" left="0" fill pointerEvents="none" aria-hidden="true">
             <HeroMosaic />
           </Column>
-          <Column horizontal="center" gap="24" zIndex={1} maxWidth={44}>
-            <Badge
+          <Column horizontal="center" gap="24" zIndex={1} maxWidth="44rem">
+            <Tag
+              variant="announce"
               effect={false}
               tabIndex={0}
               paddingY="8"
@@ -135,31 +135,26 @@ const Docs: React.FC = () => {
                 }
               }}
             >
-              <Icon
-                padding="4"
-                border="brand-alpha-medium"
-                background="brand-alpha-weak"
-                radius="full"
-                name="sparkle"
-                size="xs"
-              />
-              <ShineFx speed={3000} inverse baseOpacity={0.6}>
+              <Row fit padding="4" border="brand-alpha-medium" background="brand-alpha-weak" radius="full">
+                <Icon name="sparkle" size="xs" />
+              </Row>
+              <ShineFx duration={3000} inverse baseOpacity={0.6}>
                 What's new?
               </ShineFx>
-            </Badge>
+            </Tag>
             <Heading
               as="h1"
               align="center"
-              variant="display-default-l"
+              textVariant="display-default-l"
               style={{ lineHeight: "1.05" }}
             >
               Let Once UI fight
               <br /> your <Text onBackground="brand-medium">CSS battles</Text>
             </Heading>
-            <Column maxWidth={32}>
+            <Column maxWidth="32rem">
               <Text
                 align="center"
-                variant="body-default-l"
+                textVariant="body-default-l"
                 onBackground="neutral-medium"
                 wrap="balance"
               >
@@ -179,7 +174,7 @@ const Docs: React.FC = () => {
         </Column>
 
         <Column as="section" fillWidth gap="24" aria-labelledby="how-it-works">
-          <Heading id="how-it-works" as="h2" variant="display-strong-xs">
+          <Heading id="how-it-works" as="h2" textVariant="display-strong-xs">
             How it works
           </Heading>
           <Grid
@@ -194,11 +189,11 @@ const Docs: React.FC = () => {
           >
             {steps.map((step, index) => (
               <Column key={step.title} background="surface" padding="24" gap="12">
-                <Text variant="code-default-s" onBackground="brand-medium">
+                <Text textVariant="code-default-s" onBackground="brand-medium">
                   {String(index + 1).padStart(2, "0")}
                 </Text>
-                <Text variant="heading-strong-m">{step.title}</Text>
-                <Text variant="body-default-s" onBackground="neutral-weak">
+                <Text textVariant="heading-strong-m">{step.title}</Text>
+                <Text textVariant="body-default-s" onBackground="neutral-weak">
                   {step.body}
                 </Text>
                 {step.code && <CommandLine command={step.code} />}
@@ -217,10 +212,10 @@ const Docs: React.FC = () => {
         >
           <Row fillWidth wrap gap="16" vertical="center">
             <Row gap="12" vertical="center">
-              <Heading id="explore-sections" as="h2" variant="display-strong-xs">
+              <Heading id="explore-sections" as="h2" textVariant="display-strong-xs">
                 Explore by section
               </Heading>
-              <Tag size="m" scheme="brand">
+              <Tag size="m" tone="brand">
                 Pro
               </Tag>
             </Row>
@@ -228,13 +223,13 @@ const Docs: React.FC = () => {
             <SegmentedControl
               fillWidth={false}
               value={activeSection}
-              onChange={setActiveSection}
+              onValueChange={setActiveSection}
               buttons={sections.map((section) => ({ value: section.key, label: section.title }))}
             />
           </Row>
           {current && (
             <Column fillWidth gap="16">
-              <Text variant="label-default-s" onBackground="neutral-weak">
+              <Text textVariant="label-default-s" onBackground="neutral-weak">
                 {current.items.length} {current.items.length === 1 ? "category" : "categories"} ·{" "}
                 {current.blockCount} blocks
               </Text>
@@ -266,32 +261,28 @@ function HeroMosaic() {
     <>
       <Column className={styles.mosaic} gap="16" vertical="center" opacity={50}>
         {mosaicRows.map((row, index) => (
-          <AutoScroll
+          <Scroller auto={{ speed: "slow", hover: "none", reverse: index % 2 === 1, gap: "16" }}
             key={row[0]?.href ?? index}
-            speed="slow"
-            hover="none"
-            reverse={index % 2 === 1}
-            scrollGap="16"
           >
             {row.map((item) => (
-              <Column key={item.href} width={20} radius="m" border overflow="hidden">
+              <Column key={item.href} width="20rem" radius="m" border overflow="hidden">
                 <Media
                   sizes="320px"
-                  dark
+                  showIn="dark"
                   src={item.image?.dark || ""}
                   alt=""
                   aspectRatio="960/880"
                 />
                 <Media
                   sizes="320px"
-                  light
+                  showIn="light"
                   src={item.image?.light || ""}
                   alt=""
                   aspectRatio="960/880"
                 />
               </Column>
             ))}
-          </AutoScroll>
+          </Scroller>
         ))}
       </Column>
       <Column className={styles.fade} position="absolute" top="0" left="0" fill />
@@ -306,9 +297,9 @@ function CommandLine({ command }: { command: string }) {
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(command);
-      addToast({ variant: "success", message: "Command copied" });
+      addToast({ tone: "success", message: "Command copied" });
     } catch {
-      addToast({ variant: "danger", message: "Couldn't copy to the clipboard" });
+      addToast({ tone: "danger", message: "Couldn't copy to the clipboard" });
     }
   };
 
@@ -324,7 +315,7 @@ function CommandLine({ command }: { command: string }) {
       border
       background="overlay"
     >
-      <Text as="code" variant="code-default-xs" onBackground="neutral-strong" truncate>
+      <Text as="code" textVariant="code-default-xs" onBackground="neutral-strong" truncate>
         {command}
       </Text>
       <Row flex={1} />

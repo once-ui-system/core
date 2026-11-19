@@ -3,11 +3,12 @@ import { Animated } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 import type { TShirtSizes } from "../types";
 import { type FlexProps, flexStyle } from "./Flex";
-import { useReduceMotion } from "./motion";
+import { nativeDriver } from "./motion";
+import { useReduceMotion } from "./useReduceMotion";
 
 /**
  * As core, Skeleton takes the Flex props, so `width`, `height`, `fillWidth`
- * and the rest work as on any Flex: numbers are rem, or a spacing token or
+ * and the rest work as on any Flex: numbers are points, or a spacing token or
  * a percentage.
  */
 export interface SkeletonProps extends Omit<FlexProps, "children"> {
@@ -32,8 +33,8 @@ export function Skeleton({ shape = "line", size = "m", delay = 0, ...flex }: Ske
     if (reduceMotion) return;
     const pulse = Animated.loop(
       Animated.sequence([
-        Animated.timing(opacity, { toValue: 0.4, duration: 800, useNativeDriver: true }),
-        Animated.timing(opacity, { toValue: 1, duration: 800, useNativeDriver: true }),
+        Animated.timing(opacity, { toValue: 0.4, duration: 800, useNativeDriver: nativeDriver }),
+        Animated.timing(opacity, { toValue: 1, duration: 800, useNativeDriver: nativeDriver }),
       ]),
     );
     const timer = setTimeout(() => pulse.start(), delay);

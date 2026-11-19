@@ -35,7 +35,7 @@ describe("icons", () => {
     );
     const svg = container.querySelector("svg");
     expect(svg?.getAttribute("width")).toBe(String(2 * rem));
-    expect(container.querySelector("path")?.getAttribute("d")).toContain("M13.5 4.5");
+    expect(container.querySelector("path")?.getAttribute("d")).toContain("M5.25 12L17.75 12");
   });
 
   it("takes icon names on Button and Tag, as core does", () => {
@@ -48,12 +48,12 @@ describe("icons", () => {
     expect(container.querySelectorAll("svg")).toHaveLength(2);
   });
 
-  it("names an IconButton from ariaLabel and draws registered icons", () => {
+  it("names an IconButton from aria-label and draws registered icons", () => {
     const Rocket = ({ size }: { size: number }) => <span data-testid="rocket">{size}</span>;
     render(
       <ThemeProvider theme="light">
         <IconProvider icons={{ rocket: Rocket }}>
-          <IconButton icon={"rocket" as "refresh"} ariaLabel="Launch" />
+          <IconButton icon={"rocket" as "refresh"} aria-label="Launch" />
         </IconProvider>
       </ThemeProvider>,
     );

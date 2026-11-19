@@ -4,7 +4,7 @@ import {
   handleOGProxy,
   type OGFetchOptions,
   type OGProxyOptions,
-} from "../server/og-utils";
+} from "../server/og-utils.js";
 
 /**
  * Ready-made Open Graph route handlers for the App Router, with SSRF

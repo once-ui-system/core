@@ -1,10 +1,16 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import type React from "react";
 import { useEffect } from "react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { loadToast } from "../components/Toaster";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { ToastProvider, useToast } from "../contexts/ToastProvider";
 import { expectNoAxeViolations } from "../test/axe";
+
+// Toast loads after the page (see Toaster); these tests add toasts synchronously.
+beforeAll(async () => {
+  await loadToast();
+});
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>
@@ -39,7 +45,7 @@ describe("ToastProvider identity", () => {
         effect();
       }, [addToast, removeToast]);
       return (
-        <button type="button" onClick={() => addToast({ variant: "success", message: "Saved" })}>
+        <button type="button" onClick={() => addToast({ tone: "success", message: "Saved" })}>
           Save
         </button>
       );
@@ -61,8 +67,8 @@ describe("ToastProvider identity", () => {
     let first = "";
     let second = "";
     act(() => {
-      first = api.addToast({ variant: "info", message: "First" });
-      second = api.addToast({ variant: "info", message: "Second" });
+      first = api.addToast({ tone: "info", message: "First" });
+      second = api.addToast({ tone: "info", message: "Second" });
     });
 
     expect(typeof first).toBe("string");
@@ -86,7 +92,7 @@ describe("toast duration", () => {
   it("keeps today's six seconds by default", () => {
     render(<Capture />, { wrapper: wrap });
     act(() => {
-      api.addToast({ variant: "success", message: "Default" });
+      api.addToast({ tone: "success", message: "Default" });
     });
 
     act(() => vi.advanceTimersByTime(5999));
@@ -98,8 +104,8 @@ describe("toast duration", () => {
   it("honours a per-toast duration", () => {
     render(<Capture />, { wrapper: wrap });
     act(() => {
-      api.addToast({ variant: "success", message: "Short", duration: 1000 });
-      api.addToast({ variant: "success", message: "Long", duration: 3000 });
+      api.addToast({ tone: "success", message: "Short", duration: 1000 });
+      api.addToast({ tone: "success", message: "Long", duration: 3000 });
     });
 
     act(() => vi.advanceTimersByTime(1000));
@@ -112,7 +118,7 @@ describe("toast duration", () => {
   it("stays up until closed with an infinite duration", () => {
     render(<Capture />, { wrapper: wrap });
     act(() => {
-      api.addToast({ variant: "warning", message: "Sticky", duration: Infinity });
+      api.addToast({ tone: "warning", message: "Sticky", duration: Infinity });
     });
 
     act(() => vi.advanceTimersByTime(60_000));
@@ -122,7 +128,7 @@ describe("toast duration", () => {
   it("pauses while hovered and resumes with what was left", () => {
     render(<Capture />, { wrapper: wrap });
     act(() => {
-      api.addToast({ variant: "info", message: "Hover me", duration: 1000 });
+      api.addToast({ tone: "info", message: "Hover me", duration: 1000 });
     });
 
     act(() => vi.advanceTimersByTime(600));
@@ -141,7 +147,7 @@ describe("toast duration", () => {
     render(<Capture />, { wrapper: wrap });
     act(() => {
       api.addToast({
-        variant: "info",
+        tone: "info",
         message: "Focus me",
         duration: 1000,
         action: (
@@ -172,9 +178,9 @@ describe("toast announcements", () => {
       "polite",
     );
     act(() => {
-      api.addToast({ variant: "success", message: "Saved" });
-      api.addToast({ variant: "info", message: "Heads up" });
-      api.addToast({ variant: "warning", message: "Careful" });
+      api.addToast({ tone: "success", message: "Saved" });
+      api.addToast({ tone: "info", message: "Heads up" });
+      api.addToast({ tone: "warning", message: "Careful" });
     });
 
     for (const text of ["Saved", "Heads up", "Careful"]) {
@@ -187,7 +193,7 @@ describe("toast announcements", () => {
   it("is an alert for danger", () => {
     render(<Capture />, { wrapper: wrap });
     act(() => {
-      api.addToast({ variant: "danger", message: "Failed" });
+      api.addToast({ tone: "danger", message: "Failed" });
     });
 
     expect(toastWith("Failed")).toHaveAttribute("role", "alert");
@@ -196,8 +202,8 @@ describe("toast announcements", () => {
   it("has no axe violations", async () => {
     render(<Capture />, { wrapper: wrap });
     act(() => {
-      api.addToast({ variant: "success", message: "Saved" });
-      api.addToast({ variant: "danger", message: "Failed" });
+      api.addToast({ tone: "success", message: "Saved" });
+      api.addToast({ tone: "danger", message: "Failed" });
     });
 
     await expectNoAxeViolations(document.body);

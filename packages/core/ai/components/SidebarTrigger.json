@@ -1,0 +1,28 @@
+{
+ "name": "SidebarTrigger",
+ "partOf": "Sidebar",
+ "purpose": "Button that folds the Sidebar, or opens its drawer on phones",
+ "group": "components",
+ "props": {
+  "icon": "IconName",
+  "tooltip": "ReactNode",
+  "size": "React.ComponentProps<typeof IconButton>[\"size\"]",
+  "variant": "React.ComponentProps<typeof IconButton>[\"variant\"] = tertiary",
+  "className": "string",
+  "style": "React.CSSProperties",
+  "onClick": "React.MouseEventHandler<HTMLElement>",
+  "labels": "{ collapse?: string; expand?: string; menu?: string }"
+ },
+ "tags": [
+  "navigation"
+ ],
+ "pairsWith": [
+  "SidebarProvider",
+  "Sidebar"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "BuiltInIconName": "keyof typeof iconData",
+  "IconName": "BuiltInIconName | Extract<keyof IconLibraryOverrides, string>"
+ }
+}

@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { useState } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { Modal } from "../components/Modal";
+import { Dialog } from "../components/Dialog";
 import { resetScrollLockState } from "../components/ScrollLock";
 import { Select } from "../components/Select";
 import { LayoutProvider } from "../contexts/LayoutProvider";
@@ -48,7 +48,7 @@ describe("an uncontrolled Select", () => {
   it("shows the option picked and reports it once", async () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();
-    render(<Select id="s" label="Pick" options={options} onSelect={onSelect} />, {
+    render(<Select id="s" label="Pick" options={options} onValueChange={onSelect} />, {
       wrapper: wrap,
     });
 
@@ -66,7 +66,7 @@ describe("an uncontrolled Select", () => {
   it("keeps a multiple Select's list, adding and removing", async () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();
-    render(<Select id="s" label="Pick" multiple options={options} onSelect={onSelect} />, {
+    render(<Select id="s" label="Pick" multiple options={options} onValueChange={onSelect} />, {
       wrapper: wrap,
     });
 
@@ -86,7 +86,7 @@ describe("a controlled Select", () => {
   it("shows its value and stays on it when the parent does not take the pick", async () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();
-    render(<Select id="s" label="Pick" options={options} value="a" onSelect={onSelect} />, {
+    render(<Select id="s" label="Pick" options={options} value="a" onValueChange={onSelect} />, {
       wrapper: wrap,
     });
     expect(field()).toHaveValue("Alpha");
@@ -115,7 +115,7 @@ describe("Select options", () => {
         id="s"
         label="Pick"
         options={[{ value: "a", label: "Alpha", onClick }, ...options.slice(1)]}
-        onSelect={onSelect}
+        onValueChange={onSelect}
       />,
       { wrapper: wrap },
     );
@@ -128,7 +128,7 @@ describe("Select options", () => {
   it("does not pick a disabled option from a click", async () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();
-    render(<Select id="s" label="Pick" options={options} onSelect={onSelect} />, {
+    render(<Select id="s" label="Pick" options={options} onValueChange={onSelect} />, {
       wrapper: wrap,
     });
     await open(user);
@@ -141,7 +141,7 @@ describe("Select options", () => {
   it("picks the last enabled option with End, then Enter", async () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();
-    render(<Select id="s" label="Pick" options={options} onSelect={onSelect} />, {
+    render(<Select id="s" label="Pick" options={options} onValueChange={onSelect} />, {
       wrapper: wrap,
     });
     await user.tab();
@@ -210,7 +210,7 @@ describe("a searchable Select", () => {
   it("filters case-insensitively and picks the first match with Enter", async () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();
-    render(<Select id="s" label="Pick" searchable options={options} onSelect={onSelect} />, {
+    render(<Select id="s" label="Pick" searchable options={options} onValueChange={onSelect} />, {
       wrapper: wrap,
     });
     await open(user);
@@ -231,9 +231,9 @@ describe("Select in a Modal", () => {
     const Harness = () => {
       const [open, setOpen] = useState(true);
       return (
-        <Modal open={open} onClose={() => setOpen(false)} title="Settings">
+        <Dialog variant="sheet" open={open} onClose={() => setOpen(false)} title="Settings">
           <Select id="s" label="Pick" options={options} />
-        </Modal>
+        </Dialog>
       );
     };
     render(<Harness />, { wrapper: wrap });

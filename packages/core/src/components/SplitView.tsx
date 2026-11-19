@@ -2,12 +2,12 @@
 
 import type React from "react";
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
-import { type BreakpointKey, useLayout } from "../contexts/LayoutProvider";
-import { useScrollableTabStop } from "../internal/scrollableTabStop";
-import { Card } from "./Card";
-import { Column } from "./Column";
-import { Row } from "./Row";
-import { SegmentedControl } from "./SegmentedControl";
+import { type BreakpointKey, useLayout } from "../contexts/LayoutProvider.js";
+import { useScrollableTabStop } from "../internal/scrollableTabStop.js";
+import { Card } from "./Card.js";
+import { Column } from "./Column.js";
+import { Row } from "./Row.js";
+import { SegmentedControl } from "./SegmentedControl.js";
 
 interface SplitViewProps extends React.ComponentProps<typeof Row> {
   leftPanel: ReactNode;
@@ -158,7 +158,7 @@ function SplitView({
             { value: "right", label: rightLabel },
           ]}
           value={activePanel}
-          onChange={(value) => setActivePanel(value === "right" ? "right" : "left")}
+          onValueChange={(value) => setActivePanel(value === "right" ? "right" : "left")}
         />
         <Column fill overflowY="auto" minHeight={0}>
           {activePanel === "left" ? leftPanel : rightPanel}
@@ -223,7 +223,7 @@ function SplitView({
         {/* A pill 4px thick. It used to fill the gutter's width, which the
             gutter's own padding leaves at zero, so only the card's border
             showed and the fill never did — not even while dragging. */}
-        <Row width={isHorizontal ? "4" : 8} height={isHorizontal ? 8 : "4"}>
+        <Row width={isHorizontal ? "4" : "8rem"} height={isHorizontal ? "8rem" : "4"}>
           <Card
             fill
             background={isDragging ? "neutral-strong" : "neutral-weak"}

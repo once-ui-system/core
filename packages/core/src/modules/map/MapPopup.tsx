@@ -2,11 +2,11 @@
 
 import type React from "react";
 import { useEffect, useRef } from "react";
-import { Column } from "../../components/Column";
-import { IconButton } from "../../components/IconButton";
-import { useMap } from "./MapContext";
-import { MapMarker } from "./MapMarker";
-import type { LngLat } from "./types";
+import { Column } from "../../components/Column.js";
+import { IconButton } from "../../components/IconButton.js";
+import { useMap } from "./MapContext.js";
+import { MapMarker } from "./MapMarker.js";
+import type { LngLat } from "./types.js";
 
 export interface MapPopupProps
   extends Omit<React.ComponentProps<typeof Column>, "children" | "position"> {
@@ -24,14 +24,14 @@ export interface MapPopupProps
  * A card above a point, drawn with core surfaces. Render it while it is open,
  * as you would a Dialog; Escape and the close button call `onClose`.
  */
-const MapPopup: React.FC<MapPopupProps> = ({
+const MapPopup = ({
   position,
   children,
   onClose,
   gap = 40,
   closeLabel = "Close",
   ...flex
-}) => {
+}: MapPopupProps) => {
   const { map, reducedMotion } = useMap();
   const card = useRef<HTMLDivElement>(null);
   const [lng, lat] = position;
@@ -82,8 +82,8 @@ const MapPopup: React.FC<MapPopupProps> = ({
         shadow="l"
         padding="16"
         gap="8"
-        minWidth={14}
-        maxWidth={20}
+        minWidth={224}
+        maxWidth={320}
         position="relative"
         style={{ zIndex: 3, cursor: "auto" }}
         {...flex}

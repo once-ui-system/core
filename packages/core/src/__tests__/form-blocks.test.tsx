@@ -132,6 +132,33 @@ describe("Field", () => {
     expect(container.querySelector("[span]")).toBeNull();
     expect(container.querySelector('[data-testid="form-cell-0"]')?.className).toMatch(/span-2/);
   });
+  it("warns when a control inside it sets its own label or messages", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      render(
+        <Field label="Email" error="Required">
+          <Input id="email" label="Email" errorMessage="Required" />
+        </Field>,
+      );
+      const hints = warn.mock.calls.map((call) => String(call[0]));
+      expect(
+        hints.some((hint) => /Input "email" is inside a Field.*label, errorMessage/.test(hint)),
+      ).toBe(true);
+
+      warn.mockClear();
+      render(
+        <>
+          <Field label="Note">
+            <Textarea id="note" />
+          </Field>
+          <Input id="alone" label="Alone" description="On its own" />
+        </>,
+      );
+      expect(warn.mock.calls.some((call) => /inside a Field/.test(String(call[0])))).toBe(false);
+    } finally {
+      warn.mockRestore();
+    }
+  });
 });
 
 describe("Fieldset", () => {

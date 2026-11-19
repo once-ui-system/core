@@ -1,0 +1,29 @@
+{
+ "name": "SceneGroup",
+ "group": "scene",
+ "importFrom": "@once-ui-system/core/scene",
+ "props": {
+  "onClick": "() => void",
+  "onPointerEnter": "() => void",
+  "onPointerLeave": "() => void",
+  "position": "Vec3",
+  "rotation": "Vec3",
+  "scale": "number | Vec3",
+  "visible": "boolean",
+  "name": "string",
+  "children": "React.ReactNode"
+ },
+ "tags": [
+  "3d"
+ ],
+ "pairsWith": [
+  "Scene",
+  "SceneMesh"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "Vec3": {
+   "[key: number]": "number"
+  }
+ }
+}

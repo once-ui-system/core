@@ -5,7 +5,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 const require = createRequire(import.meta.url);
-const { run, MARKER_START, MARKER_END } = require("../../scripts/init-agent.js");
+const { run, MARKER_START, MARKER_END } = require("../../scripts/init-agent.cjs");
 
 type Result = { path: string; status: string; reason?: string };
 

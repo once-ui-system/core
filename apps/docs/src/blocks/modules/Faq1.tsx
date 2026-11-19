@@ -21,7 +21,7 @@ export const Faq1: React.FC<Faq1Props> = ({
     <Column fillWidth horizontal="center" {...flex}>
       <Column maxWidth="xs" horizontal="center">
         {title && (
-          <Heading as="h2" variant="display-strong-xs" align="center" marginBottom="8">
+          <Heading as="h2" textVariant="display-strong-xs" align="center" marginBottom="8">
             {title}
           </Heading>
         )}
@@ -29,7 +29,7 @@ export const Faq1: React.FC<Faq1Props> = ({
           <Text
             align="center"
             onBackground="neutral-medium"
-            variant="body-default-xl"
+            textVariant="body-default-xl"
             marginBottom="32"
           >
             {description}
@@ -38,8 +38,8 @@ export const Faq1: React.FC<Faq1Props> = ({
         <Column fillWidth fitHeight radius="l" border overflow="hidden" background="surface">
           {content.map((item, index) => (
             <React.Fragment key={index}>
-              <Accordion title={<Text variant="body-default-s">{item.title}</Text>}>
-                <Text variant="body-default-s" onBackground="neutral-medium">
+              <Accordion title={<Text textVariant="body-default-s">{item.title}</Text>}>
+                <Text textVariant="body-default-s" onBackground="neutral-medium">
                   {item.content}
                 </Text>
               </Accordion>
@@ -50,7 +50,7 @@ export const Faq1: React.FC<Faq1Props> = ({
         <Text
           align="center"
           wrap="balance"
-          variant="body-default-s"
+          textVariant="body-default-s"
           onBackground="neutral-medium"
           marginTop="20"
         >

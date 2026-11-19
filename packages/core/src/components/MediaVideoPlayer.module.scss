@@ -7,6 +7,14 @@
   background: var(--neutral-solid-strong);
   outline: none;
 
+  // The player is a tab stop of its own (Space plays, arrows seek), so a
+  // keyboard user needs to see when it holds focus. Inset, because the
+  // container fills its box and an outside ring would be clipped.
+  &:focus-visible {
+    outline: var(--static-space-2) solid var(--brand-solid-strong);
+    outline-offset: calc(-1 * var(--static-space-2));
+  }
+
   &:fullscreen,
   &:-webkit-full-screen {
     .video {

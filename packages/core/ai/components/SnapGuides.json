@@ -1,0 +1,23 @@
+{
+ "name": "SnapGuides",
+ "group": "canvas",
+ "importFrom": "@once-ui-system/core/canvas",
+ "props": {
+  "guides": "!CanvasGuide[]",
+  "showGaps": "boolean = true",
+  "formatGap": "(gap: number) => string"
+ },
+ "tags": [
+  "canvas"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "CanvasGuide": {
+   "axis": "!\"x\" | \"y\"",
+   "at": "!number",
+   "start": "!number",
+   "end": "!number",
+   "gap": "number"
+  }
+ }
+}

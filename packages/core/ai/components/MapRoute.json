@@ -1,0 +1,35 @@
+{
+ "name": "MapRoute",
+ "group": "map",
+ "importFrom": "@once-ui-system/core/map",
+ "props": {
+  "path": "!readonly LngLat[]",
+  "tone": "MapTone = brand",
+  "width": "number = 4",
+  "progress": "number",
+  "dashed": "boolean = false"
+ },
+ "tags": [
+  "map",
+  "location"
+ ],
+ "pairsWith": [
+  "Map",
+  "MapMarker"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "LngLat": {
+   "[key: number]": "number"
+  },
+  "MapTone": [
+   "neutral",
+   "brand",
+   "accent",
+   "info",
+   "danger",
+   "warning",
+   "success"
+  ]
+ }
+}

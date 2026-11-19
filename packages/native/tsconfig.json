@@ -11,7 +11,10 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "noEmit": true,
-    "types": []
+    "types": [],
+    // ai/examples import the package by name, as an app does; this points
+    // them at the source so the typecheck covers them.
+    "paths": { "@once-ui-system/native": ["./src/index.ts"] }
   },
-  "include": ["src", "test", "test-native", "demo-src"]
+  "include": ["src", "test", "test-native", "demo-src", "ai/examples"]
 }

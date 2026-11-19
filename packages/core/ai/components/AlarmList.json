@@ -1,0 +1,68 @@
+{
+ "name": "AlarmList",
+ "group": "components",
+ "props": {
+  "alarms": "!readonly Alarm[] = []",
+  "onAcknowledge": "(ids: string[]) => void",
+  "showNormal": "boolean = false",
+  "showShelved": "boolean = false",
+  "header": "React.ReactNode | false",
+  "announce": "boolean = true",
+  "locale": "string",
+  "timeZone": "string",
+  "labels": "AnnunciatorLabels"
+ },
+ "tags": [
+  "data",
+  "feedback"
+ ],
+ "pairsWith": [
+  "Annunciator",
+  "Button"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "Alarm": {
+   "id": "!string",
+   "label": "!string",
+   "priority": "!AlarmPriority",
+   "active": "!boolean",
+   "acknowledged": "!boolean",
+   "tag": "string",
+   "since": "Date | string | number",
+   "detail": "string",
+   "shelved": "boolean"
+  },
+  "AlarmLabels": {
+   "priority": "!Record<AlarmPriority, string>",
+   "state": "!Record<AlarmState, string>",
+   "acknowledge": "!string",
+   "acknowledgeAll": "!string",
+   "announce": "!(alarm: Alarm, priority: string) => string",
+   "empty": "!string",
+   "counts": "!(active: number, unacknowledged: number) => string"
+  },
+  "AlarmPriority": [
+   "medium",
+   "critical",
+   "high",
+   "low"
+  ],
+  "AlarmState": [
+   "normal",
+   "shelved",
+   "unacknowledged",
+   "acknowledged",
+   "returned"
+  ],
+  "AnnunciatorLabels": {
+   "acknowledge": "string",
+   "acknowledgeAll": "string",
+   "announce": "(alarm: Alarm, priority: string) => string",
+   "empty": "string",
+   "counts": "(active: number, unacknowledged: number) => string",
+   "priority": "Partial<AlarmLabels[\"priority\"]>",
+   "state": "Partial<AlarmLabels[\"state\"]>"
+  }
+ }
+}

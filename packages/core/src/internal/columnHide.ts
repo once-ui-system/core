@@ -1,6 +1,6 @@
 import tableStyles from "../components/Table.module.scss";
-import type { BreakpointKey } from "../contexts/LayoutProvider";
-import { hiddenAboveBreakpoints } from "../utils/layoutClasses";
+import type { BreakpointKey } from "../contexts/LayoutProvider.js";
+import { hiddenAboveBreakpoints } from "../utils/layoutClasses.js";
 
 /**
  * Where a table column hides, by breakpoint: `{ s: true }` hides it at the `s`

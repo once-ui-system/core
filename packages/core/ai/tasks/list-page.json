@@ -13,7 +13,7 @@
     "Table",
     "Tag",
     "Skeleton",
-    "DropdownWrapper",
+    "Dropdown",
     "Option",
     "Map",
     "MapMarkers",
@@ -44,9 +44,11 @@
   "quality": {
     "pageHeader": "Title and one primary Button in a Row that stacks at s; per-record actions belong in the Table's actions, not the header",
     "cellText": "A component cell (name with email, a status Tag) carries its text as children — Table searches and sorts by the text inside each cell",
-    "status": "Tag with a scheme and a text label, never colour alone",
+    "status": "Tag with a tone and a text label, never colour alone",
     "emptyState": "Offer the way back (clear the filter), not only 'No results'",
-    "rowActions": "Icon actions with tooltips; destructive ones take variant=\"danger\"",
-    "map": "Records with a location: a Map beside the list (MapMarkers with cluster, activeId = the hovered row, bounds = the results' positions); it stacks under the list at s"
+    "rowActions": "Icon actions with tooltips; destructive ones take tone=\"danger\"",
+    "map": "Records with a location: a Map beside the list (MapMarkers with cluster, activeId = the hovered row, bounds = the results' positions); it stacks under the list at s",
+    "states": "Every view that loads data shows loading (Skeleton shaped like the content), empty (title, one line, the action that fills it), error (Feedback tone=\"danger\" with Retry) and filled, through a typed lib/ data layer of async functions over mock data — even when the brief never mentions data",
+    "writes": "Writes are optimistic: loading on the pressed Button, rollback plus addToast({ tone: \"danger\" }) when the save fails"
   }
 }

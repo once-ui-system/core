@@ -23,7 +23,7 @@ describe("Switch accessibility", () => {
         label="Wi-Fi"
         description="Join known networks"
         checked={false}
-        onToggle={() => {}}
+        onCheckedChange={() => {}}
       />,
       { wrapper: wrap },
     );
@@ -38,61 +38,60 @@ describe("Switch accessibility", () => {
 
   it("toggles from the keyboard on the focused switch", async () => {
     const user = userEvent.setup();
-    const onToggle = vi.fn();
-    render(<Switch label="Wi-Fi" checked={false} onToggle={onToggle} />, { wrapper: wrap });
+    const onCheckedChange = vi.fn();
+    render(<Switch label="Wi-Fi" checked={false} onCheckedChange={onCheckedChange} />, {
+      wrapper: wrap,
+    });
 
     await user.tab();
     await user.keyboard(" ");
     await user.keyboard("{Enter}");
-    expect(onToggle).toHaveBeenCalledTimes(2);
+    expect(onCheckedChange).toHaveBeenCalledTimes(2);
   });
 
   it("toggles from a click on the label", async () => {
     const user = userEvent.setup();
-    const onToggle = vi.fn();
-    render(<Switch label="Wi-Fi" checked={false} onToggle={onToggle} />, { wrapper: wrap });
+    const onCheckedChange = vi.fn();
+    render(<Switch label="Wi-Fi" checked={false} onCheckedChange={onCheckedChange} />, {
+      wrapper: wrap,
+    });
 
     await user.click(screen.getByText("Wi-Fi"));
-    expect(onToggle).toHaveBeenCalledTimes(1);
+    expect(onCheckedChange).toHaveBeenCalledTimes(1);
   });
 
   it("reports its state", () => {
-    const { rerender } = render(<Switch label="Wi-Fi" checked={false} onToggle={() => {}} />, {
-      wrapper: wrap,
-    });
+    const { rerender } = render(
+      <Switch label="Wi-Fi" checked={false} onCheckedChange={() => {}} />,
+      {
+        wrapper: wrap,
+      },
+    );
     expect(screen.getByRole("switch", { name: "Wi-Fi" })).not.toBeChecked();
 
-    rerender(<Switch label="Wi-Fi" checked onToggle={() => {}} />);
+    rerender(<Switch label="Wi-Fi" checked onCheckedChange={() => {}} />);
     expect(screen.getByRole("switch", { name: "Wi-Fi" })).toBeChecked();
   });
 
-  it("is named by ariaLabel when there is no visible label", async () => {
+  it("is named by aria-label when there is no visible label", async () => {
     const { container } = render(
-      <Switch ariaLabel="Dark mode" checked={false} onToggle={() => {}} />,
+      <Switch aria-label="Dark mode" checked={false} onCheckedChange={() => {}} />,
       { wrapper: wrap },
     );
     expect(screen.getByRole("switch", { name: "Dark mode" })).toBeInTheDocument();
     await expectNoAxeViolations(container);
   });
 
-  it("accepts native aria-label, which wins over ariaLabel", () => {
-    render(
-      <Switch aria-label="Native name" ariaLabel="Prop name" checked={false} onToggle={() => {}} />,
-      { wrapper: wrap },
-    );
-    expect(screen.getByRole("switch", { name: "Native name" })).toBeInTheDocument();
-  });
-
   it("keeps the documented fallback name when given nothing else", () => {
-    render(<Switch checked={false} onToggle={() => {}} />, { wrapper: wrap });
+    render(<Switch checked={false} onCheckedChange={() => {}} />, { wrapper: wrap });
     expect(screen.getByRole("switch", { name: "Toggle switch" })).toBeInTheDocument();
   });
 
   it("stays out of the tab order and inert when disabled", async () => {
     const user = userEvent.setup();
-    const onToggle = vi.fn();
+    const onCheckedChange = vi.fn();
     const { container } = render(
-      <Switch label="Locked" disabled checked={false} onToggle={onToggle} />,
+      <Switch label="Locked" disabled checked={false} onCheckedChange={onCheckedChange} />,
       { wrapper: wrap },
     );
 
@@ -101,21 +100,30 @@ describe("Switch accessibility", () => {
     await user.tab();
     expect(control).not.toHaveFocus();
     await user.click(control);
-    expect(onToggle).not.toHaveBeenCalled();
+    expect(onCheckedChange).not.toHaveBeenCalled();
     await expectNoAxeViolations(container);
   });
 
   it("stays clean while loading", async () => {
-    const { container } = render(<Switch label="Syncing" loading checked onToggle={() => {}} />, {
-      wrapper: wrap,
-    });
+    const { container } = render(
+      <Switch label="Syncing" loading checked onCheckedChange={() => {}} />,
+      {
+        wrapper: wrap,
+      },
+    );
     await expectNoAxeViolations(container);
   });
 
   it("still submits its value with a form", () => {
     const { container } = render(
       <form>
-        <Switch label="Newsletter" name="newsletter" value="yes" checked onToggle={() => {}} />
+        <Switch
+          label="Newsletter"
+          name="newsletter"
+          value="yes"
+          checked
+          onCheckedChange={() => {}}
+        />
       </form>,
       { wrapper: wrap },
     );

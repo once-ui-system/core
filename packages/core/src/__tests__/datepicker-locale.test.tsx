@@ -3,8 +3,6 @@ import type React from "react";
 import { describe, expect, it } from "vitest";
 import { DateInput } from "../components/DateInput";
 import { DatePicker } from "../components/DatePicker";
-import { DateRangeInput } from "../components/DateRangeInput";
-import { DateRangePicker } from "../components/DateRangePicker";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { getCalendarNames } from "../utils/calendarLocale";
 
@@ -84,9 +82,14 @@ describe("DatePicker locale", () => {
     );
   });
 
-  it("passes the locale to both of DateRangePicker's calendars", async () => {
+  it("passes the locale to both of DatePicker range's calendars", async () => {
     render(
-      <DateRangePicker dual value={{ startDate: oct(13), endDate: undefined }} locale="de" />,
+      <DatePicker
+        range
+        months={2}
+        value={{ startDate: oct(13), endDate: undefined }}
+        locale="de"
+      />,
       { wrapper },
     );
     await waitFor(() => {
@@ -109,9 +112,10 @@ describe("date fields locale", () => {
     expect(screen.getByRole("combobox")).toHaveValue("Oct 13, 2026");
   });
 
-  it("DateRangeInput writes both dates in the locale", () => {
+  it("DateInput range writes both dates in the locale", () => {
     render(
-      <DateRangeInput
+      <DateInput
+        range
         id="stay"
         startLabel="Start"
         endLabel="End"

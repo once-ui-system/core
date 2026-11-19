@@ -57,7 +57,7 @@ export function DeleteSheet() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button label="Delete" variant="danger" onPress={() => setOpen(true)} />
+      <Button label="Delete" tone="danger" onPress={() => setOpen(true)} />
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
@@ -65,7 +65,7 @@ export function DeleteSheet() {
         footer={
           <>
             <Button label="Cancel" variant="secondary" onPress={() => setOpen(false)} />
-            <Button label="Delete" variant="danger" onPress={() => setOpen(false)} />
+            <Button label="Delete" tone="danger" onPress={() => setOpen(false)} />
           </>
         }
       >

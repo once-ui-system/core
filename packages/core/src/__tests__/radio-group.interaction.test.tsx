@@ -49,9 +49,12 @@ describe("RadioGroup: interaction", () => {
   it("picks the focused radio with Space or Enter while none is picked", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    const { unmount } = render(<RadioGroup label="Size" options={sizes} onChange={onChange} />, {
-      wrapper: wrap,
-    });
+    const { unmount } = render(
+      <RadioGroup label="Size" options={sizes} onValueChange={onChange} />,
+      {
+        wrapper: wrap,
+      },
+    );
     await user.tab();
     expect(radio("Small")).toHaveFocus();
     await user.keyboard(" ");
@@ -59,7 +62,7 @@ describe("RadioGroup: interaction", () => {
     expect(onChange).toHaveBeenCalledWith("s");
     unmount();
 
-    render(<RadioGroup label="Size" options={sizes} onChange={onChange} />, { wrapper: wrap });
+    render(<RadioGroup label="Size" options={sizes} onValueChange={onChange} />, { wrapper: wrap });
     await user.tab();
     await user.keyboard("{Enter}");
     expect(radio("Small")).toBeChecked();
@@ -68,7 +71,7 @@ describe("RadioGroup: interaction", () => {
   it("does not report again when the picked radio is pressed again", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<RadioGroup label="Size" options={sizes} defaultValue="l" onChange={onChange} />, {
+    render(<RadioGroup label="Size" options={sizes} defaultValue="l" onValueChange={onChange} />, {
       wrapper: wrap,
     });
     await user.click(radio("Large"));
@@ -80,7 +83,7 @@ describe("RadioGroup: interaction", () => {
   it("selects from a click on the option's label text", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<RadioGroup label="Size" options={sizes} onChange={onChange} />, { wrapper: wrap });
+    render(<RadioGroup label="Size" options={sizes} onValueChange={onChange} />, { wrapper: wrap });
     await user.click(screen.getByText("Large"));
     expect(onChange).toHaveBeenCalledWith("l");
     expect(radio("Large")).toBeChecked();
@@ -98,7 +101,7 @@ describe("RadioGroup: interaction", () => {
         label="Size"
         options={sizes}
         defaultValue="s"
-        onChange={onChange}
+        onValueChange={onChange}
         onKeyDown={onKeyDown}
       />,
       { wrapper: wrap },
@@ -115,7 +118,7 @@ describe("RadioGroup: interaction", () => {
   it("leaves arrow keys with a modifier alone", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<RadioGroup label="Size" options={sizes} defaultValue="s" onChange={onChange} />, {
+    render(<RadioGroup label="Size" options={sizes} defaultValue="s" onValueChange={onChange} />, {
       wrapper: wrap,
     });
     await user.tab();
@@ -130,7 +133,7 @@ describe("RadioGroup: interaction", () => {
       const [value, setValue] = useState("s");
       return (
         <>
-          <RadioGroup label="Size" options={sizes} value={value} onChange={setValue}>
+          <RadioGroup label="Size" options={sizes} value={value} onValueChange={setValue}>
             <RadioButton value="custom" label="Custom" />
           </RadioGroup>
           <output>{value}</output>

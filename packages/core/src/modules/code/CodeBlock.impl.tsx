@@ -3,21 +3,22 @@
 import classNames from "clsx";
 import React, { ReactNode, RefObject, useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
-import { Button } from "../../components/Button";
-import { Column } from "../../components/Column";
-import { Fade } from "../../components/Fade";
-import { Flex } from "../../components/Flex";
-import { IconButton } from "../../components/IconButton";
-import { Row } from "../../components/Row";
-import { SegmentedControl } from "../../components/SegmentedControl";
-import { StyleOverlay } from "../../components/StyleOverlay";
-import { Text } from "../../components/Text";
-import { VisuallyHidden } from "../../components/VisuallyHidden";
-import type { IconName } from "../../icons";
-import { copyText } from "../../internal/copyText";
-import { useScrollableTabStop } from "../../internal/scrollableTabStop";
-import { SpacingToken } from "../../types";
-import { escapeHtml } from "../../utils/safe-html";
+import { Button } from "../../components/Button.js";
+import { Column } from "../../components/Column.js";
+import { Fade } from "../../components/Fade.js";
+import { Flex } from "../../components/Flex.js";
+import { Icon } from "../../components/Icon.js";
+import { IconButton } from "../../components/IconButton.js";
+import { Row } from "../../components/Row.js";
+import { SegmentedControl } from "../../components/SegmentedControl.js";
+import { Text } from "../../components/Text.js";
+import { VisuallyHidden } from "../../components/VisuallyHidden.js";
+import type { IconName } from "../../icons.js";
+import { copyText } from "../../internal/copyText.js";
+import { useScrollableTabStop } from "../../internal/scrollableTabStop.js";
+import { CSSUnit, SpacingToken } from "../../types.js";
+import { cssLength, withTokenLengths } from "../../utils/layoutClasses.js";
+import { escapeHtml } from "../../utils/safe-html.js";
 import styles from "./CodeBlock.module.scss";
 
 let Prism: any;
@@ -427,7 +428,7 @@ const renderDiff = (
             <div className="diff-line-number">
               {(line.type === "deleted" || line.type === "context") &&
                 line.oldLineNumber !== undefined && (
-                  <Text variant="code-default-s" style={{ transform: "scale(0.9)" }}>
+                  <Text textVariant="code-default-s" style={{ transform: "scale(0.9)" }}>
                     {line.oldLineNumber}
                   </Text>
                 )}
@@ -435,7 +436,7 @@ const renderDiff = (
             <div className="diff-line-number">
               {(line.type === "added" || line.type === "context") &&
                 line.newLineNumber !== undefined && (
-                  <Text variant="code-default-s" style={{ transform: "scale(0.9)" }}>
+                  <Text textVariant="code-default-s" style={{ transform: "scale(0.9)" }}>
                     {line.newLineNumber}
                   </Text>
                 )}
@@ -465,13 +466,22 @@ type CodeInstance = {
 };
 
 export interface CodeBlockProps extends React.ComponentProps<typeof Flex> {
-  codeHeight?: number;
+  /**
+   * Cap on the code area's height before it scrolls: a number is on the token
+   * scale (`320` is `"20rem"`), a string a CSS length.
+   */
+  codeHeight?: number | CSSUnit;
   fillHeight?: boolean;
   previewPadding?: SpacingToken;
   codes?: CodeInstance[];
   preview?: ReactNode;
   copyButton?: boolean;
-  styleButton?: boolean;
+  /**
+   * Extra controls in the header's button row, after reload and fullscreen
+   * and before copy. 2.x's `styleButton` was one built in; in 3.0 pass
+   * `<StyleOverlay>` from `@once-ui-system/blocks` around an `IconButton`.
+   */
+  actions?: ReactNode;
   reloadButton?: boolean;
   fullscreenButton?: boolean;
   compact?: boolean;
@@ -480,30 +490,24 @@ export interface CodeBlockProps extends React.ComponentProps<typeof Flex> {
   background?: React.ComponentProps<typeof Flex>["background"];
   onInstanceChange?: (index: number) => void;
   lineNumbers?: boolean;
-  /**
-   * @deprecated Set `highlight` on each entry of `codes` instead, so every tab
-   * marks its own lines. This one still applies to an entry that sets none.
-   */
-  highlight?: string;
   maxLines?: number;
-  isCollapsible?: boolean;
+  collapsible?: boolean;
   hideCode?: boolean;
 }
 
-const CodeBlock: React.FC<CodeBlockProps> = ({
-  highlight: deprecatedHighlight,
+const CodeBlock = ({
   codeHeight,
   fillHeight,
   previewPadding = "l",
   codes = [],
   preview,
   copyButton = true,
-  styleButton = false,
+  actions,
   reloadButton = false,
   fullscreenButton = false,
   lineNumbers = false,
   maxLines = 5,
-  isCollapsible = false,
+  collapsible = false,
   compact = false,
   hideCode = false,
   className,
@@ -511,7 +515,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   background = "surface",
   onInstanceChange,
   ...rest
-}) => {
+}: CodeBlockProps) => {
   const styleBackgroundColor = style?.backgroundColor;
   const codeRef = useRef<HTMLElement>(null);
   const preRef = useRef<HTMLPreElement>(null);
@@ -531,10 +535,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
     code: "",
     language: "",
   };
-  const { code, language, startLineNumber } = codeInstance;
-
-  const highlight =
-    codeInstance.highlight !== undefined ? codeInstance.highlight : deprecatedHighlight;
+  const { code, language, startLineNumber, highlight } = codeInstance;
 
   useEffect(() => {
     const loadDependencies = async () => {
@@ -693,7 +694,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
       vertical="center"
       fillWidth
       radius="m"
-      minHeight={2.5}
+      minHeight="2.5rem"
       className={classNames(className, {
         [styles.fullscreen]: inPortal && isFullscreen,
       })}
@@ -740,7 +741,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                 fillWidth={false}
                 aria-label="Files"
                 value={String(selectedInstance)}
-                onChange={(value) => {
+                onValueChange={(value) => {
                   const index = Number(value);
                   setSelectedInstance(index);
                   onInstanceChange?.(index);
@@ -776,11 +777,11 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                     size="m"
                     tooltip="Reload"
                     tooltipPosition="bottom"
-                    color="neutral-weak"
                     variant="tertiary"
                     onClick={handleRefresh}
-                    icon="refresh"
-                  />
+                  >
+                    <Icon name="refresh" size="s" onBackground="neutral-weak" />
+                  </IconButton>
                 </Flex>
               )}
               {fullscreenButton && (
@@ -792,34 +793,20 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                 >
                   <IconButton
                     size="m"
-                    color="neutral-weak"
                     tooltip={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
                     tooltipPosition="bottom"
                     variant="tertiary"
-                    icon={isFullscreen ? "minimize" : "maximize"}
                     onClick={toggleFullscreen}
-                  />
+                  >
+                    <Icon
+                      name={isFullscreen ? "minimize" : "maximize"}
+                      size="s"
+                      onBackground="neutral-weak"
+                    />
+                  </IconButton>
                 </Flex>
               )}
-              {styleButton && (
-                <StyleOverlay>
-                  <Flex
-                    fit
-                    radius="s"
-                    background={background}
-                    style={{ backgroundColor: styleBackgroundColor }}
-                  >
-                    <IconButton
-                      variant="tertiary"
-                      icon="sparkle"
-                      // It opens the style panel; it used to be named
-                      // "Explain this code".
-                      aria-label="Code block style"
-                      color="neutral-weak"
-                    />
-                  </Flex>
-                </StyleOverlay>
-              )}
+              {actions}
               {copyButton && (
                 <Flex
                   fit
@@ -831,11 +818,11 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                     size="m"
                     tooltip="Copy"
                     tooltipPosition="bottom"
-                    color="neutral-weak"
                     variant="tertiary"
                     onClick={handleCopy}
-                    icon={copyIcon}
-                  />
+                  >
+                    <Icon name={copyIcon} size="s" onBackground="neutral-weak" />
+                  </IconButton>
                 </Flex>
               )}
             </Row>
@@ -870,14 +857,20 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           paddingRight="2"
           paddingBottom="2"
           flex="1"
-          style={{
-            left: "-1px",
-            bottom: "-1px",
-            width: "calc(100% + 2px)",
-          }}
+          // Math in a length (a percentage, or a var()) breaks jsdom's
+          // getComputedStyle in an app's tests: it lives in a custom
+          // property the length reads (see `withTokenLengths`).
+          style={
+            {
+              left: "-1px",
+              bottom: "-1px",
+              "--ou-code-frame-width": "calc(100% + 2px)",
+              width: "var(--ou-code-frame-width)",
+            } as React.CSSProperties
+          }
         >
           {((lines) => {
-            const isCollapsed = isCollapsible && maxLines > 0 && lines > maxLines && !isExpanded;
+            const isCollapsed = collapsible && maxLines > 0 && lines > maxLines && !isExpanded;
             const collapsedMaxHeight = `calc(1.75em * ${maxLines} + 1rem)`;
 
             return (
@@ -885,7 +878,13 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                 fillWidth
                 position="relative"
                 style={
-                  isCollapsed ? { maxHeight: collapsedMaxHeight, overflow: "hidden" } : undefined
+                  isCollapsed
+                    ? ({
+                        "--ou-code-collapsed-height": collapsedMaxHeight,
+                        maxHeight: "var(--ou-code-collapsed-height)",
+                        overflow: "hidden",
+                      } as React.CSSProperties)
+                    : undefined
                 }
               >
                 <Row
@@ -899,11 +898,11 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                     <div
                       ref={diffScrollRef}
                       className={classNames(styles.pre, `language-diff`, "focus-ring")}
-                      style={{
-                        maxHeight: `${codeHeight}rem`,
+                      style={withTokenLengths({
+                        maxHeight: cssLength(codeHeight),
                         overflow: "auto",
                         width: "100%",
-                      }}
+                      })}
                     >
                       {prismInstance &&
                         renderDiff(
@@ -916,11 +915,13 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                     </div>
                   ) : (
                     <pre
-                      key={`${selectedInstance}-${highlight || deprecatedHighlight || "no-highlight"}`}
+                      key={`${selectedInstance}-${highlight || "no-highlight"}`}
                       suppressHydrationWarning
                       tabIndex={-1}
-                      style={{ maxHeight: `${codeHeight}rem` }}
-                      data-line={highlight || deprecatedHighlight}
+                      style={withTokenLengths({
+                        maxHeight: cssLength(codeHeight),
+                      })}
+                      data-line={highlight}
                       ref={preRef}
                       className={classNames(
                         lineNumbers ? styles.lineNumberPadding : styles.padding,
@@ -959,7 +960,6 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                       }
                       to="top"
                       height={"100%"}
-                      blur={100}
                     />
                     <Flex
                       position="absolute"
@@ -1003,13 +1003,13 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
               <IconButton
                 tooltip="Copy"
                 tooltipPosition="left"
-                color="neutral-weak"
                 aria-label="Copy code"
                 onClick={handleCopy}
-                icon={copyIcon}
                 size="m"
                 variant="tertiary"
-              />
+              >
+                <Icon name={copyIcon} size="s" onBackground="neutral-weak" />
+              </IconButton>
             </Flex>
           )}
         </Row>

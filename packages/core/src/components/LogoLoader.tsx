@@ -2,11 +2,11 @@
 
 import classNames from "clsx";
 import type React from "react";
-import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./LogoLoader.module.scss";
 
-/** The colors the logo takes: the brand or accent hue, the strongest neutral text, or the surrounding text color. */
-export type LogoLoaderColor = "brand" | "accent" | "neutral" | "inherit";
+/** The tones the logo takes: the brand or accent hue, the strongest neutral text, or the surrounding text color. */
+export type LogoLoaderTone = "brand" | "accent" | "neutral" | "inherit";
 
 export interface LogoLoaderProps extends Omit<React.ComponentProps<"div">, "children" | "color"> {
   /** The logo as SVG markup, such as an imported `.svg?raw` file or a string. Wins over `src`. */
@@ -16,7 +16,7 @@ export interface LogoLoaderProps extends Omit<React.ComponentProps<"div">, "chil
   /** Height of the logo, in px or any CSS length; the width follows the SVG's viewBox. */
   height?: number | string;
   /** `neutral` by default, the strongest text color. */
-  color?: LogoLoaderColor;
+  tone?: LogoLoaderTone;
   /**
    * Show the filled logo without the intro. Set it after the first play so a
    * remount, or a load that runs long, never restarts the strokes.
@@ -30,10 +30,9 @@ export interface LogoLoaderProps extends Omit<React.ComponentProps<"div">, "chil
   order?: "reading" | "document";
   /** Fires once the strokes have drawn and the fill is in. Not called when `settled`. */
   onComplete?: () => void;
-  ariaLabel?: string;
 }
 
-const COLOR: Record<Exclude<LogoLoaderColor, "inherit">, string> = {
+const TONE: Record<Exclude<LogoLoaderTone, "inherit">, string> = {
   brand: "var(--brand-color-strong)",
   accent: "var(--function-accent-500)",
   neutral: "var(--neutral-on-background-strong)",
@@ -193,104 +192,99 @@ const useLogoMarkup = (svg: string | undefined, src: string | undefined) => {
  * `Spinner` stays the neutral one for buttons and fields.
  *
  * Pass the SVG as markup (`svg`) or a URL (`src`). The logo is drawn in one
- * color (`color`), so a dark-mode and a light-mode file are the same here.
+ * tone (`tone`), so a dark-mode and a light-mode file are the same here.
  * With reduced motion the strokes are skipped and the logo fades in.
  */
-const LogoLoader = forwardRef<HTMLDivElement, LogoLoaderProps>(
-  (
-    {
-      svg,
-      src,
-      height = 120,
-      color = "neutral",
-      settled = false,
-      order = "reading",
-      onComplete,
-      ariaLabel = "Loading",
-      "aria-label": nativeAriaLabel,
-      className,
-      style,
-      ...rest
-    },
-    ref,
-  ) => {
-    const markup = useLogoMarkup(svg, src);
-    const logo = useMemo(() => (markup ? parseLogo(markup) : null), [markup]);
-    const strokes = useMemo(() => {
-      const all = logo?.shapes.flatMap(strokesOf) ?? [];
-      return order === "reading" ? all.sort((a, b) => startX(a) - startX(b)) : all;
-    }, [logo, order]);
-    const { stagger, fillDelay, totalMs } = timeline(strokes.length);
+const LogoLoader = ({
+  ref,
+  svg,
+  src,
+  height = 120,
+  tone = "neutral",
+  settled = false,
+  order = "reading",
+  onComplete,
+  "aria-label": ariaLabel = "Loading",
+  className,
+  style,
+  ...rest
+}: LogoLoaderProps) => {
+  const markup = useLogoMarkup(svg, src);
+  const logo = useMemo(() => (markup ? parseLogo(markup) : null), [markup]);
+  const strokes = useMemo(() => {
+    const all = logo?.shapes.flatMap(strokesOf) ?? [];
+    return order === "reading" ? all.sort((a, b) => startX(a) - startX(b)) : all;
+  }, [logo, order]);
+  const { stagger, fillDelay, totalMs } = timeline(strokes.length);
 
-    const onCompleteRef = useRef(onComplete);
-    onCompleteRef.current = onComplete;
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
 
-    useEffect(() => {
-      if (settled || !logo) return;
-      const id = window.setTimeout(() => onCompleteRef.current?.(), totalMs);
-      return () => window.clearTimeout(id);
-    }, [settled, logo, totalMs]);
+  useEffect(() => {
+    if (settled || !logo) return;
+    const id = window.setTimeout(() => onCompleteRef.current?.(), totalMs);
+    return () => window.clearTimeout(id);
+  }, [settled, logo, totalMs]);
 
-    const ratio = logo ? `${logo.width} / ${logo.height}` : undefined;
-    const strokeWidth = logo ? logo.height * 0.008 : 0;
+  const ratio = logo ? `${logo.width} / ${logo.height}` : undefined;
+  const strokeWidth = logo ? logo.height * 0.008 : 0;
 
-    return (
-      <div
-        ref={ref}
-        role="status"
-        aria-label={nativeAriaLabel ?? ariaLabel}
-        className={classNames(styles.root, !settled && styles.playing, className)}
-        style={
-          {
-            height: typeof height === "number" ? `${height}px` : height,
-            aspectRatio: ratio,
-            ...(color !== "inherit" && { color: COLOR[color] }),
-            "--logo-loader-draw": `${DRAW_S}s`,
-            "--logo-loader-fill-delay": `${fillDelay}s`,
-            "--logo-loader-fill": `${FILL_S}s`,
-            ...style,
-          } as React.CSSProperties
-        }
-        {...rest}
-      >
-        {logo && (
-          <svg className={styles.logo} viewBox={logo.viewBox} aria-hidden="true" focusable="false">
-            {logo.shapes.map(({ tag, props, outline, strokeWidth: width }, index) => {
+  return (
+    <div
+      ref={ref}
+      role="status"
+      aria-label={ariaLabel}
+      className={classNames(styles.root, !settled && styles.playing, className)}
+      style={
+        {
+          height: typeof height === "number" ? `${height}px` : height,
+          aspectRatio: ratio,
+          ...(tone !== "inherit" && { color: TONE[tone] }),
+          "--logo-loader-draw": `${DRAW_S}s`,
+          "--logo-loader-fill-delay": `${fillDelay}s`,
+          "--logo-loader-fill": `${FILL_S}s`,
+          ...style,
+        } as React.CSSProperties
+      }
+      {...rest}
+    >
+      {logo && (
+        <svg className={styles.logo} viewBox={logo.viewBox} aria-hidden="true" focusable="false">
+          {logo.shapes.map(({ tag, props, outline, strokeWidth: width }, index) => {
+            const Tag = tag as "path";
+            return (
+              <Tag
+                // The shapes come from a fixed markup string and never reorder.
+                // biome-ignore lint/suspicious/noArrayIndexKey: no other stable key
+                key={`fill-${index}`}
+                {...props}
+                className={styles.fill}
+                fill={outline ? "none" : "currentColor"}
+                stroke={outline ? "currentColor" : undefined}
+                strokeWidth={outline ? (width ?? strokeWidth) : undefined}
+              />
+            );
+          })}
+          {!settled &&
+            strokes.map(({ tag, props }, index) => {
               const Tag = tag as "path";
               return (
                 <Tag
-                  // The shapes come from a fixed markup string and never reorder.
                   // biome-ignore lint/suspicious/noArrayIndexKey: no other stable key
-                  key={`fill-${index}`}
+                  key={`stroke-${index}`}
                   {...props}
-                  className={styles.fill}
-                  fill={outline ? "none" : "currentColor"}
-                  stroke={outline ? "currentColor" : undefined}
-                  strokeWidth={outline ? (width ?? strokeWidth) : undefined}
+                  className={styles.stroke}
+                  pathLength={100}
+                  strokeWidth={strokeWidth}
+                  style={{ "--logo-loader-delay": `${index * stagger}s` } as React.CSSProperties}
                 />
               );
             })}
-            {!settled &&
-              strokes.map(({ tag, props }, index) => {
-                const Tag = tag as "path";
-                return (
-                  <Tag
-                    // biome-ignore lint/suspicious/noArrayIndexKey: no other stable key
-                    key={`stroke-${index}`}
-                    {...props}
-                    className={styles.stroke}
-                    pathLength={100}
-                    strokeWidth={strokeWidth}
-                    style={{ "--logo-loader-delay": `${index * stagger}s` } as React.CSSProperties}
-                  />
-                );
-              })}
-          </svg>
-        )}
-      </div>
-    );
-  },
-);
+        </svg>
+      )}
+    </div>
+  );
+};
 
 LogoLoader.displayName = "LogoLoader";
 

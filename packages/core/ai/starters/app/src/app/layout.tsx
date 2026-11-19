@@ -1,7 +1,9 @@
 import "@once-ui-system/core/css/styles.css";
 import "@once-ui-system/core/css/tokens.css";
 
-import { Column, Row, ThemeInit } from "@once-ui-system/core";
+import { Column } from "@once-ui-system/core/components/Column";
+import { Row } from "@once-ui-system/core/components/Row";
+import { ThemeInit } from "@once-ui-system/core/components/ThemeInit";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Providers } from "../components/Providers";

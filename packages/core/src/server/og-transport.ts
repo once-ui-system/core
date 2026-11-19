@@ -2,9 +2,9 @@ import type { LookupAddress } from "node:dns";
 import type { IncomingMessage } from "node:http";
 import type { LookupFunction } from "node:net";
 import type { Transform } from "node:stream";
-import { isPublicIpAddress } from "./og-address";
-import { OGFetchError, OGUrlValidationError } from "./og-errors";
-import type { NodeBuiltins } from "./og-node";
+import { isPublicIpAddress } from "./og-address.js";
+import { OGFetchError, OGUrlValidationError } from "./og-errors.js";
+import type { NodeBuiltins } from "./og-node.js";
 
 /*
  * The OG handlers' HTTP client: Node's `http`/`https` with a `lookup` that

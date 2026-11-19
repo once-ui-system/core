@@ -6,7 +6,7 @@ import {
   type IconComponent,
   type IconLibrary,
   type IconName,
-} from "../icons";
+} from "../icons.js";
 
 export const IconContext = createContext<{
   icons: IconLibrary;

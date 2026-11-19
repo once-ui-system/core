@@ -47,10 +47,10 @@ describe("EmojiPicker", () => {
 
   it("lays rows out by `columns`", () => {
     const { rerender } = render(<EmojiPicker onSelect={() => {}} />, { wrapper: wrap });
-    expect(emojis()).toHaveClass("columns-8");
+    expect(emojis()).toHaveClass("grid-columns-8");
     rerender(<EmojiPicker onSelect={() => {}} columns="4" />);
-    expect(emojis()).toHaveClass("columns-4");
-    expect(emojis()).not.toHaveClass("columns-8");
+    expect(emojis()).toHaveClass("grid-columns-4");
+    expect(emojis()).not.toHaveClass("grid-columns-8");
   });
 
   it("reports a clicked emoji, then closes", async () => {

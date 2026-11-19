@@ -5,9 +5,10 @@
  "props": {
   "children": "React.ReactNode",
   "prefix": "React.ReactNode",
-  "variant": "\"pill\" | \"dot\"",
+  "icon": "IconName",
+  "variant": "\"pill\" | \"icon\" | \"dot\"",
   "active": "boolean = false",
-  "color": "MapColor = brand",
+  "tone": "MapTone",
   "href": "string",
   "onClick": "(event: React.MouseEvent<HTMLElement>) => void"
  },
@@ -21,7 +22,9 @@
  ],
  "mixinsRef": [],
  "types": {
-  "MapColor": [
+  "BuiltInIconName": "keyof typeof iconData",
+  "IconName": "BuiltInIconName | Extract<keyof IconLibraryOverrides, string>",
+  "MapTone": [
    "neutral",
    "brand",
    "accent",

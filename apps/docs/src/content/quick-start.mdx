@@ -53,6 +53,8 @@ export default nextConfig;`,
   }
 ]} />
 
+That setting only works with webpack. Next.js 16 builds with Turbopack by default, which ignores it and does not need it: Once UI lists every export by name in its entry points, so a page ships only the components it imports, from the package root, under either bundler. On a page with a Button and a Column that is about 11 kB of component CSS instead of 108 kB. Each component also has its own path, such as `@once-ui-system/core/components/Button`, if you prefer one import per component.
+
 Upgrading an app from 1.8? Follow the [migration guide](https://github.com/once-ui-system/core/blob/main/MIGRATING.md): a codemod does most of it, and it lists what is left in the order that keeps your app building.
 
 ## Dependencies
@@ -65,13 +67,12 @@ Installed with Once UI Core, nothing to do:
 | `clsx` | `^2.1.1` | Conditional class names |
 | `date-fns` | `^4.4.0` | Date pickers and inputs |
 
-Your app provides these. Components ship their styles as precompiled CSS modules, which Next.js, Vite and other bundlers handle with no setup; `sass` is optional (from 2.1):
+Your app provides these. Components ship their styles as precompiled CSS modules, which Next.js, Vite and other bundlers handle with no setup, so your app needs no `sass` (3.0 dropped it as a peer):
 
 | Package | Version | Purpose |
 | --- | --- | --- |
-| `react` | `>=18` | React |
-| `react-dom` | `>=18` | React DOM |
-| `sass` | `^1.77.6` | Optional: only if your own code uses Sass |
+| `react` | `>=19` | React |
+| `react-dom` | `>=19` | React DOM |
 
 ## Optional dependencies
 
@@ -80,7 +81,6 @@ Install these only for the features that need them. Each module named here comes
 | Package | Version | Used for |
 | --- | --- | --- |
 | `next` | `>=15.5` | Next.js apps: `LayoutProvider` from `@once-ui-system/core/next` routes links and images through `next/link` and `next/image` |
-| `recharts` | `^3.10.1` | Charts and gauges from `@once-ui-system/core/data` |
 | `prismjs` | `^1.30.0` | `CodeBlock` from `@once-ui-system/core/code` |
 | `compressorjs` | `^1.3.0` | `MediaUpload` from `@once-ui-system/core/media` |
 

@@ -4,7 +4,7 @@ import type React from "react";
 import { useState } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Button } from "../components/Button";
-import { EmojiPickerDropdown } from "../components/EmojiPickerDropdown";
+import { EmojiPicker } from "../components/EmojiPicker";
 import { resetScrollLockState } from "../components/ScrollLock";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
@@ -42,7 +42,7 @@ const openPicker = async (user: ReturnType<typeof userEvent.setup>) => {
 describe("EmojiPickerDropdown", () => {
   it("opens a dialog from its Button trigger, with focus in the search", async () => {
     const user = userEvent.setup();
-    render(<EmojiPickerDropdown trigger={<Button>React</Button>} onSelect={() => {}} />, {
+    render(<EmojiPicker trigger={<Button>React</Button>} onSelect={() => {}} />, {
       wrapper: wrap,
     });
     expect(trigger()).toHaveAttribute("aria-haspopup", "dialog");
@@ -58,7 +58,7 @@ describe("EmojiPickerDropdown", () => {
     const onSelect = vi.fn();
     const onOpenChange = vi.fn();
     render(
-      <EmojiPickerDropdown
+      <EmojiPicker
         trigger={<Button>React</Button>}
         onSelect={onSelect}
         onOpenChange={onOpenChange}
@@ -77,7 +77,7 @@ describe("EmojiPickerDropdown", () => {
   it("picks from the keyboard and hands focus back to the trigger", async () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();
-    render(<EmojiPickerDropdown trigger={<Button>React</Button>} onSelect={onSelect} />, {
+    render(<EmojiPicker trigger={<Button>React</Button>} onSelect={onSelect} />, {
       wrapper: wrap,
     });
 
@@ -95,11 +95,7 @@ describe("EmojiPickerDropdown", () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();
     render(
-      <EmojiPickerDropdown
-        closeAfterClick={false}
-        trigger={<Button>React</Button>}
-        onSelect={onSelect}
-      />,
+      <EmojiPicker closeAfterClick={false} trigger={<Button>React</Button>} onSelect={onSelect} />,
       { wrapper: wrap },
     );
     await openPicker(user);
@@ -115,7 +111,7 @@ describe("EmojiPickerDropdown", () => {
       const [open, setOpen] = useState(false);
       return (
         <>
-          <EmojiPickerDropdown
+          <EmojiPicker
             open={open}
             onOpenChange={setOpen}
             trigger={<Button>React</Button>}
@@ -135,7 +131,7 @@ describe("EmojiPickerDropdown", () => {
 
   it("closes on Escape", async () => {
     const user = userEvent.setup();
-    render(<EmojiPickerDropdown trigger={<Button>React</Button>} onSelect={() => {}} />, {
+    render(<EmojiPicker trigger={<Button>React</Button>} onSelect={() => {}} />, {
       wrapper: wrap,
     });
     await openPicker(user);
@@ -146,7 +142,7 @@ describe("EmojiPickerDropdown", () => {
 
   it("has no axe violations open", async () => {
     const user = userEvent.setup();
-    render(<EmojiPickerDropdown trigger={<Button>React</Button>} onSelect={() => {}} />, {
+    render(<EmojiPicker trigger={<Button>React</Button>} onSelect={() => {}} />, {
       wrapper: wrap,
     });
     await openPicker(user);

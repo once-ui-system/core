@@ -1,4 +1,4 @@
-import type { LngLat } from "./types";
+import type { LngLat } from "./types.js";
 
 export interface MapClusterOptions {
   /** How close, in pixels, two markers must be to merge. Default 56. */

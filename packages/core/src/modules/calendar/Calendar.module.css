@@ -1,0 +1,391 @@
+.calendar {
+  --calendar-hour-height: var(--static-space-48);
+  --calendar-gutter: var(--static-space-56);
+  --calendar-line: var(--neutral-alpha-weak);
+  position: relative;
+  min-width: 0;
+}
+
+/* Month */
+
+.monthGrid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  border-top: 1px solid var(--calendar-line);
+  border-left: 1px solid var(--calendar-line);
+}
+
+.weekdayHeader {
+  padding: var(--static-space-8);
+  border-right: 1px solid var(--calendar-line);
+  border-bottom: 1px solid var(--calendar-line);
+  color: var(--neutral-on-background-weak);
+  text-align: start;
+}
+
+.monthWeek {
+  --calendar-lane-height: 1.375rem;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  min-height: max(
+    var(--calendar-week-height, 6.5rem),
+    calc(
+      var(--static-space-32) +
+      var(--calendar-lanes, 0) *
+      var(--calendar-lane-height) +
+      var(--static-space-8)
+    )
+  );
+}
+
+.monthDay {
+  position: relative;
+  border-right: 1px solid var(--calendar-line);
+  border-bottom: 1px solid var(--calendar-line);
+  padding: var(--static-space-4);
+  min-width: 0;
+  outline: none;
+  cursor: default;
+}
+
+.monthDay[data-selectable="true"] {
+  cursor: pointer;
+}
+
+.monthDay[data-outside="true"] {
+  background: var(--neutral-alpha-weak);
+}
+
+.monthDay:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--neutral-border-strong);
+}
+
+.dayNumber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--static-space-24);
+  height: var(--static-space-24);
+  padding: 0 var(--static-space-4);
+  border-radius: var(--radius-full);
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.dayNumber:hover {
+  background: var(--neutral-alpha-weak);
+}
+
+.dayNumber[data-today="true"] {
+  background: var(--brand-solid-strong);
+  color: var(--brand-on-solid-strong);
+}
+
+/* A bar starts in its first day's cell and reaches across the next ones (each 1px border included). */
+.monthBar,
+.more {
+  position: absolute;
+  z-index: 1;
+  top: calc(var(--static-space-32) + var(--calendar-lane, 0) * var(--calendar-lane-height));
+  left: var(--static-space-2);
+  height: calc(var(--calendar-lane-height) - 2px);
+}
+
+.monthBar {
+  width: calc(var(--calendar-span, 1) * (100% + 1px) - 1px - 2 * var(--static-space-2));
+}
+
+.more {
+  right: var(--static-space-2);
+  padding: 0 var(--static-space-4);
+  border: none;
+  background: none;
+  font: inherit;
+  text-align: start;
+  color: var(--neutral-on-background-medium);
+  border-radius: var(--radius-s);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.more:hover {
+  background: var(--neutral-alpha-weak);
+}
+
+/* Events */
+
+.event {
+  display: flex;
+  align-items: center;
+  gap: var(--static-space-4);
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 1px var(--static-space-6, 0.375rem);
+  border: none;
+  border-radius: var(--radius-s);
+  font: inherit;
+  text-align: start;
+  color: var(--event-on, var(--brand-on-background-strong));
+  background: var(--event-fill, var(--brand-alpha-weak));
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+  touch-action: none;
+}
+
+.event:hover {
+  background: var(--event-fill-hover, var(--brand-alpha-medium));
+}
+
+.event:focus-visible {
+  box-shadow: 0 0 0 2px var(--neutral-border-strong);
+}
+
+.event[data-solid="true"] {
+  background: var(--event-solid, var(--brand-solid-strong));
+  color: var(--event-on-solid, var(--brand-on-solid-strong));
+}
+
+.event[data-continues-before="true"] {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.event[data-continues-after="true"] {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.event[data-dragging="true"] {
+  opacity: 0.4;
+}
+
+.dot {
+  flex-shrink: 0;
+  width: var(--static-space-8);
+  height: var(--static-space-8);
+  border-radius: var(--radius-full);
+  background: var(--event-solid, var(--brand-solid-strong));
+}
+
+.eventText {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.eventLine {
+  display: flex;
+  gap: var(--static-space-4);
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.eventTime {
+  flex-shrink: 0;
+  color: var(--event-on-weak, var(--neutral-on-background-medium));
+  font-variant-numeric: tabular-nums;
+}
+
+/* Week and day */
+
+.timeHeader {
+  display: grid;
+  grid-template-columns: var(--calendar-gutter) repeat(var(--calendar-days), minmax(0, 1fr));
+  border-bottom: 1px solid var(--calendar-line);
+}
+
+.columnHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--static-space-4);
+  padding: var(--static-space-8);
+  min-width: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: var(--neutral-on-background-medium);
+  text-align: start;
+}
+
+button.columnHeader {
+  cursor: pointer;
+}
+
+button.columnHeader:hover {
+  background: var(--neutral-alpha-weak);
+}
+
+.todayNumber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--static-space-32);
+  height: var(--static-space-32);
+  padding: 0 var(--static-space-4);
+  border-radius: var(--radius-full);
+}
+
+.todayNumber[data-today="true"] {
+  background: var(--brand-solid-strong);
+  color: var(--brand-on-solid-strong);
+}
+
+.allDayRow {
+  display: grid;
+  grid-template-columns: var(--calendar-gutter) repeat(var(--calendar-days), minmax(0, 1fr));
+  grid-auto-rows: min-content;
+  border-bottom: 1px solid var(--calendar-line);
+  padding: var(--static-space-2) 0;
+}
+
+.spanBar {
+  position: relative;
+  margin: 0 var(--static-space-2) 2px;
+  min-width: 0;
+}
+
+.allDayLabel {
+  grid-row: 1 / span 100;
+  padding: 0 var(--static-space-8);
+  color: var(--neutral-on-background-weak);
+  align-self: center;
+}
+
+.scroll {
+  position: relative;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.timeGrid {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--calendar-gutter) repeat(var(--calendar-days), minmax(0, 1fr));
+  height: calc(var(--calendar-hours) * var(--calendar-hour-height));
+}
+
+.hours {
+  position: relative;
+}
+
+.hourLabel {
+  position: absolute;
+  right: var(--static-space-8);
+  transform: translateY(-50%);
+  color: var(--neutral-on-background-weak);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.dayColumn {
+  position: relative;
+  border-left: 1px solid var(--calendar-line);
+  background-image: linear-gradient(to bottom, var(--calendar-line) 1px, transparent 1px);
+  background-size: 100% var(--calendar-hour-height);
+  touch-action: pan-y;
+  outline: none;
+}
+
+.dayColumn[data-selectable="true"] {
+  cursor: cell;
+}
+
+.timedEvent {
+  position: absolute;
+  padding: 0 1px;
+  min-height: 0;
+}
+
+.timedEvent .event {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 0;
+  padding: var(--static-space-2) var(--static-space-6, 0.375rem);
+  border-left: 3px solid var(--event-solid, var(--brand-solid-strong));
+}
+
+.timedEvent .eventText {
+  flex-shrink: 0;
+  white-space: normal;
+}
+
+.timedEvent .event {
+  /* Opaque, so a cascaded event hides the one under it. */
+  background:
+    linear-gradient(
+      var(--event-fill, var(--brand-alpha-weak)),
+      var(--event-fill, var(--brand-alpha-weak))
+    ),
+    var(--calendar-backdrop, var(--page-background));
+  box-shadow: 0 0 0 1px var(--calendar-backdrop, var(--page-background));
+}
+
+.timedEvent .event:hover {
+  background:
+    linear-gradient(
+      var(--event-fill-hover, var(--brand-alpha-medium)),
+      var(--event-fill-hover, var(--brand-alpha-medium))
+    ),
+    var(--calendar-backdrop, var(--page-background));
+}
+
+.timedEvent .eventTime {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.resize {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--static-space-8);
+  cursor: ns-resize;
+  touch-action: none;
+}
+
+.ghost {
+  position: absolute;
+  left: 1px;
+  right: 1px;
+  z-index: 2;
+  border-radius: var(--radius-s);
+  border: 1px dashed var(--brand-border-strong);
+  background: var(--brand-alpha-medium);
+  pointer-events: none;
+  padding: var(--static-space-2) var(--static-space-6, 0.375rem);
+  color: var(--brand-on-background-strong);
+  overflow: hidden;
+}
+
+.nowLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  height: 2px;
+  background: var(--danger-solid-strong);
+  pointer-events: none;
+}
+
+.nowLine::before {
+  content: "";
+  position: absolute;
+  left: calc(-1 * var(--static-space-4));
+  top: -3px;
+  width: var(--static-space-8);
+  height: var(--static-space-8);
+  border-radius: var(--radius-full);
+  background: var(--danger-solid-strong);
+}

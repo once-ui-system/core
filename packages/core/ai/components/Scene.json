@@ -1,0 +1,235 @@
+{
+ "name": "Scene",
+ "group": "scene",
+ "importFrom": "@once-ui-system/core/scene",
+ "mixins": [
+  "CommonProps",
+  "DisplayProps",
+  "FlexProps",
+  "SizeProps",
+  "SpacingProps",
+  "StyleProps"
+ ],
+ "props": {
+  "camera": "SceneCamera",
+  "controls": "SceneControls",
+  "autoRotateSpeed": "number",
+  "zoom": "boolean",
+  "lighting": "SceneLighting",
+  "floor": "boolean | \"shadow\" | \"grid\"",
+  "shadows": "boolean",
+  "maxPixelRatio": "number",
+  "onSceneLoad": "(context: SceneContextValue) => void",
+  "labels": "Partial<SceneLabels>",
+  "children": "React.ReactNode"
+ },
+ "tags": [
+  "3d",
+  "media",
+  "decoration"
+ ],
+ "pairsWith": [
+  "SceneMesh",
+  "SceneGroup",
+  "SceneLabel"
+ ],
+ "mixinsRef": [
+  "CommonProps",
+  "DisplayProps",
+  "FlexProps",
+  "SizeProps",
+  "SpacingProps",
+  "StyleProps"
+ ],
+ "tokensRef": "see tokens.json",
+ "resolvedMixins": {
+  "CommonProps": {
+   "onBackground": "Colors",
+   "onSolid": "Colors",
+   "align": "CSSProperties[\"textAlign\"]",
+   "children": "ReactNode",
+   "className": "string",
+   "style": "React.CSSProperties"
+  },
+  "DisplayProps": {
+   "inline": "boolean",
+   "hide": "boolean",
+   "pointerEvents": "\"none\" | \"all\" | \"auto\"",
+   "userSelect": "UserSelect",
+   "position": "CSSProperties[\"position\"]",
+   "overflow": "CSSProperties[\"overflow\"]",
+   "overflowX": "CSSProperties[\"overflowX\"]",
+   "overflowY": "CSSProperties[\"overflowY\"]",
+   "scrollbar": "\"default\" | \"minimal\"",
+   "transition": "\"micro-short\" | \"micro-medium\" | \"micro-long\" | \"macro-short\" | \"macro-medium\" | \"macro-long\"",
+   "opacity": "Opacity",
+   "zIndex": "-1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | \"-1\" | \"0\" | \"1\" | \"2\" | \"3\" | \"4\" | \"5\" | \"6\" | \"7\" | \"8\" | \"9\" | \"10\"",
+   "showIn": "\"dark\" | \"light\""
+  },
+  "FlexProps": {
+   "center": "boolean",
+   "s": "FlexBreakpointProps",
+   "direction": "\"row\" | \"column\" | \"row-reverse\" | \"column-reverse\"",
+   "horizontal": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\"",
+   "vertical": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\" | \"baseline\"",
+   "wrap": "boolean",
+   "flex": "FlexValue",
+   "xl": "FlexBreakpointProps",
+   "l": "FlexBreakpointProps",
+   "m": "FlexBreakpointProps",
+   "xs": "FlexBreakpointProps"
+  },
+  "SizeProps": {
+   "width": "number | SpacingToken | CSSUnit | \"auto\" | \"fit\"",
+   "height": "number | SpacingToken | CSSUnit | \"below-header\" | \"fit\"",
+   "maxWidth": "number | SpacingToken | CSSUnit",
+   "minWidth": "number | SpacingToken | CSSUnit",
+   "minHeight": "number | SpacingToken | CSSUnit | \"below-header\"",
+   "maxHeight": "number | SpacingToken | CSSUnit | \"below-header\"",
+   "fit": "boolean",
+   "fitWidth": "boolean",
+   "fitHeight": "boolean",
+   "fill": "boolean",
+   "fillWidth": "boolean",
+   "fillHeight": "boolean",
+   "aspectRatio": "CSSProperties[\"aspectRatio\"]"
+  },
+  "SpacingProps": {
+   "padding": "SpacingToken | number | CSSUnit",
+   "paddingLeft": "SpacingToken | number | CSSUnit",
+   "paddingRight": "SpacingToken | number | CSSUnit",
+   "paddingTop": "SpacingToken | number | CSSUnit",
+   "paddingBottom": "SpacingToken | number | CSSUnit",
+   "paddingX": "SpacingToken | number | CSSUnit",
+   "paddingY": "SpacingToken | number | CSSUnit",
+   "margin": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginLeft": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginRight": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginTop": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginBottom": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginX": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginY": "SpacingToken | number | CSSUnit | \"auto\"",
+   "gap": "SpacingToken | number | CSSUnit | \"-1\"",
+   "top": "SpacingToken | number | CSSUnit",
+   "right": "SpacingToken | number | CSSUnit",
+   "bottom": "SpacingToken | number | CSSUnit",
+   "left": "SpacingToken | number | CSSUnit",
+   "translateX": "SpacingToken | number | CSSUnit",
+   "translateY": "SpacingToken | number | CSSUnit"
+  },
+  "StyleProps": {
+   "textVariant": "TextVariant",
+   "background": "Colors | \"surface\" | \"overlay\" | \"page\" | \"transparent\"",
+   "solid": "Colors",
+   "borderTop": "Colors | \"surface\" | \"transparent\" | boolean",
+   "borderRight": "Colors | \"surface\" | \"transparent\" | boolean",
+   "borderBottom": "Colors | \"surface\" | \"transparent\" | boolean",
+   "borderLeft": "Colors | \"surface\" | \"transparent\" | boolean",
+   "borderX": "Colors | \"surface\" | \"transparent\" | boolean",
+   "borderY": "Colors | \"surface\" | \"transparent\" | boolean",
+   "border": "Colors | \"surface\" | \"transparent\" | boolean",
+   "borderStyle": "\"solid\" | \"dashed\"",
+   "borderWidth": "1 | 2 | 4 | 8 | \"1\" | \"2\" | \"4\" | \"8\"",
+   "topRadius": "RadiusSize",
+   "rightRadius": "RadiusSize",
+   "bottomRadius": "RadiusSize",
+   "leftRadius": "RadiusSize",
+   "topLeftRadius": "RadiusSize",
+   "topRightRadius": "RadiusSize",
+   "bottomLeftRadius": "RadiusSize",
+   "bottomRightRadius": "RadiusSize",
+   "shadow": "ShadowSize",
+   "emphasis": "boolean | \"edge\" | \"glow\" | \"aura\"",
+   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | CursorPresetValue | ReactNode",
+   "blendMode": "BlendMode",
+   "blur": "BlurSize | number | CSSUnit",
+   "backdropBlur": "BlurSize | number | CSSUnit",
+   "theme": "\"light\" | \"dark\" | \"invert\"",
+   "themeBorder": "BorderStyle",
+   "themeSolid": "SolidType",
+   "themeSurface": "SurfaceStyle",
+   "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`"
+  }
+ },
+ "types": {
+  "Color": [
+   "string",
+   "number",
+   "ColorInstance",
+   "ArrayLike<number>",
+   "Record<string, any>"
+  ],
+  "SceneCamera": {
+   "position": "Vec3",
+   "target": "Vec3",
+   "fov": "number"
+  },
+  "SceneColor": [
+   "string & {}",
+   "neutral-strong",
+   "neutral-medium",
+   "neutral-weak",
+   "brand-strong",
+   "brand-medium",
+   "brand-weak",
+   "accent-strong",
+   "accent-medium",
+   "accent-weak",
+   "info-strong",
+   "info-medium",
+   "info-weak",
+   "danger-strong",
+   "danger-medium",
+   "danger-weak",
+   "warning-strong",
+   "warning-medium",
+   "warning-weak",
+   "success-strong",
+   "success-medium",
+   "success-weak",
+   "`--${string}`"
+  ],
+  "SceneContextValue": {
+   "three": "!ThreeModule",
+   "scene": "!Three.Scene",
+   "camera": "!Three.PerspectiveCamera",
+   "renderer": "!Three.WebGLRenderer",
+   "container": "!HTMLDivElement",
+   "invalidate": "!() => void",
+   "color": "!(color: SceneColor) => { color: Three.Color; alpha: number }",
+   "themeVersion": "!number",
+   "theme": "!\"light\" | \"dark\"",
+   "reducedMotion": "!boolean",
+   "onFrame": "!(callback: (frame: SceneFrame) => void) => () => void",
+   "addPickable": "!(object: Three.Object3D, handlers: ScenePointerHandlers) => () => void",
+   "loadModel": "!(src: string) => Promise<Three.Object3D>"
+  },
+  "SceneControls": [
+   "none",
+   "orbit",
+   "turntable"
+  ],
+  "SceneFrame": {
+   "delta": "!number",
+   "elapsed": "!number"
+  },
+  "SceneLabels": {
+   "scene": "!string",
+   "unavailable": "!string"
+  },
+  "SceneLighting": [
+   "none",
+   "neutral",
+   "studio"
+  ],
+  "ScenePointerHandlers": {
+   "onClick": "() => void",
+   "onPointerEnter": "() => void",
+   "onPointerLeave": "() => void"
+  },
+  "ThreeModule": "typeof import(\"three\")",
+  "Vec3": {
+   "[key: number]": "number"
+  }
+ }
+}

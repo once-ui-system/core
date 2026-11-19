@@ -29,7 +29,8 @@ const rootOf = (html: string) => html.slice(0, html.indexOf(">") + 1);
 
 describe("typed theme props", () => {
   it("writes each one as its data attribute, on the server", () => {
-    for (const Component of [Flex, Grid]) {
+    // Flex and Grid are each overloaded, so their union is not callable as JSX.
+    for (const Component of [Flex, Grid] as React.ElementType[]) {
       // No LayoutProvider: the client path would throw.
       const root = rootOf(
         renderToStaticMarkup(
@@ -80,10 +81,10 @@ describe("typed theme props", () => {
     expect(root).toContain('data-border="playful"');
   });
 
-  it("does not touch the dark and light visibility props", () => {
-    // `dark` shows an element only in a dark theme; `theme="dark"` makes the
-    // subtree dark. One is a class, the other an attribute.
-    const shown = rootOf(renderToStaticMarkup(<Flex dark>x</Flex>));
+  it("does not touch the showIn visibility prop", () => {
+    // `showIn="dark"` shows an element only in a dark theme; `theme="dark"`
+    // makes the subtree dark. One is a class, the other an attribute.
+    const shown = rootOf(renderToStaticMarkup(<Flex showIn="dark">x</Flex>));
     expect(shown).toContain("dark-flex");
     expect(shown).not.toContain("data-theme");
     const themed = rootOf(renderToStaticMarkup(<Flex theme="dark">x</Flex>));

@@ -12,7 +12,7 @@
   "image": "string",
   "publishedTime": "string",
   "author": "{ name: string; url?: string; }",
-  "canonical": "string",
+  "canonical": "string | false",
   "robots": "string",
   "noindex": "boolean",
   "nofollow": "boolean",
@@ -40,7 +40,7 @@
    "twitter": "!{ card: \"summary_large_image\"; title: string; description: string; images: string[]; }",
    "authors": "{ name: string; url?: string }[]",
    "robots": "string",
-   "alternates": "{ canonical: string; languages: Record<string, string>; }"
+   "alternates": "{ canonical?: string; languages?: Record<string, string>; }"
   },
   "OgRoutes": {
    "fetch": "!string",

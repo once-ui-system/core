@@ -89,11 +89,11 @@ describe("Meta.generate", () => {
   it("builds the open graph and twitter cards from the minimal props", () => {
     const meta = Meta.generate({ title: "Home", description: "Hi", baseURL: "site.com" });
     expect(meta.metadataBase.href).toBe("https://site.com/");
-    expect(meta.openGraph).toMatchObject({ type: "website", url: "site.com/" });
+    expect(meta.openGraph).toMatchObject({ type: "website", url: "https://site.com/" });
     expect(meta.openGraph.images[0]).toEqual({ url: meta.twitter.images[0], alt: "Home" });
     expect(meta.twitter.images[0]).toContain("title=Home");
     expect(meta.robots).toBeUndefined();
-    expect(meta.alternates).toBeUndefined();
+    expect(meta.alternates).toEqual({ canonical: "https://site.com/" });
   });
 
   it("keeps an http base URL, as in local development", () => {
@@ -139,6 +139,19 @@ describe("Meta.generate", () => {
     expect(Meta.generate({ ...props, noindex: true }).robots).toBe("noindex,follow");
     expect(Meta.generate({ ...props, nofollow: true }).robots).toBe("index,nofollow");
     expect(Meta.generate({ ...props, noindex: true, robots: "all" }).robots).toBe("all");
+  });
+
+  it("names the page's own URL as canonical unless told not to", () => {
+    const props = { title: "T", description: "D", baseURL: "https://s.com/", path: "blog/a" };
+    expect(Meta.generate(props).alternates).toEqual({ canonical: "https://s.com/blog/a" });
+    expect(Meta.generate({ ...props, canonical: false }).alternates).toBeUndefined();
+    expect(
+      Meta.generate({
+        ...props,
+        canonical: false,
+        alternates: [{ hrefLang: "de", href: "https://s.com/de/blog/a" }],
+      }).alternates,
+    ).toEqual({ languages: { de: "https://s.com/de/blog/a" } });
   });
 
   it("uses canonical for the URL and lists alternates", () => {

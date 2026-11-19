@@ -20,10 +20,10 @@ import {
   NavGroup,
   NavItem,
   Row,
-  Scrubber,
   SplitView,
   selectNavHref,
 } from "@once-ui-system/core";
+import { Scrubber } from "@once-ui-system/core/media";
 import { useState } from "react";
 
 export const Shell = ({
@@ -55,7 +55,7 @@ export const Shell = ({
         {/* logo, search, account */}
       </Row>
       <Row fill paddingX="8">
-        <Column s={{ hide: true }} maxWidth={18} fitHeight position="sticky" top="56">
+        <Column s={{ hide: true }} maxWidth="18rem" fitHeight position="sticky" top="56">
           <SideNav nav={nav} pathname={pathname} />
         </Column>
         <Row fill horizontal="center" topRadius="l" overflow="hidden">
@@ -98,7 +98,7 @@ export const SideNav = ({ nav, pathname }: { nav: Item[]; pathname: string }) =>
     nav.flatMap((i) => (i.items ? i.items.map((s) => s.href) : [i.href!])),
   );
   return (
-    <Nav fill paddingX="8" aria-label="Main">
+    <Nav fill paddingX="8" tone="brand" aria-label="Main">
       {nav.map((item) =>
         item.items ? (
           <NavGroup
@@ -158,7 +158,7 @@ export const Editor = ({
     <Scrubber
       duration={duration}
       value={time}
-      onChange={setTime}
+      onValueChange={setTime}
       tracks={tracks}
       onGestureStart={pause}
     />

@@ -75,6 +75,10 @@ async function visit(context, path) {
     // A failed request logs only "Failed to load resource", with no URL; the
     // request handlers below say which, and drop other sites' failures.
     if (/^Failed to load resource/.test(m.text())) return;
+    // An embed's own console says nothing about the docs, and its text often
+    // names no URL (YouTube's player logs a compute-pressure permissions
+    // violation now and then), so the script that logged it is checked too.
+    if (ignored(m.location()?.url ?? "")) return;
     report(`${m.type()}: ${m.text()}`, m.type() === "warning" ? warnings : problems);
   });
   page.on("pageerror", (e) => report(`threw: ${e.message}`));

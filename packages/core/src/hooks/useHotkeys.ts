@@ -7,7 +7,7 @@ import {
   isTypingTarget,
   matchesCombo,
   parseHotkey,
-} from "../internal/hotkeys";
+} from "../internal/hotkeys.js";
 
 // Layout effects warn during a server render; this one only keeps a ref current.
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;

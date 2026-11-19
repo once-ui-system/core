@@ -28,25 +28,25 @@ export default function DatePickerCheck() {
   return (
     <Row fillWidth gap="24" padding="24" data-testid="root">
       <Column gap="12" data-testid="case-standalone">
-        <Text variant="label-strong-s">Standalone DatePicker</Text>
+        <Text textVariant="label-strong-s">Standalone DatePicker</Text>
         <Column
           border="neutral-alpha-medium"
           radius="l"
           padding="16"
-          width={24}
+          width="24rem"
           data-testid="standalone"
         >
-          <DatePicker value={standalone} onChange={setStandalone} />
+          <DatePicker value={standalone} onValueChange={setStandalone} />
         </Column>
       </Column>
 
-      <Column gap="12" width={20} data-testid="case-nested">
-        <Text variant="label-strong-s">DateInput (picker in a dropdown)</Text>
+      <Column gap="12" width="20rem" data-testid="case-nested">
+        <Text textVariant="label-strong-s">DateInput (picker in a dropdown)</Text>
         <DateInput
           id="datepicker-check-input"
           label="Date"
           value={nested}
-          onChange={setNested}
+          onValueChange={setNested}
           data-testid="nested-input"
         />
       </Column>

@@ -45,7 +45,7 @@ describe("components on React Native", () => {
   it("lets a RadioGroup check RadioButton children by value", async () => {
     const onChange = jest.fn();
     await wrap(
-      <RadioGroup defaultValue="oat" onChange={onChange}>
+      <RadioGroup defaultValue="oat" onValueChange={onChange}>
         <RadioButton value="whole" label="Whole milk" />
         <RadioButton value="oat" label="Oat" />
       </RadioGroup>,
@@ -75,7 +75,7 @@ describe("components on React Native", () => {
     const onChange = jest.fn();
     await wrap(
       <SegmentedControl
-        onChange={onChange}
+        onValueChange={onChange}
         defaultValue="day"
         buttons={[
           { value: "day", label: "Day" },
@@ -92,8 +92,8 @@ describe("components on React Native", () => {
     const onPress = jest.fn();
     await wrap(
       <>
-        <IconButton icon="close" ariaLabel="Close" onPress={onPress} />
-        <IconButton icon="check" ariaLabel="Save" loading onPress={onPress} />
+        <IconButton icon="close" aria-label="Close" onPress={onPress} />
+        <IconButton icon="check" aria-label="Save" loading onPress={onPress} />
       </>,
     );
     await fireEvent.press(screen.getByRole("button", { name: "Close" }));
@@ -107,8 +107,8 @@ describe("components on React Native", () => {
       return (
         <IconButton
           icon="plus"
-          ariaLabel="Notify"
-          onPress={() => addToast({ variant: "success", message: "Saved" })}
+          aria-label="Notify"
+          onPress={() => addToast({ tone: "success", message: "Saved" })}
         />
       );
     }
@@ -127,7 +127,7 @@ describe("components on React Native", () => {
         <Avatar value="Lorant Toth" />
         <Tag label="New" />
         <ProgressBar value={40} />
-        <Feedback variant="danger" title="Payment failed" description="Try another card." />
+        <Feedback tone="danger" title="Payment failed" description="Try another card." />
       </>,
     );
     expect(screen.getByRole("image", { name: "Avatar Lorant Toth" })).toBeTruthy();

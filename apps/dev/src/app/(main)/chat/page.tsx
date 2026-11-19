@@ -10,7 +10,6 @@ import {
 import {
   Avatar,
   Column,
-  EmojiPickerDropdown,
   Fade,
   Icon,
   IconButton,
@@ -23,6 +22,7 @@ import {
   Text,
   User,
 } from "@once-ui-system/core";
+import { EmojiPicker } from "@once-ui-system/core/emoji";
 
 type Conversation = {
   id: string;
@@ -151,8 +151,8 @@ function UnreadCount({ count }: { count: number }) {
   return (
     <Row
       center
-      minWidth={5}
-      height={5}
+      minWidth="5rem"
+      height="5rem"
       paddingX="8"
       radius="full"
       background="brand-strong"
@@ -189,36 +189,36 @@ function ConversationItem({
     >
       {active && (
         <Column
-          width={0.25}
-          height={8}
+          width="0.25rem"
+          height="8rem"
           background="brand-strong"
           radius="full"
         />
       )}
-      {!active && <Column width={0.25} />}
+      {!active && <Column width="0.25rem" />}
       <Avatar
         size="s"
         value={conversation.value}
         statusIndicator={
-          conversation.online ? { color: conversation.isAi ? "gray" : "green" } : undefined
+          conversation.online ? { scheme: conversation.isAi ? "gray" : "green" } : undefined
         }
       />
       <Column flex={1} gap="2" minWidth={0}>
         <Row fillWidth horizontal="between" vertical="center" gap="8">
           <Text
-            variant="label-default-s"
+            textVariant="label-default-s"
             onBackground={active ? "neutral-strong" : undefined}
             wrap="nowrap"
           >
             {conversation.channel ? `# ${conversation.name}` : conversation.name}
           </Text>
-          <Text variant="label-default-xs" onBackground="neutral-weak" wrap="nowrap">
+          <Text textVariant="label-default-xs" onBackground="neutral-weak" wrap="nowrap">
             {conversation.time}
           </Text>
         </Row>
         <Row fillWidth horizontal="between" vertical="center" gap="8">
           <Text
-            variant="body-default-xs"
+            textVariant="body-default-xs"
             onBackground={active ? "neutral-medium" : "neutral-weak"}
             wrap="nowrap"
           >
@@ -245,14 +245,14 @@ function MessageRow({
       paddingTop={showHeader ? "16" : "2"}
       paddingBottom="2"
     >
-      <Column width={8} horizontal="start">
+      <Column width="8rem" horizontal="start">
         {showHeader && <Avatar size="m" value={message.value} />}
       </Column>
       <Column flex={1} gap="4" minWidth={0} paddingTop={showHeader ? undefined : "2"}>
         {showHeader && (
           <Row gap="8" vertical="center">
-            <Text variant="label-strong-s">{message.author}</Text>
-            <Text variant="label-default-xs" onBackground="neutral-weak">
+            <Text textVariant="label-strong-s">{message.author}</Text>
+            <Text textVariant="label-default-xs" onBackground="neutral-weak">
               {message.time}
             </Text>
           </Row>
@@ -264,15 +264,15 @@ function MessageRow({
             radius="m"
             background="brand-alpha-weak"
             border="brand-alpha-weak"
-            maxWidth={48}
+            maxWidth="48rem"
             fitWidth
           >
-            <Text variant="body-default-s" onBackground="neutral-strong">
+            <Text textVariant="body-default-s" onBackground="neutral-strong">
               {message.text}
             </Text>
           </Row>
         ) : (
-          <Text variant="body-default-s" onBackground="neutral-strong">
+          <Text textVariant="body-default-s" onBackground="neutral-strong">
             {message.text}
           </Text>
         )}
@@ -294,16 +294,16 @@ function AgentMessage({
 }) {
   return (
     <Row gap="12" paddingX="20" paddingY="16">
-      <Column width={8} horizontal="start">
+      <Column width="8rem" horizontal="start">
         <Avatar size="m" value="AI" icon="sparkle" />
       </Column>
       <Column flex={1} gap="8" minWidth={0}>
         <Row gap="8" vertical="center">
-          <Text variant="label-strong-s">Nexus AI</Text>
-          <Text variant="label-default-xs" onBackground="neutral-weak">
+          <Text textVariant="label-strong-s">Nexus AI</Text>
+          <Text textVariant="label-default-xs" onBackground="neutral-weak">
             now
           </Text>
-          {active ? <Spinner size="xs" ariaLabel="Nexus AI is responding" /> : null}
+          {active ? <Spinner size="xs" aria-label="Nexus AI is responding" /> : null}
         </Row>
         <AgentActivityBar toolCalls={toolCalls} updates={updates} />
         <AgentGeneration text={text} active={active} />
@@ -387,7 +387,7 @@ export default function ChatPage() {
     clearedUnread[conversation.id] ? 0 : (conversation.unread ?? 0);
 
   return (
-    <Column as="main" fill fillWidth maxWidth="xl" minHeight={36}>
+    <Column as="main" fill fillWidth maxWidth="xl" minHeight="36rem">
       <SplitView
         fill
         defaultSplit={0.28}
@@ -403,7 +403,7 @@ export default function ChatPage() {
           >
             <Column paddingX="12" paddingTop="12" paddingBottom="8" gap="8">
               <Row horizontal="between" vertical="center" paddingX="4">
-                <Text variant="heading-strong-s">Inbox</Text>
+                <Text textVariant="heading-strong-s">Inbox</Text>
                 <IconButton icon="plus" variant="tertiary" size="s" tooltip="New message" />
               </Row>
               <Input
@@ -452,7 +452,7 @@ export default function ChatPage() {
                   value: activeConversation.value,
                   size: "s",
                   statusIndicator: activeConversation.online
-                    ? { color: activeConversation.isAi ? "gray" : "green" }
+                    ? { scheme: activeConversation.isAi ? "gray" : "green" }
                     : undefined,
                 }}
               />
@@ -468,7 +468,7 @@ export default function ChatPage() {
                 <Column flex={1} overflowY="auto" paddingY="8">
                   <Row paddingX="20" paddingY="12" center gap="12">
                     <Line />
-                    <Text variant="label-default-xs" onBackground="neutral-weak">
+                    <Text textVariant="label-default-xs" onBackground="neutral-weak">
                       Today
                     </Text>
                     <Line />
@@ -502,7 +502,7 @@ export default function ChatPage() {
                     })
                   )}
 
-                  <Column ref={messagesEndRef} height={1} />
+                  <Column ref={messagesEndRef} height="1rem" />
                 </Column>
               </Fade>
             </Column>
@@ -536,7 +536,7 @@ export default function ChatPage() {
                     onChange={(e) => setDraft(e.target.value)}
                   />
                 </Column>
-                <EmojiPickerDropdown
+                <EmojiPicker
                   placement="top"
                   trigger={<IconButton icon="smiley" variant="tertiary" size="s" tooltip="Add emoji" />}
                   onSelect={handleEmojiSelect}
@@ -550,12 +550,12 @@ export default function ChatPage() {
                 />
               </Row>
               <Row gap="8" vertical="center" paddingX="8">
-                <Text variant="label-default-xs" onBackground="neutral-weak">
+                <Text textVariant="label-default-xs" onBackground="neutral-weak">
                   Press
                 </Text>
                 <Kbd>⌘</Kbd>
                 <Kbd>K</Kbd>
-                <Text variant="label-default-xs" onBackground="neutral-weak">
+                <Text textVariant="label-default-xs" onBackground="neutral-weak">
                   for commands
                 </Text>
               </Row>

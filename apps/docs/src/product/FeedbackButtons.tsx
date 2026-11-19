@@ -11,6 +11,8 @@ declare global {
       embed?: (element: Element, which: Tab) => () => void;
       unread?: () => boolean;
       open?: (which: Tab) => void;
+      /** Pin mode: false when the board takes no pins or nobody vouched for the reader. */
+      pin?: () => boolean;
     };
   }
 }
@@ -51,6 +53,8 @@ export function FeedbackButtons({
 
   // A widget from before embed mode opens its own panel instead.
   const show = (which: Tab) => {
+    // Feedback puts the page in pin mode when Chirio can; else the drawer.
+    if (which === "new" && window.Chirio?.pin?.()) return;
     if (window.Chirio && !window.Chirio.embed) window.Chirio.open?.(which);
     else setOpen(which);
   };
@@ -108,7 +112,7 @@ export function FeedbackButtons({
           borderBottom="neutral-alpha-weak"
         >
           <Row flex={1}>
-            <Text variant="heading-strong-s">{title}</Text>
+            <Text textVariant="heading-strong-s">{title}</Text>
           </Row>
           <IconButton
             icon="arrowUpRight"

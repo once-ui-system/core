@@ -18,18 +18,18 @@ The `CelebrationFx` component creates animated celebration effects using the nat
   fullscreenButton
   preview={
     <CelebrationFx
-      height={20}
+      height="20rem"
       type="confetti"
-      duration={4}
+      duration={4000}
     />
   }
   codes={[
     {
       code:
 `<CelebrationFx
-  height={20}
+  height="20rem"
   type="confetti"
-  duration={4}
+  duration={4000}
 />`,
       language: "tsx",
       label: "Usage"
@@ -48,14 +48,14 @@ Choose between `confetti` (falling particles) or `fireworks` (explosive bursts).
   reloadButton
   fullscreenButton
   preview={
-    <Grid fillWidth height={16} columns={2} gap="16" s={{ columns: 1 }}>
+    <Grid fillWidth height="16rem" columns={2} gap="16" s={{ columns: 1 }}>
       <CelebrationFx
         type="confetti"
-        duration={5}
+        duration={5000}
       />
       <CelebrationFx
         type="fireworks"
-        duration={5}
+        duration={5000}
       />
     </Grid>
   }
@@ -64,11 +64,11 @@ Choose between `confetti` (falling particles) or `fireworks` (explosive bursts).
       code:
 `<CelebrationFx
     type="confetti"
-    duration={5}
+    duration={5000}
 />
 <CelebrationFx
     type="fireworks"
-    duration={5}
+    duration={5000}
 />`,
       language: "tsx",
       label: "Types"
@@ -78,7 +78,7 @@ Choose between `confetti` (falling particles) or `fireworks` (explosive bursts).
 
 ## Trigger
 
-Control when the celebration starts with `mount` (automatic), `hover` (on mouse enter), `click` (fires from click position), or `manual` (controlled via `active` prop).
+Control when the celebration starts with `mount` (on load), `hover` (while the pointer is over it; a tap on touch screens) or `click` (a burst from the click position). A celebration runs for `duration` (3000 ms by default), then what is in the air settles.
 
 <CodeBlock
   marginTop="16"
@@ -88,12 +88,12 @@ Control when the celebration starts with `mount` (automatic), `hover` (on mouse 
   fullscreenButton
   preview={
     <CelebrationFx
-      height={16}
+      height="16rem"
       type="confetti"
       trigger="hover"
       center
     >
-      <Text variant="heading-strong-l">
+      <Text textVariant="heading-strong-l">
         Hover me!
       </Text>
     </CelebrationFx>
@@ -102,12 +102,12 @@ Control when the celebration starts with `mount` (automatic), `hover` (on mouse 
     {
       code:
 `<CelebrationFx
-    height={16}
+    height="16rem"
     type="confetti"
     trigger="hover"
     center
 >
-    <Text variant="heading-strong-l">
+    <Text textVariant="heading-strong-l">
       Hover me!
     </Text>
 </CelebrationFx>`,
@@ -125,13 +125,13 @@ Use `trigger="click"` to fire celebrations from exactly where users click. Perfe
   previewPadding="none"
   fullscreenButton
   preview={
-    <Grid fillWidth height={16} columns={2} gap="16" s={{ columns: 1 }}>
+    <Grid fillWidth height="16rem" columns={2} gap="16" s={{ columns: 1 }}>
       <CelebrationFx
         type="fireworks"
         trigger="click"
         center
       >
-        <Text variant="heading-strong-l">
+        <Text textVariant="heading-strong-l">
           Click for fireworks!
         </Text>
       </CelebrationFx>
@@ -140,7 +140,7 @@ Use `trigger="click"` to fire celebrations from exactly where users click. Perfe
         trigger="click"
         center
       >
-        <Text variant="heading-strong-l">
+        <Text textVariant="heading-strong-l">
           Click for confetti!
         </Text>
       </CelebrationFx>
@@ -154,7 +154,7 @@ Use `trigger="click"` to fire celebrations from exactly where users click. Perfe
     trigger="click"
     center
 >
-    <Text variant="heading-strong-l">
+    <Text textVariant="heading-strong-l">
       Click for fireworks!
     </Text>
 </CelebrationFx>
@@ -163,7 +163,7 @@ Use `trigger="click"` to fire celebrations from exactly where users click. Perfe
     trigger="click"
     center
 >
-    <Text variant="heading-strong-l">
+    <Text textVariant="heading-strong-l">
       Click for confetti!
     </Text>
 </CelebrationFx>`,
@@ -185,9 +185,9 @@ Customize celebration colors using design tokens or any valid CSS color.
   fullscreenButton
   preview={
     <CelebrationFx
-      height={16}
+      height="16rem"
       type="fireworks"
-      duration={5}
+      duration={5000}
       colors={["accent-background-strong", "danger-background-strong", "warning-background-strong"]}
     />
   }
@@ -195,9 +195,9 @@ Customize celebration colors using design tokens or any valid CSS color.
     {
       code:
 `<CelebrationFx
-  height={16}
+  height="16rem"
   type="fireworks"
-  duration={5}
+  duration={5000}
   colors={["accent-background-strong", "danger-background-strong", "warning-background-strong"]}
 />`,
       language: "tsx",
@@ -217,16 +217,16 @@ Control particle density with `intensity` and animation speed with `speed`.
   reloadButton
   fullscreenButton
   preview={
-    <Grid fillWidth height={16} columns={2} gap="16" s={{ columns: 1 }}>
+    <Grid fillWidth height="16rem" columns={2} gap="16" s={{ columns: 1 }}>
       <CelebrationFx
         type="confetti"
-        duration={5}
+        duration={5000}
         intensity={100}
         speed={2}
       />
       <CelebrationFx
         type="confetti"
-        duration={5}
+        duration={5000}
         intensity={20}
         speed={0.5}
       />
@@ -236,16 +236,16 @@ Control particle density with `intensity` and animation speed with `speed`.
     {
       code:
 `<CelebrationFx
-    height={16}
+    height="16rem"
     type="confetti"
-    duration={5}
+    duration={5000}
     intensity={100}
     speed={2}
 />
 <CelebrationFx
-    height={16}
+    height="16rem"
     type="confetti"
-    duration={5}
+    duration={5000}
     intensity={20}
     speed={0.5}
 />`,
@@ -256,7 +256,7 @@ Control particle density with `intensity` and animation speed with `speed`.
   ]}
 />
 
-Control the celebration programmatically using `trigger="manual"` and the `active` prop.
+Start it from your own state with `active` and `onActiveChange`, like any other stateful component. `onActiveChange(false)` arrives when `duration` ends, so the button below can fire again.
 
 <CodeBlock
   marginTop="16"
@@ -273,7 +273,8 @@ Control the celebration programmatically using `trigger="manual"` and the `activ
 `"use client";
 
 import React, { useState } from "react";
-import { CelebrationFx, Button, Column } from "@once-ui-system/core";
+import { Button, Column } from "@once-ui-system/core";
+import { CelebrationFx } from "@once-ui-system/fx";
 
 export function demo() {
     const [active, setActive] = useState(false);
@@ -281,16 +282,13 @@ export function demo() {
     return (
       <Column gap="16" fillWidth>
         <CelebrationFx
-          height={16}
+          height="16rem"
           type="fireworks"
-          trigger="manual"
           active={active}
+          onActiveChange={setActive}
         />
         <Button
-          onClick={() => {
-            setActive(true);
-            setTimeout(() => setActive(false), 3000);
-          }}
+          onClick={() => setActive(true)}
         >
           Launch Fireworks
         </Button>
@@ -315,9 +313,9 @@ Use `CelebrationFx` as a wrapper to overlay celebrations behind any content.
   fullscreenButton
   preview={
     <CelebrationFx
-      height={20}
+      height="20rem"
       type="confetti"
-      duration={6}
+      duration={6000}
       center
     >
       <Column
@@ -328,8 +326,8 @@ Use `CelebrationFx` as a wrapper to overlay celebrations behind any content.
         radius="l"
       >
         <Icon name="trophy" size="xl" onBackground="accent-strong" />
-        <Text variant="heading-strong-xl">Achievement Unlocked!</Text>
-        <Text variant="body-default-s" onBackground="neutral-weak">
+        <Text textVariant="heading-strong-xl">Achievement Unlocked!</Text>
+        <Text textVariant="body-default-s" onBackground="neutral-weak">
           You've completed all challenges
         </Text>
       </Column>
@@ -339,9 +337,9 @@ Use `CelebrationFx` as a wrapper to overlay celebrations behind any content.
     {
       code:
 `<CelebrationFx
-    height={20}
+    height="20rem"
     type="confetti"
-    duration={6}
+    duration={6000}
     center
 >
     <Column
@@ -352,8 +350,8 @@ Use `CelebrationFx` as a wrapper to overlay celebrations behind any content.
       radius="l"
     >
       <Icon name="trophy" size="xl" onBackground="accent-strong" />
-      <Text variant="heading-strong-xl">Achievement Unlocked!</Text>
-      <Text variant="body-default-s" onBackground="neutral-weak">
+      <Text textVariant="heading-strong-xl">Achievement Unlocked!</Text>
+      <Text textVariant="body-default-s" onBackground="neutral-weak">
         You've completed all challenges
       </Text>
     </Column>
@@ -366,7 +364,9 @@ Use `CelebrationFx` as a wrapper to overlay celebrations behind any content.
 
 ## Performance
 
-CelebrationFx automatically detects low-end devices and the `prefers-reduced-motion` system setting. When either is detected, the animation is completely disabled. You can override this with the `reducedMotion` prop.
+CelebrationFx draws with time-based motion at your screen's pixel ratio (up to 2x), sleeps when everything has landed or the effect is scrolled off screen, and picks its colours up again when the theme changes.
+
+Under the `prefers-reduced-motion` system setting, and on low-end devices, it shows a still frame instead of animating: scattered confetti or a frozen burst while `active`. Override this with the `reducedMotion` prop.
 
 See [useReducedMotion](/hooks/useReducedMotion) for details.
 
@@ -378,12 +378,14 @@ The `CelebrationFx` component extends all layout props from `Flex` plus the foll
   component="CelebrationFx"
   describe={{
     type: "Which celebration to render.",
-    speed: "Motion multiplier. Not a duration.",
-    colors: "Palette for the pieces.",
-    intensity: "How much of it there is.",
-    duration: "Stop after this long, in milliseconds. Runs indefinitely if unset.",
-    trigger: "What starts it. \"manual\" hands control to active.",
-    active: "Run it, when trigger is \"manual\".",
+    speed: "Motion multiplier: 1 is the default. \"slow\", \"medium\" and \"fast\" are 0.5, 1 and 2.",
+    colors: "Palette: tokens (brand-solid-medium, accent-weak), custom properties or CSS colours.",
+    intensity: "How much of it there is: pieces per cannon, or sparks per shell. 0 to 200.",
+    duration: "How long it runs once started, in milliseconds. 0 or Infinity runs until active turns off.",
+    trigger: "What starts it by itself: mount, hover or click.",
+    active: "Whether it is celebrating. Controlled; pair with onActiveChange.",
+    defaultActive: "The first value of active when uncontrolled. Defaults to trigger === \"mount\".",
+    onActiveChange: "Called when it starts (hover) or ends (duration, pointer leaving).",
     reducedMotion: "\"auto\" follows the reader's system setting, which is the right default for anything ambient.",
     children: "Content drawn above the celebration.",
   }}

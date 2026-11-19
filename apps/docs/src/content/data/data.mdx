@@ -1,0 +1,222 @@
+---
+title: "Data and series"
+export: false
+summary: "The data contract every Once UI chart shares: what a row looks like, how the x axis and the series are found, dates, gaps, ordering, typed rows and reshaping API data."
+updatedAt: "2026-11-12"
+docs: "once-ui/data/data.mdx"
+github: "packages/core/src/modules/data/interfaces.ts"
+navLabel: "Data and series"
+navIcon: "layers"
+---
+
+`LineChart`, `BarChart`, `LineBarChart` and `PieChart` read the same two props. `data` is the rows: one object per point on the x axis. `series` says which keys of those rows to draw. Everything else is presentation.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="none"
+  preview={
+    <BarChart
+      border="transparent"
+      title="Orders per channel"
+      xKey="month"
+      series={[
+        { key: "web", label: "Web shop" },
+        { key: "store", label: "In store" }
+      ]}
+      data={[
+        { month: "Jan", web: 124, store: 88 },
+        { month: "Feb", web: 131, store: 91 },
+        { month: "Mar", web: 158, store: 86 },
+        { month: "Apr", web: 172, store: 94 }
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<BarChart
+  title="Orders per channel"
+  xKey="month"
+  series={[
+    { key: "web", label: "Web shop" },
+    { key: "store", label: "In store" },
+  ]}
+  data={[
+    { month: "Jan", web: 124, store: 88 },
+    { month: "Feb", web: 131, store: 91 },
+    { month: "Mar", web: 158, store: 86 },
+    { month: "Apr", web: 172, store: 94 },
+  ]}
+/>`,
+      language: "tsx",
+      label: "Rows and series"
+    }
+  ]}
+/>
+
+## Rows
+
+A row holds the x value and one number per series. The keys can be anything, and a row may carry extra keys the chart ignores (an id, a note), as long as `series` names what to draw.
+
+```ts
+{ month: "Jan", web: 124, store: 88, id: "2026-01" }
+//  x value      series     series    ignored
+```
+
+- **Values are numbers.** A string such as `"1,240"` is not drawn. Convert with `Number()` before passing the rows.
+- **Rows are drawn in the order you give them.** The chart doesn't sort. Sort by date or by value first, whichever the reader should scan in.
+- **A missing value is a gap.** Leave the key out, or set it to `undefined` or `null`, and a line breaks there instead of dropping to zero. A bar is simply not drawn. Write `0` only when the value really was zero.
+
+<LineChart
+  marginTop="16"
+  marginBottom="24"
+  title="A sensor that went offline"
+  description="Mar and Apr have no reading, so the line breaks"
+  height="18rem"
+  axis="x"
+  legend={{ display: false }}
+  xKey="month"
+  series={{ key: "temp", label: "Temperature (°C)", color: "orange" }}
+  data={[
+    { month: "Jan", temp: 4 },
+    { month: "Feb", temp: 6 },
+    { month: "Mar" },
+    { month: "Apr" },
+    { month: "May", temp: 17 },
+    { month: "Jun", temp: 21 },
+    { month: "Jul", temp: 24 }
+  ]}
+/>
+
+## The x axis
+
+The chart has to know which key is the x axis. In order, it uses:
+
+1. `xKey`, when you pass it.
+2. Otherwise the first key of the **first row** that is not a series and is not `label`.
+3. Otherwise `label`.
+
+So `{ month: "Jan", web: 124 }` puts `month` on the x axis with nothing else said. Key order is fragile, though. Rows from an API or a database often lead with an `id`, and then the id becomes the axis. **Pass `xKey` whenever the rows have more than one non-series key.**
+
+`label` is special: when a row has a `label`, that text is what the axis and the tooltip print for the row, whatever the x value is. Use it to write a friendlier name than the raw value.
+
+```ts
+{ date: "2026-01-01", label: "New year", visits: 320 }
+```
+
+## Series
+
+`series` is one object, or an array of them, one per line, bar or slice group.
+
+<PropsTable
+  content={[
+    ["key", "string", "-", "The row key this series plots. With typed rows, a key that is not on the row type is a type error."],
+    ["label", "string", "key", "The name the legend, the tooltip and the screen-reader summary use. Lets the data keep short keys."],
+    ["color", "ColorValue", "auto", "A palette hue (blue, green…), your theme's brand or accent, a token or any CSS colour. See Colors and styling."],
+    ["format", "ValueFormat", "valueFormat", "How this series' values are written in the tooltip, when it differs from the chart's valueFormat."],
+  ]}
+/>
+
+Without `series`, a cartesian chart draws every key of the first row except the x key and `label`. It is handy for a quick look and risky in production, because a new field from the API becomes a new line. Name the series.
+
+The order of `series` is the order of the legend, the tooltip, the colours and, when stacked, the stack from the bottom up. In `LineBarChart` it also decides the shape: the first series is the line, the second the bars.
+
+## Dates
+
+Dates on the x axis can be ISO strings (`"2026-03-01"`) or `Date` objects. Either way, set `date.format` to write them on the axis and in the tooltip, as a [date-fns pattern](https://date-fns.org/docs/format):
+
+```tsx
+<LineChart
+  date={{ format: "MMM d" }}
+  xKey="day"
+  series={{ key: "visits" }}
+  data={[{ day: "2026-03-01", visits: 320 }]}
+/>
+```
+
+Without `date.format`, the axis prints the value as it is in the row, so `"2026-03-01"` stays `2026-03-01`, and a `Date` prints its long `toString()` (`Sun Mar 01 2026 00:00:00 GMT…`). With `Date` objects, always set a format. A string that is not ISO (`"Mar 1"`) is never parsed: it is printed as written, which is fine for categories that happen to be dates.
+
+`date.start` and `date.end` **filter the rows**: anything outside the range is not drawn. They don't stretch the axis to the range. Use them with `date.selector` to let the reader pick a range in the header (see [States and interaction](/data/interaction#date-range)), and leave them out to draw every row.
+
+Dates are not spaced by time. Each row gets an equal slot, so a missing month doesn't leave a gap on the axis. When the spacing matters, put numbers on the x axis (a timestamp, a day index) and set `xAxisType="number"` on `LineChart`:
+
+```tsx
+<LineChart
+  xAxisType="number"
+  xKey="t"
+  series={{ key: "latency" }}
+  data={samples.map((s) => ({ t: s.time.getTime(), latency: s.ms }))}
+/>
+```
+
+## Typed rows
+
+Charts are generic over the row type. Your own `interface` works as it is, with no cast and no index signature, and `readonly` arrays are fine. A typo in a series key or in `xKey` is a type error.
+
+```tsx
+interface RevenueRow {
+  month: string;
+  revenue: number;
+  cost: number;
+}
+
+const rows: readonly RevenueRow[] = await getRevenue();
+
+<BarChart
+  data={rows}
+  xKey="month"
+  series={[{ key: "revenue" }, { key: "cost" }]}
+/>
+```
+
+`DataPoint`, `SeriesConfig`, `ValueFormat` and the other types are exported from `@once-ui-system/core/data` for the code around your charts.
+
+## Reshaping API data
+
+Charts want **wide** rows: one row per x value, one key per series. APIs and SQL usually return **long** rows: one row per x value _and_ series. Pivot them before passing:
+
+```ts
+// [{ month: "Jan", channel: "web", orders: 124 }, { month: "Jan", channel: "store", orders: 88 }, …]
+function pivot<T extends Record<string, unknown>>(
+  rows: T[],
+  x: keyof T,
+  by: keyof T,
+  value: keyof T,
+) {
+  const out = new Map<unknown, Record<string, unknown>>();
+  for (const row of rows) {
+    const key = row[x];
+    if (!out.has(key)) out.set(key, { [x]: key });
+    (out.get(key) as Record<string, unknown>)[String(row[by])] = Number(row[value]);
+  }
+  return [...out.values()];
+}
+
+const data = pivot(rows, "month", "channel", "orders");
+// [{ month: "Jan", web: 124, store: 88 }, …]
+```
+
+A series whose key is missing from some rows shows a gap there, which is usually right: no orders recorded is not the same as zero orders. Fill with `0` in the pivot if it is.
+
+## Pie data
+
+A pie reads a name and a value from each row, `name` and `value` by default. `nameKey` and `dataKey` point at other keys. Give the series the same key as `dataKey`, so its `label` and `format` apply:
+
+```tsx
+<PieChart
+  nameKey="channel"
+  dataKey="sessions"
+  series={{ key: "sessions", label: "Sessions" }}
+  data={[
+    { channel: "Direct", sessions: 4200 },
+    { channel: "Search", sessions: 3100 },
+  ]}
+/>
+```
+
+A slice takes its colour from a `color` key on its row, or from the palette in order. `series.color` doesn't colour a pie.
+
+## Empty data
+
+An empty `data` array draws the chart's empty state, not an error: the request ran and found nothing. Set `emptyState` to say what that means for this chart. See [States and interaction](/data/interaction).

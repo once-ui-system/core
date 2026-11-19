@@ -2,14 +2,13 @@ import {
   Background,
   Column,
   Heading,
-  HoloFx,
   Icon,
   IconButton,
   Input,
   Row,
   Text,
-  TiltFx,
 } from "@once-ui-system/core";
+import { HoloFx, TiltFx } from "@once-ui-system/fx";
 
 export const BankCard: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }) => {
   return (
@@ -41,10 +40,10 @@ export const BankCard: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
               gradient={{
                 display: true,
                 tilt: -45,
-                height: 150,
-                width: 100,
-                x: 75,
-                y: -50,
+                height: "150%",
+                width: "100%",
+                x: "75%",
+                y: "-50%",
                 colorStart: "brand-solid-strong",
                 colorEnd: "accent-solid-weak",
               }}
@@ -59,11 +58,11 @@ export const BankCard: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
             gap="12"
             onSolid="neutral-strong"
           >
-            <Text variant="body-default-xl">Lorant One</Text>
+            <Text textVariant="body-default-xl">Lorant One</Text>
             <Row fillWidth horizontal="between" vertical="end" paddingRight="16">
               <Column gap="4">
-                <Text variant="body-default-m">08 / 27</Text>
-                <Text variant="body-default-m">1234 5678 1234 5678</Text>
+                <Text textVariant="body-default-m">08 / 27</Text>
+                <Text textVariant="body-default-m">1234 5678 1234 5678</Text>
               </Column>
               <Icon name="visa" size="xl" />
             </Row>
@@ -72,7 +71,7 @@ export const BankCard: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
       </Row>
       <Column fillWidth gap="-1">
         <Row fillWidth vertical="center" horizontal="between" marginBottom="32">
-          <Heading as="h3" variant="display-default-xs">
+          <Heading as="h3" textVariant="display-default-xs">
             Fill in your card details
           </Heading>
           <IconButton

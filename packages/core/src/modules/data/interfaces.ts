@@ -1,15 +1,13 @@
-import type { DateRange } from "../../components/DateRangePicker";
-import type { Flex } from "../../components/Flex";
-import type { ColorValue, TShirtSizes } from "../../types";
+import type { DateRange } from "../../components/DatePicker.js";
+import type { FlexElementProps } from "../../interfaces.js";
+import type { ColorValue, TShirtSizes } from "../../types.js";
 
 /**
- * Recharts' own CurveType, inlined.
- *
- * Importing it left `recharts` in core's published .d.ts, so anyone who did
- * not install the optional peer failed to typecheck even when their bundle
- * never touched a chart. The interpolation names are a stable part of d3's
- * shape API; the CurveFactory arm of recharts' union is deliberately dropped,
- * as passing a factory was never part of this component's surface.
+ * How a line or area runs between its points: d3's curve names, which the
+ * charts' own SVG renderer draws (`natural` by default; `linear` for straight
+ * segments, `monotone` to never overshoot a point, `step`, `stepBefore` and
+ * `stepAfter` to hold a value until the next one). The `Closed`, `Open`, `X`
+ * and `Y` variants draw as their base curve.
  */
 type CurveType =
   | "basis"
@@ -29,18 +27,53 @@ type CurveType =
   | "stepAfter";
 
 type ChartVariant = "flat" | "gradient" | "outline";
+
+/**
+ * How a chart writes its numbers: on the value axis, in the tooltip and in
+ * the summary screen readers hear. Always in the chart's `locale`.
+ *
+ * - `"number"`: grouped digits (`12,400`; `12 400` in `hu-HU`). The default.
+ * - `"compact"`: `12.4K`, `1.2M`.
+ * - `"percent"`: a fraction as a percentage (`0.42` is `42%`).
+ * - `Intl.NumberFormatOptions`: anything Intl writes, such as
+ *   `{ style: "currency", currency: "HUF" }` or `{ style: "unit", unit: "kilogram" }`.
+ * - A function, for anything else.
+ */
+type ValueFormat =
+  | "number"
+  | "compact"
+  | "percent"
+  | Intl.NumberFormatOptions
+  | ((value: number) => string);
 type ChartMode = "categorical" | "divergent" | "sequential";
 type BarWidth = TShirtSizes | "fill" | number;
+/** @deprecated Use `CurveType`. */
 type curveType = CurveType;
 
+/**
+ * A row of chart data when no row type is given: a label on the x axis and a
+ * value per series. Charts take your own row type too — `data: T[]` — so an
+ * `interface RevenueRow { month: string; revenue: number }` needs no cast.
+ */
 interface DataPoint {
   [key: string]: string | number | Date | undefined;
   label?: string;
 }
 
-interface SeriesConfig {
-  key: string;
+/** The string keys of a row type: what a series can plot. */
+type SeriesKey<T> = Extract<keyof T, string>;
+
+/**
+ * One series: the row key it plots (`"revenue"`), and optionally the name the
+ * legend and tooltip show, its colour and how its values are written.
+ */
+interface SeriesConfig<T = DataPoint> {
+  key: SeriesKey<T>;
+  /** The name shown in the legend and tooltip. Defaults to `key`. */
+  label?: string;
   color?: ColorValue;
+  /** How this series' values are written in the tooltip; defaults to the chart's `valueFormat`. */
+  format?: ValueFormat;
 }
 
 interface PresetsConfig {
@@ -57,7 +90,8 @@ interface DateConfig {
   format?: string;
   presets?: PresetsConfig;
   selector?: boolean;
-  onChange?: (range: DateRange) => void;
+  /** Called with the range the reader picks in the header's date picker. */
+  onRangeChange?: (range: DateRange) => void;
 }
 
 interface LegendConfig {
@@ -72,17 +106,46 @@ interface LegendConfig {
     | "bottom-center";
 }
 
-interface ChartProps extends Omit<React.ComponentProps<typeof Flex>, "title" | "description"> {
+/**
+ * What every chart takes. `T` is the row type, inferred from `data`: `series`
+ * keys are checked against it, so a typo in a key is a type error.
+ */
+interface ChartProps<T extends object = DataPoint>
+  extends Omit<FlexElementProps, "title" | "description"> {
   title?: React.ReactNode;
   description?: React.ReactNode;
-  series: SeriesConfig | SeriesConfig[];
+  series: SeriesConfig<T> | SeriesConfig<T>[];
   /**
-   * One object per point: the x-axis value and a number per series key, as
-   * `DataPoint`. Rows typed with an `interface` (`RevenuePoint[]`) and
-   * `readonly` arrays are taken as they are; an interface has no index
-   * signature, so `DataPoint[]` alone rejected them.
+   * One object per point: the x-axis value and a number per series key.
+   * Rows typed with an `interface` (`RevenuePoint[]`) and `readonly` arrays
+   * are taken as they are.
    */
-  data: readonly DataPoint[] | readonly object[];
+  data: readonly T[];
+  /**
+   * The row key on the x axis (or the category axis of horizontal bars, the
+   * slice names of a pie). Without it, the first key of the first row that
+   * is not a series.
+   */
+  xKey?: SeriesKey<T>;
+  /** How values are written on the axis, in the tooltip and in the summary. */
+  valueFormat?: ValueFormat;
+  /**
+   * The BCP 47 locale numbers are written in (`"hu-HU"`). Defaults to
+   * `"en-US"`, the same on the server and in every browser.
+   */
+  locale?: string;
+  /**
+   * What a screen reader hears for the plot, after the title. Without it the
+   * chart writes one from its data: the series, the x range and each series'
+   * highest and lowest point (`"Revenue and Cost, Jan to Dec. Revenue: highest
+   * 12,400 in Aug, lowest 3,100 in Feb."`), in `valueFormat` and `locale`.
+   */
+  summary?: string;
+  /**
+   * The plot's whole accessible name, title included, in place of the title
+   * and summary. The data table screen readers can walk stays either way.
+   */
+  "aria-label"?: string;
   legend?: LegendConfig;
   date?: DateConfig;
   emptyState?: React.ReactNode;
@@ -95,14 +158,78 @@ interface ChartProps extends Omit<React.ComponentProps<typeof Flex>, "title" | "
   loading?: boolean;
 }
 
+/** The tones a threshold or annotation can take: each has its own line, so it reads without colour. */
+type ChartMarkTone = "neutral" | "info" | "success" | "warning" | "danger";
+
+/**
+ * A limit drawn across a chart's value axis: a line at `value`, or a band
+ * from `from` to `to` (leave one end out for "everything above" or "below").
+ * It is always labelled in the plot, and drawn so it reads without colour:
+ * `danger` is a heavy solid line over a hatched band, `warning` a dashed line
+ * over a lighter hatch, the other tones a thin dotted line over a plain tint.
+ * The value axis stretches to show every line.
+ */
+interface ChartThreshold {
+  /** A line at this value. */
+  value?: number;
+  /** A band's lower end; left out, the band runs to the bottom of the axis. */
+  from?: number;
+  /** A band's upper end; left out, the band runs to the top of the axis. */
+  to?: number;
+  /** Written in the plot beside the line or band, and in the summary. Keep it short: `"High alarm"`. */
+  label: string;
+  /** Defaults to `"warning"`. */
+  tone?: ChartMarkTone;
+  /**
+   * Which side of a line is out of limits, for the summary a screen reader
+   * hears (`"Coolant: above High alarm at 3 points, first at 14:05"`).
+   * Defaults to `"above"`; `"none"` leaves the line out of the summary's count.
+   * A band counts the points inside it, unless this is `"none"` (a normal range).
+   */
+  direction?: "above" | "below" | "none";
+}
+
+/**
+ * A moment marked on the x axis (the category axis of horizontal bars): a
+ * vertical rule at the row whose x value is `x`, labelled at the top.
+ */
+interface ChartAnnotation {
+  /** The x value it marks, as the rows hold it: `"14:05"`, a number, an ISO date. */
+  x: string | number | Date;
+  label: string;
+  /** Defaults to `"neutral"`. */
+  tone?: ChartMarkTone;
+}
+
+/** What LineChart, BarChart and LineBarChart take to draw limits and moments, and to zoom the value axis to them. */
+interface ChartMarksProps {
+  /** Limits drawn across the value axis, behind the data (bands) and over it (lines). */
+  thresholds?: readonly ChartThreshold[];
+  /** Moments marked on the x axis. */
+  annotations?: readonly ChartAnnotation[];
+  /**
+   * The value axis' range, `[min, max]`, in place of one from zero to the
+   * data's top: a reading that lives between 250 and 350 with its limits in
+   * view. Values outside it are clipped at the plot's edge.
+   */
+  yDomain?: [number, number];
+}
+
 export type {
   BarWidth,
+  ChartAnnotation,
+  ChartMarksProps,
+  ChartMarkTone,
   ChartMode,
   ChartProps,
+  ChartThreshold,
   ChartVariant,
+  CurveType,
   curveType,
   DataPoint,
   DateConfig,
   PresetsConfig,
   SeriesConfig,
+  SeriesKey,
+  ValueFormat,
 };

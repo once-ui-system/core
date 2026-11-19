@@ -77,10 +77,10 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan, ...flex }) => {
             left="0"
             position="absolute"
             gradient={{
-              x: 50,
-              y: 30,
-              width: 60,
-              height: 100,
+              x: "50%",
+              y: "30%",
+              width: "60%",
+              height: "100%",
               tilt: 45,
               opacity: 100,
               display: true,
@@ -91,17 +91,17 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan, ...flex }) => {
         )}
         <Column fill gap="4" padding="24">
           <Column fillWidth gap="8" marginBottom="12">
-            <Heading as="h3" align="left" onBackground={textColor} variant="heading-strong-xs">
+            <Heading as="h3" align="left" onBackground={textColor} textVariant="heading-strong-xs">
               {plan.name}
             </Heading>
-            <Text align="left" variant="heading-default-xl">
+            <Text align="left" textVariant="heading-default-xl">
               {plan.price.original !== plan.price.discounted && (
                 <Text onBackground="neutral-weak" style={{ textDecoration: "line-through" }}>
                   ${plan.price.original}
                 </Text>
               )}{" "}
               ${plan.price.discounted}{" "}
-              <Text onBackground="neutral-strong" variant="body-default-s">
+              <Text onBackground="neutral-strong" textVariant="body-default-s">
                 / year
               </Text>
             </Text>
@@ -110,7 +110,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan, ...flex }) => {
             {plan.features.map((feature, index) => (
               <Row key={index} vertical="center" gap="12">
                 <Icon name="check" size="xs" onBackground={textColor} />
-                <Text align="left" onBackground="neutral-medium" variant="label-default-m">
+                <Text align="left" onBackground="neutral-medium" textVariant="label-default-m">
                   {feature}
                 </Text>
               </Row>
@@ -135,10 +135,10 @@ export const Plans3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
   return (
     <Scroller maxWidth="m">
       <Row gap="-1" {...flex}>
-        <Row fillWidth paddingTop="40" minWidth={20}>
+        <Row fillWidth paddingTop="40" minWidth="20rem">
           <PlanCard id="free" plan={plans.free} leftRadius="l" />
         </Row>
-        <Column fillWidth minWidth={20}>
+        <Column fillWidth minWidth="20rem">
           <Row
             paddingX="16"
             minHeight="40"
@@ -155,7 +155,7 @@ export const Plans3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
           </Row>
           <PlanCard id="pro" plan={plans.pro} zIndex={1} />
         </Column>
-        <Row fillWidth paddingTop="40" minWidth={20}>
+        <Row fillWidth paddingTop="40" minWidth="20rem">
           <PlanCard id="team" plan={plans.team} rightRadius="l" />
         </Row>
       </Row>

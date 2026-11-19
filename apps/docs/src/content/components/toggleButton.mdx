@@ -34,6 +34,30 @@ navTagVariant: "success"
   ]}
 />
 
+## Tone
+
+`tone` sets the palette of the selected state, as on `Button`. The default `neutral` is a grey fill; `brand`, `accent` or a status tone tints the fill and colours the label and icons, the way a sidebar marks the page you are on. `Option` takes the same prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="2" maxWidth={256} fillWidth>
+      <ToggleButton selected tone="brand" fillWidth horizontal="start" prefixIcon="document" label="Welcome note" />
+      <ToggleButton tone="brand" fillWidth horizontal="start" prefixIcon="person" label="Team" />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<ToggleButton selected tone="brand" prefixIcon="document" label="Welcome note" />
+<ToggleButton tone="brand" prefixIcon="person" label="Team" />`,
+      language: "tsx",
+      label: "Tone"
+    }
+  ]}
+/>
+
 ## Icons
 
 You can attach icons to the left or right using `prefixIcon` and `suffixIcon`.

@@ -46,8 +46,13 @@ export function Shell({ drawer = false }: { drawer?: boolean }) {
         gap="8"
         borderBottom="neutral-alpha-weak"
       >
-        <IconButton icon="menu" variant="tertiary" ariaLabel="Menu" onPress={() => setMenu(true)} />
-        <Heading variant="heading-strong-s" style={{ flex: 1 }}>
+        <IconButton
+          icon="menu"
+          variant="tertiary"
+          aria-label="Menu"
+          onPress={() => setMenu(true)}
+        />
+        <Heading textVariant="heading-strong-s" style={{ flex: 1 }}>
           {TABS[tab].label}
         </Heading>
         <Avatar value="MC" size="s" />
@@ -55,23 +60,23 @@ export function Shell({ drawer = false }: { drawer?: boolean }) {
 
       <ScrollView style={{ flex: 1, backgroundColor: theme.color("page-background") }}>
         <Column padding="16" gap="12">
-          <Text variant="label-default-s" onBackground="neutral-weak">
+          <Text textVariant="label-default-s" onBackground="neutral-weak">
             Tuesday, 3 reservations
           </Text>
           {BOOKINGS.map((b) => (
             <Card key={b.time} padding="16" gap="12" direction="row" vertical="center">
               <Column width="48">
-                <Text variant="label-strong-m">{b.time}</Text>
+                <Text textVariant="label-strong-m">{b.time}</Text>
               </Column>
               <Column flex={1} gap="2">
-                <Text variant="body-strong-s">{b.name}</Text>
-                <Text variant="body-default-xs" onBackground="neutral-weak">
+                <Text textVariant="body-strong-s">{b.name}</Text>
+                <Text textVariant="body-default-xs" onBackground="neutral-weak">
                   Party of {b.party}
                 </Text>
               </Column>
               <Tag
                 size="s"
-                scheme={b.status === "Confirmed" ? "success" : "warning"}
+                tone={b.status === "Confirmed" ? "success" : "warning"}
                 label={b.status}
                 style={{ alignSelf: "center" }}
               />

@@ -1,0 +1,60 @@
+{
+ "name": "SceneModel",
+ "group": "scene",
+ "importFrom": "@once-ui-system/core/scene",
+ "props": {
+  "onClick": "() => void",
+  "onPointerEnter": "() => void",
+  "onPointerLeave": "() => void",
+  "position": "Vec3",
+  "rotation": "Vec3",
+  "scale": "number | Vec3",
+  "visible": "boolean",
+  "name": "string",
+  "src": "!string",
+  "color": "SceneColor",
+  "shadow": "boolean = true",
+  "onLoad": "(model: Three.Object3D) => void",
+  "onError": "(error: unknown) => void",
+  "children": "React.ReactNode"
+ },
+ "tags": [
+  "3d",
+  "media"
+ ],
+ "pairsWith": [
+  "Scene",
+  "SceneLabel"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "SceneColor": [
+   "string & {}",
+   "neutral-strong",
+   "neutral-medium",
+   "neutral-weak",
+   "brand-strong",
+   "brand-medium",
+   "brand-weak",
+   "accent-strong",
+   "accent-medium",
+   "accent-weak",
+   "info-strong",
+   "info-medium",
+   "info-weak",
+   "danger-strong",
+   "danger-medium",
+   "danger-weak",
+   "warning-strong",
+   "warning-medium",
+   "warning-weak",
+   "success-strong",
+   "success-medium",
+   "success-weak",
+   "`--${string}`"
+  ],
+  "Vec3": {
+   "[key: number]": "number"
+  }
+ }
+}

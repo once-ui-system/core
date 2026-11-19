@@ -12,12 +12,11 @@
     "NavItem",
     "Drawer",
     "Breadcrumbs",
-    "UserMenu",
-    "DropdownWrapper",
+    "User",
+    "Dropdown",
     "Option",
     "Kbar",
     "Kbd",
-    "KeyTip",
     "Line",
     "Table",
     "Tag",
@@ -38,15 +37,15 @@
     "layout.responsiveProps",
     "size.rem",
     "spacing.tokens",
-    "layout.noSpanOrType",
-    "Column.form"
+    "layout.noSpanOrType"
   ],
   "quality": {
     "mount": "Mount the shell once, in the `layout.tsx` of the routes it frames, and read the route with `usePathname()`; a shell rendered by each page loses its open groups and collapsed state on every navigation",
     "current": "`selectNavHref` picks the highlighted item and opens the group that holds it",
     "collapse": "A collapsed sidebar keeps every item reachable: icons with a tooltip or aria-label, the group label as the icon's name",
     "phone": "At s the sidebar hides and a header button opens the same nav in a left Drawer; following a link closes it",
-    "header": "Breadcrumbs from the route, and the account or workspace switcher as a DropdownWrapper or UserMenu with Option rows",
-    "palette": "A header Search button opens Kbar with `open` and `onOpenChange` (no children); ⌘K still toggles it"
+    "header": "Breadcrumbs from the route, and the account or workspace switcher as a Dropdown or a User with a dropdown of Option rows",
+    "palette": "A header Search button opens Kbar with `open` and `onOpenChange` (no children); ⌘K still toggles it",
+    "states": "Every view that loads data shows loading (Skeleton shaped like the content), empty (title, one line, the action that fills it), error (Feedback tone=\"danger\" with Retry) and filled, through a typed lib/ data layer of async functions over mock data — even when the brief never mentions data"
   }
 }

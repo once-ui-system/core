@@ -96,13 +96,14 @@ describe.each(cases)("%s native input props", (_name, role, renderControl) => {
     expect(input()).toHaveAttribute("form", "signup");
   });
 
-  it("still calls onToggle once per toggle", async () => {
+  // 2.x's `onToggle` is `onCheckedChange` in 3.0.
+  it("still calls onCheckedChange once per toggle", async () => {
     const user = userEvent.setup();
-    const onToggle = vi.fn();
-    render(renderControl({ onToggle }), { wrapper });
+    const onCheckedChange = vi.fn();
+    render(renderControl({ onCheckedChange }), { wrapper });
     await user.click(screen.getByRole(role, { name: "Accept" }));
-    expect(onToggle).toHaveBeenCalledTimes(1);
-    expect(onToggle).toHaveBeenCalledWith(true);
+    expect(onCheckedChange).toHaveBeenCalledTimes(1);
+    expect(onCheckedChange).toHaveBeenCalledWith(true);
   });
 });
 

@@ -52,18 +52,18 @@ export const Faq4 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" gap="48" {...flex}>
       <Column fillWidth paddingTop="24" paddingLeft="24">
-        <Heading as="h2" variant="display-strong-m" marginBottom="20">
+        <Heading as="h2" textVariant="display-strong-m" marginBottom="20">
           Frequently asked questions
         </Heading>
-        <Text onBackground="neutral-medium" variant="body-default-xl">
+        <Text onBackground="neutral-medium" textVariant="body-default-xl">
           Here are some common questions about my work and process.
         </Text>
       </Column>
       <Column fillWidth gap="8">
         {faq.map((item, index) => (
           <Column key={index} fillWidth border radius="l" padding="4" background="overlay">
-            <Accordion title={<Text variant="body-default-s">{item.title}</Text>}>
-              <Text variant="body-default-s" onBackground="neutral-medium">
+            <Accordion title={<Text textVariant="body-default-s">{item.title}</Text>}>
+              <Text textVariant="body-default-s" onBackground="neutral-medium">
                 {item.content}
               </Text>
             </Accordion>

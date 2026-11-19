@@ -57,7 +57,10 @@ export async function generateMetadata() {
     description: meta.home.description,
     baseURL: baseURL,
     path: meta.home.path,
-    image: meta.home.image
+    image: meta.home.image,
+    // Every page sets its own; a canonical here would pass down to any page
+    // that doesn't and name the home page instead.
+    canonical: false,
   });
 
   return {
@@ -128,10 +131,13 @@ export default function RootLayout({
         </Providers>
         <Analytics />
         {/* Chirio's board widget, filling the header's Feedback and What's new
-            drawer (FeedbackButtons), so it draws no button of its own. */}
+            drawer (FeedbackButtons), so it draws no button of its own. The
+            token URL is once-ui.com's: someone signed in there gets pin
+            feedback here too. */}
         <Script
           src={`${feedback.chirio}/board-widget.js`}
           data-board={feedback.board}
+          data-token-url={feedback.tokenUrl}
           data-launcher="false"
           strategy="afterInteractive"
         />

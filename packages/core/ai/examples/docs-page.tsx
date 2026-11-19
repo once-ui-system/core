@@ -58,16 +58,16 @@ export function DocsPageExample({
           paddingBottom="24"
         />
         <Column gap="12" paddingBottom="16">
-          <Heading as="h1" variant="display-strong-s">
+          <Heading as="h1" textVariant="display-strong-s">
             {title}
           </Heading>
-          <Text variant="body-default-l" onBackground="neutral-weak">
+          <Text textVariant="body-default-l" onBackground="neutral-weak">
             {summary}
           </Text>
         </Column>
         <Content components={components} />
       </Column>
-      <Column as="aside" maxWidth={16} fitHeight position="sticky" top="80" m={{ hide: true }}>
+      <Column as="aside" maxWidth="16rem" fitHeight position="sticky" top="80" m={{ hide: true }}>
         <HeadingNav />
       </Column>
     </Row>

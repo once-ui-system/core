@@ -29,7 +29,7 @@ export const PasswordInput: RefComponent<PasswordInputProps, TextInputRef> = for
           onPress={() => setShowPassword(!showPassword)}
           variant="ghost"
           icon={showPassword ? "eyeOff" : "eye"}
-          ariaLabel={showPassword ? "Hide password" : "Show password"}
+          aria-label={showPassword ? "Hide password" : "Show password"}
           size="s"
           disabled={props.disabled}
         />

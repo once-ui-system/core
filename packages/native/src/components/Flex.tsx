@@ -1,4 +1,4 @@
-import { Children, createContext, forwardRef, type ReactNode } from "react";
+import { Children, createContext, forwardRef, type ReactNode, useContext } from "react";
 import {
   type DimensionValue,
   type StyleProp,
@@ -10,13 +10,14 @@ import { useTheme } from "../theme/ThemeProvider";
 import type { OnceTheme } from "../theme/theme";
 import type { Colors, Opacity, RadiusSize, ShadowSize, SpacingToken } from "../types";
 import type { RefComponent, ViewRef, Writable } from "./refs";
-import { type SpacingProps, spacingStyle, splitSpacing } from "./spacing";
+import { type Length, type SpacingProps, spacingStyle, splitSpacing } from "./spacing";
 import { Text } from "./Text";
 
 export { type SpacingProps, spacingStyle, splitSpacing };
 
 type Alignment = "start" | "center" | "end" | "between" | "around" | "even" | "stretch";
-type Size = number | SpacingToken | `${number}%`;
+/** A size: a token, a number of points (px, as in core 3.0), `"320px"`, `"20rem"` or `"50%"`. */
+type Size = number | SpacingToken | Length | `${number}%`;
 type ZIndex = -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
 /** Core's breakpoints, largest first: the order their objects apply in. */
@@ -208,7 +209,7 @@ export function borderColor(theme: OnceTheme, value: BorderValue): string {
 function size(theme: OnceTheme, value: Size | undefined): DimensionValue | undefined {
   if (value === undefined) return undefined;
   if (typeof value === "string" && value.endsWith("%")) return value as DimensionValue;
-  return theme.space(value as SpacingToken | number);
+  return theme.space(value as Exclude<Size, `${number}%`>);
 }
 
 /**
@@ -415,6 +416,25 @@ export function wrapText(children: ReactNode): ReactNode {
  */
 export const FlexDirectionContext = createContext<"row" | "column" | null>(null);
 
+/**
+ * The nearest Flex or Card's `alignItems`, so a `Button` in a column with
+ * `horizontal="center"` follows it instead of keeping to the start.
+ */
+export const FlexAlignContext = createContext<ViewStyle["alignItems"]>(undefined);
+
+/**
+ * How a control that keeps its own width (a Button, a Tag) sits in its parent:
+ * at the start of a column that would stretch it, and where the parent puts
+ * it otherwise (a row's `vertical`, a column's `horizontal="center"`).
+ */
+export function useOwnWidth(): ViewStyle {
+  const axis = useContext(FlexDirectionContext);
+  const align = useContext(FlexAlignContext);
+  if (axis === "row") return {};
+  if (align !== undefined && align !== "stretch") return {};
+  return { alignSelf: "flex-start" };
+}
+
 export const axisOf = (style: ViewStyle) =>
   String(style.flexDirection ?? "column").startsWith("row") ? "row" : "column";
 
@@ -427,7 +447,9 @@ export const Flex: RefComponent<FlexProps, ViewRef> = forwardRef<ViewRef, FlexPr
     return (
       <View ref={ref} {...rest} style={[style, userStyle]}>
         <FlexDirectionContext.Provider value={axisOf(style)}>
-          {wrapText(props.children)}
+          <FlexAlignContext.Provider value={style.alignItems}>
+            {wrapText(props.children)}
+          </FlexAlignContext.Provider>
         </FlexDirectionContext.Provider>
       </View>
     );

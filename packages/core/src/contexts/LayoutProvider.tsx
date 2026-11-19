@@ -1,7 +1,14 @@
 "use client";
 
-import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { useAdapters, warnIfFrameworkUnadapted } from "./AdapterProvider";
+import React, {
+  createContext,
+  ReactNode,
+  startTransition,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { useAdapters, warnIfFrameworkUnadapted } from "./AdapterProvider.js";
 
 // Default breakpoints
 export const DEFAULT_BREAKPOINTS = {
@@ -30,7 +37,7 @@ interface LayoutProviderProps {
   children: ReactNode;
 }
 
-const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
+const LayoutProvider = ({ children }: LayoutProviderProps) => {
   // Fixed, and deliberately so. The utility classes carry these widths inside
   // their media queries, and a prebuilt stylesheet cannot honour a width the
   // app picks at runtime — `@media` does not read custom properties. Letting
@@ -96,8 +103,9 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
       timeoutId = setTimeout(updateWidth, 100);
     };
 
-    // Set initial width
-    updateWidth();
+    // Set initial width, as a transition so Suspense boundaries still
+    // hydrating keep their server HTML (see ThemeProvider).
+    startTransition(updateWidth);
 
     // Add resize listener with debouncing
     window.addEventListener("resize", debouncedUpdateWidth);

@@ -6,12 +6,11 @@ import {
   Button,
   Card,
   Animation,
-  Hover,
-  LetterFx,
+  HoverCard,
   Media,
   Text,
-  BlobFx
 } from "@once-ui-system/core";
+import { LetterFx, BlobFx } from "@once-ui-system/fx";
 
 export interface PromoCardProps {
   href: string;
@@ -56,7 +55,7 @@ export function PromoCard({
       <Row fill padding="4">
         <Row fill border="neutral-alpha-medium" radius="l" vertical="end" overflow="hidden" padding="12" horizontal="center">
             <Button size="s">
-              <Text variant="code-strong-s">
+              <Text textVariant="code-strong-s">
                 <LetterFx
                   charset={["x", "y", "z", "0", "/", "!", "u", "o"]}
                   trigger="custom"
@@ -79,11 +78,9 @@ export function PromoCard({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <Hover
+      <HoverCard placement="cover"
         fillWidth
-        trigger={cardContent}
-        overlay={overlayContent}
-      />
+        trigger={cardContent}>{overlayContent}</HoverCard>
     </Row>
   );
 }

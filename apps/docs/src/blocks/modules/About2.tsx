@@ -68,11 +68,11 @@ export const About2 = () => {
           </Row>
           <Line />
           <Column maxWidth="xs" gap="24" paddingY="48" paddingX="24">
-            <Heading variant="display-strong-s" align="center">
+            <Heading textVariant="display-strong-s" align="center">
               Redefining Creativity for the Future
             </Heading>
             <Text
-              variant="body-default-xl"
+              textVariant="body-default-xl"
               align="center"
               wrap="balance"
               onBackground="neutral-weak"
@@ -95,7 +95,7 @@ export const About2 = () => {
               borderBottom="neutral-medium"
             >
               <Icon name={feature.icon} onBackground="brand-weak" />
-              <Text wrap="balance" variant="body-default-l">
+              <Text wrap="balance" textVariant="body-default-l">
                 {feature.title} <Text onBackground="neutral-weak">{feature.description}</Text>
               </Text>
             </Column>
@@ -103,7 +103,7 @@ export const About2 = () => {
         </Grid>
         <Line marginTop="16" />
         <Row fillWidth padding="32" horizontal="center">
-          <Heading variant="display-strong-xs" align="center">
+          <Heading textVariant="display-strong-xs" align="center">
             Meet the Team
           </Heading>
         </Row>
@@ -123,11 +123,11 @@ export const About2 = () => {
               borderLeft={index === 1 || index === 4 ? "neutral-medium" : undefined}
             >
               <Avatar size="l" src={profile.avatar} />
-              <Text variant="label-default-m" align="center" marginTop="16">
+              <Text textVariant="label-default-m" align="center" marginTop="16">
                 {profile.name}
               </Text>
               <Text
-                variant="label-default-s"
+                textVariant="label-default-s"
                 align="center"
                 marginBottom="16"
                 onBackground="neutral-weak"
@@ -151,7 +151,7 @@ export const About2 = () => {
         <Row s={{ direction: "column" }} fillWidth vertical="center" horizontal="between">
           <Row flex={2} borderRight="neutral-medium">
             <Row fillWidth paddingX="xl" paddingY="56">
-              <Text variant="heading-default-xl" wrap="balance">
+              <Text textVariant="heading-default-xl" wrap="balance">
                 Join our community and be part of the next generation of creators.
               </Text>
             </Row>

@@ -1,18 +1,24 @@
 {
  "name": "RadioButton",
  "group": "components",
- "extends": [
-  "InteractiveDetails"
+ "mixins": [
+  "LeafProps"
  ],
  "props": {
-  "style": "React.CSSProperties",
-  "className": "string",
+  "size": "TShirtSizes",
+  "error": "boolean",
+  "errorMessage": "ReactNode",
+  "label": "React.ReactNode",
+  "id": "string",
+  "description": "React.ReactNode",
+  "iconButtonProps": "IconButtonProps",
+  "auto": "boolean",
   "checked": "boolean",
   "defaultChecked": "boolean = false",
   "name": "string",
   "value": "string",
   "disabled": "boolean",
-  "onToggle": "(checked: boolean) => void",
+  "onCheckedChange": "(checked: boolean) => void",
   "hoverable": "boolean = true"
  },
  "tags": [
@@ -23,5 +29,38 @@
   "Column",
   "Form"
  ],
- "mixinsRef": []
+ "mixinsRef": [
+  "LeafProps"
+ ],
+ "tokensRef": "see tokens.json",
+ "resolvedMixins": {
+  "LeafProps": {
+   "margin": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginTop": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginRight": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginBottom": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginLeft": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginX": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginY": "SpacingToken | number | CSSUnit | \"auto\"",
+   "flex": "FlexValue",
+   "fillWidth": "boolean",
+   "position": "CSSProperties[\"position\"]",
+   "top": "SpacingToken | number | CSSUnit",
+   "right": "SpacingToken | number | CSSUnit",
+   "bottom": "SpacingToken | number | CSSUnit",
+   "left": "SpacingToken | number | CSSUnit",
+   "className": "string",
+   "style": "CSSProperties"
+  }
+ },
+ "types": {
+  "IconButtonProps": "IconButton props",
+  "TShirtSizes": [
+   "s",
+   "xl",
+   "l",
+   "m",
+   "xs"
+  ]
+ }
 }

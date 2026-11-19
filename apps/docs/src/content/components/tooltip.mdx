@@ -13,8 +13,8 @@ navIcon: "components"
 <Feedback
   marginTop="16"
   marginBottom="24"
-  title="Tooltip, InfoTip or HoverCard"
-  description={<><SmartLink style={{ textDecoration: "underline" }} href="/components/tooltip">Tooltip</SmartLink> is a short text label on hover or focus, usually set through a component's <InlineCode>tooltip</InlineCode> prop. <SmartLink style={{ textDecoration: "underline" }} href="/components/infoTip">InfoTip</SmartLink> is an info icon that explains a label or setting in a sentence or two. <SmartLink style={{ textDecoration: "underline" }} href="/components/hoverCard">HoverCard</SmartLink> opens a card of rich content, such as a profile or a link preview, next to its trigger. 3.0 plans to consolidate them.</>}
+  title="Tooltip or HoverCard"
+  description={<><SmartLink style={{ textDecoration: "underline" }} href="/components/tooltip">Tooltip</SmartLink> is a short text explanation on hover or focus: of its children, or of an info icon when it has none (2.x InfoTip), and the bubble a component's <InlineCode>tooltip</InlineCode> prop shows. <SmartLink style={{ textDecoration: "underline" }} href="/components/hoverCard">HoverCard</SmartLink> opens a card of rich content, such as a profile or a link preview, next to its trigger, following the pointer (2.x CursorCard) or over the trigger (2.x Hover).</>}
 />
 
 <CodeBlock
@@ -73,6 +73,95 @@ You can override styles using `Flex` props, `style` or `className`.
   ]}
 />
 
+## Info icon
+
+A Tooltip with `content` and no children renders a focusable info icon as its trigger: the "what is this?" affordance that reveals a sentence on hover or focus, announced as the icon's description. `size` sizes the icon and `aria-label` names it ("More information" by default). With children, `content` opens from them instead. It was `InfoTip` in 2.x.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="8" vertical="center" paddingY="24" horizontal="center" fillWidth>
+      <Text textVariant="label-default-s">Bitrate</Text>
+      <Tooltip content="Higher bitrates keep more detail in fast motion, at a larger file size." />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Row gap="8" vertical="center">
+  <Text textVariant="label-default-s">Bitrate</Text>
+  <Tooltip content="Higher bitrates keep more detail in fast motion, at a larger file size." />
+</Row>`,
+      language: "tsx",
+      label: "InfoTip"
+    }
+  ]}
+/>
+
+### Sizing
+
+`size` takes the same tokens as [`Icon`](/components/icon). Match it to
+the text it sits beside — `xs` next to a label, `s` next to body copy — so the
+icon reads as part of the line rather than an object dropped into it.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" vertical="center" paddingY="24" horizontal="center" fillWidth>
+      <Tooltip size="xs" content="Extra small" />
+      <Tooltip size="s" content="Small" />
+      <Tooltip size="m" content="Medium" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Tooltip size="xs" content="Extra small" />
+<Tooltip size="s" content="Small" />
+<Tooltip size="m" content="Medium" />`,
+      language: "tsx",
+      label: "Sizes"
+    }
+  ]}
+/>
+
+### When not to use it
+
+Hover-only content is invisible on touch and to anyone scanning rather than
+pointing, so an `Tooltip` must never carry information the reader needs in order
+to make the choice in front of them. That belongs in a visible description —
+[`Setting`](/components/setting) has a `description` prop for exactly
+this. Reserve `Tooltip` for the second sentence: the caveat, the unit, the
+reason a default is what it is.
+
+Anything longer than a sentence or two wants a link to a page, not a tip.
+
+### In a Setting
+
+[`Setting`](/components/setting) renders an `Tooltip` for you when you
+pass its `info` prop, which is the usual way you will meet this component.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Setting
+  label="Bitrate"
+  info="Higher bitrates keep more detail in fast motion, at a larger file size."
+>
+  <Select id="bitrate" options={options} />
+</Setting>`,
+      language: "tsx",
+      label: "Via Setting"
+    }
+  ]}
+/>
+
+
 ## API reference
 
 <PropsTable
@@ -81,6 +170,11 @@ You can override styles using `Flex` props, `style` or `className`.
     label: "The text.",
     prefixIcon: "Icon before the text.",
     suffixIcon: "Icon after the text.",
+    content: "The explanation, revealed on hover or focus of the children, or of an info icon when there are none (2.x InfoTip).",
+    children: "The trigger content describes. Omit it for the info icon.",
+    size: "With content and no children: the info icon size.",
+    placement: "With content: where it opens.",
+    delay: "With content: milliseconds of hover before it opens.",
   }}
   content={[
     ["className"],

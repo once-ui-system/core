@@ -1,3 +1,5 @@
+@use "../styles/density.scss" as density;
+
 // `scroll={false}`: the options may shrink below their content, and with
 // `fillWidth` share the row equally whatever their labels.
 .shrink {
@@ -50,6 +52,16 @@
     box-sizing: border-box;
     background-color: var(--neutral-alpha-medium);
     border: 1px solid var(--neutral-alpha-weak);
+    // The options' own corners: ToggleButton's m, or the density's s or l.
+    border-radius: var(--radius-m);
+
+    @include density.size(s) {
+        border-radius: var(--radius-s);
+    }
+
+    @include density.size(l) {
+        border-radius: var(--radius-l);
+    }
 
     &[data-ready] {
         transition:

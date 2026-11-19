@@ -1,4 +1,4 @@
-import { buildOgRouteUrl, DEFAULT_OG_ROUTES, type OgRoutes } from "../../utils/ogRoutes";
+import { buildOgRouteUrl, DEFAULT_OG_ROUTES, type OgRoutes } from "../../utils/ogRoutes.js";
 
 /**
  * The metadata object `Meta.generate` returns.
@@ -29,8 +29,8 @@ export interface GeneratedMetadata {
   authors?: { name: string; url?: string }[];
   robots?: string;
   alternates?: {
-    canonical: string;
-    languages: Record<string, string>;
+    canonical?: string;
+    languages?: Record<string, string>;
   };
 }
 
@@ -51,7 +51,13 @@ export interface MetaProps {
     name: string;
     url?: string;
   };
-  canonical?: string;
+  /**
+   * The page's canonical URL. Default `baseURL + path` (3.0); `false` leaves
+   * it out. Call `Meta.generate` in a page, not a layout: Next passes a
+   * layout's `alternates` down to every page without its own, so each of
+   * them would name the layout's URL as canonical.
+   */
+  canonical?: string | false;
   robots?: string;
   noindex?: boolean;
   nofollow?: boolean;
@@ -64,7 +70,12 @@ export interface MetaProps {
   ogRoutes?: Partial<OgRoutes>;
 }
 
-export function generateMetadata({
+/**
+ * Build a Next.js metadata object (also `Meta.generate`). Named
+ * `generateMetadata` until 3.0, which Next reads as its route-segment
+ * convention when a page re-exports it.
+ */
+export function createMetadata({
   title,
   description,
   baseURL,
@@ -80,7 +91,13 @@ export function generateMetadata({
   alternates,
   ogRoutes,
 }: MetaProps): GeneratedMetadata {
-  const normalizedBaseURL = baseURL.endsWith("/") ? baseURL.slice(0, -1) : baseURL;
+  const trimmedBaseURL = baseURL.endsWith("/") ? baseURL.slice(0, -1) : baseURL;
+  // Keep an explicit scheme: an `http://localhost:3000` base used to become
+  // `https://http://localhost:3000`. Without one, `site.com` made the page URL
+  // `site.com/`, which Next resolves against metadataBase as a path.
+  const normalizedBaseURL = /^https?:\/\//.test(trimmedBaseURL)
+    ? trimmedBaseURL
+    : `https://${trimmedBaseURL}`;
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
 
   const ogImage = image
@@ -90,6 +107,9 @@ export function generateMetadata({
     : buildOgRouteUrl(ogRoutes?.generate || DEFAULT_OG_ROUTES.generate, { title });
 
   const url = canonical || `${normalizedBaseURL}${normalizedPath}`;
+  const languages = alternates?.length
+    ? Object.fromEntries(alternates.map((alt) => [alt.hrefLang, alt.href]))
+    : undefined;
 
   let robotsContent = robots;
   if (!robotsContent && (noindex || nofollow)) {
@@ -97,11 +117,7 @@ export function generateMetadata({
   }
 
   return {
-    metadataBase: new URL(
-      // Keep an explicit scheme: an `http://localhost:3000` base used to become
-      // `https://http://localhost:3000`.
-      /^https?:\/\//.test(normalizedBaseURL) ? normalizedBaseURL : `https://${normalizedBaseURL}`,
-    ),
+    metadataBase: new URL(normalizedBaseURL),
     title,
     description,
     openGraph: {
@@ -125,11 +141,13 @@ export function generateMetadata({
     },
     ...(author ? { authors: [{ name: author.name, url: author.url }] } : {}),
     ...(robotsContent ? { robots: robotsContent } : {}),
-    ...(alternates?.length
+    // Until 3.0 the canonical came only with language alternates, so most
+    // pages had none.
+    ...(canonical !== false || languages
       ? {
           alternates: {
-            canonical: url,
-            languages: Object.fromEntries(alternates.map((alt) => [alt.hrefLang, alt.href])),
+            ...(canonical !== false ? { canonical: url } : {}),
+            ...(languages ? { languages } : {}),
           },
         }
       : {}),
@@ -137,7 +155,7 @@ export function generateMetadata({
 }
 
 export const Meta = {
-  generate: generateMetadata,
+  generate: createMetadata,
 };
 
 export default Meta;

@@ -14,7 +14,7 @@ export interface DropdownTriggerState {
   /** The dropdown is open: the trigger's `aria-expanded`. */
   expanded: boolean;
   /** What opens: the trigger's `aria-haspopup`. */
-  haspopup: "listbox" | "grid" | "dialog";
+  haspopup: "listbox" | "grid" | "dialog" | "menu";
   /**
    * Called by a trigger that renders as a real button, so the wrapper stops
    * announcing itself as one around it. Returns the matching unregister.
@@ -49,7 +49,7 @@ export const DropdownTriggerContext = createContext<DropdownTriggerState | null>
 export const DropdownComboboxContext = createContext(false);
 
 /**
- * Closes the DropdownWrapper whose panel this element is in, or null outside
+ * Closes the Dropdown whose panel this element is in, or null outside
  * one. Internal: lets content that is not an option (a DatePicker's Apply
  * button) close the panel it sits in without the caller wiring `isOpen`.
  */

@@ -57,7 +57,7 @@ export const SearchInput: RefComponent<SearchInputProps, TextInputRef> = forward
             variant="ghost"
             size="s"
             icon="close"
-            ariaLabel="Clear search"
+            aria-label="Clear search"
             testID={testID ? `${testID}-clear` : undefined}
             disabled={props.disabled}
             onPress={() => {

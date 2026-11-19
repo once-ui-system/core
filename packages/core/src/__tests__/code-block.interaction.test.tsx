@@ -147,7 +147,7 @@ describe("CodeBlock interaction", () => {
     render(
       <CodeBlock
         compact
-        isCollapsible
+        collapsible
         maxLines={3}
         codes={[{ code: long, language: "ts", label: "Long" }]}
       />,

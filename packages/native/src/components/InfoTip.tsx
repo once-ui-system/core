@@ -14,7 +14,7 @@ export interface InfoTipProps extends Omit<FlexProps, "children"> {
   /** Icon size, matched to whatever text it sits beside. */
   size?: TShirtSizes;
   /** Names the icon for screen readers. */
-  ariaLabel?: string;
+  "aria-label"?: string;
   /** Finds the icon a test taps in end-to-end tests; the open tip gets `${testID}-tip`. */
   testID?: string;
 }
@@ -32,7 +32,7 @@ type Box = { x: number; y: number; width: number; height: number };
 export function InfoTip({
   children,
   size = "xs",
-  ariaLabel = "More information",
+  "aria-label": ariaLabel = "More information",
   testID,
   ...flex
 }: InfoTipProps) {
@@ -102,7 +102,7 @@ export function InfoTip({
             {...flex}
           >
             {typeof children === "string" || typeof children === "number" ? (
-              <Text variant="label-default-s" onBackground="neutral-medium">
+              <Text textVariant="label-default-s" onBackground="neutral-medium">
                 {children}
               </Text>
             ) : (

@@ -11,6 +11,7 @@
     { "id": "list-page", "file": "tasks/list-page.json", "priority": 8 },
     { "id": "editor", "file": "tasks/editor.json", "priority": 9 },
     { "id": "docs-page", "file": "tasks/docs-page.json", "priority": 10 },
-    { "id": "app-shell", "file": "tasks/app-shell.json", "priority": 11 }
+    { "id": "app-shell", "file": "tasks/app-shell.json", "priority": 11 },
+    { "id": "map-app", "file": "tasks/map-app.json", "priority": 12 }
   ]
 }

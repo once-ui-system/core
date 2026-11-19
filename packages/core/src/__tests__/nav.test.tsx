@@ -5,6 +5,7 @@ import { Nav, NavSection } from "../components/Nav";
 import { NavGroup } from "../components/NavGroup";
 import { NavItem } from "../components/NavItem";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import { ThemeProvider } from "../contexts/ThemeProvider";
 import { selectNavHref } from "../utils/navMatch";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
@@ -75,15 +76,15 @@ describe("NavGroup", () => {
   });
 
   it("hands the open state over when controlled", async () => {
-    const onToggle = vi.fn();
+    const onOpenChange = vi.fn();
     render(
-      <NavGroup label="Settings" open={false} onToggle={onToggle}>
+      <NavGroup label="Settings" open={false} onOpenChange={onOpenChange}>
         <NavItem href="/settings/billing" label="Billing" />
       </NavGroup>,
       { wrapper: wrap },
     );
     await userEvent.click(screen.getByText("Settings"));
-    expect(onToggle).toHaveBeenCalledOnce();
+    expect(onOpenChange).toHaveBeenCalledExactlyOnceWith(true);
   });
 });
 
@@ -93,12 +94,15 @@ describe("NavGroup", () => {
  */
 describe("Nav", () => {
   const link = (name: string) => screen.getByRole("link", { name }) as HTMLElement;
+  // The row that carries the label's text style, however deep the label sits.
+  const labelRow = (name: string) =>
+    screen.getByText(name).closest("[class*='font-']") as HTMLElement;
 
   it("leaves a bare NavItem at 40px with a full-contrast label", () => {
     render(<NavItem href="/a" label="Alpha" selected />, { wrapper: wrap });
     expect(link("Alpha").className).toMatch(/_l_/);
     expect(link("Alpha").getAttribute("aria-current")).toBe("page");
-    const text = screen.getByText("Alpha").parentElement as HTMLElement;
+    const text = labelRow("Alpha");
     expect(text.className).toMatch(/font-default font-m/);
     expect(text.className).not.toMatch(/on-background-weak/);
   });
@@ -111,8 +115,49 @@ describe("Nav", () => {
       { wrapper: wrap },
     );
     expect(link("Alpha").className).toMatch(/_m_/);
-    expect((screen.getByText("Alpha").parentElement as HTMLElement).className).toMatch(
-      /font-default font-s/,
+    expect(labelRow("Alpha").className).toMatch(/font-default font-s/);
+  });
+
+  // One density scale: a Nav with no density of its own takes the theme's
+  // (ThemeProvider's `density`, the config's `style.density`), and one that
+  // sets it keeps its own.
+  it("follows the theme's density, and an explicit density wins", () => {
+    const themed = ({ children }: { children: React.ReactNode }) => (
+      <LayoutProvider>
+        <ThemeProvider density="compact">{children}</ThemeProvider>
+      </LayoutProvider>
+    );
+    const { unmount } = render(
+      <Nav aria-label="Follows">
+        <NavItem href="/a" label="Alpha" />
+      </Nav>,
+      { wrapper: themed },
+    );
+    expect(screen.getByRole("navigation", { name: "Follows" }).getAttribute("data-density")).toBe(
+      "compact",
+    );
+    expect(link("Alpha").className).toMatch(/_m_/);
+    unmount();
+    render(
+      <Nav aria-label="Own" density="spacious">
+        <NavItem href="/b" label="Beta" />
+      </Nav>,
+      { wrapper: themed },
+    );
+    expect(screen.getByRole("navigation", { name: "Own" }).getAttribute("data-density")).toBe(
+      "spacious",
+    );
+  });
+
+  it("is normal with no theme around it", () => {
+    render(
+      <Nav aria-label="Bare">
+        <NavItem href="/a" label="Alpha" />
+      </Nav>,
+      { wrapper: wrap },
+    );
+    expect(screen.getByRole("navigation", { name: "Bare" }).getAttribute("data-density")).toBe(
+      "normal",
     );
   });
 
@@ -135,8 +180,8 @@ describe("Nav", () => {
       </Nav>,
       { wrapper: wrap },
     );
-    const alpha = screen.getByText("Alpha").parentElement as HTMLElement;
-    const beta = screen.getByText("Beta").parentElement as HTMLElement;
+    const alpha = labelRow("Alpha");
+    const beta = labelRow("Beta");
     expect(alpha.className).toMatch(/neutral-on-background-strong font-label font-strong/);
     expect(beta.className).toMatch(/neutral-on-background-weak font-label font-default/);
   });
@@ -180,5 +225,49 @@ describe("Nav", () => {
     expect(screen.getByRole("navigation", { name: "Product" })).toBeDefined();
     expect(screen.getByText("Projects")).toBeDefined();
     expect(screen.getByRole("button", { name: "Add" })).toBeDefined();
+  });
+});
+
+/**
+ * `tone` on a Nav marks the current row in that palette for every NavItem
+ * inside, the way most apps show the page you are on in the brand colour.
+ */
+describe("Nav: tone", () => {
+  const link = (name: string) => screen.getByRole("link", { name }) as HTMLElement;
+  const labelRow = (name: string) =>
+    screen.getByText(name).closest("[class*='font-']") as HTMLElement;
+
+  it("is neutral by default", () => {
+    render(
+      <Nav>
+        <NavItem href="/a" label="Alpha" selected />
+      </Nav>,
+      { wrapper: wrap },
+    );
+    expect(link("Alpha").className).not.toMatch(/tone-brand/);
+  });
+
+  it("passes the Nav's tone to every item, and an item's own tone wins", () => {
+    render(
+      <Nav tone="brand">
+        <NavItem href="/a" label="Alpha" selected />
+        <NavItem href="/b" label="Beta" tone="neutral" selected />
+      </Nav>,
+      { wrapper: wrap },
+    );
+    expect(link("Alpha").className).toMatch(/tone-brand/);
+    expect(link("Beta").className).not.toMatch(/tone-brand/);
+  });
+
+  it("lets a toned current row take its colour from the tone in subtle", () => {
+    render(
+      <Nav tone="brand" variant="subtle">
+        <NavItem href="/a" label="Alpha" selected />
+        <NavItem href="/b" label="Beta" />
+      </Nav>,
+      { wrapper: wrap },
+    );
+    expect(labelRow("Alpha").className).not.toMatch(/neutral-on-background/);
+    expect(labelRow("Beta").className).toMatch(/neutral-on-background-weak/);
   });
 });

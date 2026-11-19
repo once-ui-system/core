@@ -1,0 +1,28 @@
+// Glow helpers for component modules. Emits no CSS of its own.
+
+// The box-shadow of a solid control: plastic's inner shade, then the glow's
+// light edge along the top and its two-layer halo in the solid's own colour.
+// Every part reads the `--solid-*` tokens, so under flat or plastic the glow
+// layers are zero-sized and transparent, and the same rule draws all three
+// solid styles. `$scale` shrinks the halo for small solids (a checkbox, a
+// switch track).
+@mixin solid-shadow($color, $inset-color, $scale: 1) {
+    box-shadow:
+        inset 0 var(--solid-inset-distance) var(--solid-inset-size) $inset-color,
+        inset 0 1px 0 var(--solid-glow-rim),
+        0 0 calc(var(--solid-glow-near) * #{$scale} * var(--solid-glow-boost, 1))
+            color-mix(in srgb, #{$color} var(--solid-glow-near-mix), transparent),
+        0 0 calc(var(--solid-glow-far) * #{$scale} * var(--solid-glow-boost, 1))
+            color-mix(in srgb, #{$color} var(--solid-glow-far-mix), transparent);
+
+    // Asked for more contrast, the halo goes and the solid keeps its 1px
+    // edge. Forced colours drop box-shadow on their own.
+    @media (prefers-contrast: more) {
+        box-shadow: inset 0 var(--solid-inset-distance) var(--solid-inset-size) $inset-color;
+    }
+}
+
+// Brightens the halo on hover. Put it inside the control's hover rule.
+@mixin hover-boost {
+    --solid-glow-boost: 1.35;
+}

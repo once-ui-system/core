@@ -1,0 +1,71 @@
+{
+ "name": "Canvas",
+ "group": "canvas",
+ "importFrom": "@once-ui-system/core/canvas",
+ "props": {
+  "children": "ReactNode",
+  "view": "CanvasView",
+  "defaultView": "CanvasView",
+  "onViewChange": "(view: CanvasView) => void",
+  "minZoom": "number = 0.05",
+  "maxZoom": "number = 8",
+  "wheel": "\"pan\" | \"zoom\" = pan",
+  "panOnDrag": "boolean = false",
+  "grid": "\"dots\" | \"lines\" | \"none\" = dots",
+  "gridSize": "number = 16",
+  "controls": "boolean = true",
+  "controlsStart": "ReactNode",
+  "fit": "CanvasRect | null",
+  "fitKey": "string | number",
+  "fitPadding": "number = 64",
+  "fitMaxZoom": "number = 1",
+  "onSelectionBox": "(rect: CanvasRect | null, info: CanvasSelectionBoxInfo) => void",
+  "onBackgroundPointerDown": "( event: React.PointerEvent<HTMLDivElement>, point: CanvasPoint, // biome-ignore lint/suspicious/noConfusingVoidType: a handler that returns nothing declines the gesture ) => boolean | void",
+  "onBackgroundClick": "(event: React.PointerEvent<HTMLDivElement>, point: CanvasPoint) => void",
+  "overlay": "ReactNode",
+  "shortcuts": "boolean = true",
+  "labels": "Partial<CanvasLabels>",
+  "height": "CSSProperties[\"height\"] = 100%",
+  "className": "string",
+  "style": "CSSProperties"
+ },
+ "tags": [
+  "canvas",
+  "editor",
+  "design"
+ ],
+ "pairsWith": [
+  "SplitView",
+  "ToggleButton"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "CanvasLabels": {
+   "canvas": "!string",
+   "zoomIn": "!string",
+   "zoomOut": "!string",
+   "resetZoom": "!string",
+   "fit": "!string"
+  },
+  "CanvasPoint": {
+   "x": "!number",
+   "y": "!number"
+  },
+  "CanvasRect": {
+   "x": "!number",
+   "y": "!number",
+   "width": "!number",
+   "height": "!number",
+   "rotation": "number"
+  },
+  "CanvasSelectionBoxInfo": {
+   "phase": "!\"start\" | \"move\" | \"end\"",
+   "additive": "!boolean"
+  },
+  "CanvasView": {
+   "x": "!number",
+   "y": "!number",
+   "zoom": "!number"
+  }
+ }
+}

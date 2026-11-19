@@ -3,11 +3,11 @@ import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { LayoutProvider } from "../contexts/LayoutProvider";
-import { MobileMegaMenu } from "../modules/navigation/MobileMegaMenu";
+import { MegaMenu } from "../modules/navigation/MegaMenu";
 import { expectNoAxeViolations } from "../test/axe";
 
 /**
- * MobileMegaMenu's sections are lists of links. They are drawn with Option,
+ * MegaMenu collapseBelow="always"'s sections are lists of links. They are drawn with Option,
  * which is a listbox option everywhere else, so they rendered as
  * `<a role="option">` with no listbox around them: invalid, and not links to
  * a screen reader or to getByRole("link").
@@ -29,13 +29,16 @@ const groups = [
   { id: "blog", label: "Blog", href: "/blog" },
 ];
 
-describe("MobileMegaMenu", () => {
+describe('MegaMenu collapseBelow="always"', () => {
   it("renders its section links as links, with no option role", async () => {
     const user = userEvent.setup();
     const onClose = vi.fn();
-    const { container } = render(<MobileMegaMenu menuGroups={groups} onClose={onClose} />, {
-      wrapper: wrap,
-    });
+    const { container } = render(
+      <MegaMenu collapseBelow="always" menuGroups={groups} onClose={onClose} />,
+      {
+        wrapper: wrap,
+      },
+    );
     await user.click(screen.getByText("Product"));
     await user.click(await screen.findByText("Learn"));
 

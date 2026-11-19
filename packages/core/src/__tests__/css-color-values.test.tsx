@@ -34,6 +34,11 @@ describe("colour props", () => {
     // The charts' scheme names, `red` included, stay tokens.
     expect(cssColor("blue", "data-")).toBe("var(--data-blue)");
     expect(cssColor("red", "data-")).toBe("var(--data-red)");
+    // A chart's brand is the theme's brand at the palette's step; a tone and
+    // weight is still that role's text colour.
+    expect(cssColor("brand", "data-")).toBe("var(--function-brand-400)");
+    expect(cssColor("accent", "data-")).toBe("var(--function-accent-400)");
+    expect(cssColor("brand-strong", "data-")).toBe("var(--brand-on-background-strong)");
   });
 
   it("paint a raw colour on Background's dots, grid and gradient", () => {

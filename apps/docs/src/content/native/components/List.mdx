@@ -56,7 +56,7 @@ export function Steps() {
 
 ## Rich items
 
-A `ListItem` takes Text props, such as `variant` and `onBackground`. When its children are only strings and `Text`, they stay in one line of text. Any other element, like a nested `List`, goes in a column next to the marker.
+A `ListItem` takes Text props, such as `textVariant` and `onBackground`. When its children are only strings and `Text`, they stay in one line of text. Any other element, like a nested `List`, goes in a column next to the marker.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -67,8 +67,8 @@ codes={[
 export function Menu() {
   return (
     <List gap="8">
-      <ListItem variant="body-default-s" onBackground="neutral-weak">
-        <Text variant="body-strong-s">Espresso.</Text> A short, strong shot.
+      <ListItem textVariant="body-default-s" onBackground="neutral-weak">
+        <Text textVariant="body-strong-s">Espresso.</Text> A short, strong shot.
       </ListItem>
       <ListItem>
         <Text>Milk drinks</Text>
@@ -103,9 +103,9 @@ List extends Flex props, so spacing, alignment and the rest apply. It fills the 
 
 ## ListItem API reference
 
-ListItem extends Text props, such as `variant`, `onBackground`, `align` and spacing.
+ListItem extends Text props, such as `textVariant`, `onBackground`, `align` and spacing.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `variant` | `TextVariant` | `"body-default-m"` | The text style, also used for the marker. |
+| `textVariant` | `TextVariant` | `"body-default-m"` | The text style, also used for the marker. |
 | `children` | `ReactNode` | | The item's content. |

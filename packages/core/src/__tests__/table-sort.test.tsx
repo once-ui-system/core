@@ -10,11 +10,13 @@ const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
 );
 
+// 2.x's data={{ headers, rows }} as the codemod writes it: each header's
+// `content` is the column's `header`, and the array rows are read by position.
 const data = {
-  headers: [
-    { content: "Name", key: "name", sortable: true },
-    { content: "Role", key: "role", sortable: true },
-    { content: "Notes", key: "notes" },
+  columns: [
+    { header: "Name", key: "name", sortable: true },
+    { header: "Role", key: "role", sortable: true },
+    { header: "Notes", key: "notes" },
   ],
   rows: [
     ["Bea", "Design", "-"],
@@ -32,7 +34,7 @@ const firstColumn = () =>
 /** Sortable headers are operable without a pointer (ROADMAP W3). */
 describe("Table sorting accessibility", () => {
   it("renders sortable headers as buttons inside the column headers", async () => {
-    const { container } = render(<Table data={data} />, { wrapper: wrap });
+    const { container } = render(<Table {...data} />, { wrapper: wrap });
 
     const nameHeader = screen.getByRole("columnheader", { name: "Name" });
     expect(within(nameHeader).getByRole("button", { name: "Name" })).toHaveAttribute(
@@ -50,7 +52,7 @@ describe("Table sorting accessibility", () => {
 
   it("sorts from the keyboard and reports the direction with aria-sort", async () => {
     const user = userEvent.setup();
-    const { container } = render(<Table data={data} />, { wrapper: wrap });
+    const { container } = render(<Table {...data} />, { wrapper: wrap });
     const nameHeader = screen.getByRole("columnheader", { name: "Name" });
 
     await user.tab();
@@ -75,12 +77,14 @@ describe("Table sorting accessibility", () => {
     await expectNoAxeViolations(container);
   });
 
-  it("still sorts from a click anywhere in the header cell", async () => {
+  // The button's ::after covers the whole cell, padding included, so a click
+  // anywhere in it lands on the button in a browser; jsdom draws no boxes.
+  it("sorts from a click on the header's button, the whole cell in a browser", async () => {
     const user = userEvent.setup();
-    render(<Table data={data} />, { wrapper: wrap });
+    render(<Table {...data} />, { wrapper: wrap });
     const nameHeader = screen.getByRole("columnheader", { name: "Name" });
 
-    await user.click(nameHeader);
+    await user.click(within(nameHeader).getByRole("button"));
     expect(nameHeader).toHaveAttribute("aria-sort", "ascending");
     await user.click(within(nameHeader).getByRole("button"));
     expect(nameHeader).toHaveAttribute("aria-sort", "descending");
@@ -91,7 +95,7 @@ describe("Table sorting accessibility", () => {
     const onSubmit = vi.fn((event: React.FormEvent) => event.preventDefault());
     render(
       <form onSubmit={onSubmit}>
-        <Table data={data} />
+        <Table {...data} />
       </form>,
       { wrapper: wrap },
     );
@@ -102,10 +106,10 @@ describe("Table sorting accessibility", () => {
 
   it("renders headers without a key, as untyped MDX tables write them", () => {
     const keyless = {
-      headers: [{ content: "Class" }, { content: "Value" }],
+      columns: [{ header: "Class" }, { header: "Value" }],
       rows: [[".m-0", "0"]],
     } as unknown as typeof data;
-    render(<Table data={keyless} />, { wrapper: wrap });
+    render(<Table {...keyless} />, { wrapper: wrap });
 
     const header = screen.getByRole("columnheader", { name: "Class" });
     expect(header).not.toHaveAttribute("aria-sort");

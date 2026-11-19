@@ -3,9 +3,9 @@ import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { createRef, useState } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { Dropdown } from "../components/Dropdown";
 import { Option } from "../components/Option";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import { DropdownPanel } from "../internal/DropdownPanel";
 import { expectNoAxeViolations } from "../test/axe";
 import { failOnConsoleError } from "../test/failOnConsoleError";
 
@@ -31,7 +31,7 @@ const Picker = ({
     onPick?.(value);
   };
   return (
-    <Dropdown
+    <DropdownPanel
       aria-label="Sort by"
       selectedOption={selected}
       onSelect={handleSelect}
@@ -42,16 +42,16 @@ const Picker = ({
       <Option label="Newest" value="newest" selected={selected === "newest"} />
       <Option label="Oldest" value="oldest" selected={selected === "oldest"} />
       <Option label="Archived" value="archived" disabled />
-    </Dropdown>
+    </DropdownPanel>
   );
 };
 
 /**
- * Dropdown is the bare listbox panel; DropdownWrapper adds the trigger and
- * the popup. On its own it reads the clicked option's value and reports it
+ * DropdownPanel (2.x's Dropdown, internal since 3.0) is the bare listbox
+ * panel; Dropdown adds the trigger and the popup. On its own it reads the clicked option's value and reports it
  * through onSelect, and `disabled` stops every way of picking.
  */
-describe("Dropdown", () => {
+describe("DropdownPanel", () => {
   it("is a listbox of its options", async () => {
     const { container } = render(<Picker />, { wrapper: wrap });
     const listbox = screen.getByRole("listbox", { name: "Sort by" });
@@ -112,9 +112,9 @@ describe("Dropdown", () => {
     const onSelect = vi.fn();
     const onClick = vi.fn();
     const { container } = render(
-      <Dropdown aria-label="Sort by" onSelect={onSelect} disabled>
+      <DropdownPanel aria-label="Sort by" onSelect={onSelect} disabled>
         <Option label="Newest" value="newest" onClick={onClick} />
-      </Dropdown>,
+      </DropdownPanel>,
       { wrapper: wrap },
     );
 
@@ -148,9 +148,9 @@ describe("Dropdown", () => {
     const onKeyDown = vi.fn();
     const ref = createRef<HTMLDivElement>();
     render(
-      <Dropdown ref={ref} aria-label="Menu" onKeyDown={onKeyDown}>
+      <DropdownPanel ref={ref} aria-label="Menu" onKeyDown={onKeyDown}>
         <Option label="One" value="one" />
-      </Dropdown>,
+      </DropdownPanel>,
       { wrapper: wrap },
     );
     expect(ref.current).toBe(screen.getByRole("listbox", { name: "Menu" }));

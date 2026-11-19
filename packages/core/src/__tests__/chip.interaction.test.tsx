@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { Chip } from "../components/Chip";
+import { Tag } from "../components/Tag";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
 
@@ -27,7 +27,7 @@ describe("Chip: interaction", () => {
     return (
       <>
         {["Open", "Closed", "Draft"].map((label) => (
-          <Chip
+          <Tag
             key={label}
             label={label}
             selected={on.includes(label)}
@@ -61,10 +61,11 @@ describe("Chip: interaction", () => {
     const user = userEvent.setup();
     const onRemove = vi.fn();
     render(
-      <Chip
+      <Tag
+        selected
         label="Berlin"
         onRemove={onRemove}
-        iconButtonProps={{ "aria-label": "Remove Berlin" }}
+        removeButtonProps={{ "aria-label": "Remove Berlin" }}
       />,
       { wrapper: wrap },
     );
@@ -82,7 +83,9 @@ describe("Chip: interaction", () => {
     const user = userEvent.setup();
     const onClick = vi.fn();
     const onKeyDown = vi.fn();
-    render(<Chip label="Tagged" onClick={onClick} onKeyDown={onKeyDown} />, { wrapper: wrap });
+    render(<Tag selected label="Tagged" onClick={onClick} onKeyDown={onKeyDown} />, {
+      wrapper: wrap,
+    });
     await user.tab();
     await user.keyboard("{Enter} ");
     expect(onClick).toHaveBeenCalledTimes(2);
@@ -93,7 +96,8 @@ describe("Chip: interaction", () => {
     const user = userEvent.setup();
     const onClick = vi.fn();
     render(
-      <Chip
+      <Tag
+        selected
         label="Guarded"
         onClick={onClick}
         onKeyDown={(event) => {
@@ -108,7 +112,12 @@ describe("Chip: interaction", () => {
   });
 
   it("shows children when its label is empty", () => {
-    render(<Chip label="">Fallback</Chip>, { wrapper: wrap });
+    render(
+      <Tag selected label="">
+        Fallback
+      </Tag>,
+      { wrapper: wrap },
+    );
     expect(screen.getByRole("button", { name: "Fallback" })).toBeInTheDocument();
   });
 });

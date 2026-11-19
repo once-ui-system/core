@@ -26,16 +26,16 @@ export const BlockTitle = ({
         <Heading
           id={id}
           data-block-title=""
-          variant="body-strong-s"
+          textVariant="body-strong-s"
           as="h2"
           style={{ scrollMarginTop: "calc(var(--static-space-56) + var(--static-space-16))" }}
         >
           {title}
         </Heading>
-        {showNew && <Tag scheme="brand">NEW</Tag>}
+        {showNew && <Tag tone="brand">NEW</Tag>}
       </Row>
       <Line vert height="16" background="neutral-alpha-medium" s={{ hide: true }} />
-      <Text onBackground="neutral-medium" variant="body-default-s">
+      <Text onBackground="neutral-medium" textVariant="body-default-s">
         {description}
       </Text>
     </Row>

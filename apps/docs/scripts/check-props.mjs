@@ -204,12 +204,22 @@ function pageComponent(text) {
 
 const UNIVERSAL = new Set(["children", "className", "style", "ref", "id", "key"]);
 
+/**
+ * DOM attributes. In 3.0 a component passes them through to its element
+ * (`aria-label`, a native `onChange`, `name`), and the spec, which leaves
+ * out what the DOM supplies, does not list them: a hand-written row for one
+ * is fine.
+ */
+const isDomAttribute = (name) =>
+  /^(aria|data)-/.test(name) || /^on[A-Z]/.test(name) || name === "name";
+
 function checkRow(row, props, owner, report) {
   if (!Array.isArray(row) || typeof row[0] !== "string") return;
   const [name, type, def] = row;
   // The spec leaves out what every element takes; a row for one is fine.
   if (name.startsWith("...") || UNIVERSAL.has(name)) return;
   const raw = props[name];
+  if (raw === undefined && isDomAttribute(name)) return;
   if (raw === undefined) {
     report(`documents \`${name}\`, which ${owner} does not take`);
     return;

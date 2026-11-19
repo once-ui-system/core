@@ -1,6 +1,6 @@
 import React from "react";
-import { buildOgRouteUrl, DEFAULT_OG_ROUTES } from "../../utils/ogRoutes";
-import { safeScriptJson } from "../../utils/safe-html";
+import { buildOgRouteUrl, DEFAULT_OG_ROUTES } from "../../utils/ogRoutes.js";
+import { safeScriptJson } from "../../utils/safe-html.js";
 
 export interface SchemaProps {
   as:

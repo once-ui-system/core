@@ -89,7 +89,7 @@ export const Blog1 = () => {
 
   return (
     <Column gap="24" maxWidth="s">
-      <Heading variant="display-strong-xs" marginLeft="16">
+      <Heading textVariant="display-strong-xs" marginLeft="16">
         Deep Space
       </Heading>
       <Scroller>
@@ -123,16 +123,16 @@ export const Blog1 = () => {
         )}
         <Column padding="32" fillWidth gap="16" vertical="center">
           {posts[0].tag && (
-            <Text variant="label-strong-s" onBackground="neutral-weak">
+            <Text textVariant="label-strong-s" onBackground="neutral-weak">
               {posts[0].tag}
             </Text>
           )}
-          <Heading as="h2" variant="heading-strong-l">
+          <Heading as="h2" textVariant="heading-strong-l">
             {posts[0].title}
           </Heading>
           <Row gap="12" vertical="center">
             <Avatar src={posts[0].author.avatar} size="s" />
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               {posts[0].author.name}
             </Text>
           </Row>
@@ -162,16 +162,16 @@ export const Blog1 = () => {
           )}
           <Column paddingY="32" paddingX="48" fillWidth gap="16" vertical="center">
             {post.tag && (
-              <Text variant="label-strong-s" onBackground="neutral-weak">
+              <Text textVariant="label-strong-s" onBackground="neutral-weak">
                 {post.tag}
               </Text>
             )}
-            <Heading as="h2" variant="heading-strong-l">
+            <Heading as="h2" textVariant="heading-strong-l">
               {post.title}
             </Heading>
             <Row gap="12" vertical="center">
               <Avatar src={post.author.avatar} size="s" />
-              <Text variant="label-default-s" onBackground="neutral-weak">
+              <Text textVariant="label-default-s" onBackground="neutral-weak">
                 {post.author.name}
               </Text>
             </Row>
@@ -190,16 +190,16 @@ export const Blog1 = () => {
           >
             <Column padding="32" fillWidth gap="16" vertical="center">
               {post.tag && (
-                <Text variant="label-strong-s" onBackground="neutral-weak">
+                <Text textVariant="label-strong-s" onBackground="neutral-weak">
                   {post.tag}
                 </Text>
               )}
-              <Heading as="h2" variant="heading-strong-l">
+              <Heading as="h2" textVariant="heading-strong-l">
                 {post.title}
               </Heading>
               <Row gap="12" vertical="center">
                 <Avatar src={post.author.avatar} size="s" />
-                <Text variant="label-default-s" onBackground="neutral-weak">
+                <Text textVariant="label-default-s" onBackground="neutral-weak">
                   {post.author.name}
                 </Text>
               </Row>
@@ -211,13 +211,13 @@ export const Blog1 = () => {
         <IconButton size="s" icon="chevronLeft" variant="ghost" disabled />
         <Row gap="8" paddingX="8">
           <IconButton>
-            <Text variant="label-strong-s">1</Text>
+            <Text textVariant="label-strong-s">1</Text>
           </IconButton>
           <IconButton variant="secondary">
-            <Text variant="label-default-s">2</Text>
+            <Text textVariant="label-default-s">2</Text>
           </IconButton>
           <IconButton variant="secondary">
-            <Text variant="label-default-s">3</Text>
+            <Text textVariant="label-default-s">3</Text>
           </IconButton>
         </Row>
         <IconButton size="s" icon="chevronRight" variant="ghost" />

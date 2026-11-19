@@ -43,7 +43,7 @@ export const Sidebar9: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }
   return (
     <Row
       fillHeight
-      maxWidth={22}
+      maxWidth="22rem"
       background="surface"
       border
       radius="l"
@@ -52,8 +52,8 @@ export const Sidebar9: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }
     >
       <Column
         fillHeight
-        width={6}
-        minWidth={6}
+        width="6rem"
+        minWidth="6rem"
         paddingY="12"
         gap="8"
         center
@@ -85,8 +85,8 @@ export const Sidebar9: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }
 
       <Column fillHeight fill gap="16" padding="16" overflowY="auto">
         <Column gap="4">
-          <Text variant="label-strong-s">Nova Studio</Text>
-          <Text variant="body-default-xs" onBackground="neutral-weak">
+          <Text textVariant="label-strong-s">Nova Studio</Text>
+          <Text textVariant="body-default-xs" onBackground="neutral-weak">
             Pro workspace
           </Text>
         </Column>
@@ -94,7 +94,7 @@ export const Sidebar9: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }
         {sections.map((section) => (
           <Column key={section} fillWidth gap="2">
             <Text
-              variant="body-default-xs"
+              textVariant="body-default-xs"
               onBackground="neutral-weak"
               marginBottom="4"
               marginLeft="4"
@@ -117,7 +117,7 @@ export const Sidebar9: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }
                       {item.label}
                     </Row>
                     {item.badge && (
-                      <Text variant="body-default-xs" onBackground="neutral-weak">
+                      <Text textVariant="body-default-xs" onBackground="neutral-weak">
                         {item.badge}
                       </Text>
                     )}
@@ -132,10 +132,10 @@ export const Sidebar9: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }
         <Row fillWidth vertical="center" gap="12">
           <Avatar size="s" src="/images/creators/lorant.jpg" />
           <Column fillWidth gap="2">
-            <Text variant="label-default-s" truncate>
+            <Text textVariant="label-default-s" truncate>
               Lorant One
             </Text>
-            <Text variant="body-default-xs" onBackground="neutral-weak" truncate>
+            <Text textVariant="body-default-xs" onBackground="neutral-weak" truncate>
               lorant@novastudio.app
             </Text>
           </Column>

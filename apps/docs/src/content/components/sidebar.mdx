@@ -1,0 +1,174 @@
+---
+title: "Sidebar"
+export: "Sidebar"
+summary: "An app sidebar you compose from a header, a scrolling Nav and a footer. Drag it wider or narrower, fold it into an icon rail, and it remembers both."
+updatedAt: "2026-11-13"
+docs: "once-ui/components/sidebar.mdx"
+github: "components/Sidebar.tsx"
+navLabel: "Sidebar"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "success"
+---
+
+A Sidebar is the frame around a [Nav](/once-ui/components/nav): it owns the
+width, the collapse, the resize handle and the phone drawer, so the Nav inside
+only has to say what the rows are. Drag its edge to resize it. Drag past the
+minimum and it folds into an icon rail; drag the rail out and it opens again.
+Double-click the edge to reset it. ⌘B (Ctrl+B elsewhere) folds it from
+anywhere outside a text field.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<SidebarExample />}
+  codes={[
+    {
+      language: "tsx",
+      label: "Sidebar",
+      code:
+`<SidebarProvider persist="app">
+  <Row as="header">
+    <SidebarTrigger />
+    <Breadcrumbs items={crumbs} />
+  </Row>
+  <Row fill>
+    <Sidebar aria-label="Workspace">
+      <SidebarHeader>
+        <User name="Fjell" subline="Pro workspace" />
+      </SidebarHeader>
+      <SidebarContent>
+        <Nav density="compact" aria-label="Product">
+          <NavItem icon="home" label="Dashboard" href="/" selected />
+          <NavSection label="Workspace">
+            <NavGroup icon="people" label="Manage">
+              <NavItem label="Users" href="/users" />
+            </NavGroup>
+          </NavSection>
+        </Nav>
+      </SidebarContent>
+      <SidebarFooter>
+        <UserMenu />
+      </SidebarFooter>
+    </Sidebar>
+    <Column as="main" flex={1}>{children}</Column>
+  </Row>
+</SidebarProvider>`,
+    }
+  ]}
+/>
+
+## Composition
+
+- **Sidebar** is the frame: an `aside` that holds the width and draws the
+  handle on its edge.
+- **SidebarHeader** and **SidebarFooter** stay put. Put the workspace switcher
+  on top and the account at the bottom. In the rail they clip to their
+  leading mark rather than wrap.
+- **SidebarContent** takes the space left and scrolls on its own. It holds the
+  Nav.
+- **SidebarTrigger** folds and unfolds it, or opens the drawer on a phone. Its
+  tooltip names the shortcut. Put it in the top bar or in the SidebarHeader.
+- **SidebarProvider** holds the state for the Sidebar and for anything outside
+  it that reads or changes it: the trigger in the top bar, ⌘B, `useSidebar()`.
+  A Sidebar with no provider around it makes its own.
+
+## Remembering it
+
+Give the provider a `persist` key and it keeps the width and the collapse in a
+cookie. Read the cookie on the server and pass it back as the defaults, and the
+first paint is already right: no default width that jumps once the browser has
+looked.
+
+```tsx
+// app/(app)/layout.tsx
+import { cookies } from "next/headers";
+import { parseSidebarCookie, sidebarCookieName } from "@once-ui-system/core";
+
+export default async function AppLayout({ children }: { children: React.ReactNode }) {
+  const store = await cookies();
+  const saved = parseSidebarCookie(store.get(sidebarCookieName("app"))?.value);
+  return (
+    <SidebarProvider persist="app" defaultWidth={saved.width} defaultCollapsed={saved.collapsed}>
+      {/* … */}
+    </SidebarProvider>
+  );
+}
+```
+
+Both helpers are plain functions, safe to call in a server component and
+outside Next.js: read the cookie however your framework does and pass its value
+to `parseSidebarCookie`.
+
+## Peeking from the rail
+
+With `expandOnHover`, a mouse resting on the rail opens it over the page,
+labels and all, and the page beside it does not move. Keyboard focus opens it
+too; Escape or leaving closes it. Touch never opens it.
+
+<CodeBlock marginTop="16" marginBottom="24" preview={<SidebarPeekExample />} codes={[{ language: "tsx", label: "Peek", code: `<Sidebar aria-label="Workspace" expandOnHover>…</Sidebar>` }]} />
+
+In the rail, a NavGroup is its icon, and a click opens its rows in a menu
+beside it.
+
+## Off canvas
+
+`collapsible="offcanvas"` slides it out entirely instead of leaving a rail, for
+a chat list or a file tree that has no icons to keep. While it is out, nothing
+in it can be reached by Tab. `collapsible={false}` keeps it open.
+
+<CodeBlock marginTop="16" marginBottom="24" preview={<SidebarOffcanvasExample />} codes={[{ language: "tsx", label: "Off canvas", code: `<Sidebar aria-label="Chats" collapsible="offcanvas">…</Sidebar>` }]} />
+
+## Phones
+
+Below `mobileBelow` (default `s`) the sidebar is a drawer from the left, with
+the same children at full labels. The SidebarTrigger opens it, and following a
+link inside closes it. `mobileBelow={false}` keeps the desktop sidebar at
+every width.
+
+## Keyboard
+
+The edge is a focusable separator with its width as its value.
+
+| Key | Does |
+|---|---|
+| ← / → | Narrower or wider by 8px; 32px with Shift. Past the minimum, ← folds it. |
+| Home / End | The minimum or the maximum width. |
+| Enter | Folds or unfolds it. |
+| ⌘B / Ctrl+B | Folds or unfolds it from anywhere outside a text field (`shortcut`). |
+
+## Motion
+
+The width eases between open, rail and hidden on the macro transition, and the
+Nav's labels fade on the micro one. Nothing animates while you drag, and with
+`prefers-reduced-motion` nothing animates at all.
+
+## API reference
+
+<PropsTable
+  component="Sidebar"
+  describe={{
+    collapsible: "\"rail\" folds it to its icons, \"offcanvas\" slides it out, false keeps it open.",
+    resizable: "Draw the handle on its edge.",
+    expandOnHover: "As a rail, open over the page on a resting mouse or keyboard focus.",
+    railWidth: "The rail's width in pixels. Left out, 52 for a compact Nav and 80 for a normal one.",
+    labels: "The handle's and the drawer's words, for another language.",
+  }}
+/>
+
+<PropsTable
+  component="SidebarProvider"
+  describe={{
+    defaultWidth: "The open width to start from, in pixels, such as a saved one.",
+    width: "The open width, when the host owns it.",
+    onWidthChange: "Called once a resize ends.",
+    defaultCollapsed: "Start folded.",
+    collapsed: "Folded, when the host owns it.",
+    onCollapsedChange: "Called with the state it moves to.",
+    minWidth: "The narrowest a drag can make it.",
+    maxWidth: "The widest a drag can make it.",
+    persist: "Keep width and collapse in a cookie under this key.",
+    shortcut: "The key that folds it. false for none.",
+    mobileBelow: "Below this breakpoint it is a drawer. false never.",
+  }}
+/>

@@ -1,0 +1,39 @@
+{
+  "id": "home",
+  "title": "Home screen",
+  "description": "A greeting header, the hero panel the app is about (a card, a balance, today's plan), stat tiles, a list of next actions, a sheet and a loading skeleton",
+  "components": [
+    "Column",
+    "Row",
+    "Heading",
+    "Text",
+    "Avatar",
+    "IconButton",
+    "Button",
+    "Card",
+    "Tag",
+    "Icon",
+    "ProgressBar",
+    "Dialog",
+    "Skeleton"
+  ],
+  "example": "examples/home.tsx",
+  "gotchas": [
+    "Card.interactive",
+    "Card.direction",
+    "text.wrap",
+    "tone.variant",
+    "Dialog.sheet",
+    "radius.clip",
+    "spacing.tokens",
+    "color.tokens",
+    "icon.names"
+  ],
+  "quality": {
+    "hero": "One hero panel near the top, background=\"surface\" border radius=\"l\" padding=\"20\", holding the screen's main number or card and its one primary Button",
+    "tiles": "Stat tiles in a Row gap=\"12\", each a panel with flex={1}: a label-default-s label over a display-strong-xs value",
+    "actions": "Next actions as Cards with direction=\"row\": an icon box, a title and a subline in a Column flex={1}, and a chevronRight",
+    "loading": "Skeletons in the shape of the screen while it loads, never a lone Spinner",
+    "rhythm": "paddingX=\"20\", gap=\"24\" between sections, \"12\" inside them"
+  }
+}

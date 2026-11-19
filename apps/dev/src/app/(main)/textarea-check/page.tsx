@@ -17,10 +17,10 @@ const SIZES = ["xs", "s", "m", "l", "xl"] as const;
 export default function TextareaCheck() {
   return (
     <Column fillWidth gap="24" padding="24" maxWidth="l" data-testid="root">
-      <Text variant="heading-strong-l">Textarea label</Text>
+      <Text textVariant="heading-strong-l">Textarea label</Text>
       {SIZES.map((size) => (
         <Column key={size} gap="8" data-testid={`size-${size}`}>
-          <Text variant="label-default-s" onBackground="neutral-weak">
+          <Text textVariant="label-default-s" onBackground="neutral-weak">
             {size}
           </Text>
           <Row gap="8">
@@ -44,7 +44,7 @@ export default function TextareaCheck() {
         </Column>
       ))}
       <Column gap="8" data-testid="multi">
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           multi-line and fixed lines
         </Text>
         <Row gap="8">

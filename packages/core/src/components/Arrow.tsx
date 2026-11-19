@@ -1,94 +1,106 @@
 "use client";
 
 import classNames from "clsx";
-import { forwardRef, useEffect, useRef } from "react";
-import { composeTransform, translateTransform } from "../utils/layoutClasses";
+import type React from "react";
+import { useCallback, useEffect, useRef } from "react";
+import { composeTransform, translateTransform } from "../utils/layoutClasses.js";
 import styles from "./Arrow.module.scss";
-import { Flex } from "./Flex";
+import { Flex } from "./Flex.js";
 
-interface ArrowProps extends React.ComponentProps<typeof Flex> {
+interface ArrowProps extends Omit<React.ComponentProps<typeof Flex>, "children" | "color"> {
+  /**
+   * A CSS selector for the element whose hover draws the arrow (`"#plan-pro"`):
+   * a card, a link or a row around it. The arrow slides in while the pointer
+   * is over that element.
+   */
   trigger: string;
+  /** The arrow's size, as a multiplier of its 16px box. */
   scale?: number;
+  /** Drawn for a background (`onBackground`, the default) or on a solid fill. */
   color?: "onBackground" | "onSolid";
-  style?: React.CSSProperties;
-  className?: string;
+  /** `"span"` inside phrasing content, such as a Tag in a sentence. Defaults to `"div"`. */
+  as?: "div" | "span";
 }
 
-const Arrow = forwardRef<HTMLDivElement, ArrowProps>(
-  (
-    {
-      trigger,
-      scale = 0.8,
-      color = "onBackground",
-      style,
-      className,
-      translateX,
-      translateY,
-      as,
-      ...flex
+/**
+ * The animated arrow Button `arrowIcon` and Tag `arrow` draw, on its own: put
+ * it in a card or a link and point `trigger` at that element. Its layout props
+ * are Flex's (a number is on the token scale).
+ */
+const Arrow = ({
+  ref,
+  trigger,
+  scale = 0.8,
+  color = "onBackground",
+  style,
+  className,
+  translateX,
+  translateY,
+  as,
+  ...flex
+}: ArrowProps) => {
+  const node = useRef<HTMLDivElement | null>(null);
+
+  const setRef = useCallback(
+    (element: HTMLDivElement | null) => {
+      node.current = element;
+      if (typeof ref === "function") ref(element);
+      else if (ref) (ref as React.RefObject<HTMLDivElement | null>).current = element;
     },
-    _ref,
-  ) => {
-    const ref = useRef<HTMLDivElement>(null);
+    [ref],
+  );
 
-    useEffect(() => {
-      const triggerElement = document.querySelector(trigger);
+  useEffect(() => {
+    const triggerElement = document.querySelector(trigger);
+    if (!triggerElement) return;
 
-      if (triggerElement && ref.current) {
-        const handleMouseOver = () => {
-          ref.current?.classList.add(styles.active);
-        };
+    const handleMouseOver = () => node.current?.classList.add(styles.active);
+    const handleMouseOut = () => node.current?.classList.remove(styles.active);
 
-        const handleMouseOut = () => {
-          ref.current?.classList.remove(styles.active);
-        };
+    triggerElement.addEventListener("mouseenter", handleMouseOver);
+    triggerElement.addEventListener("mouseleave", handleMouseOut);
 
-        triggerElement.addEventListener("mouseenter", handleMouseOver);
-        triggerElement.addEventListener("mouseleave", handleMouseOut);
+    return () => {
+      triggerElement.removeEventListener("mouseenter", handleMouseOver);
+      triggerElement.removeEventListener("mouseleave", handleMouseOut);
+    };
+  }, [trigger]);
 
-        return () => {
-          triggerElement.removeEventListener("mouseenter", handleMouseOver);
-          triggerElement.removeEventListener("mouseleave", handleMouseOut);
-        };
-      }
-    }, [trigger]);
-
-    return (
+  return (
+    <Flex
+      ref={setRef}
+      as={as}
+      center
+      aria-hidden="true"
+      className={classNames(styles.arrowContainer, className)}
+      style={{
+        // The scale composes with a translate prop instead of replacing the
+        // transform Flex would have written for it.
+        transform: composeTransform(translateTransform(translateX, translateY), `scale(${scale})`),
+        ...style,
+      }}
+      {...flex}
+    >
       <Flex
-        ref={ref}
-        as={as}
-        center
-        className={classNames(styles.arrowContainer, className)}
-        style={{
-          // The scale composes with a translate prop instead of replacing the
-          // transform Flex would have written for it.
-          transform: composeTransform(
-            translateTransform(translateX, translateY),
-            `scale(${scale})`,
-          ),
-          ...style,
-        }}
-        {...flex}
-      >
-        <Flex
-          as={as === "span" ? "span" : undefined}
-          radius="full"
-          position="absolute"
-          className={classNames(styles.arrowHead, styles[color])}
-          height={0.0875}
-        />
-        <Flex
-          as={as === "span" ? "span" : undefined}
-          radius="full"
-          position="absolute"
-          className={classNames(styles.arrowHead, styles[color])}
-          height={0.0875}
-        />
-      </Flex>
-    );
-  },
-);
+        // Inside a span (a Tag in a sentence) the heads are spans too.
+        as={as === "span" ? "span" : undefined}
+        radius="full"
+        position="absolute"
+        className={classNames(styles.arrowHead, styles[color])}
+        height="0.0875rem"
+      />
+      <Flex
+        as={as === "span" ? "span" : undefined}
+        radius="full"
+        position="absolute"
+        className={classNames(styles.arrowHead, styles[color])}
+        height="0.0875rem"
+      />
+    </Flex>
+  );
+};
 
 Arrow.displayName = "Arrow";
 
+export type { ArrowProps };
 export { Arrow };

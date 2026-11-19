@@ -5,6 +5,10 @@
   justify-content: center;
 }
 
+.xs {
+  min-width: var(--static-space-24);
+}
+
 .s {
   min-width: var(--static-space-32);
 }
@@ -15,4 +19,8 @@
 
 .l {
   min-width: var(--static-space-48);
+}
+
+.xl {
+  min-width: var(--static-space-56);
 }

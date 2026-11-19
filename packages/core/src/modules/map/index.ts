@@ -1,20 +1,22 @@
-export type { ClusterGroup, MapClusterOptions } from "./cluster";
-export { clusterPoints } from "./cluster";
-export * from "./Map";
-export * from "./MapCircle";
-export type { MapContextValue } from "./MapContext";
-export { useMap } from "./MapContext";
-export * from "./MapMarker";
-export * from "./MapMarkers";
-export * from "./MapPin";
-export * from "./MapPopup";
-export { DEFAULT_MAP_STYLE } from "./mapStyles";
+export type { ClusterGroup, MapClusterOptions } from "./cluster.js";
+export { clusterPoints } from "./cluster.js";
+export * from "./Map.js";
+export * from "./MapArea.js";
+export * from "./MapCircle.js";
+export type { MapContextValue } from "./MapContext.js";
+export { useMap } from "./MapContext.js";
+export * from "./MapMarker.js";
+export * from "./MapMarkers.js";
+export * from "./MapPin.js";
+export * from "./MapPopup.js";
+export * from "./MapRoute.js";
+export { DEFAULT_MAP_STYLE } from "./mapStyles.js";
 export type {
   LngLat,
   MapBuildings,
-  MapColor,
   MapProjection,
   MapStyle,
   MapStyleSource,
+  MapTone,
   MapViewport,
-} from "./types";
+} from "./types.js";

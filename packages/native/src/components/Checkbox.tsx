@@ -1,41 +1,52 @@
 import type { ReactNode } from "react";
 import { Pressable, View, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
-import { InteractiveDetails } from "./InteractiveDetails";
+import { type ControlChromeProps, controlChrome, InteractiveDetails } from "./InteractiveDetails";
 import { touchSlop } from "./touch";
 import { useControllable } from "./useControllable";
 
-export interface CheckboxProps {
+export interface CheckboxProps extends ControlChromeProps {
+  /** Ticked or not, controlled. Leave it out to let the checkbox keep its own state. */
   checked?: boolean;
+  /** The starting state of an uncontrolled checkbox (no `checked`). */
   defaultChecked?: boolean;
   indeterminate?: boolean;
-  onToggle?: (checked: boolean) => void;
+  /** Called with the state the checkbox moves to, as core 3.0's (2.x's `onToggle`). */
+  onCheckedChange?: (checked: boolean) => void;
   label?: ReactNode;
   description?: ReactNode;
   disabled?: boolean;
-  ariaLabel?: string;
+  /** The name when there is no text `label`, as core's `aria-label`. */
+  "aria-label"?: string;
   style?: ViewStyle;
   /** Finds the checkbox, the pressable a test taps, in end-to-end tests. */
   testID?: string;
 }
+
+// SharedInteractiveStyles.module.scss: the box per size, in static spacing steps.
+const BOX = { s: "16", m: "20", l: "24" } as const;
 
 /** Core's `Checkbox`: a 20pt box, brand-filled with a check (or a dash when indeterminate). */
 export function Checkbox({
   checked,
   defaultChecked = false,
   indeterminate = false,
-  onToggle,
+  onCheckedChange,
   label,
   description,
   disabled = false,
-  ariaLabel = "Checkbox",
+  "aria-label": ariaLabel = "Checkbox",
+  size,
+  error,
+  errorMessage,
   style,
   testID,
 }: CheckboxProps) {
   const theme = useTheme();
-  const [on, toggle] = useControllable(checked, defaultChecked, onToggle);
+  const chrome = controlChrome({ size: size ?? theme.controlSize, error, errorMessage });
+  const [on, toggle] = useControllable(checked, defaultChecked, onCheckedChange);
   const filled = on || indeterminate;
-  const box = theme.space("20");
+  const box = theme.space(BOX[chrome.size]);
   const mark = theme.color("brand-on-solid-strong");
 
   return (
@@ -65,7 +76,11 @@ export function Checkbox({
           borderRadius: Math.min(theme.space("4"), theme.radius("xs")),
           borderWidth: 1,
           borderColor: theme.color(
-            filled ? "solid-border-color-brand" : "solid-border-color-neutral",
+            filled
+              ? "solid-border-color-brand"
+              : chrome.invalid
+                ? "danger-border-medium"
+                : "solid-border-color-neutral",
           ),
           backgroundColor: theme.color(filled ? "brand-solid-medium" : "surface-background"),
           alignItems: "center",
@@ -73,9 +88,7 @@ export function Checkbox({
         }}
       >
         {indeterminate ? (
-          <View
-            style={{ width: theme.space("12"), height: theme.space("2"), backgroundColor: mark }}
-          />
+          <View style={{ width: box * 0.6, height: theme.space("2"), backgroundColor: mark }} />
         ) : on ? (
           // A check drawn as two borders of a rotated box, so the preview needs no icon set.
           <View
@@ -91,7 +104,13 @@ export function Checkbox({
           />
         ) : null}
       </View>
-      <InteractiveDetails label={label} description={description} disabled={disabled} />
+      <InteractiveDetails
+        label={label}
+        description={description}
+        errorMessage={chrome.showsError ? errorMessage : undefined}
+        disabled={disabled}
+        size={chrome.size}
+      />
     </Pressable>
   );
 }

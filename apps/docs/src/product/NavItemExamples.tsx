@@ -13,7 +13,7 @@ const people = [
 export function NavItemAvatarExample() {
   const [current, setCurrent] = useState("ada");
   return (
-    <Column maxWidth={20} gap="4" padding="8" radius="l" border>
+    <Column maxWidth="20rem" gap="4" padding="8" radius="l" border>
       {people.map((person) => (
         <NavItem
           key={person.id}
@@ -39,7 +39,7 @@ const railTabs = [
 export function NavRailExample() {
   const [current, setCurrent] = useState("layouts");
   return (
-    <Row fillWidth height={24} radius="l" border overflow="hidden">
+    <Row fillWidth height={384} radius="l" border overflow="hidden">
       <Nav
         aria-label="Editor"
         collapsed
@@ -60,8 +60,8 @@ export function NavRailExample() {
         ))}
       </Nav>
       <Column fill padding="24" gap="8" background="surface">
-        <Text variant="heading-strong-s">{railTabs.find((tab) => tab.id === current)?.label}</Text>
-        <Text variant="body-default-s" onBackground="neutral-weak">
+        <Text textVariant="heading-strong-s">{railTabs.find((tab) => tab.id === current)?.label}</Text>
+        <Text textVariant="body-default-s" onBackground="neutral-weak">
           Hover the rail. It opens over this panel, which stays where it is.
         </Text>
       </Column>

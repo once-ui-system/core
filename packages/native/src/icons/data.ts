@@ -1,123 +1,175 @@
 // Copied from packages/core/src/icons/data.ts by scripts/sync-icons.mjs — do not edit by hand.
-// Source sets and their licences: see packages/core/src/icons/ATTRIBUTION.md
+// Once UI's own icons (once-ui-system/icons, MIT): see packages/core/src/icons/ATTRIBUTION.md
 import type { IconNode } from "./types";
 
+const line = {
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: "1.5",
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+};
+
 export const iconData = {
-  adjustments: {
+  academicCap: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75",
+          d: "M12.31 4.65L19.92 8.35A0.72 0.72 0 0 1 19.92 9.65L12.31 13.35A0.72 0.72 0 0 1 11.69 13.35L4.08 9.65A0.72 0.72 0 0 1 4.08 8.35L11.69 4.65A0.72 0.72 0 0 1 12.31 4.65Z",
         },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M6.5 11.5v4.25c1.5 1.5 3.5 2.25 5.5 2.25s4-.75 5.5-2.25V11.5M21.25 9L21.25 14.5",
+        },
+        child: [],
+      },
+    ],
+  },
+  accessibility: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: { d: "M3.25 12a8.75 8.75 0 1 0 17.5 0a8.75 8.75 0 1 0 -17.5 0Z" },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M10.75 7.25a1.25 1.25 0 1 0 2.5 0a1.25 1.25 0 1 0 -2.5 0Z",
+          fill: "currentColor",
+          stroke: "none",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M7.75 10.25L11.92 10.99A0.48 0.48 0 0 0 12.08 10.99L16.25 10.25M12 11L12 13.75M9.75 17L11.61 14.32A0.48 0.48 0 0 1 12.39 14.32L14.25 17",
+        },
+        child: [],
+      },
+    ],
+  },
+  adjustments: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M3.75 6L13.25 6M16.75 6L20.25 6M3.75 12L6.75 12M10.25 12L20.25 12M3.75 18L11.25 18M14.75 18L20.25 18",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M13.25 6a1.75 1.75 0 1 0 3.5 0a1.75 1.75 0 1 0 -3.5 0Z" },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M6.75 12a1.75 1.75 0 1 0 3.5 0a1.75 1.75 0 1 0 -3.5 0Z" },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M11.25 18a1.75 1.75 0 1 0 3.5 0a1.75 1.75 0 1 0 -3.5 0Z" },
         child: [],
       },
     ],
   },
   arrowDown: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
-      {
-        tag: "path",
-        attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3",
-        },
-        child: [],
-      },
+      { tag: "path", attr: { d: "M12 5.25L12 17.75M18.25 12.5L12 18.75L5.75 12.5" }, child: [] },
     ],
   },
   arrowLeft: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
-      {
-        tag: "path",
-        attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18",
-        },
-        child: [],
-      },
+      { tag: "path", attr: { d: "M18.75 12L6.25 12M11.5 18.25L5.25 12L11.5 5.75" }, child: [] },
     ],
   },
   arrowRight: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
-      {
-        tag: "path",
-        attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3",
-        },
-        child: [],
-      },
+      { tag: "path", attr: { d: "M5.25 12L17.75 12M12.5 5.75L18.75 12L12.5 18.25" }, child: [] },
     ],
   },
   arrowUp: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
+    child: [
+      { tag: "path", attr: { d: "M12 18.75L12 6.25M5.75 11.5L12 5.25L18.25 11.5" }, child: [] },
+    ],
+  },
+  arrowUpRight: {
+    tag: "svg",
+    attr: line,
+    child: [
+      { tag: "path", attr: { d: "M6.25 17.75L16.75 7.25M9 6.5L17.5 6.5L17.5 15" }, child: [] },
+    ],
+  },
+  arrowsRightLeft: {
+    tag: "svg",
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18",
+          d: "M4 8L19.5 8M16.25 4.5L19.75 8L16.25 11.5M4.5 16L20 16M7.75 12.5L4.25 16L7.75 19.5",
         },
         child: [],
       },
     ],
   },
-  arrowUpRight: {
+  aspectRatio: {
     tag: "svg",
-    attr: { viewBox: "0 0 24 24", fill: "currentColor", "aria-hidden": "true" },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          fillRule: "evenodd",
-          d: "M8.25 3.75H19.5a.75.75 0 0 1 .75.75v11.25a.75.75 0 0 1-1.5 0V6.31L5.03 20.03a.75.75 0 0 1-1.06-1.06L17.69 5.25H8.25a.75.75 0 0 1 0-1.5Z",
-          clipRule: "evenodd",
+          d: "M5.5 5L18.5 5A2.75 2.75 0 0 1 21.25 7.75L21.25 16.25A2.75 2.75 0 0 1 18.5 19L5.5 19A2.75 2.75 0 0 1 2.75 16.25L2.75 7.75A2.75 2.75 0 0 1 5.5 5Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M6.25 11.25L6.25 9.1A0.6 0.6 0 0 1 6.85 8.5L9.5 8.5M17.75 12.75L17.75 14.9A0.6 0.6 0 0 1 17.15 15.5L14.5 15.5",
+        },
+        child: [],
+      },
+    ],
+  },
+  backward: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M10.35 7.1L4.53 11.42A0.72 0.72 0 0 0 4.53 12.58L10.35 16.9A0.72 0.72 0 0 0 11.5 16.32L11.5 7.68A0.72 0.72 0 0 0 10.35 7.1Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M19.1 7.1L13.28 11.42A0.72 0.72 0 0 0 13.28 12.58L19.1 16.9A0.72 0.72 0 0 0 20.25 16.32L20.25 7.68A0.72 0.72 0 0 0 19.1 7.1Z",
         },
         child: [],
       },
@@ -125,113 +177,115 @@ export const iconData = {
   },
   ball: {
     tag: "svg",
-    attr: { viewBox: "0 0 512 512" },
+    attr: line,
     child: [
       {
-        tag: "circle",
+        tag: "path",
+        attr: { d: "M3.25 12a8.75 8.75 0 1 0 17.5 0a8.75 8.75 0 1 0 -17.5 0Z" },
+        child: [],
+      },
+      {
+        tag: "path",
         attr: {
-          cx: "256",
-          cy: "256",
-          r: "192",
-          fill: "none",
-          strokeLinecap: "round",
-          strokeMiterlimit: "10",
-          strokeWidth: "32",
+          d: "M12.18 9.03L14.77 10.91A0.3 0.3 0 0 1 14.88 11.25L13.89 14.3A0.3 0.3 0 0 1 13.6 14.51L10.4 14.51A0.3 0.3 0 0 1 10.11 14.3L9.12 11.25A0.3 0.3 0 0 1 9.23 10.91L11.82 9.03A0.3 0.3 0 0 1 12.18 9.03Z",
         },
         child: [],
       },
       {
         tag: "path",
         attr: {
-          fill: "none",
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          strokeWidth: "32",
-          d: "m256 175.15-76.09 63.83L200 320h112l20.09-81.02zm76.09 63.83 52.87-22.4 25.78-73.26M447 269.97l-62.04-53.39m-205.05 22.4-52.87-22.4-25.78-73.26M65 269.97l62.04-53.39M256 175.15v-57.57l64-42.64m-128-.01 64 42.65M312 320l28 48-28 71m98.74-71H342m-142-48-28 48 28.37 71.5M101.63 368H172",
+          d: "M12 8.9L12 3.25M14.95 11.04L20.32 9.3M13.82 14.51L17.14 19.08M10.18 14.51L6.86 19.08M9.05 11.04L3.68 9.3",
         },
         child: [],
       },
+    ],
+  },
+  ban: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: { d: "M3.25 12a8.75 8.75 0 1 0 17.5 0a8.75 8.75 0 1 0 -17.5 0Z" },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M5.8 5.8L18.2 18.2" }, child: [] },
     ],
   },
   banknotes: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z",
+          d: "M4.95 4.75L19.05 4.75A2.2 2.2 0 0 1 21.25 6.95L21.25 14.05A2.2 2.2 0 0 1 19.05 16.25L4.95 16.25A2.2 2.2 0 0 1 2.75 14.05L2.75 6.95A2.2 2.2 0 0 1 4.95 4.75Z",
         },
         child: [],
       },
+      { tag: "path", attr: { d: "M9.5 10.5a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0Z" }, child: [] },
+      { tag: "path", attr: { d: "M4.75 19.25L19.25 19.25" }, child: [] },
     ],
   },
   barChart: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z",
+          d: "M5.63 12.5L6.38 12.5A1.38 1.38 0 0 1 7.75 13.88L7.75 18.88A1.38 1.38 0 0 1 6.38 20.25L5.63 20.25A1.38 1.38 0 0 1 4.25 18.88L4.25 13.88A1.38 1.38 0 0 1 5.63 12.5Z",
         },
         child: [],
       },
+      {
+        tag: "path",
+        attr: {
+          d: "M11.63 4L12.38 4A1.38 1.38 0 0 1 13.75 5.38L13.75 18.88A1.38 1.38 0 0 1 12.38 20.25L11.63 20.25A1.38 1.38 0 0 1 10.25 18.88L10.25 5.38A1.38 1.38 0 0 1 11.63 4Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M17.63 8.5L18.38 8.5A1.38 1.38 0 0 1 19.75 9.88L19.75 18.88A1.38 1.38 0 0 1 18.38 20.25L17.63 20.25A1.38 1.38 0 0 1 16.25 18.88L16.25 9.88A1.38 1.38 0 0 1 17.63 8.5Z",
+        },
+        child: [],
+      },
+    ],
+  },
+  beaker: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M9.25 3.25L9.25 9.32A0.72 0.72 0 0 1 9.16 9.66L4.25 18.78A0.72 0.72 0 0 0 4.38 19.63L5.29 20.54A0.72 0.72 0 0 0 5.8 20.75L18.2 20.75A0.72 0.72 0 0 0 18.71 20.54L19.62 19.63A0.72 0.72 0 0 0 19.75 18.78L14.84 9.66A0.72 0.72 0 0 1 14.75 9.32L14.75 3.25",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M7.75 3.25L16.25 3.25" }, child: [] },
+      { tag: "path", attr: { d: "M6.5 15L17.5 15" }, child: [] },
     ],
   },
   bell: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
-      {
-        tag: "path",
-        attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0",
-        },
-        child: [],
-      },
+      { tag: "path", attr: { d: "M6.25 16.75V11a5.75 5.75 0 0 1 11.5 0v5.75" }, child: [] },
+      { tag: "path", attr: { d: "M4.75 16.75L19.25 16.75" }, child: [] },
+      { tag: "path", attr: { d: "M10 20a2 2 0 0 0 4 0" }, child: [] },
     ],
   },
   bolt: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z",
+          d: "M12.74 3.71L5.46 12.92A0.36 0.36 0 0 0 5.74 13.5L10.85 13.5A0.36 0.36 0 0 1 11.21 13.89L10.62 20.03A0.36 0.36 0 0 0 11.26 20.29L18.54 11.08A0.36 0.36 0 0 0 18.26 10.5L13.15 10.5A0.36 0.36 0 0 1 12.79 10.11L13.38 3.97A0.36 0.36 0 0 0 12.74 3.71Z",
         },
         child: [],
       },
@@ -239,20 +293,19 @@ export const iconData = {
   },
   book: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25",
+          d: "M3.47 5.25L8.53 5.25A0.72 0.72 0 0 1 8.93 5.38L11.69 7.29A0.72 0.72 0 0 1 12 7.88L12 18.79A0.72 0.72 0 0 1 10.94 19.43L8.91 18.34A0.72 0.72 0 0 0 8.57 18.25L3.47 18.25A0.72 0.72 0 0 1 2.75 17.53L2.75 5.97A0.72 0.72 0 0 1 3.47 5.25Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M20.53 5.25L15.47 5.25A0.72 0.72 0 0 0 15.07 5.38L12.31 7.29A0.72 0.72 0 0 0 12 7.88L12 18.79A0.72 0.72 0 0 0 13.06 19.43L15.09 18.34A0.72 0.72 0 0 1 15.43 18.25L20.53 18.25A0.72 0.72 0 0 0 21.25 17.53L21.25 5.97A0.72 0.72 0 0 0 20.53 5.25Z",
         },
         child: [],
       },
@@ -260,83 +313,135 @@ export const iconData = {
   },
   bookmark: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z",
+          d: "M7.2 3.25L16.8 3.25A1.2 1.2 0 0 1 18 4.45L18 18.35A1.2 1.2 0 0 1 16.08 19.31L12.72 16.79A1.2 1.2 0 0 0 11.28 16.79L7.92 19.31A1.2 1.2 0 0 1 6 18.35L6 4.45A1.2 1.2 0 0 1 7.2 3.25Z",
         },
         child: [],
       },
     ],
   },
-  calendar: {
+  briefcase: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5",
+          d: "M6 7.25L18 7.25A2.75 2.75 0 0 1 20.75 10L20.75 17A2.75 2.75 0 0 1 18 19.75L6 19.75A2.75 2.75 0 0 1 3.25 17L3.25 10A2.75 2.75 0 0 1 6 7.25Z",
         },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M9 7.25L9 5.22A0.72 0.72 0 0 1 9.72 4.5L14.28 4.5A0.72 0.72 0 0 1 15 5.22L15 7.25",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M3.25 12.75L20.75 12.75" }, child: [] },
+    ],
+  },
+  brush: {
+    tag: "svg",
+    attr: line,
+    child: [
+      { tag: "path", attr: { d: "M19.07 4.93L13.24 10.76" }, child: [] },
+      {
+        tag: "path",
+        attr: {
+          d: "M11.37 8.89L15.11 12.63A0.36 0.36 0 0 1 15.11 13.13L13.66 14.58A0.36 0.36 0 0 1 13.16 14.58L9.42 10.84A0.36 0.36 0 0 1 9.42 10.34L10.87 8.89A0.36 0.36 0 0 1 11.37 8.89Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M10.01 11.43L12.57 13.99A1.44 1.44 0 0 1 12.57 16.03L11.58 17.01A1.44 1.44 0 0 1 10.89 17.39L7.55 18.18A1.44 1.44 0 0 1 5.82 16.45L6.61 13.11A1.44 1.44 0 0 1 6.99 12.42L7.97 11.43A1.44 1.44 0 0 1 10.01 11.43Z",
+        },
+        child: [],
+      },
+    ],
+  },
+  bug: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: { d: "M12 7.5c3 0 5 2.5 5 6.25s-2 6.5-5 6.5-5-2.75-5-6.5S9 7.5 12 7.5Z" },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M9.25 7.9a2.75 2.75 0 0 1 5.5 0M7 12L3.75 10.75M17 12L20.25 10.75M7 16L4 17.5M17 16L20 17.5",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M12 10.25L12 18.25" }, child: [] },
+    ],
+  },
+  calendar: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M6.5 5.25L17.5 5.25A2.75 2.75 0 0 1 20.25 8L20.25 17.5A2.75 2.75 0 0 1 17.5 20.25L6.5 20.25A2.75 2.75 0 0 1 3.75 17.5L3.75 8A2.75 2.75 0 0 1 6.5 5.25Z",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M3.75 10L20.25 10" }, child: [] },
+      { tag: "path", attr: { d: "M8.25 3.25L8.25 6.75M15.75 3.25L15.75 6.75" }, child: [] },
+    ],
+  },
+  camera: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M3.59 8L6.75 8A0.84 0.84 0 0 0 7.49 7.56L8.51 5.69A0.84 0.84 0 0 1 9.25 5.25L14.75 5.25A0.84 0.84 0 0 1 15.49 5.69L16.51 7.56A0.84 0.84 0 0 0 17.25 8L20.41 8A0.84 0.84 0 0 1 21.25 8.84L21.25 18.41A0.84 0.84 0 0 1 20.41 19.25L3.59 19.25A0.84 0.84 0 0 1 2.75 18.41L2.75 8.84A0.84 0.84 0 0 1 3.59 8Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M8.75 13.5a3.25 3.25 0 1 0 6.5 0a3.25 3.25 0 1 0 -6.5 0Z" },
         child: [],
       },
     ],
   },
   cart: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
+      { tag: "path", attr: { d: "M2.75 3.75L4.29 3.75A0.6 0.6 0 0 1 4.87 4.2L5.6 7" }, child: [] },
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z",
+          d: "M6.5 7L19.59 7A0.72 0.72 0 0 1 20.29 7.88L18.88 13.94A0.72 0.72 0 0 1 18.18 14.5L7.83 14.5A0.72 0.72 0 0 1 7.13 13.93L5.79 7.87A0.72 0.72 0 0 1 6.5 7Z",
         },
         child: [],
       },
+      { tag: "path", attr: { d: "M7 19a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0Z" }, child: [] },
+      { tag: "path", attr: { d: "M16 19a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0Z" }, child: [] },
     ],
   },
   chat: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155",
+          d: "M6 4.5L18 4.5A2.75 2.75 0 0 1 20.75 7.25L20.75 14A2.75 2.75 0 0 1 18 16.75L13.4 16.75A2.75 2.75 0 0 0 11.77 17.29L9.16 19.21A0.88 0.88 0 0 1 7.75 18.5L7.75 18.5A1.75 1.75 0 0 0 6 16.75L5.5 16.75A2.25 2.25 0 0 1 3.25 14.5L3.25 7.25A2.75 2.75 0 0 1 6 4.5Z",
         },
         child: [],
       },
@@ -344,240 +449,180 @@ export const iconData = {
   },
   check: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
+    child: [{ tag: "path", attr: { d: "M4.75 12.5L9.5 17.25L19.25 7" }, child: [] }],
+  },
+  checkBadge: {
+    tag: "svg",
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z",
+          d: "M12.34 3.23L14.81 4.91A0.6 0.6 0 0 0 15.03 5L17.96 5.56A0.6 0.6 0 0 1 18.44 6.04L19 8.97A0.6 0.6 0 0 0 19.09 9.19L20.77 11.66A0.6 0.6 0 0 1 20.77 12.34L19.09 14.81A0.6 0.6 0 0 0 19 15.03L18.44 17.96A0.6 0.6 0 0 1 17.96 18.44L15.03 19A0.6 0.6 0 0 0 14.81 19.09L12.34 20.77A0.6 0.6 0 0 1 11.66 20.77L9.19 19.09A0.6 0.6 0 0 0 8.97 19L6.04 18.44A0.6 0.6 0 0 1 5.56 17.96L5 15.03A0.6 0.6 0 0 0 4.91 14.81L3.23 12.34A0.6 0.6 0 0 1 3.23 11.66L4.91 9.19A0.6 0.6 0 0 0 5 8.97L5.56 6.04A0.6 0.6 0 0 1 6.04 5.56L8.97 5A0.6 0.6 0 0 0 9.19 4.91L11.66 3.23A0.6 0.6 0 0 1 12.34 3.23Z",
         },
         child: [],
       },
+      { tag: "path", attr: { d: "M8.5 12.25L10.85 14.6L15.5 9.75" }, child: [] },
+    ],
+  },
+  checkCircle: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: { d: "M3.25 12a8.75 8.75 0 1 0 17.5 0a8.75 8.75 0 1 0 -17.5 0Z" },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M8.25 12.25L10.75 14.75L15.75 9.5" }, child: [] },
     ],
   },
   checkbox: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
-        attr: { strokeLinecap: "round", strokeLinejoin: "round", d: "m4.5 12.75 6 6 9-13.5" },
+        attr: {
+          d: "M6.5 3.75L17.5 3.75A2.75 2.75 0 0 1 20.25 6.5L20.25 17.5A2.75 2.75 0 0 1 17.5 20.25L6.5 20.25A2.75 2.75 0 0 1 3.75 17.5L3.75 6.5A2.75 2.75 0 0 1 6.5 3.75Z",
+        },
         child: [],
       },
+      { tag: "path", attr: { d: "M8 12.25L10.75 15L16 9.25" }, child: [] },
     ],
   },
   chevronDoubleLeft: {
     tag: "svg",
-    attr: { viewBox: "0 0 24 24", fill: "currentColor", "aria-hidden": "true" },
+    attr: line,
     child: [
       {
         tag: "path",
-        attr: {
-          fillRule: "evenodd",
-          d: "M10.72 11.47a.75.75 0 0 0 0 1.06l7.5 7.5a.75.75 0 1 0 1.06-1.06L12.31 12l6.97-6.97a.75.75 0 0 0-1.06-1.06l-7.5 7.5Z",
-          clipRule: "evenodd",
-        },
-        child: [],
-      },
-      {
-        tag: "path",
-        attr: {
-          fillRule: "evenodd",
-          d: "M4.72 11.47a.75.75 0 0 0 0 1.06l7.5 7.5a.75.75 0 1 0 1.06-1.06L6.31 12l6.97-6.97a.75.75 0 0 0-1.06-1.06l-7.5 7.5Z",
-          clipRule: "evenodd",
-        },
+        attr: { d: "M17.75 5.5L11.25 12L17.75 18.5M12.25 5.5L5.75 12L12.25 18.5" },
         child: [],
       },
     ],
   },
   chevronDoubleRight: {
     tag: "svg",
-    attr: { viewBox: "0 0 24 24", fill: "currentColor", "aria-hidden": "true" },
+    attr: line,
     child: [
       {
         tag: "path",
-        attr: {
-          fillRule: "evenodd",
-          d: "M13.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L11.69 12 4.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z",
-          clipRule: "evenodd",
-        },
-        child: [],
-      },
-      {
-        tag: "path",
-        attr: {
-          fillRule: "evenodd",
-          d: "M19.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 1 1-1.06-1.06L17.69 12l-6.97-6.97a.75.75 0 0 1 1.06-1.06l7.5 7.5Z",
-          clipRule: "evenodd",
-        },
+        attr: { d: "M6.25 5.5L12.75 12L6.25 18.5M11.75 5.5L18.25 12L11.75 18.5" },
         child: [],
       },
     ],
   },
   chevronDown: {
     tag: "svg",
-    attr: { viewBox: "0 0 24 24", fill: "currentColor", "aria-hidden": "true" },
-    child: [
-      {
-        tag: "path",
-        attr: {
-          fillRule: "evenodd",
-          d: "M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z",
-          clipRule: "evenodd",
-        },
-        child: [],
-      },
-    ],
+    attr: line,
+    child: [{ tag: "path", attr: { d: "M19.25 9L12 16.25L4.75 9" }, child: [] }],
   },
   chevronLeft: {
     tag: "svg",
-    attr: { viewBox: "0 0 24 24", fill: "currentColor", "aria-hidden": "true" },
-    child: [
-      {
-        tag: "path",
-        attr: {
-          fillRule: "evenodd",
-          d: "M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z",
-          clipRule: "evenodd",
-        },
-        child: [],
-      },
-    ],
+    attr: line,
+    child: [{ tag: "path", attr: { d: "M15 19.25L7.75 12L15 4.75" }, child: [] }],
   },
   chevronRight: {
     tag: "svg",
-    attr: { viewBox: "0 0 24 24", fill: "currentColor", "aria-hidden": "true" },
-    child: [
-      {
-        tag: "path",
-        attr: {
-          fillRule: "evenodd",
-          d: "M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z",
-          clipRule: "evenodd",
-        },
-        child: [],
-      },
-    ],
+    attr: line,
+    child: [{ tag: "path", attr: { d: "M9 4.75L16.25 12L9 19.25" }, child: [] }],
   },
   chevronUp: {
     tag: "svg",
-    attr: { viewBox: "0 0 24 24", fill: "currentColor", "aria-hidden": "true" },
+    attr: line,
+    child: [{ tag: "path", attr: { d: "M4.75 15L12 7.75L19.25 15" }, child: [] }],
+  },
+  chevronUpDown: {
+    tag: "svg",
+    attr: line,
     child: [
       {
         tag: "path",
-        attr: {
-          fillRule: "evenodd",
-          d: "M11.47 7.72a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 1 1-1.06 1.06L12 9.31l-6.97 6.97a.75.75 0 0 1-1.06-1.06l7.5-7.5Z",
-          clipRule: "evenodd",
-        },
+        attr: { d: "M7.75 9.25L12 5L16.25 9.25M7.75 14.75L12 19L16.25 14.75" },
         child: [],
       },
     ],
   },
   chevronsLeftRight: {
     tag: "svg",
-    attr: {
-      viewBox: "0 0 24 24",
-      fill: "none",
-      stroke: "currentColor",
-      strokeWidth: "2",
-      strokeLinecap: "round",
-      strokeLinejoin: "round",
-    },
+    attr: line,
     child: [
-      { tag: "path", attr: { d: "m9 7-5 5 5 5" }, child: [] },
-      { tag: "path", attr: { d: "m15 7 5 5-5 5" }, child: [] },
+      {
+        tag: "path",
+        attr: { d: "M8.5 6.75L3.25 12L8.5 17.25M15.5 6.75L20.75 12L15.5 17.25" },
+        child: [],
+      },
     ],
   },
   clipboard: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184",
+          d: "M9 4.75L7.13 4.75A1.87 1.87 0 0 0 5.25 6.63L5.25 18A2.75 2.75 0 0 0 8 20.75L16 20.75A2.75 2.75 0 0 0 18.75 18L18.75 6.63A1.87 1.87 0 0 0 16.88 4.75L15 4.75",
         },
         child: [],
       },
+      {
+        tag: "path",
+        attr: {
+          d: "M10.1 3L13.9 3A1.1 1.1 0 0 1 15 4.1L15 5.4A1.1 1.1 0 0 1 13.9 6.5L10.1 6.5A1.1 1.1 0 0 1 9 5.4L9 4.1A1.1 1.1 0 0 1 10.1 3Z",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M8.75 11L15.25 11M8.75 15L13.25 15" }, child: [] },
     ],
   },
   close: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
+    child: [{ tag: "path", attr: { d: "M6 6L18 18M18 6L6 18" }, child: [] }],
+  },
+  code: {
+    tag: "svg",
+    attr: line,
     child: [
       {
         tag: "path",
-        attr: { strokeLinecap: "round", strokeLinejoin: "round", d: "M6 18 18 6M6 6l12 12" },
+        attr: { d: "M8.5 7L3.5 12L8.5 17M15.5 7L20.5 12L15.5 17M13.5 5L10.5 19" },
         child: [],
       },
     ],
   },
-  code: {
+  columns: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5",
+          d: "M6 4.25L18 4.25A2.75 2.75 0 0 1 20.75 7L20.75 17A2.75 2.75 0 0 1 18 19.75L6 19.75A2.75 2.75 0 0 1 3.25 17L3.25 7A2.75 2.75 0 0 1 6 4.25Z",
         },
         child: [],
       },
+      { tag: "path", attr: { d: "M9.08 4.25L9.08 19.75" }, child: [] },
+      { tag: "path", attr: { d: "M14.92 4.25L14.92 19.75" }, child: [] },
     ],
   },
   computer: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25",
+          d: "M7.25 5L16.75 5A2.75 2.75 0 0 1 19.5 7.75L19.5 12.75A2.75 2.75 0 0 1 16.75 15.5L7.25 15.5A2.75 2.75 0 0 1 4.5 12.75L4.5 7.75A2.75 2.75 0 0 1 7.25 5Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M4.87 15.5L19.13 15.5A0.6 0.6 0 0 1 19.67 15.83L20.82 18.13A0.6 0.6 0 0 1 20.28 19L3.72 19A0.6 0.6 0 0 1 3.18 18.13L4.33 15.83A0.6 0.6 0 0 1 4.87 15.5Z",
         },
         child: [],
       },
@@ -585,20 +630,59 @@ export const iconData = {
   },
   copy: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75",
+          d: "M11 8.25L17.5 8.25A2.75 2.75 0 0 1 20.25 11L20.25 17.5A2.75 2.75 0 0 1 17.5 20.25L11 20.25A2.75 2.75 0 0 1 8.25 17.5L8.25 11A2.75 2.75 0 0 1 11 8.25Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M8.25 15.75L6 15.75A2.25 2.25 0 0 1 3.75 13.5L3.75 6.5A2.75 2.75 0 0 1 6.5 3.75L13.5 3.75A2.25 2.25 0 0 1 15.75 6L15.75 8.25",
+        },
+        child: [],
+      },
+    ],
+  },
+  cpu: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M7.65 6L16.35 6A1.65 1.65 0 0 1 18 7.65L18 16.35A1.65 1.65 0 0 1 16.35 18L7.65 18A1.65 1.65 0 0 1 6 16.35L6 7.65A1.65 1.65 0 0 1 7.65 6Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M10.32 9.5L13.68 9.5A0.82 0.82 0 0 1 14.5 10.32L14.5 13.68A0.82 0.82 0 0 1 13.68 14.5L10.32 14.5A0.82 0.82 0 0 1 9.5 13.68L9.5 10.32A0.82 0.82 0 0 1 10.32 9.5Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M9.5 3.25L9.5 6M9.5 18L9.5 20.75M3.25 9.5L6 9.5M18 9.5L20.75 9.5M14.5 3.25L14.5 6M14.5 18L14.5 20.75M3.25 14.5L6 14.5M18 14.5L20.75 14.5",
+        },
+        child: [],
+      },
+    ],
+  },
+  crop: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M6.5 2.75L6.5 16.3A1.2 1.2 0 0 0 7.7 17.5L21.25 17.5M2.75 6.5L16.3 6.5A1.2 1.2 0 0 1 17.5 7.7L17.5 21.25",
         },
         child: [],
       },
@@ -606,41 +690,38 @@ export const iconData = {
   },
   cube: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "m21 7.5-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9",
+          d: "M12.35 2.95L19.63 7.04A0.72 0.72 0 0 1 20 7.67L20 16.33A0.72 0.72 0 0 1 19.63 16.96L12.35 21.05A0.72 0.72 0 0 1 11.65 21.05L4.37 16.96A0.72 0.72 0 0 1 4 16.33L4 7.67A0.72 0.72 0 0 1 4.37 7.04L11.65 2.95A0.72 0.72 0 0 1 12.35 2.95Z",
         },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M4 7.25L11.76 11.62A0.48 0.48 0 0 0 12.24 11.62L20 7.25M12 11.75L12 21.25" },
         child: [],
       },
     ],
   },
   danger: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
+        attr: { d: "M3.25 12a8.75 8.75 0 1 0 17.5 0a8.75 8.75 0 1 0 -17.5 0Z" },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M12 7.75L12 12.75" }, child: [] },
+      {
+        tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z",
+          d: "M10.95 16.25a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0Z",
+          fill: "currentColor",
+          stroke: "none",
         },
         child: [],
       },
@@ -648,41 +729,30 @@ export const iconData = {
   },
   dark: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
-        attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z",
-        },
+        attr: { d: "M20.25 14.25A8.5 8.5 0 1 1 9.75 3.75a7.75 7.75 0 0 0 10.5 10.5Z" },
         child: [],
       },
     ],
   },
   dislike: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M7.498 15.25H4.372c-1.026 0-1.945-.694-2.054-1.715a12.137 12.137 0 0 1-.068-1.285c0-2.848.992-5.464 2.649-7.521C5.287 4.247 5.886 4 6.504 4h4.016a4.5 4.5 0 0 1 1.423.23l3.114 1.04a4.5 4.5 0 0 0 1.423.23h1.294M7.498 15.25c.618 0 .991.724.725 1.282A7.471 7.471 0 0 0 7.5 19.75 2.25 2.25 0 0 0 9.75 22a.75.75 0 0 0 .75-.75v-.633c0-.573.11-1.14.322-1.672.304-.76.93-1.33 1.653-1.715a9.04 9.04 0 0 0 2.86-2.4c.498-.634 1.226-1.08 2.032-1.08h.384m-10.253 1.5H9.7m8.075-9.75c.01.05.027.1.05.148.593 1.2.925 2.55.925 3.977 0 1.487-.36 2.89-.999 4.125m.023-8.25c-.076-.365.183-.75.575-.75h.908c.889 0 1.713.518 1.972 1.368.339 1.11.521 2.287.521 3.507 0 1.553-.295 3.036-.831 4.398-.306.774-1.086 1.227-1.918 1.227h-1.053c-.472 0-.745-.556-.5-.96a8.95 8.95 0 0 0 .303-.54",
+          d: "M4.35 13.75L5.65 13.75A1.1 1.1 0 0 0 6.75 12.65L6.75 4.85A1.1 1.1 0 0 0 5.65 3.75L4.35 3.75A1.1 1.1 0 0 0 3.25 4.85L3.25 12.65A1.1 1.1 0 0 0 4.35 13.75Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M8.84 13.72L11.19 19.27A1.2 1.2 0 0 0 12.3 20L12.76 20A1.2 1.2 0 0 0 13.83 19.34L14.07 18.86A1.2 1.2 0 0 0 14.18 18.1L13.77 15.92A1.2 1.2 0 0 1 14.95 14.5L18.38 14.5A1.2 1.2 0 0 0 19.36 14L19.95 13.17A1.2 1.2 0 0 0 20.15 12.24L18.84 5.47A1.2 1.2 0 0 0 18.36 4.72L17.31 3.97A1.2 1.2 0 0 0 16.62 3.75L9.95 3.75A1.2 1.2 0 0 0 8.75 4.95L8.75 13.26A1.2 1.2 0 0 0 8.84 13.72Z",
         },
         child: [],
       },
@@ -690,83 +760,77 @@ export const iconData = {
   },
   document: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12",
+          d: "M6.45 3.25L13 3.25A1.2 1.2 0 0 1 13.85 3.6L18.4 8.15A1.2 1.2 0 0 1 18.75 9L18.75 19.55A1.2 1.2 0 0 1 17.55 20.75L6.45 20.75A1.2 1.2 0 0 1 5.25 19.55L5.25 4.45A1.2 1.2 0 0 1 6.45 3.25Z",
         },
         child: [],
       },
+      {
+        tag: "path",
+        attr: { d: "M13.5 3.25L13.5 7.9A0.6 0.6 0 0 0 14.1 8.5L18.75 8.5" },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M8.75 13L15.25 13M8.75 16.5L13.25 16.5" }, child: [] },
     ],
   },
   download: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
+      { tag: "path", attr: { d: "M12 3.75L12 14.5M7.5 10.75L12 15.25L16.5 10.75" }, child: [] },
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3",
+          d: "M3.75 15.25L3.75 19.05A1.2 1.2 0 0 0 4.95 20.25L19.05 20.25A1.2 1.2 0 0 0 20.25 19.05L20.25 15.25",
         },
         child: [],
       },
     ],
   },
+  drag: {
+    tag: "svg",
+    attr: line,
+    child: [{ tag: "path", attr: { d: "M4.75 9.5L19.25 9.5M4.75 14.5L19.25 14.5" }, child: [] }],
+  },
   edit: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125",
+          d: "M16.17 4.67L19.33 7.83A0.6 0.6 0 0 1 19.33 8.67L8.64 19.36A0.6 0.6 0 0 1 8.31 19.53L4.56 20.12A0.6 0.6 0 0 1 3.88 19.44L4.47 15.69A0.6 0.6 0 0 1 4.64 15.36L15.33 4.67A0.6 0.6 0 0 1 16.17 4.67Z",
         },
         child: [],
       },
+      { tag: "path", attr: { d: "M13.81 6.19L17.81 10.19" }, child: [] },
     ],
   },
   enter: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "m7.49 12-3.75 3.75m0 0 3.75 3.75m-3.75-3.75h16.5V4.499",
+          d: "M20.25 4.5L20.25 14.55A1.2 1.2 0 0 1 19.05 15.75L4.25 15.75M7.75 12L3.75 15.75L7.75 19.5",
+        },
+        child: [],
+      },
+    ],
+  },
+  externalLink: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M10.5 5L7.2 5A2.2 2.2 0 0 0 5 7.2L5 16.8A2.2 2.2 0 0 0 7.2 19L16.8 19A2.2 2.2 0 0 0 19 16.8L19 13.5M11 13L18.75 5.25M13.75 4.75L19.25 4.75L19.25 10.25",
         },
         child: [],
       },
@@ -774,113 +838,106 @@ export const iconData = {
   },
   eye: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z",
+          d: "M2.75 12C5 7.5 8.25 5.25 12 5.25s7 2.25 9.25 6.75c-2.25 4.5-5.5 6.75-9.25 6.75S5 16.5 2.75 12Z",
         },
         child: [],
       },
       {
         tag: "path",
-        attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z",
-        },
+        attr: { d: "M9.25 12a2.75 2.75 0 1 0 5.5 0a2.75 2.75 0 1 0 -5.5 0Z" },
         child: [],
       },
     ],
   },
   eyeDropper: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "m15 11.25 1.5 1.5.75-.75V8.758l2.276-.61a3 3 0 1 0-3.675-3.675l-.61 2.277H12l-.75.75 1.5 1.5M15 11.25l-8.47 8.47c-.34.34-.8.53-1.28.53s-.94.19-1.28.53l-.97.97-.75-.75.97-.97c.34-.34.53-.8.53-1.28s.19-.94.53-1.28L12.75 9M15 11.25 12.75 9",
+          d: "M13.42 8.92L15.08 10.58A0.6 0.6 0 0 1 15.08 11.42L7.43 19.07A0.6 0.6 0 0 1 7 19.25L5.35 19.25A0.6 0.6 0 0 1 4.75 18.65L4.75 17A0.6 0.6 0 0 1 4.93 16.57L12.58 8.92A0.6 0.6 0 0 1 13.42 8.92Z",
         },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M12 7.5L16.5 12" }, child: [] },
+      {
+        tag: "path",
+        attr: { d: "M14.649999999999999 6.6a2.75 2.75 0 1 0 5.5 0a2.75 2.75 0 1 0 -5.5 0Z" },
         child: [],
       },
     ],
   },
   eyeOff: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88",
+          d: "M2.75 12C5 7.5 8.25 5.25 12 5.25s7 2.25 9.25 6.75c-2.25 4.5-5.5 6.75-9.25 6.75S5 16.5 2.75 12Z",
         },
         child: [],
       },
+      {
+        tag: "path",
+        attr: { d: "M9.25 12a2.75 2.75 0 1 0 5.5 0a2.75 2.75 0 1 0 -5.5 0Z" },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M4 4L20 20" }, child: [] },
     ],
   },
   file: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z",
+          d: "M6.45 3.25L13 3.25A1.2 1.2 0 0 1 13.85 3.6L18.4 8.15A1.2 1.2 0 0 1 18.75 9L18.75 19.55A1.2 1.2 0 0 1 17.55 20.75L6.45 20.75A1.2 1.2 0 0 1 5.25 19.55L5.25 4.45A1.2 1.2 0 0 1 6.45 3.25Z",
         },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M13.5 3.25L13.5 7.9A0.6 0.6 0 0 0 14.1 8.5L18.75 8.5" },
         child: [],
       },
     ],
   },
   filter: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z",
+          d: "M5.29 4.5L18.71 4.5A0.72 0.72 0 0 1 19.27 5.68L14.17 11.8A0.72 0.72 0 0 0 14 12.26L14 18.5A0.72 0.72 0 0 1 13.53 19.18L10.97 20.14A0.72 0.72 0 0 1 10 19.46L10 12.26A0.72 0.72 0 0 0 9.83 11.8L4.73 5.68A0.72 0.72 0 0 1 5.29 4.5Z",
+        },
+        child: [],
+      },
+    ],
+  },
+  fire: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M12 21.25c-3.9 0-6.75-2.75-6.75-6.5 0-3.5 2.25-5.25 3.75-7.5.25 1.75 1 2.75 2 3.25C11 7 12.5 4.5 15 2.75c.25 3.25 3.75 5.5 3.75 11 0 4.25-2.85 7.5-6.75 7.5Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M12 18.5c-1.25 0-2.25-.9-2.25-2.25 0-1.5 1.25-2.25 2.25-3.75 1 1.5 2.25 2.25 2.25 3.75 0 1.35-1 2.25-2.25 2.25Z",
         },
         child: [],
       },
@@ -888,98 +945,42 @@ export const iconData = {
   },
   flag: {
     tag: "svg",
-    attr: { viewBox: "0 0 512 512" },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          fill: "none",
-          strokeLinecap: "round",
-          strokeMiterlimit: "10",
-          strokeWidth: "32",
-          d: "M80 464V68.14a8 8 0 0 1 4-6.9C91.81 56.66 112.92 48 160 48c64 0 145 48 192 48a199.5 199.5 0 0 0 77.23-15.77 2 2 0 0 1 2.77 1.85v219.36a4 4 0 0 1-2.39 3.65C421.37 308.7 392.33 320 352 320c-48 0-128-32-192-32s-80 16-80 16",
+          d: "M5.97 4.5L18.17 4.5A0.72 0.72 0 0 1 18.78 5.61L16.51 9.11A0.72 0.72 0 0 0 16.51 9.89L18.78 13.39A0.72 0.72 0 0 1 18.17 14.5L5.97 14.5A0.72 0.72 0 0 1 5.25 13.78L5.25 5.22A0.72 0.72 0 0 1 5.97 4.5Z",
         },
         child: [],
       },
+      { tag: "path", attr: { d: "M5.25 3.75L5.25 20.75" }, child: [] },
     ],
   },
   folder: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z",
+          d: "M5.17 5L8.64 5A1.92 1.92 0 0 1 10.07 5.65L10.93 6.6A1.92 1.92 0 0 0 12.36 7.25L18.82 7.25A1.92 1.92 0 0 1 20.75 9.18L20.75 17.32A1.92 1.92 0 0 1 18.82 19.25L5.17 19.25A1.92 1.92 0 0 1 3.25 17.32L3.25 6.92A1.92 1.92 0 0 1 5.17 5Z",
         },
         child: [],
       },
+      { tag: "path", attr: { d: "M3.25 10.25L20.75 10.25" }, child: [] },
     ],
   },
   food: {
     tag: "svg",
-    attr: { viewBox: "0 0 512 512" },
+    attr: line,
     child: [
+      { tag: "path", attr: { d: "M4 10.75a8 6.5 0 0 1 16 0Z" }, child: [] },
+      { tag: "path", attr: { d: "M3.25 14L20.75 14" }, child: [] },
       {
         tag: "path",
         attr: {
-          fill: "none",
-          strokeLinecap: "round",
-          strokeMiterlimit: "10",
-          strokeWidth: "32",
-          d: "M322 416c0 35.35-20.65 64-56 64H134c-35.35 0-56-28.65-56-64m258-80c17.67 0 32 17.91 32 40h0c0 22.09-14.33 40-32 40H64c-17.67 0-32-17.91-32-40h0c0-22.09 14.33-40 32-40",
-        },
-        child: [],
-      },
-      {
-        tag: "path",
-        attr: {
-          fill: "none",
-          strokeLinecap: "round",
-          strokeMiterlimit: "10",
-          strokeWidth: "32",
-          d: "M344 336H179.31a8 8 0 0 0-5.65 2.34l-26.83 26.83a4 4 0 0 1-5.66 0l-26.83-26.83a8 8 0 0 0-5.65-2.34H56a24 24 0 0 1-24-24h0a24 24 0 0 1 24-24h288a24 24 0 0 1 24 24h0a24 24 0 0 1-24 24zM64 276v-.22c0-55 45-83.78 100-83.78h72c55 0 100 29 100 84v-.22M241 112l7.44 63.97",
-        },
-        child: [],
-      },
-      {
-        tag: "path",
-        attr: {
-          fill: "none",
-          strokeLinecap: "round",
-          strokeMiterlimit: "10",
-          strokeWidth: "32",
-          d: "M256 480h139.31a32 32 0 0 0 31.91-29.61L463 112",
-        },
-        child: [],
-      },
-      {
-        tag: "path",
-        attr: {
-          fill: "none",
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          strokeWidth: "32",
-          d: "m368 112 16-64 47-16",
-        },
-        child: [],
-      },
-      {
-        tag: "path",
-        attr: {
-          fill: "none",
-          strokeLinecap: "round",
-          strokeMiterlimit: "10",
-          strokeWidth: "32",
-          d: "M224 112h256",
+          d: "M5.41 17L18.59 17A0.72 0.72 0 0 1 19.3 17.88L18.88 19.69A0.72 0.72 0 0 1 18.18 20.25L5.82 20.25A0.72 0.72 0 0 1 5.12 19.69L4.7 17.88A0.72 0.72 0 0 1 5.41 17Z",
         },
         child: [],
       },
@@ -987,64 +988,38 @@ export const iconData = {
   },
   forward: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
-        attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "m15 15 6-6m0 0-6-6m6 6H9a6 6 0 0 0 0 12h3",
-        },
+        attr: { d: "M15.75 4.5L20.25 9L15.75 13.5M19.75 9H9.5a5.5 5.5 0 0 0 0 11H12" },
         child: [],
       },
     ],
   },
   gift: {
     tag: "svg",
-    attr: { viewBox: "0 0 512 512" },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          fill: "none",
-          strokeLinecap: "round",
-          strokeMiterlimit: "10",
-          strokeWidth: "32",
-          d: "M256 104v56h56a56 56 0 1 0-56-56zm0 0v56h-56a56 56 0 1 1 56-56z",
-        },
-        child: [],
-      },
-      {
-        tag: "rect",
-        attr: {
-          width: "384",
-          height: "112",
-          x: "64",
-          y: "160",
-          fill: "none",
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          strokeWidth: "32",
-          rx: "32",
-          ry: "32",
+          d: "M4.63 7.25L19.38 7.25A1.38 1.38 0 0 1 20.75 8.63L20.75 9.63A1.38 1.38 0 0 1 19.38 11L4.63 11A1.38 1.38 0 0 1 3.25 9.63L3.25 8.63A1.38 1.38 0 0 1 4.63 7.25Z",
         },
         child: [],
       },
       {
         tag: "path",
         attr: {
-          fill: "none",
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          strokeWidth: "32",
-          d: "M416 272v144a48 48 0 0 1-48 48H144a48 48 0 0 1-48-48V272m160-112v304",
+          d: "M4.75 11L4.75 18.88A1.38 1.38 0 0 0 6.13 20.25L17.88 20.25A1.38 1.38 0 0 0 19.25 18.88L19.25 11",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M12 7.25L12 20.25" }, child: [] },
+      {
+        tag: "path",
+        attr: {
+          d: "M12 7.25C10.5 4 7.25 3.5 7.25 5.5S10 7.25 12 7.25Zm0 0c1.5-3.25 4.75-3.75 4.75-1.75S14 7.25 12 7.25Z",
         },
         child: [],
       },
@@ -1052,41 +1027,52 @@ export const iconData = {
   },
   globe: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
+        attr: { d: "M3.25 12a8.75 8.75 0 1 0 17.5 0a8.75 8.75 0 1 0 -17.5 0Z" },
+        child: [],
+      },
+      {
+        tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418",
+          d: "M12 3.25c-2.5 2.4-3.75 5.3-3.75 8.75s1.25 6.35 3.75 8.75c2.5-2.4 3.75-5.3 3.75-8.75S14.5 5.65 12 3.25Z",
         },
         child: [],
       },
+      { tag: "path", attr: { d: "M3.25 12L20.75 12" }, child: [] },
     ],
   },
   grid: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z",
+          d: "M5.4 3.75L8.6 3.75A1.65 1.65 0 0 1 10.25 5.4L10.25 8.6A1.65 1.65 0 0 1 8.6 10.25L5.4 10.25A1.65 1.65 0 0 1 3.75 8.6L3.75 5.4A1.65 1.65 0 0 1 5.4 3.75Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M15.4 3.75L18.6 3.75A1.65 1.65 0 0 1 20.25 5.4L20.25 8.6A1.65 1.65 0 0 1 18.6 10.25L15.4 10.25A1.65 1.65 0 0 1 13.75 8.6L13.75 5.4A1.65 1.65 0 0 1 15.4 3.75Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M5.4 13.75L8.6 13.75A1.65 1.65 0 0 1 10.25 15.4L10.25 18.6A1.65 1.65 0 0 1 8.6 20.25L5.4 20.25A1.65 1.65 0 0 1 3.75 18.6L3.75 15.4A1.65 1.65 0 0 1 5.4 13.75Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M15.4 13.75L18.6 13.75A1.65 1.65 0 0 1 20.25 15.4L20.25 18.6A1.65 1.65 0 0 1 18.6 20.25L15.4 20.25A1.65 1.65 0 0 1 13.75 18.6L13.75 15.4A1.65 1.65 0 0 1 15.4 13.75Z",
         },
         child: [],
       },
@@ -1094,39 +1080,38 @@ export const iconData = {
   },
   grip: {
     tag: "svg",
-    attr: {
-      viewBox: "0 0 24 24",
-      fill: "none",
-      stroke: "currentColor",
-      strokeWidth: "2",
-      strokeLinecap: "round",
-      strokeLinejoin: "round",
-    },
-    child: [
-      { tag: "circle", attr: { cx: "9", cy: "12", r: "1" }, child: [] },
-      { tag: "circle", attr: { cx: "9", cy: "5", r: "1" }, child: [] },
-      { tag: "circle", attr: { cx: "9", cy: "19", r: "1" }, child: [] },
-      { tag: "circle", attr: { cx: "15", cy: "12", r: "1" }, child: [] },
-      { tag: "circle", attr: { cx: "15", cy: "5", r: "1" }, child: [] },
-      { tag: "circle", attr: { cx: "15", cy: "19", r: "1" }, child: [] },
-    ],
-  },
-  heart: {
-    tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z",
+          d: "M7.95 5.5a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0ZM13.95 5.5a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0ZM7.95 12a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0ZM13.95 12a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0ZM7.95 18.5a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0ZM13.95 18.5a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0Z",
+          fill: "currentColor",
+          stroke: "none",
+        },
+        child: [],
+      },
+    ],
+  },
+  heading: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: { d: "M6.5 4.75L6.5 19.25M17.5 4.75L17.5 19.25M6.5 12L17.5 12" },
+        child: [],
+      },
+    ],
+  },
+  heart: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M12 20.25S3.25 15 3.25 9.25A4.75 4.75 0 0 1 12 6.5a4.75 4.75 0 0 1 8.75 2.75C20.75 15 12 20.25 12 20.25Z",
         },
         child: [],
       },
@@ -1134,20 +1119,24 @@ export const iconData = {
   },
   help: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
+        attr: { d: "M3.25 12a8.75 8.75 0 1 0 17.5 0a8.75 8.75 0 1 0 -17.5 0Z" },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M9.5 9.75a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.45" },
+        child: [],
+      },
+      {
+        tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z",
+          d: "M10.95 16.75a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0Z",
+          fill: "currentColor",
+          stroke: "none",
         },
         child: [],
       },
@@ -1155,20 +1144,40 @@ export const iconData = {
   },
   home: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
+    child: [
+      { tag: "path", attr: { d: "M3.25 10.75L12 3.75L20.75 10.75" }, child: [] },
+      {
+        tag: "path",
+        attr: {
+          d: "M5.75 9L5.75 19.05A1.2 1.2 0 0 0 6.95 20.25L17.05 20.25A1.2 1.2 0 0 0 18.25 19.05L18.25 9",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M10 20.25L10 15.72A0.72 0.72 0 0 1 10.72 15L13.28 15A0.72 0.72 0 0 1 14 15.72L14 20.25",
+        },
+        child: [],
+      },
+    ],
+  },
+  idCard: {
+    tag: "svg",
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25",
+          d: "M5.5 5L18.5 5A2.75 2.75 0 0 1 21.25 7.75L21.25 16.25A2.75 2.75 0 0 1 18.5 19L5.5 19A2.75 2.75 0 0 1 2.75 16.25L2.75 7.75A2.75 2.75 0 0 1 5.5 5Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M6.5 10.5a1.75 1.75 0 1 0 3.5 0a1.75 1.75 0 1 0 -3.5 0ZM5.75 15.75c.5-1.5 1.4-2.25 2.5-2.25s2 .75 2.5 2.25M13.5 10L18 10M13.5 13.75L16.5 13.75",
         },
         child: [],
       },
@@ -1176,41 +1185,44 @@ export const iconData = {
   },
   image: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z",
+          d: "M6 4.25L18 4.25A2.75 2.75 0 0 1 20.75 7L20.75 17A2.75 2.75 0 0 1 18 19.75L6 19.75A2.75 2.75 0 0 1 3.25 17L3.25 7A2.75 2.75 0 0 1 6 4.25Z",
         },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M4.25 16.04L8.49 11.99A0.72 0.72 0 0 1 9.5 12L12.99 15.49A0.72 0.72 0 0 0 14.01 15.49L15.5 14A0.72 0.72 0 0 1 16.51 13.98L19.75 17.06",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M14 9a1.75 1.75 0 1 0 3.5 0a1.75 1.75 0 1 0 -3.5 0Z" },
         child: [],
       },
     ],
   },
   inbox: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H6.911a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661Z",
+          d: "M6 4.25L18 4.25A2.75 2.75 0 0 1 20.75 7L20.75 17A2.75 2.75 0 0 1 18 19.75L6 19.75A2.75 2.75 0 0 1 3.25 17L3.25 7A2.75 2.75 0 0 1 6 4.25Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M3.25 13.25L7.66 13.25A0.6 0.6 0 0 1 8.17 13.54L9.33 15.46A0.6 0.6 0 0 0 9.84 15.75L14.16 15.75A0.6 0.6 0 0 0 14.67 15.46L15.83 13.54A0.6 0.6 0 0 1 16.34 13.25L20.75 13.25",
         },
         child: [],
       },
@@ -1218,20 +1230,116 @@ export const iconData = {
   },
   info: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: { d: "M3.25 12a8.75 8.75 0 1 0 17.5 0a8.75 8.75 0 1 0 -17.5 0Z" },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M12 11L12 16.5" }, child: [] },
+      {
+        tag: "path",
+        attr: {
+          d: "M10.95 7.75a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0Z",
+          fill: "currentColor",
+          stroke: "none",
+        },
+        child: [],
+      },
+    ],
+  },
+  key: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: { d: "M3.75 16a4.25 4.25 0 1 0 8.5 0a4.25 4.25 0 1 0 -8.5 0Z" },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M11 13L19.75 4.25M16.75 7.25L19 9.5M14.5 9.5L16.25 11.25" },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M5.7 17.25a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0Z",
+          fill: "currentColor",
+          stroke: "none",
+        },
+        child: [],
+      },
+    ],
+  },
+  language: {
+    tag: "svg",
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z",
+          d: "M3.5 20L7.25 10.5L11 20M4.9 16.5L9.6 16.5M12.5 5L20.75 5M16.5 3.25L16.5 5M19 5c-.9 3.75-3.25 6.75-6.25 8.5M14.25 8c1.1 2.4 3 4.25 5.75 5.5",
+        },
+        child: [],
+      },
+    ],
+  },
+  layers: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M12.33 3.42L19.5 7.11A0.72 0.72 0 0 1 19.5 8.39L12.33 12.08A0.72 0.72 0 0 1 11.67 12.08L4.5 8.39A0.72 0.72 0 0 1 4.5 7.11L11.67 3.42A0.72 0.72 0 0 1 12.33 3.42Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M3.25 12L11.67 16.33A0.72 0.72 0 0 0 12.33 16.33L20.75 12M3.25 16.25L11.67 20.58A0.72 0.72 0 0 0 12.33 20.58L20.75 16.25",
+        },
+        child: [],
+      },
+    ],
+  },
+  layout: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M6 3.25L18 3.25A2.75 2.75 0 0 1 20.75 6L20.75 18A2.75 2.75 0 0 1 18 20.75L6 20.75A2.75 2.75 0 0 1 3.25 18L3.25 6A2.75 2.75 0 0 1 6 3.25Z",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M3.25 8.75L20.75 8.75" }, child: [] },
+      { tag: "path", attr: { d: "M9.25 8.75L9.25 20.75" }, child: [] },
+    ],
+  },
+  lifebuoy: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: { d: "M3.25 12a8.75 8.75 0 1 0 17.5 0a8.75 8.75 0 1 0 -17.5 0Z" },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M8.25 12a3.75 3.75 0 1 0 7.5 0a3.75 3.75 0 1 0 -7.5 0Z" },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M14.65 14.65L18.19 18.19M9.35 14.65L5.81 18.19M9.35 9.35L5.81 5.81M14.65 9.35L18.19 5.81",
         },
         child: [],
       },
@@ -1239,41 +1347,46 @@ export const iconData = {
   },
   light: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
+      { tag: "path", attr: { d: "M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0Z" }, child: [] },
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z",
+          d: "M18.6 12L20.75 12M16.67 16.67L18.19 18.19M12 18.6L12 20.75M7.33 16.67L5.81 18.19M5.4 12L3.25 12M7.33 7.33L5.81 5.81M12 5.4L12 3.25M16.67 7.33L18.19 5.81",
         },
         child: [],
       },
     ],
   },
+  lightbulb: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: { d: "M9 16.25c0-1.6-.9-2.6-1.9-3.7A6 6 0 1 1 16.9 12.55c-1 1.1-1.9 2.1-1.9 3.7Z" },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M12 12.75L12 16.25" }, child: [] },
+      { tag: "path", attr: { d: "M9.25 18.75L14.75 18.75M10.5 21.25L13.5 21.25" }, child: [] },
+    ],
+  },
   like: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M6.633 10.25c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75a.75.75 0 0 1 .75-.75 2.25 2.25 0 0 1 2.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282m0 0h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 0 1-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 0 0-1.423-.23H5.904m10.598-9.75H14.25M5.904 18.5c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 0 1-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 9.953 4.167 9.5 5 9.5h1.053c.472 0 .745.556.5.96a8.958 8.958 0 0 0-1.302 4.665c0 1.194.232 2.333.654 3.375Z",
+          d: "M4.35 10.25L5.65 10.25A1.1 1.1 0 0 1 6.75 11.35L6.75 19.15A1.1 1.1 0 0 1 5.65 20.25L4.35 20.25A1.1 1.1 0 0 1 3.25 19.15L3.25 11.35A1.1 1.1 0 0 1 4.35 10.25Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M8.84 10.28L11.19 4.73A1.2 1.2 0 0 1 12.3 4L12.76 4A1.2 1.2 0 0 1 13.83 4.66L14.07 5.14A1.2 1.2 0 0 1 14.18 5.9L13.77 8.08A1.2 1.2 0 0 0 14.95 9.5L18.38 9.5A1.2 1.2 0 0 1 19.36 10L19.95 10.83A1.2 1.2 0 0 1 20.15 11.76L18.84 18.53A1.2 1.2 0 0 1 18.36 19.28L17.31 20.03A1.2 1.2 0 0 1 16.62 20.25L9.95 20.25A1.2 1.2 0 0 1 8.75 19.05L8.75 10.74A1.2 1.2 0 0 1 8.84 10.28Z",
         },
         child: [],
       },
@@ -1281,12 +1394,21 @@ export const iconData = {
   },
   linearGauge: {
     tag: "svg",
-    attr: { viewBox: "0 0 256 256", fill: "currentColor" },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          d: "M200,56H32A24,24,0,0,0,8,80v96a24,24,0,0,0,24,24H200a24,24,0,0,0,24-24V80A24,24,0,0,0,200,56Zm8,120a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8ZM184,96v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Zm-40,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Zm-40,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0ZM64,96v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Zm192,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Z",
+          d: "M5.5 7.25L18.5 7.25A2.75 2.75 0 0 1 21.25 10L21.25 14A2.75 2.75 0 0 1 18.5 16.75L5.5 16.75A2.75 2.75 0 0 1 2.75 14L2.75 10A2.75 2.75 0 0 1 5.5 7.25Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M7.1 10.5L12.4 10.5A1.1 1.1 0 0 1 13.5 11.6L13.5 12.4A1.1 1.1 0 0 1 12.4 13.5L7.1 13.5A1.1 1.1 0 0 1 6 12.4L6 11.6A1.1 1.1 0 0 1 7.1 10.5Z",
+          fill: "currentColor",
+          stroke: "none",
         },
         child: [],
       },
@@ -1294,146 +1416,211 @@ export const iconData = {
   },
   link: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: { d: "M10.25 13.75a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1.25 1.25" },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M13.75 10.25a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1.25-1.25" },
+        child: [],
+      },
+    ],
+  },
+  list: {
+    tag: "svg",
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244",
+          d: "M3.95 6.75a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0ZM3.95 12a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0ZM3.95 17.25a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0Z",
+          fill: "currentColor",
+          stroke: "none",
         },
         child: [],
       },
+      { tag: "path", attr: { d: "M9 6.75L20 6.75M9 12L20 12M9 17.25L20 17.25" }, child: [] },
     ],
   },
   lock: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z",
+          d: "M7.5 10.5L16.5 10.5A2.75 2.75 0 0 1 19.25 13.25L19.25 17.5A2.75 2.75 0 0 1 16.5 20.25L7.5 20.25A2.75 2.75 0 0 1 4.75 17.5L4.75 13.25A2.75 2.75 0 0 1 7.5 10.5Z",
         },
         child: [],
       },
+      { tag: "path", attr: { d: "M8 10.5V7.75a4 4 0 0 1 8 0v2.75" }, child: [] },
+      { tag: "path", attr: { d: "M12 14.25L12 16.5" }, child: [] },
+    ],
+  },
+  lockOpen: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M7.5 10.5L16.5 10.5A2.75 2.75 0 0 1 19.25 13.25L19.25 17.5A2.75 2.75 0 0 1 16.5 20.25L7.5 20.25A2.75 2.75 0 0 1 4.75 17.5L4.75 13.25A2.75 2.75 0 0 1 7.5 10.5Z",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M8 10.5V7.25a4 4 0 0 1 7.85-1.1" }, child: [] },
+      { tag: "path", attr: { d: "M12 14.25L12 16.5" }, child: [] },
     ],
   },
   logout: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75",
+          d: "M10.5 3.75L5.7 3.75A1.2 1.2 0 0 0 4.5 4.95L4.5 19.05A1.2 1.2 0 0 0 5.7 20.25L10.5 20.25",
         },
         child: [],
       },
+      { tag: "path", attr: { d: "M9.5 12L19.75 12M16.25 8.25L20.25 12L16.25 15.75" }, child: [] },
     ],
   },
   mail: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75",
+          d: "M6 5.5L18 5.5A2.75 2.75 0 0 1 20.75 8.25L20.75 15.75A2.75 2.75 0 0 1 18 18.5L6 18.5A2.75 2.75 0 0 1 3.25 15.75L3.25 8.25A2.75 2.75 0 0 1 6 5.5Z",
         },
         child: [],
       },
+      {
+        tag: "path",
+        attr: { d: "M4 8.72L11.49 13.43A0.96 0.96 0 0 0 12.51 13.43L20 8.72" },
+        child: [],
+      },
+    ],
+  },
+  map: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M3.63 5.85L8.79 3.83A0.6 0.6 0 0 1 9.22 3.83L14.78 5.92A0.6 0.6 0 0 0 15.21 5.92L19.93 4.07A0.6 0.6 0 0 1 20.75 4.63L20.75 17.59A0.6 0.6 0 0 1 20.37 18.15L15.21 20.17A0.6 0.6 0 0 1 14.78 20.17L9.22 18.08A0.6 0.6 0 0 0 8.79 18.08L4.07 19.93A0.6 0.6 0 0 1 3.25 19.37L3.25 6.41A0.6 0.6 0 0 1 3.63 5.85Z",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M9 3.75L9 18M15 6L15 20.25" }, child: [] },
+    ],
+  },
+  mapPin: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: { d: "M12 21s-6.75-5.75-6.75-11.25a6.75 6.75 0 0 1 13.5 0C18.75 15.25 12 21 12 21Z" },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M9.5 9.75a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0Z" }, child: [] },
     ],
   },
   maximize: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15",
+          d: "M3.75 9L3.75 4.95A1.2 1.2 0 0 1 4.95 3.75L9 3.75M15 3.75L19.05 3.75A1.2 1.2 0 0 1 20.25 4.95L20.25 9M20.25 15L20.25 19.05A1.2 1.2 0 0 1 19.05 20.25L15 20.25M9 20.25L4.95 20.25A1.2 1.2 0 0 1 3.75 19.05L3.75 15",
         },
         child: [],
       },
+    ],
+  },
+  medal: {
+    tag: "svg",
+    attr: line,
+    child: [
+      { tag: "path", attr: { d: "M7.5 3.25L10.25 9.5M16.5 3.25L13.75 9.5" }, child: [] },
+      { tag: "path", attr: { d: "M6.5 15a5.5 5.5 0 1 0 11 0a5.5 5.5 0 1 0 -11 0Z" }, child: [] },
+      {
+        tag: "path",
+        attr: { d: "M9.75 15a2.25 2.25 0 1 0 4.5 0a2.25 2.25 0 1 0 -4.5 0Z" },
+        child: [],
+      },
+    ],
+  },
+  megaphone: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M4.72 9.25L7.83 9.25A0.72 0.72 0 0 0 8.15 9.18L17.21 4.76A0.72 0.72 0 0 1 18.25 5.4L18.25 18.6A0.72 0.72 0 0 1 17.21 19.24L8.15 14.82A0.72 0.72 0 0 0 7.83 14.75L4.72 14.75A0.72 0.72 0 0 1 4 14.03L4 9.97A0.72 0.72 0 0 1 4.72 9.25Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M6.5 14.75L7.42 19.36A0.48 0.48 0 0 0 7.89 19.75L9.45 19.75A0.48 0.48 0 0 0 9.92 19.2L9.5 16.25",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M20.75 10.25L20.75 13.75" }, child: [] },
     ],
   },
   menu: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
+    child: [{ tag: "path", attr: { d: "M4 6.75L20 6.75M4 12L20 12M4 17.25L20 17.25" }, child: [] }],
+  },
+  message: {
+    tag: "svg",
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5",
+          d: "M12 4.25c4.8 0 8.75 3.2 8.75 7.25S16.8 18.75 12 18.75c-1.1 0-2.15-.15-3.1-.45L4.25 19.75l1.4-3.5C4.1 14.95 3.25 13.3 3.25 11.5 3.25 7.45 7.2 4.25 12 4.25Z",
         },
         child: [],
       },
     ],
   },
-  minimize: {
+  microphone: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M9 9V4.5M9 9H4.5M9 9 3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5 5.25 5.25",
+          d: "M12 2.75L12 2.75A3 3 0 0 1 15 5.75L15 10.75A3 3 0 0 1 12 13.75L12 13.75A3 3 0 0 1 9 10.75L9 5.75A3 3 0 0 1 12 2.75Z",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M5.75 11.5a6.25 6.25 0 0 0 12.5 0M12 17.75L12 21" }, child: [] },
+    ],
+  },
+  minimize: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M3.75 9L7.8 9A1.2 1.2 0 0 0 9 7.8L9 3.75M15 3.75L15 7.8A1.2 1.2 0 0 0 16.2 9L20.25 9M20.25 15L16.2 15A1.2 1.2 0 0 0 15 16.2L15 20.25M9 20.25L9 16.2A1.2 1.2 0 0 0 7.8 15L3.75 15",
         },
         child: [],
       },
@@ -1441,113 +1628,179 @@ export const iconData = {
   },
   minus: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
+    child: [{ tag: "path", attr: { d: "M4.75 12L19.25 12" }, child: [] }],
+  },
+  mobile: {
+    tag: "svg",
+    attr: line,
     child: [
       {
         tag: "path",
-        attr: { strokeLinecap: "round", strokeLinejoin: "round", d: "M5 12h14" },
+        attr: {
+          d: "M9 2.75L15 2.75A2.75 2.75 0 0 1 17.75 5.5L17.75 18.5A2.75 2.75 0 0 1 15 21.25L9 21.25A2.75 2.75 0 0 1 6.25 18.5L6.25 5.5A2.75 2.75 0 0 1 9 2.75Z",
+        },
         child: [],
       },
+      { tag: "path", attr: { d: "M10.75 18L13.25 18" }, child: [] },
     ],
   },
   moreHorizontal: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z",
+          d: "M4.45 12a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0ZM10.95 12a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0ZM17.45 12a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0Z",
+          fill: "currentColor",
+          stroke: "none",
         },
         child: [],
       },
     ],
   },
-  newspaper: {
+  moreVertical: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z",
+          d: "M10.95 5.5a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0ZM10.95 12a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0ZM10.95 18.5a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0Z",
+          fill: "currentColor",
+          stroke: "none",
         },
+        child: [],
+      },
+    ],
+  },
+  music: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M9.25 17L9.25 6.53A0.36 0.36 0 0 1 9.53 6.18L19.31 3.86A0.36 0.36 0 0 1 19.75 4.21L19.75 14.75",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M4.25 17a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0Z" }, child: [] },
+      { tag: "path", attr: { d: "M14.75 14.75a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0Z" }, child: [] },
+    ],
+  },
+  newspaper: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M6 4.25L14.5 4.25A2.75 2.75 0 0 1 17.25 7L17.25 17A2.75 2.75 0 0 1 14.5 19.75L6 19.75A2.75 2.75 0 0 1 3.25 17L3.25 7A2.75 2.75 0 0 1 6 4.25Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M17.25 8.5L19.1 8.5A1.65 1.65 0 0 1 20.75 10.15L20.75 18.1A1.65 1.65 0 0 1 19.1 19.75L17.25 19.75",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M6.5 8.75L14 8.75M6.5 12.25L14 12.25M6.5 15.75L11.5 15.75" },
         child: [],
       },
     ],
   },
   opacity: {
     tag: "svg",
-    attr: { viewBox: "0 0 256 256", fill: "currentColor" },
+    attr: line,
     child: [
       {
         tag: "path",
-        attr: {
-          d: "M201.54,54.46A104,104,0,0,0,54.46,201.54,104,104,0,0,0,201.54,54.46ZM184,195.87a87.16,87.16,0,0,1-16,10.5V99.31l16-16Zm-80-32.56,16-16v68.28a88.37,88.37,0,0,1-16-3ZM88,206.37a87,87,0,0,1-16.3-10.76L88,179.31Zm48-75.06,16-16v97.32a88.37,88.37,0,0,1-16,3ZM40,128A88,88,0,0,1,184.3,60.39L60.38,184.31A87.34,87.34,0,0,1,40,128Zm160,50.59V77.41a88,88,0,0,1,0,101.18Z",
-        },
+        attr: { d: "M3.25 12a8.75 8.75 0 1 0 17.5 0a8.75 8.75 0 1 0 -17.5 0Z" },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M12 3.25a8.75 8.75 0 0 1 0 17.5Z", fill: "currentColor", stroke: "none" },
         child: [],
       },
     ],
   },
   organization: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z",
+          d: "M4.25 20.25L4.25 4.63A1.38 1.38 0 0 1 5.63 3.25L12.38 3.25A1.38 1.38 0 0 1 13.75 4.63L13.75 20.25",
         },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M15.13 8.5L18.38 8.5A1.38 1.38 0 0 1 19.75 9.88L19.75 18.88A1.38 1.38 0 0 1 18.38 20.25L15.13 20.25A1.38 1.38 0 0 1 13.75 18.88L13.75 9.88A1.38 1.38 0 0 1 15.13 8.5Z",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M2.75 20.25L21.25 20.25" }, child: [] },
+      {
+        tag: "path",
+        attr: {
+          d: "M6.2 7a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0ZM9.7 7a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0ZM6.2 10.75a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0ZM9.7 10.75a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0ZM6.2 14.5a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0ZM9.7 14.5a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0Z",
+          fill: "currentColor",
+          stroke: "none",
+        },
+        child: [],
+      },
+    ],
+  },
+  paperclip: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M15.5 7.25 9 13.75a1.75 1.75 0 0 0 2.5 2.5l6.75-6.75a3.75 3.75 0 0 0-5.3-5.3L6 11.15a5.75 5.75 0 0 0 8.15 8.15l5.6-5.6",
+        },
+        child: [],
+      },
+    ],
+  },
+  paragraph: {
+    tag: "svg",
+    attr: line,
+    child: [
+      { tag: "path", attr: { d: "M13.25 4.25H10a4 4 0 0 0 0 8h3.25Z" }, child: [] },
+      {
+        tag: "path",
+        attr: { d: "M13.25 4.25L13.25 19.75M17 4.25L17 19.75M13.25 4.25L18.75 4.25" },
         child: [],
       },
     ],
   },
   pause: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M15.75 5.25v13.5m-7.5-13.5v13.5",
+          d: "M7.38 4.25L8.63 4.25A1.38 1.38 0 0 1 10 5.63L10 18.38A1.38 1.38 0 0 1 8.63 19.75L7.38 19.75A1.38 1.38 0 0 1 6 18.38L6 5.63A1.38 1.38 0 0 1 7.38 4.25Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M15.38 4.25L16.63 4.25A1.38 1.38 0 0 1 18 5.63L18 18.38A1.38 1.38 0 0 1 16.63 19.75L15.38 19.75A1.38 1.38 0 0 1 14 18.38L14 5.63A1.38 1.38 0 0 1 15.38 4.25Z",
         },
         child: [],
       },
@@ -1555,15 +1808,24 @@ export const iconData = {
   },
   paw: {
     tag: "svg",
-    attr: { viewBox: "0 0 512 512" },
+    attr: line,
     child: [
       {
         tag: "path",
+        attr: { d: "M4.1 10.25a1.9 1.9 0 1 0 3.8 0a1.9 1.9 0 1 0 -3.8 0Z" },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M7.6 6a1.9 1.9 0 1 0 3.8 0a1.9 1.9 0 1 0 -3.8 0Z" }, child: [] },
+      { tag: "path", attr: { d: "M12.6 6a1.9 1.9 0 1 0 3.8 0a1.9 1.9 0 1 0 -3.8 0Z" }, child: [] },
+      {
+        tag: "path",
+        attr: { d: "M16.1 10.25a1.9 1.9 0 1 0 3.8 0a1.9 1.9 0 1 0 -3.8 0Z" },
+        child: [],
+      },
+      {
+        tag: "path",
         attr: {
-          fill: "none",
-          strokeMiterlimit: "10",
-          strokeWidth: "32",
-          d: "M457.74 170.1a30.3 30.3 0 0 0-11.16-2.1h-.4c-20.17.3-42.79 19.19-54.66 47.76-14.23 34.18-7.68 69.15 14.74 78.14a30.2 30.2 0 0 0 11.15 2.1c20.27 0 43.2-19 55.17-47.76 14.13-34.18 7.48-69.15-14.84-78.14zM327.6 303.48C299.8 257.35 287.8 240 256 240s-43.9 17.46-71.7 63.48c-23.8 39.36-71.9 42.64-83.9 76.07a50.9 50.9 0 0 0-3.6 19.25c0 27.19 20.8 49.2 46.4 49.2 31.8 0 75.1-25.39 112.9-25.39S337 448 368.8 448c25.6 0 46.3-22 46.3-49.2a51 51 0 0 0-3.7-19.25c-12-33.55-60-36.71-83.8-76.07zM192.51 196a26.5 26.5 0 0 0 4-.3c23.21-3.37 37.7-35.53 32.44-71.85C224 89.61 203.22 64 181.49 64a26.5 26.5 0 0 0-4 .3c-23.21 3.37-37.7 35.53-32.44 71.85C150 170.29 170.78 196 192.51 196zm174.41-59.85c5.26-36.32-9.23-68.48-32.44-71.85a26.5 26.5 0 0 0-4-.3c-21.73 0-42.47 25.61-47.43 59.85-5.26 36.32 9.23 68.48 32.44 71.85a26.5 26.5 0 0 0 4 .3c21.73 0 42.51-25.71 47.43-59.85zM105.77 293.9c22.39-9 28.93-44 14.72-78.14C108.53 187 85.62 168 65.38 168a30.2 30.2 0 0 0-11.15 2.1c-22.39 9-28.93 44-14.72 78.14C51.47 277 74.38 296 94.62 296a30.2 30.2 0 0 0 11.15-2.1z",
+          d: "M12 12.25c-3 0-5.75 3.75-5.75 6 0 1.5 1.25 2.25 2.75 2.25 1.25 0 2-.5 3-.5s1.75.5 3 .5c1.5 0 2.75-.75 2.75-2.25 0-2.25-2.75-6-5.75-6Z",
         },
         child: [],
       },
@@ -1571,104 +1833,116 @@ export const iconData = {
   },
   payment: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z",
+          d: "M5.5 5L18.5 5A2.75 2.75 0 0 1 21.25 7.75L21.25 16.25A2.75 2.75 0 0 1 18.5 19L5.5 19A2.75 2.75 0 0 1 2.75 16.25L2.75 7.75A2.75 2.75 0 0 1 5.5 5Z",
         },
         child: [],
       },
+      { tag: "path", attr: { d: "M2.75 9.5L21.25 9.5" }, child: [] },
+      { tag: "path", attr: { d: "M6 15.25L10 15.25" }, child: [] },
     ],
   },
   people: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
-        attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z",
-        },
+        attr: { d: "M5.75 8.25a3.25 3.25 0 1 0 6.5 0a3.25 3.25 0 1 0 -6.5 0Z" },
         child: [],
       },
+      { tag: "path", attr: { d: "M3 19.75c0-3.2 2.7-5.25 6-5.25s6 2.05 6 5.25Z" }, child: [] },
+      {
+        tag: "path",
+        attr: { d: "M13.5 7.75a2.75 2.75 0 1 0 5.5 0a2.75 2.75 0 1 0 -5.5 0Z" },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M17 14.6c2.3.4 3.75 2.3 3.75 5.15" }, child: [] },
     ],
   },
   person: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
-        attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z",
-        },
+        attr: { d: "M8.25 7.75a3.75 3.75 0 1 0 7.5 0a3.75 3.75 0 1 0 -7.5 0Z" },
         child: [],
       },
+      {
+        tag: "path",
+        attr: { d: "M4.75 20.25c0-3.6 3.25-5.75 7.25-5.75s7.25 2.15 7.25 5.75Z" },
+        child: [],
+      },
+    ],
+  },
+  personAdd: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: { d: "M6.25 7.75a3.75 3.75 0 1 0 7.5 0a3.75 3.75 0 1 0 -7.5 0Z" },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M2.75 20.25c0-3.6 3.25-5.75 7.25-5.75s7.25 2.15 7.25 5.75Z" },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M18.75 8L18.75 12.5M16.5 10.25L21 10.25" }, child: [] },
     ],
   },
   personRemove: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: { d: "M6.25 7.75a3.75 3.75 0 1 0 7.5 0a3.75 3.75 0 1 0 -7.5 0Z" },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M2.75 20.25c0-3.6 3.25-5.75 7.25-5.75s7.25 2.15 7.25 5.75Z" },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M16.5 10.25L21 10.25" }, child: [] },
+    ],
+  },
+  phone: {
+    tag: "svg",
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M22 10.5h-6m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z",
+          d: "M3.75 6.5c0 7.6 6.15 13.75 13.75 13.75h1a1.75 1.75 0 0 0 1.75-1.75v-1.9c0-.6-.4-1.1-1-1.2l-3.6-.9c-.5-.1-1 .1-1.3.5l-.8 1.1a10.6 10.6 0 0 1-5.6-5.6l1.1-.8c.4-.3.6-.8.5-1.3l-.9-3.6c-.1-.6-.6-1-1.2-1H5.5A1.75 1.75 0 0 0 3.75 5.5Z",
         },
         child: [],
       },
     ],
   },
+  pieChart: {
+    tag: "svg",
+    attr: line,
+    child: [
+      { tag: "path", attr: { d: "M12 3.25a8.75 8.75 0 1 0 8.75 8.75H12Z" }, child: [] },
+      { tag: "path", attr: { d: "M14 10V3.75a6.25 6.25 0 0 1 6.25 6.25Z" }, child: [] },
+    ],
+  },
   play: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z",
+          d: "M8.82 5.59L17.79 10.97A1.2 1.2 0 0 1 17.79 13.03L8.82 18.41A1.2 1.2 0 0 1 7 17.38L7 6.62A1.2 1.2 0 0 1 8.82 5.59Z",
         },
         child: [],
       },
@@ -1676,185 +1950,331 @@ export const iconData = {
   },
   plus: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
+    child: [{ tag: "path", attr: { d: "M12 4.75L12 19.25M4.75 12L19.25 12" }, child: [] }],
+  },
+  presentation: {
+    tag: "svg",
+    attr: line,
     child: [
       {
         tag: "path",
-        attr: { strokeLinecap: "round", strokeLinejoin: "round", d: "M12 4.5v15m7.5-7.5h-15" },
+        attr: {
+          d: "M5.17 3.75L18.82 3.75A1.92 1.92 0 0 1 20.75 5.67L20.75 13.32A1.92 1.92 0 0 1 18.82 15.25L5.17 15.25A1.92 1.92 0 0 1 3.25 13.32L3.25 5.67A1.92 1.92 0 0 1 5.17 3.75Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M7 11.5L9.65 9.07A0.6 0.6 0 0 1 10.39 9.01L12.6 10.49A0.6 0.6 0 0 0 13.35 10.42L17 7",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M12 15.25L12 17.5M8.5 20.75L11.59 17.88A0.6 0.6 0 0 1 12.41 17.88L15.5 20.75" },
+        child: [],
+      },
+    ],
+  },
+  puzzle: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M5.75 6H10a2 2 0 0 1 4 0h4.25v4.25a2 2 0 0 1 0 4V19H14a2 2 0 0 1-4 0H5.75v-4.75a2 2 0 0 1 0-4Z",
+        },
         child: [],
       },
     ],
   },
   radialGauge: {
     tag: "svg",
-    attr: { viewBox: "0 0 256 256", fill: "currentColor" },
+    attr: line,
     child: [
       {
         tag: "path",
-        attr: {
-          d: "M207.06,72.67A111.24,111.24,0,0,0,128,40h-.4C66.07,40.21,16,91,16,153.13V176a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V152A111.25,111.25,0,0,0,207.06,72.67ZM224,176H119.71l54.76-75.3a8,8,0,0,0-12.94-9.42L99.92,176H32V153.13c0-3.08.15-6.12.43-9.13H56a8,8,0,0,0,0-16H35.27c10.32-38.86,44-68.24,84.73-71.66V80a8,8,0,0,0,16,0V56.33A96.14,96.14,0,0,1,221,128H200a8,8,0,0,0,0,16h23.67c.21,2.65.33,5.31.33,8Z",
-        },
+        attr: { d: "M3.25 17.25L20.75 17.25A8.75 8.75 0 0 0 3.25 17.25Z" },
         child: [],
       },
+      { tag: "path", attr: { d: "M12 17.25L15.75 11.75" }, child: [] },
     ],
   },
   refresh: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: { d: "M4.72 9.35A7.75 7.75 0 0 1 19.28 9.35M19.75 4.75L19.75 9.75L14.75 9.75" },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M19.28 14.65A7.75 7.75 0 0 1 4.72 14.65M4.25 19.25L4.25 14.25L9.25 14.25" },
+        child: [],
+      },
+    ],
+  },
+  report: {
+    tag: "svg",
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99",
+          d: "M6.45 3.25L13 3.25A1.2 1.2 0 0 1 13.85 3.6L18.4 8.15A1.2 1.2 0 0 1 18.75 9L18.75 19.55A1.2 1.2 0 0 1 17.55 20.75L6.45 20.75A1.2 1.2 0 0 1 5.25 19.55L5.25 4.45A1.2 1.2 0 0 1 6.45 3.25Z",
         },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M13.5 3.25L13.5 7.9A0.6 0.6 0 0 0 14.1 8.5L18.75 8.5" },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M9 17.25L9 14.75M12 17.25L12 12.25M15 17.25L15 13.75" },
         child: [],
       },
     ],
   },
   return: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: { d: "M8.25 4.5L3.75 9L8.25 13.5M4.25 9H14.5a5.5 5.5 0 0 1 0 11H12" },
+        child: [],
+      },
+    ],
+  },
+  robot: {
+    tag: "svg",
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3",
+          d: "M8.24 8L15.76 8A3.99 3.99 0 0 1 19.75 11.99L19.75 16.01A3.99 3.99 0 0 1 15.76 20L8.24 20A3.99 3.99 0 0 1 4.25 16.01L4.25 11.99A3.99 3.99 0 0 1 8.24 8Z",
         },
         child: [],
       },
+      {
+        tag: "path",
+        attr: { d: "M12 8L12 5.75M2.75 12.5L2.75 15.5M21.25 12.5L21.25 15.5" },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M10.75 4a1.25 1.25 0 1 0 2.5 0a1.25 1.25 0 1 0 -2.5 0Z",
+          fill: "currentColor",
+          stroke: "none",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M7.65 13a1.6 1.6 0 1 0 3.2 0a1.6 1.6 0 1 0 -3.2 0ZM13.15 13a1.6 1.6 0 1 0 3.2 0a1.6 1.6 0 1 0 -3.2 0Z",
+          fill: "currentColor",
+          stroke: "none",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M10.25 16.5q1.75 1.5 3.5 0" }, child: [] },
+    ],
+  },
+  rocket: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M18.59 7.63L18.12 10.34A1.92 1.92 0 0 1 17.58 11.37L13.36 15.59A1.92 1.92 0 0 1 10.64 15.59L8.41 13.36A1.92 1.92 0 0 1 8.41 10.64L12.63 6.42A1.92 1.92 0 0 1 13.66 5.88L16.37 5.41A1.92 1.92 0 0 1 18.59 7.63Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M9.14 8.46L6.59 8.46A0.6 0.6 0 0 0 6.16 8.64L4.43 10.38A0.6 0.6 0 0 0 4.7 11.38L6.72 11.91A0.6 0.6 0 0 0 7.29 11.76L9.57 9.48A0.6 0.6 0 0 0 9.14 8.46ZM15.54 14.86L15.54 17.41A0.6 0.6 0 0 1 15.36 17.84L13.62 19.57A0.6 0.6 0 0 1 12.62 19.3L12.09 17.28A0.6 0.6 0 0 1 12.24 16.71L14.52 14.43A0.6 0.6 0 0 1 15.54 14.86Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M12.17 10.23a1.6 1.6 0 1 0 3.2 0a1.6 1.6 0 1 0 -3.2 0Z" },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M8.11 15.89L6.17 17.83" }, child: [] },
+    ],
+  },
+  ruler: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M4.4 7.5L19.6 7.5A1.65 1.65 0 0 1 21.25 9.15L21.25 14.85A1.65 1.65 0 0 1 19.6 16.5L4.4 16.5A1.65 1.65 0 0 1 2.75 14.85L2.75 9.15A1.65 1.65 0 0 1 4.4 7.5Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M6.5 7.5L6.5 10.75M10.25 7.5L10.25 12.25M14 7.5L14 10.75M17.75 7.5L17.75 12.25",
+        },
+        child: [],
+      },
+    ],
+  },
+  scissors: {
+    tag: "svg",
+    attr: line,
+    child: [
+      { tag: "path", attr: { d: "M4 6.75a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0Z" }, child: [] },
+      { tag: "path", attr: { d: "M4 17.25a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0Z" }, child: [] },
+      { tag: "path", attr: { d: "M8.6 8.1L20 16.5M8.6 15.9L20 7.5" }, child: [] },
     ],
   },
   screen: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25",
+          d: "M5.5 4L18.5 4A2.75 2.75 0 0 1 21.25 6.75L21.25 13.75A2.75 2.75 0 0 1 18.5 16.5L5.5 16.5A2.75 2.75 0 0 1 2.75 13.75L2.75 6.75A2.75 2.75 0 0 1 5.5 4Z",
         },
         child: [],
       },
+      { tag: "path", attr: { d: "M12 16.5L12 20M8 20L16 20" }, child: [] },
     ],
   },
   search: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
-        attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z",
-        },
+        attr: { d: "M4.25 10.75a6.5 6.5 0 1 0 13 0a6.5 6.5 0 1 0 -13 0Z" },
         child: [],
       },
+      { tag: "path", attr: { d: "M15.5 15.5L20 20" }, child: [] },
     ],
   },
   security: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
-        attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z",
-        },
+        attr: { d: "M12 3.25 19.75 6v5.5c0 4.5-3.25 8-7.75 9.25C7.5 19.5 4.25 16 4.25 11.5V6Z" },
         child: [],
       },
+      { tag: "path", attr: { d: "M9 12.25L11.25 14.5L15.25 10" }, child: [] },
     ],
   },
   send: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5",
+          d: "M6.41 5.04L18.53 10.92A1.2 1.2 0 0 1 18.53 13.08L6.41 18.96A1.2 1.2 0 0 1 4.76 17.47L6.6 12.41A1.2 1.2 0 0 0 6.6 11.59L4.76 6.53A1.2 1.2 0 0 1 6.41 5.04Z",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M6.75 12L12.5 12" }, child: [] },
+    ],
+  },
+  settings: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M18.62 10.32L20.35 10.5A0.42 0.42 0 0 1 20.73 10.92L20.73 13.08A0.42 0.42 0 0 1 20.35 13.5L18.62 13.68A0.42 0.42 0 0 0 18.28 13.94L17.81 15.07A0.42 0.42 0 0 0 17.87 15.49L18.97 16.85A0.42 0.42 0 0 1 18.94 17.41L17.41 18.94A0.42 0.42 0 0 1 16.85 18.97L15.49 17.87A0.42 0.42 0 0 0 15.07 17.81L13.94 18.28A0.42 0.42 0 0 0 13.68 18.62L13.5 20.35A0.42 0.42 0 0 1 13.08 20.73L10.92 20.73A0.42 0.42 0 0 1 10.5 20.35L10.32 18.62A0.42 0.42 0 0 0 10.06 18.28L8.93 17.81A0.42 0.42 0 0 0 8.51 17.87L7.15 18.97A0.42 0.42 0 0 1 6.59 18.94L5.06 17.41A0.42 0.42 0 0 1 5.03 16.85L6.13 15.49A0.42 0.42 0 0 0 6.19 15.07L5.72 13.94A0.42 0.42 0 0 0 5.38 13.68L3.65 13.5A0.42 0.42 0 0 1 3.27 13.08L3.27 10.92A0.42 0.42 0 0 1 3.65 10.5L5.38 10.32A0.42 0.42 0 0 0 5.72 10.06L6.19 8.93A0.42 0.42 0 0 0 6.13 8.51L5.03 7.15A0.42 0.42 0 0 1 5.06 6.59L6.59 5.06A0.42 0.42 0 0 1 7.15 5.03L8.51 6.13A0.42 0.42 0 0 0 8.93 6.19L10.06 5.72A0.42 0.42 0 0 0 10.32 5.38L10.5 3.65A0.42 0.42 0 0 1 10.92 3.27L13.08 3.27A0.42 0.42 0 0 1 13.5 3.65L13.68 5.38A0.42 0.42 0 0 0 13.94 5.72L15.07 6.19A0.42 0.42 0 0 0 15.49 6.13L16.85 5.03A0.42 0.42 0 0 1 17.41 5.06L18.94 6.59A0.42 0.42 0 0 1 18.97 7.15L17.87 8.51A0.42 0.42 0 0 0 17.81 8.93L18.28 10.06A0.42 0.42 0 0 0 18.62 10.32Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M9.25 12a2.75 2.75 0 1 0 5.5 0a2.75 2.75 0 1 0 -5.5 0Z" },
+        child: [],
+      },
+    ],
+  },
+  shoppingBag: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M6.5 8L17.5 8A1.65 1.65 0 0 1 19.15 9.75L18.59 19.2A1.65 1.65 0 0 1 16.94 20.75L7.06 20.75A1.65 1.65 0 0 1 5.41 19.2L4.85 9.75A1.65 1.65 0 0 1 6.5 8Z",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M9 8V6.25a3 3 0 0 1 6 0V8" }, child: [] },
+      {
+        tag: "path",
+        attr: {
+          d: "M7.95 11.25a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0ZM13.95 11.25a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0Z",
+          fill: "currentColor",
+          stroke: "none",
         },
         child: [],
       },
     ],
   },
-  settings: {
+  sidebar: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z",
+          d: "M6 4.25L18 4.25A2.75 2.75 0 0 1 20.75 7L20.75 17A2.75 2.75 0 0 1 18 19.75L6 19.75A2.75 2.75 0 0 1 3.25 17L3.25 7A2.75 2.75 0 0 1 6 4.25Z",
         },
         child: [],
       },
+      { tag: "path", attr: { d: "M9 4.25L9 19.75" }, child: [] },
+    ],
+  },
+  skipBack: {
+    tag: "svg",
+    attr: line,
+    child: [
+      { tag: "path", attr: { d: "M5.25 5.5L5.25 18.5" }, child: [] },
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z",
+          d: "M17.64 6.2L9.46 11.39A0.72 0.72 0 0 0 9.46 12.61L17.64 17.8A0.72 0.72 0 0 0 18.75 17.19L18.75 6.81A0.72 0.72 0 0 0 17.64 6.2Z",
+        },
+        child: [],
+      },
+    ],
+  },
+  skipForward: {
+    tag: "svg",
+    attr: line,
+    child: [
+      { tag: "path", attr: { d: "M18.75 5.5L18.75 18.5" }, child: [] },
+      {
+        tag: "path",
+        attr: {
+          d: "M6.36 6.2L14.54 11.39A0.72 0.72 0 0 1 14.54 12.61L6.36 17.8A0.72 0.72 0 0 1 5.25 17.19L5.25 6.81A0.72 0.72 0 0 1 6.36 6.2Z",
         },
         child: [],
       },
@@ -1862,62 +2282,60 @@ export const iconData = {
   },
   smiley: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
+        attr: { d: "M3.25 12a8.75 8.75 0 1 0 17.5 0a8.75 8.75 0 1 0 -17.5 0Z" },
+        child: [],
+      },
+      {
+        tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z",
+          d: "M7.95 10a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0ZM13.95 10a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0Z",
+          fill: "currentColor",
+          stroke: "none",
         },
         child: [],
       },
+      { tag: "path", attr: { d: "M8.5 14.25a4 4 0 0 0 7 0" }, child: [] },
     ],
   },
   sparkle: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z",
+          d: "M12 3.25C12.6 8.6 15.4 11.4 20.75 12 15.4 12.6 12.6 15.4 12 20.75 11.4 15.4 8.6 12.6 3.25 12 8.6 11.4 11.4 8.6 12 3.25Z",
         },
         child: [],
       },
     ],
   },
-  star: {
+  stack: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z",
+          d: "M6 10.25L18 10.25A2.75 2.75 0 0 1 20.75 13L20.75 17.5A2.75 2.75 0 0 1 18 20.25L6 20.25A2.75 2.75 0 0 1 3.25 17.5L3.25 13A2.75 2.75 0 0 1 6 10.25Z",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M5.25 7.25L18.75 7.25M7.25 4.25L16.75 4.25" }, child: [] },
+    ],
+  },
+  star: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M12.77 5.49L14.21 8.83A0.84 0.84 0 0 0 14.91 9.33L18.53 9.67A0.84 0.84 0 0 1 19 11.14L16.27 13.54A0.84 0.84 0 0 0 16.01 14.35L16.81 17.9A0.84 0.84 0 0 1 15.56 18.81L12.43 16.95A0.84 0.84 0 0 0 11.57 16.95L8.44 18.81A0.84 0.84 0 0 1 7.19 17.9L7.99 14.35A0.84 0.84 0 0 0 7.73 13.54L5 11.14A0.84 0.84 0 0 1 5.47 9.67L9.09 9.33A0.84 0.84 0 0 0 9.79 8.83L11.23 5.49A0.84 0.84 0 0 1 12.77 5.49Z",
         },
         child: [],
       },
@@ -1925,14 +2343,26 @@ export const iconData = {
   },
   starFill: {
     tag: "svg",
-    attr: { viewBox: "0 0 24 24", fill: "currentColor", "aria-hidden": "true" },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          fillRule: "evenodd",
-          d: "M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z",
-          clipRule: "evenodd",
+          d: "M12.77 5.49L14.21 8.83A0.84 0.84 0 0 0 14.91 9.33L18.53 9.67A0.84 0.84 0 0 1 19 11.14L16.27 13.54A0.84 0.84 0 0 0 16.01 14.35L16.81 17.9A0.84 0.84 0 0 1 15.56 18.81L12.43 16.95A0.84 0.84 0 0 0 11.57 16.95L8.44 18.81A0.84 0.84 0 0 1 7.19 17.9L7.99 14.35A0.84 0.84 0 0 0 7.73 13.54L5 11.14A0.84 0.84 0 0 1 5.47 9.67L9.09 9.33A0.84 0.84 0 0 0 9.79 8.83L11.23 5.49A0.84 0.84 0 0 1 12.77 5.49Z",
+          fill: "currentColor",
+        },
+        child: [],
+      },
+    ],
+  },
+  stop: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M7.75 5L16.25 5A2.75 2.75 0 0 1 19 7.75L19 16.25A2.75 2.75 0 0 1 16.25 19L7.75 19A2.75 2.75 0 0 1 5 16.25L5 7.75A2.75 2.75 0 0 1 7.75 5Z",
         },
         child: [],
       },
@@ -1940,20 +2370,56 @@ export const iconData = {
   },
   store: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z",
+          d: "M4.82 3.75L19.18 3.75A0.72 0.72 0 0 1 19.88 4.3L20.79 8.11A0.72 0.72 0 0 1 20.09 9L3.91 9A0.72 0.72 0 0 1 3.21 8.11L4.12 4.3A0.72 0.72 0 0 1 4.82 3.75Z",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M9 3.75L8.5 9M15 3.75L15.5 9" }, child: [] },
+      {
+        tag: "path",
+        attr: {
+          d: "M4.25 9L4.25 19.05A1.2 1.2 0 0 0 5.45 20.25L18.55 20.25A1.2 1.2 0 0 0 19.75 19.05L19.75 9",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M10 20.25L10 15.72A0.72 0.72 0 0 1 10.72 15L13.28 15A0.72 0.72 0 0 1 14 15.72L14 20.25",
+        },
+        child: [],
+      },
+    ],
+  },
+  swatch: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M5.17 3.25L8.32 3.25A1.92 1.92 0 0 1 10.25 5.17L10.25 18.82A1.92 1.92 0 0 1 8.32 20.75L5.17 20.75A1.92 1.92 0 0 1 3.25 18.82L3.25 5.17A1.92 1.92 0 0 1 5.17 3.25Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M10.25 8.25L13.74 4.76A0.72 0.72 0 0 1 14.76 4.76L18.74 8.74A0.72 0.72 0 0 1 18.74 9.76L10.25 18.25M10.25 20.75L20.03 20.75A0.72 0.72 0 0 0 20.75 20.03L20.75 14.97A0.72 0.72 0 0 0 20.03 14.25L14.5 14.25",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M5.7 16.75a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0Z",
+          fill: "currentColor",
+          stroke: "none",
         },
         child: [],
       },
@@ -1961,116 +2427,170 @@ export const iconData = {
   },
   symbol: {
     tag: "svg",
-    attr: { viewBox: "0 0 512 512" },
+    attr: line,
+    child: [
+      { tag: "path", attr: { d: "M8.5 12a3.5 3.5 0 1 0 7 0a3.5 3.5 0 1 0 -7 0Z" }, child: [] },
+      {
+        tag: "path",
+        attr: { d: "M15.5 12v1.25a2.5 2.5 0 0 0 5 0V12a8.5 8.5 0 1 0-3.5 6.9" },
+        child: [],
+      },
+    ],
+  },
+  table: {
+    tag: "svg",
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          fill: "none",
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          strokeWidth: "32",
-          d: "M320 254.27c-4.5 51-40.12 80-80.55 80s-67.34-35.82-63.45-80 37.12-80 77.55-80 70.33 36 66.45 80",
+          d: "M6 4.25L18 4.25A2.75 2.75 0 0 1 20.75 7L20.75 17A2.75 2.75 0 0 1 18 19.75L6 19.75A2.75 2.75 0 0 1 3.25 17L3.25 7A2.75 2.75 0 0 1 6 4.25Z",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M3.25 9.5L20.75 9.5" }, child: [] },
+      { tag: "path", attr: { d: "M3.25 14.5L20.75 14.5" }, child: [] },
+      { tag: "path", attr: { d: "M9.5 9.5L9.5 19.75" }, child: [] },
+    ],
+  },
+  tablet: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M7.5 2.75L16.5 2.75A2.75 2.75 0 0 1 19.25 5.5L19.25 18.5A2.75 2.75 0 0 1 16.5 21.25L7.5 21.25A2.75 2.75 0 0 1 4.75 18.5L4.75 5.5A2.75 2.75 0 0 1 7.5 2.75Z",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M10.75 18L13.25 18" }, child: [] },
+    ],
+  },
+  tag: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M4.95 3.75L10.5 3.75A1.2 1.2 0 0 1 11.35 4.1L19.4 12.15A1.2 1.2 0 0 1 19.4 13.85L13.85 19.4A1.2 1.2 0 0 1 12.15 19.4L4.1 11.35A1.2 1.2 0 0 1 3.75 10.5L3.75 4.95A1.2 1.2 0 0 1 4.95 3.75Z",
         },
         child: [],
       },
       {
         tag: "path",
         attr: {
-          fill: "none",
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          strokeWidth: "32",
-          d: "M319.77 415.77c-28.56 12-47.28 14.5-79.28 14.5-97.2 0-169-78.8-160.49-176s94.31-176 191.51-176C381 78.27 441.19 150 432.73 246c-6.31 71.67-52.11 92.32-76.09 88.07-22.56-4-41.18-24.42-37.74-63.5l8.48-96.25",
+          d: "M6.95 8a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0Z",
+          fill: "currentColor",
+          stroke: "none",
         },
         child: [],
       },
     ],
   },
-  tag: {
+  terminal: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z",
+          d: "M5.5 4.25L18.5 4.25A2.75 2.75 0 0 1 21.25 7L21.25 17A2.75 2.75 0 0 1 18.5 19.75L5.5 19.75A2.75 2.75 0 0 1 2.75 17L2.75 7A2.75 2.75 0 0 1 5.5 4.25Z",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M7 9.5L9.75 12L7 14.5M12 14.5L16.5 14.5" }, child: [] },
+    ],
+  },
+  text: {
+    tag: "svg",
+    attr: line,
+    child: [{ tag: "path", attr: { d: "M4 6.75L20 6.75M4 12L20 12M4 17.25L14 17.25" }, child: [] }],
+  },
+  ticket: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M2.75 7.375a1.375 1.375 0 0 1 1.375 -1.375h15.75a1.375 1.375 0 0 1 1.375 1.375V10a2 2 0 0 0 0 4v2.625a1.375 1.375 0 0 1 -1.375 1.375H4.125a1.375 1.375 0 0 1 -1.375 -1.375V14a2 2 0 0 0 0-4Z",
         },
         child: [],
       },
       {
         tag: "path",
-        attr: { strokeLinecap: "round", strokeLinejoin: "round", d: "M6 6h.008v.008H6V6Z" },
+        attr: { d: "M15.25 8L15.25 9.25M15.25 11.4L15.25 12.6M15.25 14.75L15.25 16" },
         child: [],
       },
     ],
   },
   time: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: { d: "M3.25 12a8.75 8.75 0 1 0 17.5 0a8.75 8.75 0 1 0 -17.5 0Z" },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M12 7.25L12 11.65A0.6 0.6 0 0 0 12.3 12.17L15.5 14" }, child: [] },
+    ],
+  },
+  toggle: {
+    tag: "svg",
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z",
+          d: "M8.25 6.5L15.75 6.5A5.5 5.5 0 0 1 21.25 12L21.25 12A5.5 5.5 0 0 1 15.75 17.5L8.25 17.5A5.5 5.5 0 0 1 2.75 12L2.75 12A5.5 5.5 0 0 1 8.25 6.5Z",
         },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M13 12a2.75 2.75 0 1 0 5.5 0a2.75 2.75 0 1 0 -5.5 0Z" },
         child: [],
       },
     ],
   },
   trash: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
+      { tag: "path", attr: { d: "M4 6.5L20 6.5" }, child: [] },
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0",
+          d: "M9.25 6.5L9.25 4.47A0.72 0.72 0 0 1 9.97 3.75L14.03 3.75A0.72 0.72 0 0 1 14.75 4.47L14.75 6.5",
         },
         child: [],
       },
+      {
+        tag: "path",
+        attr: {
+          d: "M6 6.5L6.83 19.13A1.2 1.2 0 0 0 8.02 20.25L15.98 20.25A1.2 1.2 0 0 0 17.17 19.13L18 6.5",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M10 10.5L10 16.25M14 10.5L14 16.25" }, child: [] },
     ],
   },
   trend: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
+        attr: { d: "M3.75 3.75L3.75 19.05A1.2 1.2 0 0 0 4.95 20.25L20.25 20.25" },
+        child: [],
+      },
+      {
+        tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941",
+          d: "M7.5 15L10.54 11.53A0.72 0.72 0 0 1 11.54 11.45L13.45 13.04A0.72 0.72 0 0 0 14.46 12.95L19.25 7.25",
         },
         child: [],
       },
@@ -2078,20 +2598,12 @@ export const iconData = {
   },
   trendDown: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M2.25 6 9 12.75l4.286-4.286a11.948 11.948 0 0 1 4.306 6.43l.776 2.898m0 0 3.182-5.511m-3.182 5.51-5.511-3.181",
+          d: "M3 6.75L8.49 12.24A0.72 0.72 0 0 0 9.51 12.24L12.49 9.26A0.72 0.72 0 0 1 13.51 9.26L20.25 16M15 16.75L20.75 16.75L20.75 11",
         },
         child: [],
       },
@@ -2099,41 +2611,106 @@ export const iconData = {
   },
   trendUp: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941",
+          d: "M3 17.25L8.49 11.76A0.72 0.72 0 0 1 9.51 11.76L12.49 14.74A0.72 0.72 0 0 0 13.51 14.74L20.25 8M15 7.25L20.75 7.25L20.75 13",
         },
+        child: [],
+      },
+    ],
+  },
+  trophy: {
+    tag: "svg",
+    attr: line,
+    child: [
+      { tag: "path", attr: { d: "M7 3.75h10v6a5 5 0 0 1-10 0Z" }, child: [] },
+      {
+        tag: "path",
+        attr: { d: "M7 5.5H4.75v1.75A3 3 0 0 0 7.15 10.85M17 5.5h2.25v1.75A3 3 0 0 1 16.85 10.85" },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M12 14.75L12 17.75M8 20.5L8 18.23A0.48 0.48 0 0 1 8.48 17.75L15.52 17.75A0.48 0.48 0 0 1 16 18.23L16 20.02A0.48 0.48 0 0 1 15.52 20.5L8 20.5",
+        },
+        child: [],
+      },
+    ],
+  },
+  truck: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M4.4 5.75L12.1 5.75A1.65 1.65 0 0 1 13.75 7.4L13.75 14.6A1.65 1.65 0 0 1 12.1 16.25L4.4 16.25A1.65 1.65 0 0 1 2.75 14.6L2.75 7.4A1.65 1.65 0 0 1 4.4 5.75Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M14.47 9L17.2 9A0.72 0.72 0 0 1 17.71 9.21L21.04 12.54A0.72 0.72 0 0 1 21.25 13.05L21.25 15.53A0.72 0.72 0 0 1 20.53 16.25L14.47 16.25A0.72 0.72 0 0 1 13.75 15.53L13.75 9.72A0.72 0.72 0 0 1 14.47 9Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M5.1 18.25a1.9 1.9 0 1 0 3.8 0a1.9 1.9 0 1 0 -3.8 0Z" },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M15.35 18.25a1.9 1.9 0 1 0 3.8 0a1.9 1.9 0 1 0 -3.8 0Z" },
+        child: [],
+      },
+    ],
+  },
+  tshirt: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M15.5 3.75L20.16 5.97A0.72 0.72 0 0 1 20.53 6.86L19.49 9.83A0.72 0.72 0 0 1 18.58 10.28L17.95 10.07A0.72 0.72 0 0 0 17 10.75L17 19.53A0.72 0.72 0 0 1 16.28 20.25L7.72 20.25A0.72 0.72 0 0 1 7 19.53L7 10.75A0.72 0.72 0 0 0 6.05 10.07L5.42 10.28A0.72 0.72 0 0 1 4.51 9.83L3.47 6.86A0.72 0.72 0 0 1 3.84 5.97L8.5 3.75A3.5 3.5 0 0 0 15.5 3.75Z",
+        },
+        child: [],
+      },
+    ],
+  },
+  tv: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M5.5 6L18.5 6A2.75 2.75 0 0 1 21.25 8.75L21.25 15.75A2.75 2.75 0 0 1 18.5 18.5L5.5 18.5A2.75 2.75 0 0 1 2.75 15.75L2.75 8.75A2.75 2.75 0 0 1 5.5 6Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: { d: "M8.5 2.75L11.67 5.7A0.48 0.48 0 0 0 12.33 5.7L15.5 2.75M8 21L16 21" },
         child: [],
       },
     ],
   },
   upload: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
+      { tag: "path", attr: { d: "M12 15.25L12 4.5M7.5 8.25L12 3.75L16.5 8.25" }, child: [] },
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5",
+          d: "M3.75 15.25L3.75 19.05A1.2 1.2 0 0 0 4.95 20.25L19.05 20.25A1.2 1.2 0 0 0 20.25 19.05L20.25 15.25",
         },
         child: [],
       },
@@ -2141,20 +2718,19 @@ export const iconData = {
   },
   video: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z",
+          d: "M5.5 6L12.5 6A2.75 2.75 0 0 1 15.25 8.75L15.25 15.25A2.75 2.75 0 0 1 12.5 18L5.5 18A2.75 2.75 0 0 1 2.75 15.25L2.75 8.75A2.75 2.75 0 0 1 5.5 6Z",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M15.62 9.79L19.93 7.36A0.72 0.72 0 0 1 21 7.98L21 16.02A0.72 0.72 0 0 1 19.93 16.64L15.62 14.21A0.72 0.72 0 0 1 15.25 13.58L15.25 10.42A0.72 0.72 0 0 1 15.62 9.79Z",
         },
         child: [],
       },
@@ -2162,62 +2738,95 @@ export const iconData = {
   },
   volume: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z",
+          d: "M4.47 9L6.97 9A0.72 0.72 0 0 0 7.46 8.82L10.8 5.82A0.72 0.72 0 0 1 12 6.36L12 17.64A0.72 0.72 0 0 1 10.8 18.18L7.46 15.18A0.72 0.72 0 0 0 6.97 15L4.47 15A0.72 0.72 0 0 1 3.75 14.28L3.75 9.72A0.72 0.72 0 0 1 4.47 9Z",
         },
         child: [],
       },
+      { tag: "path", attr: { d: "M15.5 9a4 4 0 0 1 0 6M18 6.25a8 8 0 0 1 0 11.5" }, child: [] },
     ],
   },
   volumeOff: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M17.25 9.75 19.5 12m0 0 2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6 4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z",
+          d: "M4.47 9L6.97 9A0.72 0.72 0 0 0 7.46 8.82L10.8 5.82A0.72 0.72 0 0 1 12 6.36L12 17.64A0.72 0.72 0 0 1 10.8 18.18L7.46 15.18A0.72 0.72 0 0 0 6.97 15L4.47 15A0.72 0.72 0 0 1 3.75 14.28L3.75 9.72A0.72 0.72 0 0 1 4.47 9Z",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M15.75 9.5L20.75 14.5M20.75 9.5L15.75 14.5" }, child: [] },
+    ],
+  },
+  warning: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M12.63 4.64L20.41 18.68A0.72 0.72 0 0 1 19.78 19.75L4.22 19.75A0.72 0.72 0 0 1 3.59 18.68L11.37 4.64A0.72 0.72 0 0 1 12.63 4.64Z",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M12 9.5L12 13.5" }, child: [] },
+      {
+        tag: "path",
+        attr: {
+          d: "M10.95 16.5a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0Z",
+          fill: "currentColor",
+          stroke: "none",
         },
         child: [],
       },
     ],
   },
-  warning: {
+  wifi: {
     tag: "svg",
-    attr: {
-      fill: "none",
-      viewBox: "0 0 24 24",
-      strokeWidth: "1.5",
-      stroke: "currentColor",
-      "aria-hidden": "true",
-    },
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          d: "M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z",
+          d: "M3.5 9.5a12 12 0 0 1 17 0M6.5 12.75a7.75 7.75 0 0 1 11 0M9.5 15.9a3.5 3.5 0 0 1 5 0",
+        },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M10.95 18.75a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0Z",
+          fill: "currentColor",
+          stroke: "none",
+        },
+        child: [],
+      },
+    ],
+  },
+  window: {
+    tag: "svg",
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: {
+          d: "M5.5 4L18.5 4A2.75 2.75 0 0 1 21.25 6.75L21.25 17.25A2.75 2.75 0 0 1 18.5 20L5.5 20A2.75 2.75 0 0 1 2.75 17.25L2.75 6.75A2.75 2.75 0 0 1 5.5 4Z",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M2.75 8.75L21.25 8.75" }, child: [] },
+      {
+        tag: "path",
+        attr: {
+          d: "M4.95 6.4a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0ZM7.7 6.4a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0 -2.1 0Z",
+          fill: "currentColor",
+          stroke: "none",
         },
         child: [],
       },
@@ -2225,64 +2834,50 @@ export const iconData = {
   },
   wordmark: {
     tag: "svg",
-    attr: {
-      viewBox: "0 0 24 24",
-      fill: "none",
-      stroke: "currentColor",
-      strokeWidth: "2",
-      strokeLinecap: "round",
-      strokeLinejoin: "round",
-    },
+    attr: line,
     child: [
-      { tag: "path", attr: { d: "M5 4h1a3 3 0 0 1 3 3 3 3 0 0 1 3-3h1" }, child: [] },
-      { tag: "path", attr: { d: "M13 20h-1a3 3 0 0 1-3-3 3 3 0 0 1-3 3H5" }, child: [] },
-      { tag: "path", attr: { d: "M5 16H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h1" }, child: [] },
-      { tag: "path", attr: { d: "M13 8h7a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-7" }, child: [] },
-      { tag: "path", attr: { d: "M9 7v10" }, child: [] },
+      {
+        tag: "path",
+        attr: { d: "M7 4.25L12.5 4.25M7 19.75L12.5 19.75M9.75 4.25L9.75 19.75" },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M14.25 8L18.6 8A1.65 1.65 0 0 1 20.25 9.65L20.25 14.35A1.65 1.65 0 0 1 18.6 16L14.25 16M5.25 8L4.5 8A0.75 0.75 0 0 0 3.75 8.75L3.75 15.25A0.75 0.75 0 0 0 4.5 16L5.25 16",
+        },
+        child: [],
+      },
     ],
   },
   world: {
     tag: "svg",
-    attr: { viewBox: "0 0 512 512" },
+    attr: line,
+    child: [
+      {
+        tag: "path",
+        attr: { d: "M3.25 12a8.75 8.75 0 1 0 17.5 0a8.75 8.75 0 1 0 -17.5 0Z" },
+        child: [],
+      },
+      {
+        tag: "path",
+        attr: {
+          d: "M12 3.25c-2.5 2.4-3.75 5.3-3.75 8.75s1.25 6.35 3.75 8.75c2.5-2.4 3.75-5.3 3.75-8.75S14.5 5.65 12 3.25Z",
+        },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M3.98 8.5L20.02 8.5" }, child: [] },
+      { tag: "path", attr: { d: "M3.98 15.5L20.02 15.5" }, child: [] },
+    ],
+  },
+  wrench: {
+    tag: "svg",
+    attr: line,
     child: [
       {
         tag: "path",
         attr: {
-          fill: "none",
-          strokeMiterlimit: "10",
-          strokeWidth: "32",
-          d: "M256 48C141.13 48 48 141.13 48 256s93.13 208 208 208 208-93.13 208-208S370.87 48 256 48z",
-        },
-        child: [],
-      },
-      {
-        tag: "path",
-        attr: {
-          fill: "none",
-          strokeMiterlimit: "10",
-          strokeWidth: "32",
-          d: "M256 48c-58.07 0-112.67 93.13-112.67 208S197.93 464 256 464s112.67-93.13 112.67-208S314.07 48 256 48z",
-        },
-        child: [],
-      },
-      {
-        tag: "path",
-        attr: {
-          fill: "none",
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          strokeWidth: "32",
-          d: "M117.33 117.33c38.24 27.15 86.38 43.34 138.67 43.34s100.43-16.19 138.67-43.34m0 277.34c-38.24-27.15-86.38-43.34-138.67-43.34s-100.43 16.19-138.67 43.34",
-        },
-        child: [],
-      },
-      {
-        tag: "path",
-        attr: {
-          fill: "none",
-          strokeMiterlimit: "10",
-          strokeWidth: "32",
-          d: "M256 48v416m208-208H48",
+          d: "M19.6 7.15 16.75 10l-2.75-.75L13.25 6.5 16.1 3.65A4.75 4.75 0 0 0 10.35 10.1L3.9 16.55a1.85 1.85 0 0 0 2.6 2.6L12.95 12.7A4.75 4.75 0 0 0 19.6 7.15Z",
         },
         child: [],
       },

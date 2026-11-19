@@ -1,17 +1,129 @@
-.card {
+.card:not(.tinted) {
     @media (hover: hover) {
         &:hover {
             background-color: var(--neutral-alpha-weak);
         }
     }
+
+    // A menu opened from inside the card keeps it lit while the pointer is in
+    // the menu.
+    &:has(:global(.dropdown-trigger)[data-state="open"]) {
+        background-color: var(--neutral-alpha-weak);
+    }
 }
 
 // The hover rule above out-specifies the `background-*` utility class, so a
 // selected card would drop back to neutral the moment the pointer touched it.
-.selected {
+.selected:not(.tinted) {
     @media (hover: hover) {
         &:hover {
             background-color: var(--brand-alpha-medium);
         }
+    }
+
+    &:has(:global(.dropdown-trigger)[data-state="open"]) {
+        background-color: var(--brand-alpha-medium);
+    }
+}
+
+// `tint`: a layer under the content that fades in on hover, keyboard focus,
+// an open menu and `selected`, with a faint fill and edge in the tint. The
+// layer has its own palette (a data-brand hue or a tone class), so nothing
+// else inside the card changes colour.
+.tinted {
+    isolation: isolate;
+
+    // While the layer shows, it draws the edge.
+    @media (hover: hover) {
+        &:hover {
+            border-color: var(--static-transparent);
+        }
+    }
+
+    &:has(:global(.dropdown-trigger)[data-state="open"]),
+    :focus-visible > &,
+    &.selected {
+        border-color: var(--static-transparent);
+    }
+}
+
+// A `position` the card is given still wins over this.
+:where(.tinted) {
+    position: relative;
+}
+
+.tint {
+    --card-tint-fill: var(--brand-alpha-weak);
+    --card-tint-edge: var(--brand-border-strong);
+
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: var(--card-tint-fill);
+    box-shadow: inset 0 0 0 1px var(--card-tint-edge);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--transition-micro-medium);
+
+    @media (hover: hover) {
+        .tinted:hover > & {
+            opacity: 1;
+        }
+    }
+
+    .tinted:has(:global(.dropdown-trigger)[data-state="open"]) > &,
+    :focus-visible > .tinted > &,
+    .selected > & {
+        opacity: 1;
+    }
+
+    .selected > & {
+        --card-tint-fill: var(--brand-alpha-medium);
+    }
+}
+
+.tint-accent {
+    --card-tint-fill: var(--accent-alpha-weak);
+    --card-tint-edge: var(--accent-border-strong);
+
+    .selected > & {
+        --card-tint-fill: var(--accent-alpha-medium);
+    }
+}
+
+.tint-info {
+    --card-tint-fill: var(--info-alpha-weak);
+    --card-tint-edge: var(--info-border-strong);
+
+    .selected > & {
+        --card-tint-fill: var(--info-alpha-medium);
+    }
+}
+
+.tint-success {
+    --card-tint-fill: var(--success-alpha-weak);
+    --card-tint-edge: var(--success-border-strong);
+
+    .selected > & {
+        --card-tint-fill: var(--success-alpha-medium);
+    }
+}
+
+.tint-warning {
+    --card-tint-fill: var(--warning-alpha-weak);
+    --card-tint-edge: var(--warning-border-strong);
+
+    .selected > & {
+        --card-tint-fill: var(--warning-alpha-medium);
+    }
+}
+
+.tint-danger {
+    --card-tint-fill: var(--danger-alpha-weak);
+    --card-tint-edge: var(--danger-border-strong);
+
+    .selected > & {
+        --card-tint-fill: var(--danger-alpha-medium);
     }
 }

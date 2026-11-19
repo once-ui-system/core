@@ -2,12 +2,11 @@ import {
   Background,
   Button,
   Column,
-  HoloFx,
   Input,
-  ParticleFx,
   Row,
   Text,
 } from "@once-ui-system/core";
+import { HoloFx, ParticleFx } from "@once-ui-system/fx";
 
 export const Newsletter3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }) => {
   return (
@@ -29,7 +28,7 @@ export const Newsletter3: React.FC<React.ComponentProps<typeof Column>> = ({ ...
         left="0"
         fill
         interactive
-        speed={4}
+        speed={13.33}
         size="1"
         intensity={40}
         pointerEvents="none"
@@ -50,7 +49,7 @@ export const Newsletter3: React.FC<React.ComponentProps<typeof Column>> = ({ ...
           gradient={{
             display: true,
             x: 0,
-            y: 125,
+            y: "125%",
             colorStart: "accent-solid-strong",
             colorEnd: "static-transparent",
           }}
@@ -58,19 +57,19 @@ export const Newsletter3: React.FC<React.ComponentProps<typeof Column>> = ({ ...
         <Background
           gradient={{
             display: true,
-            x: 125,
-            y: 100,
-            width: 150,
-            height: 150,
+            x: "125%",
+            y: "100%",
+            width: "150%",
+            height: "150%",
             colorStart: "brand-background-strong",
             colorEnd: "static-transparent",
           }}
         />
       </HoloFx>
       <Column pointerEvents="none" horizontal="center" maxWidth="xs" gap="4">
-        <Text variant="heading-strong-xl">Join the squad</Text>
+        <Text textVariant="heading-strong-xl">Join the squad</Text>
         <Text
-          variant="body-default-s"
+          textVariant="body-default-s"
           wrap="balance"
           marginBottom="l"
           onBackground="neutral-medium"
@@ -78,7 +77,7 @@ export const Newsletter3: React.FC<React.ComponentProps<typeof Column>> = ({ ...
           Sign up for news and updates
         </Text>
       </Column>
-      <Row maxWidth={16}>
+      <Row maxWidth="16rem">
         <Input
           placeholder="Email"
           id="newsletter-email"

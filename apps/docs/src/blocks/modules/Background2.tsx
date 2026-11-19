@@ -5,17 +5,17 @@ export const Background2: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
     <Row position="absolute" fill {...flex}>
       <Background
         mask={{
-          x: 60,
+          x: "60%",
           y: 0,
-          radius: 100,
+          radius: "100vh",
         }}
         gradient={{
           display: true,
           tilt: -35,
-          height: 75,
-          width: 150,
-          x: 100,
-          y: 40,
+          height: "75%",
+          width: "150%",
+          x: "100%",
+          y: "40%",
           colorStart: "accent-solid-medium",
           colorEnd: "static-transparent",
         }}
@@ -33,16 +33,16 @@ export const Background2: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
         themeSolid="color"
         mask={{
           cursor: true,
-          radius: 100,
+          radius: "100vh",
         }}
         gradient={{
           display: true,
           opacity: 100,
           tilt: -35,
-          height: 50,
-          width: 120,
-          x: 80,
-          y: 50,
+          height: "50%",
+          width: "120%",
+          x: "80%",
+          y: "50%",
           colorStart: "brand-solid-strong",
           colorEnd: "static-transparent",
         }}
@@ -53,17 +53,17 @@ export const Background2: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
         left="0"
         mask={{
           x: 0,
-          y: 100,
-          radius: 150,
+          y: "100%",
+          radius: "150vh",
         }}
         gradient={{
           display: true,
           opacity: 100,
           tilt: -35,
-          height: 100,
-          width: 120,
-          x: 25,
-          y: 50,
+          height: "100%",
+          width: "120%",
+          x: "25%",
+          y: "50%",
           colorStart: "page-background",
           colorEnd: "static-transparent",
         }}

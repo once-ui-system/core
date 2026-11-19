@@ -1,0 +1,38 @@
+{
+ "name": "IconButton",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "A square button holding one icon.",
+ "mixins": [],
+ "reactNative": [
+  "PressableProps"
+ ],
+ "props": {
+  "icon": "IconName = \"refresh\"",
+  "size": "TShirtSizes",
+  "variant": "ButtonVariant = \"primary\"",
+  "tone": "Tone",
+  "corners": "ButtonCorners",
+  "rounded": "boolean = false",
+  "loading": "boolean = false",
+  "disabled": "boolean = false",
+  "aria-label": "string",
+  "tooltip": "ReactNode",
+  "tooltipPosition": "\"top\" | \"bottom\" | \"left\" | \"right\"",
+  "onClick": "() => void",
+  "href": "string",
+  "children": "ReactNode",
+  "style": "ViewStyle"
+ },
+ "resolvedMixins": {},
+ "types": {
+  "BuiltInIconName": "one of the names listed under Icons",
+  "ButtonCorners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
+  "ButtonVariant": "\"primary\" | \"secondary\" | \"tertiary\" | \"ghost\" | \"link\" | \"subtle\"",
+  "ColorScheme": "\"neutral\" | \"brand\" | \"accent\" | \"info\" | \"danger\" | \"warning\" | \"success\"",
+  "CondensedTShirtSizes": "\"s\" | \"m\" | \"l\"",
+  "IconLibraryOverrides": "{} (an app augments it to register its own icon names)",
+  "IconName": "BuiltInIconName | Extract<keyof IconLibraryOverrides, string>",
+  "Tone": "ColorScheme",
+  "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\""
+ }
+}

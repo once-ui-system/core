@@ -1,17 +1,17 @@
 "use client";
 
 import {
-  AutoScroll,
+  Scroller,
   Avatar,
   Background,
   Column,
   Fade,
   Heading,
   Icon,
-  MatrixFx,
   Row,
   Text,
 } from "@once-ui-system/core";
+import { MatrixFx } from "@once-ui-system/fx";
 
 interface Testimonial6 {
   content: string;
@@ -43,8 +43,8 @@ export const Testimonial6: React.FC<TestimonialsSectionProps> = ({
       {...flex}
     >
       <Column
-        minWidth={14}
-        minHeight={14}
+        minWidth="14rem"
+        minHeight="14rem"
         fillHeight
         center
         radius="xl"
@@ -77,22 +77,22 @@ export const Testimonial6: React.FC<TestimonialsSectionProps> = ({
           }}
         />
         <Column horizontal="center" align="center" gap="8">
-          <Heading variant="heading-strong-s">Excellent</Heading>
-          <Text variant="display-strong-s" wrap="balance">
+          <Heading textVariant="heading-strong-s">Excellent</Heading>
+          <Text textVariant="display-strong-s" wrap="balance">
             {rating.toFixed(2)}
           </Text>
-          <Text onBackground="brand-weak" variant="label-default-s" wrap="balance">
+          <Text onBackground="brand-weak" textVariant="label-default-s" wrap="balance">
             {reviewCount} Reviews
           </Text>
         </Column>
       </Column>
       <Column fillWidth paddingY="20">
         <Row fillWidth zIndex={1} paddingLeft="12" paddingBottom="20">
-          <Heading as="h2" variant="heading-strong-l">
+          <Heading as="h2" textVariant="heading-strong-l">
             Loved by many
           </Heading>
         </Row>
-        <AutoScroll fillWidth speed="slow">
+        <Scroller auto={{ speed: "slow" }} fillWidth>
           {testimonials.map((testimonial, index) => (
             <Column
               key={index}
@@ -103,8 +103,8 @@ export const Testimonial6: React.FC<TestimonialsSectionProps> = ({
               marginRight="8"
               padding="24"
               gap="16"
-              minWidth={16}
-              maxWidth={16}
+              minWidth="16rem"
+              maxWidth="16rem"
             >
               <Row gap="4">
                 {Array.from({ length: 5 }).map((_, starIndex) => (
@@ -118,17 +118,17 @@ export const Testimonial6: React.FC<TestimonialsSectionProps> = ({
                 {(testimonial.role || testimonial.company) && (
                   <Avatar src={testimonial.avatar} size="xs" />
                 )}
-                <Text variant="label-default-s" onBackground="neutral-weak">
+                <Text textVariant="label-default-s" onBackground="neutral-weak">
                   {testimonial.name}
                 </Text>
               </Row>
             </Column>
           ))}
-        </AutoScroll>
+        </Scroller>
         <Fade
           pointerEvents="none"
           fillHeight
-          width={4}
+          width="4rem"
           s={{ hide: true }}
           top="0"
           to="right"
@@ -138,7 +138,7 @@ export const Testimonial6: React.FC<TestimonialsSectionProps> = ({
         <Fade
           pointerEvents="none"
           fillHeight
-          width={4}
+          width="4rem"
           s={{ hide: true }}
           top="0"
           to="left"

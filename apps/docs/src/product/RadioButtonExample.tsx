@@ -19,7 +19,7 @@ export function SubscriptionRadioGroup() {
         label="Monthly subscription"
         description="Billed monthly at $9.99"
         checked={selectedPlan === "monthly"}
-        onToggle={() => handleToggle("monthly")}
+        onCheckedChange={() => handleToggle("monthly")}
       />
       <RadioButton
         name="subscription"
@@ -27,7 +27,7 @@ export function SubscriptionRadioGroup() {
         label="Annual subscription"
         description="Billed annually at $99.99"
         checked={selectedPlan === "annual"}
-        onToggle={() => handleToggle("annual")}
+        onCheckedChange={() => handleToggle("annual")}
       />
       <RadioButton
         name="subscription"
@@ -35,10 +35,10 @@ export function SubscriptionRadioGroup() {
         label="Lifetime access"
         description="One-time payment of $299.99"
         checked={selectedPlan === "lifetime"}
-        onToggle={() => handleToggle("lifetime")}
+        onCheckedChange={() => handleToggle("lifetime")}
       />
       <Text 
-        variant="body-default-s" 
+        textVariant="body-default-s" 
         onBackground="neutral-medium"
         marginTop="8"
       >

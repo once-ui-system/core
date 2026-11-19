@@ -1,0 +1,79 @@
+// The editor timeline's few looks that tokens alone cannot draw: the hatch on
+// a removed range, the one-off shimmer when a block is rewritten, the glow
+// under the playhead. Everything else stays on layout props.
+
+.scroller {
+  scrollbar-width: thin;
+  scrollbar-color: var(--neutral-alpha-medium) transparent;
+}
+
+.block {
+  transition:
+    left var(--transition-duration-macro-medium, 400ms) var(--transition-eased, ease),
+    width var(--transition-duration-macro-medium, 400ms) var(--transition-eased, ease),
+    background-color var(--transition-duration-micro-medium, 200ms) ease,
+    border-color var(--transition-duration-micro-medium, 200ms) ease,
+    box-shadow var(--transition-duration-micro-medium, 200ms) ease;
+
+  // A drag follows the pointer exactly; easing it would make it lag.
+  &.dragging {
+    transition: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--brand-solid-strong);
+    outline-offset: 1px;
+  }
+}
+
+.gap {
+  background-color: transparent;
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--neutral-alpha-weak) 0 4px,
+    transparent 4px 8px
+  );
+  border: 1px dashed var(--neutral-alpha-strong);
+}
+
+.highlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    var(--static-white, #fff) 50%,
+    transparent 80%
+  );
+  opacity: 0.18;
+  transform: translateX(-100%);
+  animation: shimmer 1.1s var(--transition-eased, ease) 1 forwards;
+}
+
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.playhead {
+  box-shadow: 0 0 10px var(--accent-solid-strong);
+}
+
+.handle {
+  border-radius: var(--radius-xs) var(--radius-xs) var(--radius-s) var(--radius-s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .block {
+    transition: none;
+  }
+  .highlight::after {
+    animation: none;
+    opacity: 0;
+  }
+}

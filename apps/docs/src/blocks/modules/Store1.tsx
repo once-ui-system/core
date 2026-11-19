@@ -88,7 +88,7 @@ export const Store1 = () => {
       <Hero5 maxWidth="xl" marginBottom="l" marginTop="12" paddingX="8" />
       <Column maxWidth="m" paddingX="24">
         <Column fillWidth paddingTop="80" gap="40">
-          <Heading as="h2" variant="display-strong-s" marginLeft="16">
+          <Heading as="h2" textVariant="display-strong-s" marginLeft="16">
             Shop our new collection
           </Heading>
           <Grid fillWidth gap="20" columns={2} s={{ columns: 1 }}>
@@ -110,10 +110,10 @@ export const Store1 = () => {
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 560px"
                 />
                 <Column fillWidth gap="4" padding="16">
-                  <Heading as="h2" variant="heading-strong-s">
+                  <Heading as="h2" textVariant="heading-strong-s">
                     {title}
                   </Heading>
-                  <Text variant="body-default-s" onBackground="neutral-weak">
+                  <Text textVariant="body-default-s" onBackground="neutral-weak">
                     {subtitle}
                   </Text>
                 </Column>
@@ -122,7 +122,7 @@ export const Store1 = () => {
           </Grid>
         </Column>
         <Column fillWidth paddingTop="80" gap="24">
-          <Heading as="h2" variant="display-strong-xs" marginLeft="16">
+          <Heading as="h2" textVariant="display-strong-xs" marginLeft="16">
             Trending now
           </Heading>
           <Grid fillWidth gap="20" columns={4} m={{ columns: 2 }} s={{ columns: 1 }}>
@@ -160,10 +160,10 @@ export const Store1 = () => {
                   )}
                 </Column>
                 <Column fillWidth gap="4" paddingY="12" paddingX="16">
-                  <Heading as="h2" variant="heading-strong-xs">
+                  <Heading as="h2" textVariant="heading-strong-xs">
                     {title}
                   </Heading>
-                  <Text variant="body-default-xs" onBackground="neutral-weak">
+                  <Text textVariant="body-default-xs" onBackground="neutral-weak">
                     {brand}
                   </Text>
                 </Column>
@@ -172,7 +172,7 @@ export const Store1 = () => {
           </Grid>
         </Column>
         <Column fillWidth paddingTop="80" gap="24">
-          <Heading as="h2" variant="display-strong-xs" marginLeft="16">
+          <Heading as="h2" textVariant="display-strong-xs" marginLeft="16">
             Browse by category
           </Heading>
           <Grid fillWidth gap="20" columns={4} m={{ columns: 2 }} s={{ columns: 1 }}>
@@ -210,7 +210,7 @@ export const Store1 = () => {
                   )}
                 </Column>
                 <Column fillWidth gap="4" paddingY="12" paddingX="16">
-                  <Heading as="h2" variant="heading-strong-xs">
+                  <Heading as="h2" textVariant="heading-strong-xs">
                     {title}
                   </Heading>
                 </Column>

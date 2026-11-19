@@ -116,3 +116,29 @@ describe("NavItem: interaction", () => {
     expect(ref.current).toBe(screen.getByRole("link", { name: "Projects" }));
   });
 });
+
+/**
+ * A long label in a narrow sidebar ends in an ellipsis instead of running out
+ * of the row: every flex box between the row and the text may shrink below
+ * its content (min-width 0), and the text itself clips on one line.
+ */
+describe("NavItem: long labels", () => {
+  const long = "A really long project name that will not fit";
+
+  it("truncates by default, without changing the link's name", () => {
+    render(<NavItem href="/p" icon="home" label={long} badge={3} />, { wrapper });
+    const link = screen.getByRole("link", { name: `${long} 3 unread` });
+    const text = screen.getByText(long);
+    expect(text).toHaveClass("truncate");
+    let box = text.parentElement;
+    while (box && box !== link) {
+      expect(box).toHaveClass("min-width-0");
+      box = box.parentElement;
+    }
+  });
+
+  it("leaves the label as it is with truncate={false}", () => {
+    render(<NavItem href="/p" icon="home" label={long} truncate={false} />, { wrapper });
+    expect(screen.getByText(long)).not.toHaveClass("truncate");
+  });
+});

@@ -1,14 +1,14 @@
 ---
 title: "LineBarChart"
-summary: "A combined line and bar chart for displaying mixed series with shared axes and interactive features."
-updatedAt: "2025-05-14"
+summary: "A line and bars on one shared axis, for two measures of the same unit such as a budget and its spend, or a target and its actuals."
+updatedAt: "2026-11-12"
 docs: "once-ui/data/lineBarChart.mdx"
 github: "modules/data/LineBarChart.tsx"
 navLabel: "LineBarChart"
 navIcon: "lineBarChart"
 ---
 
-The `LineBarChart` component provides a way to display line charts with interactive features, including hover effects, click events, and custom styling options. It supports various customization options including different chart types, color schemes, and interactive features.
+`LineBarChart` draws its first series as a line and its second as bars, against one y axis. Use it for two measures in the same unit where one is a reference for the other: a budget and its spend, a target and its actuals, a forecast and what happened. It takes the [props every chart shares](/data/setup#props-every-chart-shares) and the ones on this page.
 
 <LineBarChart
   marginTop="16"
@@ -84,7 +84,7 @@ three cheap.
   exclude={["data-viz-style"]}
   describe={{
     barWidth: "Bar thickness.",
-    curve: "Recharts interpolation for the line: natural, linear, step, stepBefore, stepAfter, monotone, basis, bump and their variants.",
+    curve: "Interpolation for the line: natural, linear, step, stepBefore, stepAfter, monotone, basis, bump and their variants (d3's curve names).",
     reverseX: "Move the x axis to the top.",
     reverseY: "Move the y axis to the right.",
     grid: "Which grid lines to draw.",

@@ -1,3 +1,4 @@
+@use "../styles/density.scss" as density;
 @use "../styles/touch.scss" as touch;
 
 .button {
@@ -29,6 +30,16 @@
         border-color: var(--neutral-alpha-weak);
     }
 
+    // Hovering a selected button deepens its fill, as the tones do. The plain
+    // hover above outranks .selected, so it used to drop the selected fill to
+    // the idle-hover one and the current item looked deselected.
+    @media (hover: hover) and (pointer: fine) {
+        &.selected:hover:not([data-disabled]) {
+            background-color: var(--neutral-alpha-strong);
+            border-color: var(--neutral-alpha-weak);
+        }
+    }
+
     &[data-disabled] {
         background: var(--neutral-background-medium);
         color: var(--neutral-on-background-weak);
@@ -50,10 +61,14 @@
     padding: var(--static-space-2) var(--static-space-8);
 }
 
-.s {
+@mixin s {
     height: var(--static-space-24);
     min-height: var(--static-space-24);
     padding: var(--static-space-2) var(--static-space-8);
+}
+
+.s {
+    @include s;
 }
 
 .m {
@@ -62,16 +77,65 @@
     padding: var(--static-space-4) var(--static-space-8);
 }
 
-.l {
+@mixin l {
     height: var(--static-space-40);
     min-height: var(--static-space-40);
     padding: var(--static-space-8) var(--static-space-16);
+}
+
+.l {
+    @include l;
 }
 
 .xl {
     height: var(--static-space-48);
     min-height: var(--static-space-48);
     padding: var(--static-space-12) var(--static-space-20);
+}
+
+/* No `size`: m above, or the theme density's s or l (density.scss), with the
+   label padding, text, icons and corners ToggleButton.tsx picks per size. */
+.auto {
+    @include density.size(s) {
+        @include s;
+    }
+
+    @include density.parts(s) {
+        .label {
+            padding-left: var(--static-space-4);
+            padding-right: var(--static-space-4);
+        }
+    }
+
+    @include density.size(l) {
+        @include l;
+    }
+
+    @include density.parts(l) {
+        .label {
+            padding-left: var(--static-space-8);
+            padding-right: var(--static-space-8);
+            @include density.text(label, m);
+        }
+
+        .icon {
+            @include density.icon(s);
+        }
+    }
+}
+
+.autoRadius {
+    @include density.size(s) {
+        &:global(.radius-m) {
+            border-radius: var(--radius-s);
+        }
+    }
+
+    @include density.size(l) {
+        &:global(.radius-m) {
+            border-radius: var(--radius-l);
+        }
+    }
 }
 
 .ghost {
@@ -96,7 +160,68 @@
         }
 
         &.selected:hover:not([data-disabled]) {
-            background: var(--neutral-background-medium);
+            background: var(--neutral-alpha-strong);
         }
+    }
+}
+// `tone` colours the selected state; neutral is the grey above. A tinted fill,
+// the label and icons in the tone, the way sibling apps mark the current page
+// (brand-alpha-weak fill). Hover deepens the fill instead of greying it. Each
+// tone class only sets the palette; the rules are written once.
+.tone-brand {
+    --toggle-tone-weak: var(--brand-alpha-weak);
+    --toggle-tone-medium: var(--brand-alpha-medium);
+    --toggle-tone-text: var(--brand-on-background-strong);
+    --toggle-tone-icon: var(--brand-on-background-weak);
+}
+.tone-accent {
+    --toggle-tone-weak: var(--accent-alpha-weak);
+    --toggle-tone-medium: var(--accent-alpha-medium);
+    --toggle-tone-text: var(--accent-on-background-strong);
+    --toggle-tone-icon: var(--accent-on-background-weak);
+}
+.tone-info {
+    --toggle-tone-weak: var(--info-alpha-weak);
+    --toggle-tone-medium: var(--info-alpha-medium);
+    --toggle-tone-text: var(--info-on-background-strong);
+    --toggle-tone-icon: var(--info-on-background-weak);
+}
+.tone-success {
+    --toggle-tone-weak: var(--success-alpha-weak);
+    --toggle-tone-medium: var(--success-alpha-medium);
+    --toggle-tone-text: var(--success-on-background-strong);
+    --toggle-tone-icon: var(--success-on-background-weak);
+}
+.tone-warning {
+    --toggle-tone-weak: var(--warning-alpha-weak);
+    --toggle-tone-medium: var(--warning-alpha-medium);
+    --toggle-tone-text: var(--warning-on-background-strong);
+    --toggle-tone-icon: var(--warning-on-background-weak);
+}
+.tone-danger {
+    --toggle-tone-weak: var(--danger-alpha-weak);
+    --toggle-tone-medium: var(--danger-alpha-medium);
+    --toggle-tone-text: var(--danger-on-background-strong);
+    --toggle-tone-icon: var(--danger-on-background-weak);
+}
+
+.toned.selected:not([data-disabled]) {
+    background: var(--toggle-tone-weak);
+    border-color: var(--static-transparent);
+    color: var(--toggle-tone-text);
+
+    svg {
+        color: var(--toggle-tone-icon);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            background: var(--toggle-tone-medium);
+            border-color: var(--static-transparent);
+        }
+    }
+
+    &.outline {
+        border-color: var(--toggle-tone-medium);
     }
 }

@@ -1,12 +1,12 @@
 "use client";
 
 import React, { Suspense, useEffect, useState } from "react";
-import { Column } from "../../components/Column";
-import { MissingDependency } from "../../utils/MissingDependency";
-import type { MapProps } from "./Map.impl";
+import { Column } from "../../components/Column.js";
+import { MissingDependency } from "../../utils/MissingDependency.js";
+import type { MapProps } from "./Map.impl.js";
 
-const MapImpl = React.lazy(() =>
-  import("./Map.impl").catch(() => {
+const MapImpl = React.lazy<React.ComponentType<MapProps>>(() =>
+  import("./Map.impl.js").catch(() => {
     console.warn(
       '[@once-ui-system/core] <Map /> requires the "maplibre-gl" package. Install it with: npm install maplibre-gl',
     );
@@ -20,7 +20,7 @@ const MapImpl = React.lazy(() =>
  * The frame the map draws into, on the server and until MapLibre loads, so
  * the page does not shift when the canvas arrives.
  */
-const MapFrame: React.FC<MapProps> = ({
+const MapFrame = ({
   viewport: _viewport,
   defaultViewport: _defaultViewport,
   onViewportChange: _onViewportChange,
@@ -43,10 +43,10 @@ const MapFrame: React.FC<MapProps> = ({
   labels,
   children: _children,
   ...flex
-}) => (
+}: MapProps) => (
   <Column
     fillWidth
-    minHeight={16}
+    minHeight={256}
     radius="l"
     overflow="hidden"
     border="neutral-alpha-weak"
@@ -63,7 +63,7 @@ const MapFrame: React.FC<MapProps> = ({
  * `maplibre-gl` is an optional peer that loads when a map renders.
  */
 // biome-ignore lint/suspicious/noShadowRestrictedNames: the component is the map; import it as another name where the global Map is needed
-const Map: React.FC<MapProps> = (props) => {
+const Map = (props: MapProps) => {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   if (!mounted) return <MapFrame {...props} />;
@@ -76,5 +76,5 @@ const Map: React.FC<MapProps> = (props) => {
 
 Map.displayName = "Map";
 
-export type { MapLabels, MapProps } from "./Map.impl";
+export type { MapLabels, MapProps } from "./Map.impl.js";
 export { Map };

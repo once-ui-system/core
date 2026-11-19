@@ -6,23 +6,48 @@
   "children": "React.ReactNode",
   "subline": "React.ReactNode",
   "tag": "string",
-  "tagProps": "TagProps = {}",
-  "loading": "boolean = false",
-  "avatarProps": "AvatarProps = {}",
-  "className": "string"
+  "tagProps": "TagProps",
+  "loading": "boolean",
+  "avatarProps": "AvatarProps",
+  "className": "string",
+  "dropdown": "React.ReactNode",
+  "selected": "boolean = false",
+  "onSelect": "(value: string) => void",
+  "placement": "Placement",
+  "minWidth": "DropdownProps[\"minWidth\"]",
+  "maxWidth": "DropdownProps[\"maxWidth\"]",
+  "minHeight": "DropdownProps[\"minHeight\"]",
+  "style": "React.CSSProperties"
  },
  "tags": [
   "profile",
-  "chat"
+  "chat",
+  "navigation"
  ],
  "pairsWith": [
   "Avatar",
+  "Option",
   "Row",
   "Text"
  ],
  "mixinsRef": [],
  "types": {
   "AvatarProps": "Avatar props",
+  "DropdownProps": "Dropdown props",
+  "Placement": [
+   "top",
+   "right",
+   "bottom",
+   "left",
+   "top-end",
+   "top-start",
+   "right-end",
+   "right-start",
+   "bottom-end",
+   "bottom-start",
+   "left-end",
+   "left-start"
+  ],
   "TagProps": "Tag props"
  }
 }

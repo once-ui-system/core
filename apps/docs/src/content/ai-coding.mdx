@@ -56,31 +56,35 @@ Machine-readable discovery: `onceUi` field in `@once-ui-system/core` `package.js
 5. Generate code
 6. Validate: `npx once-ui-validate-ai-code path/to/file.tsx` (in a Next.js app it also checks that `LayoutProvider` comes from `@once-ui-system/core/next`)
 
-## MCP Server (exploratory docs)
+## MCP server
 
-For **how does X work?** questions, agents can pull docs through [Context7's MCP server](https://context7.com/once-ui-system/core).
+Once UI ships its own MCP server in `@once-ui-system/core`. It runs on your machine over stdio and answers from the harness of the version you install: no account, no network, nothing hosted.
 
-To configure it:
-
-1. Open `mcp_config.json` in File / Preferences / Settings / Plugins
-
-2. Add the following configuration:
+Add it to your agent's MCP config (`.mcp.json` for Claude Code, `.cursor/mcp.json` for Cursor, `mcp_config.json` for Windsurf):
 
 ```json
 {
   "mcpServers": {
-    "context7": {
+    "once-ui": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
+      "args": ["-y", "-p", "@once-ui-system/core@next", "once-ui-mcp"]
     }
   }
 }
 ```
 
-3. Restart your IDE
-4. Run: `get-library-docs /once-ui-system/core`
+Drop `@next` once 3.0 is the `latest` release. In a project that already has the package installed, `"command": "npx", "args": ["once-ui-mcp"]` uses that copy.
 
-Use Context7 for exploration. Use the harness for codegen.
+| Tool | What it returns |
+| --- | --- |
+| `search_components` | Components for a need ("date range", "toast"), with the entry point to import each from |
+| `get_component` | A component's import, props with types and defaults, what it pairs with, and its gotchas |
+| `get_type` | What a type or inherited prop group allows: `TShirtSizes`, `IconName`, `SpacingProps` |
+| `get_task` | The task bundles: components, recipes and a worked example for a whole page |
+| `get_rules` | The codegen rules, compact or full |
+| `validate_code` | The checks of `once-ui-validate-ai-code`, on code the agent just wrote |
+
+For open questions about the docs, [Context7](https://context7.com/once-ui-system/core) also indexes them (`npx -y @upstash/context7-mcp@latest`, then `get-library-docs /once-ui-system/core`).
 
 ## Syntax advantage
 

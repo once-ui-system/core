@@ -1,7 +1,7 @@
 ---
 title: "Button"
 summary: "The Button component provides interactive elements for user actions with various styles, sizes, and states."
-updatedAt: "2026-06-30"
+updatedAt: "2026-10-17"
 docs: "once-ui/components/button.mdx"
 github: "components/Button.tsx"
 navLabel: "Button"
@@ -12,25 +12,27 @@ navTagVariant: "success"
 
 A versatile component for triggering actions or navigating to different pages. Buttons communicate interactivity and guide users through their journey in the application.
 
+`variant` says how a button looks: `primary` (the default), `secondary`, `tertiary`, `ghost`, `link` or `subtle`. `tone` says which palette it draws in: `brand`, `accent`, `neutral`, `info`, `success`, `warning` or `danger`. Any variant takes any tone. Without one, `primary` is `brand` and the rest are `neutral`.
+
+<Feedback
+  marginTop="16"
+  marginBottom="24"
+  title="New in 3.0"
+  description={<>2.x mixed the two in <InlineCode>variant</InlineCode>: <InlineCode>variant="danger"</InlineCode> is now <InlineCode>tone="danger"</InlineCode>, <InlineCode>quaternary</InlineCode> is <InlineCode>ghost</InlineCode>, and the icon-only <InlineCode>color</InlineCode> is <InlineCode>tone</InlineCode>, which colours the label too. The 3.0 codemod rewrites them.</>}
+/>
+
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
     <Column gap="12" fillWidth>
       <Row gap="16" horizontal="center" wrap>
-        <Button size="s" weight="default" >Primary</Button>
+        <Button size="s" weight="default">Primary</Button>
         <Button size="s" weight="default" variant="secondary">Secondary</Button>
-        <Button size="s" weight="default" variant="tertiary">Tertiary</Button><Button size="s" weight="default" variant="quaternary">Quaternary</Button>
-        <Button size="s" weight="default" variant="subtle">Subtle</Button>
-      </Row>
-      <Row gap="16" horizontal="center" wrap>
-                <Button size="s" weight="default" variant="danger" prefixIcon="danger">Danger</Button>
-        <Button size="s" weight="default" variant="success" prefixIcon="check">Success</Button>
-        <Button size="s" weight="default" variant="warning" prefixIcon="warning">Warning</Button>
-      </Row>
-      <Row gap="16" horizontal="center" wrap>
+        <Button size="s" weight="default" variant="tertiary">Tertiary</Button>
         <Button size="s" weight="default" variant="ghost">Ghost</Button>
         <Button size="s" weight="default" variant="link">Link</Button>
+        <Button size="s" weight="default" variant="subtle">Subtle</Button>
       </Row>
     </Column>
   }
@@ -40,15 +42,49 @@ A versatile component for triggering actions or navigating to different pages. B
 `<Button size="s" weight="default">Primary</Button>
 <Button size="s" weight="default" variant="secondary">Secondary</Button>
 <Button size="s" weight="default" variant="tertiary">Tertiary</Button>
-<Button size="s" weight="default" variant="danger">Danger</Button>
-<Button size="s" weight="default" variant="quaternary">Quaternary</Button>
-<Button size="s" weight="default" variant="subtle">Subtle</Button>
-<Button size="s" weight="default" variant="success" prefixIcon="check">Success</Button>
-<Button size="s" weight="default" variant="warning" prefixIcon="warning">Warning</Button>
 <Button size="s" weight="default" variant="ghost">Ghost</Button>
-<Button size="s" weight="default" variant="link">Link</Button>`,
+<Button size="s" weight="default" variant="link">Link</Button>
+<Button size="s" weight="default" variant="subtle">Subtle</Button>`,
       language: "tsx",
       label: "Variants"
+    }
+  ]}
+/>
+
+## Tone
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="12" fillWidth>
+      <Row gap="16" horizontal="center" wrap>
+        <Button size="s" weight="default" tone="danger" prefixIcon="danger">Danger</Button>
+        <Button size="s" weight="default" tone="success" prefixIcon="check">Success</Button>
+        <Button size="s" weight="default" tone="warning" prefixIcon="warning">Warning</Button>
+        <Button size="s" weight="default" tone="neutral">Neutral</Button>
+      </Row>
+      <Row gap="16" horizontal="center" wrap>
+        <Button size="s" variant="secondary" tone="brand">Brand</Button>
+        <Button size="s" variant="secondary" tone="accent">Accent</Button>
+        <Button size="s" variant="tertiary" tone="danger" prefixIcon="delete">Delete</Button>
+        <Button size="s" variant="ghost" tone="info" prefixIcon="info">Details</Button>
+      </Row>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Button tone="danger" prefixIcon="danger">Danger</Button>
+<Button tone="success" prefixIcon="check">Success</Button>
+<Button tone="warning" prefixIcon="warning">Warning</Button>
+<Button tone="neutral">Neutral</Button>
+<Button variant="secondary" tone="brand">Brand</Button>
+<Button variant="secondary" tone="accent">Accent</Button>
+<Button variant="tertiary" tone="danger" prefixIcon="delete">Delete</Button>
+<Button variant="ghost" tone="info" prefixIcon="info">Details</Button>`,
+      language: "tsx",
+      label: "Tone"
     }
   ]}
 />
@@ -131,7 +167,7 @@ Control the width of button.
   marginTop="16"
   marginBottom="24"
   preview={
-    <Row gap="16" horizontal="center" maxWidth={20}>
+    <Row gap="16" horizontal="center" maxWidth="20rem">
       <Button size="s" weight="default">
       Default
       </Button>
@@ -143,7 +179,7 @@ Control the width of button.
   codes={[
     {
       code:
-`<Row gap="16" horizontal="center" maxWidth={20}>
+`<Row gap="16" horizontal="center" maxWidth="20rem">
     <Button size="s" weight="default">
       Default
     </Button>
@@ -325,7 +361,7 @@ Control the alignment of button content.
   marginTop="16"
   marginBottom="24"
   preview={
-    <Column gap="16" horizontal="center" maxWidth={20}>
+    <Column gap="16" horizontal="center" maxWidth="20rem">
       <Button size="s" fillWidth horizontal="start" prefixIcon="check">Left Aligned</Button>
       <Button size="s" fillWidth horizontal="center">Center Aligned</Button>
       <Button size="s" fillWidth horizontal="end" suffixIcon="chevronDown">Right Aligned</Button>
@@ -377,34 +413,6 @@ Override default styles with data attributes.
 </Row>`,
       language: "tsx",
       label: "Data attributes"
-    }
-  ]}
-/>
-
-## Color
-
-Use the `color` prop to apply a specific color scheme to the button. Accepts a `${ColorScheme}-${ColorWeight}` value.
-
-<CodeBlock
-  marginTop="16"
-  marginBottom="24"
-  preview={
-    <Row gap="16" horizontal="center" wrap>
-      <Button size="s" variant="secondary" color="brand-strong">Brand</Button>
-      <Button size="s" variant="secondary" color="accent-strong">Accent</Button>
-      <Button size="s" variant="secondary" color="success-strong">Success</Button>
-      <Button size="s" variant="secondary" color="warning-strong">Warning</Button>
-    </Row>
-  }
-  codes={[
-    {
-      code:
-`<Button variant="secondary" color="brand-strong">Brand</Button>
-<Button variant="secondary" color="accent-strong">Accent</Button>
-<Button variant="secondary" color="success-strong">Success</Button>
-<Button variant="secondary" color="warning-strong">Warning</Button>`,
-      language: "tsx",
-      label: "Color"
     }
   ]}
 />

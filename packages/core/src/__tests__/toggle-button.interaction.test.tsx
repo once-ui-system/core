@@ -111,3 +111,17 @@ describe("ToggleButton: interaction", () => {
     expect(screen.getByRole("button", { name: "Submit" })).toHaveAttribute("type", "submit");
   });
 });
+
+describe("ToggleButton: truncate", () => {
+  it("ends a long text label in an ellipsis when asked", () => {
+    render(<ToggleButton label="A long label" truncate />, { wrapper: wrap });
+    const text = screen.getByText("A long label");
+    expect(text).toHaveClass("truncate");
+    expect(text.parentElement).toHaveClass("min-width-0");
+  });
+
+  it("leaves the label alone by default", () => {
+    render(<ToggleButton label="A long label" />, { wrapper: wrap });
+    expect(screen.getByText("A long label")).not.toHaveClass("truncate");
+  });
+});

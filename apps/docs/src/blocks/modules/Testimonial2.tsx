@@ -51,12 +51,12 @@ export const Testimonial2: React.FC<Testimonial> = ({
     <Column flex={1} s={{ direction: "column" }}>
       <Column flex={1} padding="xl" gap="16" vertical="center">
         {title && (
-          <Heading variant="display-default-s" style={{ lineHeight: 1 }}>
+          <Heading textVariant="display-default-s" style={{ lineHeight: 1 }}>
             <b>{title}</b>
           </Heading>
         )}
         {content && (
-          <Text wrap="balance" variant="label-default-m" onBackground="neutral-medium">
+          <Text wrap="balance" textVariant="label-default-m" onBackground="neutral-medium">
             <b>{content}</b>
           </Text>
         )}
@@ -82,9 +82,9 @@ export const Testimonial2: React.FC<Testimonial> = ({
       </Column>
     </Column>
     {src && (
-      <Row flex={1} fill minHeight={20}>
+      <Row flex={1} fill minHeight="20rem">
         <Row flex={1} fillHeight paddingTop="24" paddingLeft="24" vertical="end">
-          <Background mask={{ x: 100, y: 50, radius: 150 }} aspectRatio="8/7" fitHeight>
+          <Background mask={{ x: "100%", y: "50%", radius: "150vh" }} aspectRatio="8/7" fitHeight>
             <Media
               stretch
               sizes="(max-width: 1024px) 90vw, 960px"

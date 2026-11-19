@@ -3,9 +3,10 @@
   "order": 8,
   "pages": {
     "ogRoutes": 1,
-    "handleOGFetch": 2,
-    "handleOGProxy": 3,
-    "devLogger": 4,
-    "dropdownState": 5
+    "ogImages": 2,
+    "handleOGFetch": 3,
+    "handleOGProxy": 4,
+    "devLogger": 5,
+    "dropdownState": 6
   }
 }

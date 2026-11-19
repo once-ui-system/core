@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { type DateRange, DateRangePicker } from "../components/DateRangePicker";
+import { DatePicker, type DateRange } from "../components/DatePicker";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
 
@@ -35,9 +35,10 @@ describe("DateRangePicker: interaction", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
-      <DateRangePicker
+      <DatePicker
+        range
         value={{ startDate: jan(5), endDate: undefined }}
-        onChange={onChange}
+        onValueChange={onChange}
         autoFocus
       />,
       { wrapper: wrap },
@@ -55,9 +56,10 @@ describe("DateRangePicker: interaction", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
-      <DateRangePicker
+      <DatePicker
+        range
         value={{ startDate: jan(5), endDate: jan(9) }}
-        onChange={onChange}
+        onValueChange={onChange}
         autoFocus
       />,
       { wrapper: wrap },
@@ -74,9 +76,10 @@ describe("DateRangePicker: interaction", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
-      <DateRangePicker
+      <DatePicker
+        range
         value={{ startDate: jan(5), endDate: jan(9) }}
-        onChange={onChange}
+        onValueChange={onChange}
         autoFocus
       />,
       { wrapper: wrap },
@@ -92,7 +95,7 @@ describe("DateRangePicker: interaction", () => {
       const [range, setRange] = useState<DateRange>({ startDate: jan(1), endDate: jan(2) });
       return (
         <>
-          <DateRangePicker value={range} onChange={setRange} />
+          <DatePicker range value={range} onValueChange={setRange} />
           <output>
             {range.startDate?.getDate() ?? "-"}/{range.endDate?.getDate() ?? "-"}
           </output>
@@ -113,11 +116,12 @@ describe("DateRangePicker: interaction", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
-      <DateRangePicker
+      <DatePicker
+        range
         value={{ startDate: jan(10), endDate: undefined }}
         minDate={jan(8)}
         maxDate={jan(20)}
-        onChange={onChange}
+        onValueChange={onChange}
       />,
       { wrapper: wrap },
     );
@@ -129,7 +133,7 @@ describe("DateRangePicker: interaction", () => {
 
   it("has no axe violations with a full range", async () => {
     const { container } = render(
-      <DateRangePicker value={{ startDate: jan(5), endDate: jan(9) }} onChange={vi.fn()} />,
+      <DatePicker range value={{ startDate: jan(5), endDate: jan(9) }} onValueChange={vi.fn()} />,
       { wrapper: wrap },
     );
     await day(jan(9));
