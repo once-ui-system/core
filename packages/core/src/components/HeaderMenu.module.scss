@@ -3,8 +3,9 @@
 // sliding over the page. Rows follow a beat later, one after another, and the
 // call to action lands last. Closing folds it back up, faster.
 .panel {
+    // No line on top: the header draws its own edge, and under a floating,
+    // rounded header a line here meets its corners at a tangent.
     --header-menu-ease: cubic-bezier(0.32, 0.72, 0, 1);
-    border-top: 1px solid var(--neutral-alpha-weak);
     animation: header-menu-open 0.38s var(--header-menu-ease) both;
 
     &[data-state="closed"] {
