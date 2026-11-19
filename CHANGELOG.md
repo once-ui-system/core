@@ -11,6 +11,16 @@ Entries before 1.7.13 are reconstructed from GitHub releases and git history and
 incomplete; reconciling them against actual npm release history is a scheduled roadmap
 item (see `ROADMAP.md`, Week 4).
 
+## [Unreleased]
+
+### Fixed
+
+- `Setting`: a slider (or any control that fills its parent, such as `Input` or a
+  fill-width `SegmentedControl`) in a labelled row collapsed to its thumb in 3.0.0,
+  because the control area was only as wide as its content. The area now grows into
+  the row's free space up to `controlWidth`; wrapping and the trailing-edge placement
+  of buttons are unchanged.
+
 ## [3.0.0] - 2026-11-19
 
 Breaking. Built on the `feat/3-0-breaking-cleanup` branch; [MIGRATING.md](MIGRATING.md#2x--30)
