@@ -1,5 +1,6 @@
 import { isMascotAccessory, type MascotAccessory } from "./accessories.js";
 import type { MascotIdentityLayer } from "./mascotIdentities.js";
+import { MASCOT_MEDIUMS, type MascotMedium } from "./mascotMedium.js";
 
 /*
  * A mascot as data: the part of its props a person designs, in a shape that
@@ -50,6 +51,8 @@ export interface MascotDesign {
   sides?: MascotSides;
   /** With `working`: `flat` paints the face on without light. */
   face?: "3d" | "flat";
+  /** How it is drawn: `vector` (unset), `fur`, `plush`, `clay`, `pixel`, `lowpoly` or `toon`. */
+  medium?: MascotMedium;
 }
 
 /** The look a mascot has when a design leaves a part out. */
@@ -221,6 +224,7 @@ export function parseMascotDesign(input: unknown): MascotDesign {
     working: oneOf(WORKING, r.working),
     sides: sides(r.sides),
     face: oneOf(FACES, r.face),
+    medium: oneOf(MASCOT_MEDIUMS, r.medium),
   };
   for (const key of Object.keys(design) as (keyof MascotDesign)[]) {
     if (design[key] === undefined) delete design[key];
