@@ -3,7 +3,6 @@
 import type { IconName } from "@once-ui-system/core";
 import {
   Button,
-  ChatComposer,
   Column,
   Icon,
   IconButton,
@@ -19,6 +18,7 @@ import {
   Text,
   ToggleButton,
 } from "@once-ui-system/core";
+import { PromptComposer } from "./PromptComposer";
 
 /**
  * Reference rebuild: an assistant-first home (workspace switcher, Home /
@@ -215,29 +215,7 @@ export default function AssistantReference() {
                   How can I help you today?
                 </Text>
               </Row>
-              <ChatComposer
-                onSend={() => {}}
-                placeholder="Ask anything or @ to add context"
-                attach
-                aria-label="Ask the assistant"
-                toolbar={
-                  <Row gap="4">
-                    <Button variant="tertiary" size="s" prefixIcon="folder" label="Project" />
-                    <Button variant="tertiary" size="s" prefixIcon="grid" label="Apps" />
-                  </Row>
-                }
-              />
-              <Column gap="4" paddingX="8">
-                {prompts.map((p) => (
-                  <Button
-                    key={p.label}
-                    variant="ghost"
-                    prefixIcon={p.icon}
-                    label={p.label}
-                    style={{ justifyContent: "flex-start" }}
-                  />
-                ))}
-              </Column>
+              <PromptComposer suggestions={prompts} usage={38} />
             </Column>
           </Column>
         </Column>
