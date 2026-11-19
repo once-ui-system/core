@@ -1,0 +1,716 @@
+---
+title: "Page sections"
+summary: "Twelve landing-page sections, one tag each, with a layout prop that changes how the same content is arranged."
+updatedAt: "2026-11-19"
+docs: "once-ui/components/pageSections.mdx"
+github: "blocks/src/sections"
+navLabel: "Page sections"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+A landing page is a stack of sections: a hero, what the product does, what
+people say about it, the prices, the questions, a last call and a way to get in
+touch. `@once-ui-system/blocks` has one tag for each. You fill in its content
+through props and pick its arrangement with `layout`. Every layout shows the
+same fields, so switching layouts never hides anything you wrote.
+
+Each section reads its props defensively. Content often comes from an editor,
+a JSON file or a model, so a missing, misspelled or mistyped prop renders as
+nothing instead of throwing. A section never shows sample copy of its own.
+
+The sections add no outer padding. The page sets the gutter and the space
+between sections.
+
+## Installation
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`npm install @once-ui-system/blocks`,
+      language: "bash",
+      label: "Install"
+    },
+    {
+      code:
+`import {
+  HeroSection,
+  FeaturesSection,
+  TestimonialsSection,
+  PricingSection,
+  FaqSection,
+  CtaSection,
+  ContactSection,
+  AboutSection,
+  GallerySection,
+  LogosSection,
+  StatsSection,
+  TeamSection,
+  Sections,
+} from "@once-ui-system/blocks";`,
+      language: "tsx",
+      label: "Import"
+    }
+  ]}
+/>
+
+## HeroSection
+
+The page's opening: eyebrow, headline, lead, two buttons and a picture. The
+headline is the page's `h1`. Each button shows only when it has both a label
+and a link.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={
+    <HeroSection
+      layout="split"
+      eyebrow="Fjell"
+      title="Gear for long days in the mountains"
+      description="Packs, shells and boots, tested on the ridges where we live."
+      primaryLabel="Shop the range"
+      primaryHref="#"
+      secondaryLabel="Our story"
+      secondaryHref="#"
+      image="/images/products/studio-01.jpg"
+      imageAlt="A hiker on a ridge at dawn"
+    />
+  }
+  codes={[
+    {
+      code:
+`<HeroSection
+  layout="split"
+  eyebrow="Fjell"
+  title="Gear for long days in the mountains"
+  description="Packs, shells and boots, tested on the ridges where we live."
+  primaryLabel="Shop the range"
+  primaryHref="/shop"
+  secondaryLabel="Our story"
+  secondaryHref="/about"
+  image="/images/hero.jpg"
+  imageAlt="A hiker on a ridge at dawn"
+/>`,
+      language: "tsx",
+      label: "Hero"
+    }
+  ]}
+/>
+
+Layouts (`heroLayouts`):
+
+- `split` (default): the words beside a portrait picture.
+- `centered`: centered words over a wide picture.
+- `cover`: the picture in a tall rounded frame, the words over its faded foot.
+- `boxed`: the words and a picture inside a framed box.
+- `fullscreen`: the picture fills most of the screen, the headline large at its foot.
+- `halves`: the section cut in two, the words on one half and the picture filling the other.
+- `editorial`: a very large headline, the lead and buttons side by side under a rule, the picture a wide band beneath.
+
+`heroLayoutGuide` holds one sentence per layout on when it suits, for an
+editor's tooltip or a model choosing one.
+
+## FeaturesSection
+
+What a product or service does, one point per item. Each item takes an `icon`
+name from the icon set, a `title` and a `description`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={
+    <FeaturesSection
+      layout="cards"
+      columns="3"
+      title="Why people choose Fjell"
+      items={[
+        { icon: "bolt", title: "Light", description: "Every pack under a kilo." },
+        { icon: "checkCircle", title: "Repairable", description: "Spare parts for ten years." },
+        { icon: "calendar", title: "Made to last", description: "A five-year warranty on every shell." },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<FeaturesSection
+  layout="cards"
+  columns="3"
+  title="Why people choose Fjell"
+  items={[
+    { icon: "bolt", title: "Light", description: "Every pack under a kilo." },
+    { icon: "checkCircle", title: "Repairable", description: "Spare parts for ten years." },
+    { icon: "calendar", title: "Made to last", description: "A five-year warranty on every shell." },
+  ]}
+/>`,
+      language: "tsx",
+      label: "Features"
+    }
+  ]}
+/>
+
+Layouts (`featuresLayouts`): `cards` (default), `list`, `split`. `columns`
+(`"2"`, `"3"` or `"4"`, default `"3"`) applies to `cards` and steps down on
+smaller screens.
+
+## TestimonialsSection
+
+What customers say, one quote per item, with a `name`, a `role` and an
+optional `avatar`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={
+    <TestimonialsSection
+      layout="cards"
+      title="What guests say"
+      items={[
+        { quote: "The best flat white in town, and they remember your name.", name: "Lena M.", role: "Regular", avatar: "/images/avatars/01.png" },
+        { quote: "We booked the back room for a birthday. It was easy.", name: "Tom B.", role: "Guest", avatar: "/images/avatars/02.png" },
+        { quote: "Good bread, quiet mornings, fast wifi.", name: "Sara K.", role: "Remote worker", avatar: "/images/avatars/03.png" },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<TestimonialsSection
+  layout="cards"
+  title="What guests say"
+  items={[
+    { quote: "The best flat white in town, and they remember your name.", name: "Lena M.", role: "Regular", avatar: "/avatars/lena.png" },
+    { quote: "We booked the back room for a birthday. It was easy.", name: "Tom B.", role: "Guest" },
+    { quote: "Good bread, quiet mornings, fast wifi.", name: "Sara K.", role: "Remote worker" },
+  ]}
+/>`,
+      language: "tsx",
+      label: "Testimonials"
+    }
+  ]}
+/>
+
+Layouts (`testimonialsLayouts`): `cards` (default), `spotlight`, `plain`.
+
+## PricingSection
+
+Plans side by side. `features` is a string with one feature per line.
+`highlighted` marks the plan to stand out, and `badge` adds a label to it.
+`ctaLabel` and `ctaHref` add a button to a plan.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={
+    <PricingSection
+      layout="cards"
+      title="Pricing"
+      items={[
+        { name: "Studio", price: "€19", period: "/ month", description: "For one person.", features: "One site\nEmail support", ctaLabel: "Start", ctaHref: "#" },
+        { name: "Team", price: "€49", period: "/ month", description: "For a small team.", features: "Five sites\nPriority support\nShared library", ctaLabel: "Start", ctaHref: "#", badge: "Popular", highlighted: true },
+        { name: "Agency", price: "€99", period: "/ month", description: "For client work.", features: "Unlimited sites\nClient handover", ctaLabel: "Talk to us", ctaHref: "#" },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<PricingSection
+  layout="cards"
+  title="Pricing"
+  items={[
+    {
+      name: "Studio",
+      price: "€19",
+      period: "/ month",
+      description: "For one person.",
+      features: "One site\\nEmail support",
+      ctaLabel: "Start",
+      ctaHref: "/signup?plan=studio",
+    },
+    {
+      name: "Team",
+      price: "€49",
+      period: "/ month",
+      description: "For a small team.",
+      features: "Five sites\\nPriority support\\nShared library",
+      ctaLabel: "Start",
+      ctaHref: "/signup?plan=team",
+      badge: "Popular",
+      highlighted: true,
+    },
+    {
+      name: "Agency",
+      price: "€99",
+      period: "/ month",
+      description: "For client work.",
+      features: "Unlimited sites\\nClient handover",
+      ctaLabel: "Talk to us",
+      ctaHref: "/contact",
+    },
+  ]}
+/>`,
+      language: "tsx",
+      label: "Pricing"
+    }
+  ]}
+/>
+
+Layouts (`pricingLayouts`): `cards` (default), `list`. `price` is shown as
+written, so include the currency.
+
+## FaqSection
+
+Questions and answers, one pair per item.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={
+    <FaqSection
+      layout="split"
+      title="Questions"
+      description="Anything else? Write to us."
+      items={[
+        { question: "Do you take bookings?", answer: "Yes, for groups of six or more." },
+        { question: "Is there a vegan menu?", answer: "Every dish has a vegan version." },
+        { question: "Can I bring my dog?", answer: "Dogs are welcome on the terrace." },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<FaqSection
+  layout="split"
+  title="Questions"
+  description="Anything else? Write to us."
+  items={[
+    { question: "Do you take bookings?", answer: "Yes, for groups of six or more." },
+    { question: "Is there a vegan menu?", answer: "Every dish has a vegan version." },
+    { question: "Can I bring my dog?", answer: "Dogs are welcome on the terrace." },
+  ]}
+/>`,
+      language: "tsx",
+      label: "FAQ"
+    }
+  ]}
+/>
+
+Layouts (`faqLayouts`): `stacked` (default), `split`, `grid`.
+
+## CtaSection
+
+The one thing to do next, usually the page's last section.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={
+    <CtaSection
+      layout="banner"
+      title="Book a table at Ember"
+      description="Open every day from 8:00."
+      primaryLabel="Book now"
+      primaryHref="#"
+      secondaryLabel="See the menu"
+      secondaryHref="#"
+    />
+  }
+  codes={[
+    {
+      code:
+`<CtaSection
+  layout="banner"
+  title="Book a table at Ember"
+  description="Open every day from 8:00."
+  primaryLabel="Book now"
+  primaryHref="/book"
+  secondaryLabel="See the menu"
+  secondaryHref="/menu"
+/>`,
+      language: "tsx",
+      label: "Call to action"
+    }
+  ]}
+/>
+
+Layouts (`ctaLayouts`):
+
+- `banner` (default): a band of the brand color.
+- `split`: the words and the buttons on one line in a frame.
+- `minimal`: unframed and centered.
+- `cover`: the words over a photo across the page's width, from `image` and `imageAlt`. Without an image it draws the banner.
+
+## ContactSection
+
+Email, phone, address and opening hours. The email and phone become `mailto:`
+and `tel:` links, and the address links to `mapHref` when given. `address` and
+`hours` take one entry per line. A detail that is not given is left out.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={
+    <ContactSection
+      layout="split"
+      title="Visit Ember"
+      email="hello@ember.example"
+      phone="+36 1 234 5678"
+      address={"Király utca 12\n1061 Budapest"}
+      mapHref="#"
+      hours={"Mon–Fri 8:00–22:00\nSat–Sun 9:00–23:00"}
+      primaryLabel="Book a table"
+      primaryHref="#"
+    />
+  }
+  codes={[
+    {
+      code:
+`<ContactSection
+  layout="split"
+  title="Visit Ember"
+  email="hello@ember.example"
+  phone="+36 1 234 5678"
+  address={"Király utca 12\\n1061 Budapest"}
+  mapHref="https://maps.example/ember"
+  hours={"Mon–Fri 8:00–22:00\\nSat–Sun 9:00–23:00"}
+  primaryLabel="Book a table"
+  primaryHref="/book"
+/>`,
+      language: "tsx",
+      label: "Contact"
+    }
+  ]}
+/>
+
+Layouts (`contactLayouts`): `split` (default), `cards`, `centered`.
+
+## AboutSection
+
+A longer story beside a picture. A blank line in `body` starts a new
+paragraph. `imageSide` (`"right"` or `"left"`) applies to `split`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={
+    <AboutSection
+      layout="split"
+      imageSide="left"
+      eyebrow="About"
+      title="Halden & Co"
+      body={"We are a small studio that designs furniture for small homes.\n\nEvery piece is made in our workshop by the people who drew it."}
+      image="/images/products/studio-02.jpg"
+      imageAlt="The Halden & Co workshop"
+      primaryLabel="Visit the workshop"
+      primaryHref="#"
+    />
+  }
+  codes={[
+    {
+      code:
+`<AboutSection
+  layout="split"
+  imageSide="left"
+  eyebrow="About"
+  title="Halden & Co"
+  body={"We are a small studio that designs furniture for small homes.\\n\\nEvery piece is made in our workshop by the people who drew it."}
+  image="/images/workshop.jpg"
+  imageAlt="The Halden & Co workshop"
+  primaryLabel="Visit the workshop"
+  primaryHref="/visit"
+/>`,
+      language: "tsx",
+      label: "About"
+    }
+  ]}
+/>
+
+Layouts (`aboutLayouts`): `split` (default), `stacked`.
+
+## GallerySection
+
+Photos, each with an `image`, an `alt` and an optional `caption`. Every photo
+opens large on a click.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={
+    <GallerySection
+      layout="mosaic"
+      title="From the workshop"
+      items={[
+        { image: "/images/products/studio-01.jpg", alt: "Oak chair", caption: "Oak chair" },
+        { image: "/images/products/studio-02.jpg", alt: "Walnut shelf" },
+        { image: "/images/products/studio-03.jpg", alt: "Side table" },
+        { image: "/images/products/studio-04.jpg", alt: "Bench" },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<GallerySection
+  layout="mosaic"
+  title="From the workshop"
+  items={[
+    { image: "/images/chair.jpg", alt: "Oak chair", caption: "Oak chair" },
+    { image: "/images/shelf.jpg", alt: "Walnut shelf" },
+    { image: "/images/table.jpg", alt: "Side table" },
+    { image: "/images/bench.jpg", alt: "Bench" },
+  ]}
+/>`,
+      language: "tsx",
+      label: "Gallery"
+    }
+  ]}
+/>
+
+Layouts (`galleryLayouts`):
+
+- `grid` (default): even tiles.
+- `mosaic`: the first photo takes two thirds of the width beside two stacked, the rest in tiles beneath.
+- `masonry`: each photo keeps its own shape, in columns.
+
+## LogosSection
+
+Logos of clients, press or partners. Each item takes a `src`, an optional
+`srcDark` used in dark mode, and an optional `href`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={
+    <LogosSection
+      layout="row"
+      eyebrow="Trusted by"
+      items={[
+        { src: "/trademarks/type-dark.svg", srcDark: "/trademarks/type-light.svg" },
+        { src: "/trademarks/wordmark-dark.svg", srcDark: "/trademarks/wordmark-light.svg" },
+        { src: "/trademarks/type-dark.svg", srcDark: "/trademarks/type-light.svg" },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<LogosSection
+  layout="row"
+  eyebrow="Trusted by"
+  items={[
+    { src: "/logos/fjell-dark.svg", srcDark: "/logos/fjell-light.svg", href: "https://fjell.example" },
+    { src: "/logos/halden-dark.svg", srcDark: "/logos/halden-light.svg" },
+    { src: "/logos/ember-dark.svg", srcDark: "/logos/ember-light.svg" },
+  ]}
+/>`,
+      language: "tsx",
+      label: "Logos"
+    }
+  ]}
+/>
+
+Layouts (`logosLayouts`): `row` (default, one centered line that wraps),
+`grid` (each logo in its own tile). An item without `src` is left out.
+
+## StatsSection
+
+A few figures, each with a `value`, a `label` and an optional `description`.
+`value` is a string, shown as written.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={
+    <StatsSection
+      layout="cards"
+      title="Fjell in numbers"
+      items={[
+        { value: "12", label: "Years", description: "Making gear in the same valley." },
+        { value: "3,400", label: "Repairs", description: "Done in our workshop last year." },
+        { value: "4.9", label: "Average rating" },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<StatsSection
+  layout="cards"
+  title="Fjell in numbers"
+  items={[
+    { value: "12", label: "Years", description: "Making gear in the same valley." },
+    { value: "3,400", label: "Repairs", description: "Done in our workshop last year." },
+    { value: "4.9", label: "Average rating" },
+  ]}
+/>`,
+      language: "tsx",
+      label: "Stats"
+    }
+  ]}
+/>
+
+Layouts (`statsLayouts`): `row` (default), `cards`, `strip` (figures in a
+ruled band).
+
+## TeamSection
+
+The people behind the work, each with a `name`, `role`, `bio` and `photo`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={
+    <TeamSection
+      layout="grid"
+      columns="3"
+      title="The team"
+      items={[
+        { name: "Ida Halden", role: "Founder", bio: "Draws every piece first.", photo: "/images/avatars/04.png" },
+        { name: "Jonas Berg", role: "Workshop lead", bio: "Twenty years at the bench.", photo: "/images/avatars/05.png" },
+        { name: "Mira Holm", role: "Studio manager", bio: "Keeps orders on time.", photo: "/images/avatars/06.png" },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<TeamSection
+  layout="grid"
+  columns="3"
+  title="The team"
+  items={[
+    { name: "Ida Halden", role: "Founder", bio: "Draws every piece first.", photo: "/team/ida.jpg" },
+    { name: "Jonas Berg", role: "Workshop lead", bio: "Twenty years at the bench.", photo: "/team/jonas.jpg" },
+    { name: "Mira Holm", role: "Studio manager", bio: "Keeps orders on time.", photo: "/team/mira.jpg" },
+  ]}
+/>`,
+      language: "tsx",
+      label: "Team"
+    }
+  ]}
+/>
+
+Layouts (`teamLayouts`): `grid` (default), `list`. `columns` (`"2"`, `"3"` or
+`"4"`, default `"3"`) applies to `grid`.
+
+## Sections
+
+`Sections` renders a page from stored data: a list of `{ id, type, props }`
+items, as a page builder or a CMS saves them. `type` is one of `hero`,
+`features`, `about`, `stats`, `gallery`, `testimonials`, `team`, `pricing`,
+`faq`, `logos`, `cta` and `contact`. A type the package does not have goes to
+`renderCustom`, or is left out, so a page saved by a newer editor still
+renders. `resolveHref` is passed to every section.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={
+    <Column fillWidth gap="64">
+      <Sections
+        items={[
+          { id: "hero", type: "hero", props: { layout: "centered", title: "Ember", description: "Coffee, bread and a quiet table." } },
+          { id: "stats", type: "stats", props: { layout: "strip", items: [{ value: "8:00", label: "Opens" }, { value: "40", label: "Seats" }, { value: "6", label: "Kinds of bread" }] } },
+          { id: "cta", type: "cta", props: { layout: "minimal", title: "Drop by", primaryLabel: "Find us", primaryHref: "#" } },
+        ]}
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`import { Sections } from "@once-ui-system/blocks";
+
+<Sections
+  items={page.sections}
+  resolveHref={(href) => \`/de\${href}\`}
+  renderCustom={(item) => item.type === "menu" && <Menu {...item.props} />}
+/>
+
+// page.sections
+[
+  { id: "hero", type: "hero", props: { layout: "centered", title: "Ember", description: "Coffee, bread and a quiet table." } },
+  { id: "stats", type: "stats", props: { layout: "strip", items: [{ value: "8:00", label: "Opens" }, { value: "40", label: "Seats" }] } },
+  { id: "menu", type: "menu", props: { category: "breakfast" } },
+  { id: "cta", type: "cta", props: { layout: "minimal", title: "Drop by", primaryLabel: "Find us", primaryHref: "/contact" } },
+]`,
+      language: "tsx",
+      label: "Sections"
+    }
+  ]}
+/>
+
+`Sections` adds no space between sections. Wrap it in a `Column` with a `gap`
+to set the rhythm. `sectionComponents` maps each type to its component if you
+render the list yourself.
+
+## Schema
+
+`sectionSchemas` describes every section as plain data: its `component` name,
+a `label`, a one-line `description`, its `layouts` (the first is the default),
+its `fields` and a filled-in `sample`. It has no functions, so
+`JSON.stringify(sectionSchemas)` gives an editor panel or an agent the full
+contract. `sectionTypes` lists the types in the order an editor offers them,
+and `isSectionType(value)` checks a stored type.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`import { sectionSchemas, sectionTypes } from "@once-ui-system/blocks";
+
+sectionSchemas.pricing.layouts; // ["cards", "list"]
+sectionSchemas.pricing.fields.map((field) => field.key);
+// ["layout", "eyebrow", "title", "description", "items", "width"]
+
+// A new section starts from its sample.
+const section = { id: crypto.randomUUID(), type: "faq", props: sectionSchemas.faq.sample };`,
+      language: "tsx",
+      label: "Schema"
+    }
+  ]}
+/>
+
+## API reference
+
+Every section takes these props. Lists of items are documented with each
+section above.
+
+| Prop | Type | Default | Sections |
+| --- | --- | --- | --- |
+| `layout` | `string`: one of the section's layouts | the first layout | all |
+| `width` | `"s"`, `"m"` or `"l"`: how wide the content runs | `"l"` | all |
+| `eyebrow` | `string` | | all |
+| `title` | `string` | | all |
+| `description` | `string` | | all |
+| `resolveHref` | `(href: string) => string`: rewrites every link the section renders | | all |
+| `primaryLabel`, `primaryHref` | `string` | | Hero, About, Cta, Contact |
+| `secondaryLabel`, `secondaryHref` | `string` | | Hero, About, Cta |
+| `image`, `imageAlt` | `string` | | Hero, About, Cta (`cover`) |
+| `columns` | `"2"`, `"3"` or `"4"` | `"3"` | Features, Team |
+| `items` | an array of row objects, per section | `[]` | Features, Testimonials, Pricing, Faq, Gallery, Logos, Stats, Team |
+
+`Sections` takes `items` (`{ id?, type, props? }[]`), `resolveHref` and
+`renderCustom` (`(item, index) => ReactNode`).

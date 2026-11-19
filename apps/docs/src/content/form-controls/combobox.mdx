@@ -1,0 +1,289 @@
+---
+title: "Combobox"
+summary: "A text field with suggestions. Any text is a value, and a suggestion only fills it in."
+updatedAt: "2026-11-19"
+docs: "once-ui/form-controls/combobox.mdx"
+github: "components/Combobox.tsx"
+navLabel: "Combobox"
+navIcon: "switch"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+`Combobox` is an `Input` with a list of suggestions under it: a city, a tag, a client's name, a model. Typing filters the list, and picking a suggestion fills in the field. Unlike `Select`, the person can also keep what they typed, so free text is a valid answer.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Combobox
+      id="combobox-basic"
+      label="City"
+      options={[
+        { value: "aldermoor", label: "Aldermoor" },
+        { value: "brightwater", label: "Brightwater" },
+        { value: "calderon", label: "Calderon" },
+        { value: "dunmere", label: "Dunmere" },
+        { value: "eastvale", label: "Eastvale" }
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Combobox
+  id="city"
+  label="City"
+  options={[
+    { value: "aldermoor", label: "Aldermoor" },
+    { value: "brightwater", label: "Brightwater" },
+    { value: "calderon", label: "Calderon" },
+    { value: "dunmere", label: "Dunmere" },
+    { value: "eastvale", label: "Eastvale" }
+  ]}
+/>`,
+      language: "tsx",
+      label: "Combobox"
+    }
+  ]}
+/>
+
+## When to use Combobox
+
+- Use `Combobox` when the answer can be anything, and a few common answers save typing.
+- Use `Select` when the answer must be one of the options, such as a role or a timezone. A searchable `Select` filters a long list but still only accepts what is in it.
+- Use `TagInput` when the field holds several values.
+
+## Options
+
+Each option takes the same fields as an `Option`: `value`, `label`, `description`, `prefix`, `suffix`, `tone`, `danger` and `disabled`. A pick puts the option's text in the field: its `label` when that is a string, otherwise its `value`. Arrow keys skip disabled options.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Combobox
+      id="combobox-options"
+      label="Reviewer"
+      options={[
+        { value: "mira", label: "Mira Kovan", description: "Design", prefix: <Avatar size="xs" value="MK" /> },
+        { value: "tobin", label: "Tobin Asher", description: "Engineering", prefix: <Avatar size="xs" value="TA" /> },
+        { value: "lena", label: "Lena Voss", description: "Finance", prefix: <Avatar size="xs" value="LV" /> },
+        { value: "hana", label: "Hana Pell", description: "Away until Monday", prefix: <Avatar size="xs" value="HP" />, disabled: true }
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Combobox
+  id="reviewer"
+  label="Reviewer"
+  options={[
+    { value: "mira", label: "Mira Kovan", description: "Design", prefix: <Avatar size="xs" value="MK" /> },
+    { value: "tobin", label: "Tobin Asher", description: "Engineering", prefix: <Avatar size="xs" value="TA" /> },
+    { value: "lena", label: "Lena Voss", description: "Finance", prefix: <Avatar size="xs" value="LV" /> },
+    { value: "hana", label: "Hana Pell", description: "Away until Monday", prefix: <Avatar size="xs" value="HP" />, disabled: true }
+  ]}
+/>`,
+      language: "tsx",
+      label: "Options"
+    }
+  ]}
+/>
+
+## Controlled
+
+`value` and `onValueChange` hold the field's text, and `onValueChange` runs on every keystroke and every pick. `onOptionSelect` runs only on a pick, with the whole option, so you can tell a picked suggestion from typed text. `open`, `defaultOpen` and `onOpenChange` do the same for the list.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<ComboboxControlledExample />}
+  codes={[
+    {
+      code:
+`const [text, setText] = useState("");
+const [picked, setPicked] = useState<ComboboxOption | null>(null);
+
+<Combobox
+  id="assignee"
+  label="Assign to"
+  options={teammates}
+  value={text}
+  onValueChange={(next) => {
+    setText(next);
+    if (picked && next !== picked.label) setPicked(null);
+  }}
+  onOptionSelect={setPicked}
+/>`,
+      language: "tsx",
+      label: "Controlled"
+    }
+  ]}
+/>
+
+## Filtering
+
+By default, an option matches when its text contains what was typed, ignoring case. `filter` takes your own test, called with each option and the current text.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<ComboboxFilterExample />}
+  codes={[
+    {
+      code:
+`<Combobox
+  id="country-code"
+  label="Country code"
+  options={[
+    { value: "HU", label: "HU" },
+    { value: "AT", label: "AT" },
+    { value: "DE", label: "DE" },
+    { value: "DK", label: "DK" },
+    { value: "UA", label: "UA" }
+  ]}
+  filter={(option, query) =>
+    option.value.toLowerCase().startsWith(query.trim().toLowerCase())
+  }
+/>`,
+      language: "tsx",
+      label: "Starts with"
+    }
+  ]}
+/>
+
+## Empty state
+
+When the text matches nothing, the list closes, since free text is still a valid answer. Pass `emptyState` to show a message in the list instead.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Combobox
+      id="combobox-empty"
+      label="Tag"
+      defaultValue="zz"
+      options={[
+        { value: "invoice", label: "invoice" },
+        { value: "contract", label: "contract" },
+        { value: "brief", label: "brief" }
+      ]}
+      emptyState={<Text textVariant="body-default-s" onBackground="neutral-weak">No tag matches. Press Enter to keep yours.</Text>}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Combobox
+  id="tag"
+  label="Tag"
+  options={tags}
+  emptyState={
+    <Text textVariant="body-default-s" onBackground="neutral-weak">
+      No tag matches. Press Enter to keep yours.
+    </Text>
+  }
+/>`,
+      language: "tsx",
+      label: "Empty state"
+    }
+  ]}
+/>
+
+## Server results
+
+For suggestions that come from a search on the server, pass `filter={false}` so the Combobox shows the options as given, set `loading` while a request is out, and pass the options the server sent for the current text. While `loading` is set, the list shows a spinner row with the text from `labels.loading`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<ComboboxServerExample />}
+  codes={[
+    {
+      code:
+`const [text, setText] = useState("");
+const [options, setOptions] = useState<ComboboxOption[]>([]);
+const [loading, setLoading] = useState(false);
+
+useEffect(() => {
+  if (!text.trim()) {
+    setOptions([]);
+    return;
+  }
+  let current = true;
+  setLoading(true);
+  searchCities(text).then((results) => {
+    if (!current) return;
+    setOptions(results);
+    setLoading(false);
+  });
+  return () => {
+    current = false;
+  };
+}, [text]);
+
+<Combobox
+  id="delivery-city"
+  label="Delivery city"
+  options={options}
+  value={text}
+  onValueChange={setText}
+  filter={false}
+  loading={loading}
+  emptyState={<Text>No city matches. You can still use what you typed.</Text>}
+/>`,
+      language: "tsx",
+      label: "Server results"
+    }
+  ]}
+/>
+
+## Accessibility
+
+- The field has `role="combobox"` with `aria-autocomplete="list"`, and `aria-expanded`, `aria-controls` and `aria-activedescendant` point at the list and its active option. The list is a `listbox`, named after the field's `aria-label`, `label` or `placeholder`.
+- Focus stays in the field. The Down and Up arrows open the list and move through the suggestions, wrapping round. Enter takes the active suggestion, and does not submit the form when it does. With no active suggestion, Enter keeps the typed text.
+- Escape closes the list. A second Escape clears the text. Inside a `Dialog`, Escape closes the list only, not the dialog.
+- Tab closes the list and moves on.
+- While `loading`, the list is marked `aria-busy` and the loading row is a `status`, so screen readers announce it. Translate its text with `labels={{ loading: "…" }}`.
+
+## API reference
+
+Combobox also takes the props of `Input` (`id`, `label`, `placeholder`, `description`, `errorMessage`, `prefix`, `suffix` and the rest), except `onChange`, `onSelect` and `children`.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `options` | `ComboboxOption[]` | required | The suggestions. Typing filters them unless `filter` is `false`. |
+| `value` | `string` | | The field's text, controlled. |
+| `defaultValue` | `string` | `""` | The starting text when `value` is left out. |
+| `onValueChange` | `(value: string) => void` | | Called with the text on every keystroke and every pick. |
+| `onOptionSelect` | `(option: ComboboxOption) => void` | | Called with the whole option when a suggestion is picked. |
+| `open` | `boolean` | | Whether the list is open, controlled. |
+| `defaultOpen` | `boolean` | `false` | Whether the list starts open, when `open` is left out. |
+| `onOpenChange` | `(open: boolean) => void` | | Called on every open and close. |
+| `filter` | `((option: ComboboxOption, query: string) => boolean) \| false` | contains, ignoring case | Which suggestions match the text. `false` shows `options` as given. |
+| `loading` | `boolean` | `false` | Shows a spinner row in the list while suggestions are on their way. |
+| `emptyState` | `ReactNode` | | Shown in the list when the text matches nothing. Left out, the list closes. |
+| `placement` | `Placement` | | Which side the list opens on, such as `"bottom-start"`. |
+| `labels` | `{ loading?: string }` | `{ loading: "Loading…" }` | The Combobox's own words, for a translated interface. |
+| `fillWidth` | `boolean` | `true` | Match the parent's width. |
+| `minHeight` | `number \| CSSUnit` | | The list's least height. From `Dropdown`. |
+| `minWidth` | `number \| CSSUnit` | | The list's least width. From `Dropdown`. |
+| `maxWidth` | `number \| CSSUnit` | | The list's greatest width. From `Dropdown`. |
+
+### ComboboxOption
+
+An `Option`'s props without `selected`, `highlighted`, `onClick` and `href`.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `value` | `string` | Required. The option's key, and its text when `label` is not a string. |
+| `label` | `ReactNode` | What the option shows. A string label is the text a pick puts in the field. |
+| `description` | `ReactNode` | A second line under the label. |
+| `prefix` | `ReactNode` | Shown before the label, such as an avatar or an icon. |
+| `suffix` | `ReactNode` | Shown after the label. |
+| `tone` | `Tone` | The option's palette. |
+| `danger` | `boolean` | Draws the option in the danger look. |
+| `disabled` | `boolean` | Shown but not pickable. The arrow keys skip it. |
