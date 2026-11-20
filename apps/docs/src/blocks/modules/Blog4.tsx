@@ -29,7 +29,7 @@ const featured = {
     "How a single theme file keeps complex brand systems predictable across dozens of surfaces.",
   publishedAt: "Jul 8, 2026",
   tag: "Design",
-  image: "/images/products/docs-02.jpg",
+  image: "/images/backgrounds/7.jpg",
   author: { name: "Ryan Ford", avatar: "/images/creators/ryan.jpg" },
 };
 
@@ -154,14 +154,23 @@ export const Blog4 = (flex: React.ComponentProps<typeof Column>) => {
               src={featured.image}
               alt={`Cover image of ${featured.title}`}
             />
-            <Column
-              fill
+            <Background
               position="absolute"
-              vertical="end"
-              padding="32"
-              gap="12"
-              background="overlay"
-            >
+              top="0"
+              left="0"
+              fill
+              pointerEvents="none"
+              gradient={{
+                display: true,
+                x: "50%",
+                y: "100%",
+                width: 640,
+                height: 340,
+                colorStart: "page-background",
+                colorEnd: "static-transparent",
+              }}
+            />
+            <Column fill position="absolute" top="0" left="0" vertical="end" padding="32" gap="12">
               <Tag tone="brand" size="s">
                 {featured.tag}
               </Tag>

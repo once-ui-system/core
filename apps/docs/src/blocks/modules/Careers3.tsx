@@ -1,6 +1,20 @@
 "use client";
 
-import { AvatarGroup, Background, Button, Column, Grid, Heading, Icon, Line, StatusIndicator, Row, Scroller, Tag, Text } from "@once-ui-system/core";
+import {
+  AvatarGroup,
+  Background,
+  Button,
+  Column,
+  Grid,
+  Heading,
+  Icon,
+  Line,
+  Row,
+  Scroller,
+  StatusIndicator,
+  Tag,
+  Text,
+} from "@once-ui-system/core";
 import { BlobFx, CountFx } from "@once-ui-system/fx";
 import { useMemo, useState } from "react";
 
@@ -88,6 +102,8 @@ export const Careers3 = () => {
       <Column maxWidth="l" borderX>
         <Background
           position="absolute"
+          top="0"
+          left="0"
           fill
           m={{ hide: true }}
           lines={{

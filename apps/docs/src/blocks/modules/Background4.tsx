@@ -43,6 +43,8 @@ export const Background4: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
         <Background
           fill
           position="absolute"
+          top="0"
+          left="0"
           gradient={{
             display: true,
             x: "50%",
