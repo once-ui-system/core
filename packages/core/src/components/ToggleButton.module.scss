@@ -53,12 +53,6 @@
     }
 
     @include touch.target;
-
-    // Filling its parent, the button may shrink with it, so the label can
-    // truncate instead of running out of the box.
-    &:global(.fill-width) {
-        min-width: 0;
-    }
 }
 
 // The icons keep their size while a long label gives way.

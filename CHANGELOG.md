@@ -26,8 +26,8 @@ item (see `ROADMAP.md`, Week 4).
   in conservative the rail added 2px for 4px of padding.
 - `ToggleButton`: a label too long for the button ran out of the box and pushed the
   suffix icon out with it. A `fillWidth` button (a sidebar row) now ends its label in
-  an ellipsis by default, node labels included, and may shrink with its parent; a
-  fit-width button keeps its full label, as before. `truncate` sets it either way. The
+  an ellipsis by default, node labels included; a fit-width button keeps its full
+  label, as before. `truncate` sets it either way. The
   icons keep their size.
   The docs sidebar's page titles truncate beside their tags.
 
