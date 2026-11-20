@@ -340,6 +340,10 @@ const SegmentedControl = ({
             // passes the panel's id as `aria-controls`, spread below.
             tabIndex={index === selectedIndex ? 0 : -1}
             fillWidth={fillWidth}
+            // The control shares and truncates its options itself (.shrink,
+            // .label); the button's own fill-width truncation would squeeze a
+            // long option to an equal share even where it fits.
+            truncate={false}
             {...button}
             disabled={disabled || button.disabled}
             {...(wrapped && { label: wrapped, children: undefined })}

@@ -48,6 +48,12 @@ interface ToggleButtonCommonProps extends LeafProps {
   rounded?: boolean;
   horizontal?: "start" | "center" | "end" | "between";
   weight?: "default" | "strong";
+  /**
+   * End a label that does not fit in an ellipsis instead of letting it run out
+   * of the button and push the suffix with it. Left out, a `fillWidth` button
+   * truncates (a sidebar row) and a fit-width one keeps its full label (a pill
+   * in a strip, which scrolls instead of squeezing its options).
+   */
   truncate?: boolean;
   disabled?: boolean;
   prefixIcon?: IconName;
@@ -72,7 +78,7 @@ const ToggleButton = ({
   horizontal = "center",
   fillWidth,
   weight = "default",
-  truncate = false,
+  truncate: truncateProp,
   disabled = false,
   prefixIcon,
   suffixIcon,
@@ -103,6 +109,7 @@ const ToggleButton = ({
   const size = sizeProp ?? "m";
   const auto = sizeProp === undefined;
   const iconClass = auto ? styles.icon : undefined;
+  const truncate = truncateProp ?? Boolean(fillWidth);
   // The label, wrapped so `truncate` can end a long one in an ellipsis.
   const content = label || children;
   return (
@@ -146,7 +153,7 @@ const ToggleButton = ({
         <Icon
           name={prefixIcon}
           size={size === "xl" ? "m" : size === "l" ? "s" : "xs"}
-          className={iconClass}
+          className={classNames(iconClass, styles.fixed)}
         />
       )}
       {content && (
@@ -169,7 +176,7 @@ const ToggleButton = ({
         <Icon
           name={suffixIcon}
           size={size === "xl" ? "m" : size === "l" ? "s" : "xs"}
-          className={iconClass}
+          className={classNames(iconClass, styles.fixed)}
         />
       )}
     </ElementType>

@@ -376,7 +376,7 @@ Mixins: LeafProps.
 ### ToggleButton
 Mixins: LeafProps.
 - label, children?: ReactNode
-- selected, rounded, truncate, disabled?: boolean = false
+- selected, rounded, disabled?: boolean = false
 - variant?: "ghost" | "outline" | "subtle" = ghost
 - tone?: Tone = neutral
 - size?: TShirtSizes
@@ -384,6 +384,7 @@ Mixins: LeafProps.
 - corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
 - horizontal?: "start" | "center" | "end" | "between" = center
 - weight?: "default" | "strong" = default
+- truncate?: boolean
 - prefixIcon, suffixIcon?: IconName
 - href?: string
 
