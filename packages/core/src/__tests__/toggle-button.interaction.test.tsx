@@ -4,6 +4,7 @@ import type React from "react";
 import { createRef } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { ToggleButton } from "../components/ToggleButton";
+import styles from "../components/ToggleButton.module.scss";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
 
@@ -113,15 +114,36 @@ describe("ToggleButton: interaction", () => {
 });
 
 describe("ToggleButton: truncate", () => {
-  it("ends a long text label in an ellipsis when asked", () => {
-    render(<ToggleButton label="A long label" truncate />, { wrapper: wrap });
+  it("ends a long text label in an ellipsis by default", () => {
+    render(<ToggleButton label="A long label" />, { wrapper: wrap });
     const text = screen.getByText("A long label");
     expect(text).toHaveClass("truncate");
     expect(text.parentElement).toHaveClass("min-width-0");
   });
 
-  it("leaves the label alone by default", () => {
-    render(<ToggleButton label="A long label" />, { wrapper: wrap });
+  it("lets a node label shrink too, so it can truncate itself", () => {
+    render(
+      <ToggleButton fillWidth>
+        <span>Node label</span>
+      </ToggleButton>,
+      { wrapper: wrap },
+    );
+    expect(screen.getByText("Node label").parentElement).toHaveClass("min-width-0");
+  });
+
+  it("keeps the icons at their size while the label gives way", () => {
+    const { container } = render(
+      <ToggleButton label="A long label" prefixIcon="check" suffixIcon="chevronDown" />,
+      { wrapper: wrap },
+    );
+    const button = container.querySelector("button") as HTMLElement;
+    expect(button.firstElementChild).toHaveClass(styles.fixed);
+    expect(button.lastElementChild).toHaveClass(styles.fixed);
+  });
+
+  it("leaves the label at its full width with truncate={false}", () => {
+    render(<ToggleButton label="A long label" truncate={false} />, { wrapper: wrap });
     expect(screen.getByText("A long label")).not.toHaveClass("truncate");
+    expect(screen.getByText("A long label").parentElement).not.toHaveClass("min-width-0");
   });
 });

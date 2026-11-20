@@ -15,7 +15,7 @@
   "rounded": "boolean = false",
   "horizontal": "\"start\" | \"center\" | \"end\" | \"between\" = center",
   "weight": "\"default\" | \"strong\" = default",
-  "truncate": "boolean = false",
+  "truncate": "boolean = true",
   "disabled": "boolean = false",
   "prefixIcon": "IconName",
   "suffixIcon": "IconName",

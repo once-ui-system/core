@@ -24,6 +24,11 @@ item (see `ROADMAP.md`, Week 4).
   padding and border style: the options' radius plus the padding and the border.
   A `compact` rail always took the l radius (16px round 8px options in playful), and
   in conservative the rail added 2px for 4px of padding.
+- `ToggleButton`: a label too long for the button ran out of the box and pushed the
+  suffix icon out with it. Labels now end in an ellipsis by default (`truncate` is on;
+  `truncate={false}` keeps the full width), the label area may shrink for node labels
+  too, the icons keep their size, and a `fillWidth` button may shrink with its parent.
+  The docs sidebar's page titles truncate beside their tags.
 
 ## [3.0.0] - 2026-11-19
 

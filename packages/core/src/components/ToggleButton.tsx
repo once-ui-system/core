@@ -48,6 +48,11 @@ interface ToggleButtonCommonProps extends LeafProps {
   rounded?: boolean;
   horizontal?: "start" | "center" | "end" | "between";
   weight?: "default" | "strong";
+  /**
+   * End a label that does not fit in an ellipsis instead of letting it run out
+   * of the button and push the suffix with it. On by default; `false` keeps the
+   * label at its full width.
+   */
   truncate?: boolean;
   disabled?: boolean;
   prefixIcon?: IconName;
@@ -72,7 +77,7 @@ const ToggleButton = ({
   horizontal = "center",
   fillWidth,
   weight = "default",
-  truncate = false,
+  truncate = true,
   disabled = false,
   prefixIcon,
   suffixIcon,
@@ -146,7 +151,7 @@ const ToggleButton = ({
         <Icon
           name={prefixIcon}
           size={size === "xl" ? "m" : size === "l" ? "s" : "xs"}
-          className={iconClass}
+          className={classNames(iconClass, styles.fixed)}
         />
       )}
       {content && (
@@ -169,7 +174,7 @@ const ToggleButton = ({
         <Icon
           name={suffixIcon}
           size={size === "xl" ? "m" : size === "l" ? "s" : "xs"}
-          className={iconClass}
+          className={classNames(iconClass, styles.fixed)}
         />
       )}
     </ElementType>
