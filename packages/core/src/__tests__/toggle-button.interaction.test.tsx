@@ -114,8 +114,8 @@ describe("ToggleButton: interaction", () => {
 });
 
 describe("ToggleButton: truncate", () => {
-  it("ends a long text label in an ellipsis by default", () => {
-    render(<ToggleButton label="A long label" />, { wrapper: wrap });
+  it("ends a long text label in an ellipsis by default when it fills its parent", () => {
+    render(<ToggleButton fillWidth label="A long label" />, { wrapper: wrap });
     const text = screen.getByText("A long label");
     expect(text).toHaveClass("truncate");
     expect(text.parentElement).toHaveClass("min-width-0");
@@ -141,8 +141,19 @@ describe("ToggleButton: truncate", () => {
     expect(button.lastElementChild).toHaveClass(styles.fixed);
   });
 
+  it("keeps a fit-width button's label whole by default, so strips scroll instead", () => {
+    render(<ToggleButton label="Today" />, { wrapper: wrap });
+    expect(screen.getByText("Today")).not.toHaveClass("truncate");
+    expect(screen.getByText("Today").parentElement).not.toHaveClass("min-width-0");
+  });
+
+  it("truncates a fit-width label when asked", () => {
+    render(<ToggleButton label="A long label" truncate />, { wrapper: wrap });
+    expect(screen.getByText("A long label")).toHaveClass("truncate");
+  });
+
   it("leaves the label at its full width with truncate={false}", () => {
-    render(<ToggleButton label="A long label" truncate={false} />, { wrapper: wrap });
+    render(<ToggleButton fillWidth label="A long label" truncate={false} />, { wrapper: wrap });
     expect(screen.getByText("A long label")).not.toHaveClass("truncate");
     expect(screen.getByText("A long label").parentElement).not.toHaveClass("min-width-0");
   });

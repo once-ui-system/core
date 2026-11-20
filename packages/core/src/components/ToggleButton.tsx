@@ -50,8 +50,9 @@ interface ToggleButtonCommonProps extends LeafProps {
   weight?: "default" | "strong";
   /**
    * End a label that does not fit in an ellipsis instead of letting it run out
-   * of the button and push the suffix with it. On by default; `false` keeps the
-   * label at its full width.
+   * of the button and push the suffix with it. Left out, a `fillWidth` button
+   * truncates (a sidebar row) and a fit-width one keeps its full label (a pill
+   * in a strip, which scrolls instead of squeezing its options).
    */
   truncate?: boolean;
   disabled?: boolean;
@@ -77,7 +78,7 @@ const ToggleButton = ({
   horizontal = "center",
   fillWidth,
   weight = "default",
-  truncate = true,
+  truncate: truncateProp,
   disabled = false,
   prefixIcon,
   suffixIcon,
@@ -108,6 +109,7 @@ const ToggleButton = ({
   const size = sizeProp ?? "m";
   const auto = sizeProp === undefined;
   const iconClass = auto ? styles.icon : undefined;
+  const truncate = truncateProp ?? Boolean(fillWidth);
   // The label, wrapped so `truncate` can end a long one in an ellipsis.
   const content = label || children;
   return (
