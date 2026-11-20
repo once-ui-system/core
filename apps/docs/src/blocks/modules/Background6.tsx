@@ -3,7 +3,7 @@ import { ParticleFx } from "@once-ui-system/fx";
 
 export const Background6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (
-    <Row position="absolute" fill overflow="hidden" {...flex}>
+    <Row position="absolute" top="0" left="0" fill overflow="hidden" {...flex}>
       <Background
         fill
         themeSolid="color"
@@ -34,7 +34,14 @@ export const Background6: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
         }}
       />
       <Mask position="absolute" top="0" left="0" x="50%" y="50%" radius="100vh">
-        <ParticleFx opacity={70} fill interactive speed={3.33} intensity={40} pointerEvents="none" />
+        <ParticleFx
+          opacity={70}
+          fill
+          interactive
+          speed={3.33}
+          intensity={40}
+          pointerEvents="none"
+        />
       </Mask>
     </Row>
   );

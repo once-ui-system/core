@@ -174,6 +174,25 @@ export const blocks = {
           },
         ],
       },
+      changelog: {
+        label: "Changelog",
+        image: {
+          light: "/images/blocks/changelog-light.jpg",
+          dark: "/images/blocks/changelog-dark.jpg",
+        },
+        description: "Changelog and release notes pages",
+        href: "/blocks/changelog",
+        keywords: "changelog, release notes, updates, timeline, page",
+        examples: [
+          {
+            title: "Changelog1",
+            description:
+              "Release timeline with version tags, screenshots and a typed list of changes per release",
+            updated: "",
+            created: "2026-11-19",
+          },
+        ],
+      },
       contact: {
         label: "Contact",
         image: {
@@ -402,6 +421,44 @@ export const blocks = {
               "Podcast browse page with hero player, continue listening row, and sticky mini player",
             updated: "",
             created: "2026-07-26",
+          },
+        ],
+      },
+      billing: {
+        label: "Billing",
+        image: {
+          light: "/images/blocks/billing-light.jpg",
+          dark: "/images/blocks/billing-dark.jpg",
+        },
+        description: "Billing and usage pages for SaaS apps",
+        href: "/blocks/billing",
+        keywords: "billing, usage, plan, invoices, subscription, app",
+        examples: [
+          {
+            title: "Billing1",
+            description:
+              "Billing page with the current plan, seats, payment method, usage meters that warn at 80% and invoice history",
+            updated: "",
+            created: "2026-11-19",
+          },
+        ],
+      },
+      onboarding: {
+        label: "Onboarding",
+        image: {
+          light: "/images/blocks/onboarding-light.jpg",
+          dark: "/images/blocks/onboarding-dark.jpg",
+        },
+        description: "First-run checklists and setup flows",
+        href: "/blocks/onboarding",
+        keywords: "onboarding, checklist, setup, first run, getting started, app",
+        examples: [
+          {
+            title: "Onboarding1",
+            description:
+              "First-run checklist with progress, time per step and the next step expanded",
+            updated: "",
+            created: "2026-11-19",
           },
         ],
       },
@@ -795,6 +852,31 @@ export const blocks = {
     title: "Sections",
     icon: "blocks",
     items: {
+      cta: {
+        label: "Call to action",
+        image: {
+          light: "/images/blocks/cta-light.jpg",
+          dark: "/images/blocks/cta-dark.jpg",
+        },
+        description: "Closing call-to-action sections for landing pages",
+        href: "/blocks/cta",
+        keywords: "cta, call to action, signup, banner, section",
+        examples: [
+          {
+            title: "Cta1",
+            description: "Full-bleed closing band with a brand glow, headline and button pair",
+            updated: "",
+            created: "2026-11-19",
+          },
+          {
+            title: "Cta2",
+            description:
+              "Developer CTA panel with a copyable install command and a product screenshot",
+            updated: "",
+            created: "2026-11-19",
+          },
+        ],
+      },
       faq: {
         label: "FAQ",
         image: {
@@ -1212,6 +1294,25 @@ export const blocks = {
               "Three-tier pricing with monthly/annual toggle and animated CountFx prices",
             updated: "",
             created: "2026-07-21",
+          },
+        ],
+      },
+      stats: {
+        label: "Stats",
+        image: {
+          light: "/images/blocks/stats-light.jpg",
+          dark: "/images/blocks/stats-dark.jpg",
+        },
+        description: "Metrics and numbers sections",
+        href: "/blocks/stats",
+        keywords: "stats, metrics, numbers, kpi, sparkline, section",
+        examples: [
+          {
+            title: "Stats1",
+            description:
+              "Four metrics in one divided surface, each with its label, detail and a sparkline",
+            updated: "",
+            created: "2026-11-19",
           },
         ],
       },
