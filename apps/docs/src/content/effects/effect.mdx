@@ -28,19 +28,19 @@ For heavier, cinematic WebGL scenes (a black hole, aurora, liquid glass), see th
   preview={
     <Row fillWidth gap="12" padding="12" m={{direction: "column"}}>
       <Effect type="blob" height="14rem" radius="l" border="neutral-alpha-weak" vertical="end" padding="12">
-        <Tag size="s" label="blob" background="page" />
+        <Row background="page" radius="s"><Tag size="s" label="blob" /></Row>
       </Effect>
       <Effect type="matrix" height="14rem" radius="l" border="neutral-alpha-weak" vertical="end" padding="12"
         colors={["brand-solid-strong", "accent-solid-medium"]} matrix={{ size: 2, spacing: 6, flicker: true }}>
-        <Tag size="s" label="matrix" background="page" />
+        <Row background="page" radius="s"><Tag size="s" label="matrix" /></Row>
       </Effect>
       <Effect type="particle" height="14rem" radius="l" border="neutral-alpha-weak" vertical="end" padding="12"
         colors={["brand-on-background-medium"]} particle={{ density: 160, size: "4", interactive: true }}>
-        <Tag size="s" label="particle" background="page" />
+        <Row background="page" radius="s"><Tag size="s" label="particle" /></Row>
       </Effect>
       <Effect type="weather" height="14rem" radius="l" border="neutral-alpha-weak" vertical="end" padding="12"
         colors={["accent-on-background-weak"]} weather={{ type: "rain", intensity: 120, angle: 12 }}>
-        <Tag size="s" label="weather" background="page" />
+        <Row background="page" radius="s"><Tag size="s" label="weather" /></Row>
       </Effect>
     </Row>
   }
