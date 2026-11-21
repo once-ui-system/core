@@ -7,7 +7,8 @@ import { currentVersion, stableVersion, versionHref } from "@/resources/versions
  * like `AvailabilityNotice`, which sits in the same place.
  */
 export function VersionNotice({ path }: { path: string }) {
-  if (currentVersion.status !== "beta") return null;
+  if (currentVersion.status === "stable") return null;
+  const beta = currentVersion.status === "beta";
 
   return (
     <Row
@@ -29,8 +30,18 @@ export function VersionNotice({ path }: { path: string }) {
         onBackground="neutral-strong"
         style={{ flex: 1, minWidth: "12rem" }}
       >
-        <Text onBackground="warning-strong">Prerelease docs.</Text> This describes the{" "}
-        <code>@{currentVersion.npmTag}</code> release. The stable release is documented in{" "}
+        {beta ? (
+          <>
+            <Text onBackground="warning-strong">Prerelease docs.</Text> This describes the{" "}
+            <code>@{currentVersion.npmTag}</code> release.
+          </>
+        ) : (
+          <>
+            <Text onBackground="warning-strong">Previous major version.</Text> These docs describe{" "}
+            {currentVersion.label}.
+          </>
+        )}{" "}
+        The current release is documented in{" "}
         <SmartLink href={versionHref(stableVersion, path)}>{stableVersion.label}</SmartLink>.
       </Text>
     </Row>
