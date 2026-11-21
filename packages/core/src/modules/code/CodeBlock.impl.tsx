@@ -5,7 +5,7 @@ import React, { ReactNode, RefObject, useEffect, useRef, useState } from "react"
 import ReactDOM from "react-dom";
 import { Button } from "../../components/Button.js";
 import { Column } from "../../components/Column.js";
-import { Fade } from "../../components/Fade.js";
+import { type BaseColor, Fade } from "../../components/Fade.js";
 import { Flex } from "../../components/Flex.js";
 import { Icon } from "../../components/Icon.js";
 import { IconButton } from "../../components/IconButton.js";
@@ -960,7 +960,12 @@ const CodeBlock = ({
                       zIndex={1}
                       // The block paints its own surface, so fading to the page
                       // colour left a band of the wrong colour over the code.
-                      base={background ?? "surface"}
+                      // An opacity or the gradient has no fade colour of its own.
+                      base={
+                        background && !background.includes("/") && background !== "gradient"
+                          ? (background as BaseColor)
+                          : "surface"
+                      }
                       style={
                         styleBackgroundColor
                           ? ({ "--base-color": styleBackgroundColor } as React.CSSProperties)

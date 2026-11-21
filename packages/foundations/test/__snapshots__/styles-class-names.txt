@@ -206,6 +206,7 @@
 .g-vertical--1
 .g-xl
 .g-xs
+.gradient-background
 .grid-columns-1
 .grid-columns-10
 .grid-columns-11

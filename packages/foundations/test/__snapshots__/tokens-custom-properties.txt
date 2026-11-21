@@ -1,3 +1,4 @@
+--accent-alpha
 --accent-alpha-medium
 --accent-alpha-strong
 --accent-alpha-weak
@@ -7,6 +8,9 @@
 --accent-border-medium
 --accent-border-strong
 --accent-border-weak
+--accent-color-medium
+--accent-color-strong
+--accent-color-weak
 --accent-on-background-medium
 --accent-on-background-strong
 --accent-on-background-weak
@@ -18,6 +22,7 @@
 --accent-solid-weak
 --backdrop
 --backdrop-filter
+--brand-alpha
 --brand-alpha-medium
 --brand-alpha-strong
 --brand-alpha-weak
@@ -47,6 +52,7 @@
 --code-orange
 --code-violet
 --cursor-interactive
+--danger-alpha
 --danger-alpha-medium
 --danger-alpha-strong
 --danger-alpha-weak
@@ -237,9 +243,11 @@
 --function-warning-700
 --function-warning-800
 --function-warning-900
+--gradient-brand-accent
 --header-height
 --icon-linecap
 --icon-linejoin
+--info-alpha
 --info-alpha-medium
 --info-alpha-strong
 --info-alpha-weak
@@ -282,6 +290,7 @@
 --line-height-label-s
 --line-height-label-xl
 --line-height-label-xs
+--neutral-alpha
 --neutral-alpha-medium
 --neutral-alpha-strong
 --neutral-alpha-weak
@@ -685,6 +694,7 @@
 --static-width-640
 --static-width-768
 --static-width-880
+--success-alpha
 --success-alpha-medium
 --success-alpha-strong
 --success-alpha-weak
@@ -720,6 +730,7 @@
 --transition-micro-medium
 --transition-micro-short
 --transition-property-all
+--warning-alpha
 --warning-alpha-medium
 --warning-alpha-strong
 --warning-alpha-weak
