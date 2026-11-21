@@ -20,8 +20,10 @@ const nextConfig = {
   // A version other than the stable one is served under its path on the
   // stable site (docs.once-ui.com/beta), which mounts it with the rewrites
   // below. See src/resources/versions.data.js.
-  basePath: currentVersion.path || undefined,
-  env: { NEXT_PUBLIC_DOCS_BASE_PATH: currentVersion.path },
+  // CI's render and visual checks run the build at the root of localhost
+  // (DOCS_AT_ROOT, set in ci.yml and visual.yml); Vercel serves it under /v2.
+  basePath: process.env.DOCS_AT_ROOT ? undefined : currentVersion.path || undefined,
+  env: { NEXT_PUBLIC_DOCS_BASE_PATH: process.env.DOCS_AT_ROOT ? "" : currentVersion.path },
   async rewrites() {
     return { beforeFiles: versionRewrites() };
   },

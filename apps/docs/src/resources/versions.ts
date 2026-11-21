@@ -54,8 +54,12 @@ export const currentVersion: DocsVersion = current as DocsVersion;
 export const stableVersion: DocsVersion =
   VERSIONS.find((v) => v.status === "stable") ?? currentVersion;
 
-/** This build's `basePath`, for the few URLs Next does not prefix itself. */
-export const basePath = currentVersion.path;
+/**
+ * This build's `basePath`, for the few URLs Next does not prefix itself. It
+ * comes from next.config, which leaves it empty for CI's root-served build
+ * (DOCS_AT_ROOT).
+ */
+export const basePath: string = process.env.NEXT_PUBLIC_DOCS_BASE_PATH ?? currentVersion.path;
 
 /** The address of `path` in another version. */
 export function versionHref(version: DocsVersion, path: string): string {
