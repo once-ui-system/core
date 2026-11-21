@@ -23,6 +23,11 @@ on:
       - "pnpm-lock.yaml"
       - ".github/workflows/visual.yml"
 
+# The frozen 2.x docs build under /v2 on Vercel; the checks here run them at
+# the root of localhost, as their scripts expect.
+env:
+  DOCS_AT_ROOT: "1"
+
 permissions:
   contents: read
 
