@@ -22,7 +22,7 @@
  * `brand-weak` became `var(--brand-weak)`, neither of which paints anything.
  */
 
-import { splitAlpha, withAlpha } from "../utils/colorAlpha.js";
+import { splitAlpha, withAlpha } from "./alpha.js";
 
 const FUNCTION = /^[a-z-]+\(.*\)$/is;
 
