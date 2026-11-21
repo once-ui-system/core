@@ -1,7 +1,7 @@
 ---
 title: "MegaMenu"
 summary: "MegaMenu displays a top-level navigation bar with expandable dropdowns for organized access to grouped links. It supports dynamic sizing and contextual visibility."
-updatedAt: "2025-10-06"
+updatedAt: "2026-11-21"
 docs: "once-ui/modules/megaMenu.mdx"
 github: "modules/navigation/MegaMenu.tsx"
 navLabel: "MegaMenu"
@@ -15,338 +15,66 @@ Use `MegaMenu` for complex navigational layouts where primary sections include s
 
   marginBottom="24"
   codeHeight="24rem"
-  preview={
-    <Row fillWidth height="20rem" overflow="hidden">
-    <MegaMenu
-      menuGroups={[
-        {
-      id: "products",
-      label: "Products",
-      suffixIcon: "chevronDown",
-      sections: [
-        {
-          title: "Featured",
-          links: [
-            {
-              label: "Analytics",
-              href: "#",
-              icon: "analytics",
-              description: "Get insights into your data",
-            },
-            {
-              label: "Security",
-              href: "#",
-              icon: "security",
-              description: "Protect your assets",
-            },
-          ],
-        },
-        {
-          title: "Tools",
-          links: [
-            {
-              label: "Dashboard",
-              href: "#",
-              icon: "apps",
-              description: "Monitor your metrics",
-            },
-            {
-              label: "Settings",
-              href: "#",
-              icon: "settings",
-              description: "Configure your preferences",
-            },
-            {
-              label: "Monitor",
-              href: "#",
-              icon: "screen",
-              description: "Monitor your metrics",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: "solutions",
-      label: "Solutions",
-      suffixIcon: "chevronDown",
-      sections: [
-        {
-          title: "By industry",
-          links: [
-            {
-              label: "Enterprise",
-              href: "#",
-              icon: "components",
-              description: "Solutions for large organizations",
-            },
-            {
-              label: "Startups",
-              href: "#",
-              icon: "rocket",
-              description: "Perfect for growing companies",
-            },
-          ],
-        },
-        {
-          title: "By team",
-          links: [
-            {
-              label: "Developers",
-              href: "#",
-              icon: "code",
-              description: "Tools and APIs",
-            },
-            {
-              label: "Design teams",
-              href: "#",
-              icon: "sparkle",
-              description: "Creative solutions",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: "resources",
-      label: "Resources",
-      suffixIcon: "chevronDown",
-      sections: [
-        {
-          title: "Documentation",
-          links: [
-            {
-              label: "Guides",
-              href: "#",
-              icon: "pages",
-              description: "Learn how to use our platform",
-            },
-            {
-              label: "API reference",
-              href: "#",
-              icon: "code",
-              description: "Technical documentation",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: "company",
-      label: "Company",
-      suffixIcon: "chevronDown",
-      sections: [
-        {
-          title: "About",
-          links: [
-            {
-              label: "Our story",
-              href: "#",
-              icon: "pages",
-              description: "Learn about our journey",
-            },
-            {
-              label: "Careers",
-              href: "#",
-              icon: "rocket",
-              description: "Join our team",
-            },
-          ],
-        },
-        {
-          title: "Connect",
-          links: [
-            {
-              label: "Blog",
-              href: "#",
-              icon: "document",
-              description: "Latest updates and news",
-            },
-            {
-              label: "Contact",
-              href: "#",
-              icon: "email",
-              description: "Get in touch with us",
-            },
-          ],
-        },
-      ],
-    },
-      ]}
-    />
-  </Row>
-  }
+  previewPadding="0"
+  preview={<MegaMenuSiteExample />}
   codes={[
     {
       code:
-`<MegaMenu
-    menuGroups={[
-      {
-        id: "products",
-        label: "Products",
-        suffixIcon: "chevronDown",
-        sections: [
-          {
-            title: "Featured",
-            links: [
-              {
-                label: "Analytics",
-                href: "/analytics",
-                icon: "barChart",
-                description: "Get insights into your data",
-              },
-              {
-                label: "Security",
-                href: "/security",
-                icon: "security",
-                description: "Protect your assets",
-              },
-            ],
-          },
-          {
-            title: "Tools",
-            links: [
-              {
-                label: "Dashboard",
-                href: "/dashboard",
-                icon: "trendUp",
-                description: "Monitor your metrics",
-              },
-              {
-                label: "Settings",
-                href: "/settings",
-                icon: "settings",
-                description: "Configure your preferences",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        id: "solutions",
-        label: "Solutions",
-        suffixIcon: "chevronDown",
-        sections: [
-          {
-            title: "By industry",
-            links: [
-              {
-                label: "Enterprise",
-                href: "/enterprise",
-                icon: "cube",
-                description: "Solutions for large organizations",
-              },
-              {
-                label: "Startups",
-                href: "/startups",
-                icon: "rocket",
-                description: "Perfect for growing companies",
-              },
-            ],
-          },
-          {
-            title: "By team",
-            links: [
-              {
-                label: "Developers",
-                href: "/developers",
-                icon: "code",
-                description: "Tools and APIs",
-              },
-              {
-                label: "Design teams",
-                href: "/design",
-                icon: "sparkle",
-                description: "Creative solutions",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        id: "resources",
-        label: "Resources",
-        suffixIcon: "chevronDown",
-        sections: [
-          {
-            title: "Documentation",
-            links: [
-              {
-                label: "Guides",
-                href: "/guides",
-                icon: "book",
-                description: "Learn how to use our platform",
-              },
-              {
-                label: "API reference",
-                href: "/api",
-                icon: "code",
-                description: "Technical documentation",
-              },
-            ],
-          },
-          {
-            title: "Support",
-            links: [
-              {
-                label: "Help center",
-                href: "/help",
-                icon: "help",
-                description: "Get your questions answered",
-              },
-              {
-                label: "Community",
-                href: "/community",
-                icon: "people",
-                description: "Connect with other users",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        id: "company",
-        label: "Company",
-        suffixIcon: "chevronDown",
-        sections: [
-          {
-            title: "About",
-            links: [
-              {
-                label: "Our story",
-                href: "/about",
-                icon: "book",
-                description: "Learn about our journey",
-              },
-              {
-                label: "Careers",
-                href: "/careers",
-                icon: "rocket",
-                description: "Join our team",
-              },
-            ],
-          },
-          {
-            title: "Connect",
-            links: [
-              {
-                label: "Blog",
-                href: "/blog",
-                icon: "document",
-                description: "Latest updates and news",
-              },
-              {
-                label: "Contact",
-                href: "/contact",
-                icon: "email",
-                description: "Get in touch with us",
-              },
-            ],
-          },
-        ],
-      },
-    ]}
-/>`,
+`<Row fillWidth paddingX="16" paddingY="12" gap="16" vertical="center">
+  <Logo text="Ledger" symbol="barChart" tone="brand" size="s" href="/" />
+  <Row flex={1}>
+    <MegaMenu
+      menuGroups={[
+        {
+          id: "product",
+          label: "Product",
+          suffixIcon: "chevronDown",
+          sections: [
+            {
+              title: "Platform",
+              links: [
+                { label: "Dashboards", href: "/dashboards", icon: "barChart", description: "One live view" },
+                { label: "Reports", href: "/reports", icon: "document", description: "Sent every Monday" },
+                { label: "Automations", href: "/automations", icon: "bolt", description: "Act when numbers move" },
+              ],
+            },
+            {
+              title: "Connect",
+              links: [
+                { label: "Integrations", href: "/integrations", icon: "puzzle", description: "Stripe, HubSpot, 80 more" },
+                { label: "API", href: "/api", icon: "code", description: "Build on your data" },
+                { label: "Security", href: "/security", icon: "security", description: "SSO and audit logs" },
+              ],
+            },
+          ],
+        },
+        {
+          id: "solutions",
+          label: "Solutions",
+          suffixIcon: "chevronDown",
+          content: <SolutionsPanel />, // see Custom content below
+        },
+        {
+          id: "resources",
+          label: "Resources",
+          suffixIcon: "chevronDown",
+          sections: [
+            {
+              title: "Learn and get help",
+              links: [
+                { label: "Documentation", href: "/docs", icon: "book", description: "Guides and the API reference" },
+                { label: "Changelog", href: "/changelog", icon: "newspaper", description: "What shipped this week" },
+                { label: "Help center", href: "/help", icon: "lifebuoy", description: "Answers to common questions" },
+                { label: "Community", href: "/community", icon: "chat", description: "Ask other Ledger teams" },
+              ],
+            },
+          ],
+        },
+        { id: "pricing", label: "Pricing", href: "/pricing" },
+      ]}
+    />
+  </Row>
+</Row>`,
       language: "tsx",
       label: "MegaMenu"
     }
@@ -362,101 +90,55 @@ You can use the `content` prop to render custom JSX instead of the default secti
   marginBottom="24"
   codeHeight="20rem"  collapsible={false}
 
-  preview={
-    <Row fillWidth height="20rem" overflow="hidden">
-      <MegaMenu
-        menuGroups={[
-          {
-            id: "featured",
-            label: "Featured",
-            suffixIcon: "chevronDown",
-            content: (
-              <Column gap="16" padding="8">
-                <Text textVariant="heading-strong-s" marginLeft="16">
-                  New Release
-                </Text>
-                <Row gap="12">
-                  <Card
-                    padding="16"
-                    radius="m"
-                    width="12rem"
-                    border
-                    href="#"
-                  >
-                    <Column gap="8">
-                      <Icon name="sparkle" size="s" onBackground="neutral-weak" marginBottom="8" />
-                      <Text textVariant="label-strong-m">AI Features</Text>
-                      <Text textVariant="body-default-s" onBackground="neutral-weak">
-                        Agents and Chatbots
-                      </Text>
-                    </Column>
-                  </Card>
-                  <Card
-                    padding="16"
-                    radius="m"
-                    width="12rem"
-                    border
-                    href="#"
-                  >
-                    <Column gap="8">
-                      <Icon name="rocket" size="s" onBackground="neutral-weak" marginBottom="8" />
-                      <Text textVariant="label-strong-m">Performance</Text>
-                      <Text textVariant="body-default-s" onBackground="neutral-weak">
-                        10x faster than before
-                      </Text>
-                    </Column>
-                  </Card>
-                </Row>
-              </Column>
-            ),
-          },
-          {
-            id: "products",
-            label: "Products",
-            href: "#",
-          },
-        ]}
-      />
-    </Row>
-  }
+  previewPadding="0"
+  preview={<MegaMenuCustomExample />}
   codes={[
     {
       code:
-`<MegaMenu
-    menuGroups={[
-      {
-        id: "featured",
-        label: "Featured",
-        suffixIcon: "chevronDown",
-        content: (
-          <Column gap="16" padding="8">
-            <Text textVariant="heading-strong-l" marginBottom="8">
-              New Release
-            </Text>
-            <Row gap="12">
-              <Card padding="16" radius="m" border="neutral-alpha-medium">
-                <Column gap="8">
-                  <Icon name="sparkle" size="l" onBackground="brand-medium" />
-                  <Text textVariant="label-strong-m">AI Features</Text>
-                  <Text textVariant="body-default-s" onBackground="neutral-weak">
-                    Explore our new AI-powered tools
-                  </Text>
-                </Column>
-              </Card>
-              <Card padding="16" radius="m" border="neutral-alpha-medium">
-                <Column gap="8">
-                  <Icon name="rocket" size="l" onBackground="accent-medium" />
-                  <Text textVariant="label-strong-m">Performance</Text>
-                  <Text textVariant="body-default-s" onBackground="neutral-weak">
-                    10x faster than before
-                  </Text>
-                </Column>
-              </Card>
+`// A group's \`content\` replaces the sections layout with your own panel.
+function SolutionsPanel() {
+  return (
+    <Row gap="12" padding="4">
+      <Column gap="4" width={224}>
+        <Row paddingX="12" paddingY="8">
+          <Text textVariant="label-default-s" onBackground="neutral-weak">By team</Text>
+        </Row>
+        {[
+          { icon: "trendUp", title: "Finance", description: "Close the month faster" },
+          { icon: "megaphone", title: "Marketing", description: "Campaigns that pay back" },
+          { icon: "people", title: "Operations", description: "Hiring and capacity" },
+        ].map((item) => (
+          <Card key={item.title} href="#" paddingX="12" paddingY="4" radius="l" gap="12" vertical="center" border="transparent">
+            <Row center width="40" height="40" radius="m" background="neutral-alpha-weak">
+              <Icon name={item.icon} size="s" />
             </Row>
-          </Column>
-        ),
-      },
-    ]}
+            <Column gap="2">
+              <Text textVariant="label-strong-s">{item.title}</Text>
+              <Text textVariant="body-default-xs" onBackground="neutral-weak">{item.description}</Text>
+            </Column>
+          </Card>
+        ))}
+      </Column>
+      <Card href="/blog/ledger-2" direction="column" width="12rem" padding="16" gap="12" radius="l"
+        background="brand-alpha-weak" border="brand-alpha-medium">
+        <Row center width="40" height="40" radius="m" solid="brand-strong" marginBottom="8">
+          <Icon name="rocket" size="s" onSolid="brand-strong" />
+        </Row>
+        <Tag size="s" tone="brand" label="New" />
+        <Text textVariant="heading-strong-s">Ledger 2.0 is here</Text>
+        <Text textVariant="body-default-s" onBackground="neutral-medium">
+          Live dashboards and a faster sync for every team.
+        </Text>
+      </Card>
+    </Row>
+  );
+}
+
+<MegaMenu
+  menuGroups={[
+    { id: "solutions", label: "Solutions", suffixIcon: "chevronDown", content: <SolutionsPanel /> },
+    { id: "pricing", label: "Pricing", href: "/pricing" },
+  ]}
 />`,
       language: "tsx",
       label: "Custom content"
