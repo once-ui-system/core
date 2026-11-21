@@ -222,7 +222,7 @@ export const SITE_MENU: MenuGroup[] = [
  * A site header the menu sits in: brand, the bar, actions, and a hero below
  * for the panels to open over, so the preview reads like a page.
  */
-function SiteFrame({ groups, height = "32rem" }: { groups: MenuGroup[]; height?: string }) {
+function SiteFrame({ groups, height = 512 }: { groups: MenuGroup[]; height?: number }) {
   return (
     <Column fillWidth height={height} background="page">
       <Row
@@ -261,7 +261,7 @@ export function MegaMenuSiteExample() {
 export function MegaMenuCustomExample() {
   return (
     <SiteFrame
-      height="26rem"
+      height={416}
       groups={SITE_MENU.filter((g) => g.id === "solutions" || g.id === "pricing")}
     />
   );
