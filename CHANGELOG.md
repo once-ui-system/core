@@ -30,6 +30,10 @@ item (see `ROADMAP.md`, Week 4).
   label, as before. `truncate` sets it either way. The
   icons keep their size.
   The docs sidebar's page titles truncate beside their tags.
+- `Option`: a `danger` option (Delete in a menu) now keeps the hierarchy of the rows
+  around it: the label carries the contrast (`danger-on-background-medium`, pale on dark,
+  deep on light) and the prefix icon the colour (`danger-on-background-weak`). Both were
+  the saturated tone, so the label read dimmer than its neighbours on dark.
 
 ## [3.0.0] - 2026-11-19
 

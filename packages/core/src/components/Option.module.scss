@@ -12,7 +12,7 @@
 // confirmation that follows carries the weight.
 @mixin danger-active {
     background: var(--danger-alpha-weak);
-    color: var(--danger-on-background-weak);
+    color: var(--danger-on-background-medium);
 }
 
 // An option sits in a panel of radius l with 4px of padding (Dropdown,
@@ -62,10 +62,16 @@
         }
     }
   
-    // "weak" is the saturated end of the scale in both themes; "medium"
-    // reads almost white on a dark background.
+    // A danger option keeps the hierarchy of the others: the label carries
+    // the contrast ("medium": a pale red on dark, a deep red on light) and the
+    // icon the colour ("weak", the saturated end of the scale in both
+    // themes). An icon given its own colour keeps it.
     &.danger {
-        color: var(--danger-on-background-weak);
+        color: var(--danger-on-background-medium);
+
+        .prefix {
+            color: var(--danger-on-background-weak);
+        }
   
         &:focus {
             @include danger-active;
