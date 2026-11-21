@@ -103,11 +103,11 @@ function SolutionsPanel() {
         <Row paddingX="12" paddingY="8">
           <Text textVariant="label-default-s" onBackground="neutral-weak">By team</Text>
         </Row>
-        {[
+        {([
           { icon: "trendUp", title: "Finance", description: "Close the month faster" },
           { icon: "megaphone", title: "Marketing", description: "Campaigns that pay back" },
           { icon: "people", title: "Operations", description: "Hiring and capacity" },
-        ].map((item) => (
+        ] as const).map((item) => (
           <Card key={item.title} href="#" paddingX="12" paddingY="4" radius="l" gap="12" vertical="center" border="transparent">
             <Row center width="40" height="40" radius="m" background="neutral-alpha-weak">
               <Icon name={item.icon} size="s" />
