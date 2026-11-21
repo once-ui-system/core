@@ -173,7 +173,10 @@ when a child is added, removed or reordered.
 ## Surface
 
 Background, border, radius and shadow are all tokens. A colour is a scheme and a
-weight (`brand-medium`, `neutral-alpha-weak`), never a hex.
+weight (`brand-medium`, `neutral-alpha-weak`), never a hex. Any of them takes an
+opacity after a slash: `brand/12` is the brand hue at 12%, `brand-strong/40` the
+prop's own token at 40%, and `background="gradient"` draws brand to accent
+(`gradient/16` at 16%). See [any colour at any opacity](/basics/color#any-colour-at-any-opacity).
 
 <CodeBlock
   marginTop="16"
@@ -182,6 +185,8 @@ weight (`brand-medium`, `neutral-alpha-weak`), never a hex.
     <Row fillWidth gap="12" wrap>
       <Flex width="80" height="56" radius="m" background="surface" border="neutral-alpha-medium" />
       <Flex width="80" height="56" radius="m" background="brand-alpha-weak" border="brand-alpha-medium" />
+      <Flex width="80" height="56" radius="m" background="brand/12" border="brand/22" />
+      <Flex width="80" height="56" radius="m" background="gradient" />
       <Flex width="80" height="56" radius="l" background="surface" shadow="l" />
     </Row>
   }
@@ -190,6 +195,8 @@ weight (`brand-medium`, `neutral-alpha-weak`), never a hex.
       code:
 `<Flex radius="m" background="surface" border="neutral-alpha-medium" />
 <Flex radius="m" background="brand-alpha-weak" border="brand-alpha-medium" />
+<Flex radius="m" background="brand/12" border="brand/22" />
+<Flex radius="m" background="gradient" />
 <Flex radius="l" background="surface" shadow="l" />`,
       language: "tsx",
       label: "Surface"

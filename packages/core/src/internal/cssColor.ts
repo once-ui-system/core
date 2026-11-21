@@ -22,6 +22,8 @@
  * `brand-weak` became `var(--brand-weak)`, neither of which paints anything.
  */
 
+import { splitAlpha, withAlpha } from "./alpha.js";
+
 const FUNCTION = /^[a-z-]+\(.*\)$/is;
 
 const KEYWORDS = new Set(["transparent", "currentcolor", "inherit", "initial", "unset", "revert"]);
@@ -59,6 +61,8 @@ const DATA_HUES = new Set(
 /** The theme's own colours, which a chart takes as hues: `brand`, `accent`. */
 const THEME_HUES = new Set(["brand", "accent"]);
 
+const TONES = new Set(["neutral", "brand", "accent", "info", "danger", "warning", "success"]);
+
 const TONE_WEIGHT = /^(neutral|brand|accent|info|danger|warning|success)-(weak|medium|strong)$/;
 
 /** A value CSS can paint as written, with no token lookup. */
@@ -72,6 +76,16 @@ export function isRawColor(value: string): boolean {
 /** A colour prop as a CSS value; see the comment at the top of this file. */
 export function cssColor(value: string, prefix = ""): string {
   const v = value.trim();
+  // Any of the forms below at an opacity: `brand/12` is the tone itself (its
+  // alpha colour), `brand-strong/40` or `--my-hue/40` that colour at 40%. A
+  // raw function keeps its own slashes (`rgb(0 0 0 / 50%)`).
+  if (!FUNCTION.test(v)) {
+    const [base, alpha] = splitAlpha(v);
+    if (alpha !== undefined && base) {
+      const color = TONES.has(base) && !prefix ? `var(--${base}-alpha)` : cssColor(base, prefix);
+      return withAlpha(color, alpha);
+    }
+  }
   if (prefix && DATA_HUES.has(v)) return `var(--${prefix}${v})`;
   // In a chart, `brand` and `accent` are the theme's colours at the step the
   // palette hues are drawn at, so they sit with them in light and dark. A bare

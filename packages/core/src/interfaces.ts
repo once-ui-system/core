@@ -9,6 +9,7 @@ import type { BorderStyle, SolidType, SurfaceStyle } from "./contexts/ThemeProvi
 import type {
   BlendMode,
   BlurSize,
+  ColorAlpha,
   Colors,
   CSSUnit,
   FlexValue,
@@ -258,15 +259,30 @@ export interface SpacingProps {
 export interface StyleProps {
   /** The typography preset for the text inside, `${family}-${weight}-${size}`. */
   textVariant?: TextVariant;
-  background?: Colors | "surface" | "overlay" | "page" | "transparent";
-  solid?: Colors;
-  borderTop?: Colors | "surface" | "transparent" | boolean;
-  borderRight?: Colors | "surface" | "transparent" | boolean;
-  borderBottom?: Colors | "surface" | "transparent" | boolean;
-  borderLeft?: Colors | "surface" | "transparent" | boolean;
-  borderX?: Colors | "surface" | "transparent" | boolean;
-  borderY?: Colors | "surface" | "transparent" | boolean;
-  border?: Colors | "surface" | "transparent" | boolean;
+  /**
+   * A role colour (`"brand-medium"`, `"accent-alpha-weak"`), a named surface,
+   * or `"gradient"` for brand to accent (turn it with `--gradient-angle`).
+   * Any of the colours takes an opacity after a slash: `"brand/12"`,
+   * `"brand-strong/40"`, `"gradient/16"`.
+   */
+  background?:
+    | Colors
+    | ColorAlpha
+    | "surface"
+    | "overlay"
+    | "page"
+    | "transparent"
+    | "gradient"
+    | `gradient/${number}`;
+  /** A solid fill colour; takes an opacity after a slash, as `background` does. */
+  solid?: Colors | ColorAlpha;
+  borderTop?: Colors | ColorAlpha | "surface" | "transparent" | boolean;
+  borderRight?: Colors | ColorAlpha | "surface" | "transparent" | boolean;
+  borderBottom?: Colors | ColorAlpha | "surface" | "transparent" | boolean;
+  borderLeft?: Colors | ColorAlpha | "surface" | "transparent" | boolean;
+  borderX?: Colors | ColorAlpha | "surface" | "transparent" | boolean;
+  borderY?: Colors | ColorAlpha | "surface" | "transparent" | boolean;
+  border?: Colors | ColorAlpha | "surface" | "transparent" | boolean;
   borderStyle?: "solid" | "dashed";
   borderWidth?: 1 | 2 | 4 | 8 | "1" | "2" | "4" | "8";
   topRadius?: RadiusSize;
