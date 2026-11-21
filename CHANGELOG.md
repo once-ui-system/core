@@ -1010,6 +1010,15 @@ entry below that had landed by then:
 
 ### Fixed
 
+- **A fullscreen `CodeBlock` shows its preview beside the code on a wide screen.** From
+  1024px the preview and the code sit side by side, each scrolling on its own, instead of
+  the code below a tall preview. Narrower screens keep the stacked layout.
+- **Chart states have room.** The loading, empty and error states of every chart are padded
+  from the frame, so a long `errorState` no longer runs to the edges. Pass content only;
+  leave padding off the node.
+- **`WeatherFx` rain falls at a calmer pace** (`@once-ui-system/fx`), in step with snow and
+  leaves: about half its old speed. `speed` still scales it.
+
 - **`Pulse` keeps pulsing for visitors who ask for reduced motion.** The global reduced-motion
   rule cut its halo to a single 0.01ms run, which left a flat full-size disc where the live dot
   should be. With reduced motion the halo now stays at a fixed size and fades in and out.

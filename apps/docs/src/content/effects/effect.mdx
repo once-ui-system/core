@@ -26,16 +26,28 @@ For heavier, cinematic WebGL scenes (a black hole, aurora, liquid glass), see th
   marginBottom="24"
   previewPadding="0"
   preview={
-    <Row fillWidth gap="16" m={{direction: "column"}}>
-      <Effect type="blob" height="12rem" radius="l" />
-      <Effect type="matrix" height="12rem" radius="l" />
-      <Effect type="particle" height="12rem" radius="l" />
+    <Row fillWidth gap="12" padding="12" m={{direction: "column"}}>
+      <Effect type="blob" height="14rem" radius="l" border="neutral-alpha-weak" vertical="end" padding="12">
+        <Tag size="s" label="blob" background="page" />
+      </Effect>
+      <Effect type="matrix" height="14rem" radius="l" border="neutral-alpha-weak" vertical="end" padding="12"
+        colors={["brand-solid-strong", "accent-solid-medium"]} matrix={{ size: 2, spacing: 6, flicker: true }}>
+        <Tag size="s" label="matrix" background="page" />
+      </Effect>
+      <Effect type="particle" height="14rem" radius="l" border="neutral-alpha-weak" vertical="end" padding="12"
+        colors={["brand-on-background-medium"]} particle={{ density: 160, size: "4", interactive: true }}>
+        <Tag size="s" label="particle" background="page" />
+      </Effect>
+      <Effect type="weather" height="14rem" radius="l" border="neutral-alpha-weak" vertical="end" padding="12"
+        colors={["accent-on-background-weak"]} weather={{ type: "rain", intensity: 120, angle: 12 }}>
+        <Tag size="s" label="weather" background="page" />
+      </Effect>
     </Row>
   }
   codes={[
     {
       code:
-`<Effect type={theme.effect} height="12rem" radius="l" />`,
+`<Effect type={theme.effect} height="14rem" radius="l" />`,
       language: "tsx",
       label: "Effect"
     }
@@ -53,12 +65,13 @@ effect changes the look and nothing else about the layout.
   marginBottom="24"
   previewPadding="0"
   preview={
-    <Effect type="matrix" height="20rem" radius="l" colors={["brand-solid-medium"]}>
-      <Column fillWidth center gap="8">
-        <Heading textVariant="display-strong-l" onBackground="neutral-strong">
+    <Effect type="matrix" height="20rem" radius="l" center
+      colors={["brand-solid-strong", "accent-solid-medium"]} matrix={{ size: 2, spacing: 7, flicker: true }}>
+      <Column center gap="8" paddingX="32" paddingY="24" radius="xl" background="page" border="neutral-alpha-weak" shadow="l">
+        <Heading textVariant="display-strong-s" onBackground="neutral-strong">
           One setting
         </Heading>
-        <Text textVariant="body-default-m" onBackground="neutral-weak">
+        <Text textVariant="body-default-m" onBackground="neutral-medium">
           Swap the aesthetic without touching the page
         </Text>
       </Column>
@@ -67,13 +80,20 @@ effect changes the look and nothing else about the layout.
   codes={[
     {
       code:
-`<Effect type="matrix" height="20rem" radius="l" colors={["brand-solid-medium"]}>
-    <Column fillWidth center gap="8">
-      <Heading textVariant="display-strong-l">One setting</Heading>
-      <Text textVariant="body-default-m">
-        Swap the aesthetic without touching the page
-      </Text>
-    </Column>
+`<Effect
+  type="matrix"
+  height="20rem"
+  radius="l"
+  center
+  colors={["brand-solid-strong", "accent-solid-medium"]}
+  matrix={{ size: 2, spacing: 7, flicker: true }}
+>
+  <Column center gap="8" paddingX="32" paddingY="24" radius="xl" background="page" border="neutral-alpha-weak" shadow="l">
+    <Heading textVariant="display-strong-s">One setting</Heading>
+    <Text textVariant="body-default-m" onBackground="neutral-medium">
+      Swap the aesthetic without touching the page
+    </Text>
+  </Column>
 </Effect>`,
       language: "tsx",
       label: "Layered content"
@@ -98,18 +118,21 @@ and still switched with one prop.
       type="weather"
       height="16rem"
       radius="l"
-      colors={["accent-solid-medium"]}
-      weather={{ type: "snow", intensity: 0.6 }}
+      center
+      colors={["neutral-on-background-medium", "brand-on-background-weak"]}
+      weather={{ type: "snow", intensity: 160, angle: -8 }}
       matrix={{ flicker: true }}
-    />
+    >
+      <Text textVariant="heading-strong-m" onBackground="neutral-strong">First snow</Text>
+    </Effect>
   }
   codes={[
     {
       code:
 `<Effect
   type="weather"
-  colors={["accent-solid-medium"]}
-  weather={{ type: "snow", intensity: 0.6 }}
+  colors={["neutral-on-background-medium", "brand-on-background-weak"]}
+  weather={{ type: "snow", intensity: 160, angle: -8 }}
   matrix={{ flicker: true }}
 />`,
       language: "tsx",

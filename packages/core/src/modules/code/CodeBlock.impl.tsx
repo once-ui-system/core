@@ -697,6 +697,8 @@ const CodeBlock = ({
       minHeight="2.5rem"
       className={classNames(className, {
         [styles.fullscreen]: inPortal && isFullscreen,
+        // Fullscreen with a preview and code: side by side on a wide screen.
+        [styles.split]: inPortal && isFullscreen && !!preview && codes.length > 0 && !hideCode,
       })}
       style={{
         isolation: "isolate",
@@ -725,6 +727,7 @@ const CodeBlock = ({
           horizontal="between"
           background={background}
           style={{ backgroundColor: styleBackgroundColor }}
+          className={styles.header}
         >
           {codes.length > 1 ? (
             // A SegmentedControl, so the selected background slides from one
