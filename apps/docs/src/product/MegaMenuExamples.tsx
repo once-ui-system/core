@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Background,
   Card,
   Column,
   Icon,
@@ -48,42 +49,78 @@ function PanelLink({
   );
 }
 
-/** A launch card that leads a panel: tinted surface, tag, heading and a call to action. */
+const BARS = [28, 44, 36, 60, 52, 76];
+
+/**
+ * A launch card that leads a panel: a cover with a brand glow and a small
+ * live chart, then the tag, title, copy and call to action.
+ */
 function FeaturedCard() {
   return (
     <Card
       href="#"
       direction="column"
-      width="12rem"
-      padding="16"
-      gap="12"
+      width="12.5rem"
       radius="l"
-      background="brand-alpha-weak"
-      border="brand-alpha-medium"
+      overflow="hidden"
+      background="surface"
+      border="neutral-alpha-medium"
     >
-      <Row
-        center
-        width="40"
-        height="40"
-        radius="m"
-        solid="brand-strong"
-        marginBottom="8"
-      >
-        <Icon name="rocket" size="s" onSolid="brand-strong" />
-      </Row>
-      <Tag size="s" tone="brand" label="New" />
-      <Text textVariant="heading-strong-s" onBackground="neutral-strong">
-        Ledger 2.0 is here
-      </Text>
-      <Text textVariant="body-default-s" onBackground="neutral-medium">
-        Live dashboards and a faster sync for every team.
-      </Text>
-      <Row gap="4" vertical="center" marginTop="8">
-        <Text textVariant="label-strong-s" onBackground="brand-strong">
-          Read the launch post
+      <Column fillWidth height={120} position="relative" overflow="hidden" background="page">
+        <Background
+          position="absolute"
+          fill
+          gradient={{
+            display: true,
+            x: "50%",
+            y: "120%",
+            width: "90%",
+            height: "110%",
+            colorStart: "brand-solid-strong",
+            colorEnd: "static-transparent",
+          }}
+          dots={{ display: true, color: "brand-on-background-weak", size: "8", opacity: 40 }}
+        />
+        <Row
+          position="absolute"
+          bottom="0"
+          left="0"
+          right="0"
+          gap="8"
+          horizontal="center"
+          vertical="end"
+        >
+          {BARS.map((height, i) => (
+            <Column
+              key={height}
+              width={16}
+              height={height}
+              topLeftRadius="s"
+              topRightRadius="s"
+              {...(i === BARS.length - 1
+                ? { solid: "brand-strong" as const }
+                : { background: "surface" as const, border: "neutral-alpha-medium" as const })}
+            />
+          ))}
+        </Row>
+        <Row position="absolute" top="12" left="12">
+          <Tag size="s" tone="brand" label="New" />
+        </Row>
+      </Column>
+      <Column fillWidth padding="16" gap="8" borderTop="neutral-alpha-weak">
+        <Text textVariant="heading-strong-s" onBackground="neutral-strong">
+          Ledger 2.0 is here
         </Text>
-        <Icon name="arrowRight" size="xs" onBackground="brand-strong" />
-      </Row>
+        <Text textVariant="body-default-s" onBackground="neutral-weak">
+          Live dashboards, faster sync.
+        </Text>
+        <Row gap="4" vertical="center" marginTop="4">
+          <Text textVariant="label-strong-s" onBackground="brand-medium">
+            Read the launch post
+          </Text>
+          <Icon name="arrowRight" size="xs" onBackground="brand-medium" />
+        </Row>
+      </Column>
     </Card>
   );
 }
@@ -149,7 +186,7 @@ export const SITE_MENU: MenuGroup[] = [
     suffixIcon: "chevronDown",
     content: (
       <Row gap="12" padding="4" s={{ direction: "column" }}>
-        <Column gap="4" width={224}>
+        <Column gap="4" width={192}>
           <Row paddingX="12" paddingY="8">
             <Text textVariant="label-default-s" onBackground="neutral-weak">
               By team
@@ -163,7 +200,7 @@ export const SITE_MENU: MenuGroup[] = [
           <PanelLink
             icon="megaphone"
             title="Marketing"
-            description="Campaigns that pay back"
+            description="Spend that pays back"
           />
           <PanelLink
             icon="people"

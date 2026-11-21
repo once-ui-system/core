@@ -99,13 +99,13 @@ You can use the `content` prop to render custom JSX instead of the default secti
 function SolutionsPanel() {
   return (
     <Row gap="12" padding="4">
-      <Column gap="4" width={224}>
+      <Column gap="4" width={192}>
         <Row paddingX="12" paddingY="8">
           <Text textVariant="label-default-s" onBackground="neutral-weak">By team</Text>
         </Row>
         {([
           { icon: "trendUp", title: "Finance", description: "Close the month faster" },
-          { icon: "megaphone", title: "Marketing", description: "Campaigns that pay back" },
+          { icon: "megaphone", title: "Marketing", description: "Spend that pays back" },
           { icon: "people", title: "Operations", description: "Hiring and capacity" },
         ] as const).map((item) => (
           <Card key={item.title} href="#" paddingX="12" paddingY="4" radius="l" gap="12" vertical="center" border="transparent">
@@ -119,16 +119,31 @@ function SolutionsPanel() {
           </Card>
         ))}
       </Column>
-      <Card href="/blog/ledger-2" direction="column" width="12rem" padding="16" gap="12" radius="l"
-        background="brand-alpha-weak" border="brand-alpha-medium">
-        <Row center width="40" height="40" radius="m" solid="brand-strong" marginBottom="8">
-          <Icon name="rocket" size="s" onSolid="brand-strong" />
-        </Row>
-        <Tag size="s" tone="brand" label="New" />
-        <Text textVariant="heading-strong-s">Ledger 2.0 is here</Text>
-        <Text textVariant="body-default-s" onBackground="neutral-medium">
-          Live dashboards and a faster sync for every team.
-        </Text>
+      <Card href="/blog/ledger-2" direction="column" width="12.5rem" radius="l" overflow="hidden"
+        background="surface" border="neutral-alpha-medium">
+        <Column fillWidth height={120} position="relative" overflow="hidden" background="page">
+          <Background position="absolute" fill
+            gradient={{ display: true, x: "50%", y: "120%", width: "90%", height: "110%",
+              colorStart: "brand-solid-strong", colorEnd: "static-transparent" }}
+            dots={{ display: true, color: "brand-on-background-weak", size: "8", opacity: 40 }} />
+          <Row position="absolute" bottom="0" left="0" right="0" gap="8" horizontal="center" vertical="end">
+            {[28, 44, 36, 60, 52, 76].map((height, i, bars) => (
+              <Column key={height} width={16} height={height} topLeftRadius="s" topRightRadius="s"
+                {...(i === bars.length - 1
+                  ? { solid: "brand-strong" as const }
+                  : { background: "surface" as const, border: "neutral-alpha-medium" as const })} />
+            ))}
+          </Row>
+          <Row position="absolute" top="12" left="12"><Tag size="s" tone="brand" label="New" /></Row>
+        </Column>
+        <Column fillWidth padding="16" gap="8" borderTop="neutral-alpha-weak">
+          <Text textVariant="heading-strong-s">Ledger 2.0 is here</Text>
+          <Text textVariant="body-default-s" onBackground="neutral-weak">Live dashboards, faster sync.</Text>
+          <Row gap="4" vertical="center" marginTop="4">
+            <Text textVariant="label-strong-s" onBackground="brand-medium">Read the launch post</Text>
+            <Icon name="arrowRight" size="xs" onBackground="brand-medium" />
+          </Row>
+        </Column>
       </Card>
     </Row>
   );
