@@ -1010,6 +1010,7 @@ entry below that had landed by then:
 
 ### Fixed
 
+- `RadioButton`: the checked dot uses the brand's on-solid colour, as `Checkbox`'s tick does, so the checked radio reads as a ring around a dot in light and dark themes alike (it used the neutral on-solid colour, which matched the fill in dark themes).
 - **A fullscreen `CodeBlock` shows its preview beside the code on a wide screen.** From
   1024px the preview and the code sit side by side, each scrolling on its own, instead of
   the code below a tall preview. Narrower screens keep the stacked layout.
