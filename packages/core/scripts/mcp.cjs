@@ -338,6 +338,16 @@ function kitIdentity(source) {
   }
 }
 
+/** `src/brand/brand.json`, as `once-ui brand pull` and the brand API write it. */
+function kitJson(source) {
+  try {
+    const { mark, wordmark, ...rest } = JSON.parse(source);
+    return { ...rest, hasMark: Boolean(mark), hasWordmark: Boolean(wordmark) };
+  } catch {
+    return null;
+  }
+}
+
 function firstExisting(dir, files) {
   return files.find((file) => fs.existsSync(path.join(dir, file))) ?? null;
 }
@@ -352,8 +362,16 @@ function getBrand({ dir } = {}) {
   const style = stringFields(objectBody(config, "style"), STYLE_KEYS);
   const schema = stringFields(objectBody(config, "schema"), ["name", "description"]);
   const fonts = configFonts(config);
-  const kitFile = firstExisting(root, ["src/brand/brand.ts", "src/brand/brand.js"]);
-  const kit = kitFile ? kitIdentity(readIn(kitFile)) : null;
+  const kitFile = firstExisting(root, [
+    "src/brand/brand.json",
+    "src/brand/brand.ts",
+    "src/brand/brand.js",
+  ]);
+  const kit = kitFile
+    ? kitFile.endsWith(".json")
+      ? kitJson(readIn(kitFile))
+      : kitIdentity(readIn(kitFile))
+    : null;
   const files = BRAND_FILES.filter((file) => fs.existsSync(path.join(root, file)));
   const mascotFile = firstExisting(root, MASCOT_FILES);
   const mascotSeed = mascotFile
@@ -448,7 +466,7 @@ function getBrand({ dir } = {}) {
     "## Using it",
     "",
     '- Colour comes from tokens only: `brand-*` for the product\'s own colour (`onBackground="brand-medium"`, `background="brand-alpha-weak"`, `tone="brand"` on Button and Tag), `accent-*` for the second colour. Never write the hex in a component.',
-    "- Change the brand in `style` (and `fonts`) in the config, not per component.",
+    "- Change the brand in `style` (and `fonts`) in the config, not per component. `once-ui brand pull <id>` writes a saved Brand Kit brand into the app.",
     "- The logo is `<Logo>` with the files above; never an `Icon` and `Text` side by side.",
     "",
     `Read from ${root}${configFile ? ` (${configFile}${kitFile ? `, ${kitFile}` : ""})` : kitFile ? ` (${kitFile})` : ""}.`,
