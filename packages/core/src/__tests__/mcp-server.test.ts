@@ -1,6 +1,8 @@
 // @vitest-environment node
 import { spawn } from "node:child_process";
+import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 
@@ -82,6 +84,7 @@ describe("once-ui-mcp", () => {
       "get_task",
       "get_rules",
       "validate_code",
+      "get_brand",
     ]);
     expect(lines[2].result?.content?.[0].text).toContain(
       'import { Button } from "@once-ui-system/core";',
@@ -150,5 +153,57 @@ describe("once-ui-mcp", () => {
     }).text;
     expect(good).toBe("No mechanical issues found.");
     expect(call("validate_code", { code: "" }).isError).toBe(true);
+  });
+  it("reads the app's brand from its config, the kit's brand.ts and logo files", () => {
+    const dir = mkdtempSync(path.join(tmpdir(), "once-ui-brand-"));
+    const put = (file: string, text: string) => {
+      mkdirSync(path.dirname(path.join(dir, file)), { recursive: true });
+      writeFileSync(path.join(dir, file), text);
+    };
+    put(
+      "src/resources/once-ui.config.js",
+      `import { Sora } from "next/font/google";
+const heading = Sora({ variable: "--font-heading", subsets: ["latin"] });
+const style = {
+  theme: "dark",
+  neutral: "sand", // sand | gray
+  brand: "emerald",
+  accent: "orange",
+};
+const schema = { logo: "", name: "Fjell" };
+export { style, schema };`,
+    );
+    put(
+      "src/brand/brand.ts",
+      `export const brand: BrandIdentity = ${JSON.stringify({
+        name: "Fjell",
+        tagline: "Maps for the mountains",
+        brand: "#1f9d6b",
+        partner: "#4fd1c5",
+        mark: { viewBox: "0 0 24 24", paths: ["M0 0h24v24H0z"] },
+        font: "Sora",
+      })};\n`,
+    );
+    for (const f of ["icon-light", "icon-dark", "wordmark-light", "wordmark-dark"])
+      put(`public/trademarks/${f}.svg`, "<svg/>");
+
+    const { text, isError } = call("get_brand", { dir });
+    expect(isError).toBe(false);
+    expect(text).toContain("# Brand: Fjell");
+    expect(text).toContain("Maps for the mountains");
+    expect(text).toContain("- brand scheme: emerald");
+    expect(text).toContain("- neutral: sand");
+    expect(text).toContain("- brand colour: #1f9d6b, glow partner #4fd1c5");
+    expect(text).toContain('brandSeed: "#1f9d6b"');
+    expect(text).toContain("- heading: Sora");
+    expect(text).toContain('<Logo icon={{ light: "/trademarks/icon-light.svg"');
+    expect(text).not.toContain("M0 0h24v24H0z");
+  });
+
+  it("says where to look when a folder has no brand", () => {
+    const empty = mkdtempSync(path.join(tmpdir(), "once-ui-nobrand-"));
+    const { text, isError } = call("get_brand", { dir: empty });
+    expect(isError).toBe(true);
+    expect(text).toContain("No brand found");
   });
 });
