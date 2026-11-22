@@ -981,6 +981,11 @@
     "tags": ["effect", "marketing"],
     "pairsWith": ["Heading", "Text"]
   },
+  "WorkspaceSwitcher": {
+    "purpose": "Workspace or org switcher: current pinned, groups, search; bottom sheet on phones",
+    "tags": ["navigation", "form"],
+    "pairsWith": ["SidebarHeader", "Sidebar", "Dialog"]
+  },
   "Sidebar": {
     "purpose": "Resizable app sidebar that folds to an icon rail and is a drawer on phones",
     "tags": ["navigation", "layout"],

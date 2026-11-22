@@ -460,6 +460,10 @@
       "types": "./dist/components/User.d.ts",
       "default": "./dist/components/User.js"
     },
+    "./components/WorkspaceSwitcher": {
+      "types": "./dist/components/WorkspaceSwitcher.d.ts",
+      "default": "./dist/components/WorkspaceSwitcher.js"
+    },
     "./components/VisuallyHidden": {
       "types": "./dist/components/VisuallyHidden.d.ts",
       "default": "./dist/components/VisuallyHidden.js"
