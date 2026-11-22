@@ -147,6 +147,11 @@
 --function-accent-700
 --function-accent-800
 --function-accent-900
+--function-accent-on-solid-medium
+--function-accent-on-solid-strong
+--function-accent-on-solid-weak
+--function-accent-solid-medium
+--function-accent-solid-strong
 --function-brand-100
 --function-brand-1000
 --function-brand-1100
@@ -162,6 +167,11 @@
 --function-brand-700
 --function-brand-800
 --function-brand-900
+--function-brand-on-solid-medium
+--function-brand-on-solid-strong
+--function-brand-on-solid-weak
+--function-brand-solid-medium
+--function-brand-solid-strong
 --function-danger-100
 --function-danger-1000
 --function-danger-1100
