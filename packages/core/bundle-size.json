@@ -100,6 +100,7 @@
   "./components/Tooltip": 32888,
   "./components/User": 59814,
   "./components/VisuallyHidden": 626,
+  "./components/WorkspaceSwitcher": 62955,
   "./css/styles.css": 22771,
   "./css/tokens.css": 12343,
   "./tailwind.css": 3636,
