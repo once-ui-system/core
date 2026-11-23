@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
- "version": "3.0.0-rc.1",
- "generated": "2026-11-18",
+ "version": "3.0.0",
+ "generated": "2026-11-23",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root; '@once-ui-system/fx' and '@once-ui-system/blocks' are packages of their own, installed beside core.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -1679,7 +1679,8 @@
    "accessoryColor": "string",
    "working": "\"cube\" | \"d20\"",
    "sides": "MascotSides",
-   "face": "\"3d\" | \"flat\""
+   "face": "\"3d\" | \"flat\"",
+   "medium": "MascotMedium"
   },
   "MascotEffect": [
    "heartEyes",
@@ -1730,8 +1731,18 @@
    "cheeks": "boolean",
    "personality": "\"calm\" | \"default\" | \"bouncy\"",
    "sides": "\"classic\" | \"tints\" | \"mono\" | Partial<Record<\"top\" | \"front\" | \"right\" | \"bottom\" | \"back\" | \"left\", string>>",
-   "face": "\"3d\" | \"flat\""
+   "face": "\"3d\" | \"flat\"",
+   "medium": "MascotMedium"
   },
+  "MascotMedium": [
+   "vector",
+   "fur",
+   "plush",
+   "clay",
+   "pixel",
+   "lowpoly",
+   "toon"
+  ],
   "MascotMood": [
    "neutral",
    "happy",
@@ -1828,7 +1839,8 @@
    "cheeks": "boolean",
    "personality": "\"calm\" | \"default\" | \"bouncy\"",
    "sides": "\"classic\" | \"tints\" | \"mono\" | Partial<Record<\"top\" | \"front\" | \"right\" | \"bottom\" | \"back\" | \"left\", string>>",
-   "face": "\"3d\" | \"flat\""
+   "face": "\"3d\" | \"flat\"",
+   "medium": "MascotMedium"
   },
   "MaskOptions": {
    "maskPosition": "string"
@@ -2898,11 +2910,17 @@
    "mounted": "!boolean",
    "controlled": "!boolean"
   },
+  "StylePanelCustomColors": [
+   "false",
+   "true",
+   "readonly (\"neutral\" | StylePanelSchemeRow)[]"
+  ],
   "StylePanelCustomLabels": {
    "swatch": "(row: StylePanelSchemeRow) => string",
    "picker": "(row: StylePanelSchemeRow) => string",
    "description": "(seed: string, row: StylePanelSchemeRow) => ReactNode",
-   "remove": "string"
+   "remove": "string",
+   "neutral": "StylePanelNeutralCustomLabels"
   },
   "StylePanelGroupLabels": {
    "page": "StylePanelHeading",
@@ -2929,6 +2947,11 @@
    "shapes": "Partial<Record<BorderStyle, string>>",
    "schemes": "Partial<Record<Schemes, string>>",
    "neutrals": "Partial<Record<NeutralColor, string>>"
+  },
+  "StylePanelNeutralCustomLabels": {
+   "swatch": "string",
+   "picker": "string",
+   "description": "(seed: string) => ReactNode"
   },
   "StylePanelOptionLabels": {
    "solid": "Partial<Record<SolidType, ReactNode>>",
@@ -2987,7 +3010,8 @@
    "bodyLineHeight": "BodyLineHeight",
    "chartMode": "ChartMode",
    "brandSeed": "string",
-   "accentSeed": "string"
+   "accentSeed": "string",
+   "neutralSeed": "string"
   },
   "StylePanelVisibility": {
    "page": "{ section?: boolean; theme?: boolean; shape?: boolean }",
@@ -5706,6 +5730,7 @@
     "menuGroups": "!MenuGroup[]",
     "className": "string",
     "collapseBelow": "Breakpoint | \"always\"",
+    "collapseAs": "\"accordion\" | \"drill\" = accordion",
     "onClose": "() => void"
    }
   },
@@ -5749,7 +5774,8 @@
     "cheeks": "boolean",
     "personality": "\"calm\" | \"default\" | \"bouncy\"",
     "sides": "\"classic\" | \"tints\" | \"mono\" | Partial<Record<\"top\" | \"front\" | \"right\" | \"bottom\" | \"back\" | \"left\", string>>",
-    "face": "\"3d\" | \"flat\""
+    "face": "\"3d\" | \"flat\"",
+    "medium": "MascotMedium"
    }
   },
   "VoiceVisualizer": {
@@ -7952,7 +7978,7 @@
     "title": "ReactNode | false",
     "description": "ReactNode | false",
     "rows": "StylePanelVisibility[\"color\"]",
-    "customColors": "boolean"
+    "customColors": "StylePanelCustomColors"
    }
   },
   "StylePanelDataStyle": {
@@ -8028,6 +8054,7 @@
     "StyleProps"
    ],
    "props": {
+    "custom": "boolean",
     "label": "ReactNode | false"
    }
   },
@@ -8206,7 +8233,7 @@
     "value": "StylePanelRootProps[\"value\"]",
     "onValueChange": "StylePanelRootProps[\"onValueChange\"]",
     "labels": "StylePanelLabels",
-    "customColors": "boolean",
+    "customColors": "StylePanelCustomColors",
     "stacked": "boolean"
    }
   },
@@ -8572,6 +8599,11 @@
    "kind": "function",
    "signature": "(seed: string | number) => string",
    "doc": "A seed as the registry compares it: lowercase letters and digits only."
+  },
+  "MASCOT_MEDIUMS": {
+   "group": "modules",
+   "kind": "value",
+   "type": "readonly MascotMedium[]"
   },
   "cleanMascotUsername": {
    "group": "modules",

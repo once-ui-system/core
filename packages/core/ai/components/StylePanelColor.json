@@ -16,7 +16,7 @@
   "title": "ReactNode | false",
   "description": "ReactNode | false",
   "rows": "StylePanelVisibility[\"color\"]",
-  "customColors": "boolean"
+  "customColors": "StylePanelCustomColors"
  },
  "tags": [
   "settings",
@@ -144,6 +144,15 @@
   }
  },
  "types": {
+  "StylePanelCustomColors": [
+   "false",
+   "true",
+   "readonly (\"neutral\" | StylePanelSchemeRow)[]"
+  ],
+  "StylePanelSchemeRow": [
+   "brand",
+   "accent"
+  ],
   "StylePanelVisibility": {
    "page": "{ section?: boolean; theme?: boolean; shape?: boolean }",
    "color": "{ section?: boolean; brand?: boolean; accent?: boolean; neutral?: boolean }",

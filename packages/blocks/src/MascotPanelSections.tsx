@@ -604,7 +604,7 @@ function ColorRow({ label, ...rest }: StyleRowProps) {
           )}
         </Flex>
         {custom && (
-          <Flex maxWidth={10}>
+          <Flex fillWidth maxWidth={160}>
             <ColorInput
               id="mascot-panel-color"
               aria-label={labels.options.colors.custom}
@@ -637,14 +637,14 @@ function OptionalColor({
   const groupName = useGroupName(name);
   const hex = value && /^#[0-9a-f]{6}$/i.test(value) ? value : "";
   return (
-    <Flex vertical="center" gap="8">
+    <Flex vertical="center" gap="8" wrap>
       <Switch
         checked={value !== undefined}
         onCheckedChange={(on) => onChange(on ? (value ?? fallback) : undefined)}
         {...groupName}
       />
       {value !== undefined && (
-        <Flex maxWidth={10}>
+        <Flex fillWidth maxWidth={160}>
           <ColorInput
             id={`mascot-panel-${name.replace(/\W+/g, "-").toLowerCase()}`}
             aria-label={name}

@@ -68,3 +68,4 @@ export * from "./WeatherFxExample";
 export * from "./CanvasExample";
 export * from "./MapExample";
 export * from "./CalendarExample";
+export * from "./MegaMenuExamples";

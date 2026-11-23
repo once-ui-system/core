@@ -17,6 +17,7 @@ import { harness } from "@/resources/prompts";
 import { basePath } from "@/resources/versions";
 import { dev } from "@/utils/dev-logger";
 import { useBlockDocsLinks } from "./BlockDocsLinks";
+import { BlockErrorBoundary } from "./BlockErrorBoundary";
 import { BlockFilmstrip } from "./BlockFilmstrip";
 import styles from "./BlockPage.module.scss";
 import { BlockTitle } from "./BlockTitle";
@@ -47,6 +48,11 @@ export interface BlockExampleDef {
   previewHeight?: PreviewHeight;
   /** Title/description fallback for examples that have no entry in resources/blocks.js */
   meta?: ExampleMeta;
+  /**
+   * Full-bleed preview: skip the Sections/Misc frame padding so a block's own
+   * background reaches the frame's edges. Defaults to the page's `bleed`.
+   */
+  bleed?: boolean;
 }
 
 interface BlockPageProps {
@@ -56,6 +62,8 @@ interface BlockPageProps {
   reloadButton?: boolean;
   /** Default preview sizing for all examples on the page; "fixed" for previews that fill their frame (dashboards, sidebars) */
   previewHeight?: PreviewHeight;
+  /** Full-bleed previews for every example on the page (heroes, backgrounds): no frame padding. */
+  bleed?: boolean;
 }
 
 export interface ExampleMeta {
@@ -118,8 +126,8 @@ ${sources}`;
  * don't collapse, and centering; other groups frame themselves.
  */
 function renderBlock(example: BlockExampleDef, framed: boolean, isFixed: boolean) {
-  const rendered = example.render();
-  if (!framed) return rendered;
+  const rendered = <BlockErrorBoundary key={example.id}>{example.render()}</BlockErrorBoundary>;
+  if (!framed || example.bleed) return rendered;
   return (
     <Row
       fillWidth
@@ -316,14 +324,20 @@ function BlockExample({
 
 export function BlockPage({
   category,
-  examples,
+  examples: pageExamples,
   reloadButton,
   previewHeight = "auto",
+  bleed = false,
 }: BlockPageProps) {
   const meta = findCategoryMeta(category);
   const framed = FRAMED_GROUPS.has(findCategoryGroup(category) ?? "");
   const groupTitle = findCategoryGroupTitle(category);
 
+  // A page-wide `bleed` applies to every example that does not set its own.
+  const examples: BlockExampleDef[] = pageExamples.map((example) => ({
+    ...example,
+    bleed: example.bleed ?? bleed,
+  }));
   const exampleById = new Map(examples.map((example) => [example.id, example]));
   const metaByTitle = new Map((meta?.examples ?? []).map((entry) => [entry.title, entry]));
 

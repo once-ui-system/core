@@ -16,7 +16,7 @@
   "value": "StylePanelRootProps[\"value\"]",
   "onValueChange": "StylePanelRootProps[\"onValueChange\"]",
   "labels": "StylePanelLabels",
-  "customColors": "boolean",
+  "customColors": "StylePanelCustomColors",
   "stacked": "boolean"
  },
  "tags": [
@@ -220,11 +220,17 @@
    "contrast",
    "inverse"
   ],
+  "StylePanelCustomColors": [
+   "false",
+   "true",
+   "readonly (\"neutral\" | StylePanelSchemeRow)[]"
+  ],
   "StylePanelCustomLabels": {
    "swatch": "(row: StylePanelSchemeRow) => string",
    "picker": "(row: StylePanelSchemeRow) => string",
    "description": "(seed: string, row: StylePanelSchemeRow) => ReactNode",
-   "remove": "string"
+   "remove": "string",
+   "neutral": "StylePanelNeutralCustomLabels"
   },
   "StylePanelGroupLabels": {
    "page": "StylePanelHeading",
@@ -251,6 +257,11 @@
    "shapes": "Partial<Record<BorderStyle, string>>",
    "schemes": "Partial<Record<Schemes, string>>",
    "neutrals": "Partial<Record<NeutralColor, string>>"
+  },
+  "StylePanelNeutralCustomLabels": {
+   "swatch": "string",
+   "picker": "string",
+   "description": "(seed: string) => ReactNode"
   },
   "StylePanelOptionLabels": {
    "solid": "Partial<Record<SolidType, ReactNode>>",

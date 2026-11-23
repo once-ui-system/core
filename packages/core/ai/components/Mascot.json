@@ -39,7 +39,8 @@
   "cheeks": "boolean",
   "personality": "\"calm\" | \"default\" | \"bouncy\"",
   "sides": "\"classic\" | \"tints\" | \"mono\" | Partial<Record<\"top\" | \"front\" | \"right\" | \"bottom\" | \"back\" | \"left\", string>>",
-  "face": "\"3d\" | \"flat\""
+  "face": "\"3d\" | \"flat\"",
+  "medium": "MascotMedium"
  },
  "tags": [
   "ai",
@@ -138,6 +139,15 @@
    "clip": "boolean",
    "place": "\"back\" | \"on\" | \"front\""
   },
+  "MascotMedium": [
+   "vector",
+   "fur",
+   "plush",
+   "clay",
+   "pixel",
+   "lowpoly",
+   "toon"
+  ],
   "MascotMood": [
    "neutral",
    "happy",

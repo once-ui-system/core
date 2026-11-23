@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Scroller,
   Avatar,
   AvatarGroup,
   Button,
@@ -11,6 +10,7 @@ import {
   Line,
   Logo,
   Row,
+  Scroller,
   Tag,
   Text,
 } from "@once-ui-system/core";
@@ -34,7 +34,10 @@ const members: Member[] = [
 ];
 
 // Placeholder logos: swap in real ones.
-const logos = Array.from({ length: 3 }, () => "/trademarks/wordmark-light.svg");
+const logos = Array.from({ length: 3 }, () => ({
+  light: "/trademarks/wordmark-light.svg",
+  dark: "/trademarks/wordmark-dark.svg",
+}));
 
 export const Testimonial8 = (flex: React.ComponentProps<typeof Column>) => {
   const [open, setOpen] = useState(false);

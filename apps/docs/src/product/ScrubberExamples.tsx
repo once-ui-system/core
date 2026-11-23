@@ -102,7 +102,7 @@ export function ScrubberEditorExample() {
         { id: "c3", time: 19800, label: "Click: Pay" },
       ]}
       renderPreview={(at) => (
-        <Column width={8} height={4.5} center background="neutral-alpha-weak">
+        <Column width={128} height={72} center background="neutral-alpha-weak">
           <Text family="code" textVariant="label-default-xs" onBackground="neutral-weak">
             frame {Math.round(at / 16.7)}
           </Text>

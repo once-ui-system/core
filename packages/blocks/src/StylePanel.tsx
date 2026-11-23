@@ -4,6 +4,7 @@ import {
   StylePanelAdvanced,
   StylePanelBodyText,
   StylePanelColor,
+  type StylePanelCustomColors,
   type StylePanelLabels,
   StylePanelPage,
   StylePanelRoot,
@@ -14,11 +15,13 @@ import {
 
 export type {
   StyleGroupProps,
+  StylePanelCustomColors,
   StylePanelCustomLabels,
   StylePanelGroupLabels,
   StylePanelHeading,
   StylePanelLabels,
   StylePanelNameLabels,
+  StylePanelNeutralCustomLabels,
   StylePanelOptionLabels,
   StylePanelRootProps,
   StylePanelRowLabels,
@@ -73,13 +76,15 @@ export interface StylePanelProps extends StylePanelRootProps {
    */
   labels?: StylePanelLabels;
   /**
-   * End the Brand and Accent swatches with one for a colour of the host's
-   * own, edited in a colour field and reported as `brandSeed`/`accentSeed`.
+   * End the colour rows' swatches with one for a colour of the host's own,
+   * edited in a colour field and reported as `brandSeed`, `accentSeed` or
+   * `neutralSeed`. `true` offers it on Brand and Accent; list the rows
+   * (`["brand", "accent", "neutral"]`) to choose, Neutral included.
    * Controlled mode only: bound to ThemeProvider, which takes no seed from
    * the panel, the swatch does not render. The panel never generates the
    * scheme; the host renders it from the seed.
    */
-  customColors?: boolean;
+  customColors?: StylePanelCustomColors;
   /** Put each row's label above its control, for a narrow sidebar. */
   stacked?: boolean;
 }

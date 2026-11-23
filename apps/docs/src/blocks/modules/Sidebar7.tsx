@@ -206,6 +206,8 @@ export function Sidebar7() {
             />
             <Background
               position="absolute"
+              top="0"
+              left="0"
               fill
               gradient={{
                 display: true,

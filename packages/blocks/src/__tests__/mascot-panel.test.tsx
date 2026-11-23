@@ -153,6 +153,25 @@ describe("MascotPanel", () => {
     expect(screen.getByRole("radiogroup", { name: "Surface" })).toBeTruthy();
   });
 
+  it("gives a custom body color's field room to show the hex", () => {
+    const { container } = render(<MascotPanel value={{ v: 1, color: "#ff7a59" }} />, {
+      wrapper,
+    });
+    const field = container.querySelector("#mascot-panel-color");
+    expect(field).not.toBeNull();
+    // Numbers on a Flex are pixels: the field's box was once capped at 10px,
+    // a thin bar after the swatches.
+    const box = field?.closest("[style*='max-width']") as HTMLElement | null;
+    expect(box?.style.maxWidth).not.toMatch(/ou-n-10\)/);
+    expect(box?.className).toMatch(/fill-width|wrap/);
+  });
+
+  it("keeps the side preview in a grid that sizes to the panel", () => {
+    const { container } = render(<MascotPanel />, { wrapper });
+    const frame = container.querySelector("[class*='frame']");
+    expect(frame?.querySelector("[class*='layout'] > [class*='aside']")).not.toBeNull();
+  });
+
   it("has no axe violations", async () => {
     const { container } = render(<MascotPanel value={{ v: 1, working: "cube" }} />, { wrapper });
     await expectNoAxeViolations(container);
