@@ -11,6 +11,30 @@ Entries before 1.7.13 are reconstructed from GitHub releases and git history and
 incomplete; reconciling them against actual npm release history is a scheduled roadmap
 item (see `ROADMAP.md`, Week 4).
 
+## [Unreleased]
+
+### Fixed
+
+- `Setting`: a slider (or any control that fills its parent, such as `Input` or a
+  fill-width `SegmentedControl`) in a labelled row collapsed to its thumb in 3.0.0,
+  because the control area was only as wide as its content. The area now grows into
+  the row's free space up to `controlWidth`; wrapping and the trailing-edge placement
+  of buttons are unchanged.
+- `SegmentedControl`: the rail's corners now nest round the options at every size,
+  padding and border style: the options' radius plus the padding and the border.
+  A `compact` rail always took the l radius (16px round 8px options in playful), and
+  in conservative the rail added 2px for 4px of padding.
+- `ToggleButton`: a label too long for the button ran out of the box and pushed the
+  suffix icon out with it. A `fillWidth` button (a sidebar row) now ends its label in
+  an ellipsis by default, node labels included; a fit-width button keeps its full
+  label, as before. `truncate` sets it either way. The
+  icons keep their size.
+  The docs sidebar's page titles truncate beside their tags.
+- `Option`: a `danger` option (Delete in a menu) now keeps the hierarchy of the rows
+  around it: the label carries the contrast (`danger-on-background-medium`, pale on dark,
+  deep on light) and the prefix icon the colour (`danger-on-background-weak`). Both were
+  the saturated tone, so the label read dimmer than its neighbours on dark.
+
 ## [3.0.0] - 2026-11-19
 
 Breaking. Built on the `feat/3-0-breaking-cleanup` branch; [MIGRATING.md](MIGRATING.md#2x--30)

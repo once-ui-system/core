@@ -55,6 +55,11 @@
     @include touch.target;
 }
 
+// The icons keep their size while a long label gives way.
+.fixed {
+    flex-shrink: 0;
+}
+
 .xs {
     height: var(--static-space-20);
     min-height: var(--static-space-20);
