@@ -142,6 +142,7 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
     state = "idle",
     mood = "neutral",
     seed,
+    canonical = true,
     color,
     roundness,
     aspect,
@@ -160,6 +161,11 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
     face,
     accessory: _accessory,
     accessoryColor: _accessoryColor,
+    shadow: _shadow,
+    faceAccessory: _faceAccessory,
+    layers: _layers,
+    username: _username,
+    skinSource: _skinSource,
     lookAt = "pointer",
     level,
     source,
@@ -191,11 +197,15 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
       face,
     }).filter(([, value]) => value !== undefined),
   );
+  // The cube has its own body, so a canonical mascot lends it only its colors and face.
+  const { bodyPath: _seededPath, ...seeded } =
+    seed !== undefined ? mascotLook(seed, { canonical }) : {};
   const look = {
     ...CUBE_LOOK,
-    ...(seed !== undefined ? mascotLook(seed) : {}),
+    ...seeded,
     ...passed,
   } as typeof CUBE_LOOK;
+  const eyeInk = eyeColor ?? (color === undefined ? seeded.eyeColor : undefined);
   const root = useRef<HTMLDivElement | null>(null);
   const canvas = useRef<HTMLCanvasElement | null>(null);
   const [failed, setFailed] = useState(false);
@@ -235,9 +245,9 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
   });
   input.current.personality = look.personality;
   const cubeLook = useRef<CubeLook | null>(null);
-  const lookKey = JSON.stringify([look, eyeColor]);
-  const latest = useRef({ look, eyeColor });
-  latest.current = { look, eyeColor };
+  const lookKey = JSON.stringify([look, eyeInk]);
+  const latest = useRef({ look, eyeColor: eyeInk });
+  latest.current = { look, eyeColor: eyeInk };
 
   // Resolve colors against the element, again whenever the theme changes.
   // biome-ignore lint/correctness/useExhaustiveDependencies: `lookKey` is the trigger; the look is read from `latest`
@@ -418,7 +428,7 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
           "--mascot-color": ["brand", "accent", "neutral"].includes(String(look.color))
             ? `var(--function-${look.color}-500)`
             : look.color,
-          ...(eyeColor ? { "--mascot-eye": eyeColor } : {}),
+          ...(eyeInk ? { "--mascot-eye": eyeInk } : {}),
           ...style,
         } as React.CSSProperties
       }

@@ -187,7 +187,7 @@ export function PricingExample() {
                     <Column flex={1} gap="12">
                       {tier.features.map((feature) => (
                         <Row key={feature} gap="12" vertical="center">
-                          <Icon name="checkbox" size="xs" onBackground="brand-medium" />
+                          <Icon name="check" size="xs" onBackground="brand-medium" />
                           <Text textVariant="body-default-s">{feature}</Text>
                         </Row>
                       ))}

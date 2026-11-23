@@ -185,7 +185,7 @@ const RadioButton = ({
         {isChecked && (
           <Flex
             style={{
-              backgroundColor: "var(--neutral-on-solid-strong)",
+              backgroundColor: "var(--brand-on-solid-strong)",
             }}
             radius="full"
             // Left to the theme's density, the dot is sized by `.dot` in CSS.

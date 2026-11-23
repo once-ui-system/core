@@ -1,42 +1,44 @@
 /**
- * Every built-in icon must render exactly what react-icons rendered before the
- * data was inlined.
+ * The built-in icons are Once UI's own set (once-ui-system/icons), copied into
+ * `src/icons/data.ts` by `scripts/generate-icons.mjs`.
  *
- * This is the guard on `scripts/generate-icons.mjs`: transcribed path data is
- * the kind of thing that goes subtly wrong — a dropped attribute, a stroke
- * default that no longer applies — and looks fine until someone notices an
- * icon is the wrong weight. react-icons stays a devDependency precisely so
- * this comparison can keep running.
+ * Guards: no name an app could use in 2.x disappears, every icon is a line
+ * icon on the shared 24 grid that follows `currentColor`, and the theme's
+ * border style reaches the caps and joins.
  */
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
-import manifest from "../../scripts/icon-manifest.json";
+import names2x from "../../scripts/icon-names-2x.json";
 import { iconLibrary } from "../icons";
 
-const families: Record<string, () => Promise<Record<string, React.ComponentType>>> = {
-  hi2: () => import("react-icons/hi2") as never,
-  io5: () => import("react-icons/io5") as never,
-  lu: () => import("react-icons/lu") as never,
-  pi: () => import("react-icons/pi") as never,
-};
+const names = Object.keys(iconLibrary) as (keyof typeof iconLibrary)[];
 
-const entries = Object.entries(manifest as Record<string, { family: string; symbol: string }>);
-
-describe("built-in icons match their source set", () => {
-  it("covers every registered icon", () => {
-    expect(entries.length).toBe(Object.keys(iconLibrary).length);
+describe("built-in icons", () => {
+  it("keeps every 2.x name", () => {
+    expect((names2x as string[]).filter((name) => !(name in iconLibrary))).toEqual([]);
   });
 
-  for (const [name, { family, symbol }] of entries) {
-    it(`${name} (${family}/${symbol})`, async () => {
-      const mod = await families[family]();
-      const Original = mod[symbol];
-      expect(Original, `${symbol} missing from react-icons/${family}`).toBeDefined();
+  it("ships the approved set", () => {
+    expect(names.length).toBeGreaterThanOrEqual(178);
+  });
 
-      const Inlined = iconLibrary[name as keyof typeof iconLibrary];
-      expect(renderToStaticMarkup(<Inlined />)).toBe(renderToStaticMarkup(<Original />));
+  for (const name of names) {
+    it(`${name} is a currentColor line icon on the 24 grid`, () => {
+      const Icon = iconLibrary[name];
+      const html = renderToStaticMarkup(<Icon />);
+      expect(html).toContain('viewBox="0 0 24 24"');
+      expect(html).toContain('stroke="currentColor"');
+      expect(html).toContain('stroke-width="1.5"');
+      expect(html).toMatch(/<path d="/);
+      expect(html).toContain("stroke-linecap:var(--icon-linecap, round)");
     });
   }
+
+  it("lets a caller's style win over the themed caps", () => {
+    const Icon = iconLibrary.check;
+    const html = renderToStaticMarkup(<Icon style={{ strokeLinecap: "butt" }} />);
+    expect(html).toContain("stroke-linecap:butt");
+  });
 });

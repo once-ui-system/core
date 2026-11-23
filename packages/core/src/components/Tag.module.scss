@@ -1,6 +1,7 @@
 @use "../styles/density.scss" as density;
 @use "../styles/touch.scss" as touch;
 @use "../styles/glow.scss" as glow;
+@use "../styles/nearest-theme.scss" as theme;
 
 .tag {
     white-space: nowrap;
@@ -17,7 +18,7 @@
     &.hairline {
         background: transparent;
 
-        :global([data-theme="light"]) & {
+        @include theme.in-theme(light) {
             background: var(--static-white);
         }
     }
@@ -45,8 +46,10 @@
 }
 
 // `effect`: a short brand-to-accent beam that travels round the edge (a
-// conic gradient masked to the 1px border, on a registered angle), faster on
-// hover and still under reduced motion. 2.x drew it on Badge.
+// conic gradient masked to the 1px border, on a registered angle), still
+// under reduced motion. 2.x drew it on Badge. It keeps one pace on hover:
+// changing `animation-duration` mid-run recomputes the progress from the time
+// already elapsed, so the beam jumped to a new spot as the pointer came in.
 @property --tag-beam-angle {
     syntax: "<angle>";
     inherits: false;
@@ -83,12 +86,6 @@
         animation: tagBeam 6s linear infinite;
     }
 
-    @media (hover: hover) {
-        &:hover::before {
-            animation-duration: 2.5s;
-        }
-    }
-
     @media (prefers-reduced-motion: reduce) {
         &::before {
             animation: none;
@@ -112,7 +109,7 @@
 
     // A soft highlight along the top edge in dark mode, so the pill reads as
     // raised glass.
-    :global([data-theme="dark"]) &::after {
+    @include theme.in-theme(dark, "::after") {
         content: "";
         position: absolute;
         inset: 0;
@@ -177,7 +174,7 @@
     --tag-tone-solid: var(--#{$tone}-solid-strong);
     --tag-tone-on-solid: var(--#{$tone}-on-solid-strong);
 
-    :global([data-theme="light"]) & {
+    @include theme.in-theme(light) {
         --tag-dot: var(--function-#{$tone}-500);
     }
 }
@@ -216,7 +213,7 @@
         background: transparent;
         color: var(--neutral-on-background-medium);
 
-        :global([data-theme="light"]) & {
+        @include theme.in-theme(light) {
             background: var(--static-white);
         }
 

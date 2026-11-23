@@ -5,14 +5,13 @@ import React, { ReactNode, RefObject, useEffect, useRef, useState } from "react"
 import ReactDOM from "react-dom";
 import { Button } from "../../components/Button.js";
 import { Column } from "../../components/Column.js";
-import { Fade } from "../../components/Fade.js";
+import { type BaseColor, Fade } from "../../components/Fade.js";
 import { Flex } from "../../components/Flex.js";
 import { Icon } from "../../components/Icon.js";
 import { IconButton } from "../../components/IconButton.js";
 import { Row } from "../../components/Row.js";
-import { Scroller } from "../../components/Scroller.js";
+import { SegmentedControl } from "../../components/SegmentedControl.js";
 import { Text } from "../../components/Text.js";
-import { ToggleButton } from "../../components/ToggleButton.js";
 import { VisuallyHidden } from "../../components/VisuallyHidden.js";
 import type { IconName } from "../../icons.js";
 import { copyText } from "../../internal/copyText.js";
@@ -672,13 +671,6 @@ const CodeBlock = ({
     setRefreshKey((prev) => prev + 1);
   };
 
-  const handleContent = (selectedLabel: string) => {
-    const index = codes.findIndex((instance) => instance.label === selectedLabel);
-    if (index !== -1) {
-      setSelectedInstance(index);
-    }
-  };
-
   const toggleFullscreen = () => {
     if (isFullscreen) {
       // When exiting fullscreen, first remove animation class, then remove portal after transition
@@ -705,6 +697,8 @@ const CodeBlock = ({
       minHeight="2.5rem"
       className={classNames(className, {
         [styles.fullscreen]: inPortal && isFullscreen,
+        // Fullscreen with a preview and code: side by side on a wide screen.
+        [styles.split]: inPortal && isFullscreen && !!preview && codes.length > 0 && !hideCode,
       })}
       style={{
         isolation: "isolate",
@@ -733,31 +727,36 @@ const CodeBlock = ({
           horizontal="between"
           background={background}
           style={{ backgroundColor: styleBackgroundColor }}
+          className={styles.header}
         >
           {codes.length > 1 ? (
-            <Scroller paddingX="8">
-              <Row data-scaling="90" fitWidth fillHeight vertical="center" paddingY="4" gap="2">
-                {codes.map((instance, index) => (
-                  <ToggleButton
-                    key={index}
-                    weight="default"
-                    prefixIcon={instance.prefixIcon}
-                    selected={selectedInstance === index}
-                    onClick={() => {
-                      setSelectedInstance(index);
-                      onInstanceChange?.(index);
-                      handleContent(instance.label);
-                    }}
-                  >
-                    <Text
-                      onBackground={selectedInstance === index ? "neutral-strong" : "neutral-weak"}
-                    >
-                      {instance.label}
-                    </Text>
-                  </ToggleButton>
-                ))}
-              </Row>
-            </Scroller>
+            // A SegmentedControl, so the selected background slides from one
+            // file to the next instead of jumping.
+            <Row
+              data-scaling="90"
+              minWidth={0}
+              paddingX="8"
+              paddingY="4"
+              vertical="center"
+              className={styles.tabs}
+            >
+              <SegmentedControl
+                fillWidth={false}
+                aria-label="Files"
+                value={String(selectedInstance)}
+                onValueChange={(value) => {
+                  const index = Number(value);
+                  setSelectedInstance(index);
+                  onInstanceChange?.(index);
+                }}
+                buttons={codes.map((instance, index) => ({
+                  value: String(index),
+                  label: instance.label,
+                  prefixIcon: instance.prefixIcon,
+                  weight: "default",
+                }))}
+              />
+            </Row>
           ) : (
             <Row
               paddingY="12"
@@ -834,7 +833,15 @@ const CodeBlock = ({
         </Row>
       )}
       {preview && (
-        <Row key={refreshKey} paddingX="4" paddingBottom="4" paddingTop={compact ? "4" : "0"} fill>
+        <Row
+          key={refreshKey}
+          paddingX="4"
+          paddingBottom="4"
+          paddingTop={compact ? "4" : "0"}
+          fill
+          // Headings inside a demo belong to the demo, not to the page's outline.
+          data-exclude-nav=""
+        >
           <Row
             fill
             background="overlay"
@@ -956,7 +963,12 @@ const CodeBlock = ({
                       zIndex={1}
                       // The block paints its own surface, so fading to the page
                       // colour left a band of the wrong colour over the code.
-                      base={background ?? "surface"}
+                      // An opacity or the gradient has no fade colour of its own.
+                      base={
+                        background && !background.includes("/") && background !== "gradient"
+                          ? (background as BaseColor)
+                          : "surface"
+                      }
                       style={
                         styleBackgroundColor
                           ? ({ "--base-color": styleBackgroundColor } as React.CSSProperties)

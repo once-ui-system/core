@@ -229,11 +229,75 @@ id) and `mascotLook(seed)` picks a whole look; props you pass still win.
   ]}
 />
 
+### Seeds that read words
+
+A seed is split into words at dashes, underscores, spaces, digits and camelCase, and the words it
+knows describe the mascot: colours set the hue (`red`, `mint`, `ink` or a hex like `#3fe3f2`), animals
+set the body and, where they have them, the ears (`fox`, `panda`, `frog`, `robot`), moods set the eyes,
+mouth and how it moves (`happy`, `sleepy`, `grumpy`), and objects add accessories (`royal` a crown, `dj`
+headphones, `astro` a helmet). An animal brings its own colour unless the seed names one. Anything the
+words leave open comes from the seed's hash, so a username with no known words still gets a stable
+mascot of its own. `readSeedWords(seed)` says which words it understood, and `MASCOT_SEED_WORDS` lists
+them all.
+
+<MascotSeedExample />
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Mascot seed="happy-red-fox" />
+<Mascot seed="sleepyPandaDJ" />
+<Mascot seed={user.username} />
+
+readSeedWords("royal-ink-cat");
+// { matched: ["royal", "ink", "cat"], accessory: ["crown", "catEars"], look: { ... }, unmatched: [] }`,
+      language: "tsx",
+      label: "Seeds"
+    }
+  ]}
+/>
+
+### Canonical mascots
+
+Some names stand for a real identity and draw a hand-made character instead of a generated one:
+`once-ui` is the Once UI mark come alive, `quasar` is Quasar, and every Dopler product (`stack`,
+`aveiro`, `chirio`, `tavilio`, `sigilio` and the rest) has its own. Spelling, case and dashes don't
+matter ("Once UI", "onceui"), but the whole seed has to be the name, so `once-ui-fan` is generated as
+usual. Props you pass still win, so the owner of an identity can recolour or dress it.
+
+Core can't know who typed a seed. Where people choose the text (a username, an agent's name), show the
+canonical mascot only to its owner and pass `canonical={false}` to everyone else; reserve
+`MASCOT_IDENTITY_KEYS` in sign-ups so nobody else can hold the name.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Mascot seed="once-ui" />
+<Mascot seed="quasar" mood="happy" />
+
+// A name someone typed: canonical only for the identity's owner.
+const owned = mascotIdentity(agent.name)?.owner === workspace.owner;
+<Mascot seed={agent.name} canonical={owned} />
+
+mascotSvg({ seed: "sigilio" }); // the same character in an OG image`,
+      language: "tsx",
+      label: "Canonical"
+    }
+  ]}
+/>
+
 ### Accessories
 
 Nine built-in accessories, flat and chunky so they read at avatar size: `antenna`, `bow`, `beanie`,
 `headphones`, `sprout`, `helmet`, `crown`, `catEars` and `partyHat`. Each one is placed from the body's
-own outline, so it fits a block as well as a circle, and moves and squashes with it. Pass a list to wear
+own outline, a drawn `bodyPath` included, so it fits a block, an egg or a circle (ears grow out of the
+head instead of floating over it), and moves and squashes with it. Pass a list to wear
 several, and `accessoryColor` to tint them all one color. Your own SVG still works: draw it in the
 body's 200 × 200 box.
 
@@ -255,6 +319,55 @@ body's 200 × 200 box.
 <Mascot surface="flat" accessory={["crown", "bow"]} accessoryColor="#ffd24d" />`,
       language: "tsx",
       label: "Accessories",
+    },
+  ]}
+/>
+
+`accessory` moves with the body and leans a little toward where the mascot looks, like a head
+tilting. Something that belongs to the face, such as a beak, a nose, glasses or whiskers, goes in
+`faceAccessory` instead: it rides on the face layer, so it turns with the gaze, glances up while
+thinking, drops when it sleeps or is sad, and jumps with a poke, as the eyes and cheeks do. Draw it in
+the same 200 × 200 box; with the default look the eyes sit at 71,96 and 129,96.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="24" center wrap>
+      <Mascot
+        size="m"
+        surface="flat"
+        color="#5cc8ff"
+        eyes="round"
+        mouth="none"
+        faceAccessory={<path d="M88 112 Q100 106 112 112 L100 130 Z" fill="#ffb648" />}
+      />
+      <Mascot
+        size="m"
+        surface="flat"
+        color="#e8ecf2"
+        eyes="dot"
+        mouth="smile"
+        accessory="beanie"
+        faceAccessory={
+          <g fill="none" stroke="#0c0b12" strokeWidth={4}>
+            <circle cx={71} cy={96} r={19} />
+            <circle cx={129} cy={96} r={19} />
+            <path d="M90 96 Q100 90 110 96" />
+          </g>
+        }
+      />
+    </Row>
+  }
+  codes={[
+    {
+      code: `<Mascot
+  eyes="round"
+  mouth="none"
+  faceAccessory={<path d="M88 112 Q100 106 112 112 L100 130 Z" fill="#ffb648" />}
+/>`,
+      language: "tsx",
+      label: "Face accessories",
     },
   ]}
 />
@@ -396,7 +509,7 @@ the cube shows while it thinks but does not turn.
   describe={{
     state: "idle, listening, thinking, speaking or sleeping.",
     mood: "neutral, happy, surprised, sad, skeptical, wink, focused or determined.",
-    seed: "Picks a whole look (mascotLook); props you pass win over it.",
+    seed: "Picks a whole look (mascotLook): known words set colour, body, face and accessories, the hash the rest; props you pass win over it.",
     color: "brand, accent, neutral or any CSS color; every shade comes from it.",
     roundness: "0, a rounded square, to 1, a circle.",
     aspect: "Width over height: below 1 is tall, above 1 is wide.",
@@ -413,6 +526,9 @@ the cube shows while it thinks but does not turn.
     accessory:
       "antenna, bow, beanie, headphones, sprout, helmet, crown, catEars or partyHat, a list of them, or your own SVG in the 200 × 200 box.",
     accessoryColor: "One color for the built-in accessories, in place of each one's own.",
+    shadow: "The soft floor shadow under the mascot. On by default; false hides it.",
+    faceAccessory:
+      "Your own SVG on the face (a beak, a nose, glasses), in the 200 × 200 box. Follows the gaze, poses and pokes.",
     personality: "calm, default or bouncy.",
     lookAt: "pointer, center, or a direction from -1 to 1.",
     level: "Loudness from 0 to 1 that makes the body pulse while speaking.",

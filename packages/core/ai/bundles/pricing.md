@@ -40,7 +40,7 @@ Static panel recipe (pricing tiers, stats, settings sections):
 
 - Bare `border`/`borderTop` = the default border. Name a colour only to deviate: `border="brand-alpha-medium"`.
 - `Card` = interactive only (`href` or `onClick`). Static panels = Column + surface recipe.
-- Colors: `{tone}-{weight}` or `{tone}-alpha-{weight}`. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`.
+- Colors: `{tone}-{weight}` or `{tone}-alpha-{weight}`; any step between with a slash on background/solid/border: `brand/12` (the tone, `brand/15` = `brand-alpha-weak`), `brand-strong/40`; `background="gradient"` (or `gradient/16`) is brand to accent. Never a `--my-colour` variable for an opacity. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`. Hex only in seeds (`brandSeed`, `pageBackground`, a Mascot's `color`) and in artwork: a hero scene's cast, props and textures, in classes named for what they draw, in one sheet scoped under the page class.
 - `background` also: `surface | overlay | page | transparent`
 - Same-shaped records: one surface, divided rows (`borderTop={i > 0}`), or a `Table` (row link: a link in a `cell`, not `onRowClick`); never a card per row
 - One raised `surface` for content on `page`; sections inside are spacing + `borderTop`, not grey cards
@@ -64,9 +64,9 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 - `zIndex` only inside that layer group (or on a sticky header over its pane). Never on a lone element, never a page-wide ladder.
 
 - Gradient `width`: quarter-percent (400 = 100%). Glows: 100–200.
-- Glow colors: `brand-alpha-medium`, not `brand-background-weak`
+- Glow colors: `brand-alpha-medium` or a step like `brand/12`, not `brand-background-weak`; in artwork CSS `color-mix(in srgb, var(--brand-alpha) 12%, transparent)`
 - Ambient layers on full-bleed section wrapper, outside `maxWidth` column
-- Budget: one ambient layer per section; motion in hero + one CTA max
+- Budget: one ambient layer per section; motion in hero + one CTA max. A hero scene that shows the product's work is artwork, outside this budget
 
 ### Motion
 
@@ -479,9 +479,9 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 
 ### StyleProps
 - textVariant?: TextVariant
-- background?: Colors | "surface" | "overlay" | "page" | "transparent"
-- solid?: Colors
-- borderTop, borderRight, borderBottom, borderLeft, borderX, borderY, border?: Colors | "surface" | "transparent" | boolean
+- background?: Colors | ColorAlpha | "surface" | "overlay" | "page" | "transparent" | "gradient" | `gradient/${number}`
+- solid?: Colors | ColorAlpha
+- borderTop, borderRight, borderBottom, borderLeft, borderX, borderY, border?: Colors | ColorAlpha | "surface" | "transparent" | boolean
 - borderStyle?: "solid" | "dashed"
 - borderWidth?: 1 | 2 | 4 | 8 | "1" | "2" | "4" | "8"
 - topRadius, rightRadius, bottomRadius, leftRadius, topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius?: RadiusSize
@@ -528,10 +528,12 @@ type BlendMode = "color" | "screen" | "normal" | "multiply" | "overlay" | "darke
 type BlurSize = "s" | "xl" | "l" | "m" | "xs"
 type BorderStyle = "rounded" | "conservative" | "playful" | "sharp"
 type BreakpointKey = "s" | "xl" | "l" | "m" | "xs"
+type BuiltInIconName = keyof typeof iconData
 type BulgeConfig = { type?: "ripple" | "wave"; duration?: number; intensity?: number; repeat?: boolean; delay?: number }
 type ButtonOption = LeafProps & { value: string; description?: ReactNode; label?: ReactNode; children?: ReactNode; horizontal?: "start" | "center" | "end" | "between"; radius?: RadiusSize; href?: string; disabled?: boolean; size?: TShirtSizes; corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"; variant?: "ghost" | "outline" | "subtle"; tone?: Tone; weight?: "default" | "strong"; rounded?: boolean; prefixIcon?: IconName; suffixIcon?: IconName; truncate?: boolean }
 // type ButtonVariant is one of these strings: link ghost subtle primary secondary tertiary
 type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}ch` | `${number}%` | `${number}vh` | `${number}vw` | `${number}dvh` | `${number}dvw` | `${number}svh` | `${number}svw` | `${number}lvh` | `${number}lvw` | `${number}vmin` | `${number}vmax` | `${number}cqw` | `${number}cqh` | `calc(${string})` | `min(${string})` | `max(${string})` | `clamp(${string})` | `var(${string})`
+type ColorAlpha = `neutral/${number}` | `brand/${number}` | `accent/${number}` | `info/${number}` | `danger/${number}` | `warning/${number}` | `success/${number}` | `neutral-strong/${number}` | `neutral-medium/${number}` | `neutral-weak/${number}` | `brand-strong/${number}` | `brand-medium/${number}` | `brand-weak/${number}` | `accent-strong/${number}` | `accent-medium/${number}` | `accent-weak/${number}` | `info-strong/${number}` | `info-medium/${number}` | `info-weak/${number}` | `danger-strong/${number}` | `danger-medium/${number}` | `danger-weak/${number}` | `warning-strong/${number}` | `warning-medium/${number}` | `warning-weak/${number}` | `success-strong/${number}` | `success-medium/${number}` | `success-weak/${number}` | `neutral-alpha-strong/${number}` | `neutral-alpha-medium/${number}` | `neutral-alpha-weak/${number}` | `brand-alpha-strong/${number}` | `brand-alpha-medium/${number}` | `brand-alpha-weak/${number}` | `accent-alpha-strong/${number}` | `accent-alpha-medium/${number}` | `accent-alpha-weak/${number}` | `info-alpha-strong/${number}` | `info-alpha-medium/${number}` | `info-alpha-weak/${number}` | `danger-alpha-strong/${number}` | `danger-alpha-medium/${number}` | `danger-alpha-weak/${number}` | `warning-alpha-strong/${number}` | `warning-alpha-medium/${number}` | `warning-alpha-weak/${number}` | `success-alpha-strong/${number}` | `success-alpha-medium/${number}` | `success-alpha-weak/${number}`
 // type ColorScheme is one of these strings: neutral brand accent info danger warning success
 type ColorValue = Exclude<BaseColor, "page" | "surface" | "overlay" | "transparent"> | string & {}
 type ColorWeight = "strong" | "medium" | "weak"
@@ -543,14 +545,13 @@ type DotsProps = { display?: boolean; opacity?: DisplayProps["opacity"]; color?:
 // type FieldSize is one of these strings: s xl l m xs xxs
 // type FlexBreakpointProps: an object of these Flex props, all optional (padding* is padding, paddingX, paddingTop and the rest):
 // center style direction horizontal vertical wrap flex textVariant background solid border* radius shadow padding* margin* gap top right bottom left width height maxWidth minWidth minHeight maxHeight fit* fill* aspectRatio onBackground onSolid align hide pointerEvents position overflow* scrollbar transition opacity zIndex
-// type FlexValue is one of these strings: 0 1 10 2 3 4 9 12 5 8 6 7 11
+// type FlexValue is one of these strings: 0 1 2 3 4 8 12 5 6 7 9 10 11
 type GradientProps = { display?: boolean; opacity?: DisplayProps["opacity"]; x?: number | CSSUnit; y?: number | CSSUnit; width?: number | CSSUnit; height?: number | CSSUnit; tilt?: number; colorStart?: ColorValue; colorEnd?: ColorValue }
 // type GridBreakpointProps: an object of these Grid props, all optional (padding* is padding, paddingX, paddingTop and the rest):
 // style textVariant background solid border* radius shadow padding* margin* gap top right bottom left width height maxWidth minWidth minHeight maxHeight fit* fill* aspectRatio onBackground onSolid align hide pointerEvents position overflow* scrollbar transition opacity zIndex columns rows
-// type GridSize is one of these strings: 1 10 2 3 4 9 12 5 8 6 7 11
+// type GridSize is one of these strings: 1 2 3 4 8 12 5 6 7 9 10 11
 type IconButtonProps = IconButton props
-// type IconName is one of these names, and only these:
-// symbol code link menu search time video filter image security opacity download info danger warning adjustments arrowDown arrowLeft arrowRight arrowUp arrowUpRight ball banknotes barChart bell bolt book bookmark calendar cart chat check checkbox chevronDoubleLeft chevronDoubleRight chevronDown chevronLeft chevronRight chevronUp chevronsLeftRight clipboard close computer copy cube dark dislike document edit enter eye eyeDropper eyeOff file flag folder food forward gift globe grid grip heart help home inbox light like linearGauge lock logout mail mapPin maximize minimize minus moreHorizontal newspaper organization pause paw payment people person personRemove phone play plus radialGauge refresh return screen send settings smiley sparkle star starFill store tag trash trend trendDown trendUp upload volume volumeOff wordmark world
+type IconName = BuiltInIconName | Extract<keyof IconLibraryOverrides, string>
 type LegacyToast = { variant?: Tone; tone?: Tone; children?: ReactNode; message?: ReactNode; action?: ReactNode; duration?: number }
 type LinesProps = { display?: boolean; opacity?: DisplayProps["opacity"]; size?: SpacingToken; thickness?: number; angle?: number; color?: ColorValue }
 type MaskProps = Mask props
@@ -562,10 +563,10 @@ type ScrollerAuto = { speed?: Speed; hover?: "slow" | "pause" | "none"; reverse?
 type ScrollerLabels = { previous?: string; next?: string }
 type ShadowSize = "s" | "xl" | "l" | "m" | "xs"
 type SolidType = "color" | "contrast" | "inverse"
-// type SpacingToken is one of these strings: s xl l m xs 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
+// type SpacingToken is one of these strings: s xl l m xs 0 1 2 4 8 12 16 20 24 32 40 48 56 64 72 80 104 128 160
 type Speed = "number" | "medium" | "slow" | "fast"
-// type StaticSpacingToken is one of these strings: 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
-// type StatusIndicatorScheme is one of these strings: slate sand gray rose mint dusk cyan blue indigo violet magenta pink red orange yellow moss green emerald aqua
+// type StaticSpacingToken is one of these strings: 0 1 2 4 8 12 16 20 24 32 40 48 56 64 72 80 104 128 160
+// type StatusIndicatorScheme is one of these strings: blue indigo violet magenta pink red orange yellow moss green emerald aqua cyan slate sand gray rose mint dusk
 type SurfaceStyle = "filled" | "translucent"
 type TShirtSizes = "s" | "xl" | "l" | "m" | "xs"
 type TableAction = { icon: string; label?: string; tooltip?: string; variant?: "primary" | "secondary" | "tertiary" | "ghost"; tone?: Tone; onClick: (row: unknown, index: number) => void; disabled?: (row: unknown, index: number) => boolean }
@@ -599,6 +600,7 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - Leaf components (Button, IconButton, ToggleButton, the fields, Switch, Checkbox, RadioButton, Text, Heading, Icon, Avatar, Spinner, StatusIndicator, Kbd, InlineCode, ProgressBar, Logo, SmartLink, NavIcon) take only margins, flex, fillWidth, position, top/right/bottom/left, className and style besides their own props. Padding, background, border, radius, sizes, hide and breakpoints go on a Row around it (a Column around Text or Heading; <Row fit> for an Icon's box).
 - A Button in a form that should submit it needs type="submit": with neither onClick, href nor type it renders a div, unlike a native <button>.
 - Show a field's error after it is blurred or the form is submitted, never on open: keep a touched flag per field and pass errorMessage={touched.email ? errors.email : undefined}. A form or Dialog that opens with red required-field errors reads as broken.
+- A display face reaches Heading only through --font-heading: load it with next/font as variable: "--font-x", put that class on the StyleScope or above it, and pass fonts={{ heading: "var(--font-x)" }}. Never heading: "var(--font-heading)" (a variable that names itself is invalid, and headings fall back to the body sans). Check the first screenshot: are the headings in the display face?
 
 ## Quality bar
 
@@ -856,7 +858,7 @@ export function PricingExample() {
                     <Column flex={1} gap="12">
                       {tier.features.map((feature) => (
                         <Row key={feature} gap="12" vertical="center">
-                          <Icon name="checkbox" size="xs" onBackground="brand-medium" />
+                          <Icon name="check" size="xs" onBackground="brand-medium" />
                           <Text textVariant="body-default-s">{feature}</Text>
                         </Row>
                       ))}

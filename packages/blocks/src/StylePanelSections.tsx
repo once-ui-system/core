@@ -81,6 +81,8 @@ export interface StylePanelValue {
   brandSeed?: string;
   /** As `brandSeed`, for `accent: "custom"` and the Accent row. */
   accentSeed?: string;
+  /** As `brandSeed`, for `neutral: "custom"` and the Neutral row. */
+  neutralSeed?: string;
 }
 
 /** Per-section and per-row visibility. Omitted keys default to visible. */
@@ -110,13 +112,13 @@ export interface StyleRowProps extends Omit<React.ComponentProps<typeof Flex>, "
   hint?: ReactNode | false;
 }
 
-/** Brand and Accent take one more prop than the other rows. */
+/** Brand, Accent and Neutral take one more prop than the other rows. */
 export interface StyleSchemeRowProps extends StyleRowProps {
   /**
    * End the swatches with one for a colour of the host's own, painted with
    * the current seed, and edit the seed in a colour field while it is
    * chosen. Choosing it reports `{ brand: "custom", brandSeed }` (or the
-   * accent pair) through `onValueChange`.
+   * accent or neutral pair) through `onValueChange`.
    *
    * Controlled mode only. Bound to ThemeProvider, whose `setStyle` takes no
    * seed, the panel has nowhere to put one, so the swatch does not render.
@@ -133,6 +135,12 @@ export interface StyleGroupProps extends Omit<React.ComponentProps<typeof Column
 
 /** The two colour rows, Brand and Accent. */
 export type StylePanelSchemeRow = "brand" | "accent";
+
+/**
+ * Which colour rows offer a custom colour. `true` is Brand and Accent, as it
+ * was before Neutral could; list the rows to include Neutral.
+ */
+export type StylePanelCustomColors = boolean | readonly (StylePanelSchemeRow | "neutral")[];
 
 /** A group's heading. */
 export interface StylePanelHeading {
@@ -231,7 +239,17 @@ export interface StylePanelSwatchLabels {
   neutral?: (name: string) => string;
 }
 
-/** The custom colour on the Brand and Accent rows (`custom`). */
+/** The custom colour on the Neutral row (`custom`). */
+export interface StylePanelNeutralCustomLabels {
+  /** The custom swatch's accessible name. Defaults to `Neutral colour: custom`. */
+  swatch?: string;
+  /** The colour field's label. Defaults to `Custom neutral colour`. */
+  picker?: string;
+  /** Text under the colour field, from the current seed. None by default. */
+  description?: (seed: string) => ReactNode;
+}
+
+/** The custom colour on the Brand, Accent and Neutral rows (`custom`). */
 export interface StylePanelCustomLabels {
   /** The custom swatch's accessible name. Defaults to `Brand colour: custom` (`Accent colour: custom`). */
   swatch?: (row: StylePanelSchemeRow) => string;
@@ -239,8 +257,10 @@ export interface StylePanelCustomLabels {
   picker?: (row: StylePanelSchemeRow) => string;
   /** Text under the colour field, from the current seed: a contrast hint, say. None by default. */
   description?: (seed: string, row: StylePanelSchemeRow) => ReactNode;
-  /** The colour field's clear button. Defaults to ColorInput's `"Remove"`. */
+  /** The colour field's clear button, on every row. Defaults to ColorInput's `"Remove"`. */
   remove?: string;
+  /** The Neutral row's own words: kept apart so `row` above stays `"brand" | "accent"`. */
+  neutral?: StylePanelNeutralCustomLabels;
 }
 
 /**
@@ -284,7 +304,10 @@ type ResolvedLabels = Complete<Omit<StylePanelLabels, "themeSwitcher" | "scrolle
   themeSwitcher: ThemeSwitcherLabels;
   scroller: ScrollerLabels;
   custom: Complete<Pick<StylePanelCustomLabels, "swatch" | "picker">> &
-    Pick<StylePanelCustomLabels, "description" | "remove">;
+    Pick<StylePanelCustomLabels, "description" | "remove"> & {
+      neutral: Complete<Pick<StylePanelNeutralCustomLabels, "swatch" | "picker">> &
+        Pick<StylePanelNeutralCustomLabels, "description">;
+    };
 };
 
 const shapes = ["sharp", "conservative", "playful", "rounded"] as const;
@@ -349,6 +372,7 @@ const DEFAULT_LABELS: ResolvedLabels = {
   custom: {
     swatch: (row) => `${row === "brand" ? "Brand" : "Accent"} colour: custom`,
     picker: (row) => `Custom ${row} colour`,
+    neutral: { swatch: "Neutral colour: custom", picker: "Custom neutral colour" },
   },
   hints: {
     theme: "Light, dark, or the visitor's own system setting.",
@@ -885,7 +909,7 @@ function ShapeRow({ label, ...rest }: StyleRowProps) {
   );
 }
 
-const SEED_KEYS = { brand: "brandSeed", accent: "accentSeed" } as const;
+const SEED_KEYS = { brand: "brandSeed", accent: "accentSeed", neutral: "neutralSeed" } as const;
 
 /** Where a custom colour starts when the host has not given one: the docs' own blue. */
 const DEFAULT_SEED = "#5a93fc";
@@ -919,8 +943,14 @@ function splitLineProps({ direction, horizontal, vertical, gap, wrap, ...row }: 
   return { line, row };
 }
 
-function schemeRow(key: StylePanelSchemeRow) {
-  return function SchemeRow({ label, hint, custom = false, ...rest }: StyleSchemeRowProps) {
+/**
+ * Brand, Accent and Neutral: a strip of swatches, and with `custom` (in
+ * controlled mode) one more for a colour of the host's own and a field to
+ * pick it.
+ */
+function colorRow(key: StylePanelSchemeRow | "neutral") {
+  const options: readonly string[] = key === "neutral" ? neutrals : schemes;
+  return function ColorRow({ label, hint, custom = false, ...rest }: StyleSchemeRowProps) {
     const { value, set, mounted, controlled } = useStylePanel();
     const tip = useRowHint(hint, key);
     const labels = useStylePanelLabels();
@@ -930,15 +960,19 @@ function schemeRow(key: StylePanelSchemeRow) {
     const current = mounted ? value[key] : undefined;
     const rowLabel = prefer(label, labels.rows[key]);
 
+    const ariaLabel = (option: string) =>
+      key === "neutral"
+        ? labels.swatches.neutral(labels.names.neutrals[option as NeutralColor])
+        : labels.swatches.scheme(labels.names.schemes[option as Schemes], key);
     const swatches = (trailing?: ReactNode) => (
       <Swatches
-        options={schemes}
-        selected={current as Schemes}
-        onSelect={(scheme) => set({ [key]: scheme as Schemes })}
-        ariaLabel={(scheme) => labels.swatches.scheme(labels.names.schemes[scheme as Schemes], key)}
+        options={options}
+        selected={current}
+        onSelect={(option) => set({ [key]: option })}
+        ariaLabel={ariaLabel}
         name={labels.rows[key]}
         trailingChecked={current === "custom"}
-        swatchClass={(scheme) => styles[scheme]}
+        swatchClass={(option) => styles[option]}
         scroll
         scrollLabels={labels.scroller}
         trailing={trailing}
@@ -958,7 +992,19 @@ function schemeRow(key: StylePanelSchemeRow) {
     const seedKey = SEED_KEYS[key];
     const seed = value[seedKey] || undefined;
     const chosen = current === "custom";
-    const description = chosen && seed ? labels.custom.description?.(seed, key) : undefined;
+    const words =
+      key === "neutral"
+        ? {
+            swatch: labels.custom.neutral.swatch,
+            picker: labels.custom.neutral.picker,
+            describe: (from: string) => labels.custom.neutral.description?.(from),
+          }
+        : {
+            swatch: labels.custom.swatch(key),
+            picker: labels.custom.picker(key),
+            describe: (from: string) => labels.custom.description?.(from, key),
+          };
+    const description = chosen && seed ? words.describe(seed) : undefined;
 
     // The picker spans the row under the label and the swatches. The strip
     // stays where it is in the tree whether or not the picker shows, so
@@ -976,7 +1022,7 @@ function schemeRow(key: StylePanelSchemeRow) {
             <StyleRowLabelContext.Provider value={rowLabel !== false ? labelId : null}>
               {swatches(
                 <Swatch
-                  label={labels.custom.swatch(key)}
+                  label={words.swatch}
                   pressed={chosen}
                   tabStop={chosen}
                   onSelect={() => set({ [key]: "custom", [seedKey]: seed ?? DEFAULT_SEED })}
@@ -995,7 +1041,7 @@ function schemeRow(key: StylePanelSchemeRow) {
           {chosen && (
             <ColorInput
               id={pickerId}
-              label={labels.custom.picker(key)}
+              label={words.picker}
               value={fieldColor(seed)}
               onValueChange={(next) => {
                 // The clear button reports "": keep the seed rather than
@@ -1013,29 +1059,9 @@ function schemeRow(key: StylePanelSchemeRow) {
   };
 }
 
-const BrandRow = schemeRow("brand");
-const AccentRow = schemeRow("accent");
-
-function NeutralRow({ label, ...rest }: StyleRowProps) {
-  const { value, set, mounted } = useStylePanel();
-  const labels = useStylePanelLabels();
-  return (
-    <Row label={prefer(label, labels.rows.neutral)} hintFor="neutral" {...rest}>
-      <Swatches
-        options={neutrals}
-        selected={mounted ? value.neutral : undefined}
-        onSelect={(neutral) => set({ neutral })}
-        name={labels.rows.neutral}
-        ariaLabel={(neutral) =>
-          labels.swatches.neutral(labels.names.neutrals[neutral as NeutralColor])
-        }
-        swatchClass={(neutral) => styles[neutral]}
-        scroll
-        scrollLabels={labels.scroller}
-      />
-    </Row>
-  );
-}
+const BrandRow = colorRow("brand");
+const AccentRow = colorRow("accent");
+const NeutralRow = colorRow("neutral");
 
 /**
  * A row's segmented options. Beside a label they stop at 22rem; stacked, they
@@ -1264,14 +1290,19 @@ function ColorGroup({
   customColors,
   ...rest
 }: StyleGroupProps & { rows?: StylePanelVisibility["color"] } & {
-  /** Offer a custom colour on Brand and Accent: their `custom`. Controlled mode only. */
-  customColors?: boolean;
+  /**
+   * Offer a custom colour: their `custom`. `true` is Brand and Accent; name
+   * the rows to choose, Neutral included. Controlled mode only.
+   */
+  customColors?: StylePanelCustomColors;
 }) {
+  const offers = (row: StylePanelSchemeRow | "neutral") =>
+    Array.isArray(customColors) ? customColors.includes(row) : row !== "neutral" && !!customColors;
   return (
     <Group {...useGroupHeading("color", { title, description })} {...rest}>
-      {show(rows, "brand") && <BrandRow custom={customColors} />}
-      {show(rows, "accent") && <AccentRow custom={customColors} />}
-      {show(rows, "neutral") && <NeutralRow />}
+      {show(rows, "brand") && <BrandRow custom={offers("brand")} />}
+      {show(rows, "accent") && <AccentRow custom={offers("accent")} />}
+      {show(rows, "neutral") && <NeutralRow custom={offers("neutral")} />}
     </Group>
   );
 }

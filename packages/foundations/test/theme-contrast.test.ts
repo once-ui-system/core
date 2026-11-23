@@ -79,6 +79,14 @@ function color(tokens: Record<string, string>, name: string, seen = new Set<stri
   seen.add(name);
   const reference = /^var\((--[\w-]+)\)$/.exec(value);
   if (reference) return color(tokens, reference[1], seen);
+  // `var(--x, fallback)`: x when the root sets it, else the fallback. A
+  // built-in palette sets its seed-only keys to `initial`, so they fall back.
+  const withFallback = /^var\((--[\w-]+),\s*(.+)\)$/.exec(value);
+  if (withFallback) {
+    const own = tokens[withFallback[1]];
+    if (own !== undefined && own !== "initial") return color(tokens, withFallback[1], seen);
+    return color({ ...tokens, [`${name}:fallback`]: withFallback[2] }, `${name}:fallback`, seen);
+  }
   const oklch = /^oklch\(([\d.]+) ([\d.]+) ([\d.]+)\)$/.exec(value);
   if (oklch) return oklchToHex(Number(oklch[1]), Number(oklch[2]), Number(oklch[3]));
   if (/^#[\da-f]{6}$/i.test(value)) return value.toLowerCase();

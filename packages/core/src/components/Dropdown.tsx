@@ -490,11 +490,17 @@ const DropdownMenu = ({
 
   useEffect(() => {
     if (wrapperRef.current) {
-      refs.setReference(wrapperRef.current);
+      // A field trigger opens from the field's own box, not from its
+      // description or error message below it: the panel covers the helper
+      // text instead of opening under it.
+      const anchor =
+        wrapperRef.current.querySelector<HTMLElement>('[data-surface="field"]') ??
+        wrapperRef.current;
+      refs.setReference(anchor);
 
       // Store the reference element's width for fillWidth calculation
       if (fillWidth) {
-        setReferenceWidth(wrapperRef.current.getBoundingClientRect().width);
+        setReferenceWidth(anchor.getBoundingClientRect().width);
       }
     }
   }, [refs, mounted, fillWidth]);
@@ -1190,6 +1196,10 @@ const DropdownMenu = ({
             data-is-dropdown="true"
             aria-haspopup={wrapperIsTrigger ? "true" : undefined}
             aria-expanded={wrapperIsTrigger ? isOpen : undefined}
+            // Lets a row, card or accordion header that holds this trigger
+            // keep its hover look while the panel is open and the pointer is
+            // in it: `:has(.dropdown-trigger[data-state="open"])`.
+            data-state={isOpen ? "open" : "closed"}
             className="dropdown-trigger"
           >
             <DropdownTriggerContext.Provider value={triggerState}>

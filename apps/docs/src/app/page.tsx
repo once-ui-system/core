@@ -57,7 +57,7 @@ export default function Home() {
                     gap="12"
                     vertical="center"
                   >
-                    <Text onBackground="brand-strong">{`v${corePackage.version}`}</Text> Measured, not assumed
+                    <Text onBackground="brand-strong">{`v${corePackage.version}`}</Text> What's new in 3.0
                   </Row>
                 </Row>
               </Tag>

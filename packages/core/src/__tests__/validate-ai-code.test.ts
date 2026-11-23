@@ -62,6 +62,18 @@ describe("color.tokens", () => {
     );
   });
 
+  it("accepts the hex seeds a StyleScope and a Mascot need", () => {
+    // A style value cast to CSSProperties ends in `} as CSSProperties}`; the
+    // old non-greedy match ran on to the config's `}}` and flagged its seed.
+    const src = `<Row style={{ "--i": i } as CSSProperties} />
+<StyleScope config={{ brandSeed: "#C2410C", pageBackground: "#F4EADB" }} />
+<Mascot color="#ff5b1f" />`;
+    expect(rules(src)).not.toContain("color.tokens");
+    expect(
+      rules(`<Row style={{ "--i": i } as CSSProperties} />\n<Row style={{ color: "#120d0a" }} />`),
+    ).toContain("color.tokens");
+  });
+
   it("leaves SVG paint to color.svgPaint", () => {
     const src = `<path d="M0 0" fill="#15D9EF" stroke="#15AAEF" />`;
     expect(rules(src)).not.toContain("color.tokens");

@@ -115,15 +115,15 @@
   },
   "StyleProps": {
    "textVariant": "TextVariant",
-   "background": "Colors | \"surface\" | \"overlay\" | \"page\" | \"transparent\"",
-   "solid": "Colors",
-   "borderTop": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderRight": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderBottom": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderLeft": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderX": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderY": "Colors | \"surface\" | \"transparent\" | boolean",
-   "border": "Colors | \"surface\" | \"transparent\" | boolean",
+   "background": "Colors | ColorAlpha | \"surface\" | \"overlay\" | \"page\" | \"transparent\" | \"gradient\" | `gradient/${number}`",
+   "solid": "Colors | ColorAlpha",
+   "borderTop": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderRight": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderBottom": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderLeft": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderX": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderY": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "border": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
    "borderStyle": "\"solid\" | \"dashed\"",
    "borderWidth": "1 | 2 | 4 | 8 | \"1\" | \"2\" | \"4\" | \"8\"",
    "topRadius": "RadiusSize",
@@ -193,7 +193,6 @@
    "105"
   ],
   "Schemes": [
-   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -205,7 +204,8 @@
    "moss",
    "green",
    "emerald",
-   "aqua"
+   "aqua",
+   "cyan"
   ],
   "ScrollerLabels": {
    "previous": "string",
@@ -225,7 +225,8 @@
    "swatch": "(row: StylePanelSchemeRow) => string",
    "picker": "(row: StylePanelSchemeRow) => string",
    "description": "(seed: string, row: StylePanelSchemeRow) => ReactNode",
-   "remove": "string"
+   "remove": "string",
+   "neutral": "StylePanelNeutralCustomLabels"
   },
   "StylePanelGroupLabels": {
    "page": "StylePanelHeading",
@@ -247,24 +248,24 @@
    "m",
    "xs",
    "0",
-   "32",
    "1",
    "2",
    "4",
-   "64",
-   "160",
-   "12",
    "8",
+   "12",
    "16",
    "20",
    "24",
+   "32",
    "40",
    "48",
    "56",
+   "64",
    "72",
    "80",
    "104",
    "128",
+   "160",
    "`${number}px`",
    "`${number}rem`",
    "`${number}em`",
@@ -303,6 +304,11 @@
    "shapes": "Partial<Record<BorderStyle, string>>",
    "schemes": "Partial<Record<Schemes, string>>",
    "neutrals": "Partial<Record<NeutralColor, string>>"
+  },
+  "StylePanelNeutralCustomLabels": {
+   "swatch": "string",
+   "picker": "string",
+   "description": "(seed: string) => ReactNode"
   },
   "StylePanelOptionLabels": {
    "solid": "Partial<Record<SolidType, ReactNode>>",
@@ -360,7 +366,8 @@
    "bodyLineHeight": "BodyLineHeight",
    "chartMode": "ChartMode",
    "brandSeed": "string",
-   "accentSeed": "string"
+   "accentSeed": "string",
+   "neutralSeed": "string"
   },
   "SurfaceStyle": [
    "filled",

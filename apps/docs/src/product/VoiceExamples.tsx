@@ -3,11 +3,14 @@
 import {
   Button,
   Column,
+  Input,
   Mascot,
   type MascotMood,
   type MascotState,
+  readSeedWords,
   Row,
   SegmentedControl,
+  Tag,
   Text,
   type VoiceState,
   VoiceVisualizer,
@@ -193,6 +196,46 @@ export function MascotCubeExample() {
           value={mood}
           onValueChange={(value) => setMood(value as MascotMood)}
         />
+      </Column>
+    </Column>
+  );
+}
+
+const SEED_IDEAS = ["happy-red-fox", "sleepyPandaDJ", "royal-ink-cat", "curious-mint-robot", "party-frog", "astro-owl"];
+
+/** Type a seed and see the mascot it makes, with the words it understood. */
+export function MascotSeedExample() {
+  const [seed, setSeed] = useState("happy-red-fox");
+  const reading = readSeedWords(seed);
+
+  return (
+    <Column fillWidth gap="20" horizontal="center" paddingY="24">
+      <Mascot size="xl" seed={seed || " "} />
+      <Column gap="12" fillWidth maxWidth="28rem">
+        <Input
+          id="mascot-seed"
+          label="Seed"
+          value={seed}
+          onChange={(event) => setSeed(event.target.value)}
+          description="A name, a username, or words: colours, animals, moods and objects."
+        />
+        <Row gap="8" wrap>
+          {reading.matched.map((word) => (
+            <Tag key={`m-${word}`} label={word} tone="brand" />
+          ))}
+          {reading.unmatched.map((word) => (
+            <Tag key={`u-${word}`} label={word} tone="neutral" />
+          ))}
+        </Row>
+        <Text textVariant="body-default-xs" onBackground="neutral-weak">
+          Highlighted words set part of the look; the rest feed the hash, so the same seed is always the
+          same mascot.
+        </Text>
+        <Row gap="8" wrap>
+          {SEED_IDEAS.map((idea) => (
+            <Button key={idea} size="s" variant="tertiary" label={idea} onClick={() => setSeed(idea)} />
+          ))}
+        </Row>
       </Column>
     </Column>
   );

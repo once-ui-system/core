@@ -278,3 +278,18 @@ describe("a 1.x tree", () => {
     }
   });
 });
+
+describe("the dataStyle height in arithmetic", () => {
+  it("reads the number back with parseFloat once the config is a rem string", () => {
+    const src = `${core("DataThemeProvider")}const dataStyle = { height: 24 };\nconst h = dataStyle.height + 4;\nconst w = 2 * dataStyle.height;\nexport const P = () => <DataThemeProvider height={dataStyle.height} />;\n`;
+    const out = body(src);
+    assert.match(out, /const h = parseFloat\(dataStyle\.height\) \+ 4;/);
+    assert.match(out, /const w = 2 \* parseFloat\(dataStyle\.height\);/);
+    assert.equal(run(run(src).out).out, run(src).out);
+  });
+
+  it("reports a template that would add a second unit", () => {
+    const src = `${core("Row")}const dataStyle = { height: 24 };\nconst t = \`\${dataStyle.height}rem\`;\n`;
+    assert.ok(run(src).warnings.some((w) => /parseFloat\(dataStyle\.height\)/.test(w)));
+  });
+});

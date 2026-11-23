@@ -59,6 +59,8 @@ const NOT_A_TYPE = new Set([
   "End",
   "HH",
   "Loading",
+  // HeaderMenu's default `label`
+  "Menu",
   "MM",
   "MMM",
   // RangeSlider's default `thumbLabels`

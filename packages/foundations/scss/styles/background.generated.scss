@@ -23,6 +23,10 @@
   background-color: var(--static-transparent);
 }
 
+.gradient-background {
+  background-image: linear-gradient(var(--gradient-angle, 135deg), var(--brand-color-strong), var(--accent-color-strong));
+}
+
 .neutral-background-weak ::selection,
 .neutral-background-medium ::selection,
 .neutral-background-strong ::selection,

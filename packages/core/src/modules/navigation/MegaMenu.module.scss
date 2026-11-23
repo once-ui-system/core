@@ -1,14 +1,32 @@
-@keyframes fadeInDropdown {
+// The panel's entrance is split in two on purpose. The clipping box slides and
+// scales; only the surface inside it fades. A translucent surface frosts what
+// is behind it with `backdrop-filter`, and an ancestor with opacity below 1
+// becomes its backdrop root: while that ancestor faded, the blur had nothing
+// to sample, so the panel looked clear during the animation and then turned
+// frosted the moment it ended. Fading the surface itself keeps the glass the
+// same from the first frame to the last.
+@keyframes dropdownEnter {
   from {
-    opacity: 0;
     transform: translateY(-1rem) scale(0.95);
   }
   to {
-    opacity: 1;
     transform: translateY(0) scale(1);
   }
 }
 
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .dropdown {
-  animation: fadeInDropdown 0.2s ease-out forwards;
+  animation: dropdownEnter 0.2s ease-out forwards;
+}
+
+.dropdown > [data-dropdown-wrapper] {
+  animation: dropdownFade 0.2s ease-out forwards;
 }

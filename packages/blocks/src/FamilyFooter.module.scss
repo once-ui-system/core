@@ -1,0 +1,163 @@
+// The family row and the co-brand bar are the parts that must look the same on
+// every site, so their look is fixed here on neutral tokens and fixed radii
+// (a brand's border style would otherwise round the tiles differently). The brand band
+// above takes the brand's colours from the theme and its `background` slot.
+
+.footer {
+  position: relative;
+  isolation: isolate;
+}
+
+.brandArea {
+  overflow: hidden;
+}
+
+.decoration {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+// The link's colour is its Text's; hover underlines it, which reads the same
+// whatever colour the brand gave the words.
+.link {
+  color: inherit;
+  text-decoration: none;
+  text-underline-offset: 0.25em;
+
+  &:hover,
+  &:focus-visible {
+    text-decoration: underline;
+  }
+}
+
+.family {
+  border-top: 1px solid var(--neutral-alpha-weak);
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: var(--static-space-8);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tile {
+  display: flex;
+  align-items: center;
+  gap: var(--static-space-12);
+  height: 100%;
+  padding: var(--static-space-12);
+  border-radius: 12px;
+  border: 1px solid var(--neutral-alpha-weak);
+  background: var(--neutral-alpha-weak);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    background-color var(--transition-micro-medium, 0.15s) ease,
+    border-color var(--transition-micro-medium, 0.15s) ease;
+
+  &:hover {
+    background: var(--neutral-alpha-medium);
+    border-color: var(--neutral-alpha-medium);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--brand-solid-strong);
+    outline-offset: 2px;
+  }
+
+  &:hover .tileArrow,
+  &:focus-visible .tileArrow {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+.tileText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.tileArrow {
+  flex-shrink: 0;
+  align-self: flex-start;
+  color: var(--neutral-on-background-weak);
+  opacity: 0;
+  transform: translate(-2px, 2px);
+  transition:
+    opacity var(--transition-micro-medium, 0.15s) ease,
+    transform var(--transition-micro-medium, 0.15s) ease;
+}
+
+.markImage,
+.markNode,
+.monogram {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.markImage {
+  object-fit: contain;
+}
+
+// The letter mark: the product's own colour when it gives one, the strongest
+// neutral otherwise, with the page colour for the letter.
+.monogram {
+  background: var(--family-mark, var(--neutral-on-background-strong));
+  color: var(--static-white);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.875rem;
+  line-height: 1;
+}
+
+.monogram:not([style*="--family-mark"]) {
+  color: var(--page-background);
+}
+
+.parentMark.monogram {
+  border-radius: 5px;
+  font-size: 0.6875rem;
+}
+
+.bar {
+  border-top: 1px solid var(--neutral-alpha-weak);
+}
+
+.parent {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--static-space-8);
+  color: inherit;
+  text-decoration: none;
+
+  &:focus-visible {
+    outline: 2px solid var(--brand-solid-strong);
+    outline-offset: 4px;
+    border-radius: var(--radius-s);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile,
+  .tileArrow {
+    transition: none;
+  }
+}

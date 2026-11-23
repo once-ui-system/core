@@ -1,0 +1,85 @@
+// GradientFx's CSS look: what the server sends, what a browser without
+// WebGL keeps, and what shows for the moment before the shader's first frame.
+// A few soft colour blobs drifting under a heavy blur, and an SVG grain on top.
+
+.field {
+    isolation: isolate;
+}
+
+.layer {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.base {
+    background: var(--gradient-fx-base);
+
+    // Under the shader's canvas once it has faded in: no longer painted.
+    &[data-hidden="true"] {
+        visibility: hidden;
+        transition: visibility 0s linear 0.7s;
+    }
+}
+
+.canvas {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.6s ease-out;
+
+    &[data-ready="true"] {
+        opacity: 1;
+    }
+}
+
+.blobs {
+    position: absolute;
+    inset: -25%;
+    filter: blur(var(--gradient-fx-blur));
+}
+
+.blob {
+    position: absolute;
+    width: 85%;
+    height: 60%;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, var(--gradient-fx-color) 20%, transparent);
+    transform-origin: 50% 50%;
+    will-change: transform;
+
+    @media (prefers-reduced-motion: no-preference) {
+        animation: gradient-fx-drift var(--gradient-fx-duration) ease-in-out infinite alternate;
+        animation-delay: var(--gradient-fx-delay);
+    }
+
+    [data-still="true"] & {
+        animation: none;
+    }
+}
+
+@keyframes gradient-fx-drift {
+    0% {
+        transform: translate(0, 0) rotate(var(--gradient-fx-angle)) scale(1);
+    }
+    50% {
+        transform: translate(var(--gradient-fx-dx), var(--gradient-fx-dy))
+            rotate(var(--gradient-fx-angle)) scale(1.15);
+    }
+    100% {
+        transform: translate(calc(var(--gradient-fx-dx) * -0.6), calc(var(--gradient-fx-dy) * 0.8))
+            rotate(var(--gradient-fx-angle)) scale(0.95);
+    }
+}
+
+// Film grain: fractal noise as a tiny SVG tile, blended over the colours.
+.grain {
+    position: absolute;
+    inset: 0;
+    opacity: var(--gradient-fx-grain);
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    background-size: 160px 160px;
+}

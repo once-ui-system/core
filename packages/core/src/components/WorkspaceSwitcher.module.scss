@@ -1,0 +1,19 @@
+/* The trigger's label box is as wide as what is in it, so a long name would
+   push the chevron out. Let it take the room beside the chevron and no more,
+   so the name is cut there. */
+.trigger > :first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Pull the mark to the button's edge, as a leading icon sits. */
+.current {
+  min-width: 0;
+  margin-left: calc(-1 * var(--static-space-8));
+}
+
+/* In the list a long name wraps instead of being cut. */
+.name {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}

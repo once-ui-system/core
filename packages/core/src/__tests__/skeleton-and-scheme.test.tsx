@@ -17,6 +17,20 @@ describe("Skeleton", () => {
     expect(container.firstElementChild).toHaveStyle({ width: "80%" });
   });
 
+  // The shape's default radius used to be set after the caller's props, so a
+  // `block` dropped any radius it was given.
+  it("keeps a radius the caller passes", () => {
+    const { container } = render(<Skeleton shape="block" radius="l" />, { wrapper: wrap });
+    expect(container.firstElementChild?.className).toMatch(/radius-l\b/);
+  });
+
+  it("rounds a line fully unless told otherwise", () => {
+    const { container: line } = render(<Skeleton shape="line" />, { wrapper: wrap });
+    expect(line.firstElementChild?.className).toMatch(/radius-full/);
+    const { container: square } = render(<Skeleton shape="line" radius="s" />, { wrapper: wrap });
+    expect(square.firstElementChild?.className).toMatch(/radius-s\b/);
+  });
+
   it("applies the size scale", () => {
     const { container } = render(<Skeleton shape="line" size="xl" />, { wrapper: wrap });
     expect(container.firstElementChild?.className).toMatch(/size-xl/);

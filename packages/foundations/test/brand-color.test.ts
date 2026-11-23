@@ -17,7 +17,9 @@ const THEME = readFileSync(join(__dirname, "..", "scss", "tokens", "theme.scss")
 /** The declarations of the first rule whose selector list is exactly `selector`. */
 const block = (selector: string): Record<string, string> => {
   const escaped = selector.replace(/[[\]"=]/g, "\\$&");
-  const match = THEME.match(new RegExp(`(?:^|\\n)${escaped}(?:,[^{]*)?\\s*\\{([^}]*)\\}`));
+  const match = THEME.match(
+    new RegExp(`(?:^|\\n)${escaped}(?:,(?:#\\{[^}]*\\}|[^{])*)?\\s*\\{([^}]*)\\}`),
+  );
   if (!match) throw new Error(`no rule for ${selector}`);
   return Object.fromEntries(
     [...match[1].matchAll(/(--[\w-]+):\s*([^;]+);/g)].map((m) => [m[1], m[2].trim()]),
@@ -30,7 +32,9 @@ describe("--brand-color-*", () => {
       const base = block(`[data-theme="${theme}"]`);
       const color = block(`[data-theme="${theme}"][data-solid="color"]`);
       for (const weight of ["strong", "medium", "weak"]) {
-        expect(base[`--brand-color-${weight}`]).toBe(color[`--brand-solid-${weight}`]);
+        // A solid reads a seeded scheme's own key first, then the step.
+        const solid = color[`--brand-solid-${weight}`].replace(/^var\(--[\w-]+,\s*(.+)\)$/, "$1");
+        expect(base[`--brand-color-${weight}`]).toBe(solid);
         expect(base[`--brand-color-${weight}`]).toMatch(/^var\(--function-brand-\d+\)$/);
       }
     });

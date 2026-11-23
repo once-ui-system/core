@@ -9,6 +9,12 @@ Changes to `@once-ui-system/cli`. Releases are tagged `cli-vX.Y.Z`.
 - **`once-ui create --targets desktop,mobile`** ships the app to macOS, Windows and
   Linux (Electron) and to iOS and Android (Capacitor) as well as the web. Both shells
   load the deployed site, so `--targets` needs `--url`; `--app-id` sets the bundle id.
+- **`once-ui create --locales en,hu`** sets the app's languages, default first. Two or
+  more add language URLs (`/hu/...`) and a language switcher (the Languages slice).
+- **`once-ui brand new | list | pull`** and **`once-ui create --brand`** bring Brand Kit
+  brands into apps: generate one from a description (Pro and Indie, `--pick` to choose
+  without a prompt) or use a saved one, and its logo, icons, exact colour (`brandSeed`),
+  heading font and name are written in.
 
 ## [0.2.0]
 

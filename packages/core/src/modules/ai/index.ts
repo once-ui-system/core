@@ -11,8 +11,24 @@ export {
 } from "./design.js";
 export type { MascotEffect, MascotLook, MascotMood, MascotProps, MascotState } from "./Mascot.js";
 export { Mascot, mascotLook } from "./Mascot.js";
+export type { MascotIdentity, MascotIdentityLayer } from "./mascotIdentities.js";
+export {
+  MASCOT_IDENTITIES,
+  MASCOT_IDENTITY_KEYS,
+  mascotIdentity,
+  mascotIdentityKey,
+} from "./mascotIdentities.js";
+export type { MascotSkin } from "./mascotSkin.js";
+export {
+  cleanMascotUsername,
+  fetchMascotSkin,
+  MASCOT_SKIN_SOURCE,
+  useMascotSkin,
+} from "./mascotSkin.js";
 export type { MascotSvgOptions } from "./mascotSvg.js";
 export { mascotDataUrl, mascotSvg } from "./mascotSvg.js";
+export type { MascotSeedReading } from "./mascotWords.js";
+export { MASCOT_SEED_WORDS, readSeedWords } from "./mascotWords.js";
 export type { VoiceState, VoiceVisualizerProps } from "./VoiceVisualizer.js";
 export { VoiceVisualizer } from "./VoiceVisualizer.js";
 export type { WorkingIndicatorProps } from "./WorkingIndicator.js";

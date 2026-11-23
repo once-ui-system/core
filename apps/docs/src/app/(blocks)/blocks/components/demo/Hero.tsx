@@ -2,7 +2,6 @@
 
 import { Button, Column, Row } from "@once-ui-system/core";
 import type React from "react";
-import { type BlockExampleDef, BlockPage } from "../BlockPage";
 import {
   Hero1,
   Hero2,
@@ -19,6 +18,7 @@ import {
   Hero13,
   Hero14,
 } from "@/blocks/modules";
+import { type BlockExampleDef, BlockPage } from "../BlockPage";
 
 const smokeVideo = "/videos/smoke.mp4";
 
@@ -162,6 +162,6 @@ const examples: BlockExampleDef[] = [
   },
 ];
 
-const Docs: React.FC = () => <BlockPage category="hero" examples={examples} reloadButton />;
+const Docs: React.FC = () => <BlockPage category="hero" examples={examples} reloadButton bleed />;
 
 export default Docs;

@@ -16,6 +16,9 @@
     "pieChart": 12,
     "sparkline": 13,
     "radialGauge": 14,
-    "linearGauge": 15
+    "linearGauge": 15,
+    "treemap": 16,
+    "heatmap": 17,
+    "divergingBars": 18
   }
 }

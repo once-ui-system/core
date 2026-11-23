@@ -55,22 +55,53 @@ type Lookup = PublishedPackage | "unpublished" | null;
 const lookups = new Map<string, { at: number; pending: Promise<Lookup> }>();
 
 function distTag(platform: Platform): string {
-  // The web docs follow the docs version (the 3.0 beta build reads `next`);
-  // other platforms version on their own and read `latest`.
+  // The web docs follow the docs version; other platforms version on their
+  // own and read `latest`.
   return platform.id === "web" ? (currentVersion.npmTag ?? "latest") : "latest";
 }
 
-function lookup(platform: Platform): Promise<Lookup> {
-  const key = `${platform.packageName}@${distTag(platform)}`;
+/**
+ * The packages a platform's pages document. Web pages cover core and the
+ * packages released with it: the effects live in fx, and StylePanel,
+ * MascotPanel, Banner and the page sections in blocks.
+ */
+function packagesOf(platform: Platform): string[] {
+  return platform.id === "web"
+    ? [platform.packageName, "@once-ui-system/fx", "@once-ui-system/blocks"]
+    : [platform.packageName];
+}
+
+function lookupPackage(name: string, tag: string): Promise<Lookup> {
+  const key = `${name}@${tag}`;
   const cached = lookups.get(key);
   if (cached && Date.now() - cached.at < LOOKUP_TTL_MS) return cached.pending;
-  const pending = readPublished(platform.packageName, distTag(platform)).catch((error) => {
+  const pending = readPublished(name, tag).catch((error) => {
     console.warn(`Could not read ${key} from npm; no page is marked unreleased.`, error);
     lookups.delete(key);
     return null;
   });
   lookups.set(key, { at: Date.now(), pending });
   return pending;
+}
+
+/**
+ * Every name the platform's packages export. The platform's own package
+ * decides "unpublished"; a companion package that cannot be read or is not
+ * published only adds nothing.
+ */
+async function lookup(platform: Platform): Promise<Lookup> {
+  const tag = distTag(platform);
+  const [main, ...companions] = await Promise.all(
+    packagesOf(platform).map((name) => lookupPackage(name, tag)),
+  );
+  if (main === null || main === "unpublished") return main;
+  const exports = new Set(main.exports);
+  for (const companion of companions) {
+    if (companion === null) return null;
+    if (companion === "unpublished") continue;
+    for (const name of companion.exports) exports.add(name);
+  }
+  return { version: main.version, exports };
 }
 
 async function readPublished(name: string, tag: string): Promise<Lookup> {

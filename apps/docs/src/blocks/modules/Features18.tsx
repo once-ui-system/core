@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Scroller,
   Background,
   Column,
   Grid,
@@ -10,11 +9,12 @@ import {
   Icon,
   Mask,
   Row,
+  Scroller,
   Tag,
   Text,
 } from "@once-ui-system/core";
-import { MatrixFx, ShineFx } from "@once-ui-system/fx";
 import { LineChart } from "@once-ui-system/core/data";
+import { MatrixFx, ShineFx } from "@once-ui-system/fx";
 import type { ReactNode } from "react";
 
 const categories = [
@@ -61,11 +61,20 @@ const demoTiles: {
       <Row fill center gap="32">
         <Background
           position="absolute"
+          top="0"
+          left="0"
           fill
           dots={{ display: true, size: "2", color: "brand-background-strong" }}
           mask={{ x: "50%", y: "50%", radius: "25vh" }}
         />
-        <Row radius="full" border="brand-medium" width="6rem" height="6rem" overflow="hidden" center>
+        <Row
+          radius="full"
+          border="brand-medium"
+          width="6rem"
+          height="6rem"
+          overflow="hidden"
+          center
+        >
           <Mask fill position="absolute" x="50%" y="50%" radius="6vh">
             <MatrixFx flicker size={1.5} colors={["brand-on-background-medium"]} />
           </Mask>
@@ -81,6 +90,8 @@ const demoTiles: {
       <Column fill padding="24" gap="8">
         <Background
           position="absolute"
+          top="0"
+          left="0"
           fill
           gradient={{
             display: true,
@@ -169,6 +180,8 @@ export const Features18 = (flex: React.ComponentProps<typeof Column>) => {
       <Column maxWidth="l" padding="2" radius="xl-4" overflow="hidden">
         <Background
           position="absolute"
+          top="0"
+          left="0"
           fill
           mask={{ cursor: true }}
           gradient={{
@@ -193,7 +206,8 @@ export const Features18 = (flex: React.ComponentProps<typeof Column>) => {
                 paddingLeft="l"
                 paddingTop="l"
               >
-                <HoverCard placement="cover"
+                <HoverCard
+                  placement="cover"
                   fill
                   trigger={
                     <Row
@@ -207,16 +221,19 @@ export const Features18 = (flex: React.ComponentProps<typeof Column>) => {
                     >
                       {tile.content}
                     </Row>
-                  }><Row
-                      onBackground="brand-weak"
-                      position="absolute"
-                      bottom="24"
-                      fillWidth
-                      horizontal="center"
-                      textVariant="code-default-xs"
-                    >
-                      {tile.label}
-                    </Row></HoverCard>
+                  }
+                >
+                  <Row
+                    onBackground="brand-weak"
+                    position="absolute"
+                    bottom="24"
+                    fillWidth
+                    horizontal="center"
+                    textVariant="code-default-xs"
+                  >
+                    {tile.label}
+                  </Row>
+                </HoverCard>
               </Column>
             ))}
           </Row>

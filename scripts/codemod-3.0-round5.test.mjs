@@ -214,7 +214,7 @@ describe("magic-docs: Accordion and Feedback", () => {
 		const { warnings } = transform('<Feedback icon tone="info">a</Feedback>\n', { file: "/app/a.mdx" });
 		assert.equal(warnings.length, 1);
 		assert.match(warnings[0], /<Feedback> icon: a bare icon .*showIcon=\{false\}/);
-		assert.deepEqual(transform('<Feedback icon="check">a</Feedback>\n', { file: "/app/a.mdx" }).warnings, []);
+		assert.deepEqual(transform('<Feedback icon="info">a</Feedback>\n', { file: "/app/a.mdx" }).warnings, []);
 	});
 });
 
