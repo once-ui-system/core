@@ -48,6 +48,13 @@ interface SkeletonProps
    * as a step rather than the duration it actually is.
    */
   delay?: number;
+  /**
+   * `pulse` (default) fades in and out. `generating` is for work that takes a
+   * while, such as an image a model is drawing: a slow brand-to-accent mist
+   * drifts under a fine grain of dots. It holds still under reduced motion.
+   * Children (a caption, a progress line) sit above it.
+   */
+  effect?: "pulse" | "generating";
   style?: React.CSSProperties;
   className?: string;
 }
@@ -57,15 +64,18 @@ const Skeleton = ({
   shape = "line",
   size = "m",
   delay,
+  effect = "pulse",
   style,
   className,
   ...props
 }: SkeletonProps) => {
+  const generating = effect === "generating";
   return (
     <Flex
       // A label on a plain div is not announced (axe: aria-prohibited-attr);
       // a labelled skeleton says what is loading, as a status.
       role={props["aria-label"] || props["aria-labelledby"] ? "status" : undefined}
+      aria-busy={generating || undefined}
       {...props}
       ref={ref}
       style={delay !== undefined ? { animationDelay: `${delay}ms`, ...style } : style}
@@ -76,6 +86,7 @@ const Skeleton = ({
         styles.skeleton,
         styles[shape],
         size && styles["size-" + size],
+        generating && styles.generating,
         className,
       )}
     />
