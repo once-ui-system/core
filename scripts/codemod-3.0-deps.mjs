@@ -48,3 +48,30 @@ export function dependencyReports(pkg) {
     );
   return out;
 }
+
+const CORE = "@once-ui-system/core";
+
+/** The range a parsed package.json gives Once UI core, or null when it does not depend on it. */
+export function coreRange(pkg) {
+  const all = { ...pkg?.peerDependencies, ...pkg?.devDependencies, ...pkg?.dependencies };
+  return CORE in all ? String(all[CORE]) : null;
+}
+
+/**
+ * Why a nested package is not the codemod's to rewrite, or null when it is.
+ * A package below the directory the codemod was run on is left alone when it
+ * does not depend on Once UI core (a native app, a script with React of its
+ * own), or when it pins a different major of core than the app being migrated
+ * (a tool still on 2.x beside an app already on 3.0). `target` is the core range
+ * of the nearest package at or above that directory, or null when it has none
+ * (a monorepo root), in which case only the first rule applies.
+ */
+export function packageSkipReason(pkg, target) {
+  const range = coreRange(pkg);
+  if (range === null) return `does not depend on ${CORE}`;
+  if (target === null) return null;
+  const own = lowestMajor(range);
+  const wanted = lowestMajor(target);
+  if (own !== null && wanted !== null && own !== wanted) return `pins ${CORE} ${range}, not ${target}`;
+  return null;
+}

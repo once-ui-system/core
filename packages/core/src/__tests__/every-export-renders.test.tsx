@@ -88,6 +88,7 @@ const fixtures: Record<string, Record<string, unknown>> = {
   SettingAxes: { label: "Tilt", axes: [{ label: "X", control: "x" }] },
   Table: { columns: [{ key: "name", header: "Name" }], rows: [{ id: "1", name: "Ada" }] },
   Timeline: { items: [{ label: "Step one" }] },
+  WorkspaceSwitcher: { items: [{ value: "fjell", label: "Fjell" }], value: "fjell" },
   ThemeInit: { config: {} },
   MegaMenu: { menuGroups: [{ id: "docs", label: "Docs", href: "/docs" }] },
   MobileMegaMenu: { menuGroups: [{ id: "docs", label: "Docs", href: "/docs" }] },
@@ -136,6 +137,19 @@ const fixtures: Record<string, Record<string, unknown>> = {
       dispatch: noop,
     },
     children: () => "preview",
+  },
+  Treemap: {
+    data: [
+      { label: "A", value: 2 },
+      { label: "B", value: 1 },
+    ],
+  },
+  Heatmap: { data: [{ label: "2026", Jan: 1, Feb: 2 }], columns: ["Jan", "Feb"] },
+  DivergingBars: {
+    data: [
+      { label: "A", value: 1 },
+      { label: "B", value: -1 },
+    ],
   },
 };
 

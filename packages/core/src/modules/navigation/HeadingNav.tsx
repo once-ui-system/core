@@ -213,7 +213,7 @@ const HeadingNav = ({ ref, className, style, header = true, ...rest }: HeadingNa
               onBackground="neutral-weak"
               textVariant="label-default-s"
             >
-              <Icon name="document" size="xs" />
+              <Icon name="text" size="xs" />
               On this page
             </Row>
           )}

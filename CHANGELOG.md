@@ -11,9 +11,95 @@ Entries before 1.7.13 are reconstructed from GitHub releases and git history and
 incomplete; reconciling them against actual npm release history is a scheduled roadmap
 item (see `ROADMAP.md`, Week 4).
 
-## [3.1.0] - Unreleased
+## [Unreleased]
 
-Built on the 3.0 branch and held until 3.0.0 ships.
+### Fixed
+
+- `Setting`: a slider (or any control that fills its parent, such as `Input` or a
+  fill-width `SegmentedControl`) in a labelled row collapsed to its thumb in 3.0.0,
+  because the control area was only as wide as its content. The area now grows into
+  the row's free space up to `controlWidth`; wrapping and the trailing-edge placement
+  of buttons are unchanged.
+- `SegmentedControl`: the rail's corners now nest round the options at every size,
+  padding and border style: the options' radius plus the padding and the border.
+  A `compact` rail always took the l radius (16px round 8px options in playful), and
+  in conservative the rail added 2px for 4px of padding.
+- `ToggleButton`: a label too long for the button ran out of the box and pushed the
+  suffix icon out with it. A `fillWidth` button (a sidebar row) now ends its label in
+  an ellipsis by default, node labels included; a fit-width button keeps its full
+  label, as before. `truncate` sets it either way. The
+  icons keep their size.
+  The docs sidebar's page titles truncate beside their tags.
+- `Option`: a `danger` option (Delete in a menu) now keeps the hierarchy of the rows
+  around it: the label carries the contrast (`danger-on-background-medium`, pale on dark,
+  deep on light) and the prefix icon the colour (`danger-on-background-weak`). Both were
+  the saturated tone, so the label read dimmer than its neighbours on dark.
+
+## [3.0.0] - 2026-11-19
+
+Breaking. Built on the `feat/3-0-breaking-cleanup` branch; [MIGRATING.md](MIGRATING.md#2x--30)
+lists what to do and `scripts/codemod-3.0.mjs` does most of it.
+
+`@once-ui-system/foundations`, `fx` and `blocks` are 3.0.0 too. Everything below,
+including what was first held for 3.1, ships in 3.0.0.
+
+Pre-releases on npm `next` (`npm i @once-ui-system/core@next`), each with every
+entry below that had landed by then:
+
+- **3.0.0-rc.1** (2026-11-18), with `@once-ui-system/foundations`, `fx` and
+  `blocks` at 3.0.0-rc.1 too. New since rc.0: Once UI's own icons (178 names,
+  one line set; `check` and `checkbox` swap meanings, see MIGRATING § 15);
+  `HeaderMenu`, the landing header's phone menu, with `NavIcon` folding into
+  the cross in place and `Drawer` keeping the nearest StyleScope's look;
+  `ProgressBar` `size="s"`; the marketing-hero bundle starting from the
+  product's world. Fixes from apps moving to rc.0: dark StyleScope solids,
+  Tag, Timeline, Input and RichTextEditor follow the nearest theme on a light
+  page; dropdowns open from the field and their options nest in the panel's
+  corners; charts read dates the same on the server and in the browser; and
+  the codemod's `tone` shorthand, `dataStyle.height` arithmetic, Select
+  height and nested packages.
+- **3.0.0-rc.0** (2026-11-17), with `@once-ui-system/foundations`, `fx` and
+  `blocks` at 3.0.0-rc.0 too. The first release candidate. New since beta.3: `Treemap`, `Heatmap` and
+  `DivergingBars` in the data module; `tint` on Card, a coloured hover in a
+  tone or named hue; Mascot `shadow`, accessories that sit on a drawn body's
+  real outline, and username skins and layers as data; and in blocks
+  `FamilyFooter`, one footer for a family of products.
+- **3.0.0-beta.3** (2026-11-15), with `@once-ui-system/foundations`, `fx` and
+  `blocks` at 3.0.0-beta.3 too. beta.2 was tagged before its version bump
+  landed, so it never reached npm; beta.3 is the first pre-release after beta.1.
+  New since beta.1: Mascot seeds that read words, `faceAccessory`, worn
+  accessories that lean with the gaze, and canonical mascots for identity names; an editor-grade `Scrubber`;
+  `EmptyState` (Table's empty states use it); nested `Submenu` and
+  `openOn="hover"` on Dropdown; `tone` on Nav, ToggleButton and Option; the
+  hairline Tag; Select's default chevron and `alignSelected`; the d20 Mascot;
+  light-mode alpha tokens as visible as in dark; root imports ship only the
+  components a page uses; `brandSeed` is the exact brand colour;
+  CelebrationFx and WeatherFx on 3.0; gallery, picture-first heroes
+  and more sections in blocks; chart tooltips that glide, `color: "brand"` that
+  paints the brand, and errors shown over empty charts; everything from 2.7 and
+  2.8 (SegmentedControl's sliding selection, Logo monogram, Map globe, Option
+  danger and selected looks); and fixes from the first real-app migrations onto
+  beta.1 (ghost fields in a composer, MascotCube colours, Dropdown focus, Switch,
+  FormErrorSummary, DatePicker, Avatar initials). Pulled forward from 3.1 for
+  beta.3: `Calendar` (`/calendar`), `Combobox`, the Sidebar shell,
+  `RichTextEditor` (`/richtext`), canvas editor primitives (`/canvas`), `Scene`
+  (`/scene`, three.js as an optional peer), peer cursors, Map routes, areas and
+  status pins, `StatTile` and the control-room primitives, theme presets, the
+  refreshed Timeline, the solid Tag, Logo `tone`, the glow solid style, Table
+  virtual rows and editable cells, Mascot accessories, agent guidance states,
+  Open Graph images (`createOgImageRoute`, `mascotSvg`), and in blocks
+  `MascotPanel` and the settings blocks. MatrixFx draws offscreen and dashboards
+  render less.
+- **3.0.0-beta.1** (2026-11-02), with `@once-ui-system/foundations`, `fx` and
+  `blocks` at 3.0.0-beta.1 too. New since beta.0: charts draw their own SVG,
+  so recharts is no longer a dependency (uninstall it); all shipped CSS in one
+  `@layer once-ui`, so an app's own CSS wins; `data-theme="invert"`; one import
+  path per component for Turbopack; the `once-ui-mcp` server; `Meta.generate`
+  canonical URLs; chart props (`xKey`, series labels, `valueFormat`, stacks,
+  horizontal bars), chart summaries and `Sparkline`; Map on 3.0; the cube
+  Mascot; page sections in blocks; fixes to Dialog, DatePicker, Select, Kbar,
+  Drawer, Dropdown, Media and OgCard.
+- **3.0.0-beta.0** (2026-10-21): the first 3.0 preview.
 
 ### Added
 
@@ -51,8 +137,6 @@ Built on the 3.0 branch and held until 3.0.0 ships.
   - **`ConfirmButton`.** For actions that are hard to take back: press twice
     (the first press arms it, a double click never confirms) or hold to
     confirm. Escape, blur or the timeout disarms it.
-### Added
-
 - **`MascotPanel`** in `@once-ui-system/blocks`: a character designer for the Mascot,
   built like StylePanel. Body, eyes, face, accessories (several at once), working style
   (`cube`, `d20`) and personality. Pickers are scrolling rows of tiles, each showing the
@@ -68,55 +152,34 @@ Built on the 3.0 branch and held until 3.0.0 ships.
   `parseMascotDesign` (reads stored or AI-written values safely, never throws),
   `mascotDesignProps`, `MASCOT_DESIGN_DEFAULTS` and `MASCOT_DESIGN_RANGES`. The Mascot
   reads its defaults from the same constant.
-### Added
-
 - `Calendar` in `@once-ui-system/core/calendar`: month, week and day views of events. Overlapping events sit side by side, events of a day or more run as bars, and a crowded month day folds into "n more". `onSlotSelect` lets people drag or click empty time (or press a month day) to pick a slot, and `onEventChange` lets them drag an event to a new time or day or drag its end. There's a now line, the toolbar has its own slot for app controls, `locale` and `labels` translate it, and the month view is an ARIA grid you can move through with the keyboard. The layout helpers (`layoutDay`, `layoutSpans`, `viewDays`) are exported too.
+- `ProgressBar` `size`: `"s"` draws a 4px track for a thin bar in a row or a card; `"m"`, 8px, stays the default.
+- **Once UI's own icons.** The built-in icons are now drawn in-house
+  ([once-ui-system/icons](https://github.com/once-ui-system/icons), MIT): one
+  24 grid, 1.5 stroke, and 178 names, up from 107 (the 71 new ones cover what
+  apps registered themselves: `briefcase`, `camera`, `rocket`, `truck`,
+  `checkCircle`, `text` and more). `data-border="conservative"` squares their
+  caps and joins through new `--icon-linecap` and `--icon-linejoin` tokens.
+  Core no longer carries Heroicons, Ionicons, Lucide or Phosphor data.
+- **One phone nav.** `HeaderMenu` is a landing header's phone menu: the
+  hamburger turns into the cross in the same spot and the menu grows down
+  out of the header as a panel, rows arriving one after another, with the
+  main call to action at its foot; closing folds it back up. `NavIcon`
+  now draws the built-in `menu` icon and folds it into `close`. A `Drawer`
+  (and so `Sidebar`'s phone drawer) keeps the look of the StyleScope it was
+  opened from instead of dropping it in the portal.
+- **Drill-in phone menu.** `MegaMenu` takes `collapseAs="drill"`: collapsed,
+  it lists the groups, and tapping one replaces the list with that group's
+  links under a back row, sliding in from the side it came from. Links are
+  thumb-sized rows (label, description, icon), section titles are small
+  labels, and focus moves to the back row and returns to the group. For large
+  menus inside `HeaderMenu`; `"accordion"` stays the default.
 
-## [3.0.0] - Unreleased
-
-Breaking. Built on the `feat/3-0-breaking-cleanup` branch; [MIGRATING.md](MIGRATING.md#2x--30)
-lists what to do and `scripts/codemod-3.0.mjs` does most of it.
-
-Pre-releases on npm `next` (`npm i @once-ui-system/core@next`), each with every
-entry below that had landed by then:
-
-- **3.0.0-beta.2** (2026-11-13), with `@once-ui-system/foundations`, `fx` and
-  `blocks` at 3.0.0-beta.2 too. New since beta.1: an editor-grade `Scrubber`;
-  `EmptyState` (Table's empty states use it); nested `Submenu` and
-  `openOn="hover"` on Dropdown; `tone` on Nav, ToggleButton and Option; the
-  hairline Tag; Select's default chevron and `alignSelected`; the d20 Mascot;
-  light-mode alpha tokens as visible as in dark; root imports ship only the
-  components a page uses; `brandSeed` is the exact brand colour;
-  CelebrationFx and WeatherFx on 3.0; gallery, picture-first heroes
-  and more sections in blocks; chart tooltips that glide, `color: "brand"` that
-  paints the brand, and errors shown over empty charts; everything from 2.7 and
-  2.8 (SegmentedControl's sliding selection, Logo monogram, Map globe, Option
-  danger and selected looks); and fixes from the first real-app migrations onto
-  beta.1 (ghost fields in a composer, MascotCube colours, Dropdown focus, Switch,
-  FormErrorSummary, DatePicker, Avatar initials). Pulled forward from 3.1 for
-  beta.2: `Calendar` (`/calendar`), `Combobox`, the Sidebar shell,
-  `RichTextEditor` (`/richtext`), canvas editor primitives (`/canvas`), `Scene`
-  (`/scene`, three.js as an optional peer), peer cursors, Map routes, areas and
-  status pins, `StatTile` and the control-room primitives, theme presets, the
-  refreshed Timeline, the solid Tag, Logo `tone`, the glow solid style, Table
-  virtual rows and editable cells, Mascot accessories, agent guidance states,
-  Open Graph images (`createOgImageRoute`, `mascotSvg`), and in blocks
-  `MascotPanel` and the settings blocks. MatrixFx draws offscreen and dashboards
-  render less.
-- **3.0.0-beta.1** (2026-11-02), with `@once-ui-system/foundations`, `fx` and
-  `blocks` at 3.0.0-beta.1 too. New since beta.0: charts draw their own SVG,
-  so recharts is no longer a dependency (uninstall it); all shipped CSS in one
-  `@layer once-ui`, so an app's own CSS wins; `data-theme="invert"`; one import
-  path per component for Turbopack; the `once-ui-mcp` server; `Meta.generate`
-  canonical URLs; chart props (`xKey`, series labels, `valueFormat`, stacks,
-  horizontal bars), chart summaries and `Sparkline`; Map on 3.0; the cube
-  Mascot; page sections in blocks; fixes to Dialog, DatePicker, Select, Kbar,
-  Drawer, Dropdown, Media and OgCard.
-- **3.0.0-beta.0** (2026-10-21): the first 3.0 preview.
-
-### Added
-
+- **`Card` `tint`.** A card can pick up its own colour on hover, keyboard focus, an open menu and `selected`: a faint fill and edge in a tone (`brand`, `accent`, `success`…) or a named hue (`cyan`, `magenta`…), drawn on a layer under the content so buttons and text inside keep their colours. Without `tint` nothing changes.
+- **`Treemap`, `Heatmap` and `DivergingBars`** in `@once-ui-system/core/data`, moved from Sigilio's portfolio. `Treemap` sizes tiles by `dataKey` and colours them by a signed `toneKey` (gain emerald, loss orange, stronger further from zero). `Heatmap` draws rows by `columns` in five steps of one hue, with a Less to More scale. `DivergingBars` puts gains right and losses left of one shared zero and writes each value with its sign. All three are HTML, render on the server, take the chart card, `valueFormat`, `locale`, `loading`, `error` and the empty and error states, and make every mark a focusable button whose name carries its value, with a hover card on hover and focus.
+- **FamilyFooter** (`@once-ui-system/blocks`). One footer for a family of products, the same four bands on every site: a brand band (logo, one-line promise, primary button, and an `extra` such as a big wordmark, the mascot or a newsletter field), up to five link columns, a "More from Dopler" row with one tile per live sibling, and a co-brand bar ("A product by Dopler", © year and legal entity, a link to the family's shared legal page, language and theme switches, social links, "Built with Once UI"). The first two bands take the brand's colours and a `decoration` behind them; the family row and the bar sit on neutral tokens and fixed radii so they look the same everywhere. `familyProducts` and `familyParent` are the defaults, so a new product reaches every footer on the next blocks bump; `live: false` holds one back. Every family link carries `ref=<current>-footer` (`familyHref`). Hungarian labels in `familyFooterLabelsHu`.
 - **Mascot seeds read words.** A `seed` is split at dashes, underscores, spaces, digits and camelCase, and the words it knows describe the mascot: colours set the hue (`red`, `mint`, `ink`, `#3fe3f2`), animals the body and ears (`fox`, `panda`, `frog`, `robot`), moods the eyes, mouth and motion (`happy`, `sleepy`, `grumpy`), objects the accessories (`royal`, `dj`, `astro`). What the words leave open still comes from the hash, so a seed with no known words looks as it did. `readSeedWords(seed)` reports what it understood and `MASCOT_SEED_WORDS` lists the vocabulary.
+- **Canonical mascots.** A seed that names a real identity draws its hand-made character instead of a generated one: `once-ui` (or "Once UI", "onceui", "once") is the Once UI mark mascot, `quasar` is Quasar, and each Dopler product (`stack`, `aveiro`, `chirio`, `tavilio`, `sigilio`, `frametic`, `worldline`, `holo-zone`, `magic-docs`, `motion`, `liverio`, `dopler`) its own mascot. Spelling, case and dashes do not matter, but the whole seed has to be the name. `Mascot`, `mascotSvg` and `mascotLook` take `canonical` (on by default); pass `canonical={false}` for seeds people type unless that person owns the identity. Props still win over the canonical look, so an owner can customise it. `MASCOT_IDENTITIES`, `mascotIdentity(seed)` and `MASCOT_IDENTITY_KEYS` (for reserving the names in a sign-up) are exported.
 - **Open Graph images: `createOgImageRoute` and `defineOgSkin`** in `@once-ui-system/core/next`.
   One route draws a 1200 × 630 card for every page in the product's skin: the title set
   large in the heading font (`*words*` in the brand color, optionally in an italic
@@ -131,6 +194,9 @@ entry below that had landed by then:
   options as `Mascot` and a mood, every color written out, for places without React or
   CSS (Open Graph images, emails, favicons). `Mascot` and `mascotSvg` share their geometry
   from `mascotShape.ts`.
+- **Mascots by username.** `<Mascot username="foxdev" />` draws that person's Once UI mascot, the one their name hatched or the one they saved in once-ui.com's character designer, so it is the same in every app. Opt-in: only `username` fetches anything, once per name per page, from a public, cached endpoint (`MASCOT_SKIN_SOURCE`, override with `skinSource`) that returns only the look, read through `parseMascotDesign`. Passed props still win; the mascot stays hidden for at most 800 ms while it loads and falls back to the name as a seed. `useMascotSkin`, `fetchMascotSkin` and `cleanMascotUsername` are exported. `layers` (on `Mascot` and in `MascotDesign`) draws worn shapes as path data, the format canonical mascots already use, so a design can carry its own hats as JSON.
+- **Mascot face accessories.** `faceAccessory` draws your own SVG (a beak, a nose, glasses) on the face layer, so it follows the gaze, the thinking, sleeping and sad poses and a poke, as the eyes do. `mascotSvg` takes it as markup. `accessory` now leans a little toward where the mascot looks, like a head tilt; a canonical mascot's body paint stays put.
+- **`Mascot` `shadow`.** `shadow={false}` hides the floor shadow, as `mascotSvg` already allowed. Built-in accessories now read a drawn body's real outline (`bodyPath`, a canonical mascot's path), not a guessed ellipse, and `catEars` grow out of the head past the outline under both corners, so ears never float over an egg, a tall body or a block.
 - **Mascot accessories.** `accessory` takes a built-in one: `antenna`, `bow`,
   `beanie`, `headphones`, `sprout`, `helmet`, `crown`, `catEars` or
   `partyHat`, or a list of them. They are flat and chunky, fit any body shape,
@@ -417,6 +483,20 @@ entry below that had landed by then:
 
 ### Changed
 
+- **Agent guidance: a product's landing page starts from its world.** The
+  marketing-hero bundle now opens with a "find the world first" step (recipes.md
+  #9): a direction card, three worlds with the name pun and the house default
+  (charcoal, one orange, a Fraunces headline, a tilted card) dropped, a first
+  screen that shows the product's work, and the swap test. The template hero
+  (text-effect headline, CTA pair, logo cloud, glow) is one option, no longer
+  the default. Hex is allowed in seeds and in a hero scene's artwork, in named
+  classes in one scoped sheet, and that scene is outside the one-ambient-layer
+  budget. Two new gotchas: a display face reaches `Heading` only through
+  `--font-heading` (never `heading: "var(--font-heading)"`), and `StyleScope`
+  paints no background, so a light paper card needs `background="page"`. The
+  validator no longer flags a `StyleScope` config's hex seeds when a `style`
+  value earlier in the file is cast (`{ "--i": i } as CSSProperties`), nor a
+  `Mascot`'s `color`.
 - **Agent guidance: system parts for brand, alerts and charts, and one
   surface level.** Agents now reach for `Logo` (with `text` and `monogram`)
   instead of an icon beside text, `Feedback` instead of hand-built alert boxes,
@@ -758,6 +838,16 @@ entry below that had landed by then:
 
 ### Fixed
 
+- A Tag, a Timeline dot, an Input and a RichTextEditor in a dark scope on a light page take the dark look. Their light-only rules matched any light ancestor, and `<html>` always carries the app's theme, so a dark StyleScope's unselected Tag toggles went white with near-white text. They now follow the element's nearest theme, as the brand solids do since rc.0.
+- 3.0 codemod: a shorthand `variant` before a space and the closing brace (`addToast({ message, variant })`) became `vtone: variant`; it is `tone: variant`. Arithmetic on the config's `dataStyle.height`, now a "24rem" string, is rewritten to `parseFloat(dataStyle.height)` (it concatenated to "24rem4"), and a template that would add a second unit is reported. A Select's 1.x-style `height` is dropped like an Input's, since 2.x passed it to the native input, where it did nothing.
+- 3.0 codemod: run on a repository root, it rewrote sub-packages that are not on Once UI core (a native app's Toast `variant`) or pin another major of it (a tool still on 2.x). A nested package whose package.json does not depend on `@once-ui-system/core`, or pins a different major than the package the codemod runs in, is now skipped and listed; `--all-packages` walks them too.
+- In the rounded border style, a dropdown's highlighted first and last options nest in the panel's corners. The panel took radius l (28px) while a one-line option can round to only 17px, so a gap opened towards the curve; a panel with radius l now rounds to at most 22px, and options follow it. A panel given another radius keeps it.
+- A dropdown on a field with a description or error message opens from the field itself and covers the helper text, instead of opening below it. Select, Combobox and every other trigger with a field box (`data-surface="field"`) anchor to that box.
+- A section in another theme takes the brand solids of its own theme. A dark `StyleScope` with `solid: "contrast"` on a light page kept light's black primary buttons, because the page's `[data-theme="light"] [data-solid]` rules matched the scope as strongly as its own and came later. The brand solids now follow the nearest `data-theme` and the nearest `data-solid` (three levels deep, `invert` included), and a section without a `data-solid` of its own takes the page's in its own theme.
+- Charts read and write dates the same way on the server and in the browser, so a page no longer throws a hydration error (React #418) for readers outside UTC. A date-only string (`"2025-01-01"`) is midnight UTC, as `new Date("2025-01-01")` reads it, so a `date.start` and rows written either way line up: in Budapest the January row was dropped from a range starting on 1 January. A calendar day is written as that day in every time zone, so `new Date("1980-01-01")` no longer reads as 1979 west of Greenwich; dates with a time still show in the reader's time zone.
+- `Skeleton` keeps a `radius` you pass. The shape's default was set after the
+  props were spread, so a `block` dropped any radius it was given; a `line` or
+  `circle` can now take a radius other than `full` too.
 - A row keeps its hover look while a menu opened from it is open. The
   `DropdownWrapper` trigger now carries `data-state="open" | "closed"`, and
   `Accordion` headers, `Table` rows (hoverable and clickable) and `Card` stay lit
@@ -935,6 +1025,13 @@ entry below that had landed by then:
 
 ### Added
 
+- **A custom colour on `StylePanel`'s Neutral row.** List the rows in
+  `customColors` (`["brand", "accent", "neutral"]`), or set `custom` on
+  `StylePanel.Neutral`, to offer a grey of your own, reported as
+  `neutralSeed`. `customColors={true}` still means Brand and Accent only, so
+  hosts that render two seeds are unchanged. Its words are
+  `labels.custom.neutral`. New types: `StylePanelCustomColors`,
+  `StylePanelNeutralCustomLabels`.
 - **`Select` gets `position="aligned"`.** The list opens with the selected option sitting
   exactly on the field and the others above and below it in their own order, as macOS draws
   a pop-up button (the first option, with nothing picked). A long list shows six and a half
@@ -942,7 +1039,44 @@ entry below that had landed by then:
   Select, it opens as the usual dropdown. The default stays `"dropdown"`. `DropdownWrapper`
   takes the same behaviour as `alignSelected`.
 
+### Changed
+
+- **`border="rounded"` is calmer on large surfaces.** `radius-l` is 24px and
+  `radius-xl` 28px (were 28px and 32px), and their nested steps follow
+  4px and 8px of padding evenly. Cards, panels and dialogs keep a soft
+  corner without reading as bubbles; `radius-xs`, `s` and `m`, the controls'
+  pill shapes, are unchanged. Other border styles are untouched.
+
 ### Fixed
+
+- **A menu's trigger stays highlighted while the menu is open.** A `NavItem`,
+  `ToggleButton` or anything built on it that opens a `Dropdown` (a sidebar's
+  Help or account row) keeps its hover fill while the menu shows, so the row the
+  menu came from stays marked once the pointer moves into it. A selected trigger
+  keeps its deeper selected-hover fill.
+- **`MascotPanel` fits its box and lines its columns up.** The custom body colour's field (and the eye and accessory colour fields) was capped at 10px and showed as a thin bar after the swatches; it now takes up to 160px and wraps under them when the row is tight. The side layout sizes to the panel's own width instead of the viewport's, so it no longer spills past a narrow card or docs preview, and stacks below 34rem. The sticky preview now sits flush with the top of its scroll box, level with the first group of controls (it was pushed 16px down); offset it with `--mascot-panel-sticky-top` under a fixed header.
+- `RadioButton`: the checked dot uses the brand's on-solid colour, as `Checkbox`'s tick does, so the checked radio reads as a ring around a dot in light and dark themes alike (it used the neutral on-solid colour, which matched the fill in dark themes).
+- **A fullscreen `CodeBlock` shows its preview beside the code on a wide screen.** From
+  1024px the preview and the code sit side by side, each scrolling on its own, instead of
+  the code below a tall preview. Narrower screens keep the stacked layout.
+- **Chart states have room.** The loading, empty and error states of every chart are padded
+  from the frame, so a long `errorState` no longer runs to the edges. Pass content only;
+  leave padding off the node.
+- **`WeatherFx` rain falls at a calmer pace** (`@once-ui-system/fx`), in step with snow and
+  leaves: about half its old speed. `speed` still scales it.
+
+- **`Pulse` keeps pulsing for visitors who ask for reduced motion.** The global reduced-motion
+  rule cut its halo to a single 0.01ms run, which left a flat full-size disc where the live dot
+  should be. With reduced motion the halo now stays at a fixed size and fades in and out.
+
+- **A CodeBlock's file tabs slide.** The row of files above the code is now a `SegmentedControl`,
+  so the selected background slides from one file to the next instead of jumping, and the files are
+  real tabs (arrow keys move between them). The rail draws no border of its own inside the block's.
+
+- **Menu items no longer draw a border inside the menu.** The highlighted, hovered and focused
+  states of `Option` (Dropdown, ContextMenu, Select, UserMenu) kept a 1px border, so the first item,
+  highlighted as soon as a menu opened, read as a box nested inside the panel's border. They now
+  show only the fill; keyboard focus keeps its brand ring.
 
 - **A Select's highlight stays where the arrow keys put it.** The list scrolling under a
   resting pointer fired `mouseover`, which moved the highlight back under the pointer, so the

@@ -4,7 +4,8 @@ const path = require("path");
 // Syncs build inputs/outputs from @once-ui-system/foundations into this
 // package (Once UI 2.0 Phase 1 — rfcs/2026-08-once-ui-2-architecture.md §7).
 //
-//   scss: copies breakpoints.scss, touch.scss and density.scss into src/styles/
+//   scss: copies breakpoints.scss, touch.scss, density.scss, glow.scss and
+//         nearest-theme.scss into src/styles/
 //         (gitignored) so the component .module.scss files resolve their
 //         relative `../styles/*.scss` imports when compile-css-modules.cjs
 //         compiles them (they are not shipped; 3.0 ships the compiled CSS only).
@@ -23,14 +24,20 @@ const copy = (from, to) => {
 const mode = process.argv[2];
 
 if (mode === "scss") {
-  for (const file of ["breakpoints.scss", "touch.scss", "density.scss", "glow.scss"]) {
+  for (const file of [
+    "breakpoints.scss",
+    "touch.scss",
+    "density.scss",
+    "glow.scss",
+    "nearest-theme.scss",
+  ]) {
     copy(
       path.join(foundationsRoot, "scss", "styles", file),
       path.join(__dirname, "..", "src", "styles", file),
     );
   }
   console.log(
-    "Synced breakpoints.scss, touch.scss, density.scss and glow.scss from @once-ui-system/foundations",
+    "Synced breakpoints.scss, touch.scss, density.scss, glow.scss and nearest-theme.scss from @once-ui-system/foundations",
   );
 } else if (mode === "css") {
   for (const file of ["tokens.css", "styles.css"]) {

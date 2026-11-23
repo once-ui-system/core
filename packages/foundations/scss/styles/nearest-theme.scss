@@ -1,0 +1,24 @@
+// The element's nearest theme, not any theme above it.
+//
+// `[data-theme="light"] &` matches whenever ANY ancestor is light, and <html>
+// always carries the app's theme. So a dark StyleScope or `theme="dark"`
+// subtree on a light page still took the light rules: Tag's unselected toggle
+// went white with light-on-white text. This matches when the element is at or
+// under `$theme` and not under the other theme below it, unless `$theme`
+// comes again below that: three levels, as foundations' nearest-solid rules
+// (theme.scss, solid-nearest).
+//
+// `:is()` keeps the specificity of the old `[data-theme] &` (one attribute),
+// so the rules it replaces win and lose exactly as before. `$pseudo` goes
+// after the condition: `@include in-theme(dark, "::after")`.
+@mixin in-theme($theme, $pseudo: "") {
+    $other: light;
+    @if $theme == light {
+        $other: dark;
+    }
+    $t: '[data-theme="#{$theme}"]';
+    $o: '[data-theme="#{$other}"]';
+    &:is(#{$t}, #{$t} *):not(:where(#{$t} #{$o}, #{$t} #{$o} *):not(:where(#{$t} #{$o} #{$t}, #{$t} #{$o} #{$t} *)))#{$pseudo} {
+        @content;
+    }
+}

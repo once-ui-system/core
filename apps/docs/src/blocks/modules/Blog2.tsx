@@ -93,6 +93,8 @@ export const Blog2 = (flex: React.ComponentProps<typeof Column>) => {
             <Column
               fill
               position="absolute"
+              top="0"
+              left="0"
               vertical="end"
               padding="32"
               gap="12"

@@ -14,7 +14,9 @@ navIcon: "components"
   marginTop="16"
   marginBottom="24"
   preview={
-    <MascotPanel defaultValue={{ v: 1, mouth: "smile", accessory: ["sprout"] }} />
+    <Column fillWidth maxHeight="40rem" overflowY="auto">
+      <MascotPanel defaultValue={{ v: 1, mouth: "smile", accessory: ["sprout"] }} />
+    </Column>
   }
   codes={[
     {
@@ -57,13 +59,17 @@ The pickers for surface, eye shape, mouth, accessories, state and mood are one s
 
 The preview tries every state and mood, kawaii ones included. That part is never saved.
 
+Beside the controls, the preview sticks to the top of the box that scrolls them, as in the examples above. Under a fixed header, offset it with the `--mascot-panel-sticky-top` CSS variable. Narrower than 34rem, the panel puts the preview above the controls instead.
+
 `size="s"` makes it denser: tighter rows and groups, smaller tiles and a smaller preview, as on [StylePanel](/components/stylePanel#size).
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
-    <MascotPanel size="s" defaultValue={{ v: 1, eyes: "round", accessory: ["beanie"] }} />
+    <Column fillWidth maxHeight="40rem" overflowY="auto">
+      <MascotPanel size="s" defaultValue={{ v: 1, eyes: "round", accessory: ["beanie"] }} />
+    </Column>
   }
   codes={[
     {

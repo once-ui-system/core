@@ -123,7 +123,13 @@ describe("the properties are the ones the CSS reads", () => {
       const block = tokens.match(new RegExp(`\\[data-${scheme}="custom"\\]\\s*\\{([^}]*)\\}`));
       if (!block) throw new Error(`no [data-${scheme}="custom"] block`);
       const read = [...block[1].matchAll(/var\((--scheme-[\w-]+)\)/g)].map((m) => m[1]).sort();
-      const written = Object.keys(customSchemeProperties({ [scheme]: SEED })).sort();
+      // A pale seed adds its own solids and on-solid text (brand and accent).
+      const written = [
+        ...new Set([
+          ...Object.keys(customSchemeProperties({ [scheme]: SEED })),
+          ...Object.keys(customSchemeProperties({ [scheme]: "#d4f43c" })),
+        ]),
+      ].sort();
       expect(written).toEqual(read);
     }
   });

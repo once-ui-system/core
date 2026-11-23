@@ -19,6 +19,7 @@ import type {
   ChartVariant,
   DataPoint,
 } from "./interfaces.js";
+import { toChartDate } from "./utils/chartDate.js";
 import { chartFormatters, chartSeries, valueAxisWidth } from "./utils/chartSeries.js";
 import { formatDate } from "./utils/formatDate.js";
 
@@ -164,10 +165,8 @@ const BarChart = ({
           return true;
         }
 
-        const itemDate =
-          typeof item[xAxisKey] === "string"
-            ? new Date(item[xAxisKey] as string)
-            : (item[xAxisKey] as Date);
+        const itemDate = toChartDate(item[xAxisKey]);
+        if (!itemDate) return true;
 
         return itemDate >= selectedDateRange.startDate && itemDate <= selectedDateRange.endDate;
       } catch (e) {
@@ -250,7 +249,7 @@ const BarChart = ({
             barRadius={(outer) => {
               const r = barWidth === "fill" || barWidth === "xl" ? 10 : 6;
               if (!stack) return [r, r, r, r];
-              // A stack rounds only its outer end: the last series.
+              // A stack without a gap rounds only its outer end: the last series.
               if (!outer) return [0, 0, 0, 0];
               return horizontal ? [0, r, r, 0] : [r, r, 0, 0];
             }}

@@ -91,6 +91,15 @@
     --function-brand-600-15: var(--scheme-brand-600-15);
     --function-brand-600-30: var(--scheme-brand-600-30);
     --function-brand-600-50: var(--scheme-brand-600-50);
+
+    /* A seeded scheme's own solids and the text on them (core's
+       customSchemeProperties writes these only for a light seed);
+       unset, theme.scss falls back to the built-in steps. */
+    --function-brand-solid-strong: var(--scheme-brand-solid-strong);
+    --function-brand-solid-medium: var(--scheme-brand-solid-medium);
+    --function-brand-on-solid-strong: var(--scheme-brand-on-solid-strong);
+    --function-brand-on-solid-medium: var(--scheme-brand-on-solid-medium);
+    --function-brand-on-solid-weak: var(--scheme-brand-on-solid-weak);
 }
 
 [data-brand="red"] {
@@ -110,6 +119,12 @@
     --function-brand-600-15: var(--scheme-red-600-15);
     --function-brand-600-30: var(--scheme-red-600-30);
     --function-brand-600-50: var(--scheme-red-600-50);
+
+    --function-brand-solid-strong: initial;
+    --function-brand-solid-medium: initial;
+    --function-brand-on-solid-strong: initial;
+    --function-brand-on-solid-medium: initial;
+    --function-brand-on-solid-weak: initial;
 }
 
 [data-brand="orange"] {
@@ -129,6 +144,12 @@
     --function-brand-600-15: var(--scheme-orange-600-15);
     --function-brand-600-30: var(--scheme-orange-600-30);
     --function-brand-600-50: var(--scheme-orange-600-50);
+
+    --function-brand-solid-strong: initial;
+    --function-brand-solid-medium: initial;
+    --function-brand-on-solid-strong: initial;
+    --function-brand-on-solid-medium: initial;
+    --function-brand-on-solid-weak: initial;
 }
 
 [data-brand="yellow"] {
@@ -148,6 +169,12 @@
     --function-brand-600-15: var(--scheme-yellow-600-15);
     --function-brand-600-30: var(--scheme-yellow-600-30);
     --function-brand-600-50: var(--scheme-yellow-600-50);
+
+    --function-brand-solid-strong: initial;
+    --function-brand-solid-medium: initial;
+    --function-brand-on-solid-strong: initial;
+    --function-brand-on-solid-medium: initial;
+    --function-brand-on-solid-weak: initial;
 }
 
 [data-brand="moss"] {
@@ -167,6 +194,12 @@
     --function-brand-600-15: var(--scheme-moss-600-15);
     --function-brand-600-30: var(--scheme-moss-600-30);
     --function-brand-600-50: var(--scheme-moss-600-50);
+
+    --function-brand-solid-strong: initial;
+    --function-brand-solid-medium: initial;
+    --function-brand-on-solid-strong: initial;
+    --function-brand-on-solid-medium: initial;
+    --function-brand-on-solid-weak: initial;
 }
 
 [data-brand="green"] {
@@ -186,6 +219,12 @@
     --function-brand-600-15: var(--scheme-green-600-15);
     --function-brand-600-30: var(--scheme-green-600-30);
     --function-brand-600-50: var(--scheme-green-600-50);
+
+    --function-brand-solid-strong: initial;
+    --function-brand-solid-medium: initial;
+    --function-brand-on-solid-strong: initial;
+    --function-brand-on-solid-medium: initial;
+    --function-brand-on-solid-weak: initial;
 }
 
 [data-brand="emerald"] {
@@ -205,6 +244,12 @@
     --function-brand-600-15: var(--scheme-emerald-600-15);
     --function-brand-600-30: var(--scheme-emerald-600-30);
     --function-brand-600-50: var(--scheme-emerald-600-50);
+
+    --function-brand-solid-strong: initial;
+    --function-brand-solid-medium: initial;
+    --function-brand-on-solid-strong: initial;
+    --function-brand-on-solid-medium: initial;
+    --function-brand-on-solid-weak: initial;
 }
 
 [data-brand="aqua"] {
@@ -224,6 +269,12 @@
     --function-brand-600-15: var(--scheme-aqua-600-15);
     --function-brand-600-30: var(--scheme-aqua-600-30);
     --function-brand-600-50: var(--scheme-aqua-600-50);
+
+    --function-brand-solid-strong: initial;
+    --function-brand-solid-medium: initial;
+    --function-brand-on-solid-strong: initial;
+    --function-brand-on-solid-medium: initial;
+    --function-brand-on-solid-weak: initial;
 }
 
 [data-brand="cyan"] {
@@ -243,6 +294,12 @@
     --function-brand-600-15: var(--scheme-cyan-600-15);
     --function-brand-600-30: var(--scheme-cyan-600-30);
     --function-brand-600-50: var(--scheme-cyan-600-50);
+
+    --function-brand-solid-strong: initial;
+    --function-brand-solid-medium: initial;
+    --function-brand-on-solid-strong: initial;
+    --function-brand-on-solid-medium: initial;
+    --function-brand-on-solid-weak: initial;
 }
 
 [data-brand="blue"] {
@@ -262,6 +319,12 @@
     --function-brand-600-15: var(--scheme-blue-600-15);
     --function-brand-600-30: var(--scheme-blue-600-30);
     --function-brand-600-50: var(--scheme-blue-600-50);
+
+    --function-brand-solid-strong: initial;
+    --function-brand-solid-medium: initial;
+    --function-brand-on-solid-strong: initial;
+    --function-brand-on-solid-medium: initial;
+    --function-brand-on-solid-weak: initial;
 }
 
 [data-brand="indigo"] {
@@ -281,6 +344,12 @@
     --function-brand-600-15: var(--scheme-indigo-600-15);
     --function-brand-600-30: var(--scheme-indigo-600-30);
     --function-brand-600-50: var(--scheme-indigo-600-50);
+
+    --function-brand-solid-strong: initial;
+    --function-brand-solid-medium: initial;
+    --function-brand-on-solid-strong: initial;
+    --function-brand-on-solid-medium: initial;
+    --function-brand-on-solid-weak: initial;
 }
 
 [data-brand="violet"] {
@@ -300,6 +369,12 @@
     --function-brand-600-15: var(--scheme-violet-600-15);
     --function-brand-600-30: var(--scheme-violet-600-30);
     --function-brand-600-50: var(--scheme-violet-600-50);
+
+    --function-brand-solid-strong: initial;
+    --function-brand-solid-medium: initial;
+    --function-brand-on-solid-strong: initial;
+    --function-brand-on-solid-medium: initial;
+    --function-brand-on-solid-weak: initial;
 }
 
 [data-brand="magenta"] {
@@ -319,6 +394,12 @@
     --function-brand-600-15: var(--scheme-magenta-600-15);
     --function-brand-600-30: var(--scheme-magenta-600-30);
     --function-brand-600-50: var(--scheme-magenta-600-50);
+
+    --function-brand-solid-strong: initial;
+    --function-brand-solid-medium: initial;
+    --function-brand-on-solid-strong: initial;
+    --function-brand-on-solid-medium: initial;
+    --function-brand-on-solid-weak: initial;
 }
 
 [data-brand="pink"] {
@@ -338,6 +419,12 @@
     --function-brand-600-15: var(--scheme-pink-600-15);
     --function-brand-600-30: var(--scheme-pink-600-30);
     --function-brand-600-50: var(--scheme-pink-600-50);
+
+    --function-brand-solid-strong: initial;
+    --function-brand-solid-medium: initial;
+    --function-brand-on-solid-strong: initial;
+    --function-brand-on-solid-medium: initial;
+    --function-brand-on-solid-weak: initial;
 }
 
 /* accent */
@@ -358,6 +445,15 @@
     --function-accent-600-15: var(--scheme-accent-600-15);
     --function-accent-600-30: var(--scheme-accent-600-30);
     --function-accent-600-50: var(--scheme-accent-600-50);
+
+    /* A seeded scheme's own solids and the text on them (core's
+       customSchemeProperties writes these only for a light seed);
+       unset, theme.scss falls back to the built-in steps. */
+    --function-accent-solid-strong: var(--scheme-accent-solid-strong);
+    --function-accent-solid-medium: var(--scheme-accent-solid-medium);
+    --function-accent-on-solid-strong: var(--scheme-accent-on-solid-strong);
+    --function-accent-on-solid-medium: var(--scheme-accent-on-solid-medium);
+    --function-accent-on-solid-weak: var(--scheme-accent-on-solid-weak);
 }
 
 [data-accent="red"] {
@@ -377,6 +473,12 @@
     --function-accent-600-15: var(--scheme-red-600-15);
     --function-accent-600-30: var(--scheme-red-600-30);
     --function-accent-600-50: var(--scheme-red-600-50);
+
+    --function-accent-solid-strong: initial;
+    --function-accent-solid-medium: initial;
+    --function-accent-on-solid-strong: initial;
+    --function-accent-on-solid-medium: initial;
+    --function-accent-on-solid-weak: initial;
 }
 
 [data-accent="orange"] {
@@ -396,6 +498,12 @@
     --function-accent-600-15: var(--scheme-orange-600-15);
     --function-accent-600-30: var(--scheme-orange-600-30);
     --function-accent-600-50: var(--scheme-orange-600-50);
+
+    --function-accent-solid-strong: initial;
+    --function-accent-solid-medium: initial;
+    --function-accent-on-solid-strong: initial;
+    --function-accent-on-solid-medium: initial;
+    --function-accent-on-solid-weak: initial;
 }
 
 [data-accent="yellow"] {
@@ -415,6 +523,12 @@
     --function-accent-600-15: var(--scheme-yellow-600-15);
     --function-accent-600-30: var(--scheme-yellow-600-30);
     --function-accent-600-50: var(--scheme-yellow-600-50);
+
+    --function-accent-solid-strong: initial;
+    --function-accent-solid-medium: initial;
+    --function-accent-on-solid-strong: initial;
+    --function-accent-on-solid-medium: initial;
+    --function-accent-on-solid-weak: initial;
 }
 
 [data-accent="moss"] {
@@ -434,6 +548,12 @@
     --function-accent-600-15: var(--scheme-moss-600-15);
     --function-accent-600-30: var(--scheme-moss-600-30);
     --function-accent-600-50: var(--scheme-moss-600-50);
+
+    --function-accent-solid-strong: initial;
+    --function-accent-solid-medium: initial;
+    --function-accent-on-solid-strong: initial;
+    --function-accent-on-solid-medium: initial;
+    --function-accent-on-solid-weak: initial;
 }
 
 [data-accent="green"] {
@@ -453,6 +573,12 @@
     --function-accent-600-15: var(--scheme-green-600-15);
     --function-accent-600-30: var(--scheme-green-600-30);
     --function-accent-600-50: var(--scheme-green-600-50);
+
+    --function-accent-solid-strong: initial;
+    --function-accent-solid-medium: initial;
+    --function-accent-on-solid-strong: initial;
+    --function-accent-on-solid-medium: initial;
+    --function-accent-on-solid-weak: initial;
 }
 
 [data-accent="emerald"] {
@@ -472,6 +598,12 @@
     --function-accent-600-15: var(--scheme-emerald-600-15);
     --function-accent-600-30: var(--scheme-emerald-600-30);
     --function-accent-600-50: var(--scheme-emerald-600-50);
+
+    --function-accent-solid-strong: initial;
+    --function-accent-solid-medium: initial;
+    --function-accent-on-solid-strong: initial;
+    --function-accent-on-solid-medium: initial;
+    --function-accent-on-solid-weak: initial;
 }
 
 [data-accent="aqua"] {
@@ -491,6 +623,12 @@
     --function-accent-600-15: var(--scheme-aqua-600-15);
     --function-accent-600-30: var(--scheme-aqua-600-30);
     --function-accent-600-50: var(--scheme-aqua-600-50);
+
+    --function-accent-solid-strong: initial;
+    --function-accent-solid-medium: initial;
+    --function-accent-on-solid-strong: initial;
+    --function-accent-on-solid-medium: initial;
+    --function-accent-on-solid-weak: initial;
 }
 
 [data-accent="cyan"] {
@@ -510,6 +648,12 @@
     --function-accent-600-15: var(--scheme-cyan-600-15);
     --function-accent-600-30: var(--scheme-cyan-600-30);
     --function-accent-600-50: var(--scheme-cyan-600-50);
+
+    --function-accent-solid-strong: initial;
+    --function-accent-solid-medium: initial;
+    --function-accent-on-solid-strong: initial;
+    --function-accent-on-solid-medium: initial;
+    --function-accent-on-solid-weak: initial;
 }
 
 [data-accent="blue"] {
@@ -529,6 +673,12 @@
     --function-accent-600-15: var(--scheme-blue-600-15);
     --function-accent-600-30: var(--scheme-blue-600-30);
     --function-accent-600-50: var(--scheme-blue-600-50);
+
+    --function-accent-solid-strong: initial;
+    --function-accent-solid-medium: initial;
+    --function-accent-on-solid-strong: initial;
+    --function-accent-on-solid-medium: initial;
+    --function-accent-on-solid-weak: initial;
 }
 
 [data-accent="indigo"] {
@@ -548,6 +698,12 @@
     --function-accent-600-15: var(--scheme-indigo-600-15);
     --function-accent-600-30: var(--scheme-indigo-600-30);
     --function-accent-600-50: var(--scheme-indigo-600-50);
+
+    --function-accent-solid-strong: initial;
+    --function-accent-solid-medium: initial;
+    --function-accent-on-solid-strong: initial;
+    --function-accent-on-solid-medium: initial;
+    --function-accent-on-solid-weak: initial;
 }
 
 [data-accent="violet"] {
@@ -567,6 +723,12 @@
     --function-accent-600-15: var(--scheme-violet-600-15);
     --function-accent-600-30: var(--scheme-violet-600-30);
     --function-accent-600-50: var(--scheme-violet-600-50);
+
+    --function-accent-solid-strong: initial;
+    --function-accent-solid-medium: initial;
+    --function-accent-on-solid-strong: initial;
+    --function-accent-on-solid-medium: initial;
+    --function-accent-on-solid-weak: initial;
 }
 
 [data-accent="magenta"] {
@@ -586,6 +748,12 @@
     --function-accent-600-15: var(--scheme-magenta-600-15);
     --function-accent-600-30: var(--scheme-magenta-600-30);
     --function-accent-600-50: var(--scheme-magenta-600-50);
+
+    --function-accent-solid-strong: initial;
+    --function-accent-solid-medium: initial;
+    --function-accent-on-solid-strong: initial;
+    --function-accent-on-solid-medium: initial;
+    --function-accent-on-solid-weak: initial;
 }
 
 [data-accent="pink"] {
@@ -605,6 +773,12 @@
     --function-accent-600-15: var(--scheme-pink-600-15);
     --function-accent-600-30: var(--scheme-pink-600-30);
     --function-accent-600-50: var(--scheme-pink-600-50);
+
+    --function-accent-solid-strong: initial;
+    --function-accent-solid-medium: initial;
+    --function-accent-on-solid-strong: initial;
+    --function-accent-on-solid-medium: initial;
+    --function-accent-on-solid-weak: initial;
 }
 
 /* neutral */

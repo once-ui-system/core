@@ -12,6 +12,7 @@
     "map": 8,
     "canvas": 9,
     "scene": 10,
-    "calendar": 11
+    "calendar": 11,
+    "richTextEditor": 12
   }
 }

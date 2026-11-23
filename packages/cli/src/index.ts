@@ -2,6 +2,7 @@
 import { readFileSync } from "node:fs";
 import { parseArgs } from "node:util";
 import { add } from "./commands/add.js";
+import { brand } from "./commands/brand.js";
 import { create } from "./commands/create.js";
 import { list } from "./commands/list.js";
 import { login, logout, whoami } from "./commands/login.js";
@@ -14,14 +15,25 @@ const HELP = `once-ui — scaffold apps from Stack surfaces and add Once UI bloc
 
 Usage
   once-ui create <dir> [--surfaces landing,docs] [--slices billing] [--name my-app] [--url https://…]
-                [--targets desktop,mobile] [--app-id com.my.app]
+                [--targets desktop,mobile] [--app-id com.my.app] [--locales en,hu]
                                 Desktop (Electron) and mobile (Capacitor) apps load
-                                the deployed site, so --targets needs --url
+                                the deployed site, so --targets needs --url.
+                                --locales sets the languages, default first; two or
+                                more add language URLs (/hu) and a switcher
+                [--brand "<description>" | --brand <brand id>] [--pick 0-3]
+                                Generate a brand (Pro and Indie) or use a saved one:
+                                logo, icons, color and heading font go into the app
   once-ui add <block…> [--overwrite] [--no-install]
   once-ui update [block…] [--dry-run] [--force] [--no-install]
                                 Bring added blocks up to date; files you edited are kept
   once-ui migrate <version> [dir] [--dry-run] [--force]
                                 Rewrite a project for a new Once UI major (2.0 or 3.0)
+  once-ui brand new "<description>" [--pick 0-3] [--engine board|board-icons|svg]
+                                Generate four candidates on once-ui.com, keep one;
+                                written into the app when run in one
+  once-ui brand list            Your saved brands
+  once-ui brand pull <id> [dir] Write a saved brand into an app: logo slots, icons,
+                                once-ui.config color (brandSeed) and heading font
   once-ui list                  Surfaces and slices in the current Stack release, and which you own
   once-ui login [--no-browser]  Sign in through once-ui.com in your browser
   once-ui login --token oui_…   Or save an access token (pipe one in, or set ONCE_UI_TOKEN)
@@ -51,6 +63,10 @@ async function main(argv: string[]) {
       url: { type: "string" },
       targets: { type: "string" },
       "app-id": { type: "string" },
+      locales: { type: "string" },
+      brand: { type: "string" },
+      pick: { type: "string" },
+      engine: { type: "string" },
       overwrite: { type: "boolean" },
       css: { type: "boolean" },
       force: { type: "boolean" },
@@ -80,6 +96,8 @@ async function main(argv: string[]) {
       return list(await client());
     case "create":
       return create(await client(), rest[0], { ...values, appId: values["app-id"] });
+    case "brand":
+      return brand(await client(), rest, { pick: values.pick, engine: values.engine });
     case "add":
       return add(await client(), rest, {
         overwrite: values.overwrite,

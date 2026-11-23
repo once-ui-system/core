@@ -8,6 +8,7 @@ export * from "./CountFx.js";
 export * from "./Effect.js";
 export * from "./FlipFx.js";
 export * from "./GlitchFx.js";
+export * from "./GradientFx.js";
 export * from "./HoloFx.js";
 export * from "./LetterFx.js";
 export * from "./MatrixFx.js";

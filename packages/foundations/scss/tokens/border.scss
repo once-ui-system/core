@@ -23,6 +23,10 @@
 }
 
 [data-border="conservative"] {
+    // Built-in icons square their caps and joins to match crisp corners.
+    --icon-linecap:     square;
+    --icon-linejoin:    miter;
+
     --radius-xs:        0.125rem;
     --radius-xs-nest-4: 0.25rem;
     --radius-xs-nest-8: 0.375rem;
@@ -59,13 +63,16 @@
     --radius-m-nest-4:  1.5rem;
     --radius-m-nest-8:  1.875rem;
     
-    --radius-l:         1.75rem;
-    --radius-l-nest-4:  2rem;
-    --radius-l-nest-8:  2.5rem;
+    // Large surfaces (cards, panels, dialogs) step up gently from the
+    // controls' pill radius rather than keep growing: at 28px and 32px a
+    // card's corners read as a bubble.
+    --radius-l:         1.5rem;
+    --radius-l-nest-4:  1.75rem;
+    --radius-l-nest-8:  2rem;
 
-    --radius-xl:        2rem;
-    --radius-xl-nest-4: 2.25rem;
-    --radius-xl-nest-8: 2.75rem;
+    --radius-xl:        1.75rem;
+    --radius-xl-nest-4: 2rem;
+    --radius-xl-nest-8: 2.25rem;
 
     --radius-full:      999rem;
 }

@@ -11,8 +11,9 @@
  *     }
  *   }
  *
- * Tools: search_components, get_component, get_type, get_task, get_rules and
- * validate_code (the checks of once-ui-validate-ai-code). The protocol is
+ * Tools: search_components, get_component, get_type, get_task, get_rules,
+ * validate_code (the checks of once-ui-validate-ai-code) and get_brand (the
+ * app's own brand, read from its files). The protocol is
  * JSON-RPC 2.0, one message per line, so it needs no SDK.
  */
 
@@ -229,6 +230,250 @@ function validateCode({ code, next }) {
   ].join("\n");
 }
 
+/* ------------------------------------------------------------------ brand */
+
+const CONFIG_FILES = [
+  "src/resources/once-ui.config.js",
+  "src/resources/once-ui.config.ts",
+  "src/resources/once-ui.config.mjs",
+  "once-ui.config.js",
+  "once-ui.config.ts",
+  "once-ui.config.mjs",
+];
+
+/** Logo, icon and mascot files the brand kit and Stack write, in the order an agent wants them. */
+const BRAND_FILES = [
+  "public/trademarks/icon-light.svg",
+  "public/trademarks/icon-dark.svg",
+  "public/trademarks/wordmark-light.svg",
+  "public/trademarks/wordmark-dark.svg",
+  "public/brand/mark-brand.svg",
+  "public/brand/mark-black.svg",
+  "public/brand/mark-white.svg",
+  "public/brand/lockup-light.svg",
+  "public/brand/lockup-dark.svg",
+  "assets/mark-brand.svg",
+  "assets/wordmark-brand.svg",
+  "assets/lockup-light.svg",
+  "assets/lockup-dark.svg",
+  "src/app/icon.svg",
+  "src/app/favicon.ico",
+  "src/app/apple-icon.png",
+];
+
+const MASCOT_FILES = [
+  "src/components/AppMascot.tsx",
+  "src/components/AppMascot.jsx",
+  "src/app/components/AppMascot.tsx",
+];
+
+const STYLE_KEYS = [
+  "theme",
+  "defaultTheme",
+  "neutral",
+  "brand",
+  "brandSeed",
+  "accent",
+  "accentSeed",
+  "solid",
+  "solidStyle",
+  "border",
+  "surface",
+  "pageBackground",
+  "surfaceBackground",
+  "scaling",
+];
+
+const HEX = /^#[0-9a-f]{6}$/i;
+
+/** The body of `const <name> = { … }`, braces balanced, or null. */
+function objectBody(source, name) {
+  const start = source.search(new RegExp(`(?:const|let|var)\\s+${name}\\s*(?::[^=]+)?=\\s*\\{`));
+  if (start === -1) return null;
+  const open = source.indexOf("{", start);
+  let depth = 0;
+  for (let i = open; i < source.length; i++) {
+    if (source[i] === "{") depth++;
+    else if (source[i] === "}" && --depth === 0) return source.slice(open + 1, i);
+  }
+  return null;
+}
+
+/** `key: "value"` pairs at the top level of an object body (strings only). */
+function stringFields(body, keys) {
+  const out = {};
+  if (!body) return out;
+  for (const key of keys) {
+    const match = body.match(
+      new RegExp(`(?:^|[\\s,{])["']?${key}["']?\\s*:\\s*(["'\`])([^"'\`\\n]*)\\1`),
+    );
+    if (match) out[key] = match[2];
+  }
+  return out;
+}
+
+/** The family each font variant loads: `const heading = Space_Grotesk({` → "Space Grotesk". */
+function configFonts(source) {
+  const families = {};
+  const re =
+    /const\s+(\w+)\s*=\s*([A-Z][A-Za-z0-9_]*)\s*\(\s*\{[^}]*variable:\s*["']--font-(\w+)["']/g;
+  for (let m = re.exec(source); m; m = re.exec(source)) {
+    families[m[3]] = m[2].replace(/_/g, " ");
+  }
+  return families;
+}
+
+/** The JSON the kit writes into `src/brand/brand.ts`, without the mark's paths. */
+function kitIdentity(source) {
+  const at = source.search(/export\s+const\s+brand\b[^=]*=\s*\{/);
+  if (at === -1) return null;
+  const open = source.indexOf("{", at);
+  const close = source.lastIndexOf("}");
+  try {
+    const identity = JSON.parse(source.slice(open, close + 1));
+    const { mark, wordmark, ...rest } = identity;
+    return { ...rest, hasMark: Boolean(mark), hasWordmark: Boolean(wordmark) };
+  } catch {
+    return null;
+  }
+}
+
+/** `src/brand/brand.json`, as `once-ui brand pull` and the brand API write it. */
+function kitJson(source) {
+  try {
+    const { mark, wordmark, ...rest } = JSON.parse(source);
+    return { ...rest, hasMark: Boolean(mark), hasWordmark: Boolean(wordmark) };
+  } catch {
+    return null;
+  }
+}
+
+function firstExisting(dir, files) {
+  return files.find((file) => fs.existsSync(path.join(dir, file))) ?? null;
+}
+
+function getBrand({ dir } = {}) {
+  const root = path.resolve(String(dir || process.cwd()));
+  if (!fs.existsSync(root)) throw new UserError(`There is no folder ${root}.`);
+  const readIn = (file) => fs.readFileSync(path.join(root, file), "utf8");
+
+  const configFile = firstExisting(root, CONFIG_FILES);
+  const config = configFile ? readIn(configFile) : "";
+  const style = stringFields(objectBody(config, "style"), STYLE_KEYS);
+  const schema = stringFields(objectBody(config, "schema"), ["name", "description"]);
+  const fonts = configFonts(config);
+  const kitFile = firstExisting(root, [
+    "src/brand/brand.json",
+    "src/brand/brand.ts",
+    "src/brand/brand.js",
+  ]);
+  const kit = kitFile
+    ? kitFile.endsWith(".json")
+      ? kitJson(readIn(kitFile))
+      : kitIdentity(readIn(kitFile))
+    : null;
+  const files = BRAND_FILES.filter((file) => fs.existsSync(path.join(root, file)));
+  const mascotFile = firstExisting(root, MASCOT_FILES);
+  const mascotSeed = mascotFile
+    ? readIn(mascotFile).match(/MASCOT_SEED\s*=\s*["']([^"']+)["']/)?.[1]
+    : null;
+
+  if (!configFile && !kit && !files.length) {
+    throw new UserError(
+      `No brand found in ${root}: no once-ui.config, no src/brand/brand.ts, no logo files in public/trademarks. Pass \`dir\` as the app's root, or make a brand at https://once-ui.com/brand-kit.`,
+    );
+  }
+
+  const name = kit?.name ?? schema.name ?? null;
+  const hex = kit?.brand ?? (HEX.test(style.brandSeed ?? "") ? style.brandSeed : null);
+  const lines = [`# Brand${name ? `: ${name}` : ""}`, ""];
+  if (kit?.tagline) lines.push(kit.tagline, "");
+
+  lines.push("## Colour", "");
+  if (style.brand)
+    lines.push(
+      `- brand scheme: ${style.brand}${style.brandSeed ? ` (seed ${style.brandSeed})` : ""}`,
+    );
+  if (style.accent)
+    lines.push(
+      `- accent scheme: ${style.accent}${style.accentSeed ? ` (seed ${style.accentSeed})` : ""}`,
+    );
+  if (style.neutral) lines.push(`- neutral: ${style.neutral}`);
+  if (hex)
+    lines.push(`- brand colour: ${hex}${kit?.partner ? `, glow partner ${kit.partner}` : ""}`);
+  for (const key of [
+    "theme",
+    "defaultTheme",
+    "solid",
+    "solidStyle",
+    "border",
+    "surface",
+    "pageBackground",
+    "surfaceBackground",
+  ]) {
+    if (style[key]) lines.push(`- ${key}: ${style[key]}`);
+  }
+  if (kit?.brand && style.brand && style.brand !== "custom") {
+    lines.push(
+      "",
+      `The config uses the nearest scheme (${style.brand}), not the exact colour. For ${kit.brand} itself, set \`brand: "custom", brandSeed: "${kit.brand}"\` in \`style\`.`,
+    );
+  }
+  lines.push("");
+
+  const families = { ...fonts };
+  if (kit?.font && !families.heading) families.heading = kit.font;
+  if (Object.keys(families).length) {
+    lines.push("## Type", "");
+    for (const [variant, family] of Object.entries(families)) lines.push(`- ${variant}: ${family}`);
+    lines.push("");
+  }
+
+  lines.push("## Logo and icons", "");
+  if (files.length) for (const file of files) lines.push(`- ${file}`);
+  else lines.push("- none in public/trademarks or public/brand");
+  const light = files.find((f) => f.endsWith("icon-light.svg"));
+  const dark = files.find((f) => f.endsWith("icon-dark.svg"));
+  const wordLight = files.find((f) => f.endsWith("wordmark-light.svg"));
+  const wordDark = files.find((f) => f.endsWith("wordmark-dark.svg"));
+  const src = (file) => `/${file.replace(/^public\//, "")}`;
+  if (light && dark) {
+    const word =
+      wordLight && wordDark
+        ? ` wordmark={{ light: "${src(wordLight)}", dark: "${src(wordDark)}" }}`
+        : "";
+    lines.push(
+      "",
+      "```tsx",
+      `<Logo icon={{ light: "${src(light)}", dark: "${src(dark)}" }}${word} href="/" />`,
+      "```",
+    );
+  } else if (name) {
+    lines.push("", "```tsx", `<Logo text=${JSON.stringify(name)} monogram href="/" />`, "```");
+  }
+  lines.push("");
+
+  if (mascotFile) {
+    lines.push(
+      "## Mascot",
+      "",
+      `- \`<AppMascot />\` from ${mascotFile}${mascotSeed ? ` (seed ${mascotSeed})` : ""}. Use it as an EmptyState's \`visual\`; never draw another.`,
+      "",
+    );
+  }
+
+  lines.push(
+    "## Using it",
+    "",
+    '- Colour comes from tokens only: `brand-*` for the product\'s own colour (`onBackground="brand-medium"`, `background="brand-alpha-weak"`, `tone="brand"` on Button and Tag), `accent-*` for the second colour. Never write the hex in a component.',
+    "- Change the brand in `style` (and `fonts`) in the config, not per component. `once-ui brand pull <id>` writes a saved Brand Kit brand into the app.",
+    "- The logo is `<Logo>` with the files above; never an `Icon` and `Text` side by side.",
+    "",
+    `Read from ${root}${configFile ? ` (${configFile}${kitFile ? `, ${kitFile}` : ""})` : kitFile ? ` (${kitFile})` : ""}.`,
+  );
+  return lines.join("\n").trim();
+}
+
 class UserError extends Error {}
 
 const TOOLS = [
@@ -307,6 +552,21 @@ const TOOLS = [
     },
     run: validateCode,
   },
+  {
+    name: "get_brand",
+    description:
+      "The app's own brand, read from its files: brand and accent schemes, exact colour, fonts, the logo files with the <Logo> to render them, and the mascot. Call it before choosing colours, a logo or type, so the UI uses the brand instead of inventing one.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        dir: {
+          type: "string",
+          description: "The app's root folder (default: the folder the server runs in)",
+        },
+      },
+    },
+    run: getBrand,
+  },
 ];
 
 /** One JSON-RPC message in, its response out (null for a notification). */
@@ -324,7 +584,7 @@ function handle(message) {
         protocolVersion: PROTOCOL_VERSIONS.includes(asked) ? asked : PROTOCOL_VERSIONS[0],
         capabilities: { tools: {} },
         serverInfo: { name: "once-ui", title: "Once UI", version: version() },
-        instructions: `Once UI ${version()}. Before writing UI, call get_rules once, search_components for what you need, and get_component for each component you use. For a whole page, get_task. Run validate_code on the result.`,
+        instructions: `Once UI ${version()}. Before writing UI, call get_rules once, search_components for what you need, and get_component for each component you use. For a whole page, get_task. In an app, call get_brand before picking colours, type or a logo. Run validate_code on the result.`,
       });
     }
     case "ping":

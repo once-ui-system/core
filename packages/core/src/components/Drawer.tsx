@@ -4,6 +4,7 @@ import classNames from "clsx";
 import type React from "react";
 import { type ReactNode, type RefObject, useCallback, useId, useRef } from "react";
 import { createPortal } from "react-dom";
+import { useScopeAttributes } from "../internal/scopeAttributes.js";
 import { useOverlay } from "../internal/useOverlay.js";
 import { Column } from "./Column.js";
 import styles from "./Drawer.module.scss";
@@ -123,7 +124,13 @@ const Drawer = ({
     [ref],
   );
 
-  if (!mounted || !visible) return null;
+  // Where the drawer sits in the tree, so the portal keeps the look of the
+  // StyleScope (or data-theme section) it was opened from.
+  const markerRef = useRef<HTMLSpanElement | null>(null);
+  const scope = useScopeAttributes(markerRef, mounted);
+  const marker = <span ref={markerRef} hidden data-drawer-anchor="" />;
+
+  if (!mounted || !visible) return marker;
 
   const titleNode =
     title === undefined ? null : typeof title === "string" ? (
@@ -140,10 +147,11 @@ const Drawer = ({
 
   const showHeader = !flush && (title !== undefined || description !== undefined || showClose);
 
-  return createPortal(
+  const portal = createPortal(
     <>
       <ScrollLock enabled={open} allowScrollInElement={panelRef} />
       <Flex
+        {...scope}
         ref={overlayRef}
         position="fixed"
         top="0"
@@ -265,6 +273,13 @@ const Drawer = ({
       </Flex>
     </>,
     document.body,
+  );
+
+  return (
+    <>
+      {marker}
+      {portal}
+    </>
   );
 };
 

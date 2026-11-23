@@ -92,8 +92,56 @@
   "mascotLook": {
    "group": "modules",
    "kind": "function",
-   "signature": "(seed: string | number) => MascotLook",
+   "signature": "(seed: string | number, options?: { canonical?: boolean }) => MascotLook",
    "doc": "A whole look from a seed: a user id, a product name, any string or number."
+  },
+  "MASCOT_IDENTITIES": {
+   "group": "modules",
+   "kind": "value",
+   "type": "readonly MascotIdentity[]",
+   "doc": "Every canonical mascot."
+  },
+  "MASCOT_IDENTITY_KEYS": {
+   "group": "modules",
+   "kind": "value",
+   "type": "readonly string[]",
+   "doc": "Every name the registry holds, as keys: for reserving them in a sign-up or a name claim."
+  },
+  "mascotIdentity": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(seed: string | number | undefined) => MascotIdentity | undefined",
+   "doc": "The canonical mascot a seed names, or `undefined` when it names none."
+  },
+  "mascotIdentityKey": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(seed: string | number) => string",
+   "doc": "A seed as the registry compares it: lowercase letters and digits only."
+  },
+  "cleanMascotUsername": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(raw: string) => string",
+   "doc": "A username as it is stored: lowercase, no"
+  },
+  "fetchMascotSkin": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(username: string, source?: string) => Promise<MascotSkin | null>",
+   "doc": "Reads a username's skin once per page and source: later calls share the first request."
+  },
+  "MASCOT_SKIN_SOURCE": {
+   "group": "modules",
+   "kind": "value",
+   "type": "\"https://once-ui.com/api/mascot/skin\"",
+   "doc": "Where skins are read from, unless `skinSource` says otherwise."
+  },
+  "useMascotSkin": {
+   "group": "modules",
+   "kind": "hook",
+   "signature": "(username: string | undefined, source?: string) => { skin: MascotSkin | null; ready: boolean; }",
+   "doc": "A username's skin for a component: `ready` turns true when it arrived, or failed, or took longer than a moment, so the mascot never stays hidden."
   },
   "mascotDataUrl": {
    "group": "modules",
@@ -130,6 +178,61 @@
    "kind": "function",
    "signature": "(option: Pick<ReactionOption, \"value\" | \"emoji\" | \"src\" | \"motion\">) => ReactionMotion",
    "doc": "The gesture a reaction plays: its own `motion`, else one that suits the emoji."
+  },
+  "useWorkspace": {
+   "group": "modules",
+   "kind": "hook",
+   "signature": "<T = unknown>(options?: UseWorkspaceOptions<T>) => WorkspaceController<T>",
+   "doc": "The workspace's state in a component: tabs beside a conversation, each a preview that can switch to its editor."
+  },
+  "activeWorkspaceTab": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "<T>(state: WorkspaceState<T>) => WorkspaceTab<T> | null",
+   "doc": "The active tab, or null when nothing is open."
+  },
+  "DEFAULT_MAX_TABS": {
+   "group": "modules",
+   "kind": "value",
+   "type": "8"
+  },
+  "emptyWorkspace": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "<T = unknown>() => WorkspaceState<T>"
+  },
+  "workspaceReducer": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "<T>(state: WorkspaceState<T>, action: WorkspaceAction<T>, options?: WorkspaceOptions) => WorkspaceState<T>",
+   "doc": "The workspace's reducer."
+  },
+  "workspaceTabMode": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(state: WorkspaceState<unknown>, key: string) => WorkspaceTabMode",
+   "doc": "The mode a tab is in: `\"edit\"` only while its editor is mounted."
+  },
+  "divergingScale": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "kind": "function",
+   "signature": "(values: readonly number[]) => { zero: number; span: number }",
+   "doc": "Where zero sits across the track, in percent: where the largest loss ends, so a list with no losses uses the whole width and one with only losses grows leftward."
+  },
+  "heatmapStep": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "kind": "function",
+   "signature": "(value: number, max: number) => number",
+   "doc": "The step a value falls in, 0 to 4, against the largest value in the grid."
+  },
+  "squarify": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "kind": "function",
+   "signature": "(values: readonly number[], box: Rect) => Rect[]",
+   "doc": "Squarified treemap (Bruls, Huizing, van Wijk): rows of tiles kept close to square."
   },
   "clusterPoints": {
    "group": "map",
@@ -727,6 +830,41 @@
    "type": "{ readonly ops: { readonly description: \"Operations, incident, dispatch and map tools: dark first, compact, a quiet cyan brand on slate so status colours carry the meaning.\"; readonly style: { ...; }; readonly dataStyle: { ...; }; readonly fonts: { ...; }; }; readonly care: { ...; }; readonly creative: { ...; }; rea...",
    "doc": "Finished looks for the kinds of app Once UI is built for."
   },
+  "familyFooterLabelsHu": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "FamilyFooterLabels",
+   "doc": "Hungarian labels for the Dopler family."
+  },
+  "familyHref": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "function",
+   "signature": "(href: string, from?: string) => string",
+   "doc": "The link a sibling tile points at: `href` with `ref=<from>-footer` added, so the sibling's analytics can tell which product sent the visit."
+  },
+  "familySiblings": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "function",
+   "signature": "(products: FamilyProduct[], current?: string) => FamilyProduct[]",
+   "doc": "The siblings to show: live ones, without the product the footer is on."
+  },
+  "familyParent": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "FamilyParent",
+   "doc": "The company behind the products this family footer ships with."
+  },
+  "familyProducts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "FamilyProduct[]",
+   "doc": "Every Dopler product, in the order the row shows them."
+  },
   "randomMascotDesign": {
    "group": "blocks",
    "importFrom": "@once-ui-system/blocks",
@@ -1030,6 +1168,7 @@
    "xs"
   ],
   "Breakpoints": "Record<BreakpointKey, number>",
+  "BuiltInIconName": "keyof typeof iconData",
   "CSSUnit": [
    "`${number}px`",
    "`${number}rem`",
@@ -1179,10 +1318,10 @@
    "spacious"
   ],
   "DeviceFontSize": [
-   "15",
    "16",
    "13",
    "14",
+   "15",
    "17",
    "18"
   ],
@@ -1197,6 +1336,29 @@
    "wide",
    "dot"
   ],
+  "FamilyFooterLabels": {
+   "moreFrom": "string",
+   "productBy": "string",
+   "builtWith": "string",
+   "family": "string",
+   "navigation": "string",
+   "legal": "string"
+  },
+  "FamilyParent": {
+   "name": "!string",
+   "href": "!string",
+   "mark": "string | ReactNode",
+   "legalHref": "string"
+  },
+  "FamilyProduct": {
+   "id": "!string",
+   "name": "!string",
+   "line": "!string",
+   "href": "!string",
+   "mark": "string | ReactNode",
+   "color": "string",
+   "live": "boolean"
+  },
   "FieldControl": {
    "id": "!string",
    "invalid": "!boolean",
@@ -1217,117 +1379,7 @@
    "FunctionComponent<SVGProps<SVGSVGElement>>"
   ],
   "IconLibrary": "Record<IconName, IconComponent>",
-  "IconName": [
-   "symbol",
-   "code",
-   "link",
-   "menu",
-   "search",
-   "time",
-   "video",
-   "filter",
-   "image",
-   "security",
-   "opacity",
-   "download",
-   "info",
-   "danger",
-   "warning",
-   "adjustments",
-   "arrowDown",
-   "arrowLeft",
-   "arrowRight",
-   "arrowUp",
-   "arrowUpRight",
-   "ball",
-   "banknotes",
-   "barChart",
-   "bell",
-   "bolt",
-   "book",
-   "bookmark",
-   "calendar",
-   "cart",
-   "chat",
-   "check",
-   "checkbox",
-   "chevronDoubleLeft",
-   "chevronDoubleRight",
-   "chevronDown",
-   "chevronLeft",
-   "chevronRight",
-   "chevronUp",
-   "chevronsLeftRight",
-   "clipboard",
-   "close",
-   "computer",
-   "copy",
-   "cube",
-   "dark",
-   "dislike",
-   "document",
-   "edit",
-   "enter",
-   "eye",
-   "eyeDropper",
-   "eyeOff",
-   "file",
-   "flag",
-   "folder",
-   "food",
-   "forward",
-   "gift",
-   "globe",
-   "grid",
-   "grip",
-   "heart",
-   "help",
-   "home",
-   "inbox",
-   "light",
-   "like",
-   "linearGauge",
-   "lock",
-   "logout",
-   "mail",
-   "mapPin",
-   "maximize",
-   "minimize",
-   "minus",
-   "moreHorizontal",
-   "newspaper",
-   "organization",
-   "pause",
-   "paw",
-   "payment",
-   "people",
-   "person",
-   "personRemove",
-   "phone",
-   "play",
-   "plus",
-   "radialGauge",
-   "refresh",
-   "return",
-   "screen",
-   "send",
-   "settings",
-   "smiley",
-   "sparkle",
-   "star",
-   "starFill",
-   "store",
-   "tag",
-   "trash",
-   "trend",
-   "trendDown",
-   "trendUp",
-   "upload",
-   "volume",
-   "volumeOff",
-   "wordmark",
-   "world"
-  ],
+  "IconName": "BuiltInIconName | Extract<keyof IconLibraryOverrides, string>",
   "Identity": {
    "id": "!string",
    "provider": "!string",
@@ -1399,10 +1451,32 @@
    "cheeks": "boolean",
    "personality": "\"calm\" | \"default\" | \"bouncy\"",
    "accessory": "MascotAccessory[]",
+   "layers": "MascotIdentityLayer[]",
    "accessoryColor": "string",
    "working": "\"cube\" | \"d20\"",
    "sides": "MascotSides",
    "face": "\"3d\" | \"flat\""
+  },
+  "MascotIdentity": {
+   "handle": "!string",
+   "name": "!string",
+   "aliases": "string[]",
+   "owner": "!string",
+   "about": "!string",
+   "seed": "!string",
+   "look": "!MascotLook",
+   "layers": "!MascotIdentityLayer[]"
+  },
+  "MascotIdentityLayer": {
+   "d": "!string",
+   "fill": "string",
+   "stroke": "string",
+   "width": "number",
+   "cap": "\"round\" | \"butt\"",
+   "opacity": "number",
+   "transform": "string",
+   "clip": "boolean",
+   "place": "\"back\" | \"on\" | \"front\""
   },
   "MascotLook": {
    "color": "\"brand\" | \"accent\" | \"neutral\" | (string & {})",
@@ -1470,6 +1544,11 @@
    "mono",
    "Partial<Record<\"top\" | \"right\" | \"bottom\" | \"left\" | \"front\" | \"back\", string>>"
   ],
+  "MascotSkin": {
+   "name": "!string",
+   "design": "!MascotDesign",
+   "identity": "string"
+  },
   "MascotState": [
    "idle",
    "listening",
@@ -1479,8 +1558,10 @@
   ],
   "MascotSvgOptions": {
    "seed": "string | number",
+   "canonical": "boolean",
    "mood": "MascotMood",
    "accessory": "string",
+   "faceAccessory": "string",
    "schemes": "Partial<Record<\"brand\" | \"accent\" | \"neutral\", string>>",
    "lookAt": "{ x: number; y: number }",
    "shadow": "boolean",
@@ -1609,13 +1690,6 @@
    "generate": "!string"
   },
   "OgSchemeName": [
-   "slate",
-   "sand",
-   "gray",
-   "rose",
-   "mint",
-   "dusk",
-   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -1627,7 +1701,14 @@
    "moss",
    "green",
    "emerald",
-   "aqua"
+   "aqua",
+   "cyan",
+   "slate",
+   "sand",
+   "gray",
+   "rose",
+   "mint",
+   "dusk"
   ],
   "OgSkin": {
    "name": "!string",
@@ -1727,7 +1808,6 @@
    "delete": "(() => Promise<void>) | undefined"
   },
   "PeerCursorScheme": [
-   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -1739,7 +1819,8 @@
    "moss",
    "green",
    "emerald",
-   "aqua"
+   "aqua",
+   "cyan"
   ],
   "PhotoViewerItem": {
    "src": "!string",
@@ -1781,6 +1862,12 @@
    "{ password: string; }",
    "{ recentSignIn: true; }"
   ],
+  "Rect": {
+   "left": "!number",
+   "top": "!number",
+   "width": "!number",
+   "height": "!number"
+  },
   "ResizeOptions": {
    "keepRatio": "boolean",
    "fromCenter": "boolean",
@@ -1871,7 +1958,6 @@
    "dark": "SchemeScale"
   },
   "Schemes": [
-   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -1883,7 +1969,8 @@
    "moss",
    "green",
    "emerald",
-   "aqua"
+   "aqua",
+   "cyan"
   ],
   "SectionField": {
    "key": "!string",
@@ -2124,7 +2211,8 @@
    "bodyLineHeight": "BodyLineHeight",
    "chartMode": "ChartMode",
    "brandSeed": "string",
-   "accentSeed": "string"
+   "accentSeed": "string",
+   "neutralSeed": "string"
   },
   "StyleProviderState": {
    "theme": "!Theme",
@@ -2227,6 +2315,51 @@
    "units": "\"fraction\" | \"px\"",
    "unproject": "(x: number, y: number) => { x: number; y: number }",
    "disabled": "boolean"
-  }
+  },
+  "UseWorkspaceOptions": {
+   "initialTabs": "WorkspaceTabInput<T>[]",
+   "maxTabs": "number"
+  },
+  "WorkspaceAction": [
+   "{ type: \"open\"; tabs: WorkspaceTabInput<T>[]; focus?: boolean | undefined; expand?: boolean | undefined; }",
+   "{ type: \"activate\"; key: string; }",
+   "{ type: \"close\"; key: string; }",
+   "{ type: \"expand\"; expanded: boolean; }",
+   "{ type: \"mode\"; key: string; mode: WorkspaceTabMode; }",
+   "{ type: \"reset\"; }"
+  ],
+  "WorkspaceController": {
+   "state": "!WorkspaceState<unknown>",
+   "active": "!WorkspaceTab<unknown> | null",
+   "open": "!( tabs: WorkspaceTabInput<unknown> | WorkspaceTabInput<unknown>[], options?: { focus?: boolean; expand?: boolean }, ) => void",
+   "activate": "!(key: string) => void",
+   "close": "!(key: string) => void",
+   "setMode": "!(key: string, mode: WorkspaceTabMode) => void",
+   "modeOf": "!(key: string) => WorkspaceTabMode",
+   "setExpanded": "!(expanded: boolean) => void",
+   "reset": "!() => void",
+   "dispatch": "!(action: WorkspaceAction<unknown>) => void"
+  },
+  "WorkspaceOptions": {
+   "maxTabs": "number"
+  },
+  "WorkspaceState": {
+   "tabs": "!WorkspaceTab<unknown>[]",
+   "activeKey": "!string | null",
+   "expanded": "!boolean",
+   "editing": "!Record<string, true>"
+  },
+  "WorkspaceTab": {
+   "key": "!string",
+   "title": "!string",
+   "data": "!unknown",
+   "editable": "boolean",
+   "version": "!number"
+  },
+  "WorkspaceTabInput": "Omit<WorkspaceTab<unknown>, \"version\">",
+  "WorkspaceTabMode": [
+   "edit",
+   "preview"
+  ]
  }
 }

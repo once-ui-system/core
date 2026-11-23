@@ -43,6 +43,8 @@ export const Features6: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
       <Column
         fill
         position="absolute"
+        top="0"
+        left="0"
         style={{
           transform: "skewY(-6deg)",
         }}

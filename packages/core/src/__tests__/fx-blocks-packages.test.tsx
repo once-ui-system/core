@@ -27,6 +27,7 @@ const FX = [
   "Effect",
   "FlipFx",
   "GlitchFx",
+  "GradientFx",
   "HoloFx",
   "LetterFx",
   "MatrixFx",
@@ -40,6 +41,7 @@ const FX = [
 const BLOCKS = [
   "Banner",
   "Book",
+  "FamilyFooter",
   "LogoCloud",
   "MascotPanel",
   "ScrollToTop",

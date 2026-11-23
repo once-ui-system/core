@@ -1,6 +1,6 @@
 "use client";
 
-import { isWithinInterval, parseISO } from "date-fns";
+import { isWithinInterval } from "date-fns";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Column } from "../../components/Column.js";
 import type { DateRange } from "../../components/DatePicker.js";
@@ -21,6 +21,7 @@ import type {
   CurveType,
   DataPoint,
 } from "./interfaces.js";
+import { toChartDate } from "./utils/chartDate.js";
 import { chartFormatters, chartSeries, valueAxisWidth } from "./utils/chartSeries.js";
 
 export interface LineBarChartProps<T extends object = DataPoint>
@@ -125,8 +126,8 @@ const LineBarChart = ({
             const itemDateValue = item[xAxisKey];
             if (!itemDateValue) return false;
 
-            const itemDate =
-              typeof itemDateValue === "string" ? parseISO(itemDateValue) : (itemDateValue as Date);
+            const itemDate = toChartDate(itemDateValue);
+            if (!itemDate) return false;
 
             return isWithinInterval(itemDate, {
               start: startDate,

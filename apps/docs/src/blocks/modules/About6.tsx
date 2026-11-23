@@ -39,6 +39,8 @@ export const About6 = () => {
         <Column maxWidth="m" borderX>
           <Background
             position="absolute"
+            top="0"
+            left="0"
             fill
             m={{ hide: true }}
             lines={{
@@ -101,7 +103,8 @@ export const About6 = () => {
               <Row fillWidth marginTop="48" borderTop>
                 <Grid columns="3" m={{ columns: 3 }} s={{ columns: 2 }} fillWidth background="page">
                   {contributors.map((contributor) => (
-                    <HoverCard placement="cover"
+                    <HoverCard
+                      placement="cover"
                       key={contributor.login}
                       trigger={
                         <Card
@@ -117,16 +120,19 @@ export const About6 = () => {
                         >
                           <Avatar src={contributor.avatar} style={{ filter: "grayscale(100%)" }} />
                         </Card>
-                      }><Row
-                          fill
-                          center
-                          background="surface"
-                          border
-                          onBackground="neutral-medium"
-                          textVariant="label-default-s"
-                        >
-                          {contributor.login}
-                        </Row></HoverCard>
+                      }
+                    >
+                      <Row
+                        fill
+                        center
+                        background="surface"
+                        border
+                        onBackground="neutral-medium"
+                        textVariant="label-default-s"
+                      >
+                        {contributor.login}
+                      </Row>
+                    </HoverCard>
                   ))}
                 </Grid>
               </Row>

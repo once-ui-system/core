@@ -59,6 +59,8 @@ export const Testimonial7 = (flex: React.ComponentProps<typeof Column>) => {
         <MatrixFx
           themeSolid="color"
           position="absolute"
+          top="0"
+          left="0"
           fill
           colors={["brand-solid-strong"]}
           size={2}
@@ -91,6 +93,8 @@ export const Testimonial7 = (flex: React.ComponentProps<typeof Column>) => {
         <Background
           themeSolid="color"
           position="absolute"
+          top="0"
+          left="0"
           fill
           gradient={{
             display: true,

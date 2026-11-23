@@ -47,3 +47,33 @@
     height: calc(100% - var(--fullscreen-top) - var(--fullscreen-bottom)) !important;
     z-index: 9;
 }
+
+// Fullscreen with a preview and its code: on a wide screen the preview sits
+// beside the code instead of above it, each scrolling on its own. The header
+// spans both.
+@media (min-width: 1024px) {
+    .fullscreen.split {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-rows: auto minmax(0, 1fr);
+        align-items: stretch;
+
+        > * {
+            min-height: 0;
+        }
+
+        > .header {
+            grid-column: 1 / -1;
+        }
+
+        > :last-child {
+            overflow-y: auto;
+        }
+    }
+}
+// The file tabs sit in the block's header, inside the block's own border:
+// the control's rail drops its border so it does not read as a box in a box.
+// The sliding selected background stays.
+.tabs [role="tablist"] {
+    border-color: transparent;
+}

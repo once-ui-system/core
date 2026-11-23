@@ -61,6 +61,16 @@ describe("mascotSvg", () => {
     expect(svg).toContain('<circle cx="1" cy="2" r="3"/>');
   });
 
+  it("draws a faceAccessory inside the face, so it moves with lookAt", () => {
+    const svg = mascotSvg({
+      lookAt: { x: 1, y: 0 },
+      faceAccessory: '<path d="M90 112L110 112L100 128Z"/>',
+    });
+    const face = svg.indexOf('<g transform="translate(24 0)">');
+    expect(face).toBeGreaterThan(-1);
+    expect(svg.indexOf('d="M90 112L110 112L100 128Z"')).toBeGreaterThan(face);
+  });
+
   it("gives two different mascots different ids, so they can share a page", () => {
     const a = mascotSvg({ color: "#f00" }).match(/id="(m[a-z0-9]+)-light"/)?.[1];
     const b = mascotSvg({ color: "#0f0" }).match(/id="(m[a-z0-9]+)-light"/)?.[1];

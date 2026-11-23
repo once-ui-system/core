@@ -12,6 +12,7 @@ import { useAdapters } from "../../contexts/AdapterProvider.js";
 import type { IconName } from "../../icons.js";
 import styles from "./MegaMenu.module.scss";
 import { MegaMenuAccordion } from "./MegaMenuAccordion.js";
+import { MegaMenuDrill } from "./MegaMenuDrill.js";
 import { clampPanelLeft } from "./panelPosition.js";
 
 export interface MenuLink {
@@ -49,7 +50,14 @@ export interface MegaMenuProps extends React.ComponentProps<typeof Flex> {
    * a menu inside a mobile drawer. Left out, the bar shows at every width.
    */
   collapseBelow?: Breakpoint | "always";
-  /** Called when a link in the accordions is followed, to close the drawer they sit in. */
+  /**
+   * How the collapsed menu nests. `"accordion"` (the default) opens each
+   * group in place. `"drill"` lists the groups and replaces the list with a
+   * group's links under a back row, for menus whose groups hold many links:
+   * the phone menu of a large site, inside `HeaderMenu`.
+   */
+  collapseAs?: "accordion" | "drill";
+  /** Called when a link in the collapsed menu is followed, to close the menu it sits in. */
   onClose?: () => void;
 }
 
@@ -71,14 +79,20 @@ const FOCUSABLE =
  * A navigation bar whose groups open panels of links, collapsing into
  * accordions at `collapseBelow`.
  */
-export const MegaMenu = ({ collapseBelow, onClose, ...props }: MegaMenuProps) => {
+export const MegaMenu = ({
+  collapseBelow,
+  collapseAs = "accordion",
+  onClose,
+  ...props
+}: MegaMenuProps) => {
+  const Collapsed = collapseAs === "drill" ? MegaMenuDrill : MegaMenuAccordion;
   if (collapseBelow === undefined) return <MegaMenuBar {...props} />;
-  if (collapseBelow === "always") return <MegaMenuAccordion onClose={onClose} {...props} />;
+  if (collapseBelow === "always") return <Collapsed onClose={onClose} {...props} />;
   const own = props[collapseBelow];
   return (
     <>
       <MegaMenuBar {...props} {...{ [collapseBelow]: { ...own, hide: true } }} />
-      <MegaMenuAccordion
+      <Collapsed
         menuGroups={props.menuGroups}
         onClose={onClose}
         hide
@@ -94,7 +108,7 @@ const MegaMenuBar = ({
   menuGroups,
   className,
   ...rest
-}: Omit<MegaMenuProps, "collapseBelow" | "onClose">) => {
+}: Omit<MegaMenuProps, "collapseBelow" | "collapseAs" | "onClose">) => {
   const { usePathname } = useAdapters();
   const pathname = usePathname();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);

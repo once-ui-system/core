@@ -12,7 +12,7 @@ When the request doesn't specify design intent, ask these five questions first (
 4. **Decoration** — gradients, MatrixFx, animated blobs, none?
 5. **Imagery** — placeholder images, or avatars/logos/icons only?
 
-If you can't ask (or the user says "you decide"), default to: restrained, centered with `maxWidth="m"` content, single brand accent, one subtle gradient (recipes.md #1), no placeholder images (use `Avatar`, `Logo`, `Icon`).
+For a product's own landing page or homepage, find its world first (recipes.md #9, brand world): a direction card and three worlds before any code. For any other marketing page, or when the person asks for a plain one: if you can't ask (or the user says "you decide"), default to: restrained, centered with `maxWidth="m"` content, single brand accent, one subtle gradient (recipes.md #1), no placeholder images (use `Avatar`, `Logo`, `Icon`).
 
 That default is for a landing page. For an app (signed-in, records, forms), the first build step is the theme, not a page: set it from the theme preset for the app's domain, in `once-ui.config` or in the props of `ThemeInit`, `ThemeProvider` and `DataThemeProvider` wherever the app mounts them, `themePreset("ops" | "care" | "creative" | "commerce")` (rule 30c), which sets page and surface in both themes, brand, accent, solids, corners, density and the faces to load with `next/font`. Change only what is the product's own, usually `brandSeed`. One brand accent, no ambient layers or effects. Shipping the starter's gray/blue/contrast unchanged reads as unbranded.
 
@@ -76,7 +76,7 @@ That default is for a landing page. For an app (signed-in, records, forms), the 
 
 ## Color and surfaces
 
-7. Colors are semantic tokens, never hex/rgb: `{tone}-{weight}` or `{tone}-alpha-{weight}` where tone = `neutral | brand | accent | info | danger | warning | success` and weight = `weak | medium | strong`. A component's palette is its `tone` prop (Button, IconButton, Tag, Feedback, Toast, `addToast`, `StatusIndicator pulse`, gauges, Timeline items); `scheme` is a palette hue (`blue`, `green`…) on the plain StatusIndicator dot and Avatar's `statusIndicator`.
+7. Colors are semantic tokens, never hex/rgb: `{tone}-{weight}` or `{tone}-alpha-{weight}` where tone = `neutral | brand | accent | info | danger | warning | success` and weight = `weak | medium | strong`. For an opacity between the alpha steps, put it after a slash on `background`, `solid` or `border`: `background="brand/12"` is the tone itself at 12% (`brand/15` is `brand-alpha-weak`), `border="brand-strong/40"` the prop's own token at 40%; `background="gradient"` (or `"gradient/16"`) is brand to accent, turned by `--gradient-angle`. Never copy a token into a new `--my-colour` variable to get an opacity; in artwork CSS write `color-mix(in srgb, var(--brand-alpha) 12%, transparent)`. A component's palette is its `tone` prop (Button, IconButton, Tag, Feedback, Toast, `addToast`, `StatusIndicator pulse`, gauges, Timeline items); `scheme` is a palette hue (`blue`, `green`…) on the plain StatusIndicator dot and Avatar's `statusIndicator`. Two exceptions: a seed, which only takes a colour (`brandSeed`, `accentSeed`, `pageBackground`, `surfaceBackground`, a Mascot's `color`), and artwork: the cast, props and textures of a hero scene, drawn in classes named for what they draw (`.emChair`) in one sheet scoped under the page class. Nowhere else.
    - `background` also accepts `surface | overlay | page | transparent`
    - `onBackground` colors text/icons on a background
    - Inline SVG paint too: `fill="currentColor"` (colour the wrapper with `onBackground`) or a token, `stroke="var(--brand-solid-strong)"` — never `fill="#15D9EF"`
@@ -108,7 +108,7 @@ That default is for a landing page. For an app (signed-in, records, forms), the 
 8e. Use the system's parts for brand, alerts and charts; hand-built versions read as off-brand:
 - The product mark is a `Logo`: `<Logo text="Seatwise" monogram href="/" />` without a designed mark, or `icon`/`wordmark` sources when there are files. Never an `Icon` beside a `Text`.
 - An inline alert or notice is a `Feedback` (`tone`, `icon`, `title`, children), never a `Column role="alert"` with a tinted background.
-- A chart is `LineChart`, `BarChart`, `LineBarChart`, `PieChart` or `Sparkline` from `@once-ui-system/core/data`, never hand-drawn SVG. They take the theme's data palette, tooltips and axes.
+- A chart is `LineChart`, `BarChart`, `LineBarChart`, `PieChart`, `Sparkline`, `Treemap`, `Heatmap` or `DivergingBars` from `@once-ui-system/core/data`, never hand-drawn SVG. They take the theme's data palette, tooltips and axes.
 - Give a single-series chart the brand: series `color: "brand"` (not `"brand-strong"`, a text colour: white in dark). Its `height` is a string (`height="16rem"`): `height={16}` is the 1rem token and collapses the chart to a line.
 
 8f. Work apps are dense and quiet. An app people use all day (a front desk, a planner, an admin) sets `density: "compact"` and `border: "conservative"` in the config `style`; spacious and rounded oversize every control and corner. Key numbers are one bordered strip of divided cells (label, then value, a `StatusIndicator` for state), not a row of grey tiles. One screen has one primary action: the same "Book appointment" in the header and on the page is one too many.
@@ -274,7 +274,7 @@ Siblings holding content get `zIndex={1}`. That layer and its content sibling ar
 
 22. `Background` gradient units: `x`/`y` place the centre as a percentage string of the container (`"50%"`/`"50%"` = center) or a number on the token scale. `width`/`height` are the ellipse's radii, as a percentage string of the container (`"100%"`, the default) or a number. A soft corner glow is `width: "100%"`–`"200%"`; `"500%"` overshoots the container. `Mask` is the same: `x`/`y` percentage strings, `radius` a CSS length (`"50vh"`, the default) or a number.
 
-23. Color visibility: `*-background-weak` is nearly the page color — it is invisible as an accent. For tints and glows use alpha tokens (`brand-alpha-medium`, `brand-alpha-strong`) or solid tokens (`brand-solid-strong`) and do not stack a low `opacity` on top of an already-weak color.
+23. Color visibility: `*-background-weak` is nearly the page color — it is invisible as an accent. For tints and glows use alpha tokens (`brand-alpha-medium`, `brand-alpha-strong`) or a step between them (`brand/12`, `accent/22`) or solid tokens (`brand-solid-strong`) and do not stack a low `opacity` on top of an already-weak color.
 
 ## Effect units
 
@@ -283,7 +283,7 @@ Siblings holding content get `zIndex={1}`. That layer and its content sibling ar
 25. `LogoCloud` extends `Grid` — always set `columns` (and responsive overrides), or logos stack in one column: `columns="4" m={{ columns: 3 }} s={{ columns: 2 }}`.
    A logo that changes with the theme is one `Logo` with a source per theme — `<Logo wordmark={{ light: "/logo-light.svg", dark: "/logo-dark.svg" }} />`, and `icon` takes the same pair — not a `<Logo showIn="dark">` beside a `<Logo showIn="light">`. Keep `showIn` for a logo that should only appear in one theme.
 
-26. Use decoration recipes from `recipes.md` verbatim, then adjust. Application shells — a dashboard with a sidebar, a data-driven nav, a two-pane editor, a phone header, a plan or map canvas, a selection with a details panel — come from `layouts.md` the same way. Budget: at most one ambient background layer per section, ambient motion in at most the hero and final CTA, one accent color family per page.
+26. Use decoration recipes from `recipes.md` verbatim, then adjust. Application shells — a dashboard with a sidebar, a data-driven nav, a two-pane editor, a phone header, a plan or map canvas, a selection with a details panel — come from `layouts.md` the same way. Budget: at most one ambient background layer per section, ambient motion in at most the hero and final CTA, one accent color family per page. A hero scene that shows the product's work (recipes.md #9) is artwork, outside that budget; every other section keeps it.
 
 ## Motion
 

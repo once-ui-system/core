@@ -25,7 +25,9 @@ export const ChartStatus = ({
   }
 
   return (
-    <Column fill center>
+    // The chart pads its state, so `emptyState` and `errorState` are content
+    // only: a line of text, or an icon and a line, never their own padding.
+    <Column fill center gap="8" padding="24">
       {/* An error wins over empty: a failed request usually leaves `data` empty
           too (`data ?? []`), and "No data" would hide that it failed. */}
       {loading ? (
