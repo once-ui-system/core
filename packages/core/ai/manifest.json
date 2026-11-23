@@ -1,6 +1,6 @@
 {
  "version": "3.0.0",
- "generated": "2026-11-20",
+ "generated": "2026-11-23",
  "imports": {
   "@once-ui-system/core": {
    "use": "Components, hooks, providers, defineConfig and types: everything not listed below"
@@ -559,11 +559,13 @@
     "SettingsSection",
     "StatsSectionProps",
     "StyleGroupProps",
+    "StylePanelCustomColors",
     "StylePanelCustomLabels",
     "StylePanelGroupLabels",
     "StylePanelHeading",
     "StylePanelLabels",
     "StylePanelNameLabels",
+    "StylePanelNeutralCustomLabels",
     "StylePanelOptionLabels",
     "StylePanelProps",
     "StylePanelRootProps",
