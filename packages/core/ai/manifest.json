@@ -1,6 +1,6 @@
 {
  "version": "3.0.0",
- "generated": "2026-11-19",
+ "generated": "2026-11-23",
  "imports": {
   "@once-ui-system/core": {
    "use": "Components, hooks, providers, defineConfig and types: everything not listed below"
@@ -384,6 +384,7 @@
     "Effect",
     "FlipFx",
     "GlitchFx",
+    "GradientFx",
     "HoloFx",
     "LetterFx",
     "MatrixFx",
@@ -402,6 +403,7 @@
     "EffectProps",
     "EffectType",
     "FlipFxProps",
+    "GradientFxProps",
     "ShineFxProps",
     "TypeFxProps"
    ]
@@ -557,11 +559,13 @@
     "SettingsSection",
     "StatsSectionProps",
     "StyleGroupProps",
+    "StylePanelCustomColors",
     "StylePanelCustomLabels",
     "StylePanelGroupLabels",
     "StylePanelHeading",
     "StylePanelLabels",
     "StylePanelNameLabels",
+    "StylePanelNeutralCustomLabels",
     "StylePanelOptionLabels",
     "StylePanelProps",
     "StylePanelRootProps",

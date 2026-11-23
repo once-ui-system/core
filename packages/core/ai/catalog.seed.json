@@ -338,6 +338,11 @@
     "tags": ["effect", "marketing"],
     "pairsWith": ["Heading", "Media"]
   },
+  "GradientFx": {
+    "purpose": "Animated grain gradient behind its children",
+    "tags": ["effect", "marketing"],
+    "pairsWith": ["Heading"]
+  },
   "Grid": {
     "purpose": "CSS grid with columns per breakpoint and every Flex prop; `masonry` flows uneven items down columns",
     "tags": ["layout", "basics"],
@@ -980,6 +985,11 @@
     "purpose": "Shine sweeping across text; speed in ms",
     "tags": ["effect", "marketing"],
     "pairsWith": ["Heading", "Text"]
+  },
+  "WorkspaceSwitcher": {
+    "purpose": "Workspace or org switcher: current pinned, groups, search; bottom sheet on phones",
+    "tags": ["navigation", "form"],
+    "pairsWith": ["SidebarHeader", "Sidebar", "Dialog"]
   },
   "Sidebar": {
     "purpose": "Resizable app sidebar that folds to an icon rail and is a drawer on phones",

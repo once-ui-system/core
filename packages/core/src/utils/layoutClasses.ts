@@ -8,6 +8,7 @@
 
 import type { CSSProperties } from "react";
 import type { StaticSpacingToken } from "../types.js";
+import { roleColorAlpha } from "./colorAlpha.js";
 
 /**
  * The static spacing scale, as a value the size parsers can read.
@@ -417,6 +418,8 @@ export function borderColorValue(value: unknown): string | undefined {
   if (typeof value !== "string" || !value) return undefined;
   if (value === "transparent") return "var(--static-transparent)";
   if (value === "surface") return "var(--surface-border)";
+  const alpha = roleColorAlpha("border", value);
+  if (alpha) return alpha;
   const parts = value.split("-");
   if (parts.includes("alpha")) return `var(--${parts[0]}-alpha-${parts[2]})`;
   return `var(--${parts[0]}-border-${parts[1]})`;

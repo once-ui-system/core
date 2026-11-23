@@ -120,9 +120,14 @@
     "components": ["Icon", "Row", "Column"]
   },
   "color.background-weak": {
-    "rule": "*-background-weak is nearly the page color — invisible as accent. Use alpha tokens (brand-alpha-medium) for glows.",
+    "rule": "*-background-weak is nearly the page color — invisible as accent. Use alpha tokens (brand-alpha-medium) or a step after a slash (background=\"brand/12\") for glows.",
     "inRules": true,
     "components": ["Background"]
+  },
+  "color.alphaStep": {
+    "rule": "An opacity between the alpha steps is a slash on the colour prop, not a custom variable: background=\"brand/12\", border=\"accent/22\", solid=\"brand-strong/60\", background=\"gradient/16\". In artwork CSS, color-mix(in srgb, var(--brand-alpha) 12%, transparent). Text colour (onBackground/onSolid) takes no opacity: keep it on its contrast-checked tokens.",
+    "inRules": true,
+    "components": ["Column", "Row", "Flex", "Grid", "Card"]
   },
   "api.renamed": {
     "rule": "Write 3.0 prop names, not 1.x or 2.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onValueChange/defaultValue (not selected/onToggle/defaultSelected), Tag tone (not scheme or variant), Button tone=\"danger\" (not variant=\"danger\"), Text/Heading textVariant (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius), Table onSelectedChange (not onSelectionChange), CodeBlock collapsible (not isCollapsible). The validator names the 3.0 prop.",

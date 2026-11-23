@@ -187,6 +187,11 @@
     --brand-alpha-strong:           var(--function-brand-600-50);
     --brand-alpha-medium:           var(--function-brand-600-30);
     --brand-alpha-weak:             var(--function-brand-600-15);
+    /* The colour the three alphas are drawn from, at full strength. A
+       style prop takes it at any opacity as `brand/12`; in CSS it is
+       color-mix(in srgb, var(--brand-alpha) 12%, transparent). Weak,
+       medium and strong are this colour at 15, 30 and 50%. */
+    --brand-alpha:                  var(--function-brand-600);
 
     /* The brand colour at solid strength, whatever data-solid says: what
        --brand-solid-* is under data-solid="color". Under "contrast" the
@@ -205,13 +210,13 @@
     --accent-on-background-medium:  var(--function-accent-900);
     --accent-on-background-weak:    var(--function-accent-700);
   
-    --accent-solid-strong:          var(--function-accent-500);
-    --accent-solid-medium:          var(--function-accent-400);
+    --accent-solid-strong:          var(--function-accent-solid-strong, var(--function-accent-500));
+    --accent-solid-medium:          var(--function-accent-solid-medium, var(--function-accent-400));
     --accent-solid-weak:            var(--function-accent-300);
   
-    --accent-on-solid-strong:       var(--static-white);
-    --accent-on-solid-medium:       var(--function-accent-1000);
-    --accent-on-solid-weak:         var(--function-accent-900);
+    --accent-on-solid-strong:       var(--function-accent-on-solid-strong, var(--static-white));
+    --accent-on-solid-medium:       var(--function-accent-on-solid-medium, var(--function-accent-1000));
+    --accent-on-solid-weak:         var(--function-accent-on-solid-weak, var(--function-accent-900));
 
     --accent-border-strong:         var(--function-accent-400);
     --accent-border-medium:         var(--function-accent-300);
@@ -220,6 +225,17 @@
     --accent-alpha-strong:          var(--function-accent-600-50);
     --accent-alpha-medium:          var(--function-accent-600-30);
     --accent-alpha-weak:            var(--function-accent-600-15);
+    --accent-alpha:                 var(--function-accent-600);
+
+    /* The accent colour at solid strength, as --brand-color-* is for brand. */
+    --accent-color-strong:          var(--function-accent-500);
+    --accent-color-medium:          var(--function-accent-400);
+    --accent-color-weak:            var(--function-accent-300);
+
+    /* Brand to accent, the two theme hues. `background="gradient"` draws
+       it (and `gradient/16` at an opacity); the class takes its angle from
+       --gradient-angle on the element. */
+    --gradient-brand-accent:        linear-gradient(135deg, var(--brand-color-strong), var(--accent-color-strong));
 
     --page-background:              var(--neutral-background-weak);
     --solid-border-color-neutral:   var(--neutral-alpha-strong);
@@ -248,6 +264,7 @@
     --neutral-alpha-strong:         var(--function-neutral-600-50);
     --neutral-alpha-medium:         var(--function-neutral-600-30);
     --neutral-alpha-weak:           var(--function-neutral-600-15);
+    --neutral-alpha:                var(--function-neutral-600);
 }
 
 [data-theme="dark"] {
@@ -289,6 +306,7 @@
     --info-alpha-strong:            var(--function-info-600-50);
     --info-alpha-medium:            var(--function-info-600-30);
     --info-alpha-weak:              var(--function-info-600-15);
+    --info-alpha:                   var(--function-info-600);
 
     /* warning */
     --warning-background-strong:    var(--function-warning-300);
@@ -314,6 +332,7 @@
     --warning-alpha-strong:         var(--function-warning-600-50);
     --warning-alpha-medium:         var(--function-warning-600-30);
     --warning-alpha-weak:           var(--function-warning-600-15);
+    --warning-alpha:                var(--function-warning-600);
 
     /* danger */
     --danger-background-strong:     var(--function-danger-300);
@@ -339,6 +358,7 @@
     --danger-alpha-strong:          var(--function-danger-600-50);
     --danger-alpha-medium:          var(--function-danger-600-30);
     --danger-alpha-weak:            var(--function-danger-600-15);
+    --danger-alpha:                 var(--function-danger-600);
 
     /* success */ 
     --success-background-strong:    var(--function-success-300);
@@ -364,6 +384,7 @@
     --success-alpha-strong:         var(--function-success-600-50);
     --success-alpha-medium:         var(--function-success-600-30);
     --success-alpha-weak:           var(--function-success-600-15);
+    --success-alpha:                var(--function-success-600);
 
     .dark-flex {
         display: flex;
@@ -414,6 +435,11 @@
     --brand-alpha-strong:           color-mix(in srgb, var(--function-brand-500) 50%, transparent);
     --brand-alpha-medium:           color-mix(in srgb, var(--function-brand-500) 30%, transparent);
     --brand-alpha-weak:             color-mix(in srgb, var(--function-brand-500) 15%, transparent);
+    /* The colour the three alphas are drawn from, at full strength. A
+       style prop takes it at any opacity as `brand/12`; in CSS it is
+       color-mix(in srgb, var(--brand-alpha) 12%, transparent). Weak,
+       medium and strong are this colour at 15, 30 and 50%. */
+    --brand-alpha:                  var(--function-brand-500);
 
     /* See the dark block: the brand solids as data-solid="color" has them. */
     --brand-color-strong:           var(--function-brand-500);
@@ -429,13 +455,13 @@
     --accent-on-background-medium:  var(--function-accent-400);
     --accent-on-background-weak:    var(--function-accent-400);
   
-    --accent-solid-strong:          var(--function-accent-500);
-    --accent-solid-medium:          var(--function-accent-400);
+    --accent-solid-strong:          var(--function-accent-solid-strong, var(--function-accent-500));
+    --accent-solid-medium:          var(--function-accent-solid-medium, var(--function-accent-400));
     --accent-solid-weak:            var(--function-accent-300);
   
-    --accent-on-solid-strong:       var(--static-white);      
-    --accent-on-solid-medium:       var(--function-accent-1100);
-    --accent-on-solid-weak:         var(--function-accent-1000);
+    --accent-on-solid-strong:       var(--function-accent-on-solid-strong, var(--static-white));
+    --accent-on-solid-medium:       var(--function-accent-on-solid-medium, var(--function-accent-1100));
+    --accent-on-solid-weak:         var(--function-accent-on-solid-weak, var(--function-accent-1000));
 
     --accent-border-strong:         var(--function-accent-800);
     --accent-border-medium:         var(--function-accent-900);
@@ -444,6 +470,17 @@
     --accent-alpha-strong:          color-mix(in srgb, var(--function-accent-500) 50%, transparent);
     --accent-alpha-medium:          color-mix(in srgb, var(--function-accent-500) 30%, transparent);
     --accent-alpha-weak:            color-mix(in srgb, var(--function-accent-500) 15%, transparent);
+    --accent-alpha:                 var(--function-accent-500);
+
+    /* The accent colour at solid strength, as --brand-color-* is for brand. */
+    --accent-color-strong:          var(--function-accent-500);
+    --accent-color-medium:          var(--function-accent-400);
+    --accent-color-weak:            var(--function-accent-300);
+
+    /* Brand to accent, the two theme hues. `background="gradient"` draws
+       it (and `gradient/16` at an opacity); the class takes its angle from
+       --gradient-angle on the element. */
+    --gradient-brand-accent:        linear-gradient(135deg, var(--brand-color-strong), var(--accent-color-strong));
 
     /* The page sits a step below its surfaces, as dark mode's does: an
        off-white canvas with white cards on it, so layers read by elevation
@@ -475,6 +512,7 @@
     --neutral-alpha-strong:         color-mix(in srgb, var(--function-neutral-400) 50%, transparent);
     --neutral-alpha-medium:         color-mix(in srgb, var(--function-neutral-400) 30%, transparent);
     --neutral-alpha-weak:           color-mix(in srgb, var(--function-neutral-400) 15%, transparent);
+    --neutral-alpha:                var(--function-neutral-400);
 }
 
 [data-theme="light"] {
@@ -517,6 +555,7 @@
     --info-alpha-strong:            color-mix(in srgb, var(--function-info-400) 50%, transparent);
     --info-alpha-medium:            color-mix(in srgb, var(--function-info-400) 30%, transparent);
     --info-alpha-weak:              color-mix(in srgb, var(--function-info-400) 15%, transparent);
+    --info-alpha:                   var(--function-info-400);
 
     /* warning */
     --warning-background-strong:    var(--function-warning-800);
@@ -542,6 +581,7 @@
     --warning-alpha-strong:         color-mix(in srgb, var(--function-warning-500) 50%, transparent);
     --warning-alpha-medium:         color-mix(in srgb, var(--function-warning-500) 30%, transparent);
     --warning-alpha-weak:           color-mix(in srgb, var(--function-warning-500) 15%, transparent);
+    --warning-alpha:                var(--function-warning-500);
    
     /* danger */   
     --danger-background-strong:     var(--function-danger-800);
@@ -567,6 +607,7 @@
     --danger-alpha-strong:          color-mix(in srgb, var(--function-danger-500) 50%, transparent);
     --danger-alpha-medium:          color-mix(in srgb, var(--function-danger-500) 30%, transparent);
     --danger-alpha-weak:            color-mix(in srgb, var(--function-danger-500) 15%, transparent);
+    --danger-alpha:                 var(--function-danger-500);
    
     /* success */   
     --success-background-strong:    var(--function-success-800);
@@ -592,6 +633,7 @@
     --success-alpha-strong:         color-mix(in srgb, var(--function-success-500) 50%, transparent);
     --success-alpha-medium:         color-mix(in srgb, var(--function-success-500) 30%, transparent);
     --success-alpha-weak:           color-mix(in srgb, var(--function-success-500) 15%, transparent);
+    --success-alpha:                var(--function-success-500);
     
     .dark-flex {
         display: none;
@@ -763,13 +805,13 @@
 }
 [data-theme="dark"][data-solid="color"],
 #{solid-nearest-selector("dark", "color")} {
-    --brand-solid-strong:         var(--function-brand-500);
-    --brand-solid-medium:         var(--function-brand-400);
+    --brand-solid-strong:         var(--function-brand-solid-strong, var(--function-brand-500));
+    --brand-solid-medium:         var(--function-brand-solid-medium, var(--function-brand-400));
     --brand-solid-weak:           var(--function-brand-300);
 
-    --brand-on-solid-strong:      var(--static-white);      
-    --brand-on-solid-medium:      var(--function-brand-1100);
-    --brand-on-solid-weak:        var(--function-brand-900);
+    --brand-on-solid-strong:      var(--function-brand-on-solid-strong, var(--static-white));
+    --brand-on-solid-medium:      var(--function-brand-on-solid-medium, var(--function-brand-1100));
+    --brand-on-solid-weak:        var(--function-brand-on-solid-weak, var(--function-brand-900));
 }
 
 [data-theme="dark"][data-solid="contrast"],
@@ -800,13 +842,13 @@
 #{solid-nearest-selector("light", "color")} {
     /* Step 500, the same as dark: white text on step 600 measures 3:1,
        below WCAG AA for button labels. */
-    --brand-solid-strong:         var(--function-brand-500);
-    --brand-solid-medium:         var(--function-brand-400);
+    --brand-solid-strong:         var(--function-brand-solid-strong, var(--function-brand-500));
+    --brand-solid-medium:         var(--function-brand-solid-medium, var(--function-brand-400));
     --brand-solid-weak:           var(--function-brand-300);
   
-    --brand-on-solid-strong:      var(--static-white);      
-    --brand-on-solid-medium:      var(--function-brand-1100);
-    --brand-on-solid-weak:        var(--function-brand-1000);
+    --brand-on-solid-strong:      var(--function-brand-on-solid-strong, var(--static-white));
+    --brand-on-solid-medium:      var(--function-brand-on-solid-medium, var(--function-brand-1100));
+    --brand-on-solid-weak:        var(--function-brand-on-solid-weak, var(--function-brand-1000));
 }
 
 [data-theme="light"][data-solid="contrast"],

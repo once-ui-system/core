@@ -1,8 +1,8 @@
 import classNames from "clsx";
 import type { CSSProperties, ElementType, HTMLAttributes, Ref } from "react";
-
 import type { GridBreakpointProps, GridLayoutProps, GridProps } from "../interfaces.js";
 import type { ColorScheme, ColorWeight } from "../types.js";
+import { alphaColorStyle } from "../utils/colorAlpha.js";
 import { cursorProps } from "../utils/cursor.js";
 import {
   BELOW_HEADER,
@@ -185,7 +185,11 @@ const ServerGrid = ({
       return `transparent-${type}`;
     }
 
-    if (value === "surface" || value === "page") {
+    // A value with an opacity, `brand/12` or `brand-strong/40`, has no class:
+    // `alphaColorStyle` writes it inline.
+    if (value.includes("/")) return undefined;
+
+    if (["surface", "page", "overlay", "gradient"].includes(value)) {
       return `${value}-${type}`;
     }
 
@@ -323,6 +327,17 @@ const ServerGrid = ({
   const transform = translateTransform(translateX, translateY);
 
   const combinedStyle: CSSProperties = {
+    ...alphaColorStyle({
+      background,
+      solid,
+      border,
+      borderTop,
+      borderRight,
+      borderBottom,
+      borderLeft,
+      borderX,
+      borderY,
+    }),
     maxWidth: ["xs", "s", "m", "l", "xl"].includes(maxWidth as string)
       ? undefined
       : sizeValue(maxWidth, "width"),

@@ -238,6 +238,57 @@ export function sectorPath(
   return d;
 }
 
+/**
+ * A ring slice with `gap` px between it and its neighbours (an even width the
+ * whole way out, not a wedge) and corners rounded by `corner` px. Angles as in
+ * `sectorPath`. A slice too thin for its corners gets smaller ones; one too
+ * thin for the gap draws nothing.
+ */
+export function roundedSectorPath(
+  cx: number,
+  cy: number,
+  inner: number,
+  outer: number,
+  start: number,
+  end: number,
+  gap: number,
+  corner: number,
+): string {
+  const g = gap / 2;
+  const rad = (deg: number) => (-deg * Math.PI) / 180;
+  // A point `r` out along `deg`, moved `off` px across it towards `side` degrees.
+  const at = (r: number, deg: number, off = 0, side = 90) =>
+    `${f(cx + r * Math.cos(rad(deg)) + off * Math.cos(rad(deg + side)))},${f(
+      cy + r * Math.sin(rad(deg)) + off * Math.sin(rad(deg + side)),
+    )}`;
+  const deg = (x: number) => (Math.asin(Math.min(1, x)) * 180) / Math.PI;
+  let rc = Math.max(0, Math.min(corner, (outer - inner) / 2));
+  for (;;) {
+    const to = deg((rc + g) / (outer - rc));
+    const ti = deg((rc + g) / (inner + rc));
+    if (end - start - 2 * ti > 0.01 || rc === 0) {
+      if (end - start - 2 * ti <= 0.01) return "";
+      const dO = Math.sqrt((outer - rc) ** 2 - (rc + g) ** 2);
+      const dI = Math.sqrt((inner + rc) ** 2 - (rc + g) ** 2);
+      const largeO = end - start - 2 * to > 180 ? 1 : 0;
+      const largeI = end - start - 2 * ti > 180 ? 1 : 0;
+      const c = rc ? `A${f(rc)},${f(rc)} 0 0 0 ` : "L";
+      return (
+        `M${at(outer, start + to)}` +
+        `A${f(outer)},${f(outer)} 0 ${largeO} 0 ${at(outer, end - to)}` +
+        `${c}${at(dO, end, g, -90)}` +
+        `L${at(dI, end, g, -90)}` +
+        `${c}${at(inner, end - ti)}` +
+        `A${f(inner)},${f(inner)} 0 ${largeI} 1 ${at(inner, start + ti)}` +
+        `${c}${at(dI, start, g)}` +
+        `L${at(dO, start, g)}` +
+        `${c}${at(outer, start + to)}Z`
+      );
+    }
+    rc = rc < 0.5 ? 0 : rc / 2;
+  }
+}
+
 // Curves: copied from packages/native/src/components/charts/scale.ts.
 
 const f = (n: number) => Number(n.toFixed(2));

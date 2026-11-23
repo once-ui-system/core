@@ -10,16 +10,29 @@ import styles from "./SegmentedControl.module.scss";
 import { Text } from "./Text.js";
 import { ToggleButton, ToggleButtonProps } from "./ToggleButton.js";
 
-/** The rail's radius for options of this size (or radius) inside 4px of padding. */
-function railRadius(
+/**
+ * The rail's corners: the options' own radius plus the padding and border
+ * between them, so the ring round a selected option is even at every size,
+ * padding and border style. Computed from the option's token instead of the
+ * `-nest-4` tokens: compact pads by 2px, which has no nest token (it used to
+ * fall back to "l", far too round for small options), and the conservative
+ * nest tokens add 2px where the padding is 4px. Large tokens on short
+ * buttons clamp to a pill on both, so they still nest.
+ *
+ * Left out, the options take the theme's density (m, or s/l); the inner
+ * radius then comes from the module's CSS, which follows the density too.
+ */
+function railStyle(
   first: { size?: ToggleButtonProps["size"]; radius?: ToggleButtonProps["radius"] } | undefined,
   compact: boolean | undefined,
-) {
-  const inner = first?.radius ?? first?.size ?? "m";
-  // Compact pads by 2px, which has no nested radius token: it keeps "l".
-  if (compact || inner === "none") return "l" as const;
-  if (inner === "full") return "full" as const;
-  return `${inner}-4` as const;
+): React.CSSProperties {
+  const inner = first?.radius ?? first?.size;
+  const style: Record<string, string> = {
+    "--segmented-control-pad": compact ? "var(--static-space-2)" : "var(--static-space-4)",
+  };
+  if (inner === "none") style["--segmented-control-inner"] = "0px";
+  else if (inner) style["--segmented-control-inner"] = `var(--radius-${inner})`;
+  return style as React.CSSProperties;
 }
 
 const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
@@ -251,18 +264,17 @@ const SegmentedControl = ({
       ref={tablistRef}
       fillWidth={fillWidth}
       position={slides ? "relative" : undefined}
-      className={slides ? styles.track : undefined}
+      className={classNames(styles.rail, slides && styles.track)}
       // Scrolling, never narrower than its options: when they overflow, the
       // border goes round all of them and scrolls with them, instead of
       // ending at the edge of the strip with the last options outside it.
       // Not scrolling, it may shrink, and the options with it.
-      style={scroll ? { minWidth: "max-content" } : { minWidth: 0 }}
+      style={{
+        ...railStyle(buttons[0], compact),
+        minWidth: scroll ? "max-content" : 0,
+      }}
       gap="2"
       padding={compact ? "2" : "4"}
-      // The rail's corners follow the options inside it: their radius plus
-      // the 4px padding, so the gap round a selected option stays even at
-      // every size. A fixed "l" left small options with a too-round rail.
-      radius={railRadius(buttons[0], compact)}
       border="neutral-alpha-weak"
     >
       {buttons.map(({ onClick, description, ...button }, index) => {
@@ -328,6 +340,10 @@ const SegmentedControl = ({
             // passes the panel's id as `aria-controls`, spread below.
             tabIndex={index === selectedIndex ? 0 : -1}
             fillWidth={fillWidth}
+            // The control shares and truncates its options itself (.shrink,
+            // .label); the button's own fill-width truncation would squeeze a
+            // long option to an equal share even where it fits.
+            truncate={false}
             {...button}
             disabled={disabled || button.disabled}
             {...(wrapped && { label: wrapped, children: undefined })}

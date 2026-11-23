@@ -161,9 +161,12 @@ const toneVars = (tone: Tone = "brand") =>
   ({
     "--event-fill": `var(--${tone}-alpha-weak)`,
     "--event-fill-hover": `var(--${tone}-alpha-medium)`,
-    "--event-solid": `var(--${tone}-solid-strong)`,
+    // The stripe and dot: Tag's dot recipe (the scale's most saturated step,
+    // 600 on dark and 500 on light), so an event matches its calendar's Tag
+    // whatever the app's solid style (a contrast solid is near white or black).
+    "--event-accent-dark": `var(--function-${tone}-600)`,
+    "--event-accent-light": `var(--function-${tone}-500)`,
     "--event-on": `var(--${tone}-on-background-strong)`,
-    "--event-on-solid": `var(--${tone}-on-solid-strong)`,
   }) as CSSProperties;
 
 type Drag<E> =
