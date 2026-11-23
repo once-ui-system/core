@@ -338,6 +338,11 @@
     "tags": ["effect", "marketing"],
     "pairsWith": ["Heading", "Media"]
   },
+  "GradientFx": {
+    "purpose": "Animated grain gradient behind its children",
+    "tags": ["effect", "marketing"],
+    "pairsWith": ["Heading"]
+  },
   "Grid": {
     "purpose": "CSS grid with columns per breakpoint and every Flex prop; `masonry` flows uneven items down columns",
     "tags": ["layout", "basics"],

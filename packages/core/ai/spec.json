@@ -7330,6 +7330,28 @@
     "continuous": "boolean = true"
    }
   },
+  "GradientFx": {
+   "group": "fx",
+   "importFrom": "@once-ui-system/fx",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "colors": "string[]",
+    "speed": "Speed",
+    "grain": "number = 0.35",
+    "blur": "number = 0.6",
+    "angle": "number = -30",
+    "seed": "number = 0",
+    "reducedMotion": "boolean | \"auto\" = auto",
+    "children": "React.ReactNode"
+   }
+  },
   "HoloFx": {
    "group": "fx",
    "importFrom": "@once-ui-system/fx",
