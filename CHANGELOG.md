@@ -1049,6 +1049,11 @@ entry below that had landed by then:
 
 ### Fixed
 
+- **A menu's trigger stays highlighted while the menu is open.** A `NavItem`,
+  `ToggleButton` or anything built on it that opens a `Dropdown` (a sidebar's
+  Help or account row) keeps its hover fill while the menu shows, so the row the
+  menu came from stays marked once the pointer moves into it. A selected trigger
+  keeps its deeper selected-hover fill.
 - **`MascotPanel` fits its box and lines its columns up.** The custom body colour's field (and the eye and accessory colour fields) was capped at 10px and showed as a thin bar after the swatches; it now takes up to 160px and wraps under them when the row is tight. The side layout sizes to the panel's own width instead of the viewport's, so it no longer spills past a narrow card or docs preview, and stacks below 34rem. The sticky preview now sits flush with the top of its scroll box, level with the first group of controls (it was pushed 16px down); offset it with `--mascot-panel-sticky-top` under a fixed header.
 - `RadioButton`: the checked dot uses the brand's on-solid colour, as `Checkbox`'s tick does, so the checked radio reads as a ring around a dot in light and dark themes alike (it used the neutral on-solid colour, which matched the fill in dark themes).
 - **A fullscreen `CodeBlock` shows its preview beside the code on a wide screen.** From

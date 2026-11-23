@@ -25,6 +25,14 @@
         }
     }
 
+    // A dropdown's trigger keeps its hover look while its menu is open, so
+    // the row the menu came from stays marked once the pointer moves into
+    // the menu (a sidebar's Help or account row, a header menu).
+    &[aria-expanded="true"]:not([data-disabled]) {
+        background: var(--neutral-alpha-weak);
+        border-color: var(--neutral-alpha-weak);
+    }
+
     &.selected {
         background-color: var(--neutral-alpha-medium);
         border-color: var(--neutral-alpha-weak);
@@ -38,6 +46,11 @@
             background-color: var(--neutral-alpha-strong);
             border-color: var(--neutral-alpha-weak);
         }
+    }
+
+    &.selected[aria-expanded="true"]:not([data-disabled]) {
+        background-color: var(--neutral-alpha-strong);
+        border-color: var(--neutral-alpha-weak);
     }
 
     &[data-disabled] {
@@ -167,6 +180,11 @@
         &.selected:hover:not([data-disabled]) {
             background: var(--neutral-alpha-strong);
         }
+    }
+
+    &[aria-expanded="true"]:not([data-disabled]) {
+        background: var(--neutral-alpha-weak);
+        border-color: var(--static-transparent);
     }
 }
 // `tone` colours the selected state; neutral is the grey above. A tinted fill,
