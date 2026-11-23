@@ -197,7 +197,8 @@
    "accessoryColor": "string",
    "working": "\"cube\" | \"d20\"",
    "sides": "MascotSides",
-   "face": "\"3d\" | \"flat\""
+   "face": "\"3d\" | \"flat\"",
+   "medium": "MascotMedium"
   },
   "MascotIdentityLayer": {
    "d": "!string",
@@ -219,6 +220,15 @@
    "spin",
    "pulse",
    "flicker"
+  ],
+  "MascotMedium": [
+   "vector",
+   "fur",
+   "plush",
+   "clay",
+   "pixel",
+   "lowpoly",
+   "toon"
   ],
   "MascotMood": [
    "neutral",

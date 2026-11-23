@@ -330,6 +330,7 @@ Mixins: LeafProps.
 - personality?: "calm" | "default" | "bouncy"
 - sides?: "classic" | "tints" | "mono" | Partial<Record<"top" | "front" | "right" | "bottom" | "back" | "left", string>>
 - face?: "3d" | "flat"
+- medium?: MascotMedium
 
 ### Logo
 Mixins: LeafProps.
@@ -613,6 +614,7 @@ type LogoSource = "string" | { light: string; dark: string; }
 // type MascotEffect is one of these strings: heartEyes starEyes laughEyes blush sweat tears anger hearts sparkles question
 type MascotIdentityLayer = { d: string; fill?: string; stroke?: string; width?: number; cap?: "round" | "butt"; opacity?: number; transform?: string; clip?: boolean; place?: "back" | "on" | "front"; motion?: MascotLayerMotion; origin?: string }
 // type MascotLayerMotion is one of these strings: float bob sway spin pulse flicker
+// type MascotMedium is one of these strings: vector fur plush clay pixel lowpoly toon
 // type MascotMood is one of these strings: neutral happy surprised sad skeptical wink focused determined love excited laughing embarrassed crying angry confused
 type MascotState = "idle" | "listening" | "thinking" | "speaking" | "sleeping"
 // type Opacity is one of these strings: 0 10 20 30 40 50 60 70 80 90 100

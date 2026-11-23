@@ -15,6 +15,7 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **Mascot mediums.** `medium` on `Mascot`, `mascotSvg` and `MascotDesign` draws the same character another way: `fur`, `plush` and `clay` give the body a material, `pixel` turns the whole mascot into a sprite with a one-pixel outline, `lowpoly` cuts the body into lit facets and `toon` inks it with cel shading. `vector` stays the default. Each one is an SVG filter or plain shapes, so it animates live with no WebGL, renders on the server through `mascotSvg`, and holds still under reduced motion like the vector mascot. `MASCOT_MEDIUMS` lists them; `parseMascotDesign` keeps a known one and drops anything else.
 - **Skeleton `effect="generating"`.** For work that takes seconds, such as an image a
   model is drawing: a slow brand-to-accent mist drifts under a fine grain of dots in
   place of the pulse. It moves only by `transform`, follows the theme and the brand,

@@ -10,21 +10,22 @@ import { mascotIdentity } from "./mascotIdentities.js";
 import { measureOutline } from "./mascotOutline.js";
 import { readSeedWords } from "./mascotWords.js";
 
-export const DEFAULT_LOOK: Required<Omit<MascotLook, "bodyPath" | "eyeColor" | "sides" | "face">> =
-  {
-    color: "brand",
-    roundness: 0.7,
-    aspect: 1,
-    surface: "glossy",
-    eyes: "tile",
-    eyeSize: 1,
-    eyeSpacing: 1,
-    eyeHeight: 0,
-    mouth: "none",
-    brows: false,
-    cheeks: false,
-    personality: "default",
-  };
+export const DEFAULT_LOOK: Required<
+  Omit<MascotLook, "bodyPath" | "eyeColor" | "sides" | "face" | "medium">
+> = {
+  color: "brand",
+  roundness: 0.7,
+  aspect: 1,
+  surface: "glossy",
+  eyes: "tile",
+  eyeSize: 1,
+  eyeSpacing: 1,
+  eyeHeight: 0,
+  mouth: "none",
+  brows: false,
+  cheeks: false,
+  personality: "default",
+};
 
 /* The top tile of the Once UI mark (590 box), centered on 0,0 below. */
 export const TILE =

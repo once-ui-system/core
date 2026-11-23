@@ -23,6 +23,8 @@ export {
   mascotIdentity,
   mascotIdentityKey,
 } from "./mascotIdentities.js";
+export type { MascotMedium } from "./mascotMedium.js";
+export { MASCOT_MEDIUMS } from "./mascotMedium.js";
 export type { MascotSkin } from "./mascotSkin.js";
 export {
   cleanMascotUsername,

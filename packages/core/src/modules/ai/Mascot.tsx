@@ -2,7 +2,7 @@
 
 import classNames from "clsx";
 import type React from "react";
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { Flex } from "../../components/Flex.js";
 import type { LeafPropsOf } from "../../interfaces.js";
 import type { CSSUnit } from "../../types.js";
@@ -23,6 +23,15 @@ import {
 import styles from "./Mascot.module.scss";
 import { MascotCube } from "./MascotCube.js";
 import { type MascotIdentityLayer, mascotIdentity } from "./mascotIdentities.js";
+import {
+  facetFill,
+  furStrands,
+  hairFill,
+  lowPolyFacets,
+  type MascotMedium,
+  MediumFilter,
+  mediumTarget,
+} from "./mascotMedium.js";
 import {
   accessoryBody,
   bodyShape,
@@ -85,6 +94,13 @@ export interface MascotLook {
     | Partial<Record<"top" | "front" | "right" | "bottom" | "back" | "left", string>>;
   /** With `working="cube"`: `flat` paints the eyes, brows and mouth on without light. */
   face?: "3d" | "flat";
+  /**
+   * How it is drawn. `vector` (default) is the flat mascot; `fur`, `plush` and `clay` give the
+   * body a material, `pixel` turns the whole mascot into a sprite, `lowpoly` cuts the body into
+   * lit facets and `toon` inks it with cel shading. Every one is an SVG filter or plain shapes,
+   * so it animates live with no WebGL; with reduced motion it holds still like the vector one.
+   */
+  medium?: MascotMedium;
 }
 
 export interface MascotProps extends MascotLook, Omit<LeafPropsOf<"div">, "children" | "color"> {
@@ -459,6 +475,9 @@ function identityLayers(layers: readonly MascotIdentityLayer[], clip: string) {
   };
 }
 
+/** A filter group around part of the mascot, or nothing at all when the medium has none there. */
+const MediumWrap = ({ filter, children }: { filter?: string; children: React.ReactNode }) =>
+  filter ? <g filter={filter}>{children}</g> : children;
 type Worn = {
   back?: React.ReactNode;
   paint?: React.ReactNode;
@@ -514,6 +533,7 @@ const FlatMascot = ({
   accessory,
   accessoryColor,
   shadow = true,
+  medium = "vector",
   layers,
   username: _username,
   skinSource: _skinSource,
@@ -597,6 +617,13 @@ const FlatMascot = ({
   const spread = Math.min(29 * look.eyeSpacing, body.halfWidth - 22);
   const eyeY = 96 + clamp(look.eyeHeight, -1, 1) * 30;
   const tile = look.eyes === "tile";
+  const target = mediumTarget(medium);
+  const filter = target === "none" ? undefined : `url(#${id}-medium)`;
+  const facets = useMemo(
+    () => (medium === "lowpoly" ? lowPolyFacets(body.d) : []),
+    [medium, body.d],
+  );
+  const coat = useMemo(() => (medium === "fur" ? furStrands(body.d) : []), [medium, body.d]);
 
   // A quick squash whenever the expression changes, never on the first render.
   const prod = useMascotPoke(poke, onPointerDown);
@@ -680,6 +707,7 @@ const FlatMascot = ({
       data-state={state}
       data-mood={base}
       data-surface={look.surface}
+      data-medium={medium === "vector" ? undefined : medium}
       data-personality={look.personality}
       data-eyes={tile ? "tile" : "shape"}
       data-live={live || undefined}
@@ -713,108 +741,169 @@ const FlatMascot = ({
           <clipPath id={`${id}-clip`}>
             <path d={body.d} />
           </clipPath>
+          <MediumFilter id={`${id}-medium`} medium={medium} />
         </defs>
-        {shadow && <ellipse cx={100} cy={196} rx={56} ry={5} className={styles.shadow} />}
-        <g className={styles.float}>
-          <g
-            key={`${changes.current.count}-${prod.pokes}`}
-            className={classNames(
-              styles.body,
-              prod.poked ? styles.poke : changes.current.count > 0 && styles.pop,
-            )}
-            style={{ transformOrigin: `100px ${body.bottom}px` }}
-          >
-            {worn.back && <g className={styles.accessory}>{worn.back}</g>}
-            <path d={body.d} className={styles.fill} />
-            <g clipPath={`url(#${id}-clip)`}>
-              <path d={body.d} fill={`url(#${id}-shade)`} className={styles.shade} />
-              <path d={body.d} fill={`url(#${id}-rim)`} className={styles.rim} />
-              <g className={styles.sheen}>
-                <path d={body.d} fill={`url(#${id}-light)`} className={styles.light} />
-                <ellipse cx={70} cy={body.top + 26} rx={20} ry={11} className={styles.spec} />
-              </g>
-            </g>
-            <path d={body.d} className={styles.edge} />
-            {worn.paint}
-            {worn.on && <g className={styles.accessory}>{worn.on}</g>}
-            <g className={styles.face}>
-              <g className={styles.flick}>
-                {look.brows &&
-                  ([-1, 1] as const).map((side) => (
-                    <path
-                      key={side}
-                      d={`M${100 + side * spread - 9} ${eyeY - 26 * look.eyeSize} L${100 + side * spread + 9} ${eyeY - 26 * look.eyeSize}`}
-                      className={classNames(styles.brow, side < 0 ? styles.left : styles.right)}
-                    />
-                  ))}
-                {glyph ? (
-                  ([-1, 1] as const).map((side) => (
-                    <g
-                      key={side}
-                      transform={`translate(${100 + side * spread} ${eyeY}) scale(${unit})`}
-                      className={styles.kawaii}
-                    >
-                      <EyeGlyph kind={glyph} side={side} />
+        <MediumWrap filter={target === "all" ? filter : undefined}>
+          {shadow && <ellipse cx={100} cy={196} rx={56} ry={5} className={styles.shadow} />}
+          <g className={styles.float}>
+            <g
+              key={`${changes.current.count}-${prod.pokes}`}
+              className={classNames(
+                styles.body,
+                prod.poked ? styles.poke : changes.current.count > 0 && styles.pop,
+              )}
+              style={{ transformOrigin: `100px ${body.bottom}px` }}
+            >
+              <MediumWrap filter={target === "body" ? filter : undefined}>
+                {worn.back && <g className={styles.accessory}>{worn.back}</g>}
+                {medium === "lowpoly" ? (
+                  <g className={styles.facets}>
+                    {facets.map((facet) => (
+                      <polygon
+                        key={facet.points}
+                        points={facet.points}
+                        style={{ fill: facetFill(facet.light), stroke: facetFill(facet.light) }}
+                      />
+                    ))}
+                  </g>
+                ) : medium === "fur" ? (
+                  // Hairs over a dark undercoat, which shows in the gaps between tufts.
+                  <g>
+                    <path d={body.d} className={styles.undercoat} />
+                    {coat.map((layer) => (
+                      <path
+                        key={layer.d.slice(0, 24) + layer.light}
+                        d={layer.d}
+                        style={{ fill: hairFill(layer.light) }}
+                      />
+                    ))}
+                  </g>
+                ) : medium === "toon" ? (
+                  // Cel shading: one hard shadow band where a copy of the body, moved toward
+                  // the light, leaves it uncovered, and one hard highlight.
+                  <g>
+                    <path d={body.d} className={styles.toonShade} />
+                    <g clipPath={`url(#${id}-clip)`}>
+                      <path d={body.d} transform="translate(-9 -12)" className={styles.fill} />
+                      <g className={styles.sheen}>
+                        <ellipse
+                          cx={66}
+                          cy={body.top + 24}
+                          rx={15}
+                          ry={8}
+                          transform={`rotate(-28 66 ${body.top + 24})`}
+                          className={styles.toonLight}
+                        />
+                      </g>
                     </g>
-                  ))
+                  </g>
                 ) : (
-                  <>
-                    <Eye id={id} side={-1} x={100 - spread} y={eyeY} look={look} />
-                    <Eye id={id} side={1} x={100 + spread} y={eyeY} look={look} />
-                  </>
+                  <MediumWrap filter={target === "skin" ? filter : undefined}>
+                    <path d={body.d} className={styles.fill} />
+                    <g clipPath={`url(#${id}-clip)`}>
+                      <path d={body.d} fill={`url(#${id}-shade)`} className={styles.shade} />
+                      <path d={body.d} fill={`url(#${id}-rim)`} className={styles.rim} />
+                      <g className={styles.sheen}>
+                        <path d={body.d} fill={`url(#${id}-light)`} className={styles.light} />
+                        <ellipse
+                          cx={70}
+                          cy={body.top + 26}
+                          rx={20}
+                          ry={11}
+                          className={styles.spec}
+                        />
+                      </g>
+                    </g>
+                  </MediumWrap>
                 )}
-                {look.cheeks &&
-                  ([-1, 1] as const).map((side) => (
-                    <ellipse
-                      key={side}
-                      cx={100 + side * (spread + 8)}
-                      cy={eyeY + 22 * look.eyeSize}
-                      rx={9}
-                      ry={5}
-                      className={styles.cheek}
-                    />
-                  ))}
-                <g
-                  className={styles.mouth}
-                  transform={`translate(100 ${eyeY + 34 * Math.max(0.8, look.eyeSize)})`}
-                >
-                  <Mouth kind={look.mouth} mood={base} state={state} laugh={glyph === "laugh"} />
+                <path d={body.d} className={styles.edge} />
+                {worn.paint}
+                {worn.on && <g className={styles.accessory}>{worn.on}</g>}
+                <g className={styles.face}>
+                  <g className={styles.flick}>
+                    {look.brows &&
+                      ([-1, 1] as const).map((side) => (
+                        <path
+                          key={side}
+                          d={`M${100 + side * spread - 9} ${eyeY - 26 * look.eyeSize} L${100 + side * spread + 9} ${eyeY - 26 * look.eyeSize}`}
+                          className={classNames(styles.brow, side < 0 ? styles.left : styles.right)}
+                        />
+                      ))}
+                    {glyph ? (
+                      ([-1, 1] as const).map((side) => (
+                        <g
+                          key={side}
+                          transform={`translate(${100 + side * spread} ${eyeY}) scale(${unit})`}
+                          className={styles.kawaii}
+                        >
+                          <EyeGlyph kind={glyph} side={side} />
+                        </g>
+                      ))
+                    ) : (
+                      <>
+                        <Eye id={id} side={-1} x={100 - spread} y={eyeY} look={look} />
+                        <Eye id={id} side={1} x={100 + spread} y={eyeY} look={look} />
+                      </>
+                    )}
+                    {look.cheeks &&
+                      ([-1, 1] as const).map((side) => (
+                        <ellipse
+                          key={side}
+                          cx={100 + side * (spread + 8)}
+                          cy={eyeY + 22 * look.eyeSize}
+                          rx={9}
+                          ry={5}
+                          className={styles.cheek}
+                        />
+                      ))}
+                    <g
+                      className={styles.mouth}
+                      transform={`translate(100 ${eyeY + 34 * Math.max(0.8, look.eyeSize)})`}
+                    >
+                      <Mouth
+                        kind={look.mouth}
+                        mood={base}
+                        state={state}
+                        laugh={glyph === "laugh"}
+                      />
+                    </g>
+                    {faceAccessory && <g className={styles.onFace}>{faceAccessory}</g>}
+                  </g>
+                  <KawaiiLayer
+                    effects={fx}
+                    at={{
+                      eyes: [
+                        [100 - spread, eyeY],
+                        [100 + spread, eyeY],
+                      ],
+                      unit,
+                      top: body.top,
+                      halfWidth: body.halfWidth,
+                    }}
+                  />
                 </g>
-                {faceAccessory && <g className={styles.onFace}>{faceAccessory}</g>}
-              </g>
-              <KawaiiLayer
-                effects={fx}
-                at={{
-                  eyes: [
-                    [100 - spread, eyeY],
-                    [100 + spread, eyeY],
-                  ],
-                  unit,
-                  top: body.top,
-                  halfWidth: body.halfWidth,
-                }}
-              />
+                {worn.front && <g className={styles.accessory}>{worn.front}</g>}
+              </MediumWrap>
             </g>
-            {worn.front && <g className={styles.accessory}>{worn.front}</g>}
           </g>
-        </g>
-        {state === "thinking" && (
-          <g className={styles.thought}>
-            <circle cx={156} cy={34} r={7} />
-            <circle cx={174} cy={16} r={10} />
-            <circle cx={198} cy={-6} r={14} />
-          </g>
-        )}
-        {state === "sleeping" && (
-          <g className={styles.zzz}>
-            <text x={156} y={44}>
-              z
-            </text>
-            <text x={172} y={26}>
-              z
-            </text>
-          </g>
-        )}
+          {state === "thinking" && (
+            <g className={styles.thought}>
+              <circle cx={156} cy={34} r={7} />
+              <circle cx={174} cy={16} r={10} />
+              <circle cx={198} cy={-6} r={14} />
+            </g>
+          )}
+          {state === "sleeping" && (
+            <g className={styles.zzz}>
+              <text x={156} y={44}>
+                z
+              </text>
+              <text x={172} y={26}>
+                z
+              </text>
+            </g>
+          )}
+        </MediumWrap>
       </svg>
     </Flex>
   );

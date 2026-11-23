@@ -829,6 +829,27 @@
   opacity: 0;
 }
 
+/* `medium="lowpoly"`: hairline strokes in each facet's own colour close the seams. */
+.facets polygon {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+/* `medium="toon"`: flat colours with one hard shadow band and one hard highlight. */
+.toonShade {
+  fill: color-mix(in oklab, var(--mascot-color), black 26%);
+}
+
+.toonLight {
+  fill: #fff;
+  opacity: 0.78;
+}
+
+/* `medium="fur"`: the dark undercoat between the tufts. */
+.undercoat {
+  fill: color-mix(in oklab, var(--mascot-color), black 32%);
+}
+
 /* Layer motion (`MascotIdentityLayer.motion`): small loops on worn shapes. Each turns
    around its own origin in the 200 × 200 box, set inline. */
 .layerMotion {
