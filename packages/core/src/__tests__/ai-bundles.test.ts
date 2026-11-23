@@ -54,9 +54,11 @@ describe("ai harness without spec.json", () => {
   // held 3.0 work (MascotPanel and its parts, the settings blocks, Scene,
   // the control-room primitives, theme presets) brought it to 29,645; the
   // cap moves to 30,500, about 125 tokens of headroom. The own icon set (178
-  // names, 71 more) brought it to 30,968; the cap moves to 31,200.
+  // names, 71 more) brought it to 30,968; the cap moves to 31,200. 3.1's new
+  // pieces (mascot mediums, TabBar, WorkspaceSwitcher, WorkspacePanel,
+  // ColorButton) add about 1,000; the cap moves to 32,500.
   it("keeps the catalog small enough to load on every task", () => {
-    expect(statSync(path.join(AI, "catalog.json")).size).toBeLessThan(31_200);
+    expect(statSync(path.join(AI, "catalog.json")).size).toBeLessThan(32_500);
   });
 });
 
