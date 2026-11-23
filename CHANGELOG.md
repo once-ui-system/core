@@ -1015,6 +1015,14 @@ entry below that had landed by then:
   Select, it opens as the usual dropdown. The default stays `"dropdown"`. `DropdownWrapper`
   takes the same behaviour as `alignSelected`.
 
+### Changed
+
+- **`border="rounded"` is calmer on large surfaces.** `radius-l` is 24px and
+  `radius-xl` 28px (were 28px and 32px), and their nested steps follow
+  4px and 8px of padding evenly. Cards, panels and dialogs keep a soft
+  corner without reading as bubbles; `radius-xs`, `s` and `m`, the controls'
+  pill shapes, are unchanged. Other border styles are untouched.
+
 ### Fixed
 
 - `RadioButton`: the checked dot uses the brand's on-solid colour, as `Checkbox`'s tick does, so the checked radio reads as a ring around a dot in light and dark themes alike (it used the neutral on-solid colour, which matched the fill in dark themes).
