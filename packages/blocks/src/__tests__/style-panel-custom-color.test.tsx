@@ -359,7 +359,7 @@ describe("StylePanel custom neutral colour", () => {
     expect(screen.queryByRole("radio", { name: "Brand colour: custom" })).toBeNull();
   });
 
-  it("reports neutral and neutralSeed, and edits the seed in its own field", async () => {
+  it("reports neutral and neutralSeed, and edits the seed from its own colour button", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(<NeutralHost initial={{ neutral: "sand" }} onChange={onChange} />, { wrapper });
@@ -369,8 +369,8 @@ describe("StylePanel custom neutral colour", () => {
       { neutral: "custom", neutralSeed: "#5a93fc" },
       { neutral: "custom", neutralSeed: "#5a93fc" },
     );
-    const field = screen.getByLabelText("Custom neutral colour") as HTMLInputElement;
-    fireEvent.change(field, { target: { value: "#6b6457" } });
+    expect(screen.getByRole("button", { name: /^Custom neutral colour/ })).toBeInTheDocument();
+    fireEvent.change(nativeField(), { target: { value: "#6b6457" } });
     expect(onChange).toHaveBeenLastCalledWith(
       { neutral: "custom", neutralSeed: "#6b6457" },
       { neutral: "custom", neutralSeed: "#6b6457" },
@@ -411,7 +411,7 @@ describe("StylePanel custom neutral colour", () => {
       "aria-checked",
       "true",
     );
-    expect(screen.getByLabelText("Eigenes Grau wählen")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^Eigenes Grau wählen/ })).toBeInTheDocument();
     expect(screen.getByText("Grau aus #6b6457")).toBeInTheDocument();
     await expectNoAxeViolations(container);
   });
