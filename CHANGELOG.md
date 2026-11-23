@@ -13,6 +13,13 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Added
+
+- **Skeleton `effect="generating"`.** For work that takes seconds, such as an image a
+  model is drawing: a slow brand-to-accent mist drifts under a fine grain of dots in
+  place of the pulse. It moves only by `transform`, follows the theme and the brand,
+  holds still under reduced motion and sets `aria-busy`. Children (a caption) sit above it.
+
 ### Fixed
 
 - `Setting`: a slider (or any control that fills its parent, such as `Input` or a

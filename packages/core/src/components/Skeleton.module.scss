@@ -117,3 +117,74 @@ $skeleton-step: 2.5%; // 100% / $skeleton-cycles
         }
     }
 }
+
+/* effect="generating": a slow brand-to-accent mist under a fine dot grain,
+   for work that takes seconds (an image being drawn). The mist is one
+   oversized layer that only moves (transform), so the compositor runs it;
+   the grain is a still layer on top. No filter and no opacity pulse.
+   Reduced motion keeps the mist where it is. Children sit above both. */
+@keyframes skeleton-mist {
+    0% {
+        transform: translate3d(-12%, -8%, 0) rotate(0deg);
+    }
+    50% {
+        transform: translate3d(10%, 6%, 0) rotate(180deg);
+    }
+    100% {
+        transform: translate3d(-12%, -8%, 0) rotate(360deg);
+    }
+}
+
+.skeleton.generating {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    animation: none;
+    background-color: var(--neutral-background-medium);
+
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    &::before {
+        inset: -50%;
+        background:
+            radial-gradient(
+                closest-side at 35% 40%,
+                color-mix(in srgb, var(--brand-solid-strong) 45%, transparent),
+                transparent
+            ),
+            radial-gradient(
+                closest-side at 65% 60%,
+                color-mix(in srgb, var(--accent-solid-strong) 40%, transparent),
+                transparent
+            );
+        animation: skeleton-mist 14s ease-in-out infinite;
+    }
+
+    &::after {
+        inset: 0;
+        background-image: radial-gradient(
+            circle at center,
+            color-mix(in srgb, var(--neutral-on-background-weak) 35%, transparent) 0.5px,
+            transparent 1px
+        );
+        background-size: var(--static-space-4) var(--static-space-4);
+    }
+
+    .group & {
+        &::before {
+            animation: none;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        &::before {
+            animation: none;
+        }
+    }
+}
