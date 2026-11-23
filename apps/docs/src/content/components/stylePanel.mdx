@@ -282,8 +282,11 @@ const [draft, setDraft] = useState<StylePanelValue>({
 />
 ```
 
-For one row only, compose the panel and set `custom` on that row:
-`<StylePanelBrand custom />`.
+`true` offers it on Brand and Accent. To choose the rows, Neutral included,
+list them: `customColors={["brand", "accent", "neutral"]}`. The Neutral row
+reports `{ neutral: "custom", neutralSeed }`, and the whole grey scale is
+generated from that one colour. For one row only, compose the panel and set
+`custom` on that row: `<StylePanelBrand custom />` or `<StylePanelNeutral custom />`.
 
 It is for the controlled mode. Bound to `ThemeProvider`, whose `setStyle`
 takes no seed, the panel would have nowhere to keep one, so the custom swatch
@@ -302,7 +305,14 @@ picked.
 | `swatch(row)` | The swatch's accessible name: `Brand colour: custom` (`Accent colour: custom`). |
 | `picker(row)` | The field's label: `Custom brand colour` (`Custom accent colour`). |
 | `description(seed, row)` | None. Text under the field, wired to its `aria-describedby`. |
-| `remove` | The field's clear button: `Remove`. |
+| `remove` | The field's clear button, on every row: `Remove`. |
+| `neutral.swatch` | The Neutral row's swatch: `Neutral colour: custom`. |
+| `neutral.picker` | The Neutral row's field: `Custom neutral colour`. |
+| `neutral.description(seed)` | None. As `description`, for the Neutral row. |
+
+The Neutral row has its own words under `neutral` so that `row` in the
+functions above stays `"brand" | "accent"`, and a translation keyed on it
+keeps compiling.
 
 ### Rendering the colour
 
@@ -360,7 +370,7 @@ generated from one colour.
     value: "Take ownership of the state. The panel then writes nothing to the providers or to storage.",
     onValueChange: "Called with the whole state and just the keys that changed — the latter being what you send to a server.",
     labels: "Every string the panel shows or announces, over the English defaults. Groups and rows read it; their own props still win.",
-    customColors: "End the Brand and Accent swatches with a custom colour, reported as brandSeed and accentSeed. Controlled mode only.",
+    customColors: "End the colour rows' swatches with a custom colour, reported as brandSeed, accentSeed or neutralSeed. true is Brand and Accent; list the rows to include Neutral. Controlled mode only.",
     stacked: "Put each row's label above its control, for a narrow sidebar.",
     size: "How much room rows and groups take: m (default), or s for a denser panel.",
   }}
