@@ -239,6 +239,13 @@
   min-width: 0;
 }
 
+/* The preview line is as tall as the unread badge whether or not the
+   badge shows, so opening a conversation (which clears its count) does
+   not shrink the row. */
+.conversationPreview {
+  min-height: 1.25rem;
+}
+
 .unread {
   flex-shrink: 0;
   min-width: 1.25rem;

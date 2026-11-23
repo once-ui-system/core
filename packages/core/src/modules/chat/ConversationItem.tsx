@@ -100,7 +100,13 @@ const ConversationItem = ({
               </Text>
             )}
           </Row>
-          <Row fillWidth gap="8" vertical="center" horizontal="between">
+          <Row
+            fillWidth
+            gap="8"
+            vertical="center"
+            horizontal="between"
+            className={styles.conversationPreview}
+          >
             <Text
               textVariant="body-default-s"
               onBackground={typing ? "brand-medium" : hasUnread ? "neutral-strong" : "neutral-weak"}
