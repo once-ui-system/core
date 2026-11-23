@@ -1,8 +1,8 @@
 import classNames from "clsx";
 import type { CSSProperties, ElementType, HTMLAttributes, Ref } from "react";
-
 import type { FlexLayoutProps } from "../interfaces.js";
 import { type ColorScheme, type ColorWeight, SpacingToken, type TextVariant } from "../types.js";
+import { alphaColorStyle } from "../utils/colorAlpha.js";
 import { cursorProps } from "../utils/cursor.js";
 import {
   BELOW_HEADER,
@@ -203,7 +203,11 @@ const ServerFlex = ({
       return `transparent-${type}`;
     }
 
-    if (["surface", "page", "overlay"].includes(value)) {
+    // A value with an opacity, `brand/12` or `brand-strong/40`, has no class:
+    // `alphaColorStyle` writes it inline.
+    if (value.includes("/")) return undefined;
+
+    if (["surface", "page", "overlay", "gradient"].includes(value)) {
       return `${value}-${type}`;
     }
 
@@ -464,6 +468,17 @@ const ServerFlex = ({
   const transform = translateTransform(translateX, translateY);
 
   const combinedStyle: CSSProperties = {
+    ...alphaColorStyle({
+      background,
+      solid,
+      border,
+      borderTop,
+      borderRight,
+      borderBottom,
+      borderLeft,
+      borderX,
+      borderY,
+    }),
     maxWidth: ["xs", "s", "m", "l", "xl"].includes(maxWidth as string)
       ? undefined
       : sizeValue(maxWidth, "width"),
