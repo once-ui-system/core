@@ -35,7 +35,7 @@ describe("icons", () => {
     );
     const svg = container.querySelector("svg");
     expect(svg?.getAttribute("width")).toBe(String(2 * rem));
-    expect(container.querySelector("path")?.getAttribute("d")).toContain("M13.5 4.5");
+    expect(container.querySelector("path")?.getAttribute("d")).toContain("M5.25 12L17.75 12");
   });
 
   it("takes icon names on Button and Tag, as core does", () => {

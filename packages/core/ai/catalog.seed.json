@@ -237,6 +237,11 @@
     "tags": ["overlay", "auth"],
     "pairsWith": ["Button", "Column", "OTPInput"]
   },
+  "DivergingBars": {
+    "purpose": "Signed value per item on one shared zero: gains right, losses left, each value written",
+    "tags": ["data", "chart", "dashboard"],
+    "pairsWith": ["Treemap", "Heatmap", "BarChart"]
+  },
   "Drawer": {
     "purpose": "Modal sheet that slides in from any edge, with focus trap and scroll lock: mobile nav, filters, side panels",
     "tags": ["overlay", "navigation"],
@@ -262,6 +267,11 @@
     "tags": ["effect", "chat"],
     "avoid": "Wrapping content — it is an absolute edge overlay, not a container",
     "pairsWith": ["Column", "Row"]
+  },
+  "FamilyFooter": {
+    "purpose": "Footer a product family shares: brand band, link columns, sibling products row and a co-brand bar",
+    "tags": ["marketing", "navigation", "layout"],
+    "pairsWith": ["Logo", "ThemeSwitcher"]
   },
   "FaqSection": {
     "purpose": "Site section: questions and answers",
@@ -333,6 +343,11 @@
     "tags": ["effect", "marketing"],
     "pairsWith": ["Heading", "Media"]
   },
+  "GradientFx": {
+    "purpose": "Animated grain gradient behind its children",
+    "tags": ["effect", "marketing"],
+    "pairsWith": ["Heading"]
+  },
   "Grid": {
     "purpose": "CSS grid with columns per breakpoint and every Flex prop; `masonry` flows uneven items down columns",
     "tags": ["layout", "basics"],
@@ -353,6 +368,11 @@
     "purpose": "Auto-generated table of contents from the page's headings, highlighting the section in view",
     "tags": ["navigation", "docs"],
     "pairsWith": ["HeadingLink", "Column"]
+  },
+  "Heatmap": {
+    "purpose": "Grid of rows by columns, each cell's size in one hue (months by year, hours by day)",
+    "tags": ["data", "chart", "dashboard"],
+    "pairsWith": ["DivergingBars", "Treemap", "BarChart"]
   },
   "HeroSection": {
     "purpose": "Site section: h1, lead, buttons, picture",
@@ -724,6 +744,11 @@
     "tags": ["navigation", "action"],
     "pairsWith": ["MegaMenu", "Row"]
   },
+  "HeaderMenu": {
+    "purpose": "Landing header's phone menu: hamburger becomes X in place, panel under the header",
+    "tags": ["navigation"],
+    "pairsWith": ["MegaMenu", "Button"]
+  },
   "NavItem": {
     "purpose": "One sidebar navigation row: label, icon, selected state, count badge or unread dot",
     "tags": ["navigation"],
@@ -965,6 +990,11 @@
     "purpose": "Shine sweeping across text; speed in ms",
     "tags": ["effect", "marketing"],
     "pairsWith": ["Heading", "Text"]
+  },
+  "WorkspaceSwitcher": {
+    "purpose": "Workspace or org switcher: current pinned, groups, search; bottom sheet on phones",
+    "tags": ["navigation", "form"],
+    "pairsWith": ["SidebarHeader", "Sidebar", "Dialog"]
   },
   "Sidebar": {
     "purpose": "Resizable app sidebar that folds to an icon rail and is a drawer on phones",
@@ -1333,6 +1363,11 @@
     "purpose": "Short hint on hover or focus of its children; with content and no children, an info icon (2.x InfoTip)",
     "tags": ["overlay", "basics"],
     "pairsWith": ["IconButton", "Text", "Setting"]
+  },
+  "Treemap": {
+    "purpose": "Tiles sized by value, coloured by a signed tone (holdings, spend by category)",
+    "tags": ["data", "chart", "dashboard"],
+    "pairsWith": ["DivergingBars", "Heatmap", "PieChart"]
   },
   "TypeFx": {
     "purpose": "Typewriter that types and deletes a list of words; `mode=\"fade\"` fades letters in instead",

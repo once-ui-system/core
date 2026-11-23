@@ -146,9 +146,19 @@
   box-shadow: 0 0 0 2px var(--neutral-border-strong);
 }
 
+.event {
+  --event-accent: var(--event-accent-light, var(--function-brand-500));
+}
+
+:global([data-theme="dark"]) .event {
+  --event-accent: var(--event-accent-dark, var(--function-brand-600));
+}
+
+/* All-day and multi-day bars: the tone's stronger tint, so they read as one
+   family with timed events and their Tag in every solid style. */
 .event[data-solid="true"] {
-  background: var(--event-solid, var(--brand-solid-strong));
-  color: var(--event-on-solid, var(--brand-on-solid-strong));
+  background: var(--event-fill-hover, var(--brand-alpha-medium));
+  color: var(--event-on, var(--brand-on-background-strong));
 }
 
 .event[data-continues-before="true"] {
@@ -170,7 +180,7 @@
   width: var(--static-space-8);
   height: var(--static-space-8);
   border-radius: var(--radius-full);
-  background: var(--event-solid, var(--brand-solid-strong));
+  background: var(--event-accent);
 }
 
 .eventText {
@@ -310,8 +320,10 @@ button.columnHeader:hover {
   align-items: stretch;
   justify-content: flex-start;
   gap: 0;
-  padding: var(--static-space-2) var(--static-space-6, 0.375rem);
-  border-left: 3px solid var(--event-solid, var(--brand-solid-strong));
+  /* 4px on top centres one 16px line in a 24px half-hour tile; longer
+     events keep the same inset so titles line up across a column. */
+  padding: var(--static-space-4) var(--static-space-6, 0.375rem) var(--static-space-2);
+  border-left: 3px solid var(--event-accent);
 }
 
 .timedEvent .eventText {

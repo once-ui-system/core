@@ -1,0 +1,60 @@
+{
+ "name": "WorkspaceSwitcher",
+ "group": "components",
+ "props": {
+  "items": "!WorkspaceSwitcherItem[]",
+  "value": "string",
+  "defaultValue": "string",
+  "onValueChange": "(value: string) => void",
+  "groups": "WorkspaceSwitcherGroup[]",
+  "pinCurrent": "boolean = true",
+  "counts": "boolean = true",
+  "searchAbove": "number | false = 6",
+  "loading": "boolean = false",
+  "onCreate": "() => void",
+  "footer": "ReactNode",
+  "trigger": "ReactNode",
+  "mobileBelow": "\"xs\" | \"s\" | \"m\" | \"l\" | false = s",
+  "minWidth": "number | `${number}rem` | `${number}px` = 20rem",
+  "open": "boolean",
+  "defaultOpen": "boolean = false",
+  "onOpenChange": "(open: boolean) => void",
+  "labels": "WorkspaceSwitcherLabels"
+ },
+ "tags": [
+  "navigation",
+  "form"
+ ],
+ "pairsWith": [
+  "SidebarHeader",
+  "Sidebar",
+  "Dialog"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "WorkspaceSwitcherGroup": {
+   "id": "!string",
+   "label": "!string"
+  },
+  "WorkspaceSwitcherItem": {
+   "value": "!string",
+   "label": "!string",
+   "description": "ReactNode",
+   "src": "string",
+   "prefix": "ReactNode",
+   "group": "string",
+   "keywords": "string[]",
+   "disabled": "boolean"
+  },
+  "WorkspaceSwitcherLabels": {
+   "title": "string",
+   "current": "string",
+   "search": "string",
+   "noMatch": "string",
+   "empty": "string",
+   "loading": "string",
+   "pick": "string",
+   "create": "string"
+  }
+ }
+}

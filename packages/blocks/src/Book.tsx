@@ -51,7 +51,7 @@ const Book = ({ ref, src, alt, sizes, href, children, ...flex }: BookProps) => {
             />
           )}
           {children && (
-            <Column fill position="absolute" zIndex={1} data-theme="dark">
+            <Column fill position="absolute" top="0" left="0" zIndex={1} data-theme="dark">
               {children}
             </Column>
           )}

@@ -106,7 +106,13 @@ const SettingRow = ({
         // any row narrower than label plus cap, even with room to spare. And
         // the control keeps to the row's trailing edge, also when a narrow
         // row does wrap it: buttons are always found in one place.
+        // The area still grows into the space up to that cap: sized only to
+        // its content, a control that fills its parent (Slider, Input) had no
+        // width to fill and collapsed to its thumb. Whether the row wraps is
+        // decided by content size before growing, so this adds no wrapping,
+        // and `horizontal="end"` keeps a button at the trailing edge.
         style={{
+          flexGrow: hasLabel ? 1 : undefined,
           marginLeft: "auto",
           maxWidth: hasLabel ? sizeValue(controlWidth, "width") : undefined,
           minWidth: 0,

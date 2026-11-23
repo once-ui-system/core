@@ -61,6 +61,20 @@ describe("Mascot", () => {
     expect(container.querySelector("[data-testid='hat']")).toBeTruthy();
   });
 
+  it("draws faceAccessory on the face layer, so it follows the gaze and the poses", () => {
+    const { container } = render(
+      <Mascot
+        accessory={<circle data-testid="hat" r={4} />}
+        faceAccessory={<path data-testid="beak" d="M90 112 L110 112 L100 128Z" />}
+      />,
+    );
+    const beak = container.querySelector("[data-testid='beak']") as Element;
+    const hat = container.querySelector("[data-testid='hat']") as Element;
+    expect(beak.closest("g[class*='face']")).toBeTruthy();
+    expect(hat.closest("g[class*='face']")).toBeNull();
+    expect(hat.closest("g[class*='accessory']")).toBeTruthy();
+  });
+
   it("draws built-in accessories in their layers, alone or several at once", () => {
     const { container } = render(<Mascot surface="flat" accessory={["helmet", "catEars"]} />);
     const layers = container.querySelectorAll("g[class*='accessory']");

@@ -1,0 +1,9 @@
+// A panel of radius l rounds only as far as a one-line option inside it can
+// follow. An option is 34px tall, so it rounds to 17px at most; with the
+// panel's 1px border and 4px padding, its corners nest in a 22px panel. In
+// the rounded border style radius l is 28px, and the highlighted first
+// option sat in the panel's corner with a gap that widened towards the
+// curve. Only when the panel takes radius l: another radius prop is kept.
+.panel:global(.radius-l) {
+    border-radius: min(var(--radius-l), 1.375rem);
+}

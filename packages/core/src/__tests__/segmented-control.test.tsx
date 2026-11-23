@@ -319,19 +319,49 @@ describe("SegmentedControl's sliding background", () => {
 });
 
 describe("SegmentedControl rail radius", () => {
-  it("follows the options' size plus its 4px padding", () => {
+  const rail = (container: HTMLElement) =>
+    container.querySelector(`.${styles.rail}`) as HTMLElement;
+  const two = (extra: Record<string, unknown>) => [
+    { value: "a", label: "A", ...extra },
+    { value: "b", label: "B", ...extra },
+  ];
+
+  it("nests round the options' radius token plus the 4px padding", () => {
     for (const size of ["s", "m", "l"] as const) {
-      const { container, unmount } = render(
-        <SegmentedControl
-          buttons={[
-            { value: "a", label: "A", size },
-            { value: "b", label: "B", size },
-          ]}
-        />,
-        { wrapper: wrap },
-      );
-      expect(container.querySelector(`.radius-${size}-4`)).not.toBeNull();
+      const { container, unmount } = render(<SegmentedControl buttons={two({ size })} />, {
+        wrapper: wrap,
+      });
+      const style = rail(container).style;
+      expect(style.getPropertyValue("--segmented-control-inner")).toBe(`var(--radius-${size})`);
+      expect(style.getPropertyValue("--segmented-control-pad")).toBe("var(--static-space-4)");
       unmount();
     }
+  });
+
+  it("nests round small options in compact too, by 2px instead of a fixed l", () => {
+    const { container } = render(<SegmentedControl compact buttons={two({ size: "s" })} />, {
+      wrapper: wrap,
+    });
+    const style = rail(container).style;
+    expect(style.getPropertyValue("--segmented-control-inner")).toBe("var(--radius-s)");
+    expect(style.getPropertyValue("--segmented-control-pad")).toBe("var(--static-space-2)");
+    expect(container.querySelector(".radius-l")).toBeNull();
+  });
+
+  it("follows an explicit radius over the size, and none", () => {
+    const { container, rerender } = render(
+      <SegmentedControl buttons={two({ size: "l", radius: "xs" })} />,
+      { wrapper: wrap },
+    );
+    expect(rail(container).style.getPropertyValue("--segmented-control-inner")).toBe(
+      "var(--radius-xs)",
+    );
+    rerender(<SegmentedControl buttons={two({ radius: "none" })} />);
+    expect(rail(container).style.getPropertyValue("--segmented-control-inner")).toBe("0px");
+  });
+
+  it("leaves the inner radius to CSS (and the density) when the options have no size", () => {
+    const { container } = render(<SegmentedControl buttons={two({})} />, { wrapper: wrap });
+    expect(rail(container).style.getPropertyValue("--segmented-control-inner")).toBe("");
   });
 });

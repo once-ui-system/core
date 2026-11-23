@@ -2,7 +2,7 @@ import * as core from "@once-ui-system/core";
 import { describe, expect, it } from "vitest";
 import * as fx from "../index.js";
 
-/** 3.0, F8: the sixteen effects are this package's, and core's root no longer has them. */
+/** 3.0, F8: the effects are this package's, and core's root no longer has them. */
 const EFFECTS = [
   "BlobFx",
   "CelebrationFx",
@@ -11,6 +11,7 @@ const EFFECTS = [
   "Effect",
   "FlipFx",
   "GlitchFx",
+  "GradientFx",
   "HoloFx",
   "LetterFx",
   "MatrixFx",
@@ -23,7 +24,7 @@ const EFFECTS = [
 ];
 
 describe("@once-ui-system/fx", () => {
-  it("exports the sixteen effects and nothing else", () => {
+  it("exports the effects (sixteen in 3.0, GradientFx in 3.1) and nothing else", () => {
     expect(Object.keys(fx).sort()).toEqual([...EFFECTS].sort());
   });
 

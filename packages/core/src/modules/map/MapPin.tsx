@@ -80,7 +80,8 @@ const MapPin = ({
       {prefix}
       {icon && kind !== "dot" ? (
         <span className={styles.disc} aria-hidden="true">
-          <Icon name={icon} decorative />
+          {/* Sized to sit inside the disc: the default `m` (1.5rem) is wider than a pill's disc. */}
+          <Icon name={icon} size={kind === "pill" ? "xs" : "s"} decorative />
         </span>
       ) : (
         kind === "pill" && toneProp && <span className={styles.status} aria-hidden="true" />

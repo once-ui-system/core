@@ -125,6 +125,8 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
           >
             <Background
               position="absolute"
+              top="0"
+              left="0"
               fill
               lines={{
                 display: true,

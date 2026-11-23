@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-import { type BlockExampleDef, BlockPage } from "../BlockPage";
 import {
   Background1,
   Background2,
@@ -11,6 +10,7 @@ import {
   Background6,
   Background7,
 } from "@/blocks/modules";
+import { type BlockExampleDef, BlockPage } from "../BlockPage";
 
 const examples: BlockExampleDef[] = [
   {
@@ -51,7 +51,7 @@ const examples: BlockExampleDef[] = [
 ];
 
 const Docs: React.FC = () => (
-  <BlockPage category="background" examples={examples} previewHeight="fixed" />
+  <BlockPage category="background" examples={examples} previewHeight="fixed" bleed />
 );
 
 export default Docs;

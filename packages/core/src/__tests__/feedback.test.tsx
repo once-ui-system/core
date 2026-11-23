@@ -48,7 +48,7 @@ describe("Feedback alignment", () => {
 describe("Feedback icon", () => {
   it("renders the variant's icon by default", () => {
     const { container } = render(<Feedback tone="success" description="Saved." />);
-    const { container: reference } = render(<Icon name="check" />);
+    const { container: reference } = render(<Icon name="checkCircle" />);
     expect(container.querySelector("svg")?.innerHTML).toBe(
       reference.querySelector("svg")?.innerHTML,
     );

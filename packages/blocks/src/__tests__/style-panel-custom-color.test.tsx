@@ -10,6 +10,7 @@ import {
   StylePanelBrand,
   StylePanelGroup,
   type StylePanelLabels,
+  StylePanelNeutral,
   StylePanelRoot,
   type StylePanelValue,
 } from "../StylePanel.js";
@@ -302,5 +303,116 @@ describe("StylePanel controlled Theme row", () => {
       "aria-checked",
       "true",
     );
+  });
+});
+
+describe("StylePanel custom neutral colour", () => {
+  function NeutralHost({
+    initial = {},
+    onChange,
+    labels,
+  }: {
+    initial?: StylePanelValue;
+    onChange?: (next: StylePanelValue, changed: Partial<StylePanelValue>) => void;
+    labels?: StylePanelLabels;
+  }) {
+    const [value, setValue] = useState<StylePanelValue>(initial);
+    return (
+      <StylePanel
+        customColors={["brand", "accent", "neutral"]}
+        labels={labels}
+        value={value}
+        onValueChange={(next, changed) => {
+          setValue(next);
+          onChange?.(next, changed);
+        }}
+      />
+    );
+  }
+  const customNeutral = () => screen.getByRole("radio", { name: "Neutral colour: custom" });
+
+  it("stays off with customColors={true}, so hosts that render only two seeds keep working", () => {
+    render(<Host />, { wrapper });
+    expect(screen.queryByRole("radio", { name: "Neutral colour: custom" })).toBeNull();
+  });
+
+  it("ends the Neutral swatches when the rows are listed", () => {
+    render(<NeutralHost />, { wrapper });
+    const names = screen.getAllByRole("radio").map((b) => b.getAttribute("aria-label"));
+    expect(names[names.indexOf("Neutral colour: rose") + 1]).toBe("Neutral colour: custom");
+    expect(names.filter((name) => name?.endsWith(": custom"))).toHaveLength(3);
+  });
+
+  it("offers only the rows listed", () => {
+    function OnlyNeutral() {
+      const [value, setValue] = useState<StylePanelValue>({});
+      return (
+        <StylePanel
+          customColors={["neutral"]}
+          value={value}
+          onValueChange={(next) => setValue(next)}
+        />
+      );
+    }
+    render(<OnlyNeutral />, { wrapper });
+    expect(customNeutral()).toBeInTheDocument();
+    expect(screen.queryByRole("radio", { name: "Brand colour: custom" })).toBeNull();
+  });
+
+  it("reports neutral and neutralSeed, and edits the seed in its own field", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(<NeutralHost initial={{ neutral: "sand" }} onChange={onChange} />, { wrapper });
+
+    await user.click(customNeutral());
+    expect(onChange).toHaveBeenLastCalledWith(
+      { neutral: "custom", neutralSeed: "#5a93fc" },
+      { neutral: "custom", neutralSeed: "#5a93fc" },
+    );
+    const field = screen.getByLabelText("Custom neutral colour") as HTMLInputElement;
+    fireEvent.change(field, { target: { value: "#6b6457" } });
+    expect(onChange).toHaveBeenLastCalledWith(
+      { neutral: "custom", neutralSeed: "#6b6457" },
+      { neutral: "custom", neutralSeed: "#6b6457" },
+    );
+    expect(face(customNeutral()).style.background).toBe("rgb(107, 100, 87)");
+  });
+
+  it("is offered by custom on StylePanelNeutral in a composed panel", () => {
+    function Composed() {
+      const [value, setValue] = useState<StylePanelValue>({ neutralSeed: "#6b6457" });
+      return (
+        <StylePanelRoot value={value} onValueChange={(next) => setValue(next)}>
+          <StylePanelGroup title="Colour">
+            <StylePanelNeutral custom />
+          </StylePanelGroup>
+        </StylePanelRoot>
+      );
+    }
+    render(<Composed />, { wrapper });
+    expect(face(customNeutral()).style.background).toBe("rgb(107, 100, 87)");
+  });
+
+  it("takes its own translated words, and has no axe violations with the picker open", async () => {
+    const labels: StylePanelLabels = {
+      custom: {
+        neutral: {
+          swatch: "Eigenes Grau",
+          picker: "Eigenes Grau wählen",
+          description: (seed) => `Grau aus ${seed}`,
+        },
+      },
+    };
+    const { container } = render(
+      <NeutralHost labels={labels} initial={{ neutral: "custom", neutralSeed: "#6b6457" }} />,
+      { wrapper },
+    );
+    expect(screen.getByRole("radio", { name: "Eigenes Grau" })).toHaveAttribute(
+      "aria-checked",
+      "true",
+    );
+    expect(screen.getByLabelText("Eigenes Grau wählen")).toBeInTheDocument();
+    expect(screen.getByText("Grau aus #6b6457")).toBeInTheDocument();
+    await expectNoAxeViolations(container);
   });
 });

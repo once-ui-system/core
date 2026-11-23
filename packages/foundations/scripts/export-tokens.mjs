@@ -103,6 +103,11 @@ function value(name, raw) {
   const v = raw.trim();
   const ref = v.match(/^var\(--([\w-]+)\)$/);
   if (ref) return ref[1] === name ? undefined : `{${ref[1]}}`;
+  // `var(--x, var(--y))`: x is set only by a seeded scheme at runtime, so the
+  // export (built-in palettes) reads the fallback. `initial` unsets a key.
+  const fallback = v.match(/^var\(--[\w-]+,\s*(.+)\)$/);
+  if (fallback) return value(name, fallback[1]);
+  if (v === "initial") return undefined;
   // `color-mix(in srgb, var(--x) 15%, transparent)`: token x at 15% opacity.
   const mix = v.match(
     /^color-mix\(\s*in srgb\s*,\s*var\(--([\w-]+)\)\s+([\d.]+)%\s*,\s*transparent\s*\)$/,
@@ -136,6 +141,24 @@ function blocks(css) {
       }
     }
   }
+  return out;
+}
+
+/** A selector list split at its own commas, not those inside `:where(…)` or `:not(…)`. */
+function topLevel(list) {
+  const out = [];
+  let depth = 0;
+  let start = 0;
+  for (let i = 0; i < list.length; i++) {
+    const ch = list[i];
+    if (ch === "(") depth++;
+    else if (ch === ")") depth--;
+    else if (ch === "," && depth === 0) {
+      out.push(list.slice(start, i).trim());
+      start = i + 1;
+    }
+  }
+  out.push(list.slice(start).trim());
   return out;
 }
 
@@ -179,7 +202,7 @@ function layers(css) {
       }
       const tokens = declarations(body);
       if (Object.keys(tokens).length === 0) continue;
-      for (const selector of prelude.split(",").map((s) => s.trim())) {
+      for (const selector of topLevel(prelude)) {
         const when = conditions(selector);
         if (!when) continue;
         out.push({ when, ...(media ? { maxWidth: media } : {}), tokens });

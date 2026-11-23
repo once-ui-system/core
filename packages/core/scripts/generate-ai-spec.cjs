@@ -1159,9 +1159,15 @@ async function main() {
   // to know which icons exist and guessed — which is how the shipped examples
   // ended up asking for "email", "loading" and "github", none of which were
   // registered, each rendering nothing. The vocabulary is listed explicitly.
-  const iconNames = Object.keys(
-    JSON.parse(fs.readFileSync(path.join(__dirname, "icon-manifest.json"), "utf8")),
-  ).sort();
+  const iconNames = [
+    ...fs
+      .readFileSync(path.join(ROOT, "src", "icons", "data.ts"), "utf8")
+      .matchAll(/^ {2}(\w+): \{$/gm),
+  ]
+    .map((m) => m[1])
+    .sort();
+  if (iconNames.length < 100)
+    throw new Error(`Read only ${iconNames.length} icon names from src/icons/data.ts`);
 
   const types = collectTypeAliases(
     ts,
@@ -1709,6 +1715,13 @@ function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody, functions = 
       ...(example ? ["a gold example"] : []),
     ])}. Write the page from it; reading the rules, catalog, gotchas, manifest or examples again only adds cost. Open \`components/<Name>.json\` only for a component not listed here, and then every one you need in a single step.`,
     "",
+    // A step that comes before any code (the brand-world direction card for a
+    // landing page) goes first, not with the recipes at the end, where an
+    // agent reaches it after the template hero has already been written.
+    ...(task.first ?? []).flatMap((id) => {
+      const section = markdownSection("recipes.md", id);
+      return section ? [section.replace(/^### (?:\d+\. )?/, "## Start here: "), ""] : [];
+    }),
     "## Rules",
     "",
     rulesBody.trim().replace(/^## /gm, "### "),

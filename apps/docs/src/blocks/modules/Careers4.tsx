@@ -9,8 +9,8 @@ import {
   Heading,
   Icon,
   Media,
-  StatusIndicator,
   Row,
+  StatusIndicator,
   Text,
 } from "@once-ui-system/core";
 
@@ -51,6 +51,8 @@ export const Careers4 = () => {
       <Column maxWidth="l" borderX>
         <Background
           position="absolute"
+          top="0"
+          left="0"
           fill
           m={{ hide: true }}
           lines={{

@@ -161,3 +161,66 @@ describe("generateSeededScheme", () => {
     warn.mockRestore();
   });
 });
+
+describe("customSchemeProperties on-solid text", () => {
+  it("gives a light seed dark text and rests its solid on the seed", () => {
+    const props = customSchemeProperties({ brand: "#d4f43c", accent: "#facc15" });
+    // A pale cyan and a mint, too.
+    for (const seed of ["#22d3ee", "#6ee7b7"]) {
+      expect(customSchemeProperties({ brand: seed })["--scheme-brand-on-solid-strong"]).toBe(
+        "var(--static-black)",
+      );
+    }
+    for (const name of ["brand", "accent"]) {
+      expect(props[`--scheme-${name}-on-solid-strong`]).toBe("var(--static-black)");
+      expect(props[`--scheme-${name}-on-solid-medium`]).toBe(`var(--scheme-${name}-100)`);
+      expect(props[`--scheme-${name}-on-solid-weak`]).toBe(`var(--scheme-${name}-200)`);
+      expect(props[`--scheme-${name}-solid-medium`]).toBe(`var(--scheme-${name}-500)`);
+      expect(props[`--scheme-${name}-solid-strong`]).toMatch(/^oklch\(/);
+    }
+  });
+
+  it("leaves dark and mid-tone seeds on white text", () => {
+    for (const seed of [
+      "#2563eb",
+      "#5a93fc",
+      "#7c3aed",
+      "#f97316",
+      "#10b981",
+      "#0ea5e9",
+      "#dc2626",
+    ]) {
+      const props = customSchemeProperties({ brand: seed });
+      expect(Object.keys(props).some((key) => key.includes("solid"))).toBe(false);
+    }
+  });
+
+  it("never touches the neutral scheme", () => {
+    const props = customSchemeProperties({ neutral: "#f5f5f4" });
+    expect(Object.keys(props).some((key) => key.includes("solid"))).toBe(false);
+  });
+
+  it("keeps a pinned scale's own solids and only picks the text", () => {
+    const props = customSchemeProperties(
+      { brand: "#d4f43c" },
+      { brand: { 400: "#d4f43c", 500: "#e2fb73" } },
+    );
+    expect(props["--scheme-brand-on-solid-strong"]).toBe("var(--static-black)");
+    expect(props["--scheme-brand-solid-medium"]).toBeUndefined();
+    expect(props["--scheme-brand-solid-strong"]).toBeUndefined();
+  });
+
+  it("writes keys foundations reads back, with white as the fallback", () => {
+    const theme = readFileSync(
+      join(__dirname, "../../../foundations/scss/tokens/theme.scss"),
+      "utf8",
+    );
+    expect(theme).toContain("var(--function-brand-on-solid-strong, var(--static-white))");
+    expect(theme).toContain("var(--function-brand-solid-medium, var(--function-brand-400))");
+    const fn = readFileSync(
+      join(__dirname, "../../../foundations/scss/tokens/function.scss"),
+      "utf8",
+    );
+    expect(fn).toContain("--function-brand-on-solid-strong: var(--scheme-brand-on-solid-strong);");
+  });
+});

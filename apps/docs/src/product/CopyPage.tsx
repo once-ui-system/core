@@ -77,7 +77,7 @@ function CopyPage({ path }: CopyPageProps) {
         trigger={
           <IconButton
             variant="secondary"
-            icon="chevronDown"
+            icon={open ? "chevronUp" : "chevronDown"}
             tooltip="More"
             aria-expanded={open}
             onClick={() => setOpen((value) => !value)}

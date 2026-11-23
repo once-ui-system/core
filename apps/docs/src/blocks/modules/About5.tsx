@@ -62,7 +62,8 @@ function SwagCard({ href, image, label }: { href: string; image: string; label: 
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <HoverCard placement="cover"
+      <HoverCard
+        placement="cover"
         fillWidth
         trigger={
           <Card
@@ -76,45 +77,48 @@ function SwagCard({ href, image, label }: { href: string; image: string; label: 
               <Media aspectRatio="1/1" src={image} sizes="400px" alt={label} />
             </Animation>
           </Card>
-        }><Row fill padding="4">
-            <Row fill border="neutral-alpha-medium" radius="l" vertical="end" overflow="hidden">
-              <Row fillWidth height="32">
-                <Background
-                  fill
-                  borderTop="neutral-alpha-medium"
-                  lines={{
-                    display: true,
-                    color: "neutral-alpha-weak",
-                    angle: -45,
-                    size: "4",
-                  }}
-                />
-                <Button data-border="sharp" size="s" suffixIcon="chevronRight">
-                  <Text textVariant="code-default-s">
-                    <LetterFx
-                      charset={["x", "y", "z", "0", "/", "!", "u", "o"]}
-                      trigger="custom"
-                      onTrigger={(triggerFn) => {
-                        triggerLetterFxRef.current = triggerFn;
-                      }}
-                    >
-                      Shop now
-                    </LetterFx>
-                  </Text>
-                </Button>
-                <Background
-                  fill
-                  borderTop="neutral-alpha-medium"
-                  lines={{
-                    display: true,
-                    color: "neutral-alpha-weak",
-                    angle: -45,
-                    size: "4",
-                  }}
-                />
-              </Row>
+        }
+      >
+        <Row fill padding="4">
+          <Row fill border="neutral-alpha-medium" radius="l" vertical="end" overflow="hidden">
+            <Row fillWidth height="32">
+              <Background
+                fill
+                borderTop="neutral-alpha-medium"
+                lines={{
+                  display: true,
+                  color: "neutral-alpha-weak",
+                  angle: -45,
+                  size: "4",
+                }}
+              />
+              <Button data-border="sharp" size="s" suffixIcon="chevronRight">
+                <Text textVariant="code-default-s">
+                  <LetterFx
+                    charset={["x", "y", "z", "0", "/", "!", "u", "o"]}
+                    trigger="custom"
+                    onTrigger={(triggerFn) => {
+                      triggerLetterFxRef.current = triggerFn;
+                    }}
+                  >
+                    Shop now
+                  </LetterFx>
+                </Text>
+              </Button>
+              <Background
+                fill
+                borderTop="neutral-alpha-medium"
+                lines={{
+                  display: true,
+                  color: "neutral-alpha-weak",
+                  angle: -45,
+                  size: "4",
+                }}
+              />
             </Row>
-          </Row></HoverCard>
+          </Row>
+        </Row>
+      </HoverCard>
     </Row>
   );
 }
@@ -126,6 +130,8 @@ export const About5 = () => {
         <Column maxWidth="m" borderX>
           <Background
             position="absolute"
+            top="0"
+            left="0"
             fill
             m={{ hide: true }}
             lines={{

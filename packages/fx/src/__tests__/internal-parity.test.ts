@@ -30,6 +30,12 @@ describe("copies of core's internal helpers", () => {
     );
   });
 
+  it("alpha is core's, word for word", () => {
+    expect(body(path.resolve(__dirname, "../internal/alpha.ts"))).toBe(
+      body(path.join(CORE, "internal/alpha.ts")),
+    );
+  });
+
   it("useControllableState is core's, word for word", () => {
     expect(body(path.resolve(__dirname, "../internal/useControllableState.ts"))).toBe(
       body(path.join(CORE, "internal/useControllableState.ts")),

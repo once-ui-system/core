@@ -74,10 +74,10 @@
    "spacious"
   ],
   "DeviceFontSize": [
-   "15",
    "16",
    "13",
    "14",
+   "15",
    "17",
    "18"
   ],
@@ -120,7 +120,6 @@
    "dark": "SchemeScale"
   },
   "Schemes": [
-   "cyan",
    "blue",
    "indigo",
    "violet",
@@ -132,7 +131,8 @@
    "moss",
    "green",
    "emerald",
-   "aqua"
+   "aqua",
+   "cyan"
   ],
   "SolidStyle": [
    "flat",

@@ -1,6 +1,17 @@
 "use client";
 
-import { Background, Button, Column, Heading, InlineCode, Line, Media, Row, Tag, Text } from "@once-ui-system/core";
+import {
+  Background,
+  Button,
+  Column,
+  Heading,
+  InlineCode,
+  Line,
+  Media,
+  Row,
+  Tag,
+  Text,
+} from "@once-ui-system/core";
 
 export const Hero13 = (flex: React.ComponentProps<typeof Column>) => {
   return (
@@ -20,7 +31,8 @@ export const Hero13 = (flex: React.ComponentProps<typeof Column>) => {
       />
       <Row maxWidth="xl" gap="48" vertical="center" m={{ direction: "column" }}>
         <Column fill gap="24" maxWidth="48rem">
-          <Tag variant="announce"
+          <Tag
+            variant="announce"
             background="overlay"
             paddingLeft="8"
             paddingRight="20"
@@ -55,6 +67,8 @@ export const Hero13 = (flex: React.ComponentProps<typeof Column>) => {
                 themeSolid="color"
                 fill
                 position="absolute"
+                top="0"
+                left="0"
                 gradient={{
                   display: true,
                   colorStart: "brand-solid-strong",

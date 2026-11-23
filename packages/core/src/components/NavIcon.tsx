@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "clsx";
-import React from "react";
+import type React from "react";
 import type { LeafPropsOf } from "../interfaces.js";
 import { Flex } from "./Flex.js";
 import styles from "./NavIcon.module.scss";
@@ -14,7 +14,12 @@ interface NavIconProps extends LeafPropsOf<"div"> {
 }
 
 /**
- * The menu toggle: a button named "Menu" (or by `aria-label`), operated with
+ * The menu toggle, drawn as the built-in `menu` icon: given `active`, its
+ * lines fold into the `close` cross in the same spot, so a header never moves
+ * its button between open and closed. The motion is off under
+ * `prefers-reduced-motion`.
+ *
+ * A button named "Menu" (or by `aria-label`), operated with
  * Enter and Space as well as a click. Given `active`, the state of the menu
  * it controls, it is a disclosure button whose `aria-expanded` follows it;
  * point `aria-controls` at the menu while it is rendered.
@@ -50,6 +55,7 @@ const NavIcon = ({
       aria-label="Menu"
       aria-expanded={active}
       radius="m"
+      center
       cursor="interactive"
       width="40"
       height="40"
@@ -61,8 +67,20 @@ const NavIcon = ({
       onKeyDown={handleKeyDown}
       {...rest}
     >
-      <div className={classNames(styles.line, active && styles.active)} />
-      <div className={classNames(styles.line, active && styles.active)} />
+      <svg
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        aria-hidden="true"
+        className={classNames(styles.glyph, active && styles.active)}
+      >
+        <path className={styles.top} d="M4 6.75L20 6.75" />
+        <path className={styles.middle} d="M4 12L20 12" />
+        <path className={styles.bottom} d="M4 17.25L20 17.25" />
+      </svg>
     </Flex>
   );
 };

@@ -93,3 +93,15 @@ describe("NavIcon", () => {
     await expectNoAxeViolations(container);
   });
 });
+
+describe("NavIcon glyph", () => {
+  it("draws the menu icon's three lines and marks the open state", () => {
+    const { container, rerender } = render(<NavIcon active={false} />, { wrapper });
+    const svg = container.querySelector("svg");
+    expect(svg).toHaveAttribute("aria-hidden", "true");
+    expect(container.querySelectorAll("path")).toHaveLength(3);
+    const closed = svg?.getAttribute("class") ?? "";
+    rerender(<NavIcon active />);
+    expect(container.querySelector("svg")?.getAttribute("class")).not.toBe(closed);
+  });
+});

@@ -79,6 +79,8 @@ export const About4 = () => {
         <Column maxWidth="m" borderX>
           <Background
             position="absolute"
+            top="0"
+            left="0"
             fill
             m={{ hide: true }}
             lines={{

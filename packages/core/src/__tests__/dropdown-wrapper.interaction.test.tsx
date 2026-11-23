@@ -71,6 +71,23 @@ describe("DropdownWrapper open state", () => {
     expect(onOpenChange).toHaveBeenCalledTimes(2);
   });
 
+  it("marks its trigger with data-state, so a row holding it can stay lit while open", async () => {
+    const user = userEvent.setup();
+    const { container } = render(<Dropdown trigger={<Button>Actions</Button>}>{list}</Dropdown>, {
+      wrapper: wrap,
+    });
+    const triggerRow = container.querySelector(".dropdown-trigger");
+
+    expect(triggerRow).toHaveAttribute("data-state", "closed");
+    await user.click(trigger());
+    await waitForOpen();
+    expect(triggerRow).toHaveAttribute("data-state", "open");
+
+    await user.keyboard("{Escape}");
+    await waitForClosed();
+    expect(triggerRow).toHaveAttribute("data-state", "closed");
+  });
+
   it("follows a controlled `open`, asking onOpenChange rather than opening itself", async () => {
     const user = userEvent.setup();
     const onOpenChange = vi.fn();

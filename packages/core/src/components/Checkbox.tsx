@@ -158,7 +158,7 @@ const Checkbox = ({
       >
         {isChecked && !indeterminate && (
           <Flex className={styles.icon}>
-            <Icon onSolid="brand-strong" name="checkbox" size="xs" />
+            <Icon onSolid="brand-strong" name="check" size="xs" />
           </Flex>
         )}
         {indeterminate && (

@@ -44,7 +44,7 @@ export function NavRailExample() {
         aria-label="Editor"
         collapsed
         expandOnHover
-        expandedWidth={12}
+        expandedWidth={192}
         padding="8"
         radius="l"
         borderRight
