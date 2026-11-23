@@ -166,11 +166,16 @@
    declared, so --brand-solid-strong set on <html> keeps <html>'s brand
    however a section below sets --function-brand-*: data-brand alone
    recoloured nothing. The last two selectors keep a data-brand inside a
-   nested data-theme, or on the same element as one, on that theme. */
+   nested data-theme, or on the same element as one, on that theme. The
+   three-level selectors let the nearest theme win one level deeper (a dark
+   StyleScope with a seed inside a light section of a dark page): at equal
+   weight the light block, later in the sheet, would win (core#558). */
 [data-theme="dark"],
 [data-theme="dark"] :is([data-brand], [data-accent], [data-neutral]),
 [data-theme="light"] [data-theme="dark"]:is([data-brand], [data-accent], [data-neutral]),
-[data-theme="light"] [data-theme="dark"] :is([data-brand], [data-accent], [data-neutral]) {
+[data-theme="light"] [data-theme="dark"] :is([data-brand], [data-accent], [data-neutral]),
+[data-theme="dark"] [data-theme="light"] [data-theme="dark"]:is([data-brand], [data-accent], [data-neutral]),
+[data-theme="dark"] [data-theme="light"] [data-theme="dark"] :is([data-brand], [data-accent], [data-neutral]) {
     /* brand */
     --brand-background-strong:      var(--function-brand-300);
     --brand-background-medium:      var(--function-brand-200);
@@ -408,7 +413,9 @@
 [data-theme="light"],
 [data-theme="light"] :is([data-brand], [data-accent], [data-neutral]),
 [data-theme="dark"] [data-theme="light"]:is([data-brand], [data-accent], [data-neutral]),
-[data-theme="dark"] [data-theme="light"] :is([data-brand], [data-accent], [data-neutral]) {
+[data-theme="dark"] [data-theme="light"] :is([data-brand], [data-accent], [data-neutral]),
+[data-theme="light"] [data-theme="dark"] [data-theme="light"]:is([data-brand], [data-accent], [data-neutral]),
+[data-theme="light"] [data-theme="dark"] [data-theme="light"] :is([data-brand], [data-accent], [data-neutral]) {
     /* brand */  
     --brand-background-strong:      var(--function-brand-800);
     --brand-background-medium:      var(--function-brand-1000);

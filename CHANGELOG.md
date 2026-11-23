@@ -15,6 +15,11 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- Nested themes: a `StyleScope` that pins a theme and seeds a scheme (`theme="dark"` with
+  `accentSeed`) inside a light section of a dark page took the light theme's text and
+  background tokens, because the light rule matched it through its ancestors at the same
+  weight and came later. The nearest `data-theme` now wins one level deeper, as `showIn`
+  already did (core#558).
 - `Setting`: a slider (or any control that fills its parent, such as `Input` or a
   fill-width `SegmentedControl`) in a labelled row collapsed to its thumb in 3.0.0,
   because the control area was only as wide as its content. The area now grows into
