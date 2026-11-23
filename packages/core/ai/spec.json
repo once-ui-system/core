@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "3.0.0",
- "generated": "2026-11-20",
+ "generated": "2026-11-23",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root; '@once-ui-system/fx' and '@once-ui-system/blocks' are packages of their own, installed beside core.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -151,15 +151,15 @@
   },
   "StyleProps": {
    "textVariant": "TextVariant",
-   "background": "Colors | \"surface\" | \"overlay\" | \"page\" | \"transparent\"",
-   "solid": "Colors",
-   "borderTop": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderRight": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderBottom": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderLeft": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderX": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderY": "Colors | \"surface\" | \"transparent\" | boolean",
-   "border": "Colors | \"surface\" | \"transparent\" | boolean",
+   "background": "Colors | ColorAlpha | \"surface\" | \"overlay\" | \"page\" | \"transparent\" | \"gradient\" | `gradient/${number}`",
+   "solid": "Colors | ColorAlpha",
+   "borderTop": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderRight": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderBottom": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderLeft": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderX": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderY": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "border": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
    "borderStyle": "\"solid\" | \"dashed\"",
    "borderWidth": "1 | 2 | 4 | 8 | \"1\" | \"2\" | \"4\" | \"8\"",
    "topRadius": "RadiusSize",
@@ -899,6 +899,57 @@
    "ColorInstance",
    "ArrayLike<number>",
    "Record<string, any>"
+  ],
+  "ColorAlpha": [
+   "`neutral/${number}`",
+   "`brand/${number}`",
+   "`accent/${number}`",
+   "`info/${number}`",
+   "`danger/${number}`",
+   "`warning/${number}`",
+   "`success/${number}`",
+   "`neutral-strong/${number}`",
+   "`neutral-medium/${number}`",
+   "`neutral-weak/${number}`",
+   "`brand-strong/${number}`",
+   "`brand-medium/${number}`",
+   "`brand-weak/${number}`",
+   "`accent-strong/${number}`",
+   "`accent-medium/${number}`",
+   "`accent-weak/${number}`",
+   "`info-strong/${number}`",
+   "`info-medium/${number}`",
+   "`info-weak/${number}`",
+   "`danger-strong/${number}`",
+   "`danger-medium/${number}`",
+   "`danger-weak/${number}`",
+   "`warning-strong/${number}`",
+   "`warning-medium/${number}`",
+   "`warning-weak/${number}`",
+   "`success-strong/${number}`",
+   "`success-medium/${number}`",
+   "`success-weak/${number}`",
+   "`neutral-alpha-strong/${number}`",
+   "`neutral-alpha-medium/${number}`",
+   "`neutral-alpha-weak/${number}`",
+   "`brand-alpha-strong/${number}`",
+   "`brand-alpha-medium/${number}`",
+   "`brand-alpha-weak/${number}`",
+   "`accent-alpha-strong/${number}`",
+   "`accent-alpha-medium/${number}`",
+   "`accent-alpha-weak/${number}`",
+   "`info-alpha-strong/${number}`",
+   "`info-alpha-medium/${number}`",
+   "`info-alpha-weak/${number}`",
+   "`danger-alpha-strong/${number}`",
+   "`danger-alpha-medium/${number}`",
+   "`danger-alpha-weak/${number}`",
+   "`warning-alpha-strong/${number}`",
+   "`warning-alpha-medium/${number}`",
+   "`warning-alpha-weak/${number}`",
+   "`success-alpha-strong/${number}`",
+   "`success-alpha-medium/${number}`",
+   "`success-alpha-weak/${number}`"
   ],
   "ColorInputLabels": {
    "remove": "string",
@@ -2898,11 +2949,17 @@
    "mounted": "!boolean",
    "controlled": "!boolean"
   },
+  "StylePanelCustomColors": [
+   "false",
+   "true",
+   "readonly (\"neutral\" | StylePanelSchemeRow)[]"
+  ],
   "StylePanelCustomLabels": {
    "swatch": "(row: StylePanelSchemeRow) => string",
    "picker": "(row: StylePanelSchemeRow) => string",
    "description": "(seed: string, row: StylePanelSchemeRow) => ReactNode",
-   "remove": "string"
+   "remove": "string",
+   "neutral": "StylePanelNeutralCustomLabels"
   },
   "StylePanelGroupLabels": {
    "page": "StylePanelHeading",
@@ -2929,6 +2986,11 @@
    "shapes": "Partial<Record<BorderStyle, string>>",
    "schemes": "Partial<Record<Schemes, string>>",
    "neutrals": "Partial<Record<NeutralColor, string>>"
+  },
+  "StylePanelNeutralCustomLabels": {
+   "swatch": "string",
+   "picker": "string",
+   "description": "(seed: string) => ReactNode"
   },
   "StylePanelOptionLabels": {
    "solid": "Partial<Record<SolidType, ReactNode>>",
@@ -2987,7 +3049,8 @@
    "bodyLineHeight": "BodyLineHeight",
    "chartMode": "ChartMode",
    "brandSeed": "string",
-   "accentSeed": "string"
+   "accentSeed": "string",
+   "neutralSeed": "string"
   },
   "StylePanelVisibility": {
    "page": "{ section?: boolean; theme?: boolean; shape?: boolean }",
@@ -3008,15 +3071,15 @@
   },
   "StyleProps": {
    "textVariant": "TextVariant",
-   "background": "Colors | \"surface\" | \"overlay\" | \"page\" | \"transparent\"",
-   "solid": "Colors",
-   "borderTop": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderRight": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderBottom": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderLeft": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderX": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderY": "Colors | \"surface\" | \"transparent\" | boolean",
-   "border": "Colors | \"surface\" | \"transparent\" | boolean",
+   "background": "Colors | ColorAlpha | \"surface\" | \"overlay\" | \"page\" | \"transparent\" | \"gradient\" | `gradient/${number}`",
+   "solid": "Colors | ColorAlpha",
+   "borderTop": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderRight": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderBottom": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderLeft": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderX": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderY": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "border": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
    "borderStyle": "\"solid\" | \"dashed\"",
    "borderWidth": "1 | 2 | 4 | 8 | \"1\" | \"2\" | \"4\" | \"8\"",
    "topRadius": "RadiusSize",
@@ -3435,7 +3498,31 @@
    "snow",
    "leaves",
    "lightning"
-  ]
+  ],
+  "WorkspaceSwitcherGroup": {
+   "id": "!string",
+   "label": "!string"
+  },
+  "WorkspaceSwitcherItem": {
+   "value": "!string",
+   "label": "!string",
+   "description": "ReactNode",
+   "src": "string",
+   "prefix": "ReactNode",
+   "group": "string",
+   "keywords": "string[]",
+   "disabled": "boolean"
+  },
+  "WorkspaceSwitcherLabels": {
+   "title": "string",
+   "current": "string",
+   "search": "string",
+   "noMatch": "string",
+   "empty": "string",
+   "loading": "string",
+   "pick": "string",
+   "create": "string"
+  }
  },
  "components": {
   "ScrollLock": {
@@ -5617,6 +5704,29 @@
     "style": "React.CSSProperties"
    }
   },
+  "WorkspaceSwitcher": {
+   "group": "components",
+   "props": {
+    "items": "!WorkspaceSwitcherItem[]",
+    "value": "string",
+    "defaultValue": "string",
+    "onValueChange": "(value: string) => void",
+    "groups": "WorkspaceSwitcherGroup[]",
+    "pinCurrent": "boolean = true",
+    "counts": "boolean = true",
+    "searchAbove": "number | false = 6",
+    "loading": "boolean = false",
+    "onCreate": "() => void",
+    "footer": "ReactNode",
+    "trigger": "ReactNode",
+    "mobileBelow": "\"xs\" | \"s\" | \"m\" | \"l\" | false = s",
+    "minWidth": "number | `${number}rem` | `${number}px` = 20rem",
+    "open": "boolean",
+    "defaultOpen": "boolean = false",
+    "onOpenChange": "(open: boolean) => void",
+    "labels": "WorkspaceSwitcherLabels"
+   }
+  },
   "VisuallyHidden": {
    "group": "components",
    "props": {
@@ -6017,7 +6127,7 @@
     "grid": "\"x\" | \"y\" | \"both\" | \"none\" = y",
     "axis": "\"x\" | \"y\" | \"both\" | \"none\" = both",
     "loading": "boolean = false",
-    "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak"
+    "border": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak"
    }
   },
   "ChartHeader": {
@@ -6235,7 +6345,7 @@
     "grid": "\"x\" | \"y\" | \"both\" | \"none\" = y",
     "axis": "\"x\" | \"y\" | \"both\" | \"none\" = both",
     "loading": "boolean = false",
-    "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak"
+    "border": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak"
    }
   },
   "LineChart": {
@@ -6269,7 +6379,7 @@
     "grid": "\"x\" | \"y\" | \"both\" | \"none\" = both",
     "axis": "\"x\" | \"y\" | \"both\" | \"none\" = both",
     "loading": "boolean = false",
-    "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak"
+    "border": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak"
    }
   },
   "PieChart": {
@@ -6293,7 +6403,7 @@
     "gap": "number = 2",
     "cornerRadius": "number = 4",
     "legend": "LegendConfig = {}",
-    "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak",
+    "border": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak",
     "error": "boolean = false",
     "loading": "boolean = false",
     "tooltip": "boolean = true"
@@ -7977,7 +8087,7 @@
     "title": "ReactNode | false",
     "description": "ReactNode | false",
     "rows": "StylePanelVisibility[\"color\"]",
-    "customColors": "boolean"
+    "customColors": "StylePanelCustomColors"
    }
   },
   "StylePanelDataStyle": {
@@ -8053,6 +8163,7 @@
     "StyleProps"
    ],
    "props": {
+    "custom": "boolean",
     "label": "ReactNode | false"
    }
   },
@@ -8231,7 +8342,7 @@
     "value": "StylePanelRootProps[\"value\"]",
     "onValueChange": "StylePanelRootProps[\"onValueChange\"]",
     "labels": "StylePanelLabels",
-    "customColors": "boolean",
+    "customColors": "StylePanelCustomColors",
     "stacked": "boolean"
    }
   },
