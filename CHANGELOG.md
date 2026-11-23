@@ -15,6 +15,10 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **Skeleton `effect="generating"`.** For work that takes seconds, such as an image a
+  model is drawing: a slow brand-to-accent mist drifts under a fine grain of dots in
+  place of the pulse. It moves only by `transform`, follows the theme and the brand,
+  holds still under reduced motion and sets `aria-busy`. Children (a caption) sit above it.
 - **Mascot layers that move, and whole outfits.** A `MascotIdentityLayer` takes `motion` (`float`, `bob`, `sway`, `spin`, `pulse` or `flicker`) and an `origin` (`"x y"` in the 200 × 200 box) it turns or grows around; loops stop for reduced motion. A `MascotDesign` keeps up to 48 layers (was 16), enough for a hat, glasses, something held, a back piece and a pet. Built-in `accessory` names and `layers` are now drawn together instead of the built-ins replacing the layers, and `mascotSvg` takes `layers` (drawn still), so a saved look renders the same in an email, an OG image or a Discord card. `MASCOT_LAYER_MOTIONS` and `MascotLayerMotion` are exported. Non-breaking.
 
 ### Fixed
