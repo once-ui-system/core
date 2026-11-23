@@ -11,10 +11,15 @@ export {
 } from "./design.js";
 export type { MascotEffect, MascotLook, MascotMood, MascotProps, MascotState } from "./Mascot.js";
 export { Mascot, mascotLook } from "./Mascot.js";
-export type { MascotIdentity, MascotIdentityLayer } from "./mascotIdentities.js";
+export type {
+  MascotIdentity,
+  MascotIdentityLayer,
+  MascotLayerMotion,
+} from "./mascotIdentities.js";
 export {
   MASCOT_IDENTITIES,
   MASCOT_IDENTITY_KEYS,
+  MASCOT_LAYER_MOTIONS,
   mascotIdentity,
   mascotIdentityKey,
 } from "./mascotIdentities.js";

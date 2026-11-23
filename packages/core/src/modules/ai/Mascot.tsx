@@ -416,19 +416,33 @@ function identityLayers(layers: readonly MascotIdentityLayer[], clip: string) {
       (layer) => (layer.place ?? "on") === place && (only ? only(layer) : true),
     );
     if (!shapes.length) return null;
-    const path = (layer: MascotIdentityLayer, i: number) => (
-      <path
-        key={i}
-        d={layer.d}
-        fill={paint(layer.fill) ?? "none"}
-        stroke={paint(layer.stroke)}
-        strokeWidth={layer.width}
-        strokeLinecap={layer.stroke ? (layer.cap ?? "round") : undefined}
-        strokeLinejoin={layer.stroke ? "round" : undefined}
-        opacity={layer.opacity}
-        transform={layer.transform}
-      />
-    );
+    const path = (layer: MascotIdentityLayer, i: number) => {
+      const shape = (
+        <path
+          key={i}
+          d={layer.d}
+          fill={paint(layer.fill) ?? "none"}
+          stroke={paint(layer.stroke)}
+          strokeWidth={layer.width}
+          strokeLinecap={layer.stroke ? (layer.cap ?? "round") : undefined}
+          strokeLinejoin={layer.stroke ? "round" : undefined}
+          opacity={layer.opacity}
+          transform={layer.transform}
+        />
+      );
+      if (!layer.motion) return shape;
+      // The loop runs on a group around the path, so the path's own transform stays put.
+      const [ox, oy] = (layer.origin ?? "100 104").split(/\s+/);
+      return (
+        <g
+          key={i}
+          className={classNames(styles.layerMotion, styles[`motion-${layer.motion}`])}
+          style={{ transformOrigin: `${ox}px ${oy}px`, animationDelay: `${(i % 5) * -0.37}s` }}
+        >
+          {shape}
+        </g>
+      );
+    };
     const clipped = shapes.filter((layer) => layer.clip);
     return (
       <>
@@ -442,6 +456,33 @@ function identityLayers(layers: readonly MascotIdentityLayer[], clip: string) {
     paint: draw("on", (layer) => Boolean(layer.clip)),
     on: draw("on", (layer) => !layer.clip),
     front: draw("front"),
+  };
+}
+
+type Worn = {
+  back?: React.ReactNode;
+  paint?: React.ReactNode;
+  on?: React.ReactNode;
+  front?: React.ReactNode;
+};
+
+/** Built-in accessories with your layers drawn in the same places, the layers over them. */
+function mergeWorn(builtIn: Worn, own?: Worn): Worn {
+  if (!own) return builtIn;
+  const both = (a: React.ReactNode, b: React.ReactNode) =>
+    a && b ? (
+      <>
+        {a}
+        {b}
+      </>
+    ) : (
+      (a ?? b)
+    );
+  return {
+    back: both(builtIn.back, own.back),
+    paint: own.paint,
+    on: both(builtIn.on, own.on),
+    front: both(builtIn.front, own.front),
   };
 }
 
@@ -542,13 +583,12 @@ const FlatMascot = ({
       ? readSeedWords(seed).accessory
       : undefined);
   const builtIn = (Array.isArray(wearing) ? wearing : [wearing]).filter(isMascotAccessory);
-  const worn: {
-    back?: React.ReactNode;
-    paint?: React.ReactNode;
-    on?: React.ReactNode;
-    front?: React.ReactNode;
-  } = builtIn.length
-    ? accessoryLayers(builtIn, accessoryBody(body, outline, look.roundness), accessoryColor)
+  const worn: Worn = builtIn.length
+    ? // Built-ins and your own layers together: a crown from the list over a hand-drawn cape.
+      mergeWorn(
+        accessoryLayers(builtIn, accessoryBody(body, outline, look.roundness), accessoryColor),
+        layers?.length ? identityLayers(layers, `url(#${id}-clip)`) : undefined,
+      )
     : layers?.length && accessory === undefined
       ? identityLayers(layers, `url(#${id}-clip)`)
       : identity && accessory === undefined

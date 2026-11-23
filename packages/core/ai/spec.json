@@ -1763,8 +1763,18 @@
    "opacity": "number",
    "transform": "string",
    "clip": "boolean",
-   "place": "\"back\" | \"on\" | \"front\""
+   "place": "\"back\" | \"on\" | \"front\"",
+   "motion": "MascotLayerMotion",
+   "origin": "string"
   },
+  "MascotLayerMotion": [
+   "float",
+   "bob",
+   "sway",
+   "spin",
+   "pulse",
+   "flicker"
+  ],
   "MascotLook": {
    "color": "\"brand\" | \"accent\" | \"neutral\" | (string & {})",
    "roundness": "number",
@@ -1858,6 +1868,7 @@
    "canonical": "boolean",
    "mood": "MascotMood",
    "accessory": "string",
+   "layers": "readonly MascotIdentityLayer[]",
    "faceAccessory": "string",
    "schemes": "Partial<Record<\"brand\" | \"accent\" | \"neutral\", string>>",
    "lookAt": "{ x: number; y: number }",
@@ -2284,12 +2295,12 @@
   "ReactionMotion": [
    "pop",
    "none",
+   "spin",
+   "flicker",
    "beat",
    "nod",
    "shake",
    "droop",
-   "flicker",
-   "spin",
    "wave",
    "bounce"
   ],
@@ -8697,6 +8708,11 @@
    "kind": "value",
    "type": "readonly string[]",
    "doc": "Every name the registry holds, as keys: for reserving them in a sign-up or a name claim."
+  },
+  "MASCOT_LAYER_MOTIONS": {
+   "group": "modules",
+   "kind": "value",
+   "type": "readonly [\"float\", \"bob\", \"sway\", \"spin\", \"pulse\", \"flicker\"]"
   },
   "mascotIdentity": {
    "group": "modules",

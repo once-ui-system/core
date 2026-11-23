@@ -611,7 +611,8 @@ type LegacyToast = { variant?: Tone; tone?: Tone; children?: ReactNode; message?
 type LogoSource = "string" | { light: string; dark: string; }
 // type MascotAccessory is one of these strings: antenna bow beanie headphones sprout helmet crown catEars partyHat
 // type MascotEffect is one of these strings: heartEyes starEyes laughEyes blush sweat tears anger hearts sparkles question
-type MascotIdentityLayer = { d: string; fill?: string; stroke?: string; width?: number; cap?: "round" | "butt"; opacity?: number; transform?: string; clip?: boolean; place?: "back" | "on" | "front" }
+type MascotIdentityLayer = { d: string; fill?: string; stroke?: string; width?: number; cap?: "round" | "butt"; opacity?: number; transform?: string; clip?: boolean; place?: "back" | "on" | "front"; motion?: MascotLayerMotion; origin?: string }
+// type MascotLayerMotion is one of these strings: float bob sway spin pulse flicker
 // type MascotMood is one of these strings: neutral happy surprised sad skeptical wink focused determined love excited laughing embarrassed crying angry confused
 type MascotState = "idle" | "listening" | "thinking" | "speaking" | "sleeping"
 // type Opacity is one of these strings: 0 10 20 30 40 50 60 70 80 90 100
