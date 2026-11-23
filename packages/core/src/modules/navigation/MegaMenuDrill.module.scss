@@ -1,0 +1,57 @@
+// The drill-in phone menu: a level slides in from the side it comes from, so
+// going into a group moves left and coming back moves right. Short and
+// small, because it answers a tap.
+.view {
+    animation: mega-menu-drill-in 0.28s cubic-bezier(0.32, 0.72, 0, 1) both;
+
+    &[data-direction="back"] {
+        animation-name: mega-menu-drill-back;
+    }
+
+    &[data-direction="none"] {
+        animation: none;
+    }
+}
+
+.row {
+    transition: background-color 0.16s ease;
+
+    @media (hover: hover) {
+        &:hover {
+            background-color: var(--neutral-alpha-weak);
+        }
+    }
+
+    &:active {
+        background-color: var(--neutral-alpha-medium);
+    }
+}
+
+@keyframes mega-menu-drill-in {
+    from {
+        opacity: 0;
+        transform: translateX(var(--static-space-24));
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes mega-menu-drill-back {
+    from {
+        opacity: 0;
+        transform: translateX(calc(-1 * var(--static-space-24)));
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .view,
+    .view[data-direction="back"] {
+        animation: none;
+    }
+}

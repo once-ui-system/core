@@ -54,20 +54,33 @@
     clip-path: inset(50%);
 }
 
-/* Preview beside the controls, stuck while they scroll; above them when narrow. */
+/* Preview beside the controls, stuck while they scroll; above them when narrow.
+   The panel's own width decides, not the viewport's, so it also fits a narrow
+   card or docs preview. Both tracks can shrink: nothing spills past the panel. */
+.frame {
+    container-type: inline-size;
+    width: 100%;
+    min-width: 0;
+}
+
 .layout {
     display: grid;
-    grid-template-columns: minmax(18rem, 1fr) minmax(20rem, 1.4fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
     gap: var(--static-space-24);
     align-items: start;
+
+    > * {
+        min-width: 0;
+    }
 }
 
+/* Flush with the scroll box's top edge, so both columns start level. */
 .aside {
     position: sticky;
-    top: var(--static-space-16);
+    top: var(--mascot-panel-sticky-top, 0);
 }
 
-@media (max-width: 52rem) {
+@container (max-width: 34rem) {
     .layout {
         grid-template-columns: minmax(0, 1fr);
     }

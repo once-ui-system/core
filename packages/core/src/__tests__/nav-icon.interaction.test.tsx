@@ -66,10 +66,10 @@ describe("NavIcon with a menu", () => {
 
   it("draws the cross while active", () => {
     const { rerender, container } = render(<NavIcon active={false} />, { wrapper });
-    const lines = () => Array.from(container.querySelectorAll("[role=button] > div"));
-    expect(lines().every((l) => !/_active_/.test(l.className))).toBe(true);
+    const glyph = () => container.querySelector("[role=button] > svg")?.getAttribute("class") ?? "";
+    expect(glyph()).not.toMatch(/_active_/);
     rerender(<NavIcon active />);
-    expect(lines()).toHaveLength(2);
-    expect(lines().every((l) => /_active_/.test(l.className))).toBe(true);
+    expect(container.querySelectorAll("[role=button] > svg path")).toHaveLength(3);
+    expect(glyph()).toMatch(/_active_/);
   });
 });

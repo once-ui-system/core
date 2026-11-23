@@ -1,9 +1,21 @@
 "use client";
 
-import { Avatar, Background, Button, Card, Column, Heading, InlineCode, Media, Row, Tag, Text } from "@once-ui-system/core";
-import { TiltFx } from "@once-ui-system/fx";
-import { CompareImage } from "@once-ui-system/core/media";
+import {
+  Avatar,
+  Background,
+  Button,
+  Card,
+  Column,
+  Heading,
+  InlineCode,
+  Media,
+  Row,
+  Tag,
+  Text,
+} from "@once-ui-system/core";
 import { CodeBlock } from "@once-ui-system/core/code";
+import { CompareImage } from "@once-ui-system/core/media";
+import { TiltFx } from "@once-ui-system/fx";
 
 export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
   return (
@@ -18,7 +30,8 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
     >
       <Column maxWidth="xl" gap="56" horizontal="center">
         <Column maxWidth="l" gap="24" paddingX="s" paddingBottom="l" paddingTop="m">
-          <Tag variant="announce"
+          <Tag
+            variant="announce"
             background="overlay"
             paddingLeft="8"
             paddingRight="20"
@@ -65,6 +78,8 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
                 themeSolid="color"
                 fill
                 position="absolute"
+                top="0"
+                left="0"
                 gradient={{
                   display: true,
                   colorStart: "brand-solid-strong",

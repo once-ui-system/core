@@ -7,7 +7,7 @@ export const useHeadingLinks = () => {
 
   useEffect(() => {
     const elements = Array.from(document.querySelectorAll("h2, h3, h4, h5, h6"))
-      .filter((elem) => !elem.hasAttribute("data-exclude-nav"))
+      .filter((elem) => !elem.closest("[data-exclude-nav]"))
       .map((elem, index) => ({
         id: elem.id || `heading-${index}`,
         text: elem.textContent || "",

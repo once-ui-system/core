@@ -37,7 +37,7 @@ Never open `ai/spec.json`: it is the full machine spec, for tooling.
 <!-- tasks:start -->
 | Bundle | For | Adds |
 |---|---|---|
-| `ai/bundles/marketing-hero.md` | Marketing hero: Headline with text effect, CTA pair, social proof logos, background effect | Background, RevealFx, LetterFx, LogoCloud, Line |
+| `ai/bundles/marketing-hero.md` | Marketing hero: A product's landing page or hero: find the product's world first; the template hero (text-effect headline, CTA pair, logo cloud, background effect) is one option | Background, RevealFx, LetterFx, LogoCloud, Line, StyleScope |
 | `ai/bundles/pricing.md` | Pricing page: Three tiers, highlighted middle tier, feature comparison table, FAQ accordion | Background, MatrixFx, BlobFx, RevealFx, CountFx, SegmentedControl, Table, AccordionGroup |
 | `ai/bundles/settings.md` | Settings page: Vertical section tabs, profile form, settings rows with one control each, grouped sub-settings, danger zone | Tabs, TabList, Tab, TabPanel, Form, Select, Setting, Tooltip, Switch, Slider, NumberInput, Checkbox, MediaUpload, Table, NavItem |
 | `ai/bundles/dashboard.md` | Analytics dashboard: KPI stat cards, charts area, recent-activity list | Background, CountFx, StatusIndicator, Table, SegmentedControl, LineChart, BarChart, ChartHeader, RevealFx, Line, Drawer, NavItem |
@@ -61,7 +61,7 @@ Most briefs never mention data, states or a brand; every one expects them. Every
 - **Use what ships.** Before writing a component of your own, check `ai/catalog.json`. A brand mark is `Logo`. An assistant or character is `Mascot`, never a hand-drawn SVG. Uploads go through `MediaUpload` or `ChatComposer attach`. Places go on `Map`, and steps or history go in `Timeline`.
 - **Backend-ready.** Write a `lib/` data layer of typed async functions over mock data with a short delay. Screens call those functions, never the mock array.
 - **Every state.** A screen that loads data shows loading (Skeleton), empty, error (Feedback with Retry) and filled. A write is optimistic, and rolls back with a danger toast when it fails.
-- **Designed, not stock.** One idea carries the screen: a map app is the map with panels floating over it, and an assistant chat has the Mascot's face. The brand is identity (Logo, Mascot colour, Nav tone), not a fill on every button.
+- **Designed, not stock.** One idea carries the screen: a map app is the map with panels floating over it, and an assistant chat has the Mascot's face. The brand is identity (Logo, Mascot colour, Nav tone), not a fill on every button. A product's own landing page starts from its world, not the template hero: the "Start here" step of `ai/bundles/marketing-hero.md`.
 
 ## Phone apps
 

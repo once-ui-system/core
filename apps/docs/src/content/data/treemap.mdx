@@ -1,0 +1,72 @@
+---
+title: "Treemap"
+summary: "Tiles sized by value and coloured by direction: holdings by value and change, spend by category. HTML, server-rendered, every tile focusable."
+updatedAt: "2026-11-16"
+docs: "once-ui/data/treemap.mdx"
+github: "modules/data/Treemap.tsx"
+navLabel: "Treemap"
+navIcon: "treemap"
+---
+
+`Treemap` draws one tile per row of `data`, its area the row's value. With `toneKey` each tile is also coloured by a signed number, such as a change since purchase: above zero in the gain colour, below zero in the loss colour, stronger the further from zero. Use it when there are too many parts for a [`PieChart`](/data/pieChart) and their sizes matter more than their order. It takes the card, `title`, `description`, `valueFormat`, `locale`, `tooltip`, `loading`, `error`, `emptyState` and `errorState` the other charts take.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Treemap
+      title="Holdings"
+      description="Area is value, colour is change since bought"
+      data={[
+        { label: "Fjell", value: 4200, change: 0.18, share: "35%" },
+        { label: "Halden", value: 2600, change: -0.06, share: "22%" },
+        { label: "Ember", value: 1900, change: 0.04, share: "16%" },
+        { label: "Quill", value: 1300, change: -0.21, share: "11%" },
+        { label: "Nord", value: 1100, change: 0.09, share: "9%" },
+        { label: "Brim", value: 800, change: 0, share: "7%" },
+      ]}
+      toneKey="change"
+      subKey="share"
+      valueFormat={{ style: "currency", currency: "EUR", maximumFractionDigits: 0 }}
+      toneFormat="percent"
+    />
+  }
+  codes={[
+    {
+      code:
+`<Treemap
+  title="Holdings"
+  data={holdings}
+  toneKey="change"
+  subKey="share"
+  valueFormat={{ style: "currency", currency: "EUR", maximumFractionDigits: 0 }}
+  toneFormat="percent"
+/>`,
+      language: "tsx",
+      label: "Usage"
+    }
+  ]}
+/>
+
+Rows without a positive value are left out, and tiles are laid out largest first so the biggest sit top left. A tile writes its name when it fits and `subKey`'s text when there is room for a second line; its hover card and its accessible name always carry the value, the tone and that text.
+
+## Colour
+
+Without `toneKey` every tile is neutral and area alone carries the data. With it, the strongest tone gets the strongest colour; set `toneMax` to fix that scale instead, so two treemaps compare (`toneMax={0.5}` paints anything at ±50% at full strength). Gains are emerald and losses orange by default, a pair that stays apart for colour-blind readers in light and dark; `gainColor` and `lossColor` take any palette name or CSS colour.
+
+## API reference
+
+<PropsTable
+  component="Treemap"
+  describe={{
+    data: "One row per tile. Rows with no positive value are left out.",
+    dataKey: "The row key that sizes each tile. Defaults to \"value\".",
+    nameKey: "The row key that names each tile. Defaults to \"label\".",
+    toneKey: "The row key of a signed number that colours each tile: gains above zero, losses below.",
+    toneMax: "The tone at full strength. Defaults to the largest tone in the data.",
+    toneFormat: "How tones are written in the hover card. Defaults to valueFormat.",
+    subKey: "The row key whose text is the tile's second line when it fits.",
+    gainColor: "Tiles above zero. Defaults to emerald.",
+    lossColor: "Tiles below zero. Defaults to orange.",
+  }}
+/>

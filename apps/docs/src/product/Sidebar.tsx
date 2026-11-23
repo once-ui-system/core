@@ -228,16 +228,17 @@ const NavigationItemComponent: React.FC<{
       className={depth === 0 ? styles.navigation : undefined}
       href={`/${correctedSlug}`}
     >
-      <Row fillWidth horizontal="between" vertical="center">
-        <Row
-          overflow="hidden"
-          gap="8"
+      <Row fillWidth horizontal="between" vertical="center" gap="8" style={{ minWidth: 0 }}>
+        {/* A text box, not a Row: an ellipsis needs the text in a block, and
+            the tag beside it keeps its size while the title gives way. */}
+        <Text
+          truncate
           onBackground="neutral-strong"
           textVariant={`label-${isSelected ? "strong" : "default"}-${depth === 0 ? "m" : "s"}`}
-          style={{ textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+          style={{ minWidth: 0 }}
         >
           {item.label || item.title}
-        </Row>
+        </Text>
         {(() => {
           /* Availability outranks recency. Something can be both new and
              unreleased, and in a column this narrow only one of the two fits —
@@ -247,7 +248,7 @@ const NavigationItemComponent: React.FC<{
           if (item.status) {
             const { tag, scheme } = AVAILABILITY[item.status];
             return (
-              <Tag tone={scheme} size="s">
+              <Tag tone={scheme} size="s" style={{ flexShrink: 0 }}>
                 {tag}
               </Tag>
             );

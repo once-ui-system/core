@@ -5,9 +5,9 @@ import {
   Heading,
   Icon,
   Media,
+  Row,
   SmartLink,
   Text,
-  Row,
 } from "@once-ui-system/core";
 import { LetterFx, TiltFx } from "@once-ui-system/fx";
 import { clsx } from "clsx";
@@ -66,6 +66,8 @@ export function DesignEngineersClub1({ children, ...flex }: DesignEngineersClub1
           radius="xl"
           pointerEvents="none"
           position="absolute"
+          top="0"
+          left="0"
           m={{
             position: "relative",
           }}

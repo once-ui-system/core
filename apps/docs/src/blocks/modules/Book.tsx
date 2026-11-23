@@ -45,7 +45,7 @@ export const Book: React.FC<BookProps> = ({ children, src, alt, sizes, href, ...
                   stretch
                 />
               )}
-              <Column fill position="absolute" zIndex={1}>
+              <Column fill position="absolute" top="0" left="0" zIndex={1}>
                 {children}
               </Column>
               <Row

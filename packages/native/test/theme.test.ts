@@ -46,7 +46,7 @@ describe("theme", () => {
 
   it("reads radius from the border style", () => {
     expect(createTheme({ ...dark, border: "sharp" }, 1440).radius("l")).toBe(0);
-    expect(createTheme({ ...dark, border: "rounded" }, 1440).radius("l")).toBe(28);
+    expect(createTheme({ ...dark, border: "rounded" }, 1440).radius("l")).toBe(24);
   });
 
   it("builds text styles like core's font classes", () => {

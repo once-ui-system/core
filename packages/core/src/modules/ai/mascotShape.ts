@@ -3,7 +3,11 @@
  * (a client component) and `mascotSvg`, which draws a still on the server.
  * No React here, and no "use client", so server code can import it.
  */
+
+import type { AccessoryBody } from "./accessories.js";
 import type { MascotLook } from "./Mascot.js";
+import { mascotIdentity } from "./mascotIdentities.js";
+import { measureOutline } from "./mascotOutline.js";
 import { readSeedWords } from "./mascotWords.js";
 
 export const DEFAULT_LOOK: Required<Omit<MascotLook, "bodyPath" | "eyeColor" | "sides" | "face">> =
@@ -57,6 +61,34 @@ export function bodyShape(roundness: number, aspect: number) {
   return { d: `M${points.join("L")}Z`, top: 104 - b, bottom: 104 + b, halfWidth: a };
 }
 
+/**
+ * The body as built-in accessories see it. A drawn outline (`bodyPath`, a
+ * canonical mascot's path) is measured, so ears and hats sit on its real top
+ * edge; the generated superellipse is described exactly by its numbers.
+ */
+export function accessoryBody(
+  body: { top: number; bottom: number; halfWidth: number },
+  outline: string | undefined,
+  roundness: number,
+): AccessoryBody {
+  const measured = outline ? measureOutline(outline) : undefined;
+  if (measured) {
+    return {
+      a: Math.max(100 - measured.left, measured.right - 100),
+      b: (measured.bottom - measured.top) / 2,
+      cy: (measured.top + measured.bottom) / 2,
+      n: 3,
+      outline: measured,
+    };
+  }
+  return {
+    a: body.halfWidth,
+    b: (body.bottom - body.top) / 2,
+    cy: (body.top + body.bottom) / 2,
+    n: outline ? 3 : 2 + (1 - clamp(roundness, 0, 1)) * 4,
+  };
+}
+
 /* A small deterministic generator, so a seed always gives the same character. */
 export function random(seed: string | number) {
   let h = 2166136261;
@@ -76,8 +108,17 @@ export function random(seed: string | number) {
  * mascot: "happy-red-fox", "sleepyPandaDJ" or "Royal Robot 42" set the colour,
  * the body, the face and the mood (see `MASCOT_SEED_WORDS`); whatever the words
  * leave open comes from the seed's hash, as it does for a seed with no words.
+ *
+ * A seed that names a canonical mascot ("once-ui", "quasar", a Dopler product,
+ * see `MASCOT_IDENTITIES`) gives that hand-made look instead, unless
+ * `canonical` is `false`.
  */
-export function mascotLook(seed: string | number): MascotLook {
+export function mascotLook(
+  seed: string | number,
+  options: { canonical?: boolean } = {},
+): MascotLook {
+  const identity = options.canonical === false ? undefined : mascotIdentity(seed);
+  if (identity) return { ...identity.look };
   return { ...hashedLook(seed), ...readSeedWords(seed).look };
 }
 

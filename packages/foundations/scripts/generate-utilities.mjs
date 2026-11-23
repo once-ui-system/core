@@ -338,6 +338,13 @@ function background() {
     // cleared the author's border. These are the two that were missing.
     rule(".transparent-background", ["background-color: var(--static-transparent);"]),
     rule(".transparent-solid", ["background-color: var(--static-transparent);"]),
+    // `background="gradient"`: brand to accent, the two theme hues. The
+    // expression is written here rather than read from
+    // `--gradient-brand-accent` so `--gradient-angle` set on this element
+    // turns it: a token resolves where it is declared, not where it is read.
+    rule(".gradient-background", [
+      "background-image: linear-gradient(var(--gradient-angle, 135deg), var(--brand-color-strong), var(--accent-color-strong));",
+    ]),
   ];
 
   for (const scheme of SCHEMES) {

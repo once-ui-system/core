@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
-    "@next/mdx": "^16.4.3",
+    "@next/mdx": "^16.4.6",
     "@once-ui-system/blocks": "workspace:*",
     "@once-ui-system/core": "workspace:*",
     "@once-ui-system/foundations": "workspace:*",
@@ -36,7 +36,7 @@
     "clsx": "^2.1.1",
     "front-matter": "^4.0.2",
     "maplibre-gl": "^6.15.0",
-    "next": "^16.4.3",
+    "next": "^16.4.6",
     "next-mdx-remote": "^6.0.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",

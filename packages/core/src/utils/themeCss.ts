@@ -56,6 +56,12 @@ const SCHEME_STEPS = [
   "600-15",
   "600-30",
   "600-50",
+  // A light seed's own solids and on-solid text (customSchemeProperties).
+  "solid-strong",
+  "solid-medium",
+  "on-solid-strong",
+  "on-solid-medium",
+  "on-solid-weak",
 ];
 
 /**

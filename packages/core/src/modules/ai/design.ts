@@ -1,4 +1,5 @@
 import { isMascotAccessory, type MascotAccessory } from "./accessories.js";
+import type { MascotIdentityLayer } from "./mascotIdentities.js";
 
 /*
  * A mascot as data: the part of its props a person designs, in a shape that
@@ -37,6 +38,11 @@ export interface MascotDesign {
   personality?: "calm" | "default" | "bouncy";
   /** Built-in accessories, by name. */
   accessory?: MascotAccessory[];
+  /**
+   * Shapes it wears beyond the built-ins, as path data in the body's 200 × 200
+   * box (the same layers canonical mascots wear). Drawn when `accessory` is unset.
+   */
+  layers?: MascotIdentityLayer[];
   accessoryColor?: string;
   /** How it works: the flat mascot (unset), or the 3D `cube` or `d20`. */
   working?: "cube" | "d20";
@@ -130,6 +136,43 @@ function eyes(value: unknown): MascotDesign["eyes"] {
   return undefined;
 }
 
+const PLACES = ["back", "on", "front"] as const;
+const CAPS = ["round", "butt"] as const;
+/** SVG transforms only: function names, numbers, separators. */
+const TRANSFORM = /^[a-zA-Z0-9.,()\s+-]{1,200}$/;
+const MAX_LAYERS = 16;
+
+const paint = (value: unknown): string | undefined =>
+  value === "body" || value === "shade" ? value : color(value);
+
+function layers(value: unknown): MascotIdentityLayer[] | undefined {
+  if (!Array.isArray(value)) return undefined;
+  const out: MascotIdentityLayer[] = [];
+  for (const item of value.slice(0, MAX_LAYERS)) {
+    if (!item || typeof item !== "object") continue;
+    const l = item as Record<string, unknown>;
+    const d = path(l.d);
+    if (!d) continue;
+    const layer: MascotIdentityLayer = {
+      d,
+      fill: paint(l.fill),
+      stroke: paint(l.stroke),
+      width: number(l.width, [0, 24]),
+      cap: oneOf(CAPS, l.cap),
+      opacity: number(l.opacity, [0, 1]),
+      transform:
+        typeof l.transform === "string" && TRANSFORM.test(l.transform) ? l.transform : undefined,
+      clip: flag(l.clip),
+      place: oneOf(PLACES, l.place),
+    };
+    for (const key of Object.keys(layer) as (keyof MascotIdentityLayer)[]) {
+      if (layer[key] === undefined) delete layer[key];
+    }
+    out.push(layer);
+  }
+  return out.length ? out : undefined;
+}
+
 function accessories(value: unknown): MascotAccessory[] | undefined {
   const list = Array.isArray(value) ? value : value === undefined ? [] : [value];
   const names = [...new Set(list.filter(isMascotAccessory))];
@@ -173,6 +216,7 @@ export function parseMascotDesign(input: unknown): MascotDesign {
     cheeks: flag(r.cheeks),
     personality: oneOf(PERSONALITIES, r.personality),
     accessory: accessories(r.accessory),
+    layers: layers(r.layers),
     accessoryColor: color(r.accessoryColor),
     working: oneOf(WORKING, r.working),
     sides: sides(r.sides),

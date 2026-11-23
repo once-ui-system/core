@@ -128,6 +128,17 @@ export type ColorWeight = "weak" | "medium" | "strong";
 export type Colors = `${ColorScheme}-${ColorWeight}` | `${ColorScheme}-alpha-${ColorWeight}`;
 
 /**
+ * A colour at any opacity, 0 to 100, after a slash. `"brand/12"` is the tone
+ * itself (the colour its alpha scale is drawn from, so `"brand/15"` is
+ * `"brand-alpha-weak"`); `"brand-strong/40"` is the prop's own token for
+ * `"brand-strong"` at 40%. Written inline by the server, so any step works
+ * without a class per step.
+ *
+ * @example <Column background="accent/12" border="brand/22" />
+ */
+export type ColorAlpha = `${ColorScheme | Colors}/${number}`;
+
+/**
  * A design token, or any CSS colour.
  *
  * The `(string & {})` arm is what keeps token autocomplete alive: a bare

@@ -1,0 +1,61 @@
+---
+title: "DivergingBars"
+summary: "A signed value per item on one shared zero: gains grow right, losses left, each value written beside its bar. HTML, server-rendered, every bar focusable."
+updatedAt: "2026-11-16"
+docs: "once-ui/data/divergingBars.mdx"
+github: "modules/data/DivergingBars.tsx"
+navLabel: "DivergingBars"
+navIcon: "divergingBars"
+---
+
+`DivergingBars` draws one row per row of `data`: its name, a bar from zero, and its value. Gains grow right in the gain colour and losses left in the loss colour, all on one scale, so lengths compare across the list. Zero sits where the largest loss ends: a list with no losses uses the whole width. Every value is written with its sign (`+12%`), so colour is never the only cue. It takes the card, `title`, `description`, `valueFormat`, `locale`, `tooltip`, `loading`, `error`, `emptyState` and `errorState` the other charts take.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <DivergingBars
+      title="Since bought"
+      data={[
+        { label: "Fjell", value: 0.18 },
+        { label: "Nord", value: 0.09 },
+        { label: "Ember", value: 0.04 },
+        { label: "Brim", value: 0 },
+        { label: "Halden", value: -0.06 },
+        { label: "Quill", value: -0.21 },
+      ]}
+      valueFormat="percent"
+    />
+  }
+  codes={[
+    {
+      code:
+`<DivergingBars
+  title="Since bought"
+  data={[
+    { label: "Fjell", value: 0.18 },
+    { label: "Halden", value: -0.06 },
+    { label: "Quill", value: -0.21 },
+  ]}
+  valueFormat="percent"
+/>`,
+      language: "tsx",
+      label: "Usage"
+    }
+  ]}
+/>
+
+Bars are drawn in the order given, so sort the rows first to rank them. `dataKey` and `nameKey` read other keys than `"value"` and `"label"`. Gains are emerald and losses orange by default; `gainColor` and `lossColor` take any palette name or CSS colour.
+
+## API reference
+
+<PropsTable
+  component="DivergingBars"
+  describe={{
+    data: "One row per bar, drawn in the order given.",
+    dataKey: "The row key of each bar's signed value. Defaults to \"value\".",
+    nameKey: "The row key that names each bar. Defaults to \"label\".",
+    gainColor: "Bars above zero. Defaults to emerald.",
+    lossColor: "Bars below zero. Defaults to orange.",
+  }}
+/>

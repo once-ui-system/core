@@ -77,6 +77,8 @@ export function DesignEngineersClub2({ children, ...flex }: DesignEngineersClub2
           radius="xl"
           pointerEvents="none"
           position="absolute"
+          top="0"
+          left="0"
           m={{
             position: "relative",
           }}

@@ -37,6 +37,8 @@ export const BankCard: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
             <Background
               fill
               position="absolute"
+              top="0"
+              left="0"
               gradient={{
                 display: true,
                 tilt: -45,
@@ -52,6 +54,8 @@ export const BankCard: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
           <Column
             fill
             position="absolute"
+            top="0"
+            left="0"
             pointerEvents="none"
             padding="24"
             vertical="end"

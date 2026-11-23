@@ -1,0 +1,235 @@
+---
+title: "StatTile"
+summary: "One key figure with its label, the change since the last period, a line of context and an optional small chart."
+updatedAt: "2026-11-19"
+docs: "once-ui/components/statTile.mdx"
+github: "components/StatTile.tsx"
+navLabel: "StatTile"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+`StatTile` shows one number with its label and context. A row of them sits at the top of a dashboard or a console, with the figures people check first. It is one of the control-room pieces added in 3.0.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <StatTile
+      maxWidth={320}
+      label="Open jobs"
+      value="128"
+      icon="briefcase"
+      delta={{ label: "+12%", direction: "up", tone: "success" }}
+      hint="Since last Monday"
+    />
+  }
+  codes={[
+    {
+      code:
+`<StatTile
+  label="Open jobs"
+  value="128"
+  icon="briefcase"
+  delta={{ label: "+12%", direction: "up", tone: "success" }}
+  hint="Since last Monday"
+/>`,
+      language: "tsx",
+      label: "StatTile"
+    }
+  ]}
+/>
+
+## A row of tiles
+
+A tile fills the width it is given, so lay several out in a `Grid` or a wrapping `Row`. Pass `value` already formatted for the reader's locale, such as `"1,284"`, `"€12.4k"` or `"94%"`. The tile draws it with tabular figures, so numbers in neighbouring tiles line up.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Grid fillWidth columns="3" s={{ columns: "1" }} gap="12">
+      <StatTile
+        label="Revenue this week"
+        value="€12.4k"
+        icon="banknotes"
+        delta={{ label: "+8%", direction: "up", tone: "success" }}
+      />
+      <StatTile
+        label="Late deliveries"
+        value="3"
+        icon="truck"
+        delta={{ label: "−2", direction: "down", tone: "success" }}
+        hint="Fewer late jobs is good news"
+      />
+      <StatTile
+        label="Seats in use"
+        value="1,284"
+        icon="people"
+        hint="of 1,500 seats"
+      />
+    </Grid>
+  }
+  codes={[
+    {
+      code:
+`<Grid fillWidth columns="3" s={{ columns: "1" }} gap="12">
+  <StatTile
+    label="Revenue this week"
+    value="€12.4k"
+    icon="banknotes"
+    delta={{ label: "+8%", direction: "up", tone: "success" }}
+  />
+  <StatTile
+    label="Late deliveries"
+    value="3"
+    icon="truck"
+    delta={{ label: "−2", direction: "down", tone: "success" }}
+    hint="Fewer late jobs is good news"
+  />
+  <StatTile
+    label="Seats in use"
+    value="1,284"
+    icon="people"
+    hint="of 1,500 seats"
+  />
+</Grid>`,
+      language: "tsx",
+      label: "Row"
+    }
+  ]}
+/>
+
+## Delta
+
+`delta` shows the change since the last period beside the value. Its `label` is the text, such as `"+12%"` or `"−3 since Monday"`. `direction` draws an up or down arrow, and leaving it out draws none. `tone` colours it: `success`, `danger`, `warning` or `neutral` (the default).
+
+Direction and tone are separate on purpose. A number going down can be good news, such as fewer failed payments, so set the tone by what the change means, not by which way it went.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Grid fillWidth columns="2" s={{ columns: "1" }} gap="12">
+      <StatTile label="Failed payments" value="4" delta={{ label: "−6", direction: "down", tone: "success" }} />
+      <StatTile label="Support backlog" value="57" delta={{ label: "+19", direction: "up", tone: "danger" }} />
+      <StatTile label="Average reply time" value="2h 10m" delta={{ label: "+15 min", direction: "up", tone: "warning" }} />
+      <StatTile label="Active projects" value="23" delta={{ label: "No change" }} />
+    </Grid>
+  }
+  codes={[
+    {
+      code:
+`<StatTile label="Failed payments" value="4" delta={{ label: "−6", direction: "down", tone: "success" }} />
+<StatTile label="Support backlog" value="57" delta={{ label: "+19", direction: "up", tone: "danger" }} />
+<StatTile label="Average reply time" value="2h 10m" delta={{ label: "+15 min", direction: "up", tone: "warning" }} />
+<StatTile label="Active projects" value="23" delta={{ label: "No change" }} />`,
+      language: "tsx",
+      label: "Delta"
+    }
+  ]}
+/>
+
+## Chart
+
+`chart` takes a small chart that sits under the value, usually a `Sparkline` from `@once-ui-system/core/data`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Grid fillWidth columns="2" s={{ columns: "1" }} gap="12">
+      <StatTile
+        label="Signups"
+        value="342"
+        delta={{ label: "+21%", direction: "up", tone: "success" }}
+        chart={<Sparkline data={[180, 172, 190, 201, 236, 251, 290, 342]} variant="area" color="emerald" height={40} showLast />}
+      />
+      <StatTile
+        label="Error rate"
+        value="0.8%"
+        delta={{ label: "+0.2 pts", direction: "up", tone: "danger" }}
+        chart={<Sparkline data={[0.5, 0.6, 0.5, 0.7, 0.6, 0.7, 0.9, 0.8]} color="red" height={40} showLast />}
+      />
+    </Grid>
+  }
+  codes={[
+    {
+      code:
+`import { Sparkline } from "@once-ui-system/core/data";
+
+<StatTile
+  label="Signups"
+  value="342"
+  delta={{ label: "+21%", direction: "up", tone: "success" }}
+  chart={
+    <Sparkline
+      data={[180, 172, 190, 201, 236, 251, 290, 342]}
+      variant="area"
+      color="emerald"
+      height={40}
+      showLast
+    />
+  }
+/>`,
+      language: "tsx",
+      label: "Chart"
+    }
+  ]}
+/>
+
+## Link and loading
+
+With `href`, the whole tile is a link to the screen it sums up, drawn as a `Card`. Without `href` it is a plain panel and does not look clickable.
+
+`loading` draws a placeholder in place of the value and hides the delta, so the tile keeps its size while the number loads.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Grid fillWidth columns="2" s={{ columns: "1" }} gap="12">
+      <StatTile label="Unpaid invoices" value="7" icon="document" hint="Open the invoice list" href="#link-and-loading" />
+      <StatTile label="Orders today" value="" icon="cart" loading />
+    </Grid>
+  }
+  codes={[
+    {
+      code:
+`<StatTile label="Unpaid invoices" value="7" icon="document" hint="Open the invoice list" href="/invoices?status=unpaid" />
+<StatTile label="Orders today" value={orders?.length} icon="cart" loading={!orders} />`,
+      language: "tsx",
+      label: "Link and loading"
+    }
+  ]}
+/>
+
+## Accessibility
+
+- The label, value, delta and hint are text, read in that order. The delta's arrow is hidden from screen readers, so write the direction into `delta.label` with a sign, such as `"+12%"` or `"−3"`, and do not rely on colour alone.
+- With `href` the tile is one link, and its name is all the text inside it. Keep the label short so the link reads well.
+- While `loading`, the placeholder is labelled "Loading".
+
+## API reference
+
+StatTile also takes the layout and style props of `Column` (`padding`, `radius`, `background`, `border` and the rest), except `children`. With `href`, they go to the `Card` that draws the tile.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `ReactNode` | required | What is counted, such as "Open jobs" or "Revenue this week". |
+| `value` | `ReactNode` | required | The number, already formatted for the locale. |
+| `icon` | `IconName` | | An icon beside the label. |
+| `hint` | `ReactNode` | | A line of context under the value, such as "of 1,500 seats". |
+| `delta` | `StatTileDelta` | | The change since the last period, beside the value. |
+| `chart` | `ReactNode` | | A small chart under the value, such as a `Sparkline`. |
+| `href` | `string` | | Makes the whole tile a link. |
+| `loading` | `boolean` | `false` | Draws a placeholder for the value while it loads. |
+
+### StatTileDelta
+
+| Field | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `string` | required | The change, such as `"+12%"`. |
+| `direction` | `"up" \| "down"` | | Draws an arrow. Left out, no arrow. |
+| `tone` | `"success" \| "danger" \| "warning" \| "neutral"` | `"neutral"` | Whether the change is good news, separate from its direction. |
