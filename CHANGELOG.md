@@ -1001,6 +1001,13 @@ entry below that had landed by then:
 
 ### Added
 
+- **A custom colour on `StylePanel`'s Neutral row.** List the rows in
+  `customColors` (`["brand", "accent", "neutral"]`), or set `custom` on
+  `StylePanel.Neutral`, to offer a grey of your own, reported as
+  `neutralSeed`. `customColors={true}` still means Brand and Accent only, so
+  hosts that render two seeds are unchanged. Its words are
+  `labels.custom.neutral`. New types: `StylePanelCustomColors`,
+  `StylePanelNeutralCustomLabels`.
 - **`Select` gets `position="aligned"`.** The list opens with the selected option sitting
   exactly on the field and the others above and below it in their own order, as macOS draws
   a pop-up button (the first option, with nothing picked). A long list shows six and a half
@@ -1008,8 +1015,17 @@ entry below that had landed by then:
   Select, it opens as the usual dropdown. The default stays `"dropdown"`. `DropdownWrapper`
   takes the same behaviour as `alignSelected`.
 
+### Changed
+
+- **`border="rounded"` is calmer on large surfaces.** `radius-l` is 24px and
+  `radius-xl` 28px (were 28px and 32px), and their nested steps follow
+  4px and 8px of padding evenly. Cards, panels and dialogs keep a soft
+  corner without reading as bubbles; `radius-xs`, `s` and `m`, the controls'
+  pill shapes, are unchanged. Other border styles are untouched.
+
 ### Fixed
 
+- **`MascotPanel` fits its box and lines its columns up.** The custom body colour's field (and the eye and accessory colour fields) was capped at 10px and showed as a thin bar after the swatches; it now takes up to 160px and wraps under them when the row is tight. The side layout sizes to the panel's own width instead of the viewport's, so it no longer spills past a narrow card or docs preview, and stacks below 34rem. The sticky preview now sits flush with the top of its scroll box, level with the first group of controls (it was pushed 16px down); offset it with `--mascot-panel-sticky-top` under a fixed header.
 - `RadioButton`: the checked dot uses the brand's on-solid colour, as `Checkbox`'s tick does, so the checked radio reads as a ring around a dot in light and dark themes alike (it used the neutral on-solid colour, which matched the fill in dark themes).
 - **A fullscreen `CodeBlock` shows its preview beside the code on a wide screen.** From
   1024px the preview and the code sit side by side, each scrolling on its own, instead of
