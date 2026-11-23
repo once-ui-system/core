@@ -1001,6 +1001,13 @@ entry below that had landed by then:
 
 ### Added
 
+- **A custom colour on `StylePanel`'s Neutral row.** List the rows in
+  `customColors` (`["brand", "accent", "neutral"]`), or set `custom` on
+  `StylePanel.Neutral`, to offer a grey of your own, reported as
+  `neutralSeed`. `customColors={true}` still means Brand and Accent only, so
+  hosts that render two seeds are unchanged. Its words are
+  `labels.custom.neutral`. New types: `StylePanelCustomColors`,
+  `StylePanelNeutralCustomLabels`.
 - **`Select` gets `position="aligned"`.** The list opens with the selected option sitting
   exactly on the field and the others above and below it in their own order, as macOS draws
   a pop-up button (the first option, with nothing picked). A long list shows six and a half
