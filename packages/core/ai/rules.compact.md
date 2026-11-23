@@ -38,7 +38,7 @@ Static panel recipe (pricing tiers, stats, settings sections):
 
 - Bare `border`/`borderTop` = the default border. Name a colour only to deviate: `border="brand-alpha-medium"`.
 - `Card` = interactive only (`href` or `onClick`). Static panels = Column + surface recipe.
-- Colors: `{tone}-{weight}` or `{tone}-alpha-{weight}`. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`. Hex only in seeds (`brandSeed`, `pageBackground`, a Mascot's `color`) and in artwork: a hero scene's cast, props and textures, in classes named for what they draw, in one sheet scoped under the page class.
+- Colors: `{tone}-{weight}` or `{tone}-alpha-{weight}`; any step between with a slash on background/solid/border: `brand/12` (the tone, `brand/15` = `brand-alpha-weak`), `brand-strong/40`; `background="gradient"` (or `gradient/16`) is brand to accent. Never a `--my-colour` variable for an opacity. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`. Hex only in seeds (`brandSeed`, `pageBackground`, a Mascot's `color`) and in artwork: a hero scene's cast, props and textures, in classes named for what they draw, in one sheet scoped under the page class.
 - `background` also: `surface | overlay | page | transparent`
 - Same-shaped records: one surface, divided rows (`borderTop={i > 0}`), or a `Table` (row link: a link in a `cell`, not `onRowClick`); never a card per row
 - One raised `surface` for content on `page`; sections inside are spacing + `borderTop`, not grey cards
@@ -62,7 +62,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 - `zIndex` only inside that layer group (or on a sticky header over its pane). Never on a lone element, never a page-wide ladder.
 
 - Gradient `width`: quarter-percent (400 = 100%). Glows: 100–200.
-- Glow colors: `brand-alpha-medium`, not `brand-background-weak`
+- Glow colors: `brand-alpha-medium` or a step like `brand/12`, not `brand-background-weak`; in artwork CSS `color-mix(in srgb, var(--brand-alpha) 12%, transparent)`
 - Ambient layers on full-bleed section wrapper, outside `maxWidth` column
 - Budget: one ambient layer per section; motion in hero + one CTA max. A hero scene that shows the product's work is artwork, outside this budget
 

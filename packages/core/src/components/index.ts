@@ -98,4 +98,5 @@ export * from "./Toast.js";
 export * from "./ToggleButton.js";
 export * from "./Tooltip.js";
 export * from "./User.js";
+export * from "./WorkspaceSwitcher.js";
 export * from "./VisuallyHidden.js";

@@ -11,11 +11,33 @@ Entries before 1.7.13 are reconstructed from GitHub releases and git history and
 incomplete; reconciling them against actual npm release history is a scheduled roadmap
 item (see `ROADMAP.md`, Week 4).
 
-## [3.1.0] - Unreleased
+## [Unreleased]
 
 ### Added
 
 - **Mascot mediums.** `medium` on `Mascot`, `mascotSvg` and `MascotDesign` draws the same character another way: `fur`, `plush` and `clay` give the body a material, `pixel` turns the whole mascot into a sprite with a one-pixel outline, `lowpoly` cuts the body into lit facets and `toon` inks it with cel shading. `vector` stays the default. Each one is an SVG filter or plain shapes, so it animates live with no WebGL, renders on the server through `mascotSvg`, and holds still under reduced motion like the vector mascot. `MASCOT_MEDIUMS` lists them; `parseMascotDesign` keeps a known one and drops anything else.
+
+### Fixed
+
+- `Setting`: a slider (or any control that fills its parent, such as `Input` or a
+  fill-width `SegmentedControl`) in a labelled row collapsed to its thumb in 3.0.0,
+  because the control area was only as wide as its content. The area now grows into
+  the row's free space up to `controlWidth`; wrapping and the trailing-edge placement
+  of buttons are unchanged.
+- `SegmentedControl`: the rail's corners now nest round the options at every size,
+  padding and border style: the options' radius plus the padding and the border.
+  A `compact` rail always took the l radius (16px round 8px options in playful), and
+  in conservative the rail added 2px for 4px of padding.
+- `ToggleButton`: a label too long for the button ran out of the box and pushed the
+  suffix icon out with it. A `fillWidth` button (a sidebar row) now ends its label in
+  an ellipsis by default, node labels included; a fit-width button keeps its full
+  label, as before. `truncate` sets it either way. The
+  icons keep their size.
+  The docs sidebar's page titles truncate beside their tags.
+- `Option`: a `danger` option (Delete in a menu) now keeps the hierarchy of the rows
+  around it: the label carries the contrast (`danger-on-background-medium`, pale on dark,
+  deep on light) and the prefix icon the colour (`danger-on-background-weak`). Both were
+  the saturated tone, so the label read dimmer than its neighbours on dark.
 
 ## [3.0.0] - 2026-11-19
 
@@ -1031,6 +1053,11 @@ entry below that had landed by then:
 
 ### Fixed
 
+- **A menu's trigger stays highlighted while the menu is open.** A `NavItem`,
+  `ToggleButton` or anything built on it that opens a `Dropdown` (a sidebar's
+  Help or account row) keeps its hover fill while the menu shows, so the row the
+  menu came from stays marked once the pointer moves into it. A selected trigger
+  keeps its deeper selected-hover fill.
 - **`MascotPanel` fits its box and lines its columns up.** The custom body colour's field (and the eye and accessory colour fields) was capped at 10px and showed as a thin bar after the swatches; it now takes up to 160px and wraps under them when the row is tight. The side layout sizes to the panel's own width instead of the viewport's, so it no longer spills past a narrow card or docs preview, and stacks below 34rem. The sticky preview now sits flush with the top of its scroll box, level with the first group of controls (it was pushed 16px down); offset it with `--mascot-panel-sticky-top` under a fixed header.
 - `RadioButton`: the checked dot uses the brand's on-solid colour, as `Checkbox`'s tick does, so the checked radio reads as a ring around a dot in light and dark themes alike (it used the neutral on-solid colour, which matched the fill in dark themes).
 - **A fullscreen `CodeBlock` shows its preview beside the code on a wide screen.** From

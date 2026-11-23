@@ -1,0 +1,66 @@
+---
+title: "WorkspaceSwitcher"
+summary: "Switch between the workspaces, organizations, venues or sites a person belongs to: a dropdown on desktop, a sheet from the bottom on a phone."
+updatedAt: "2026-11-22"
+docs: "once-ui/components/workspaceSwitcher.mdx"
+github: "components/WorkspaceSwitcher.tsx"
+navLabel: "WorkspaceSwitcher"
+navIcon: "components"
+---
+
+One switcher for every multi-tenant app. Put it in `SidebarHeader`, or in the top bar on a phone. The trigger shows the current item's mark and name. The list pins the current item on top, groups the rest under headings with counts, shows a search field once there are more than six items, and ends with a create button.
+
+On a phone (at and below `mobileBelow`, default `"s"`) the list opens as a sheet from the bottom of the screen: near the thumb, as wide as the screen, so long names wrap instead of being cut. Elsewhere it is a dropdown under the trigger, at least 20rem wide. In a Sidebar folded to its rail, the trigger is the mark alone.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`"use client";
+
+import { SidebarHeader, WorkspaceSwitcher } from "@once-ui-system/core";
+import { useRouter } from "next/navigation";
+
+export function Switcher({ orgs, current }) {
+  const router = useRouter();
+  return (
+    <SidebarHeader>
+      <WorkspaceSwitcher
+        items={orgs.map((org) => ({
+          value: org.slug,
+          label: org.name,
+          src: org.logo,
+          description: org.role,
+          group: org.claimable ? "offer" : "own",
+          keywords: [org.slug],
+        }))}
+        groups={[
+          { id: "own", label: "Your venues" },
+          { id: "offer", label: "Waiting to be claimed" },
+        ]}
+        value={current}
+        onValueChange={(slug) => router.push(\`/app/\${slug}\`)}
+        onCreate={() => setCreating(true)}
+        labels={{ title: "Venues", create: "New venue" }}
+      />
+    </SidebarHeader>
+  );
+}`,
+      language: "tsx",
+      label: "Switcher.tsx"
+    }
+  ]}
+/>
+
+## Behaviour
+
+- **Current pinned:** the current item sits on top under its own heading (`pinCurrent`, default on), marked selected with a check.
+- **Groups:** `groups` names the headings and their order; each item names its group by `id`. Items without a known group come last. With no `groups`, the list sits under `labels.title`. `counts` (default on) adds the number of items to each heading.
+- **Search:** above `searchAbove` items (default 6; `false` never) a field filters every group by name and `keywords`, with an empty state.
+- **Create:** `onCreate` adds a button at the foot that closes the list first. `footer` adds more under it.
+- **Loading:** `loading` with no current item shows placeholders the size of the mark and name, so nothing moves when the list arrives.
+- **Your own trigger:** `trigger` replaces the default one. On a phone it is given `onClick`, so use a Button or an IconButton.
+- **Controlled or not:** `value` / `defaultValue` / `onValueChange` and `open` / `defaultOpen` / `onOpenChange`.
+- **Words:** `labels` (`title`, `current`, `search`, `noMatch`, `empty`, `loading`, `pick`, `create`) for another language.

@@ -88,6 +88,7 @@ const fixtures: Record<string, Record<string, unknown>> = {
   SettingAxes: { label: "Tilt", axes: [{ label: "X", control: "x" }] },
   Table: { columns: [{ key: "name", header: "Name" }], rows: [{ id: "1", name: "Ada" }] },
   Timeline: { items: [{ label: "Step one" }] },
+  WorkspaceSwitcher: { items: [{ value: "fjell", label: "Fjell" }], value: "fjell" },
   ThemeInit: { config: {} },
   MegaMenu: { menuGroups: [{ id: "docs", label: "Docs", href: "/docs" }] },
   MobileMegaMenu: { menuGroups: [{ id: "docs", label: "Docs", href: "/docs" }] },

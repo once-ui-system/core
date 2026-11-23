@@ -384,6 +384,7 @@
     "Effect",
     "FlipFx",
     "GlitchFx",
+    "GradientFx",
     "HoloFx",
     "LetterFx",
     "MatrixFx",
@@ -402,6 +403,7 @@
     "EffectProps",
     "EffectType",
     "FlipFxProps",
+    "GradientFxProps",
     "ShineFxProps",
     "TypeFxProps"
    ]
