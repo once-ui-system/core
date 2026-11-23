@@ -19,13 +19,19 @@ const categoryPages: Record<string, ComponentType<object>> = {
   blog: dynamic(() => import("@/app/(blocks)/blocks/components/demo/Blog"), { ssr: false }),
   social: dynamic(() => import("@/app/(blocks)/blocks/components/demo/Social"), { ssr: false }),
   about: dynamic(() => import("@/app/(blocks)/blocks/components/demo/About"), { ssr: false }),
-  dashboard: dynamic(() => import("@/app/(blocks)/blocks/components/demo/Dashboard"), { ssr: false }),
+  dashboard: dynamic(() => import("@/app/(blocks)/blocks/components/demo/Dashboard"), {
+    ssr: false,
+  }),
   productivity: dynamic(() => import("@/app/(blocks)/blocks/components/demo/Productivity"), {
     ssr: false,
   }),
-  streaming: dynamic(() => import("@/app/(blocks)/blocks/components/demo/Streaming"), { ssr: false }),
+  streaming: dynamic(() => import("@/app/(blocks)/blocks/components/demo/Streaming"), {
+    ssr: false,
+  }),
   waitlist: dynamic(() => import("@/app/(blocks)/blocks/components/demo/Waitlist"), { ssr: false }),
-  ecommerce: dynamic(() => import("@/app/(blocks)/blocks/components/demo/Ecommerce"), { ssr: false }),
+  ecommerce: dynamic(() => import("@/app/(blocks)/blocks/components/demo/Ecommerce"), {
+    ssr: false,
+  }),
 
   features: dynamic(() => import("@/app/(blocks)/blocks/components/demo/Features"), { ssr: false }),
   bento: dynamic(() => import("@/app/(blocks)/blocks/components/demo/Bento"), { ssr: false }),
@@ -44,6 +50,16 @@ const categoryPages: Record<string, ComponentType<object>> = {
   }),
   widgets: dynamic(() => import("@/app/(blocks)/blocks/components/demo/Widgets"), { ssr: false }),
 
+  changelog: dynamic(() => import("@/app/(blocks)/blocks/components/demo/Changelog"), {
+    ssr: false,
+  }),
+  billing: dynamic(() => import("@/app/(blocks)/blocks/components/demo/Billing"), { ssr: false }),
+  onboarding: dynamic(() => import("@/app/(blocks)/blocks/components/demo/Onboarding"), {
+    ssr: false,
+  }),
+  cta: dynamic(() => import("@/app/(blocks)/blocks/components/demo/Cta"), { ssr: false }),
+  stats: dynamic(() => import("@/app/(blocks)/blocks/components/demo/Stats"), { ssr: false }),
+
   background: dynamic(() => import("@/app/(blocks)/blocks/components/demo/Background"), {
     ssr: false,
   }),
@@ -58,11 +74,7 @@ export function BlocksClient({ category }: BlocksClientProps) {
 
   return (
     <Flex fill minHeight="20rem" center>
-      {Component ? (
-        <Component />
-      ) : (
-        <Text align="center">No blocks found for {category}</Text>
-      )}
+      {Component ? <Component /> : <Text align="center">No blocks found for {category}</Text>}
     </Flex>
   );
 }

@@ -1,5 +1,10 @@
-import { Scroller, Column, Heading, Icon, Line, Logo, Row, Text } from "@once-ui-system/core";
+import { Column, Heading, Icon, Line, Logo, Row, Scroller, Text } from "@once-ui-system/core";
 import { Sidebar1 } from "./Sidebar1";
+
+const wordmark = {
+  light: "/trademarks/wordmark-light.svg",
+  dark: "/trademarks/wordmark-dark.svg",
+};
 
 const section = {
   title: "Advanced design made simple",
@@ -12,13 +17,13 @@ const tiles = {
       title: "Templates",
       description: "Quick start with pre-built templates",
       media: (
-        <Scroller auto>
-          <Logo wordmark={"/trademarks/wordmark-light.svg"} />
-          <Line vert />
-          <Logo wordmark={"/trademarks/wordmark-light.svg"} />
-          <Line vert />
-          <Logo wordmark={"/trademarks/wordmark-light.svg"} />
-          <Line vert />
+        <Scroller auto fadeColor="page" gap="32" vertical="center">
+          {Array.from({ length: 6 }, (_, index) => (
+            <Row key={index} gap="32" vertical="center">
+              <Logo wordmark={wordmark} />
+              <Line vert height="24" />
+            </Row>
+          ))}
         </Scroller>
       ),
     },
@@ -30,7 +35,7 @@ const tiles = {
           <Sidebar1
             minWidth="16rem"
             marginTop="48"
-            border="neutral-strong"
+            border="neutral-alpha-medium"
             tabIndex={-1}
             aria-hidden="true"
           />
@@ -55,20 +60,16 @@ const tiles = {
       title: "Community",
       description: "Join our community to get help and share knowledge",
       media: (
-        <Row padding="56" radius="full" border="neutral-strong">
+        <Row padding="56" radius="full" border="neutral-alpha-medium">
           <Row
             padding="40"
             radius="full"
-            border="neutral-strong"
+            border="neutral-alpha-medium"
             onBackground="neutral-strong"
             horizontal="center"
           >
-            <Row fit padding="24" radius="full" border="neutral-strong">
-              <Icon
-                onBackground="neutral-strong"
-                name="discord"
-                size="xl"
-              />
+            <Row fit padding="24" radius="full" border="neutral-alpha-medium">
+              <Icon onBackground="neutral-strong" name="discord" size="xl" />
             </Row>
           </Row>
         </Row>
@@ -95,6 +96,7 @@ export const Bento1: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex 
               <Column
                 key={index}
                 border="neutral-alpha-medium"
+                background="surface"
                 vertical="between"
                 overflow="hidden"
                 flex={key === "1" ? (index % 2 === 0 ? "2" : "2") : index % 2 === 0 ? "4" : "3"}
@@ -110,8 +112,6 @@ export const Bento1: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex 
                 </Column>
                 <Row fillWidth height="20rem" paddingLeft="m">
                   <Row
-                    theme="light"
-                    themeSolid="contrast"
                     background="page"
                     fill
                     center

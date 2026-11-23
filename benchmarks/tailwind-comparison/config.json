@@ -166,7 +166,7 @@
   },
   "versions": {
     "node": "22.x",
-    "next": "16.2.12",
+    "next": "16.4.6",
     "react": "19.2.8",
     "typescript": "6.0.3",
     "tailwindcss": "4.3.3",

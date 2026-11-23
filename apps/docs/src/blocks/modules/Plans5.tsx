@@ -168,6 +168,8 @@ export const Plans5 = ({
                 themeSolid="color"
                 pointerEvents="none"
                 position="absolute"
+                top="0"
+                left="0"
                 fill
                 radius="xl"
                 colors={["brand-solid-strong"]}

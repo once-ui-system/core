@@ -155,7 +155,7 @@ function fallScene(
   const reachX = () => Math.tan(Math.abs(rad)) * stage.height;
 
   const speedFor = (z: number) =>
-    type === "rain" ? rand(650, 800) + z * 600 : type === "snow" ? 22 + z * 60 : 40 + z * 55;
+    type === "rain" ? rand(280, 340) + z * 220 : type === "snow" ? 22 + z * 60 : 40 + z * 55;
 
   const spawn = (y: number): Particle => {
     const z = Math.random() ** 1.4; // more far than near

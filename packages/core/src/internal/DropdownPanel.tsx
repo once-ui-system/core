@@ -3,6 +3,7 @@
 import React, { ReactNode, SyntheticEvent } from "react";
 import { Column } from "../components/Column.js";
 import { Row } from "../components/Row.js";
+import styles from "./DropdownPanel.module.scss";
 
 interface DropdownPanelProps extends Omit<React.ComponentProps<typeof Row>, "onSelect"> {
   selectedOption?: string;
@@ -72,7 +73,10 @@ const DropdownPanel = ({
       // its square box, so a Background glow behind a menu's header painted
       // past the panel's rounded corners and over its border.
       overflow="hidden"
-      className={disabled ? "cursor-not-allowed" : undefined}
+      // The caller's className was taken and dropped.
+      className={[styles.panel, disabled && "cursor-not-allowed", className]
+        .filter(Boolean)
+        .join(" ")}
       style={{ opacity: disabled ? 0.6 : undefined }}
       // Only when it is: "false" is the default, and on a panel with no
       // role of its own (DropdownWrapper's is "none") the attribute would

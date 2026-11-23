@@ -1,0 +1,63 @@
+---
+title: "Heatmap"
+summary: "A grid of rows by columns, each cell's size in one hue: dividends by month and year, visits by hour and weekday. HTML, server-rendered, every cell focusable."
+updatedAt: "2026-11-16"
+docs: "once-ui/data/heatmap.mdx"
+github: "modules/data/Heatmap.tsx"
+navLabel: "Heatmap"
+navIcon: "heatmap"
+---
+
+`Heatmap` draws one row per row of `data` and one cell per column you name, each cell in one of five steps of a single hue against the largest value in the grid. Use it to find patterns across two periods, like which months pay out in which years. Empty, zero and negative cells stay neutral: a heatmap shows how much, not which way ([`DivergingBars`](/data/divergingBars) shows direction). It takes the card, `title`, `description`, `valueFormat`, `locale`, `tooltip`, `loading`, `error`, `emptyState` and `errorState` the other charts take.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Heatmap
+      title="Dividends"
+      data={[
+        { label: "2024", Jan: 0, Feb: 12, Mar: 40, Apr: 0, May: 18, Jun: 52, Jul: 0, Aug: 14, Sep: 44, Oct: 0, Nov: 20, Dec: 61 },
+        { label: "2025", Jan: 8, Feb: 15, Mar: 46, Apr: 0, May: 22, Jun: 58, Jul: 6, Aug: 17, Sep: 50, Oct: 0, Nov: 25, Dec: 70 },
+        { label: "2026", Jan: 10, Feb: 19, Mar: 55, Apr: 3, May: 27, Jun: 66, Jul: 9, Aug: 21, Sep: 58, Oct: 2, Nov: null, Dec: null },
+      ]}
+      columns={["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]}
+      valueFormat={{ style: "currency", currency: "EUR" }}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Heatmap
+  title="Dividends"
+  data={[
+    { label: "2025", Jan: 8, Feb: 15, Mar: 46 /* … */ },
+    { label: "2026", Jan: 10, Feb: 19, Mar: 55 /* … */ },
+  ]}
+  columns={["Jan", "Feb", "Mar" /* … */]}
+  valueFormat={{ style: "currency", currency: "EUR" }}
+/>`,
+      language: "tsx",
+      label: "Usage"
+    }
+  ]}
+/>
+
+`columns` lists row keys, left to right, or `{ key, label }` when the heading should read differently from the key. `rowKey` names the key each row's name comes from (`"label"` by default). Each cell's hover card and accessible name say its row, its column and its value, or "No data".
+
+## Colour and scale
+
+The cells are emerald by default; `color` takes any palette name or CSS colour. The scale under the grid reads "Less" to "More": rename its ends with `legend={{ less: "Kevesebb", more: "Több" }}`, or hide it with `legend={{ display: false }}`.
+
+## API reference
+
+<PropsTable
+  component="Heatmap"
+  describe={{
+    data: "One row per line of cells: a year, a client, a weekday.",
+    columns: "The columns, left to right, as row keys or { key, label }.",
+    rowKey: "The row key that names each row. Defaults to \"label\".",
+    color: "The hue the cells are drawn in. Defaults to emerald.",
+    legend: "The scale under the grid: display, and the less and more labels.",
+  }}
+/>

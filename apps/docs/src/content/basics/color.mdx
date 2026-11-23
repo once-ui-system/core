@@ -96,6 +96,78 @@ Which to reach for:
 - **`surface`** for the neutral raised panel, which follows the theme without
   naming a scheme at all.
 
+## Any colour at any opacity
+
+The three alphas, weak, medium and strong, are one colour at 15, 30 and 50%.
+When a design needs a step between them, such as a glow at 12% or an edge at
+22%, put the opacity after a slash. It works on `background`, `solid`,
+`border` and the border sides:
+
+- **`"brand/12"`** is the tone itself, the colour its alphas are drawn from.
+  `"brand/15"` is `"brand-alpha-weak"`.
+- **`"brand-strong/40"`** is the token the prop already reads for
+  `"brand-strong"` (`--brand-background-strong` on `background`,
+  `--brand-border-strong` on `border`) at 40%.
+- **`"gradient"`** is brand to accent, the theme's two hues, and
+  **`"gradient/16"`** the same at 16%. Turn it with `--gradient-angle`.
+
+It follows the theme, the scheme and any `StyleScope` around it, and needs no
+class per step: the server writes it inline, so the element stays a server
+component.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Grid fillWidth columns="2" gap="16" s={{ columns: "1" }}>
+      <Column padding="24" gap="8" radius="l" background="brand/12" border="brand/22">
+        <Text textVariant="heading-strong-s">brand/12, edged at 22%</Text>
+        <Text textVariant="body-default-s" onBackground="neutral-weak">A glow with no custom variables.</Text>
+      </Column>
+      <Column padding="24" gap="8" radius="l" background="gradient/16" border="accent/22">
+        <Text textVariant="heading-strong-s">gradient/16</Text>
+        <Text textVariant="body-default-s" onBackground="neutral-weak">Brand to accent at 16%.</Text>
+      </Column>
+    </Grid>
+  }
+  codes={[
+    {
+      code:
+`<Column background="brand/12" border="brand/22">
+<Column background="gradient/16" border="accent/22">
+<Row solid="accent-strong/40">
+<Row background="gradient" style={{ ["--gradient-angle" as string]: "90deg" }}>`,
+      language: "tsx",
+      label: "Props"
+    },
+    {
+      code:
+`/* Artwork and keyframes, where no prop reaches */
+.glow {
+  background: radial-gradient(
+    color-mix(in srgb, var(--brand-alpha) 16%, transparent),
+    transparent 70%
+  );
+}
+.ring {
+  background: var(--gradient-brand-accent);
+}`,
+      language: "css",
+      label: "CSS"
+    }
+  ]}
+/>
+
+In a stylesheet, mix the token with `transparent`, the way the alphas
+themselves are made. `--{tone}-alpha` is each tone's alpha colour,
+`--brand-color-*` and `--accent-color-*` the two hues at solid strength, and
+`--gradient-brand-accent` the gradient at 135°. Never copy a token's value
+into a new `--my-colour` variable to get an opacity: it stops following the
+theme.
+
+Free colour props, such as `Background`'s and `StyleScope`'s and the charts',
+read the same forms: `"brand/12"`, `"brand-strong/40"`, `"--my-hue/50"`.
+
 ## The brand colour
 
 `solid="contrast"`, the default solid style, draws filled controls in neutral:

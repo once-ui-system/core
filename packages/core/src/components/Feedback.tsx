@@ -31,7 +31,7 @@ const toneIconMap: Partial<Record<Tone, IconName>> = {
   info: "info",
   danger: "danger",
   warning: "warning",
-  success: "check",
+  success: "checkCircle",
 };
 
 const Feedback = ({

@@ -18,6 +18,13 @@ export {
   mascotIdentity,
   mascotIdentityKey,
 } from "./mascotIdentities.js";
+export type { MascotSkin } from "./mascotSkin.js";
+export {
+  cleanMascotUsername,
+  fetchMascotSkin,
+  MASCOT_SKIN_SOURCE,
+  useMascotSkin,
+} from "./mascotSkin.js";
 export type { MascotSvgOptions } from "./mascotSvg.js";
 export { mascotDataUrl, mascotSvg } from "./mascotSvg.js";
 export type { MascotSeedReading } from "./mascotWords.js";

@@ -131,10 +131,13 @@ export default function RootLayout({
         </Providers>
         <Analytics />
         {/* Chirio's board widget, filling the header's Feedback and What's new
-            drawer (FeedbackButtons), so it draws no button of its own. */}
+            drawer (FeedbackButtons), so it draws no button of its own. The
+            token URL is once-ui.com's: someone signed in there gets pin
+            feedback here too. */}
         <Script
           src={`${feedback.chirio}/board-widget.js`}
           data-board={feedback.board}
+          data-token-url={feedback.tokenUrl}
           data-launcher="false"
           strategy="afterInteractive"
         />

@@ -1,5 +1,6 @@
 import type React from "react";
 import styles from "./Mascot.module.scss";
+import type { OutlineMeasure } from "./mascotOutline.js";
 
 /*
  * Built-in accessories: chunky, flat, chibi pieces that fit any body the
@@ -35,7 +36,10 @@ export const MASCOT_ACCESSORIES: readonly MascotAccessory[] = [
 export const isMascotAccessory = (value: unknown): value is MascotAccessory =>
   typeof value === "string" && (MASCOT_ACCESSORIES as readonly string[]).includes(value);
 
-/** The body as accessories see it: a superellipse around (100, 104). */
+/**
+ * The body as accessories see it: a superellipse around (100, `cy`), or the
+ * measured outline of a drawn body, which wins where it is given.
+ */
 export interface AccessoryBody {
   /** Half the width. */
   a: number;
@@ -43,7 +47,13 @@ export interface AccessoryBody {
   b: number;
   /** Superellipse exponent: 2 is an ellipse, higher is squarer. */
   n: number;
+  /** The body's vertical middle, 104 by default. */
+  cy?: number;
+  /** A drawn body's real outline, so pieces sit on it instead of on a guessed ellipse. */
+  outline?: OutlineMeasure;
 }
+
+const middle = (body: AccessoryBody) => body.cy ?? 104;
 
 const INK = "#1b1e24";
 const GLASS = "#f4f7fb";
@@ -63,8 +73,10 @@ const TINT: Record<MascotAccessory, string> = {
 
 /** Where the top of the body is, `dx` from the middle (positive is right). */
 function topAt(body: AccessoryBody, dx: number): number {
+  const measured = body.outline?.topAt(100 + dx);
+  if (measured !== undefined) return measured;
   const t = Math.min(1, Math.abs(dx) / body.a);
-  return 104 - body.b * (1 - t ** body.n) ** (1 / body.n);
+  return middle(body) - body.b * (1 - t ** body.n) ** (1 / body.n);
 }
 
 /** The normal pointing out of the top edge at `dx`, as an angle in degrees from straight up. */
@@ -76,7 +88,9 @@ function tiltAt(body: AccessoryBody, dx: number): number {
 
 /** Half the body's width at height `y`. */
 function halfWidthAt(body: AccessoryBody, y: number): number {
-  const t = Math.min(1, Math.abs(y - 104) / body.b);
+  const span = body.outline?.spanAt(y);
+  if (span) return Math.max(100 - span[0], span[1] - 100);
+  const t = Math.min(1, Math.abs(y - middle(body)) / body.b);
   return body.a * (1 - t ** body.n) ** (1 / body.n);
 }
 
@@ -192,7 +206,8 @@ function draw(kind: MascotAccessory, body: AccessoryBody, tint: string): Layers 
     case "beanie": {
       // A knit hat pulled well down: it follows the head's own outline to just
       // above the eyes, with a folded cuff and a pompom.
-      const hem = 104 - body.b * 0.36;
+      const cy = middle(body);
+      const hem = cy - body.b * 0.36;
       const cuff = 17 * s;
       const pad = 4;
       const lift = 12 * s;
@@ -202,7 +217,7 @@ function draw(kind: MascotAccessory, body: AccessoryBody, tint: string): Layers 
         const cos = Math.cos(t);
         const sin = Math.sin(t);
         const x = 100 + (body.a + pad) * Math.sign(cos) * Math.abs(cos) ** (2 / body.n);
-        let y = 104 + (body.b + pad) * Math.sign(sin) * Math.abs(sin) ** (2 / body.n);
+        let y = cy + (body.b + pad) * Math.sign(sin) * Math.abs(sin) ** (2 / body.n);
         if (y > hem) continue;
         const k = (x - 100) / (body.a + pad);
         y -= lift * Math.max(0, 1 - k * k);
@@ -229,7 +244,7 @@ function draw(kind: MascotAccessory, body: AccessoryBody, tint: string): Layers 
       // reads on dark and light surfaces alike, and big rounded cups.
       const cupW = 24 * c * 0.8;
       const cupH = 44 * c * 0.8;
-      const cupY = 100;
+      const cupY = middle(body) - 4;
       const reach = halfWidthAt(body, cupY) + cupW * 0.28;
       const bandW = 13 * s;
       const arcTop = top - 12 * s;
@@ -278,9 +293,9 @@ function draw(kind: MascotAccessory, body: AccessoryBody, tint: string): Layers 
 
     case "helmet": {
       const r = Math.max(body.a, body.b) + 14;
-      const cy = 100;
+      const cy = middle(body) - 4;
       const collarW = body.a * 1.15;
-      const collarY = 104 + body.b - 4;
+      const collarY = middle(body) + body.b - 4;
       return {
         back: <circle cx={100} cy={cy} r={r} fill={GLASS} opacity={0.12} />,
         front: (
@@ -339,7 +354,12 @@ function draw(kind: MascotAccessory, body: AccessoryBody, tint: string): Layers 
         const x = 100 + dx;
         const y = topAt(body, dx) + 10;
         const angle = tiltAt(body, dx) + side * 8;
-        const outer = `M${x - 20 * s} ${y} Q${x - 10 * s} ${y - 40 * s} ${x} ${y - 38 * s} Q${x + 10 * s} ${y - 40 * s} ${x + 20 * s} ${y}Z`;
+        // The ear grows out of the head: its base reaches down past the outline
+        // under both of its corners, behind the body, so no gap shows on a
+        // narrow, egg or blocky head where the top falls away to the sides.
+        const half = 20 * s;
+        const root = Math.max(y, topAt(body, dx - half) + 12, topAt(body, dx + half) + 12) + 4 * s;
+        const outer = `M${x - half} ${root} L${x - half} ${y} Q${x - 10 * s} ${y - 40 * s} ${x} ${y - 38 * s} Q${x + 10 * s} ${y - 40 * s} ${x + half} ${y} L${x + half} ${root}Z`;
         const inner = `M${x - 10 * s} ${y - 6} Q${x - 5 * s} ${y - 30 * s} ${x} ${y - 29 * s} Q${x + 5 * s} ${y - 30 * s} ${x + 10 * s} ${y - 6}Z`;
         return (
           <g key={side} transform={`rotate(${angle} ${x} ${y})`}>

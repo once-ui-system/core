@@ -12,7 +12,7 @@ import { ChartPlot } from "./ChartPlot.js";
 import { ChartStatus } from "./ChartStatus.js";
 import type { ChartProps, ChartVariant, DataPoint, SeriesKey } from "./interfaces.js";
 import { PiePlot } from "./PiePlot.js";
-
+import { toChartDate } from "./utils/chartDate.js";
 import { chartFormatters } from "./utils/chartSeries.js";
 
 export interface PieChartProps<T extends object = DataPoint> extends Omit<ChartProps<T>, "xKey"> {
@@ -28,6 +28,13 @@ export interface PieChartProps<T extends object = DataPoint> extends Omit<ChartP
   /** The row key that names each slice. */
   nameKey?: SeriesKey<T>;
   origo?: { x: number; y: number };
+  /**
+   * Room between a ring's slices, in px, and the radius their corners round
+   * by. A ring (`ring.inner` above 0) draws with a 2px gap and 4px corners;
+   * set both to 0 for touching, square slices. A full pie ignores them.
+   */
+  gap?: number;
+  cornerRadius?: number;
 }
 
 const PieChart = ({
@@ -46,6 +53,8 @@ const PieChart = ({
   border = "neutral-alpha-weak",
   variant: variantProp,
   ring = { inner: 0, outer: 80 },
+  gap = 2,
+  cornerRadius = 4,
   dataKey = "value",
   nameKey = "name",
   valueFormat,
@@ -96,7 +105,8 @@ const PieChart = ({
           return true;
         }
 
-        const itemDate = typeof item.date === "string" ? new Date(item.date) : item.date;
+        const itemDate = toChartDate(item.date);
+        if (!itemDate) return true;
 
         return itemDate >= selectedDateRange.startDate && itemDate <= selectedDateRange.endDate;
       } catch (e) {
@@ -166,6 +176,8 @@ const PieChart = ({
             date={date}
             formatValue={format.tooltip}
             ring={ring}
+            gap={gap}
+            cornerRadius={cornerRadius}
             origo={origo}
             gradientId={getGradientId}
           />

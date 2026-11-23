@@ -187,11 +187,18 @@ describe("stacking", () => {
     );
     const bars = shapes(container);
     expect(bars).toHaveLength(6);
-    // Jan's two bars share a slot: the store bar (rounded 6px at its top
-    // corners) starts where the square web bar does.
+    // Jan's two bars share a slot: each segment rounds on its own, so both
+    // paths start 6px in from the same left edge.
     const janWeb = numbers(bars[0].getAttribute("d"));
     const janStore = numbers(bars[3].getAttribute("d"));
-    expect(janStore[0] - 6).toBeCloseTo(janWeb[0], 5);
+    expect(janStore[0]).toBeCloseTo(janWeb[0], 5);
+    // A 2px gap separates them: the web bar's top sits 2px below the store
+    // bar's bottom, which is the store path's lowest y.
+    const pairs = (d: string | null) =>
+      [...(d ?? "").matchAll(/(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/g)].map((m) => Number(m[2]));
+    const webTop = pairs(bars[0].getAttribute("d"))[0];
+    const storeBottom = Math.max(...pairs(bars[3].getAttribute("d")));
+    expect(webTop - storeBottom).toBeCloseTo(2, 1);
   });
 
   it("fills a percent stack to the top of the plot", () => {

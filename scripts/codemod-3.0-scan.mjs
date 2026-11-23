@@ -74,6 +74,7 @@ export function objectEntries(text) {
       continue;
     }
     let key;
+    const keyAt = i;
     if (/["']/.test(text[i])) {
       const close = skipLexeme(text, i);
       key = text.slice(i + 1, close - 1);
@@ -91,7 +92,10 @@ export function objectEntries(text) {
     let valueAt = i;
     if (key !== null && text[i] === ":") valueAt = i + 1;
     else if (key !== null && (text[i] === "," || i >= end)) {
-      entries.push({ key, value: key, at: valueAt - key.length, end: valueAt, shorthand: true });
+      // The key's own span: whitespace before the comma or the closing brace
+      // (`{ message, variant }`) is not part of it, and counting back from
+      // there by the key's length cut its first letter off ("vtone").
+      entries.push({ key, value: key, at: keyAt, end: keyAt + key.length, shorthand: true });
       continue;
     } else if (key !== null) opaque = true; // a method or a getter
     let j = valueAt;

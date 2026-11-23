@@ -1,0 +1,284 @@
+---
+title: "RichTextEditor"
+summary: "A rich-text field with a toolbar, keyboard shortcuts and Markdown shortcuts. Its value is HTML."
+updatedAt: "2026-11-19"
+docs: "once-ui/modules/richTextEditor.mdx"
+github: "modules/richtext/RichTextEditor.tsx"
+navLabel: "RichTextEditor"
+navIcon: "modules"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+`RichTextEditor` is a form field for formatted text: bold, italic, headings, lists and links. People format with the toolbar, the usual shortcuts (Mod-B, Mod-I) or Markdown as they type (`## `, `- `, `1. `, `> `). The value is HTML. It is built on TipTap, which loads only when an editor renders.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <RichTextEditor
+      label="Notes"
+      placeholder="Write a note for the team"
+      defaultValue="<p>Kickoff with <strong>Northwind Studio</strong> moved to Thursday.</p><ul><li>Bring the brand board</li><li>Confirm the delivery dates</li></ul>"
+    />
+  }
+  codes={[
+    {
+      code:
+`import { RichTextEditor } from "@once-ui-system/core/richtext";
+
+<RichTextEditor
+  label="Notes"
+  placeholder="Write a note for the team"
+  defaultValue="<p>Kickoff with <strong>Northwind Studio</strong> moved to Thursday.</p>"
+/>`,
+      language: "tsx",
+      label: "RichTextEditor"
+    }
+  ]}
+/>
+
+## Installation
+
+`RichTextEditor` has its own entry point, `@once-ui-system/core/richtext`, so apps that do not use it do not load it.
+
+```tsx
+import { RichTextEditor } from "@once-ui-system/core/richtext";
+```
+
+It needs TipTap 3, which is an optional peer dependency of `@once-ui-system/core`. Install it in the app that renders the editor:
+
+```bash
+npm install @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extensions
+```
+
+Without these packages the editor renders a notice that names the missing dependency, and logs the install command to the console.
+
+The editor mounts on the client only. On the server, and until TipTap has loaded, it renders an empty frame of the same height, so the page does not shift.
+
+## Value
+
+The value is the document as HTML. `defaultValue` sets the starting document for an uncontrolled editor. For a controlled one, pass `value` and `onValueChange`, which runs on every change. An empty document is `""`, not `"<p></p>"`, so a required check can test for an empty string.
+
+The editor does not sanitize HTML. Run the saved HTML through your sanitizer before you show it anywhere else.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<RichTextEditorControlledExample />}
+  codes={[
+    {
+      code:
+`const [html, setHtml] = useState(
+  "<p>Hi Ada,</p><p>The <strong>first draft</strong> is ready for review.</p>",
+);
+
+<RichTextEditor
+  label="Message"
+  value={html}
+  onValueChange={setHtml}
+  maxHeight="16rem"
+/>`,
+      language: "tsx",
+      label: "Controlled"
+    }
+  ]}
+/>
+
+## Toolbar
+
+`tools` sets the toolbar's buttons, in the order given. The default is bold, italic, heading, bulleted list, numbered list, link, undo and redo. `underline`, `strike` and `code` are also available. The heading button toggles a level 2 heading, and `### ` typed at the start of a line makes a level 3 heading.
+
+`tools={false}` hides the toolbar. The keyboard shortcuts and Markdown shortcuts still work.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="24">
+      <RichTextEditor
+        label="Comment"
+        tools={["bold", "italic", "underline", "strike", "code", "link"]}
+        minHeight="5rem"
+        placeholder="Add a comment"
+      />
+      <RichTextEditor
+        label="Quick note"
+        tools={false}
+        minHeight="4rem"
+        placeholder="Type ## for a heading or - for a list"
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<RichTextEditor
+  label="Comment"
+  tools={["bold", "italic", "underline", "strike", "code", "link"]}
+  minHeight="5rem"
+  placeholder="Add a comment"
+/>
+
+<RichTextEditor
+  label="Quick note"
+  tools={false}
+  minHeight="4rem"
+  placeholder="Type ## for a heading or - for a list"
+/>`,
+      language: "tsx",
+      label: "Tools"
+    }
+  ]}
+/>
+
+The link button opens an address field under the toolbar. An address without a scheme gets `https://`. Addresses with `mailto:`, `tel:`, a leading `/` or `#` are kept as typed, and any other scheme, `javascript:` included, is refused. On a link, the same button removes it.
+
+## Size
+
+`minHeight` is the writing area's least height, as a CSS length, and defaults to `"8rem"`. With `maxHeight`, the writing area scrolls once the document is taller.
+
+## In a Field
+
+Inside a `Field`, leave out `label`. The Field's label names the editor, and its `hint` and `error` describe it. While `error` is set, the editor draws its invalid look. Give the editor an `id`, or the Field gives it one.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<RichTextEditorFieldExample />}
+  codes={[
+    {
+      code:
+`const [html, setHtml] = useState("");
+const [submitted, setSubmitted] = useState(false);
+
+<Field
+  label="Project summary"
+  hint="A few lines the client sees at the top of the project."
+  error={submitted && !html ? "Write a short summary before you send it." : undefined}
+  required
+>
+  <RichTextEditor
+    id="project-summary"
+    value={html}
+    onValueChange={setHtml}
+    placeholder="What is this project about?"
+  />
+</Field>`,
+      language: "tsx",
+      label: "Field"
+    }
+  ]}
+/>
+
+## Read-only and disabled
+
+`readOnly` shows the document without the toolbar, and the text can still be selected and copied. `disabled` also hides the toolbar and draws the field dimmed. Neither can be edited.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <RichTextEditor
+      label="Agreed scope"
+      readOnly
+      minHeight="4rem"
+      defaultValue="<p>Two rounds of revisions, then <em>final files</em> in SVG and PNG.</p>"
+    />
+  }
+  codes={[
+    {
+      code:
+`<RichTextEditor
+  label="Agreed scope"
+  readOnly
+  minHeight="4rem"
+  defaultValue="<p>Two rounds of revisions, then <em>final files</em> in SVG and PNG.</p>"
+/>`,
+      language: "tsx",
+      label: "Read-only"
+    }
+  ]}
+/>
+
+## Language
+
+`labels` translates the toolbar's name and each button's name. Fields you leave out stay in English.
+
+```tsx
+<RichTextEditor
+  label="Jegyzet"
+  labels={{
+    toolbar: "Formázás",
+    bold: "Félkövér",
+    italic: "Dőlt",
+    heading: "Címsor",
+    bulletList: "Felsorolás",
+    orderedList: "Számozott lista",
+    link: "Hivatkozás",
+    unlink: "Hivatkozás törlése",
+    undo: "Visszavonás",
+    redo: "Újra",
+    linkUrl: "Hivatkozás címe",
+    apply: "Alkalmaz",
+  }}
+/>
+```
+
+## Accessibility
+
+- The writing area has `role="textbox"` and `aria-multiline="true"`. Name it with `label`, `aria-label` or `aria-labelledby`, or put it inside a `Field`. A `<label>` cannot name an editable region, so with `label` or a Field the editor points at the label with `aria-labelledby`.
+- `aria-describedby`, `aria-invalid` and `aria-required` are passed to the writing area. A Field sets them for you.
+- `readOnly` and `disabled` set `aria-readonly` and `aria-disabled`.
+- The toolbar has `role="toolbar"` and is named by `labels.toolbar` ("Formatting" by default). Each button is named by its label, which is also its `title`. Format buttons report their state with `aria-pressed`, and the link button reports the address field with `aria-expanded`.
+- In the address field, Enter applies the link and Escape closes the field.
+- `autoFocus` moves focus into the editor when it mounts, with the cursor at the end. Use it only where the editor is the reason the page or dialog opened.
+
+## API reference
+
+RichTextEditor also takes the layout and style props of `Column` (`margin`, `fillWidth`, `className`, `style` and the rest), except `children`, `onChange`, `defaultValue`, `id`, `aria-label`, `minHeight` and `maxHeight`, which it defines itself.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `id` | `string` | generated | The writing area's id. Inside a `Field`, the Field gives it. |
+| `value` | `string` | | The document as HTML, controlled. An empty document is `""`. |
+| `defaultValue` | `string` | | The starting document as HTML, uncontrolled. |
+| `onValueChange` | `(html: string) => void` | | Called with the HTML on every change, `""` once the document is empty. |
+| `label` | `ReactNode` | | A visible label above the editor. Leave it out inside a `Field`. |
+| `placeholder` | `string` | | Shown while the document is empty. |
+| `tools` | `RichTextTool[] \| false` | bold, italic, heading, bulletList, orderedList, link, undo, redo | The toolbar's buttons in order, or `false` for none. |
+| `disabled` | `boolean` | `false` | Not editable, dimmed, no toolbar. |
+| `readOnly` | `boolean` | `false` | Not editable, no toolbar. |
+| `minHeight` | `string` | `"8rem"` | The writing area's least height, as a CSS length. |
+| `maxHeight` | `string` | | The writing area scrolls past this height, as a CSS length. |
+| `autoFocus` | `boolean` | `false` | Focus the editor when it mounts. |
+| `labels` | `Partial<RichTextEditorLabels>` | English | The toolbar's and buttons' names, for a translated interface. |
+| `aria-label` | `string` | | Names the editor when there is no visible label. |
+| `aria-labelledby` | `string` | | The id of the element that names the editor. |
+| `aria-describedby` | `string` | | The ids of elements that describe the editor. |
+| `aria-invalid` | `boolean \| "true" \| "false"` | | Marks the value invalid and draws the invalid look. |
+| `aria-required` | `boolean \| "true" \| "false"` | | Marks the field required. |
+
+### RichTextTool
+
+`"bold" | "italic" | "underline" | "strike" | "code" | "heading" | "bulletList" | "orderedList" | "link" | "undo" | "redo"`
+
+### RichTextEditorLabels
+
+| Field | Default |
+| --- | --- |
+| `toolbar` | `"Formatting"` |
+| `bold` | `"Bold"` |
+| `italic` | `"Italic"` |
+| `underline` | `"Underline"` |
+| `strike` | `"Strikethrough"` |
+| `code` | `"Code"` |
+| `heading` | `"Heading"` |
+| `bulletList` | `"Bulleted list"` |
+| `orderedList` | `"Numbered list"` |
+| `link` | `"Link"` |
+| `unlink` | `"Remove link"` |
+| `undo` | `"Undo"` |
+| `redo` | `"Redo"` |
+| `linkUrl` | `"Link address"` |
+| `apply` | `"Apply"` |
