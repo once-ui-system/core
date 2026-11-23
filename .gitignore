@@ -55,3 +55,4 @@ packages/core/src/styles/breakpoints.scss
 packages/core/src/styles/touch.scss
 packages/core/src/styles/glow.scss
 packages/core/src/styles/density.scss
+packages/core/src/styles/nearest-theme.scss

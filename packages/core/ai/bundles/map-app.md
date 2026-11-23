@@ -40,7 +40,7 @@ Static panel recipe (pricing tiers, stats, settings sections):
 
 - Bare `border`/`borderTop` = the default border. Name a colour only to deviate: `border="brand-alpha-medium"`.
 - `Card` = interactive only (`href` or `onClick`). Static panels = Column + surface recipe.
-- Colors: `{tone}-{weight}` or `{tone}-alpha-{weight}`. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`.
+- Colors: `{tone}-{weight}` or `{tone}-alpha-{weight}`. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`. Hex only in seeds (`brandSeed`, `pageBackground`, a Mascot's `color`) and in artwork: a hero scene's cast, props and textures, in classes named for what they draw, in one sheet scoped under the page class.
 - `background` also: `surface | overlay | page | transparent`
 - Same-shaped records: one surface, divided rows (`borderTop={i > 0}`), or a `Table` (row link: a link in a `cell`, not `onRowClick`); never a card per row
 - One raised `surface` for content on `page`; sections inside are spacing + `borderTop`, not grey cards
@@ -66,7 +66,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 - Gradient `width`: quarter-percent (400 = 100%). Glows: 100–200.
 - Glow colors: `brand-alpha-medium`, not `brand-background-weak`
 - Ambient layers on full-bleed section wrapper, outside `maxWidth` column
-- Budget: one ambient layer per section; motion in hero + one CTA max
+- Budget: one ambient layer per section; motion in hero + one CTA max. A hero scene that shows the product's work is artwork, outside this budget
 
 ### Motion
 
@@ -527,6 +527,7 @@ type BaseColor = Colors | "page" | "surface" | "overlay" | "transparent"
 type BlendMode = "color" | "screen" | "normal" | "multiply" | "overlay" | "darken" | "lighten" | "difference" | "exclusion" | "hue" | "saturation" | "luminosity" | `color-${"dodge" | "burn"}` | "hard-light" | "soft-light" | "plus-lighter"
 type BlurSize = "s" | "xl" | "l" | "m" | "xs"
 type BorderStyle = "rounded" | "conservative" | "playful" | "sharp"
+type BuiltInIconName = keyof typeof iconData
 type ButtonOption = LeafProps & { value: string; description?: ReactNode; label?: ReactNode; children?: ReactNode; horizontal?: "start" | "center" | "end" | "between"; radius?: RadiusSize; href?: string; disabled?: boolean; size?: TShirtSizes; corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"; variant?: "ghost" | "outline" | "subtle"; tone?: Tone; weight?: "default" | "strong"; rounded?: boolean; prefixIcon?: IconName; suffixIcon?: IconName; truncate?: boolean }
 // type ButtonVariant is one of these strings: link ghost subtle primary secondary tertiary
 type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}ch` | `${number}%` | `${number}vh` | `${number}vw` | `${number}dvh` | `${number}dvw` | `${number}svh` | `${number}svw` | `${number}lvh` | `${number}lvw` | `${number}vmin` | `${number}vmax` | `${number}cqw` | `${number}cqh` | `calc(${string})` | `min(${string})` | `max(${string})` | `clamp(${string})` | `var(${string})`
@@ -537,13 +538,12 @@ type CursorPresetValue = "rounded" | "dot" | "system" | "soft"
 // type FieldSize is one of these strings: s xl l m xs xxs
 // type FlexBreakpointProps: an object of these Flex props, all optional (padding* is padding, paddingX, paddingTop and the rest):
 // center style direction horizontal vertical wrap flex textVariant background solid border* radius shadow padding* margin* gap top right bottom left width height maxWidth minWidth minHeight maxHeight fit* fill* aspectRatio onBackground onSolid align hide pointerEvents position overflow* scrollbar transition opacity zIndex
-// type FlexValue is one of these strings: 0 1 10 2 3 4 9 12 5 8 6 7 11
+// type FlexValue is one of these strings: 0 1 2 3 4 8 12 5 6 7 9 10 11
 // type GridBreakpointProps: an object of these Grid props, all optional (padding* is padding, paddingX, paddingTop and the rest):
 // style textVariant background solid border* radius shadow padding* margin* gap top right bottom left width height maxWidth minWidth minHeight maxHeight fit* fill* aspectRatio onBackground onSolid align hide pointerEvents position overflow* scrollbar transition opacity zIndex columns rows
-// type GridSize is one of these strings: 1 10 2 3 4 9 12 5 8 6 7 11
+// type GridSize is one of these strings: 1 2 3 4 8 12 5 6 7 9 10 11
 type IconButtonProps = IconButton props
-// type IconName is one of these names, and only these:
-// symbol code link menu search time video filter image security opacity download info danger warning adjustments arrowDown arrowLeft arrowRight arrowUp arrowUpRight ball banknotes barChart bell bolt book bookmark calendar cart chat check checkbox chevronDoubleLeft chevronDoubleRight chevronDown chevronLeft chevronRight chevronUp chevronsLeftRight clipboard close computer copy cube dark dislike document edit enter eye eyeDropper eyeOff file flag folder food forward gift globe grid grip heart help home inbox light like linearGauge lock logout mail mapPin maximize minimize minus moreHorizontal newspaper organization pause paw payment people person personRemove phone play plus radialGauge refresh return screen send settings smiley sparkle star starFill store tag trash trend trendDown trendUp upload volume volumeOff wordmark world
+type IconName = BuiltInIconName | Extract<keyof IconLibraryOverrides, string>
 type LegacyToast = { variant?: Tone; tone?: Tone; children?: ReactNode; message?: ReactNode; action?: ReactNode; duration?: number }
 type LngLat = { [key: number]?: number }
 type LogoSource = "string" | { light: string; dark: string; }
@@ -564,9 +564,9 @@ type ScrollerAuto = { speed?: Speed; hover?: "slow" | "pause" | "none"; reverse?
 type ScrollerLabels = { previous?: string; next?: string }
 type ShadowSize = "s" | "xl" | "l" | "m" | "xs"
 type SolidType = "color" | "contrast" | "inverse"
-// type SpacingToken is one of these strings: s xl l m xs 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
+// type SpacingToken is one of these strings: s xl l m xs 0 1 2 4 8 12 16 20 24 32 40 48 56 64 72 80 104 128 160
 type Speed = "number" | "medium" | "slow" | "fast"
-// type StaticSpacingToken is one of these strings: 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
+// type StaticSpacingToken is one of these strings: 0 1 2 4 8 12 16 20 24 32 40 48 56 64 72 80 104 128 160
 // type StatusIndicatorScheme is one of these strings: blue indigo violet magenta pink red orange yellow moss green emerald aqua cyan slate sand gray rose mint dusk
 type SurfaceStyle = "filled" | "translucent"
 type TShirtSizes = "s" | "xl" | "l" | "m" | "xs"
@@ -595,6 +595,7 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - Positions are [longitude, latitude], not [lat, lng]. Map needs a height (or fill inside a sized parent); it shadows the global Map, so import it as another name in a file that also uses new Map().
 - A Button in a form that should submit it needs type="submit": with neither onClick, href nor type it renders a div, unlike a native <button>.
 - Show a field's error after it is blurred or the form is submitted, never on open: keep a touched flag per field and pass errorMessage={touched.email ? errors.email : undefined}. A form or Dialog that opens with red required-field errors reads as broken.
+- A display face reaches Heading only through --font-heading: load it with next/font as variable: "--font-x", put that class on the StyleScope or above it, and pass fonts={{ heading: "var(--font-x)" }}. Never heading: "var(--font-heading)" (a variable that names itself is invalid, and headings fall back to the body sans). Check the first screenshot: are the headings in the display face?
 
 ## Quality bar
 

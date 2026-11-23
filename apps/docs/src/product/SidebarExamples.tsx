@@ -40,7 +40,7 @@ function Frame({
   return (
     // The docs page is not an app: no ⌘B, and no drawer below `s`.
     <SidebarProvider shortcut={false} mobileBelow={false}>
-      <Column fillWidth height={28} border="neutral-alpha-weak" radius="l" overflow="hidden">
+      <Column fillWidth height={448} border="neutral-alpha-weak" radius="l" overflow="hidden">
         <Row height="48" vertical="center" gap="8" paddingX="8">
           <SidebarTrigger />
           <Text textVariant="label-default-s" onBackground="neutral-weak">

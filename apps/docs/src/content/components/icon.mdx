@@ -1,7 +1,7 @@
 ---
 title: "Icon"
 summary: "The Icon component displays an icon with various styles and sizes."
-updatedAt: "2026-09-13"
+updatedAt: "2026-11-19"
 docs: "once-ui/components/icon.mdx"
 github: "components/Icon.tsx"
 navLabel: "Icon"
@@ -149,51 +149,50 @@ By default, icons are considered decorative and hidden from screen readers. Use 
 
 ## Icon library
 
-Once UI ships its own icons — the SVG data is inlined in the package, so no
-icon dependency is installed with it. 76 names are built in, covering
-everything the components themselves render.
+Once UI ships its own icons: 178 names drawn in one line style. The SVG data is
+inlined in the package, so no icon dependency is installed with it.
 
 `name` is typed as `IconName`, a union of those names, so a typo is a build
-error rather than a blank space at runtime. To add your own icons — from
+error rather than a blank space at runtime. To add your own icons, from
 [react-icons](https://react-icons.github.io/react-icons/), another set, or
-hand-written SVG — and to extend that union with them, see
+hand-written SVG, and to extend that union with them, see
 [IconProvider](/contexts/iconProvider).
+
+Search the full set below. Click an icon to copy its name.
+
+<IconGallery />
+
+The same list is exported as `iconLibrary`, and `BuiltInIconName` is the type of
+its keys, if you need to build your own picker:
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  preview={
-    <Row gap="16" wrap horizontal="center" fillWidth>
-      <Icon name="check" />
-      <Icon name="chevronDown" />
-      <Icon name="chevronRight" />
-      <Icon name="chevronLeft" />
-      <Icon name="danger" />
-      <Icon name="info" />
-      <Icon name="warning" />
-      <Icon name="close" />
-      <Icon name="plus" />
-      <Icon name="refresh" />
-    </Row>
-  }
   codes={[
     {
       code:
-`<Icon name="chevronDown" />
-<Icon name="chevronRight" />
-<Icon name="chevronLeft" />
-<Icon name="check" />
-<Icon name="danger" />
-<Icon name="info" />
-<Icon name="warning" />
-<Icon name="close" />
-<Icon name="plus" />
-<Icon name="refresh" />`,
+`import { iconLibrary, type BuiltInIconName } from "@once-ui-system/core";
+
+const names = Object.keys(iconLibrary) as BuiltInIconName[];`,
       language: "tsx",
-      label: "Common icons"
+      label: "List the icons"
     }
   ]}
 />
+
+### Coming from 2.x
+
+The icons were redrawn for 3.0 under the same names, and two of them now draw
+something else:
+
+| Name | 2.x drew | 3.0 draws | To keep the 2.x look |
+| --- | --- | --- | --- |
+| `check` | a check in a circle | the plain check mark | `checkCircle` |
+| `checkbox` | the plain check mark | a ticked box | `check` |
+
+`document` now draws a page, and `text` draws the lines it used to. The 3.0
+codemod reports every use of these names without rewriting them. See the
+[migration guide](https://github.com/once-ui-system/core/blob/main/MIGRATING.md#15-icons-are-once-uis-own).
 
 ## API reference
 

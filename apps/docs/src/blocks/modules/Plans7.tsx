@@ -93,6 +93,8 @@ function TierCard({ tier, billing }: { tier: Tier; billing: BillingPeriod }) {
               themeSolid="color"
               pointerEvents="none"
               position="absolute"
+              top="0"
+              left="0"
               fill
               colors={["brand-solid-strong"]}
               size={1.5}
@@ -184,7 +186,12 @@ export const Plans7 = (flex: React.ComponentProps<typeof Column>) => {
         <Heading as="h2" textVariant="display-strong-m" align="center">
           Plans that grow with your product
         </Heading>
-        <Text textVariant="body-default-l" onBackground="neutral-weak" align="center" wrap="balance">
+        <Text
+          textVariant="body-default-l"
+          onBackground="neutral-weak"
+          align="center"
+          wrap="balance"
+        >
           Switch billing anytime. Save 20% when you pay annually.
         </Text>
         <Row gap="12" wrap center>

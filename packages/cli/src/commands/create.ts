@@ -8,6 +8,7 @@ import { x as extract } from "tar";
 import { type ApiClient, CliError, failureFrom, getCatalog } from "../lib/api.js";
 import { packageNameFrom } from "../lib/paths.js";
 import { ask } from "../lib/prompt.js";
+import { brandForCreate, pull } from "./brand.js";
 
 export type CreateFlags = {
   surfaces?: string;
@@ -18,6 +19,13 @@ export type CreateFlags = {
   targets?: string;
   /** Bundle id for the desktop and mobile apps. */
   appId?: string;
+  /** The app's languages, comma-separated, default first: `en,hu`. */
+  locales?: string;
+  /** A saved brand's id, or a description to generate one from (Pro and Indie). */
+  brand?: string;
+  /** With a description: which candidate to keep, instead of asking. */
+  pick?: string;
+  engine?: string;
 };
 
 const split = (value: string | undefined) =>
@@ -47,6 +55,8 @@ export async function create(client: ApiClient, dir: string | undefined, flags: 
     );
   }
 
+  const locales = split(flags.locales);
+
   let surfaces = split(flags.surfaces);
   if (!surfaces.length) {
     const catalog = await getCatalog(client);
@@ -59,6 +69,11 @@ export async function create(client: ApiClient, dir: string | undefined, flags: 
     if (!surfaces.length) throw new CliError("No surfaces chosen.");
   }
 
+  // Settled before the scaffold, so a brand that fails leaves no half-made app.
+  const brandId = flags.brand
+    ? await brandForCreate(client, flags.brand, { pick: flags.pick, engine: flags.engine })
+    : null;
+
   const res = await client.fetch("/api/stack/scaffold", {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -69,6 +84,7 @@ export async function create(client: ApiClient, dir: string | undefined, flags: 
       ...(flags.url ? { url: flags.url } : {}),
       ...(targets.length ? { targets } : {}),
       ...(targets.length && flags.appId ? { appId: flags.appId } : {}),
+      ...(locales.length ? { locales } : {}),
     }),
   });
   if (!res.ok) throw await failureFrom(res);
@@ -85,6 +101,8 @@ export async function create(client: ApiClient, dir: string | undefined, flags: 
     if (created) await rm(target, { recursive: true, force: true });
     throw error;
   }
+
+  if (brandId) await pull(client, brandId, target);
 
   const shown = relative(process.cwd(), target) || ".";
   const release = res.headers.get("x-stack-release");

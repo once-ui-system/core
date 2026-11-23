@@ -54,7 +54,9 @@ export interface MascotPanelProps extends MascotPanelRootProps {
   visibility?: MascotPanelVisibility;
   /**
    * Where the live preview goes: `side` (default) beside the controls, stuck
-   * while they scroll and above them when narrow; `top` above them; `none`
+   * to the top of the scroll box while they scroll (offset it with the
+   * `--mascot-panel-sticky-top` CSS variable, under a fixed header) and above
+   * them when the panel is narrower than 34rem; `top` above them; `none`
    * leaves it to the host.
    */
   preview?: "side" | "top" | "none";
@@ -104,9 +106,11 @@ const MascotPanel = ({
   return (
     <MascotPanelRoot ref={ref} stacked={stacked} {...rest}>
       {preview === "side" && previewSection ? (
-        <div className={styles.layout}>
-          <div className={styles.aside}>{previewSection}</div>
-          {sections}
+        <div className={styles.frame}>
+          <div className={styles.layout}>
+            <div className={styles.aside}>{previewSection}</div>
+            {sections}
+          </div>
         </div>
       ) : (
         <>

@@ -1,3 +1,5 @@
+@use "../styles/nearest-theme.scss" as theme;
+
 /* Field metrics
    ----------------------------------------------------------------------------
    The floating label and the value are placed by where their INK falls — cap
@@ -134,13 +136,18 @@
 /* Light theme: a white field with a firmer edge, as native text fields are.
    The tinted fill that reads as a well in dark mode reads as disabled on a
    light page. Matched on the utility classes the default variant sets, so the
-   ghost variant and the error state below keep their own colours. */
-:global([data-theme="light"]) :not(.error) > .base:global(.neutral-background-alpha-weak) {
-  background-color: var(--neutral-background-weak);
+   ghost variant and the error state below keep their own colours. Light is
+   the field's nearest theme, so a dark scope on a light page keeps the well. */
+:not(.error) > .base:global(.neutral-background-alpha-weak) {
+  @include theme.in-theme(light) {
+    background-color: var(--neutral-background-weak);
+  }
 }
 
-:global([data-theme="light"]) :not(.error) > .base:global(.neutral-border-medium) {
-  border-color: var(--neutral-border-strong);
+:not(.error) > .base:global(.neutral-border-medium) {
+  @include theme.in-theme(light) {
+    border-color: var(--neutral-border-strong);
+  }
 }
 
 @media (hover: none) and (pointer: coarse) {

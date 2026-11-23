@@ -65,6 +65,8 @@ Charts fetch nothing themselves, so the states of a request are props you set fr
   ]}
 />
 
+The chart centres the state and pads it from the frame, so pass content only: a line of text, or an icon above a line. Leave padding off the node you pass, or it adds to the chart's own.
+
 An empty array is not an error: the query ran and matched nothing. That is why `emptyState` and `errorState` are separate. When both `loading` and `error` are false and `data` is empty, the empty state shows.
 
 ## Tooltip and keyboard

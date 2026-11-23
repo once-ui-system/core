@@ -1,8 +1,29 @@
 # Marketing hero
 
-Headline with text effect, CTA pair, social proof logos, background effect
+A product's landing page or hero: find the product's world first; the template hero (text-effect headline, CTA pair, logo cloud, background effect) is one option
 
 This file is complete for this task: the rules (all of `rules.compact.md`), the props, mixins and types of every component below, every gotcha for these components, the quality bar and a gold example. Write the page from it; reading the rules, catalog, gotchas, manifest or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.
+
+## Start here: Brand world (find the world first)
+
+For a product's own landing page or homepage hero. The template hero (a text-effect headline, a CTA pair, a logo cloud, a glow behind it) is what every product has: it is one option, not the default. Make a first screen that would look wrong with a competitor's logo on it.
+
+**Direction card, before any code.** A world is one place the product's work already happens in, taken from what the product does, never from its category (launch videos: a film set at the start of a screening; venue bookings: a kitchen's ticket rail). One line each:
+
+- **World:** the place, in five words. **Vibe:** its light and mood.
+- **Type:** one display face with character (condensed, rounded, serif, extended) and a mono for metadata, never only the default sans.
+- **Palette:** a ground (near-black, a tinted dark, or paper) and ONE hot focal colour; a second only as a small accent.
+- **Layout:** the first screen as a picture. **Cast:** who acts in the scene (a mascot family, or the product's own objects: tickets, posters, cards), each with a job. **Signature motion:** one loop that shows the work happening.
+
+**Write three worlds and pick on purpose.** Drop the name pun (Ember: a fire, a hearth); every model reaches for it first. Drop the house default: a charcoal ground, one orange, a Fraunces headline and a tilted paper card. Prefer the world with the most objects to turn sections into, or show the person all three.
+
+**The first screen is a scene of the work:** believable content (questions and answers, file names, times, prices, statuses) with mono metadata under each item. The headline is a split poster: the plain half in the text colour, the promise in the focal colour, up to 10–12vw, tight leading. Under it, one plain sentence of what the product does and for whom, and a small price or free-plan line.
+
+**Carry the world through the page:** its language in the nav, eyebrows, pricing and closing CTA; each section an object of the world (examples as posters, how-it-works as a storyboard, plans as tickets), not a three-card grid; one texture per section. Cast members keep their proportions: vary size, never scaleX/scaleY.
+
+**Build it with the system.** One `StyleScope` (or the app's config) holds the look: `brandSeed` = the focal colour, `pageBackground`/`surfaceBackground` = the ground, `fonts` with the display face on `heading` and the mono on `code`/`label`, loaded with `next/font`. Re-tune the display tokens inside that scope in one sheet (`--font-size-display-xl: clamp(64px, 12vw, 180px); --line-height-display-xl: 0.8em;`). Layout, type, buttons and lists stay components and props. Custom CSS only for artwork (the cast, the world's props, textures, keyframes): classes named for what they draw (`.emChair`, `.emStrip`) in that one sheet, scoped under the page class, the one place hex is fine. The scene is artwork, outside the one-ambient-layer budget; every other section keeps it.
+
+**Check it like a designer:** screenshot 1440 and 390 wide (the scene still reads on a phone, nothing scrolls sideways); headings really in the display face; a light paper scope really light; the swap test (cover the name: could it be a competitor's?); the category test (does it read as "an AI SaaS landing page"?); the focal colour only on the promise, the primary button and one thing in the scene.
 
 ## Rules
 
@@ -40,7 +61,7 @@ Static panel recipe (pricing tiers, stats, settings sections):
 
 - Bare `border`/`borderTop` = the default border. Name a colour only to deviate: `border="brand-alpha-medium"`.
 - `Card` = interactive only (`href` or `onClick`). Static panels = Column + surface recipe.
-- Colors: `{tone}-{weight}` or `{tone}-alpha-{weight}`. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`.
+- Colors: `{tone}-{weight}` or `{tone}-alpha-{weight}`. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`. Hex only in seeds (`brandSeed`, `pageBackground`, a Mascot's `color`) and in artwork: a hero scene's cast, props and textures, in classes named for what they draw, in one sheet scoped under the page class.
 - `background` also: `surface | overlay | page | transparent`
 - Same-shaped records: one surface, divided rows (`borderTop={i > 0}`), or a `Table` (row link: a link in a `cell`, not `onRowClick`); never a card per row
 - One raised `surface` for content on `page`; sections inside are spacing + `borderTop`, not grey cards
@@ -66,7 +87,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 - Gradient `width`: quarter-percent (400 = 100%). Glows: 100–200.
 - Glow colors: `brand-alpha-medium`, not `brand-background-weak`
 - Ambient layers on full-bleed section wrapper, outside `maxWidth` column
-- Budget: one ambient layer per section; motion in hero + one CTA max
+- Budget: one ambient layer per section; motion in hero + one CTA max. A hero scene that shows the product's work is artwork, outside this budget
 
 ### Motion
 
@@ -236,6 +257,13 @@ Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProp
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 - vert?: boolean
 - style?: React.CSSProperties
+
+### StyleScope
+Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+- config?: StyleScopeConfig = {}
+- fonts?: StyleScopeFonts
+- style?: React.CSSProperties
+- children?: React.ReactNode
 
 ### IconButton
 Mixins: LeafProps.
@@ -445,6 +473,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 type BlendMode = "color" | "screen" | "normal" | "multiply" | "overlay" | "darken" | "lighten" | "difference" | "exclusion" | "hue" | "saturation" | "luminosity" | `color-${"dodge" | "burn"}` | "hard-light" | "soft-light" | "plus-lighter"
 type BlurSize = "s" | "xl" | "l" | "m" | "xs"
 type BorderStyle = "rounded" | "conservative" | "playful" | "sharp"
+type BuiltInIconName = keyof typeof iconData
 // type ButtonVariant is one of these strings: link ghost subtle primary secondary tertiary
 type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}ch` | `${number}%` | `${number}vh` | `${number}vw` | `${number}dvh` | `${number}dvw` | `${number}svh` | `${number}svw` | `${number}lvh` | `${number}lvw` | `${number}vmin` | `${number}vmax` | `${number}cqw` | `${number}cqh` | `calc(${string})` | `min(${string})` | `max(${string})` | `clamp(${string})` | `var(${string})`
 // type ColorScheme is one of these strings: neutral brand accent info danger warning success
@@ -456,33 +485,42 @@ type DotsProps = { display?: boolean; opacity?: DisplayProps["opacity"]; color?:
 // type FieldSize is one of these strings: s xl l m xs xxs
 // type FlexBreakpointProps: an object of these Flex props, all optional (padding* is padding, paddingX, paddingTop and the rest):
 // center style direction horizontal vertical wrap flex textVariant background solid border* radius shadow padding* margin* gap top right bottom left width height maxWidth minWidth minHeight maxHeight fit* fill* aspectRatio onBackground onSolid align hide pointerEvents position overflow* scrollbar transition opacity zIndex
-// type FlexValue is one of these strings: 0 1 10 2 3 4 9 12 5 8 6 7 11
+// type FlexValue is one of these strings: 0 1 2 3 4 8 12 5 6 7 9 10 11
 type GradientProps = { display?: boolean; opacity?: DisplayProps["opacity"]; x?: number | CSSUnit; y?: number | CSSUnit; width?: number | CSSUnit; height?: number | CSSUnit; tilt?: number; colorStart?: ColorValue; colorEnd?: ColorValue }
 // type GridBreakpointProps: an object of these Grid props, all optional (padding* is padding, paddingX, paddingTop and the rest):
 // style textVariant background solid border* radius shadow padding* margin* gap top right bottom left width height maxWidth minWidth minHeight maxHeight fit* fill* aspectRatio onBackground onSolid align hide pointerEvents position overflow* scrollbar transition opacity zIndex columns rows
-// type GridSize is one of these strings: 1 10 2 3 4 9 12 5 8 6 7 11
+// type GridSize is one of these strings: 1 2 3 4 8 12 5 6 7 9 10 11
 type IconButtonProps = IconButton props
-// type IconName is one of these names, and only these:
-// symbol code link menu search time video filter image security opacity download info danger warning adjustments arrowDown arrowLeft arrowRight arrowUp arrowUpRight ball banknotes barChart bell bolt book bookmark calendar cart chat check checkbox chevronDoubleLeft chevronDoubleRight chevronDown chevronLeft chevronRight chevronUp chevronsLeftRight clipboard close computer copy cube dark dislike document edit enter eye eyeDropper eyeOff file flag folder food forward gift globe grid grip heart help home inbox light like linearGauge lock logout mail mapPin maximize minimize minus moreHorizontal newspaper organization pause paw payment people person personRemove phone play plus radialGauge refresh return screen send settings smiley sparkle star starFill store tag trash trend trendDown trendUp upload volume volumeOff wordmark world
+type IconName = BuiltInIconName | Extract<keyof IconLibraryOverrides, string>
 type LegacyToast = { variant?: Tone; tone?: Tone; children?: ReactNode; message?: ReactNode; action?: ReactNode; duration?: number }
 type LinesProps = { display?: boolean; opacity?: DisplayProps["opacity"]; size?: SpacingToken; thickness?: number; angle?: number; color?: ColorValue }
 type LogoProps = Logo props
 type MaskProps = Mask props
+// type NeutralColor is one of these strings: slate sand gray rose mint dusk
 // type Opacity is one of these strings: 0 10 20 30 40 50 60 70 80 90 100
 type RadiusNest = "4" | "8"
 // type RadiusSize is one of these strings: s xl l m xs none full
+// type SchemeRampWeight is one of these strings: 100 1200 200 300 400 500 600 700 800 900 1000 1100
+type SchemeScale = Partial< Record<SchemeRampWeight | "600-15" | "600-30" | "600-50", string> >
+type SchemeScaleByTheme = { light?: SchemeScale; dark?: SchemeScale }
+// type Schemes is one of these strings: blue indigo violet magenta pink red orange yellow moss green emerald aqua cyan
 type ShadowSize = "s" | "xl" | "l" | "m" | "xs"
+type SolidStyle = "flat" | "plastic" | "glow"
 type SolidType = "color" | "contrast" | "inverse"
-// type SpacingToken is one of these strings: s xl l m xs 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
+// type SpacingToken is one of these strings: s xl l m xs 0 1 2 4 8 12 16 20 24 32 40 48 56 64 72 80 104 128 160
 type Speed = "number" | "medium" | "slow" | "fast"
-// type StaticSpacingToken is one of these strings: 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
+// type StaticSpacingToken is one of these strings: 0 1 2 4 8 12 16 20 24 32 40 48 56 64 72 80 104 128 160
 // type StatusIndicatorScheme is one of these strings: blue indigo violet magenta pink red orange yellow moss green emerald aqua cyan slate sand gray rose mint dusk
+type StyleScopeConfig = { solid?: SolidType; border?: BorderStyle; neutral?: NeutralColor | "custom"; brand?: Schemes | "custom"; accent?: Schemes | "custom"; surface?: SurfaceStyle; solidStyle?: SolidStyle; brandSeed?: string; accentSeed?: string; neutralSeed?: string; brandScale?: ThemedSchemeScale; accentScale?: ThemedSchemeScale; neutralScale?: ThemedSchemeScale; pageBackground?: ThemeColor; surfaceBackground?: ThemeColor; theme?: "light" | "dark" | "invert" | "system" }
+type StyleScopeFonts = Partial<Record<"heading" | "body" | "label" | "code", string>>
 type SurfaceStyle = "filled" | "translucent"
 type TShirtSizes = "s" | "xl" | "l" | "m" | "xs"
 type TextBreakpointHide = { hide?: boolean }
 type TextType = "body" | "code" | "label" | "display" | "heading"
 type TextVariant = `${"body" | "code" | "label" | "display" | "heading"}-${"strong" | "default" | "normal" | "medium"}-${"xl" | "xs" | "s" | "l" | "m"}`
 type TextWeight = "strong" | "default" | "normal" | "medium"
+type ThemeColor = "string" | { light?: string | undefined; dark?: string | undefined; }
+type ThemedSchemeScale = Partial<Record<SchemeRampWeight | "600-15" | "600-30" | "600-50", string>> | "SchemeScaleByTheme"
 type ToastContextProps = { toasts: Toast[]; addToast: (toast: Omit<Toast, "id"> | LegacyToast) => string; removeToast: (id: string) => void }
 // type Tone is one of these strings: neutral brand accent info danger warning success
 type UserSelect = "text" | "auto" | "none" | "all"
@@ -491,6 +529,8 @@ type UserSelect = "text" | "auto" | "none" | "all"
 ## Gotchas
 
 - overflow="hidden" on full-bleed sections clips glows into hard bands — only use when parent has radius.
+- A display face reaches Heading only through --font-heading: load it with next/font as variable: "--font-x", put that class on the StyleScope or above it, and pass fonts={{ heading: "var(--font-x)" }}. Never heading: "var(--font-heading)" (a variable that names itself is invalid, and headings fall back to the body sans). Check the first screenshot: are the headings in the display face?
+- StyleScope sets a look but paints nothing: pageBackground and surfaceBackground only define the variables. A light paper card inside a dark page needs background="page" (or "surface") on the StyleScope itself, or its dark text sits on the dark page.
 - x/y are percent positions of the container (50/50 = center).
 - Never cast an icon name with `as IconName`: the cast compiles a name the registry does not have, and it renders nothing. Use a name from iconNames; in data, type the field as IconName ({ icon: IconName }[]) or write the literal `as const`, so the type check still runs.
 - Field heights run a step above Button's: Input size xs is 40px, s 48px, m 56px (the default). A field beside a size="s" Button (32px), as in a toolbar or filter row, takes size="xxs", which is 32px too; Form size="xxs" sets it for every field inside. An xxs field has no floating label: label shows as the placeholder, so keep label for the accessible name.
@@ -507,6 +547,7 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - 104
 - display-strong-l
 - label-default-s onBackground="brand-medium"
+- A direction card and a world before code; the gold example below is the template hero, one option, not the default
 
 ## Recipes
 

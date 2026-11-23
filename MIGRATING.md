@@ -34,7 +34,9 @@ node scripts/codemod-3.0.mjs src
 
 It only touches Once UI's own components (found through your imports, or by
 name in MDX), never a same-named component of yours, and running it twice
-changes nothing. Run it once, before you write 3.0 code: it reads every bare
+changes nothing. Run on a repository root, it skips (and lists) a nested
+package that does not depend on `@once-ui-system/core` or pins another major
+of it; `--all-packages` includes them. Run it once, before you write 3.0 code: it reads every bare
 number as 2.x did, so on a size you wrote the 3.0 way (`width={200}`) it would
 write `"200rem"`. Lines marked `!` are for you to fix by hand, one per site,
 each with its file and line. Code you have
@@ -700,6 +702,11 @@ CSS, so look for these:
 
 - An override that was losing on purpose now wins. Most often that is a rule
   written before Once UI's styles took over, which never showed until now.
+  Check the rules that set type or spacing on an element that also has a Once
+  UI class (`letter-spacing`, `line-height`, `font-size`, `padding`, `gap`): a
+  hero's `.title { letter-spacing: -0.035em }` used to lose to the display
+  class's -0.05em and now wins, which widens the line and can clip gradient
+  text at its edge.
 - An app `!important` against one of Once UI's own `!important` declarations
   (a handful, on Button, Dialog, EmojiPicker, Input, Switch, Table and link
   underlines) now loses: inside layers, `!important` runs the other way. Drop
@@ -837,6 +844,22 @@ Only a class you wrote by hand needs this: the codemod rewrites them in
 Tailwind CSS in its package.json it reports them instead, since there `p-4`
 already meant Tailwind's. `node scripts/codemod-3.0-class-names.mjs <dir>`
 runs this step on its own.
+
+### 15. Icons are Once UI's own
+
+The built-in icons are redrawn (same names, one consistent stroke), and two
+names changed what they draw:
+
+| Name | 2.x drew | 3.0 draws | To keep the 2.x look |
+| --- | --- | --- | --- |
+| `check` | a check in a circle | the plain check mark | `checkCircle` |
+| `checkbox` | the plain check mark | a ticked box | `check` |
+
+The codemod reports each use (in `<Icon name>`, in `icon`, `prefixIcon` and
+`suffixIcon` props and in `icon: "…"` config entries) without rewriting it:
+the plain mark is often what a 2.x `check` meant, so choose per site.
+`document` now draws a page; `text` draws the lines it used to. An icon you
+registered yourself is untouched.
 
 ---
 

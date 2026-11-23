@@ -3,7 +3,7 @@ import { ParticleFx } from "@once-ui-system/fx";
 
 export const Background1: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (
-    <Row position="absolute" fill {...flex}>
+    <Row position="absolute" top="0" left="0" fill {...flex}>
       <ParticleFx
         opacity={70}
         position="absolute"
