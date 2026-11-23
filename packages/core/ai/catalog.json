@@ -1,6 +1,6 @@
 {
  "version": "3.0.0",
- "generated": "2026-11-20",
+ "generated": "2026-11-23",
  "iconNames": ["academicCap","accessibility","adjustments","arrowDown","arrowLeft","arrowRight","arrowUp","arrowUpRight","arrowsRightLeft","aspectRatio","backward","ball","ban","banknotes","barChart","beaker","bell","bolt","book","bookmark","briefcase","brush","bug","calendar","camera","cart","chat","check","checkBadge","checkCircle","checkbox","chevronDoubleLeft","chevronDoubleRight","chevronDown","chevronLeft","chevronRight","chevronUp","chevronUpDown","chevronsLeftRight","clipboard","close","code","columns","computer","copy","cpu","crop","cube","danger","dark","dislike","document","download","drag","edit","enter","externalLink","eye","eyeDropper","eyeOff","file","filter","fire","flag","folder","food","forward","gift","globe","grid","grip","heading","heart","help","home","idCard","image","inbox","info","key","language","layers","layout","lifebuoy","light","lightbulb","like","linearGauge","link","list","lock","lockOpen","logout","mail","map","mapPin","maximize","medal","megaphone","menu","message","microphone","minimize","minus","mobile","moreHorizontal","moreVertical","music","newspaper","opacity","organization","paperclip","paragraph","pause","paw","payment","people","person","personAdd","personRemove","phone","pieChart","play","plus","presentation","puzzle","radialGauge","refresh","report","return","robot","rocket","ruler","scissors","screen","search","security","send","settings","shoppingBag","sidebar","skipBack","skipForward","smiley","sparkle","stack","star","starFill","stop","store","swatch","symbol","table","tablet","tag","terminal","text","ticket","time","toggle","trash","trend","trendDown","trendUp","trophy","truck","tshirt","tv","upload","video","volume","volumeOff","warning","wifi","window","wordmark","world","wrench"],
  "components": {
   "ScrollLock": {"purpose":"Freezes page scroll while enabled, keeping one referenced region scrollable"},
@@ -110,6 +110,7 @@
   "ToggleButton": {"purpose":"Button with a selected state, for toolbars, segmented choices and nav rows"},
   "Tooltip": {"purpose":"Short hint on hover or focus of its children; with content and no children, an info icon (2.x InfoTip)"},
   "User": {"purpose":"Avatar with name, subline and optional tag, an identity row; with dropdown it opens an account menu (2.x UserMenu)"},
+  "WorkspaceSwitcher": {"purpose":"Workspace or org switcher: current pinned, groups, search; bottom sheet on phones"},
   "VisuallyHidden": {"purpose":"Content for screen readers only; focusable makes it a skip link that shows on focus"},
   "Sparkline": {"purpose":"Tiny SVG trend line, area or bars for a stat tile or table cell","importFrom":"@once-ui-system/core/data"},
   "HeadingLink": {"purpose":"Section heading with an anchor link, picked up by HeadingNav for the table of contents"},
