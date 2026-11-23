@@ -41,7 +41,9 @@ interface TabBarProps extends Omit<React.HTMLAttributes<HTMLElement>, "children"
  *
  * It sits on the page background behind a hairline and keeps clear of the
  * home indicator (`env(safe-area-inset-bottom)`). The current item, `selected`,
- * is `aria-current="page"` and stands out on a soft pill.
+ * is `aria-current="page"` and fills its slot with a soft tile: every item is
+ * its full share of the bar, icon and label centred, so the tap target and the
+ * highlight are the same shape.
  */
 function TabBar({ showBelow = "s", spacer = true, className, children, ...nav }: TabBarProps) {
   const shown = showBelow ? styles[`below-${showBelow}`] : styles.always;
