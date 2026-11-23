@@ -103,6 +103,11 @@ function value(name, raw) {
   const v = raw.trim();
   const ref = v.match(/^var\(--([\w-]+)\)$/);
   if (ref) return ref[1] === name ? undefined : `{${ref[1]}}`;
+  // `var(--x, var(--y))`: x is set only by a seeded scheme at runtime, so the
+  // export (built-in palettes) reads the fallback. `initial` unsets a key.
+  const fallback = v.match(/^var\(--[\w-]+,\s*(.+)\)$/);
+  if (fallback) return value(name, fallback[1]);
+  if (v === "initial") return undefined;
   // `color-mix(in srgb, var(--x) 15%, transparent)`: token x at 15% opacity.
   const mix = v.match(
     /^color-mix\(\s*in srgb\s*,\s*var\(--([\w-]+)\)\s+([\d.]+)%\s*,\s*transparent\s*\)$/,

@@ -32,7 +32,9 @@ describe("--brand-color-*", () => {
       const base = block(`[data-theme="${theme}"]`);
       const color = block(`[data-theme="${theme}"][data-solid="color"]`);
       for (const weight of ["strong", "medium", "weak"]) {
-        expect(base[`--brand-color-${weight}`]).toBe(color[`--brand-solid-${weight}`]);
+        // A solid reads a seeded scheme's own key first, then the step.
+        const solid = color[`--brand-solid-${weight}`].replace(/^var\(--[\w-]+,\s*(.+)\)$/, "$1");
+        expect(base[`--brand-color-${weight}`]).toBe(solid);
         expect(base[`--brand-color-${weight}`]).toMatch(/^var\(--function-brand-\d+\)$/);
       }
     });

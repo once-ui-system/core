@@ -389,7 +389,12 @@
         "function-brand-1200": "{scheme-brand-1200}",
         "function-brand-600-15": "{scheme-brand-600-15}",
         "function-brand-600-30": "{scheme-brand-600-30}",
-        "function-brand-600-50": "{scheme-brand-600-50}"
+        "function-brand-600-50": "{scheme-brand-600-50}",
+        "function-brand-solid-strong": "{scheme-brand-solid-strong}",
+        "function-brand-solid-medium": "{scheme-brand-solid-medium}",
+        "function-brand-on-solid-strong": "{scheme-brand-on-solid-strong}",
+        "function-brand-on-solid-medium": "{scheme-brand-on-solid-medium}",
+        "function-brand-on-solid-weak": "{scheme-brand-on-solid-weak}"
       }
     },
     {
@@ -697,7 +702,12 @@
         "function-accent-1200": "{scheme-accent-1200}",
         "function-accent-600-15": "{scheme-accent-600-15}",
         "function-accent-600-30": "{scheme-accent-600-30}",
-        "function-accent-600-50": "{scheme-accent-600-50}"
+        "function-accent-600-50": "{scheme-accent-600-50}",
+        "function-accent-solid-strong": "{scheme-accent-solid-strong}",
+        "function-accent-solid-medium": "{scheme-accent-solid-medium}",
+        "function-accent-on-solid-strong": "{scheme-accent-on-solid-strong}",
+        "function-accent-on-solid-medium": "{scheme-accent-on-solid-medium}",
+        "function-accent-on-solid-weak": "{scheme-accent-on-solid-weak}"
       }
     },
     {
