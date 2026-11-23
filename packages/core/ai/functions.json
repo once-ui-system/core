@@ -2177,7 +2177,8 @@
    "bodyLineHeight": "BodyLineHeight",
    "chartMode": "ChartMode",
    "brandSeed": "string",
-   "accentSeed": "string"
+   "accentSeed": "string",
+   "neutralSeed": "string"
   },
   "StyleProviderState": {
    "theme": "!Theme",
