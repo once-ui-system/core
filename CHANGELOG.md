@@ -1015,6 +1015,14 @@ entry below that had landed by then:
   Select, it opens as the usual dropdown. The default stays `"dropdown"`. `DropdownWrapper`
   takes the same behaviour as `alignSelected`.
 
+### Changed
+
+- **`border="rounded"` is calmer on large surfaces.** `radius-l` is 24px and
+  `radius-xl` 28px (were 28px and 32px), and their nested steps follow
+  4px and 8px of padding evenly. Cards, panels and dialogs keep a soft
+  corner without reading as bubbles; `radius-xs`, `s` and `m`, the controls'
+  pill shapes, are unchanged. Other border styles are untouched.
+
 ### Fixed
 
 - **`MascotPanel` fits its box and lines its columns up.** The custom body colour's field (and the eye and accessory colour fields) was capped at 10px and showed as a thin bar after the swatches; it now takes up to 160px and wraps under them when the row is tight. The side layout sizes to the panel's own width instead of the viewport's, so it no longer spills past a narrow card or docs preview, and stacks below 34rem. The sticky preview now sits flush with the top of its scroll box, level with the first group of controls (it was pushed 16px down); offset it with `--mascot-panel-sticky-top` under a fixed header.

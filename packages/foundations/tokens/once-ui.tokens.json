@@ -1490,12 +1490,12 @@
         "radius-m": "1.25rem",
         "radius-m-nest-4": "1.5rem",
         "radius-m-nest-8": "1.875rem",
-        "radius-l": "1.75rem",
-        "radius-l-nest-4": "2rem",
-        "radius-l-nest-8": "2.5rem",
-        "radius-xl": "2rem",
-        "radius-xl-nest-4": "2.25rem",
-        "radius-xl-nest-8": "2.75rem",
+        "radius-l": "1.5rem",
+        "radius-l-nest-4": "1.75rem",
+        "radius-l-nest-8": "2rem",
+        "radius-xl": "1.75rem",
+        "radius-xl-nest-4": "2rem",
+        "radius-xl-nest-8": "2.25rem",
         "radius-full": "999rem"
       }
     },
