@@ -179,6 +179,42 @@
    "signature": "(option: Pick<ReactionOption, \"value\" | \"emoji\" | \"src\" | \"motion\">) => ReactionMotion",
    "doc": "The gesture a reaction plays: its own `motion`, else one that suits the emoji."
   },
+  "armElementPicker": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(doc: Document, options: ElementPickerOptions) => () => void",
+   "doc": "Arms a document for one pick: blocks outline under the pointer, a click picks one (and is kept from following links), Escape cancels."
+  },
+  "frameDocument": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(frame: HTMLIFrameElement | null) => Document | null",
+   "doc": "A frame's document, or null when it is cross-origin or not loaded."
+  },
+  "markElement": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(el: HTMLElement, outline?: string) => () => void",
+   "doc": "Outlines a picked block while it is the conversation's context; returns the cleanup."
+  },
+  "pageSections": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(doc: Document, selector?: string) => HTMLElement[]",
+   "doc": "The page's top-level sections, top to bottom (a section inside a section is part of it)."
+  },
+  "selectCursor": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(accent?: string) => string",
+   "doc": "The select cursor: a dark arrow with a white rim and, at its foot, a dashed selection box in `accent`."
+  },
+  "useElementPicker": {
+   "group": "modules",
+   "kind": "hook",
+   "signature": "(frameRef: RefObject<HTMLIFrameElement | null>, options: UseElementPickerOptions) => ElementPicker",
+   "doc": "The element picker on a same-origin preview frame: `setPicking(true)` arms one pick, the picked block stays outlined as the conversation's context."
+  },
   "useWorkspace": {
    "group": "modules",
    "kind": "hook",
@@ -1329,6 +1365,21 @@
    "undefined",
    "(args?: any) => any"
   ],
+  "ElementPicker": {
+   "picking": "!boolean",
+   "setPicking": "!(picking: boolean) => void",
+   "picked": "!PickedElement | null",
+   "clear": "!() => void"
+  },
+  "ElementPickerOptions": {
+   "onPick": "!(picked: PickedElement) => void",
+   "onCancel": "() => void",
+   "onMiss": "(miss: PickMiss) => void",
+   "sectionSelector": "string",
+   "elementSelector": "string",
+   "hoverOutline": "string",
+   "cursor": "string"
+  },
   "EyeShape": [
    "round",
    "tile",
@@ -1830,6 +1881,18 @@
    "width": "number",
    "height": "number"
   },
+  "PickMiss": [
+   "nothing",
+   "outside"
+  ],
+  "PickedElement": {
+   "element": "!HTMLElement",
+   "kind": "!\"section\" | \"element\"",
+   "index": "!number",
+   "total": "!number",
+   "label": "!string | null",
+   "tag": "!string"
+  },
   "ProfilePatch": {
    "name": "string",
    "username": "string"
@@ -2302,6 +2365,14 @@
    "alarms": "readonly Alarm[]",
    "defaultAlarms": "readonly Alarm[]",
    "onAlarmsChange": "(alarms: Alarm[]) => void"
+  },
+  "UseElementPickerOptions": {
+   "onPick": "!(picked: PickedElement) => void",
+   "cursor": "string",
+   "onMiss": "(miss: PickMiss) => void",
+   "sectionSelector": "string",
+   "elementSelector": "string",
+   "hoverOutline": "string"
   },
   "UseHotkeysOptions": {
    "enabled": "boolean",
