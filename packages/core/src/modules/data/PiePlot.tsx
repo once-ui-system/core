@@ -11,7 +11,7 @@ import type { ChartProps, ChartVariant, DataPoint, DateConfig } from "./interfac
 import { Legend } from "./Legend.js";
 import { getDistributedColor } from "./utils/colorDistribution.js";
 import { placeTooltip } from "./utils/placeTooltip.js";
-import { sectorPath } from "./utils/scale.js";
+import { roundedSectorPath, sectorPath } from "./utils/scale.js";
 
 export interface PiePlotProps {
   id: string;
@@ -28,6 +28,8 @@ export interface PiePlotProps {
   date?: DateConfig;
   formatValue?: (value: number, key?: string) => string;
   ring: { inner: number; outer: number };
+  gap?: number;
+  cornerRadius?: number;
   origo: { x: number; y: number };
   gradientId: (colorKey: string) => string;
 }
@@ -48,6 +50,8 @@ export function PiePlot({
   date,
   formatValue,
   ring,
+  gap = 0,
+  cornerRadius = 0,
   origo,
   gradientId,
 }: PiePlotProps) {
@@ -170,7 +174,20 @@ export function PiePlot({
           s.sweep > 0 ? (
             <path
               key={s.i}
-              d={sectorPath(cx, cy, inner, outer, s.start, s.start + s.sweep)}
+              d={
+                inner > 0 && s.sweep < 360 && (gap > 0 || cornerRadius > 0)
+                  ? roundedSectorPath(
+                      cx,
+                      cy,
+                      inner,
+                      outer,
+                      s.start,
+                      s.start + s.sweep,
+                      gap,
+                      cornerRadius,
+                    )
+                  : sectorPath(cx, cy, inner, outer, s.start, s.start + s.sweep)
+              }
               fill={
                 variant === "outline" ? "transparent" : `url(#${gradientId(colorKey(s.row, s.i))})`
               }

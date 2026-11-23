@@ -249,7 +249,7 @@ const BarChart = ({
             barRadius={(outer) => {
               const r = barWidth === "fill" || barWidth === "xl" ? 10 : 6;
               if (!stack) return [r, r, r, r];
-              // A stack rounds only its outer end: the last series.
+              // A stack without a gap rounds only its outer end: the last series.
               if (!outer) return [0, 0, 0, 0];
               return horizontal ? [0, r, r, 0] : [r, r, 0, 0];
             }}
