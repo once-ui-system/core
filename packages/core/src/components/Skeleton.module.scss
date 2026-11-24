@@ -125,16 +125,31 @@ $skeleton-step: 2.5%; // 100% / $skeleton-cycles
    only the fields move (transform), so the compositor runs it: no filter, no
    per-frame paint. Reduced motion keeps one still frame. Children sit above
    all of it. */
+/* Each field wanders the whole box, corner to corner, on a path of its own;
+   the component starts every field at a random point of its path, so two
+   skeletons side by side never light up in step. */
 @keyframes skeleton-drift-a {
-    0% { transform: translate3d(-22%, -16%, 0) scale(1); }
-    50% { transform: translate3d(18%, 12%, 0) scale(1.2); }
-    100% { transform: translate3d(-4%, 20%, 0) scale(0.9); }
+    0% { transform: translate3d(-55%, -45%, 0) scale(1); }
+    25% { transform: translate3d(50%, -35%, 0) scale(1.2); }
+    50% { transform: translate3d(35%, 45%, 0) scale(0.9); }
+    75% { transform: translate3d(-45%, 30%, 0) scale(1.1); }
+    100% { transform: translate3d(-55%, -45%, 0) scale(1); }
 }
 
 @keyframes skeleton-drift-b {
-    0% { transform: translate3d(22%, 16%, 0) scale(1.1); }
-    50% { transform: translate3d(-16%, -10%, 0) scale(0.9); }
-    100% { transform: translate3d(6%, -20%, 0) scale(1.2); }
+    0% { transform: translate3d(45%, 40%, 0) scale(1.1); }
+    25% { transform: translate3d(-50%, 25%, 0) scale(0.9); }
+    50% { transform: translate3d(-30%, -45%, 0) scale(1.2); }
+    75% { transform: translate3d(55%, -30%, 0) scale(1); }
+    100% { transform: translate3d(45%, 40%, 0) scale(1.1); }
+}
+
+@keyframes skeleton-drift-c {
+    0% { transform: translate3d(0%, 50%, 0) scale(1); }
+    25% { transform: translate3d(-55%, -10%, 0) scale(1.15); }
+    50% { transform: translate3d(10%, -50%, 0) scale(0.9); }
+    75% { transform: translate3d(55%, 15%, 0) scale(1.1); }
+    100% { transform: translate3d(0%, 50%, 0) scale(1); }
 }
 
 .skeleton.generating {
@@ -179,33 +194,25 @@ $skeleton-step: 2.5%; // 100% / $skeleton-cycles
 
 .field {
     position: absolute;
+    top: 15%;
+    left: 20%;
     width: 60%;
     height: 70%;
     border-radius: 50%;
     background: radial-gradient(closest-side, var(--skeleton-field) 0%, var(--skeleton-field) 25%, transparent 100%);
     will-change: transform;
-    animation: skeleton-drift-a var(--skeleton-field-time) ease-in-out infinite alternate;
+    animation: skeleton-drift-a 13s linear infinite;
 
     &:nth-child(1) {
         --skeleton-field: var(--brand-color-strong, var(--brand-solid-strong));
-        --skeleton-field-time: 11s;
-        top: 0;
-        left: 10%;
     }
     &:nth-child(2) {
         --skeleton-field: var(--accent-color-strong, var(--accent-solid-strong));
-        --skeleton-field-time: 14s;
-        top: 30%;
-        left: 35%;
         animation-name: skeleton-drift-b;
     }
     &:nth-child(3) {
         --skeleton-field: var(--brand-color-medium, var(--brand-solid-medium));
-        --skeleton-field-time: 17s;
-        top: 35%;
-        left: 0;
-        animation-name: skeleton-drift-b;
-        animation-direction: alternate-reverse;
+        animation-name: skeleton-drift-c;
     }
 }
 

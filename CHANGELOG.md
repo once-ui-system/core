@@ -20,6 +20,12 @@ item (see `ROADMAP.md`, Week 4).
   ghost and its eyes, a flame and its core) came apart as it moved. Layers that give the same
   `motion` and `origin` now keep one phase; layers without an `origin` still drift out of
   step, as before.
+- **A `block` Skeleton has rounded corners by default.** Lines and circles were round already,
+  but a block without a `radius` drew square corners. It now defaults to `radius="l"`, and a
+  radius you pass still wins.
+- **Generating skeletons don't move in step.** Each field of `effect="generating"` now
+  wanders the whole box on its own path, starting at a different point and speed for every
+  skeleton, so two side by side no longer light up together.
 
 ## [3.1.0] - 2026-11-24
 
