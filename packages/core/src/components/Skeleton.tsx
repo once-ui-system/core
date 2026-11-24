@@ -50,8 +50,9 @@ interface SkeletonProps
   delay?: number;
   /**
    * `pulse` (default) fades in and out. `generating` is for work that takes a
-   * while, such as an image a model is drawing: a slow brand-to-accent mist
-   * drifts under a fine grain of dots. It holds still under reduced motion.
+   * while, such as an image a model is drawing: a dot matrix whose dots swell
+   * and take the brand and accent colours as soft fields drift under them.
+   * It holds still under reduced motion.
    * Children (a caption, a progress line) sit above it.
    */
   effect?: "pulse" | "generating";
@@ -67,6 +68,7 @@ const Skeleton = ({
   effect = "pulse",
   style,
   className,
+  children,
   ...props
 }: SkeletonProps) => {
   const generating = effect === "generating";
@@ -89,7 +91,16 @@ const Skeleton = ({
         generating && styles.generating,
         className,
       )}
-    />
+    >
+      {generating && (
+          <span className={styles.mist} aria-hidden="true">
+            <span className={styles.field} />
+            <span className={styles.field} />
+            <span className={styles.field} />
+          </span>
+      )}
+      {children}
+    </Flex>
   );
 };
 
