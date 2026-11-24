@@ -72,6 +72,9 @@ const Skeleton = ({
   ...props
 }: SkeletonProps) => {
   const generating = effect === "generating";
+  // A stable per-instance number (the same on the server and in the browser)
+  // that sets where on its path each field starts and how fast it goes.
+  const seed = hashId(React.useId());
   return (
     <Flex
       // A label on a plain div is not announced (axe: aria-prohibited-attr);
@@ -82,7 +85,7 @@ const Skeleton = ({
       ref={ref}
       style={delay !== undefined ? { animationDelay: `${delay}ms`, ...style } : style}
       // A radius the caller passes wins; this only supplies the shape's default.
-      radius={props.radius ?? (shape === "line" || shape === "circle" ? "full" : undefined)}
+      radius={props.radius ?? (shape === "block" ? "l" : "full")}
       inline
       className={classNames(
         styles.skeleton,
@@ -93,16 +96,34 @@ const Skeleton = ({
       )}
     >
       {generating && (
-          <span className={styles.mist} aria-hidden="true">
-            <span className={styles.field} />
-            <span className={styles.field} />
-            <span className={styles.field} />
-          </span>
+        <span className={styles.mist} aria-hidden="true">
+          {FIELDS.map((i) => (
+            <span key={i} className={styles.field} style={fieldTiming(seed, i)} />
+          ))}
+        </span>
       )}
       {children}
     </Flex>
   );
 };
+
+const FIELDS = [0, 1, 2];
+
+function hashId(id: string) {
+  let h = 2166136261;
+  for (let i = 0; i < id.length; i++) h = Math.imul(h ^ id.charCodeAt(i), 16777619);
+  return h >>> 0;
+}
+
+/** 11–19s per lap, starting anywhere on it. */
+function fieldTiming(seed: number, i: number): React.CSSProperties {
+  const n = Math.imul(seed ^ ((i + 1) * 0x9e3779b9), 2654435761) >>> 0;
+  const duration = 11 + (n % 9);
+  return {
+    animationDuration: `${duration}s`,
+    animationDelay: `-${((n >>> 8) % (duration * 1000)) / 1000}s`,
+  };
+}
 
 Skeleton.displayName = "Skeleton";
 
