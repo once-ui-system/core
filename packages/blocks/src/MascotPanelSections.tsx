@@ -574,6 +574,7 @@ function ColorRow({ label, ...rest }: StyleRowProps) {
   const custom = !isScheme(color);
   const [last, setLast] = useState(custom ? color : "#ff7a59");
   const groupName = useGroupName(labels.rows.color);
+  const small = useContext(StylePanelSizeContext) === "s";
   const swatch = (key: Scheme | "custom", paint: string) => {
     const checked = key === "custom" ? custom : color === key;
     const choose = () => set({ color: key === "custom" ? last : key });
@@ -604,9 +605,10 @@ function ColorRow({ label, ...rest }: StyleRowProps) {
           )}
         </Flex>
         {custom && (
-          <Flex fillWidth maxWidth={160}>
+          <Flex width={11 * 16} flex={0}>
             <ColorInput
               id="mascot-panel-color"
+              size={small ? "xxs" : "xs"}
               aria-label={labels.options.colors.custom}
               value={/^#[0-9a-f]{6}$/i.test(color) ? color : ""}
               onValueChange={(next) => {
@@ -635,24 +637,29 @@ function OptionalColor({
   fallback: string;
 }) {
   const groupName = useGroupName(name);
+  const small = useContext(StylePanelSizeContext) === "s";
   const hex = value && /^#[0-9a-f]{6}$/i.test(value) ? value : "";
+  // The switch stays at the row's end, where every other on/off row has it,
+  // and the field opens to its left on the same line: a compact field, wide
+  // enough that the hex and the clear button never meet.
   return (
-    <Flex vertical="center" gap="8" wrap>
-      <Switch
-        checked={value !== undefined}
-        onCheckedChange={(on) => onChange(on ? (value ?? fallback) : undefined)}
-        {...groupName}
-      />
+    <Flex vertical="center" horizontal="end" gap="12" fillWidth>
       {value !== undefined && (
-        <Flex fillWidth maxWidth={160}>
+        <Flex width={11 * 16} flex={0}>
           <ColorInput
             id={`mascot-panel-${name.replace(/\W+/g, "-").toLowerCase()}`}
             aria-label={name}
+            size={small ? "xxs" : "xs"}
             value={hex}
             onValueChange={(next) => next && onChange(next)}
           />
         </Flex>
       )}
+      <Switch
+        checked={value !== undefined}
+        onCheckedChange={(on) => onChange(on ? (value ?? fallback) : undefined)}
+        {...groupName}
+      />
     </Flex>
   );
 }
