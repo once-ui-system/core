@@ -4,6 +4,7 @@ import { StyleOverlay } from "@once-ui-system/blocks";
 import {
   Button,
   Column,
+  Icon,
   IconButton,
   Row,
   SegmentedControl,
@@ -296,11 +297,12 @@ function BlockExample({
             <IconButton
               size="m"
               variant="tertiary"
-              icon="sparkle"
               tooltip="Style"
               tooltipPosition="bottom"
               aria-label="Open the style panel"
-            />
+            >
+              <Icon name="sparkle" size="s" onBackground="neutral-weak" />
+            </IconButton>
           </StyleOverlay>
         }
         reloadButton={reloadButton}
