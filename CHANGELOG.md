@@ -13,8 +13,17 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [3.1.1] - 2026-11-24
+
+Patch. Fixes only; nothing to change in your code. `foundations`, `fx` and `blocks` stay
+at 3.1.0.
+
 ### Fixed
 
+- **`SidebarContent` uses the thin Once UI scrollbar** instead of the browser's own, so a
+  long sidebar scrolls like the rest of the app.
+- **`MascotPanel` tidies its One color row**, and small panels shrink their segmented
+  controls instead of overflowing.
 - **Mascot layers that share an origin move as one.** Moving layers used to take their
   step in the loop from their position in the list, so a thing drawn in several layers (a
   ghost and its eyes, a flame and its core) came apart as it moved. Layers that give the same
