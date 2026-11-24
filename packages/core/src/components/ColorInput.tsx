@@ -90,6 +90,7 @@ const ColorInput = ({
   // nothing but the eyedropper. The text overlay shows it instead. Hidden
   // from assistive technology: the hidden <label> already names the field.
   const compact = useFieldSize(props.size) === "xxs";
+  const floating = Boolean(label) && !compact;
   const emptyText = compact && !hexValue ? (props.placeholder ?? label) : undefined;
 
   /**
@@ -201,6 +202,11 @@ const ColorInput = ({
             fillWidth
             opacity={hexValue || emptyText ? 100 : 0}
             transition="micro-medium"
+            // With a floating label the value line sits below the field's
+            // middle, where this overlay starts. Without one (no label, or
+            // xxs, which hides it) the value is centred, so the text centres
+            // on the overlay's top as the clear button beside it does.
+            style={floating ? undefined : { transform: "translateY(-50%)" }}
           >
             {" "}
             {hexValue ? (

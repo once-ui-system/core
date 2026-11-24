@@ -152,6 +152,8 @@ These change how existing code looks. Nothing needs editing; check the screens t
   leaves: about half its old speed. `speed` still scales it.
 - `ConversationItem`: a row keeps its height when opening it clears the unread count; it
   used to shrink as the count's badge went away.
+- `ColorInput`: the hex text sits centred in the field when there is no label to float
+  above it; it sat low, where a label would have pushed it.
 - `MapPin`: the icon fits its disc (`s`) and pill (`xs`); it rendered at 24px in a 22px disc.
 
 ### Docs
