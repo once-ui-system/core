@@ -160,10 +160,10 @@ describe("MascotPanel", () => {
     const field = container.querySelector("#mascot-panel-color");
     expect(field).not.toBeNull();
     // Numbers on a Flex are pixels: the field's box was once capped at 10px,
-    // a thin bar after the swatches.
-    const box = field?.closest("[style*='max-width']") as HTMLElement | null;
-    expect(box?.style.maxWidth).not.toMatch(/ou-n-10\)/);
-    expect(box?.className).toMatch(/fill-width|wrap/);
+    // a thin bar after the swatches. It is a fixed 176px now, wide enough
+    // that the hex and the clear button never meet.
+    const box = field?.closest("[style*='width']") as HTMLElement | null;
+    expect(box?.getAttribute("style")).toMatch(/ou-n-176\)/);
   });
 
   it("keeps the side preview in a grid that sizes to the panel", () => {
