@@ -3557,6 +3557,10 @@
    "none",
    "all"
   ],
+  "UseWorkspaceOptions": {
+   "initialTabs": "WorkspaceTabInput<T>[]",
+   "maxTabs": "number"
+  },
   "ValueFormat": [
    "number",
    "compact",
@@ -3579,6 +3583,45 @@
    "leaves",
    "lightning"
   ],
+  "WorkspaceAction": [
+   "{ type: \"open\"; tabs: WorkspaceTabInput<T>[]; focus?: boolean | undefined; expand?: boolean | undefined; }",
+   "{ type: \"activate\"; key: string; }",
+   "{ type: \"close\"; key: string; }",
+   "{ type: \"expand\"; expanded: boolean; }",
+   "{ type: \"mode\"; key: string; mode: WorkspaceTabMode; }",
+   "{ type: \"reset\"; }"
+  ],
+  "WorkspaceController": {
+   "state": "!WorkspaceState<unknown>",
+   "active": "!WorkspaceTab<unknown> | null",
+   "open": "!( tabs: WorkspaceTabInput<unknown> | WorkspaceTabInput<unknown>[], options?: { focus?: boolean; expand?: boolean }, ) => void",
+   "activate": "!(key: string) => void",
+   "close": "!(key: string) => void",
+   "setMode": "!(key: string, mode: WorkspaceTabMode) => void",
+   "modeOf": "!(key: string) => WorkspaceTabMode",
+   "setExpanded": "!(expanded: boolean) => void",
+   "reset": "!() => void",
+   "dispatch": "!(action: WorkspaceAction<unknown>) => void"
+  },
+  "WorkspaceOptions": {
+   "maxTabs": "number"
+  },
+  "WorkspacePanelLabels": {
+   "tabs": "!string",
+   "close": "!(title: string) => string",
+   "mode": "!string",
+   "preview": "!string",
+   "edit": "!string",
+   "expand": "!string",
+   "collapse": "!string",
+   "openEditor": "!string"
+  },
+  "WorkspaceState": {
+   "tabs": "!WorkspaceTab<unknown>[]",
+   "activeKey": "!string | null",
+   "expanded": "!boolean",
+   "editing": "!Record<string, true>"
+  },
   "WorkspaceSwitcherGroup": {
    "id": "!string",
    "label": "!string"
@@ -3602,7 +3645,19 @@
    "loading": "string",
    "pick": "string",
    "create": "string"
-  }
+  },
+  "WorkspaceTab": {
+   "key": "!string",
+   "title": "!string",
+   "data": "!unknown",
+   "editable": "boolean",
+   "version": "!number"
+  },
+  "WorkspaceTabInput": "Omit<WorkspaceTab<unknown>, \"version\">",
+  "WorkspaceTabMode": [
+   "edit",
+   "preview"
+  ]
  },
  "components": {
   "ScrollLock": {
@@ -6036,6 +6091,26 @@
     "aria-label": "string"
    }
   },
+  "ActionCard": {
+   "group": "modules",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "icon": "IconName",
+    "title": "!ReactNode",
+    "meta": "ReactNode",
+    "children": "ReactNode",
+    "footer": "ReactNode",
+    "onPreview": "() => void",
+    "previewLabel": "string = Preview"
+   }
+  },
   "ChatComposer": {
    "group": "modules",
    "mixins": [
@@ -6236,6 +6311,29 @@
     "addLabel": "string = Add reaction",
     "aria-label": "string",
     "renderCount": "(count: number, value: string) => ReactNode"
+   }
+  },
+  "WorkspacePanel": {
+   "group": "modules",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "workspace": "!WorkspaceController<T>",
+    "children": "!(tab: WorkspaceTab<T>, mode: WorkspaceTabMode) => ReactNode",
+    "tabIcon": "(tab: WorkspaceTab<T>) => IconName | undefined",
+    "meta": "(tab: WorkspaceTab<T>) => ReactNode",
+    "tools": "(tab: WorkspaceTab<T>, mode: WorkspaceTabMode) => ReactNode",
+    "editorHref": "(tab: WorkspaceTab<T>) => string | undefined",
+    "expandToggle": "boolean | \"phone\" = phone",
+    "expandOnEdit": "boolean = true",
+    "labels": "Partial<WorkspacePanelLabels>",
+    "empty": "ReactNode"
    }
   },
   "BarChart": {
@@ -8937,6 +9035,40 @@
    "kind": "function",
    "signature": "(option: Pick<ReactionOption, \"value\" | \"emoji\" | \"src\" | \"motion\">) => ReactionMotion",
    "doc": "The gesture a reaction plays: its own `motion`, else one that suits the emoji."
+  },
+  "useWorkspace": {
+   "group": "modules",
+   "kind": "hook",
+   "signature": "<T = unknown>(options?: UseWorkspaceOptions<T>) => WorkspaceController<T>",
+   "doc": "The workspace's state in a component: tabs beside a conversation, each a preview that can switch to its editor."
+  },
+  "activeWorkspaceTab": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "<T>(state: WorkspaceState<T>) => WorkspaceTab<T> | null",
+   "doc": "The active tab, or null when nothing is open."
+  },
+  "DEFAULT_MAX_TABS": {
+   "group": "modules",
+   "kind": "value",
+   "type": "8"
+  },
+  "emptyWorkspace": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "<T = unknown>() => WorkspaceState<T>"
+  },
+  "workspaceReducer": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "<T>(state: WorkspaceState<T>, action: WorkspaceAction<T>, options?: WorkspaceOptions) => WorkspaceState<T>",
+   "doc": "The workspace's reducer."
+  },
+  "workspaceTabMode": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(state: WorkspaceState<unknown>, key: string) => WorkspaceTabMode",
+   "doc": "The mode a tab is in: `\"edit\"` only while its editor is mounted."
   },
   "divergingScale": {
    "group": "data",
