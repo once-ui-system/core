@@ -1,5 +1,5 @@
 {
-  ".": 257354,
+  ".": 257372,
   "./components/Accordion": 26861,
   "./components/AccordionGroup": 27297,
   "./components/AlarmList": 29153,
@@ -117,6 +117,6 @@
   "./media": 49344,
   "./map": 43486,
   "./scene": 26152,
-  "./mdx": 87297,
+  "./mdx": 87296,
   "./richtext": 27441
 }
