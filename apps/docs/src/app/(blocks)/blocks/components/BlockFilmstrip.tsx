@@ -229,8 +229,8 @@ export function BlockFilmstrip({
               padding="4"
               gap="4"
               radius="l"
-              border={selected ? "brand-alpha-strong" : "neutral-alpha-medium"}
-              background={selected ? "neutral-alpha-weak" : "overlay"}
+              border={selected ? "brand-alpha-medium" : "neutral-alpha-medium"}
+              background={selected ? "brand-alpha-weak" : "overlay"}
             >
               <Column
                 fillWidth
