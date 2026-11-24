@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "3.0.0",
- "generated": "2026-11-23",
+ "generated": "2026-11-24",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root; '@once-ui-system/fx' and '@once-ui-system/blocks' are packages of their own, installed beside core.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -1730,7 +1730,8 @@
    "accessoryColor": "string",
    "working": "\"cube\" | \"d20\"",
    "sides": "MascotSides",
-   "face": "\"3d\" | \"flat\""
+   "face": "\"3d\" | \"flat\"",
+   "medium": "MascotMedium"
   },
   "MascotEffect": [
    "heartEyes",
@@ -1763,8 +1764,18 @@
    "opacity": "number",
    "transform": "string",
    "clip": "boolean",
-   "place": "\"back\" | \"on\" | \"front\""
+   "place": "\"back\" | \"on\" | \"front\"",
+   "motion": "MascotLayerMotion",
+   "origin": "string"
   },
+  "MascotLayerMotion": [
+   "float",
+   "bob",
+   "sway",
+   "spin",
+   "pulse",
+   "flicker"
+  ],
   "MascotLook": {
    "color": "\"brand\" | \"accent\" | \"neutral\" | (string & {})",
    "roundness": "number",
@@ -1781,8 +1792,18 @@
    "cheeks": "boolean",
    "personality": "\"calm\" | \"default\" | \"bouncy\"",
    "sides": "\"classic\" | \"tints\" | \"mono\" | Partial<Record<\"top\" | \"front\" | \"right\" | \"bottom\" | \"back\" | \"left\", string>>",
-   "face": "\"3d\" | \"flat\""
+   "face": "\"3d\" | \"flat\"",
+   "medium": "MascotMedium"
   },
+  "MascotMedium": [
+   "vector",
+   "fur",
+   "plush",
+   "clay",
+   "pixel",
+   "lowpoly",
+   "toon"
+  ],
   "MascotMood": [
    "neutral",
    "happy",
@@ -1858,6 +1879,7 @@
    "canonical": "boolean",
    "mood": "MascotMood",
    "accessory": "string",
+   "layers": "readonly MascotIdentityLayer[]",
    "faceAccessory": "string",
    "schemes": "Partial<Record<\"brand\" | \"accent\" | \"neutral\", string>>",
    "lookAt": "{ x: number; y: number }",
@@ -1879,7 +1901,8 @@
    "cheeks": "boolean",
    "personality": "\"calm\" | \"default\" | \"bouncy\"",
    "sides": "\"classic\" | \"tints\" | \"mono\" | Partial<Record<\"top\" | \"front\" | \"right\" | \"bottom\" | \"back\" | \"left\", string>>",
-   "face": "\"3d\" | \"flat\""
+   "face": "\"3d\" | \"flat\"",
+   "medium": "MascotMedium"
   },
   "MaskOptions": {
    "maskPosition": "string"
@@ -2284,12 +2307,12 @@
   "ReactionMotion": [
    "pop",
    "none",
+   "spin",
+   "flicker",
    "beat",
    "nod",
    "shake",
    "droop",
-   "flicker",
-   "spin",
    "wave",
    "bounce"
   ],
@@ -3196,6 +3219,12 @@
   "SurfaceStyle": [
    "filled",
    "translucent"
+  ],
+  "TabBarBreakpoint": [
+   "s",
+   "l",
+   "m",
+   "xs"
   ],
   "TableAction": {
    "icon": "!string",
@@ -5114,6 +5143,7 @@
     "expandOnHover": "boolean",
     "railWidth": "number",
     "labels": "{ resize?: string; menu?: string }",
+    "mobileSide": "\"left\" | \"bottom\"",
     "defaultWidth": "number",
     "width": "number",
     "onWidthChange": "(width: number) => void",
@@ -5210,6 +5240,7 @@
     "shape": "\"line\" | \"circle\" | \"block\" = line",
     "size": "\"xl\" | \"l\" | \"m\" | \"s\" | \"xs\" = m",
     "delay": "number",
+    "effect": "\"pulse\" | \"generating\" = pulse",
     "style": "React.CSSProperties",
     "className": "string"
    }
@@ -5433,6 +5464,43 @@
     "disabled": "boolean",
     "reverse": "boolean = false",
     "onCheckedChange": "(checked: boolean) => void"
+   }
+  },
+  "TabBar": {
+   "group": "components",
+   "props": {
+    "aria-label": "!string",
+    "showBelow": "TabBarBreakpoint | false = s",
+    "spacer": "boolean = true",
+    "children": "!ReactNode"
+   }
+  },
+  "TabBarItem": {
+   "group": "components",
+   "props": {
+    "href": "string",
+    "onClick": "(event: React.MouseEvent<HTMLElement>) => void",
+    "icon": "!IconName",
+    "label": "!ReactNode",
+    "selected": "boolean = false",
+    "badge": "number | boolean",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "aria-haspopup": "\"dialog\" | \"menu\"",
+    "aria-expanded": "boolean"
+   }
+  },
+  "TabBarSidebarTrigger": {
+   "group": "components",
+   "props": {
+    "label": "ReactNode",
+    "icon": "IconName",
+    "style": "React.CSSProperties",
+    "className": "string",
+    "aria-expanded": "boolean",
+    "aria-haspopup": "\"dialog\" | \"menu\"",
+    "selected": "boolean",
+    "badge": "number | boolean"
    }
   },
   "Table": {
@@ -5929,7 +5997,8 @@
     "cheeks": "boolean",
     "personality": "\"calm\" | \"default\" | \"bouncy\"",
     "sides": "\"classic\" | \"tints\" | \"mono\" | Partial<Record<\"top\" | \"front\" | \"right\" | \"bottom\" | \"back\" | \"left\", string>>",
-    "face": "\"3d\" | \"flat\""
+    "face": "\"3d\" | \"flat\"",
+    "medium": "MascotMedium"
    }
   },
   "VoiceVisualizer": {
@@ -8787,6 +8856,11 @@
    "type": "readonly string[]",
    "doc": "Every name the registry holds, as keys: for reserving them in a sign-up or a name claim."
   },
+  "MASCOT_LAYER_MOTIONS": {
+   "group": "modules",
+   "kind": "value",
+   "type": "readonly [\"float\", \"bob\", \"sway\", \"spin\", \"pulse\", \"flicker\"]"
+  },
   "mascotIdentity": {
    "group": "modules",
    "kind": "function",
@@ -8798,6 +8872,11 @@
    "kind": "function",
    "signature": "(seed: string | number) => string",
    "doc": "A seed as the registry compares it: lowercase letters and digits only."
+  },
+  "MASCOT_MEDIUMS": {
+   "group": "modules",
+   "kind": "value",
+   "type": "readonly MascotMedium[]"
   },
   "cleanMascotUsername": {
    "group": "modules",

@@ -828,3 +828,130 @@
 .mascot[data-surface="flat"] .glint {
   opacity: 0;
 }
+
+/* `medium="lowpoly"`: hairline strokes in each facet's own colour close the seams. */
+.facets polygon {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+/* `medium="toon"`: flat colours with one hard shadow band and one hard highlight. */
+.toonShade {
+  fill: color-mix(in oklab, var(--mascot-color), black 26%);
+}
+
+.toonLight {
+  fill: #fff;
+  opacity: 0.78;
+}
+
+/* `medium="fur"`: the dark undercoat between the tufts. */
+.undercoat {
+  fill: color-mix(in oklab, var(--mascot-color), black 32%);
+}
+
+/* Layer motion (`MascotIdentityLayer.motion`): small loops on worn shapes. Each turns
+   around its own origin in the 200 × 200 box, set inline. */
+.layerMotion {
+  transform-box: view-box;
+  animation-duration: 3.2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+.motion-float {
+  animation-name: layer-float;
+}
+
+.motion-bob {
+  animation-name: layer-bob;
+  animation-duration: 1.6s;
+}
+
+.motion-sway {
+  animation-name: layer-sway;
+  animation-duration: 2.8s;
+}
+
+.motion-spin {
+  animation-name: layer-spin;
+  animation-duration: 9s;
+  animation-timing-function: linear;
+}
+
+.motion-pulse {
+  animation-name: layer-pulse;
+  animation-duration: 2.4s;
+}
+
+.motion-flicker {
+  animation-name: layer-flicker;
+  animation-duration: 0.42s;
+  animation-timing-function: steps(3, jump-none);
+}
+
+@keyframes layer-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes layer-bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(1.5px) rotate(-2deg);
+  }
+}
+
+@keyframes layer-sway {
+  0%,
+  100% {
+    transform: rotate(-6deg);
+  }
+  50% {
+    transform: rotate(6deg);
+  }
+}
+
+@keyframes layer-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes layer-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 0.85;
+  }
+}
+
+@keyframes layer-flicker {
+  0% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(0.88, 1.12);
+  }
+  100% {
+    transform: scale(1.06, 0.92);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layerMotion {
+    animation: none;
+  }
+}

@@ -15,6 +15,7 @@
   "expandOnHover": "boolean",
   "railWidth": "number",
   "labels": "{ resize?: string; menu?: string }",
+  "mobileSide": "\"left\" | \"bottom\"",
   "defaultWidth": "number",
   "width": "number",
   "onWidthChange": "(width: number) => void",

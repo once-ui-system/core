@@ -306,6 +306,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - shape?: "line" | "circle" | "block" = line
 - size?: "xl" | "l" | "m" | "s" | "xs" = m
 - delay?: number
+- effect?: "pulse" | "generating" = pulse
 - style?: React.CSSProperties
 - className?: string
 
