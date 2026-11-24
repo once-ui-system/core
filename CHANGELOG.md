@@ -13,14 +13,100 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [3.1.0] - 2026-11-24
+
+Minor. Everything is additive except a few default looks that change on purpose; they are
+listed under **Changed** so you can check your screens. `@once-ui-system/foundations`,
+`fx` and `blocks` are 3.1.0 too; `blocks` now needs core 3.1 (its StylePanel uses
+`ColorButton`). The 3.0.1 patch never shipped: its fixes are here.
+
 ### Added
 
+- **Any colour token at any opacity.** `background`, `solid`, `border` and the border
+  sides take an opacity after a slash, on `Flex`/`Row`/`Column`/`Grid` and everything built
+  on them: `background="brand/12"`, `border="accent/22"`, `solid="accent-strong/40"`,
+  `background="neutral-alpha-strong/50"`. `brand/N` reads the new `--brand-alpha` token, so
+  the named alpha steps are points on one continuous scale. The value is written inline as
+  `color-mix()`, with no class per step, so the box stays a server component and follows the
+  theme, scheme and `StyleScope`. `cssColor` props (StyleScope, Background, charts, gauges)
+  read the same forms, plus `--my-hue/50`. Typed as `ColorAlpha`.
+- **A brand-to-accent gradient.** `background="gradient"` (and `gradient/16`); in
+  stylesheets `--gradient-brand-accent` and the `.gradient-background` utility, whose angle
+  follows `--gradient-angle`. Foundations adds `--{tone}-alpha` for all seven tones and
+  `--accent-color-strong|medium|weak`, mirroring `--brand-color-*`.
+- **`TabBar`**, phone bottom navigation that pairs with `Sidebar`: `TabBarItem` (icon over
+  a short label, each filling its whole slot, `selected` as a soft tile with
+  `aria-current="page"`, `badge` as a count or a dot) and `TabBarSidebarTrigger` ("More",
+  which opens the Sidebar's phone drawer). Shown at and below `showBelow` (`s`), with a
+  `spacer` so page ends never sit under it and room for the safe area. `Sidebar` takes
+  `mobileSide="bottom"` to open its phone drawer as a bottom sheet; the default stays `"left"`.
+- **`WorkspaceSwitcher`**, one switcher for workspaces, orgs, venues and sites: the current
+  item's mark and name as the trigger (the mark alone in a folded Sidebar), the current item
+  pinned on top, `groups` with counts, search above `searchAbove` items (6) over names and
+  `keywords`, `onCreate` and a `footer`. A `Dropdown` on desktop, a bottom `Drawer` at and
+  below `mobileBelow` (`s`), with focus on the current item so the keyboard doesn't cover
+  the list.
+- **The Workspace kit** (`modules/workspace`), extracted from Aveiro's chat home:
+  `useWorkspace` / `workspaceReducer` (tabs keyed by what they show, a version bumped on
+  refresh that an open editor keeps, a cap of 8 tabs, background opens, expand and
+  collapse) and `WorkspacePanel` (tab strip, header with `meta` and `tools`, a Preview / Edit
+  switch, a Full editor link, a phone expand toggle, keyboard navigation). `ActionCard`
+  (`modules/chat`) is the card an assistant answers with. `useElementPicker` and
+  `armElementPicker` let a person point at a section or element of a same-origin preview
+  so the next message knows what "this" is; `markElement`, `pageSections`, `frameDocument`
+  and `selectCursor` are exported with them.
+- **`ColorButton`**, a compact colour trigger: a small secondary button with a swatch and
+  the hex (or its `label` beside a swatch of every hue before a colour is picked) that opens
+  the browser's colour picker. `onValueChange` fires while dragging, `onValueCommit` once
+  when the picker closes. `StylePanel`'s custom Brand and Accent colours use it in place of
+  the full `ColorInput`; `labels.custom.remove` is deprecated and ignored.
+- **`StylePanel` row hints and one label width** (`@once-ui-system/blocks`). `hint` on any
+  row adds an info tooltip beside its label; `hints` on the panel turns on a tooltip for
+  every built-in row (words in `labels.hints`), and `hint={false}` drops one. `labelWidth`
+  gives every side label one width that truncates instead of wrapping.
+- **A custom colour on `StylePanel`'s Neutral row.** List the rows in
+  `customColors` (`["brand", "accent", "neutral"]`), or set `custom` on
+  `StylePanel.Neutral`, to offer a grey of your own, reported as
+  `neutralSeed`. `customColors={true}` still means Brand and Accent only, so
+  hosts that render two seeds are unchanged. Its words are
+  `labels.custom.neutral`. New types: `StylePanelCustomColors`,
+  `StylePanelNeutralCustomLabels`.
+- **`GradientFx`** (`@once-ui-system/fx`): soft colour bands that drift through each other
+  under film grain, the blurred-mesh hero look. `colors` (2 to 6 stops, tokens or CSS
+  colours; default page background, brand, accent), `speed`, `grain`, `blur`, `angle`,
+  `seed`, `reducedMotion`. One small shader at up to 30 fps that sleeps off screen and in
+  hidden tabs; a still frame under reduced motion; blurred CSS blobs on the server and
+  without WebGL.
 - **Mascot mediums.** `medium` on `Mascot`, `mascotSvg` and `MascotDesign` draws the same character another way: `fur`, `plush` and `clay` give the body a material, `pixel` turns the whole mascot into a sprite with a one-pixel outline, `lowpoly` cuts the body into lit facets and `toon` inks it with cel shading. `vector` stays the default. Each one is an SVG filter or plain shapes, so it animates live with no WebGL, renders on the server through `mascotSvg`, and holds still under reduced motion like the vector mascot. `MASCOT_MEDIUMS` lists them; `parseMascotDesign` keeps a known one and drops anything else.
 - **Skeleton `effect="generating"`.** For work that takes seconds, such as an image a
-  model is drawing: a slow brand-to-accent mist drifts under a fine grain of dots in
-  place of the pulse. It moves only by `transform`, follows the theme and the brand,
-  holds still under reduced motion and sets `aria-busy`. Children (a caption) sit above it.
+  model is drawing: a dot matrix whose dots swell and take the brand and accent
+  colours as soft fields drift under them.
+  It moves only by `transform`, follows the theme and the brand, holds still under
+  reduced motion and sets `aria-busy`. Children (a caption) sit above it.
 - **Mascot layers that move, and whole outfits.** A `MascotIdentityLayer` takes `motion` (`float`, `bob`, `sway`, `spin`, `pulse` or `flicker`) and an `origin` (`"x y"` in the 200 × 200 box) it turns or grows around; loops stop for reduced motion. A `MascotDesign` keeps up to 48 layers (was 16), enough for a hat, glasses, something held, a back piece and a pet. Built-in `accessory` names and `layers` are now drawn together instead of the built-ins replacing the layers, and `mascotSvg` takes `layers` (drawn still), so a saved look renders the same in an email, an OG image or a Discord card. `MASCOT_LAYER_MOTIONS` and `MascotLayerMotion` are exported. Non-breaking.
+
+### Changed
+
+These change how existing code looks. Nothing needs editing; check the screens they touch.
+
+- **`border="rounded"` is calmer on large surfaces.** `radius-l` is 24px and
+  `radius-xl` 28px (were 28px and 32px), and their nested steps follow
+  4px and 8px of padding evenly. Cards, panels and dialogs keep a soft
+  corner without reading as bubbles; `radius-xs`, `s` and `m`, the controls'
+  pill shapes, are unchanged. Other border styles are untouched.
+- **Stacked bars and ring charts have gaps and rounded segments.** `BarChart` stacks leave
+  2px between segments and round each one on its own (square only on the baseline), so
+  floating waterfall steps read as bars. `PieChart` rings take `gap` (default 2px) and
+  `cornerRadius` (default 4px); pass `0` for the old look.
+- **Pale brand and accent seeds get dark text and rest on the seed.** With `solid="color"`,
+  a `brandSeed` or `accentSeed` whose white text would fall below 2.25:1 (a lime, a yellow,
+  a pale cyan) now writes black on-solid text and a resting fill on the seed itself, hover a
+  shade darker, instead of white text on an olive rest. Mid and dark seeds, built-in
+  palettes and neutral are unchanged; a scale that pins 400 or 500 keeps its solids.
+- **Calendar events match their calendar's `Tag`.** The stripe and dot use the Tag dot
+  colour in every solid style (under a contrast style they drew grey or white), all-day and
+  multi-day bars use the tone's tint with strong text instead of a solid, and a half-hour
+  title sits centred in its tile.
 
 ### Fixed
 
@@ -49,6 +135,30 @@ item (see `ROADMAP.md`, Week 4).
   around it: the label carries the contrast (`danger-on-background-medium`, pale on dark,
   deep on light) and the prefix icon the colour (`danger-on-background-weak`). Both were
   the saturated tone, so the label read dimmer than its neighbours on dark.
+- **A menu's trigger stays highlighted while the menu is open.** A `NavItem`,
+  `ToggleButton` or anything built on it that opens a `Dropdown` (a sidebar's
+  Help or account row) keeps its hover fill while the menu shows, so the row the
+  menu came from stays marked once the pointer moves into it. A selected trigger
+  keeps its deeper selected-hover fill.
+- **`MascotPanel` fits its box and lines its columns up.** The custom body colour's field (and the eye and accessory colour fields) was capped at 10px and showed as a thin bar after the swatches; it now takes up to 160px and wraps under them when the row is tight. The side layout sizes to the panel's own width instead of the viewport's, so it no longer spills past a narrow card or docs preview, and stacks below 34rem. The sticky preview now sits flush with the top of its scroll box, level with the first group of controls (it was pushed 16px down); offset it with `--mascot-panel-sticky-top` under a fixed header.
+- `RadioButton`: the checked dot uses the brand's on-solid colour, as `Checkbox`'s tick does, so the checked radio reads as a ring around a dot in light and dark themes alike (it used the neutral on-solid colour, which matched the fill in dark themes).
+- **A fullscreen `CodeBlock` shows its preview beside the code on a wide screen.** From
+  1024px the preview and the code sit side by side, each scrolling on its own, instead of
+  the code below a tall preview. Narrower screens keep the stacked layout.
+- **Chart states have room.** The loading, empty and error states of every chart are padded
+  from the frame, so a long `errorState` no longer runs to the edges. Pass content only;
+  leave padding off the node.
+- **`WeatherFx` rain falls at a calmer pace** (`@once-ui-system/fx`), in step with snow and
+  leaves: about half its old speed. `speed` still scales it.
+- `ConversationItem`: a row keeps its height when opening it clears the unread count; it
+  used to shrink as the count's badge went away.
+- `ColorInput`: the hex text sits centred in the field when there is no label to float
+  above it; it sat low, where a label would have pushed it.
+- `MapPin`: the icon fits its disc (`s`) and pill (`xs`); it rendered at 24px in a 22px disc.
+
+### Docs
+
+- The 2.x docs are pickable in the version switcher and live at docs.once-ui.com/v2.
 
 ## [3.0.0] - 2026-11-19
 
@@ -1036,17 +1146,10 @@ entry below that had landed by then:
   `description` or `errorMessage` warns once: the Field owns those, so there is one label
   and every message lines up under it.
 
-## [Unreleased]
+## 2.x fixes after 2.8.0 (shipped in 3.0.0)
 
 ### Added
 
-- **A custom colour on `StylePanel`'s Neutral row.** List the rows in
-  `customColors` (`["brand", "accent", "neutral"]`), or set `custom` on
-  `StylePanel.Neutral`, to offer a grey of your own, reported as
-  `neutralSeed`. `customColors={true}` still means Brand and Accent only, so
-  hosts that render two seeds are unchanged. Its words are
-  `labels.custom.neutral`. New types: `StylePanelCustomColors`,
-  `StylePanelNeutralCustomLabels`.
 - **`Select` gets `position="aligned"`.** The list opens with the selected option sitting
   exactly on the field and the others above and below it in their own order, as macOS draws
   a pop-up button (the first option, with nothing picked). A long list shows six and a half
@@ -1054,31 +1157,8 @@ entry below that had landed by then:
   Select, it opens as the usual dropdown. The default stays `"dropdown"`. `DropdownWrapper`
   takes the same behaviour as `alignSelected`.
 
-### Changed
-
-- **`border="rounded"` is calmer on large surfaces.** `radius-l` is 24px and
-  `radius-xl` 28px (were 28px and 32px), and their nested steps follow
-  4px and 8px of padding evenly. Cards, panels and dialogs keep a soft
-  corner without reading as bubbles; `radius-xs`, `s` and `m`, the controls'
-  pill shapes, are unchanged. Other border styles are untouched.
-
 ### Fixed
 
-- **A menu's trigger stays highlighted while the menu is open.** A `NavItem`,
-  `ToggleButton` or anything built on it that opens a `Dropdown` (a sidebar's
-  Help or account row) keeps its hover fill while the menu shows, so the row the
-  menu came from stays marked once the pointer moves into it. A selected trigger
-  keeps its deeper selected-hover fill.
-- **`MascotPanel` fits its box and lines its columns up.** The custom body colour's field (and the eye and accessory colour fields) was capped at 10px and showed as a thin bar after the swatches; it now takes up to 160px and wraps under them when the row is tight. The side layout sizes to the panel's own width instead of the viewport's, so it no longer spills past a narrow card or docs preview, and stacks below 34rem. The sticky preview now sits flush with the top of its scroll box, level with the first group of controls (it was pushed 16px down); offset it with `--mascot-panel-sticky-top` under a fixed header.
-- `RadioButton`: the checked dot uses the brand's on-solid colour, as `Checkbox`'s tick does, so the checked radio reads as a ring around a dot in light and dark themes alike (it used the neutral on-solid colour, which matched the fill in dark themes).
-- **A fullscreen `CodeBlock` shows its preview beside the code on a wide screen.** From
-  1024px the preview and the code sit side by side, each scrolling on its own, instead of
-  the code below a tall preview. Narrower screens keep the stacked layout.
-- **Chart states have room.** The loading, empty and error states of every chart are padded
-  from the frame, so a long `errorState` no longer runs to the edges. Pass content only;
-  leave padding off the node.
-- **`WeatherFx` rain falls at a calmer pace** (`@once-ui-system/fx`), in step with snow and
-  leaves: about half its old speed. `speed` still scales it.
 
 - **`Pulse` keeps pulsing for visitors who ask for reduced motion.** The global reduced-motion
   rule cut its halo to a single 0.01ms run, which left a flat full-size disc where the live dot
