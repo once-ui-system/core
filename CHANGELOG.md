@@ -24,6 +24,7 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **A fullscreen `CodeBlock` on a tab with no code keeps its preview full width.** The side-by-side fullscreen layout applied even when the selected tab had no code (such as a "Preview" tab), which left the right half empty.
 - Nested themes: a `StyleScope` that pins a theme and seeds a scheme (`theme="dark"` with
   `accentSeed`) inside a light section of a dark page took the light theme's text and
   background tokens, because the light rule matched it through its ancestors at the same
