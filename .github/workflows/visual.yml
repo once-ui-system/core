@@ -36,7 +36,9 @@ jobs:
     # Labels other than visual-change change nothing here.
     if: ${{ (github.event.action != 'labeled' && github.event.action != 'unlabeled') || github.event.label.name == 'visual-change' }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    # Two passes over ~325 pages take about 20 minutes, plus 3 to 7 for the
+    # build and the capture tool's install; 30 cut head captures off.
+    timeout-minutes: 45
     strategy:
       matrix:
         side: [base, head]
