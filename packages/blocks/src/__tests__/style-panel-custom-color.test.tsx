@@ -19,8 +19,8 @@ import { expectNoAxeViolations } from "../test/axe.js";
 /**
  * `customColors` (or `custom` on `StylePanelBrand`/`StylePanelAccent`) ends
  * the row's swatches with one for a colour of the host's own. Choosing it
- * reports `brand: "custom"` with a seed; while it is chosen a colour field
- * edits the seed. It is a controlled-mode feature: bound to ThemeProvider,
+ * reports `brand: "custom"` with a seed; while it is chosen a compact colour
+ * button (ColorButton) edits the seed. It is a controlled-mode feature: bound to ThemeProvider,
  * whose `setStyle` takes no seed, the swatch does not render. The panel only
  * reports the seed — the host renders the scheme.
  */
@@ -58,7 +58,10 @@ function Host({
 }
 
 const customBrand = () => screen.getByRole("radio", { name: "Brand colour: custom" });
-const brandField = () => screen.getByLabelText("Custom brand colour") as HTMLInputElement;
+/** The compact colour button under the row, named by its label and the colour. */
+const brandButton = () => screen.getByRole("button", { name: /^Custom brand colour/ });
+/** The native field the button opens, hidden from assistive technology. */
+const nativeField = () => document.querySelector('input[type="color"]') as HTMLInputElement;
 /** The decorative face inside a swatch. */
 const face = (swatch: HTMLElement) => swatch.querySelector('[class*="swatch"]') as HTMLElement;
 
@@ -151,23 +154,23 @@ describe("StylePanel custom colour", () => {
     expect(customBrand()).toHaveFocus();
   });
 
-  it("edits the seed in a labelled colour field while custom is chosen", () => {
+  it("edits the seed from a colour button while custom is chosen", () => {
     const onChange = vi.fn();
     render(<Host initial={{ brand: "custom", brandSeed: "#336699" }} onChange={onChange} />, {
       wrapper,
     });
-    expect(brandField()).toHaveAttribute("type", "color");
-    expect(brandField().value).toBe("#336699");
-    // Only the chosen row shows a field.
-    expect(screen.queryByLabelText("Custom accent colour")).toBeNull();
+    expect(brandButton()).toHaveAccessibleName("Custom brand colour: #336699");
+    expect(nativeField().value).toBe("#336699");
+    // Only the chosen row shows a button.
+    expect(screen.queryByRole("button", { name: /^Custom accent colour/ })).toBeNull();
 
-    fireEvent.change(brandField(), { target: { value: "#ff8800" } });
+    fireEvent.change(nativeField(), { target: { value: "#ff8800" } });
     expect(onChange).toHaveBeenLastCalledWith(
       { brand: "custom", brandSeed: "#ff8800" },
       { brand: "custom", brandSeed: "#ff8800" },
     );
     expect(face(customBrand()).style.background).toBe("rgb(255, 136, 0)");
-    expect(screen.getByText("#ff8800")).toBeInTheDocument();
+    expect(screen.getByText("#FF8800")).toBeInTheDocument();
   });
 
   it("hides the field when a named scheme is chosen, keeping the seed for later", async () => {
@@ -181,25 +184,15 @@ describe("StylePanel custom colour", () => {
       { brand: "green", brandSeed: "#336699" },
       { brand: "green" },
     );
-    expect(screen.queryByLabelText("Custom brand colour")).toBeNull();
+    expect(screen.queryByRole("button", { name: /^Custom brand colour/ })).toBeNull();
     expect(face(customBrand()).style.background).toBe("rgb(51, 102, 153)");
-  });
-
-  it("does not report the field's clear button, which would leave no seed", () => {
-    const onChange = vi.fn();
-    render(<Host initial={{ brand: "custom", brandSeed: "#336699" }} onChange={onChange} />, {
-      wrapper,
-    });
-    // A bare click: see color-input.test.tsx on jsdom and this field's suffix.
-    fireEvent.click(screen.getByRole("button", { name: "Remove", hidden: true }));
-    expect(onChange).not.toHaveBeenCalled();
   });
 
   it("shows a short hex seed in the field, and leaves it empty for other formats", () => {
     const { unmount } = render(<Host initial={{ brand: "custom", brandSeed: "#F80" }} />, {
       wrapper,
     });
-    expect(brandField().value).toBe("#ff8800");
+    expect(nativeField().value).toBe("#ff8800");
     unmount();
 
     render(<Host initial={{ brand: "custom", brandSeed: "oklch(0.72 0.17 40)" }} />, { wrapper });
@@ -208,13 +201,12 @@ describe("StylePanel custom colour", () => {
     expect(face(customBrand()).getAttribute("style")).toContain("oklch(0.72 0.17 40)");
   });
 
-  it("takes its names, label, description and clear button from labels", () => {
+  it("takes its names, label and description from labels", () => {
     const labels: StylePanelLabels = {
       custom: {
         swatch: (row) => `Eigene ${row === "brand" ? "Markenfarbe" : "Akzentfarbe"}`,
         picker: (row) => `${row === "brand" ? "Markenfarbe" : "Akzentfarbe"} wählen`,
         description: (seed, row) => `${seed} ist zu hell für weißen Text (${row})`,
-        remove: "Entfernen",
       },
     };
     render(<Host labels={labels} initial={{ brand: "custom", brandSeed: "#eeeeee" }} />, {
@@ -226,10 +218,9 @@ describe("StylePanel custom colour", () => {
       "true",
     );
     expect(screen.getByRole("radio", { name: "Eigene Akzentfarbe" })).toBeInTheDocument();
-    const field = screen.getByLabelText("Markenfarbe wählen");
+    const button = screen.getByRole("button", { name: "Markenfarbe wählen: #EEEEEE" });
     const hint = screen.getByText("#eeeeee ist zu hell für weißen Text (brand)");
-    expect(field.getAttribute("aria-describedby")).toContain(hint.id);
-    expect(screen.getByRole("button", { name: "Entfernen", hidden: true })).toBeInTheDocument();
+    expect(button.getAttribute("aria-describedby")).toContain(hint.id);
   });
 
   it("is offered on a composed row with `custom`", async () => {
@@ -261,14 +252,15 @@ describe("StylePanel custom colour", () => {
         swatch: (row) => `Eigene Farbe (${row})`,
         picker: (row) => `Eigene Farbe wählen (${row})`,
         description: (seed) => `Zu hell: ${seed}`,
-        remove: "Entfernen",
       },
     };
     const { container } = render(
       <Host labels={labels} initial={{ brand: "custom", brandSeed: "#eeeeee", accent: "red" }} />,
       { wrapper },
     );
-    expect(screen.getByLabelText("Eigene Farbe wählen (brand)")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Eigene Farbe wählen (brand): #EEEEEE" }),
+    ).toBeInTheDocument();
     expect(screen.getByText("Zu hell: #eeeeee")).toBeInTheDocument();
     expect(screen.getByRole("radio", { name: "Eigene Farbe (brand)" })).toHaveAttribute(
       "aria-checked",
@@ -367,7 +359,7 @@ describe("StylePanel custom neutral colour", () => {
     expect(screen.queryByRole("radio", { name: "Brand colour: custom" })).toBeNull();
   });
 
-  it("reports neutral and neutralSeed, and edits the seed in its own field", async () => {
+  it("reports neutral and neutralSeed, and edits the seed from its own colour button", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(<NeutralHost initial={{ neutral: "sand" }} onChange={onChange} />, { wrapper });
@@ -377,8 +369,8 @@ describe("StylePanel custom neutral colour", () => {
       { neutral: "custom", neutralSeed: "#5a93fc" },
       { neutral: "custom", neutralSeed: "#5a93fc" },
     );
-    const field = screen.getByLabelText("Custom neutral colour") as HTMLInputElement;
-    fireEvent.change(field, { target: { value: "#6b6457" } });
+    expect(screen.getByRole("button", { name: /^Custom neutral colour/ })).toBeInTheDocument();
+    fireEvent.change(nativeField(), { target: { value: "#6b6457" } });
     expect(onChange).toHaveBeenLastCalledWith(
       { neutral: "custom", neutralSeed: "#6b6457" },
       { neutral: "custom", neutralSeed: "#6b6457" },
@@ -419,7 +411,7 @@ describe("StylePanel custom neutral colour", () => {
       "aria-checked",
       "true",
     );
-    expect(screen.getByLabelText("Eigenes Grau wählen")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^Eigenes Grau wählen/ })).toBeInTheDocument();
     expect(screen.getByText("Grau aus #6b6457")).toBeInTheDocument();
     await expectNoAxeViolations(container);
   });

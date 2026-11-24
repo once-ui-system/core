@@ -372,6 +372,60 @@ the same 200 × 200 box; with the default look the eyes sit at 71,96 and 129,96.
   ]}
 />
 
+### Layers that move
+
+`layers` draws shapes as path data in the same 200 × 200 box, so a whole outfit can be saved as JSON
+in a `MascotDesign` and shown the same in every app. Each layer sits `back` (behind the body), `on`
+it or `front` of the face, and can carry a small loop with `motion`: `float`, `bob`, `sway`, `spin`,
+`pulse` or `flicker`. `spin`, `sway` and `pulse` turn around `origin`, written as `"x y"`. Built-in
+accessories and layers can be worn together: a crown from the list over a hand-drawn jetpack. Loops
+stop for people who ask for reduced motion, and `mascotSvg` draws layers as a still.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="24" center wrap>
+      <Mascot
+        size="m"
+        surface="flat"
+        color="#08a97c"
+        mouth="smile"
+        accessory="crown"
+        layers={[
+          { d: "M30 120Q30 104 46 104Q62 104 62 120V156H30Z", fill: "#c9ced6", place: "back" },
+          { d: "M138 120Q138 104 154 104Q170 104 170 120V156H138Z", fill: "#c9ced6", place: "back" },
+          { d: "M36 158Q46 196 56 158Z", fill: "#ff7a1a", place: "back", motion: "flicker", origin: "46 158" },
+          { d: "M144 158Q154 196 164 158Z", fill: "#ff7a1a", place: "back", motion: "flicker", origin: "154 158" },
+        ]}
+      />
+      <Mascot
+        size="m"
+        surface="flat"
+        color="#7358fa"
+        eyes="round"
+        layers={[
+          { d: "M4 104a96 26 0 1 0 192 0a96 26 0 1 0 -192 0Z", stroke: "#5effc4", width: 3, place: "back", motion: "pulse" },
+          { d: "M8 100h14v14h-14Z", fill: "#5effc4", motion: "spin", origin: "100 104", place: "front" },
+        ]}
+      />
+    </Row>
+  }
+  codes={[
+    {
+      code: `<Mascot
+  accessory="crown"
+  layers={[
+    { d: "M30 120Q30 104 46 104Q62 104 62 120V156H30Z", fill: "#c9ced6", place: "back" },
+    { d: "M36 158Q46 196 56 158Z", fill: "#ff7a1a", place: "back", motion: "flicker", origin: "46 158" },
+  ]}
+/>`,
+      language: "tsx",
+      label: "Layers with motion",
+    },
+  ]}
+/>
+
 ### Cube
 
 `working="cube"` gives the mascot something to do while it works. At rest it is the same soft

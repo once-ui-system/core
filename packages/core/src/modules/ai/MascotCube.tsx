@@ -24,7 +24,7 @@ const SIZE = { s: 32, m: 48, l: 96, xl: 160 } as const;
 const SCHEMES = new Set(["brand", "accent", "neutral"]);
 
 /** The look the cube mascot starts from: the approved 3D character, before a seed or props. */
-export const CUBE_LOOK: Required<Omit<MascotLook, "bodyPath" | "eyeColor">> = {
+export const CUBE_LOOK: Required<Omit<MascotLook, "bodyPath" | "eyeColor" | "medium">> = {
   color: "brand",
   roundness: 0.75,
   aspect: 1.12,
@@ -162,6 +162,7 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
     accessory: _accessory,
     accessoryColor: _accessoryColor,
     shadow: _shadow,
+    medium: _medium,
     faceAccessory: _faceAccessory,
     layers: _layers,
     username: _username,

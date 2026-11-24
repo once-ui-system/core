@@ -1,0 +1,29 @@
+{
+ "name": "TabBarItem",
+ "partOf": "TabBar",
+ "purpose": "One place in a TabBar: icon over a short label, the current page on a pill, an optional count or dot",
+ "group": "components",
+ "props": {
+  "href": "string",
+  "onClick": "(event: React.MouseEvent<HTMLElement>) => void",
+  "icon": "!IconName",
+  "label": "!ReactNode",
+  "selected": "boolean = false",
+  "badge": "number | boolean",
+  "className": "string",
+  "style": "React.CSSProperties",
+  "aria-haspopup": "\"dialog\" | \"menu\"",
+  "aria-expanded": "boolean"
+ },
+ "tags": [
+  "navigation"
+ ],
+ "pairsWith": [
+  "TabBar"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "BuiltInIconName": "keyof typeof iconData",
+  "IconName": "BuiltInIconName | Extract<keyof IconLibraryOverrides, string>"
+ }
+}

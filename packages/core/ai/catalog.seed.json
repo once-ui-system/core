@@ -166,6 +166,11 @@
     "tags": ["docs", "content"],
     "pairsWith": ["InlineCode", "Column"]
   },
+  "ColorButton": {
+    "purpose": "Compact colour trigger: a button with a swatch and the hex that opens the native picker, committing when it closes",
+    "tags": ["form", "settings"],
+    "pairsWith": ["ColorInput", "StylePanel"]
+  },
   "ColorInput": {
     "purpose": "Colour picker field showing the hex value and a swatch, with optional alpha",
     "tags": ["form", "settings"],
@@ -1264,6 +1269,23 @@
     "purpose": "One tab in a TabList, matched to its TabPanel by value",
     "tags": ["navigation", "tabs"],
     "pairsWith": ["Tabs", "TabList", "TabPanel"]
+  },
+  "TabBar": {
+    "purpose": "Phone bottom navigation: the four most used places in thumb reach, hidden above a breakpoint where a Sidebar takes over",
+    "tags": ["navigation", "layout"],
+    "pairsWith": ["TabBarItem", "TabBarSidebarTrigger", "Sidebar"]
+  },
+  "TabBarItem": {
+    "partOf": "TabBar",
+    "purpose": "One place in a TabBar: icon over a short label, the current page on a pill, an optional count or dot",
+    "tags": ["navigation"],
+    "pairsWith": ["TabBar"]
+  },
+  "TabBarSidebarTrigger": {
+    "partOf": "TabBar",
+    "purpose": "Last TabBar item (More) that opens the Sidebar's phone drawer, a bottom sheet with mobileSide bottom",
+    "tags": ["navigation"],
+    "pairsWith": ["TabBar", "SidebarProvider", "Sidebar"]
   },
   "Table": {
     "purpose": "Table from column definitions: sorting, search, selection, pagination, row actions, empty and loading states",

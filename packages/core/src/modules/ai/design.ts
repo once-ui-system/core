@@ -1,5 +1,6 @@
 import { isMascotAccessory, type MascotAccessory } from "./accessories.js";
-import type { MascotIdentityLayer } from "./mascotIdentities.js";
+import { MASCOT_LAYER_MOTIONS, type MascotIdentityLayer } from "./mascotIdentities.js";
+import { MASCOT_MEDIUMS, type MascotMedium } from "./mascotMedium.js";
 
 /*
  * A mascot as data: the part of its props a person designs, in a shape that
@@ -50,6 +51,8 @@ export interface MascotDesign {
   sides?: MascotSides;
   /** With `working`: `flat` paints the face on without light. */
   face?: "3d" | "flat";
+  /** How it is drawn: `vector` (unset), `fur`, `plush`, `clay`, `pixel`, `lowpoly` or `toon`. */
+  medium?: MascotMedium;
 }
 
 /** The look a mascot has when a design leaves a part out. */
@@ -140,7 +143,9 @@ const PLACES = ["back", "on", "front"] as const;
 const CAPS = ["round", "butt"] as const;
 /** SVG transforms only: function names, numbers, separators. */
 const TRANSFORM = /^[a-zA-Z0-9.,()\s+-]{1,200}$/;
-const MAX_LAYERS = 16;
+/** Enough for a whole outfit (hat, face, held, back, around) of a few shapes each. */
+const MAX_LAYERS = 48;
+const ORIGIN = /^-?\d{1,3}(\.\d+)?\s+-?\d{1,3}(\.\d+)?$/;
 
 const paint = (value: unknown): string | undefined =>
   value === "body" || value === "shade" ? value : color(value);
@@ -164,6 +169,9 @@ function layers(value: unknown): MascotIdentityLayer[] | undefined {
         typeof l.transform === "string" && TRANSFORM.test(l.transform) ? l.transform : undefined,
       clip: flag(l.clip),
       place: oneOf(PLACES, l.place),
+      motion: oneOf(MASCOT_LAYER_MOTIONS, l.motion),
+      origin:
+        typeof l.origin === "string" && ORIGIN.test(l.origin.trim()) ? l.origin.trim() : undefined,
     };
     for (const key of Object.keys(layer) as (keyof MascotIdentityLayer)[]) {
       if (layer[key] === undefined) delete layer[key];
@@ -221,6 +229,7 @@ export function parseMascotDesign(input: unknown): MascotDesign {
     working: oneOf(WORKING, r.working),
     sides: sides(r.sides),
     face: oneOf(FACES, r.face),
+    medium: oneOf(MASCOT_MEDIUMS, r.medium),
   };
   for (const key of Object.keys(design) as (keyof MascotDesign)[]) {
     if (design[key] === undefined) delete design[key];
