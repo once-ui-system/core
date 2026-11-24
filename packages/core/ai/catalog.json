@@ -1,6 +1,6 @@
 {
  "version": "3.0.0",
- "generated": "2026-11-23",
+ "generated": "2026-11-24",
  "iconNames": ["academicCap","accessibility","adjustments","arrowDown","arrowLeft","arrowRight","arrowUp","arrowUpRight","arrowsRightLeft","aspectRatio","backward","ball","ban","banknotes","barChart","beaker","bell","bolt","book","bookmark","briefcase","brush","bug","calendar","camera","cart","chat","check","checkBadge","checkCircle","checkbox","chevronDoubleLeft","chevronDoubleRight","chevronDown","chevronLeft","chevronRight","chevronUp","chevronUpDown","chevronsLeftRight","clipboard","close","code","columns","computer","copy","cpu","crop","cube","danger","dark","dislike","document","download","drag","edit","enter","externalLink","eye","eyeDropper","eyeOff","file","filter","fire","flag","folder","food","forward","gift","globe","grid","grip","heading","heart","help","home","idCard","image","inbox","info","key","language","layers","layout","lifebuoy","light","lightbulb","like","linearGauge","link","list","lock","lockOpen","logout","mail","map","mapPin","maximize","medal","megaphone","menu","message","microphone","minimize","minus","mobile","moreHorizontal","moreVertical","music","newspaper","opacity","organization","paperclip","paragraph","pause","paw","payment","people","person","personAdd","personRemove","phone","pieChart","play","plus","presentation","puzzle","radialGauge","refresh","report","return","robot","rocket","ruler","scissors","screen","search","security","send","settings","shoppingBag","sidebar","skipBack","skipForward","smiley","sparkle","stack","star","starFill","stop","store","swatch","symbol","table","tablet","tag","terminal","text","ticket","time","toggle","trash","trend","trendDown","trendUp","trophy","truck","tshirt","tv","upload","video","volume","volumeOff","warning","wifi","window","wordmark","world","wrench"],
  "components": {
   "ScrollLock": {"purpose":"Freezes page scroll while enabled, keeping one referenced region scrollable"},
@@ -20,6 +20,7 @@
   "Card": {"purpose":"Interactive surface — a clickable or linked panel with hover feedback; requires href or onClick","avoid":"Static panels (pricing tiers, testimonials, stats) — use Column + surface recipe"},
   "Carousel": {"purpose":"Image slideshow with arrows, dots or thumbnails and autoplay; mode=\"snap\" is a touch track (2.x Swiper)"},
   "Checkbox": {"purpose":"Checkbox with label and description, including an indeterminate state"},
+  "ColorButton": {"purpose":"Compact colour trigger: a button with a swatch and the hex that opens the native picker, committing when it closes"},
   "ColorInput": {"purpose":"Colour picker field showing the hex value and a swatch, with optional alpha"},
   "Column": {"purpose":"Vertical flex layout — default direction column","preferOver":"Flex with direction=\"column\""},
   "Combobox": {"purpose":"Free-text field with suggestions"},
@@ -94,6 +95,7 @@
   "Submenu": {"purpose":"Item in a Dropdown or context menu that opens a nested menu on hover, click or Right arrow"},
   "SubmitButton": {"purpose":"Submit Button that shows a spinner and ignores repeat presses while its Form's async onSubmit runs"},
   "Switch": {"purpose":"On/off toggle with label, description and loading state"},
+  "TabBar": {"purpose":"Phone bottom navigation: the four most used places in thumb reach, hidden above a breakpoint where a Sidebar takes over"},
   "Table": {"purpose":"Table from column definitions: sorting, search, selection, pagination, row actions, empty and loading states"},
   "Tab": {"purpose":"One tab in a TabList, matched to its TabPanel by value"},
   "TabList": {"purpose":"The row or column of Tabs inside Tabs, with arrow-key focus"},

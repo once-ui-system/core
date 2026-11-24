@@ -1,0 +1,52 @@
+---
+title: "ColorButton"
+summary: "A compact colour trigger: a button with a swatch and the hex that opens the browser's colour picker."
+updatedAt: "2026-11-17"
+docs: "once-ui/form-controls/colorButton.mdx"
+github: "components/ColorButton.tsx"
+navLabel: "ColorButton"
+navIcon: "switch"
+---
+
+`ColorButton` is a small secondary button that shows a swatch and the colour's hex, and opens the browser's colour picker. Before a colour is picked it shows its `label` beside a swatch of every hue. Use it for a custom colour beside a row of preset swatches, where a full [ColorInput](/once-ui/form-controls/colorInput) field would be too heavy.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<ColorButtonExample />}
+  codes={[
+    {
+      code:
+`const [saved, setSaved] = useState("");
+
+<ColorButton label="Own colour" value={saved} onValueCommit={setSaved} />`,
+      language: "tsx",
+      label: "ColorButton"
+    }
+  ]}
+/>
+
+## Preview and commit
+
+- `onValueChange` fires on every drag while the picker is open. Use it for a live preview.
+- `onValueCommit` fires once, when the picker closes on a new colour. Save, send or record an undo step here, so a drag does not produce dozens of saves.
+
+The button shows the dragged colour while the picker is open, even before the host commits it.
+
+## Accessibility
+
+The button is the control. Its accessible name is the `label` followed by the colour (`Own colour: #00B5BA`). The native colour field it opens is out of the Tab order and hidden from assistive technology. To link a note under the button, such as a contrast warning, pass its id as `aria-describedby`.
+
+## Props
+
+<PropsTable
+  component="ColorButton"
+  describe={{
+    label: "The text before a colour is picked, and the button's accessible name.",
+    value: "The colour, controlled, as #rrggbb. Leave it out and the button keeps its own.",
+    defaultValue: "The starting colour when `value` is left out.",
+    onValueChange: "Receives each colour while the picker is open, for a live preview.",
+    onValueCommit: "Receives the colour once, when the picker closes on a new one.",
+    showValue: "Show the hex once there is a colour (the default), or keep the label.",
+  }}
+/>

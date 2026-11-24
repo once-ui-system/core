@@ -25,12 +25,12 @@
   "ReactionMotion": [
    "pop",
    "none",
+   "spin",
+   "flicker",
    "beat",
    "nod",
    "shake",
    "droop",
-   "flicker",
-   "spin",
    "wave",
    "bounce"
   ]

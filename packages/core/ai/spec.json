@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "3.0.0",
- "generated": "2026-11-23",
+ "generated": "2026-11-24",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root; '@once-ui-system/fx' and '@once-ui-system/blocks' are packages of their own, installed beside core.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -1251,21 +1251,6 @@
    "particle",
    "celebration"
   ],
-  "ElementPicker": {
-   "picking": "!boolean",
-   "setPicking": "!(picking: boolean) => void",
-   "picked": "!PickedElement | null",
-   "clear": "!() => void"
-  },
-  "ElementPickerOptions": {
-   "onPick": "!(picked: PickedElement) => void",
-   "onCancel": "() => void",
-   "onMiss": "(miss: PickMiss) => void",
-   "sectionSelector": "string",
-   "elementSelector": "string",
-   "hoverOutline": "string",
-   "cursor": "string"
-  },
   "EmptyStateSize": [
    "s",
    "l",
@@ -1745,7 +1730,8 @@
    "accessoryColor": "string",
    "working": "\"cube\" | \"d20\"",
    "sides": "MascotSides",
-   "face": "\"3d\" | \"flat\""
+   "face": "\"3d\" | \"flat\"",
+   "medium": "MascotMedium"
   },
   "MascotEffect": [
    "heartEyes",
@@ -1778,8 +1764,18 @@
    "opacity": "number",
    "transform": "string",
    "clip": "boolean",
-   "place": "\"back\" | \"on\" | \"front\""
+   "place": "\"back\" | \"on\" | \"front\"",
+   "motion": "MascotLayerMotion",
+   "origin": "string"
   },
+  "MascotLayerMotion": [
+   "float",
+   "bob",
+   "sway",
+   "spin",
+   "pulse",
+   "flicker"
+  ],
   "MascotLook": {
    "color": "\"brand\" | \"accent\" | \"neutral\" | (string & {})",
    "roundness": "number",
@@ -1796,8 +1792,18 @@
    "cheeks": "boolean",
    "personality": "\"calm\" | \"default\" | \"bouncy\"",
    "sides": "\"classic\" | \"tints\" | \"mono\" | Partial<Record<\"top\" | \"front\" | \"right\" | \"bottom\" | \"back\" | \"left\", string>>",
-   "face": "\"3d\" | \"flat\""
+   "face": "\"3d\" | \"flat\"",
+   "medium": "MascotMedium"
   },
+  "MascotMedium": [
+   "vector",
+   "fur",
+   "plush",
+   "clay",
+   "pixel",
+   "lowpoly",
+   "toon"
+  ],
   "MascotMood": [
    "neutral",
    "happy",
@@ -1873,6 +1879,7 @@
    "canonical": "boolean",
    "mood": "MascotMood",
    "accessory": "string",
+   "layers": "readonly MascotIdentityLayer[]",
    "faceAccessory": "string",
    "schemes": "Partial<Record<\"brand\" | \"accent\" | \"neutral\", string>>",
    "lookAt": "{ x: number; y: number }",
@@ -1894,7 +1901,8 @@
    "cheeks": "boolean",
    "personality": "\"calm\" | \"default\" | \"bouncy\"",
    "sides": "\"classic\" | \"tints\" | \"mono\" | Partial<Record<\"top\" | \"front\" | \"right\" | \"bottom\" | \"back\" | \"left\", string>>",
-   "face": "\"3d\" | \"flat\""
+   "face": "\"3d\" | \"flat\"",
+   "medium": "MascotMedium"
   },
   "MaskOptions": {
    "maskPosition": "string"
@@ -2234,18 +2242,6 @@
    "error": "string",
    "retry": "string"
   },
-  "PickedElement": {
-   "element": "!HTMLElement",
-   "kind": "!\"section\" | \"element\"",
-   "index": "!number",
-   "total": "!number",
-   "label": "!string | null",
-   "tag": "!string"
-  },
-  "PickMiss": [
-   "nothing",
-   "outside"
-  ],
   "Placement": [
    "top",
    "right",
@@ -2311,12 +2307,12 @@
   "ReactionMotion": [
    "pop",
    "none",
+   "spin",
+   "flicker",
    "beat",
    "nod",
    "shake",
    "droop",
-   "flicker",
-   "spin",
    "wave",
    "bounce"
   ],
@@ -3007,8 +3003,59 @@
    "swatches": "StylePanelSwatchLabels",
    "themeSwitcher": "ThemeSwitcherLabels",
    "scroller": "ScrollerLabels",
-   "custom": "StylePanelCustomLabels"
+   "custom": "StylePanelCustomLabels",
+   "hints": "StylePanelRowLabels"
   },
+  "StylePanelLabelWidth": [
+   "undefined",
+   "number",
+   "s",
+   "xl",
+   "l",
+   "m",
+   "xs",
+   "0",
+   "1",
+   "2",
+   "4",
+   "8",
+   "12",
+   "16",
+   "20",
+   "24",
+   "32",
+   "40",
+   "48",
+   "56",
+   "64",
+   "72",
+   "80",
+   "104",
+   "128",
+   "160",
+   "`${number}px`",
+   "`${number}rem`",
+   "`${number}em`",
+   "`${number}ch`",
+   "`${number}%`",
+   "`${number}vh`",
+   "`${number}vw`",
+   "`${number}dvh`",
+   "`${number}dvw`",
+   "`${number}svh`",
+   "`${number}svw`",
+   "`${number}lvh`",
+   "`${number}lvw`",
+   "`${number}vmin`",
+   "`${number}vmax`",
+   "`${number}cqw`",
+   "`${number}cqh`",
+   "`calc(${string})`",
+   "`min(${string})`",
+   "`max(${string})`",
+   "`clamp(${string})`",
+   "`var(${string})`"
+  ],
   "StylePanelNameLabels": {
    "shapes": "Partial<Record<BorderStyle, string>>",
    "schemes": "Partial<Record<Schemes, string>>",
@@ -3172,6 +3219,12 @@
   "SurfaceStyle": [
    "filled",
    "translucent"
+  ],
+  "TabBarBreakpoint": [
+   "s",
+   "l",
+   "m",
+   "xs"
   ],
   "TableAction": {
    "icon": "!string",
@@ -3484,14 +3537,6 @@
    "alarms": "readonly Alarm[]",
    "defaultAlarms": "readonly Alarm[]",
    "onAlarmsChange": "(alarms: Alarm[]) => void"
-  },
-  "UseElementPickerOptions": {
-   "onPick": "!(picked: PickedElement) => void",
-   "cursor": "string",
-   "onMiss": "(miss: PickMiss) => void",
-   "sectionSelector": "string",
-   "elementSelector": "string",
-   "hoverOutline": "string"
   },
   "UseHotkeysOptions": {
    "enabled": "boolean",
@@ -3942,6 +3987,24 @@
     "indeterminate": "boolean = false",
     "onCheckedChange": "(checked: boolean) => void",
     "hoverable": "boolean = true"
+   }
+  },
+  "ColorButton": {
+   "group": "components",
+   "props": {
+    "value": "string",
+    "defaultValue": "string",
+    "label": "!string",
+    "onValueChange": "(value: string) => void",
+    "onValueCommit": "(value: string) => void",
+    "size": "TShirtSizes = s",
+    "variant": "\"primary\" | \"secondary\" | \"tertiary\" = secondary",
+    "disabled": "boolean",
+    "showValue": "boolean = true",
+    "id": "string",
+    "aria-describedby": "string",
+    "className": "string",
+    "style": "React.CSSProperties"
    }
   },
   "ColorInput": {
@@ -5135,6 +5198,7 @@
     "expandOnHover": "boolean",
     "railWidth": "number",
     "labels": "{ resize?: string; menu?: string }",
+    "mobileSide": "\"left\" | \"bottom\"",
     "defaultWidth": "number",
     "width": "number",
     "onWidthChange": "(width: number) => void",
@@ -5231,6 +5295,7 @@
     "shape": "\"line\" | \"circle\" | \"block\" = line",
     "size": "\"xl\" | \"l\" | \"m\" | \"s\" | \"xs\" = m",
     "delay": "number",
+    "effect": "\"pulse\" | \"generating\" = pulse",
     "style": "React.CSSProperties",
     "className": "string"
    }
@@ -5454,6 +5519,43 @@
     "disabled": "boolean",
     "reverse": "boolean = false",
     "onCheckedChange": "(checked: boolean) => void"
+   }
+  },
+  "TabBar": {
+   "group": "components",
+   "props": {
+    "aria-label": "!string",
+    "showBelow": "TabBarBreakpoint | false = s",
+    "spacer": "boolean = true",
+    "children": "!ReactNode"
+   }
+  },
+  "TabBarItem": {
+   "group": "components",
+   "props": {
+    "href": "string",
+    "onClick": "(event: React.MouseEvent<HTMLElement>) => void",
+    "icon": "!IconName",
+    "label": "!ReactNode",
+    "selected": "boolean = false",
+    "badge": "number | boolean",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "aria-haspopup": "\"dialog\" | \"menu\"",
+    "aria-expanded": "boolean"
+   }
+  },
+  "TabBarSidebarTrigger": {
+   "group": "components",
+   "props": {
+    "label": "ReactNode",
+    "icon": "IconName",
+    "style": "React.CSSProperties",
+    "className": "string",
+    "aria-expanded": "boolean",
+    "aria-haspopup": "\"dialog\" | \"menu\"",
+    "selected": "boolean",
+    "badge": "number | boolean"
    }
   },
   "Table": {
@@ -5950,7 +6052,8 @@
     "cheeks": "boolean",
     "personality": "\"calm\" | \"default\" | \"bouncy\"",
     "sides": "\"classic\" | \"tints\" | \"mono\" | Partial<Record<\"top\" | \"front\" | \"right\" | \"bottom\" | \"back\" | \"left\", string>>",
-    "face": "\"3d\" | \"flat\""
+    "face": "\"3d\" | \"flat\"",
+    "medium": "MascotMedium"
    }
   },
   "VoiceVisualizer": {
@@ -7943,7 +8046,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "MascotPanelEyes": {
@@ -8122,7 +8226,8 @@
    ],
    "props": {
     "custom": "boolean",
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelAdvanced": {
@@ -8154,7 +8259,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelBodySize": {
@@ -8169,7 +8275,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelBodyText": {
@@ -8202,7 +8309,8 @@
    ],
    "props": {
     "custom": "boolean",
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelColor": {
@@ -8235,7 +8343,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelDensity": {
@@ -8250,7 +8359,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelEffect": {
@@ -8265,7 +8375,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelGroup": {
@@ -8297,7 +8408,8 @@
    ],
    "props": {
     "custom": "boolean",
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelPage": {
@@ -8333,7 +8445,9 @@
     "onValueChange": "(next: StylePanelValue, changed: Partial<StylePanelValue>) => void",
     "labels": "StylePanelLabels",
     "stacked": "boolean = false",
-    "size": "StylePanelSize = m"
+    "size": "StylePanelSize = m",
+    "labelWidth": "StylePanelLabelWidth",
+    "hints": "boolean = false"
    }
   },
   "StylePanelRow": {
@@ -8348,7 +8462,9 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false",
+    "hintFor": "keyof StylePanelRowLabels"
    }
   },
   "StylePanelScaling": {
@@ -8363,7 +8479,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelShape": {
@@ -8378,7 +8495,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelSolid": {
@@ -8393,7 +8511,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelSolidStyle": {
@@ -8425,7 +8544,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelTheme": {
@@ -8440,7 +8560,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanelTransition": {
@@ -8455,7 +8576,8 @@
     "StyleProps"
    ],
    "props": {
-    "label": "ReactNode | false"
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
    }
   },
   "StylePanel": {
@@ -8471,6 +8593,8 @@
    ],
    "props": {
     "size": "StylePanelSize",
+    "labelWidth": "StylePanelLabelWidth",
+    "hints": "boolean",
     "visibility": "StylePanelVisibility",
     "value": "StylePanelRootProps[\"value\"]",
     "onValueChange": "StylePanelRootProps[\"onValueChange\"]",
@@ -8830,6 +8954,11 @@
    "type": "readonly string[]",
    "doc": "Every name the registry holds, as keys: for reserving them in a sign-up or a name claim."
   },
+  "MASCOT_LAYER_MOTIONS": {
+   "group": "modules",
+   "kind": "value",
+   "type": "readonly [\"float\", \"bob\", \"sway\", \"spin\", \"pulse\", \"flicker\"]"
+  },
   "mascotIdentity": {
    "group": "modules",
    "kind": "function",
@@ -8841,6 +8970,11 @@
    "kind": "function",
    "signature": "(seed: string | number) => string",
    "doc": "A seed as the registry compares it: lowercase letters and digits only."
+  },
+  "MASCOT_MEDIUMS": {
+   "group": "modules",
+   "kind": "value",
+   "type": "readonly MascotMedium[]"
   },
   "cleanMascotUsername": {
    "group": "modules",
@@ -8901,42 +9035,6 @@
    "kind": "function",
    "signature": "(option: Pick<ReactionOption, \"value\" | \"emoji\" | \"src\" | \"motion\">) => ReactionMotion",
    "doc": "The gesture a reaction plays: its own `motion`, else one that suits the emoji."
-  },
-  "armElementPicker": {
-   "group": "modules",
-   "kind": "function",
-   "signature": "(doc: Document, options: ElementPickerOptions) => () => void",
-   "doc": "Arms a document for one pick: blocks outline under the pointer, a click picks one (and is kept from following links), Escape cancels."
-  },
-  "frameDocument": {
-   "group": "modules",
-   "kind": "function",
-   "signature": "(frame: HTMLIFrameElement | null) => Document | null",
-   "doc": "A frame's document, or null when it is cross-origin or not loaded."
-  },
-  "markElement": {
-   "group": "modules",
-   "kind": "function",
-   "signature": "(el: HTMLElement, outline?: string) => () => void",
-   "doc": "Outlines a picked block while it is the conversation's context; returns the cleanup."
-  },
-  "pageSections": {
-   "group": "modules",
-   "kind": "function",
-   "signature": "(doc: Document, selector?: string) => HTMLElement[]",
-   "doc": "The page's top-level sections, top to bottom (a section inside a section is part of it)."
-  },
-  "selectCursor": {
-   "group": "modules",
-   "kind": "function",
-   "signature": "(accent?: string) => string",
-   "doc": "The select cursor: a dark arrow with a white rim and, at its foot, a dashed selection box in `accent`."
-  },
-  "useElementPicker": {
-   "group": "modules",
-   "kind": "hook",
-   "signature": "(frameRef: RefObject<HTMLIFrameElement | null>, options: UseElementPickerOptions) => ElementPicker",
-   "doc": "The element picker on a same-origin preview frame: `setPicking(true)` arms one pick, the picked block stays outlined as the conversation's context."
   },
   "useWorkspace": {
    "group": "modules",
