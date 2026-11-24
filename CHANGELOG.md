@@ -13,6 +13,14 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Fixed
+
+- **Mascot layers that share an origin move as one.** Moving layers used to take their
+  step in the loop from their position in the list, so a thing drawn in several layers (a
+  ghost and its eyes, a flame and its core) came apart as it moved. Layers that give the same
+  `motion` and `origin` now keep one phase; layers without an `origin` still drift out of
+  step, as before.
+
 ## [3.1.0] - 2026-11-24
 
 Minor. Everything is additive except a few default looks that change on purpose; they are

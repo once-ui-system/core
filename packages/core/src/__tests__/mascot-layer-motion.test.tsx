@@ -47,6 +47,25 @@ describe("layer motion", () => {
     ).toBeNull();
   });
 
+  it("keeps layers that share an origin in step, and staggers loose ones", () => {
+    const ghost = ["M80 60h40v40h-40Z", "M88 70h4v4h-4Z", "M108 70h4v4h-4Z"];
+    const { container } = render(
+      <Mascot
+        layers={[
+          ...ghost.map((d) => ({ d, motion: "float" as const, origin: "100 80" })),
+          { d: "M10 10h4v4h-4Z", motion: "float" as const },
+          { d: "M20 10h4v4h-4Z", motion: "float" as const },
+        ]}
+      />,
+      { wrapper },
+    );
+    const delay = (d: string) =>
+      (container.querySelector(`path[d="${d}"]`)?.parentElement as HTMLElement).style
+        .animationDelay;
+    expect(new Set(ghost.map(delay)).size).toBe(1);
+    expect(delay("M10 10h4v4h-4Z")).not.toBe(delay("M20 10h4v4h-4Z"));
+  });
+
   it("draws built-in accessories and layers together", () => {
     const { container } = render(
       <Mascot accessory="crown" layers={[{ d: CAPE, place: "back" }]} />,
