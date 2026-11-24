@@ -12,11 +12,13 @@
  ],
  "props": {
   "size": "StylePanelSize",
+  "labelWidth": "StylePanelLabelWidth",
+  "hints": "boolean",
   "visibility": "StylePanelVisibility",
   "value": "StylePanelRootProps[\"value\"]",
   "onValueChange": "StylePanelRootProps[\"onValueChange\"]",
   "labels": "StylePanelLabels",
-  "customColors": "boolean",
+  "customColors": "StylePanelCustomColors",
   "stacked": "boolean"
  },
  "tags": [
@@ -114,15 +116,15 @@
   },
   "StyleProps": {
    "textVariant": "TextVariant",
-   "background": "Colors | \"surface\" | \"overlay\" | \"page\" | \"transparent\"",
-   "solid": "Colors",
-   "borderTop": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderRight": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderBottom": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderLeft": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderX": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderY": "Colors | \"surface\" | \"transparent\" | boolean",
-   "border": "Colors | \"surface\" | \"transparent\" | boolean",
+   "background": "Colors | ColorAlpha | \"surface\" | \"overlay\" | \"page\" | \"transparent\" | \"gradient\" | `gradient/${number}`",
+   "solid": "Colors | ColorAlpha",
+   "borderTop": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderRight": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderBottom": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderLeft": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderX": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderY": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "border": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
    "borderStyle": "\"solid\" | \"dashed\"",
    "borderWidth": "1 | 2 | 4 | 8 | \"1\" | \"2\" | \"4\" | \"8\"",
    "topRadius": "RadiusSize",
@@ -220,11 +222,17 @@
    "contrast",
    "inverse"
   ],
+  "StylePanelCustomColors": [
+   "false",
+   "true",
+   "readonly (\"neutral\" | StylePanelSchemeRow)[]"
+  ],
   "StylePanelCustomLabels": {
    "swatch": "(row: StylePanelSchemeRow) => string",
    "picker": "(row: StylePanelSchemeRow) => string",
    "description": "(seed: string, row: StylePanelSchemeRow) => ReactNode",
-   "remove": "string"
+   "remove": "string",
+   "neutral": "StylePanelNeutralCustomLabels"
   },
   "StylePanelGroupLabels": {
    "page": "StylePanelHeading",
@@ -237,6 +245,56 @@
    "title": "ReactNode",
    "description": "ReactNode"
   },
+  "StylePanelLabelWidth": [
+   "undefined",
+   "number",
+   "s",
+   "xl",
+   "l",
+   "m",
+   "xs",
+   "0",
+   "1",
+   "2",
+   "4",
+   "8",
+   "12",
+   "16",
+   "20",
+   "24",
+   "32",
+   "40",
+   "48",
+   "56",
+   "64",
+   "72",
+   "80",
+   "104",
+   "128",
+   "160",
+   "`${number}px`",
+   "`${number}rem`",
+   "`${number}em`",
+   "`${number}ch`",
+   "`${number}%`",
+   "`${number}vh`",
+   "`${number}vw`",
+   "`${number}dvh`",
+   "`${number}dvw`",
+   "`${number}svh`",
+   "`${number}svw`",
+   "`${number}lvh`",
+   "`${number}lvw`",
+   "`${number}vmin`",
+   "`${number}vmax`",
+   "`${number}cqw`",
+   "`${number}cqh`",
+   "`calc(${string})`",
+   "`min(${string})`",
+   "`max(${string})`",
+   "`clamp(${string})`",
+   "`var(${string})`"
+  ],
   "StylePanelLabels": {
    "groups": "StylePanelGroupLabels",
    "rows": "StylePanelRowLabels",
@@ -245,12 +303,18 @@
    "swatches": "StylePanelSwatchLabels",
    "themeSwitcher": "ThemeSwitcherLabels",
    "scroller": "ScrollerLabels",
-   "custom": "StylePanelCustomLabels"
+   "custom": "StylePanelCustomLabels",
+   "hints": "StylePanelRowLabels"
   },
   "StylePanelNameLabels": {
    "shapes": "Partial<Record<BorderStyle, string>>",
    "schemes": "Partial<Record<Schemes, string>>",
    "neutrals": "Partial<Record<NeutralColor, string>>"
+  },
+  "StylePanelNeutralCustomLabels": {
+   "swatch": "string",
+   "picker": "string",
+   "description": "(seed: string) => ReactNode"
   },
   "StylePanelOptionLabels": {
    "solid": "Partial<Record<SolidType, ReactNode>>",

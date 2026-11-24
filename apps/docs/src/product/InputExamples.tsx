@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ColorButton,
   ColorInput,
   Column,
   DateInput,
@@ -118,6 +119,19 @@ export function ColorInputExample({ size }: { size?: FieldSize } = {}) {
       value={colorValue}
       onValueChange={handleColorChange}
     />
+  );
+}
+
+// A compact colour trigger: previews while the picker is open, saves when it closes
+export function ColorButtonExample() {
+  const [saved, setSaved] = useState("");
+  return (
+    <Row gap="12" vertical="center">
+      <ColorButton label="Own colour" value={saved} onValueCommit={setSaved} />
+      <Text textVariant="body-default-s" onBackground="neutral-weak">
+        {saved ? `Saved ${saved}` : "Nothing saved yet"}
+      </Text>
+    </Row>
   );
 }
 

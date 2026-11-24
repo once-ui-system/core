@@ -31,6 +31,26 @@ describe("Skeleton", () => {
     expect(square.firstElementChild?.className).toMatch(/radius-s\b/);
   });
 
+  it("pulses by default and is not busy", () => {
+    const { container } = render(<Skeleton shape="block" />, { wrapper: wrap });
+    expect(container.firstElementChild?.className).not.toMatch(/generating/);
+    expect(container.firstElementChild).not.toHaveAttribute("aria-busy");
+  });
+
+  it('effect="generating" draws the mist, says it is busy and keeps its children', () => {
+    const { container, getByText } = render(
+      <Skeleton shape="block" effect="generating" aria-label="Painting logos">
+        Painting logos…
+      </Skeleton>,
+      { wrapper: wrap },
+    );
+    const el = container.firstElementChild;
+    expect(el?.className).toMatch(/generating/);
+    expect(el).toHaveAttribute("aria-busy", "true");
+    expect(el).toHaveAttribute("role", "status");
+    expect(getByText("Painting logos…")).toBeInTheDocument();
+  });
+
   it("applies the size scale", () => {
     const { container } = render(<Skeleton shape="line" size="xl" />, { wrapper: wrap });
     expect(container.firstElementChild?.className).toMatch(/size-xl/);

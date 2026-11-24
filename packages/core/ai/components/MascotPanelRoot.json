@@ -115,15 +115,15 @@
   },
   "StyleProps": {
    "textVariant": "TextVariant",
-   "background": "Colors | \"surface\" | \"overlay\" | \"page\" | \"transparent\"",
-   "solid": "Colors",
-   "borderTop": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderRight": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderBottom": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderLeft": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderX": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderY": "Colors | \"surface\" | \"transparent\" | boolean",
-   "border": "Colors | \"surface\" | \"transparent\" | boolean",
+   "background": "Colors | ColorAlpha | \"surface\" | \"overlay\" | \"page\" | \"transparent\" | \"gradient\" | `gradient/${number}`",
+   "solid": "Colors | ColorAlpha",
+   "borderTop": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderRight": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderBottom": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderLeft": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderX": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderY": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "border": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
    "borderStyle": "\"solid\" | \"dashed\"",
    "borderWidth": "1 | 2 | 4 | 8 | \"1\" | \"2\" | \"4\" | \"8\"",
    "topRadius": "RadiusSize",
@@ -196,7 +196,8 @@
    "accessoryColor": "string",
    "working": "\"cube\" | \"d20\"",
    "sides": "MascotSides",
-   "face": "\"3d\" | \"flat\""
+   "face": "\"3d\" | \"flat\"",
+   "medium": "MascotMedium"
   },
   "MascotIdentityLayer": {
    "d": "!string",
@@ -207,8 +208,27 @@
    "opacity": "number",
    "transform": "string",
    "clip": "boolean",
-   "place": "\"back\" | \"on\" | \"front\""
+   "place": "\"back\" | \"on\" | \"front\"",
+   "motion": "MascotLayerMotion",
+   "origin": "string"
   },
+  "MascotLayerMotion": [
+   "float",
+   "bob",
+   "sway",
+   "spin",
+   "pulse",
+   "flicker"
+  ],
+  "MascotMedium": [
+   "vector",
+   "fur",
+   "plush",
+   "clay",
+   "pixel",
+   "lowpoly",
+   "toon"
+  ],
   "MascotMood": [
    "neutral",
    "happy",

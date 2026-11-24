@@ -27,6 +27,7 @@ const FX = [
   "Effect",
   "FlipFx",
   "GlitchFx",
+  "GradientFx",
   "HoloFx",
   "LetterFx",
   "MatrixFx",

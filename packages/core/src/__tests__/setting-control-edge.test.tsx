@@ -2,6 +2,7 @@ import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Button } from "../components/Button";
 import { Setting } from "../components/Setting";
+import { Slider } from "../components/Slider";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 
 /**
@@ -24,5 +25,19 @@ describe("Setting control placement", () => {
     // under the label in any row narrower than label plus cap.
     expect(area).not.toHaveClass("fill-width");
     expect(area?.style.maxWidth).toBe("14rem");
+  });
+
+  it("lets a filling control such as a Slider grow up to the cap", () => {
+    const { container } = render(
+      <Setting label="Duration" controlWidth="16rem">
+        <Slider value={1} min={1} max={15} onValueChange={() => {}} />
+      </Setting>,
+      { wrapper: ({ children }) => <LayoutProvider>{children}</LayoutProvider> },
+    );
+    const area = container.querySelector<HTMLElement>('[style*="margin-left: auto"]');
+    // Sized only to its content, the area left a full-width Slider nothing to
+    // fill, and it collapsed to its thumb (3.0.0).
+    expect(area?.style.flexGrow).toBe("1");
+    expect(area?.style.maxWidth).toBe("16rem");
   });
 });

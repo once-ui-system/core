@@ -242,6 +242,63 @@ export function schemeAlphaVariants(scheme: SchemeRamp): Record<string, string> 
   };
 }
 
+/**
+ * Below this contrast for white text, a seeded scheme's solids take dark
+ * text. Set for pale seeds (a lime is 1.3:1, a yellow 1.5:1, a pale cyan
+ * 1.8:1), not mid-tones: an orange, an emerald or a sky blue sits at 2.5 to
+ * 3:1, the white labels they are usually designed with, and keeps them.
+ */
+const WHITE_TEXT_FLOOR = 2.25;
+
+/** WCAG contrast of black and of white text on a colour. */
+const textContrast = (lch: Lch) => {
+  const l = luminance(lch);
+  return { black: (l + 0.05) / 0.05, white: 1.05 / (l + 0.05) };
+};
+
+/**
+ * The solids of a seeded scheme that is too light for white text: `brand`
+ * and `accent` solids carry white text by default (foundations' theme.scss),
+ * which a pale seed such as a lime or a yellow can't hold (1.3:1 on
+ * `#d4f43c`). For a seed where black reads better than white, the text on its
+ * solids turns dark (black, with the scheme's own darkest steps for the
+ * medium and weak text), and the resting solid becomes the seed itself
+ * rather than step 400, which the ramp has to keep dark for brand text on a
+ * light page and which would otherwise turn a lime button olive. Hover
+ * (solid-strong) is the seed a shade darker. A scale that pins step 400 or
+ * 500 keeps its own solids; only the text colour follows them.
+ *
+ * Built-in schemes and darker seeds return nothing, so they keep white text.
+ */
+function seededSolidProperties(
+  name: CustomScheme,
+  scale: SchemeScale,
+  pinned: SchemeScale | undefined,
+): Record<string, string> {
+  if (name === "neutral") return {};
+  const pinnedSolids = Boolean(pinned?.[400] || pinned?.[500]);
+  // The colours buttons actually show: the resting fill and the hover.
+  const resting = parseSeed((pinnedSolids ? scale[400] : scale[500]) ?? "");
+  const hover = parseSeed(scale[500] ?? "");
+  if (!resting || !hover) return {};
+  const worst = (pick: "black" | "white") =>
+    Math.min(textContrast(resting)[pick], textContrast(hover)[pick]);
+  // Mid-tones keep white (WHITE_TEXT_FLOOR); a pale seed takes dark text.
+  if (worst("white") >= WHITE_TEXT_FLOOR || worst("black") <= worst("white")) return {};
+  const properties: Record<string, string> = {
+    [`--scheme-${name}-on-solid-strong`]: "var(--static-black)",
+    [`--scheme-${name}-on-solid-medium`]: `var(--scheme-${name}-100)`,
+    [`--scheme-${name}-on-solid-weak`]: `var(--scheme-${name}-200)`,
+  };
+  if (!pinnedSolids) {
+    properties[`--scheme-${name}-solid-medium`] = `var(--scheme-${name}-500)`;
+    properties[`--scheme-${name}-solid-strong`] = format(
+      fitChroma({ ...hover, l: Math.max(0, hover.l - 0.06) }),
+    );
+  }
+  return properties;
+}
+
 const warned = new Set<string>();
 
 /**
@@ -317,6 +374,7 @@ export function customSchemeProperties(
     for (const [suffix, value] of Object.entries(schemeAlphaVariants(scale as SchemeRamp))) {
       if (!scale[suffix as "600-15"]) properties[`--scheme-${name}-${suffix}`] = value;
     }
+    Object.assign(properties, seededSolidProperties(name, scale, scales[name]));
   }
   return properties;
 }

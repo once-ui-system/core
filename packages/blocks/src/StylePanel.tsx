@@ -20,6 +20,7 @@ export type {
   StylePanelGroupLabels,
   StylePanelHeading,
   StylePanelLabels,
+  StylePanelLabelWidth,
   StylePanelNameLabels,
   StylePanelNeutralCustomLabels,
   StylePanelOptionLabels,

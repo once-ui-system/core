@@ -7,6 +7,7 @@ import {
   Heading,
   Input,
   Logo,
+  OTPInput,
   Row,
   SmartLink,
   Text,
@@ -18,16 +19,7 @@ type Step = "email" | "verify";
 export const Login5 = () => {
   const [step, setStep] = useState<Step>("email");
   const [email, setEmail] = useState("");
-  const [code, setCode] = useState(["", "", "", "", "", ""]);
-
-  const updateCode = (index: number, value: string) => {
-    const digit = value.replace(/\D/g, "").slice(-1);
-    setCode((current) => {
-      const next = [...current];
-      next[index] = digit;
-      return next;
-    });
-  };
+  const [code, setCode] = useState("");
 
   return (
     <Column fill center padding="24" overflow="hidden">
@@ -88,7 +80,8 @@ export const Login5 = () => {
                 minWidth="32"
                 minHeight="32"
                 radius="full"
-                background={step === item ? "brand-strong" : "neutral-alpha-weak"}
+                solid={step === item ? "brand-strong" : undefined}
+                background={step === item ? undefined : "neutral-alpha-weak"}
               >
                 <Text
                   textVariant="label-default-xs"
@@ -122,22 +115,13 @@ export const Login5 = () => {
           </Column>
         ) : (
           <Column fillWidth gap="16">
-            <Row fillWidth gap="8" horizontal="center">
-              {code.map((digit, index) => (
-                <Input
-                  key={index}
-                  id={`login5-code-${index}`}
-                  value={digit}
-                  maxLength={1}
-                  style={{ width: "2.75rem", textAlign: "center" }}
-                  onChange={(event) => updateCode(index, event.target.value)}
-                />
-              ))}
+            <Row fillWidth horizontal="center">
+              <OTPInput length={6} value={code} onValueChange={setCode} />
             </Row>
             <Button fillWidth size="l">
               Verify and sign in
             </Button>
-            <Row fillWidth horizontal="center" gap="4">
+            <Row fillWidth horizontal="center" vertical="center" gap="4">
               <Text textVariant="label-default-s" onBackground="neutral-weak">
                 Didn't get it?
               </Text>

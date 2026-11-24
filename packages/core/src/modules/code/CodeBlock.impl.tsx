@@ -5,7 +5,7 @@ import React, { ReactNode, RefObject, useEffect, useRef, useState } from "react"
 import ReactDOM from "react-dom";
 import { Button } from "../../components/Button.js";
 import { Column } from "../../components/Column.js";
-import { Fade } from "../../components/Fade.js";
+import { type BaseColor, Fade } from "../../components/Fade.js";
 import { Flex } from "../../components/Flex.js";
 import { Icon } from "../../components/Icon.js";
 import { IconButton } from "../../components/IconButton.js";
@@ -698,7 +698,8 @@ const CodeBlock = ({
       className={classNames(className, {
         [styles.fullscreen]: inPortal && isFullscreen,
         // Fullscreen with a preview and code: side by side on a wide screen.
-        [styles.split]: inPortal && isFullscreen && !!preview && codes.length > 0 && !hideCode,
+        // A tab with no code (a "Preview" tab) keeps the preview full width.
+        [styles.split]: inPortal && isFullscreen && !!preview && !!code && !hideCode,
       })}
       style={{
         isolation: "isolate",
@@ -963,7 +964,12 @@ const CodeBlock = ({
                       zIndex={1}
                       // The block paints its own surface, so fading to the page
                       // colour left a band of the wrong colour over the code.
-                      base={background ?? "surface"}
+                      // An opacity or the gradient has no fade colour of its own.
+                      base={
+                        background && !background.includes("/") && background !== "gradient"
+                          ? (background as BaseColor)
+                          : "surface"
+                      }
                       style={
                         styleBackgroundColor
                           ? ({ "--base-color": styleBackgroundColor } as React.CSSProperties)

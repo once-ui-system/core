@@ -35,16 +35,16 @@ export const VERSIONS = [
     samePaths: true,
   },
   {
-    // 2.x docs have no deployment of their own yet: listed, not pickable,
-    // until a build from the 2.x line is up at `origin`.
+    // The frozen 2.x docs, built from `docs-v2` (cut from v2.8.0) with
+    // basePath /v2, mounted here like 1.x.
     id: "2",
     label: "2.x",
     status: "legacy",
     path: "/v2",
     origin: "https://v2.docs.once-ui.com",
-    branch: "v2",
-    published: false,
-    mounted: false,
+    branch: "docs-v2",
+    published: true,
+    mounted: true,
     samePaths: true,
   },
   {

@@ -13,7 +13,9 @@
   "StyleProps"
  ],
  "props": {
-  "label": "ReactNode | false"
+  "label": "ReactNode | false",
+  "hint": "ReactNode | false",
+  "hintFor": "keyof StylePanelRowLabels"
  },
  "tags": [
   "settings",
@@ -108,15 +110,15 @@
   },
   "StyleProps": {
    "textVariant": "TextVariant",
-   "background": "Colors | \"surface\" | \"overlay\" | \"page\" | \"transparent\"",
-   "solid": "Colors",
-   "borderTop": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderRight": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderBottom": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderLeft": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderX": "Colors | \"surface\" | \"transparent\" | boolean",
-   "borderY": "Colors | \"surface\" | \"transparent\" | boolean",
-   "border": "Colors | \"surface\" | \"transparent\" | boolean",
+   "background": "Colors | ColorAlpha | \"surface\" | \"overlay\" | \"page\" | \"transparent\" | \"gradient\" | `gradient/${number}`",
+   "solid": "Colors | ColorAlpha",
+   "borderTop": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderRight": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderBottom": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderLeft": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderX": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "borderY": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
+   "border": "Colors | ColorAlpha | \"surface\" | \"transparent\" | boolean",
    "borderStyle": "\"solid\" | \"dashed\"",
    "borderWidth": "1 | 2 | 4 | 8 | \"1\" | \"2\" | \"4\" | \"8\"",
    "topRadius": "RadiusSize",
@@ -138,6 +140,24 @@
    "themeSolid": "SolidType",
    "themeSurface": "SurfaceStyle",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`"
+  }
+ },
+ "types": {
+  "StylePanelRowLabels": {
+   "theme": "ReactNode",
+   "shape": "ReactNode",
+   "brand": "ReactNode",
+   "accent": "ReactNode",
+   "neutral": "ReactNode",
+   "solid": "ReactNode",
+   "effect": "ReactNode",
+   "surface": "ReactNode",
+   "density": "ReactNode",
+   "scaling": "ReactNode",
+   "transition": "ReactNode",
+   "dataStyle": "ReactNode",
+   "bodySize": "ReactNode",
+   "bodyLineHeight": "ReactNode"
   }
  }
 }

@@ -117,3 +117,104 @@ $skeleton-step: 2.5%; // 100% / $skeleton-cycles
         }
     }
 }
+
+/* effect="generating": a dot matrix that lights up. A fine grid of dim dots
+   covers the box; soft brand and accent fields drift underneath on their own
+   slow paths, and only show through a second, larger grid of dots, so the
+   dots they pass under swell and take their colour. The grids hold still and
+   only the fields move (transform), so the compositor runs it: no filter, no
+   per-frame paint. Reduced motion keeps one still frame. Children sit above
+   all of it. */
+@keyframes skeleton-drift-a {
+    0% { transform: translate3d(-22%, -16%, 0) scale(1); }
+    50% { transform: translate3d(18%, 12%, 0) scale(1.2); }
+    100% { transform: translate3d(-4%, 20%, 0) scale(0.9); }
+}
+
+@keyframes skeleton-drift-b {
+    0% { transform: translate3d(22%, 16%, 0) scale(1.1); }
+    50% { transform: translate3d(-16%, -10%, 0) scale(0.9); }
+    100% { transform: translate3d(6%, -20%, 0) scale(1.2); }
+}
+
+.skeleton.generating {
+    --skeleton-dot-pitch: var(--static-space-12);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    animation: none;
+    background-color: var(--neutral-background-weak);
+
+    /* The resting grid: small, dim dots everywhere. */
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background-image: radial-gradient(
+            circle at center,
+            var(--neutral-alpha-medium) 0 1px,
+            transparent 1.5px
+        );
+        background-size: var(--skeleton-dot-pitch) var(--skeleton-dot-pitch);
+        background-position: center;
+    }
+}
+
+/* The fields show only through larger dots on the same grid. */
+.mist {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+    -webkit-mask-image: radial-gradient(circle at center, #000 0 1.75px, transparent 2.5px);
+    mask-image: radial-gradient(circle at center, #000 0 1.75px, transparent 2.5px);
+    -webkit-mask-size: var(--skeleton-dot-pitch) var(--skeleton-dot-pitch);
+    mask-size: var(--skeleton-dot-pitch) var(--skeleton-dot-pitch);
+    -webkit-mask-position: center;
+    mask-position: center;
+}
+
+.field {
+    position: absolute;
+    width: 60%;
+    height: 70%;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, var(--skeleton-field) 0%, var(--skeleton-field) 25%, transparent 100%);
+    will-change: transform;
+    animation: skeleton-drift-a var(--skeleton-field-time) ease-in-out infinite alternate;
+
+    &:nth-child(1) {
+        --skeleton-field: var(--brand-color-strong, var(--brand-solid-strong));
+        --skeleton-field-time: 11s;
+        top: 0;
+        left: 10%;
+    }
+    &:nth-child(2) {
+        --skeleton-field: var(--accent-color-strong, var(--accent-solid-strong));
+        --skeleton-field-time: 14s;
+        top: 30%;
+        left: 35%;
+        animation-name: skeleton-drift-b;
+    }
+    &:nth-child(3) {
+        --skeleton-field: var(--brand-color-medium, var(--brand-solid-medium));
+        --skeleton-field-time: 17s;
+        top: 35%;
+        left: 0;
+        animation-name: skeleton-drift-b;
+        animation-direction: alternate-reverse;
+    }
+}
+
+.group .generating .field {
+    animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .field {
+        animation: none;
+    }
+}

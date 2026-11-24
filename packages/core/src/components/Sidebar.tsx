@@ -248,6 +248,12 @@ interface SidebarProps
   railWidth?: number;
   /** Its words, for another language. */
   labels?: { resize?: string; menu?: string };
+  /**
+   * The edge the phone drawer comes from. `"left"` (the default) for a
+   * SidebarTrigger in the top bar; `"bottom"`, a sheet, for a
+   * TabBarSidebarTrigger in a TabBar, so it rises from where it was opened.
+   */
+  mobileSide?: "left" | "bottom";
 }
 
 /**
@@ -307,6 +313,7 @@ function SidebarFrame({
   expandOnHover = false,
   railWidth,
   labels,
+  mobileSide = "left",
   children,
   className,
   style,
@@ -442,8 +449,8 @@ function SidebarFrame({
       <Drawer
         open={mobileOpen}
         onClose={() => setMobileOpen(false)}
-        side="left"
-        size="s"
+        side={mobileSide}
+        size={mobileSide === "bottom" ? "l" : "s"}
         title={menuLabel}
         flush
       >

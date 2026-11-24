@@ -39,7 +39,8 @@
   "cheeks": "boolean",
   "personality": "\"calm\" | \"default\" | \"bouncy\"",
   "sides": "\"classic\" | \"tints\" | \"mono\" | Partial<Record<\"top\" | \"front\" | \"right\" | \"bottom\" | \"back\" | \"left\", string>>",
-  "face": "\"3d\" | \"flat\""
+  "face": "\"3d\" | \"flat\"",
+  "medium": "MascotMedium"
  },
  "tags": [
   "ai",
@@ -136,8 +137,27 @@
    "opacity": "number",
    "transform": "string",
    "clip": "boolean",
-   "place": "\"back\" | \"on\" | \"front\""
+   "place": "\"back\" | \"on\" | \"front\"",
+   "motion": "MascotLayerMotion",
+   "origin": "string"
   },
+  "MascotLayerMotion": [
+   "float",
+   "bob",
+   "sway",
+   "spin",
+   "pulse",
+   "flicker"
+  ],
+  "MascotMedium": [
+   "vector",
+   "fur",
+   "plush",
+   "clay",
+   "pixel",
+   "lowpoly",
+   "toon"
+  ],
   "MascotMood": [
    "neutral",
    "happy",
