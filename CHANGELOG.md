@@ -150,6 +150,8 @@ These change how existing code looks. Nothing needs editing; check the screens t
   leave padding off the node.
 - **`WeatherFx` rain falls at a calmer pace** (`@once-ui-system/fx`), in step with snow and
   leaves: about half its old speed. `speed` still scales it.
+- `ConversationItem`: a row keeps its height when opening it clears the unread count; it
+  used to shrink as the count's badge went away.
 - `MapPin`: the icon fits its disc (`s`) and pill (`xs`); it rendered at 24px in a 22px disc.
 
 ### Docs
