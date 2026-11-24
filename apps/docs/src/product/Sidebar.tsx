@@ -262,24 +262,22 @@ const NavigationItemComponent: React.FC<{
              green, which is both unreadable and the whole meaning resting on
              colour. The dot stays as the thing that catches the eye; the word
              says which it is. */
-          const recency = (variant: ColorScheme | undefined) => (
+          /* One dot for every tag, whatever the page's front matter says: the
+             pages' own `navTagVariant` mixed tones the dot could not paint
+             (`cyan` drew nothing) and the age fade turned it grey or orange,
+             so three "New" items in a row looked like three different
+             things. The tag still disappears after 60 days. */
+          if (item.updatedAt) {
+            const age = Date.now() - new Date(item.updatedAt).getTime();
+            if (age > 60 * 24 * 60 * 60 * 1000) return null;
+          }
+          return (
             <Row gap="4" vertical="center" flex={0}>
-              <StatusIndicator pulse tone={variant} size="s" />
+              <StatusIndicator pulse tone="brand" size="s" />
               <Text textVariant="label-default-xs" onBackground="neutral-medium">
                 {item.navTag}
               </Text>
             </Row>
-          );
-
-          if (!item.updatedAt) return recency(item.navTagVariant);
-          const age = Date.now() - new Date(item.updatedAt).getTime();
-          if (age > 60 * 24 * 60 * 60 * 1000) return null;
-          return recency(
-            age > 30 * 24 * 60 * 60 * 1000
-              ? "neutral"
-              : age > 20 * 24 * 60 * 60 * 1000
-                ? "warning"
-                : item.navTagVariant,
           );
         })()}
       </Row>

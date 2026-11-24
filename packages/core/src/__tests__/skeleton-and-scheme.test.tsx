@@ -31,6 +31,32 @@ describe("Skeleton", () => {
     expect(square.firstElementChild?.className).toMatch(/radius-s\b/);
   });
 
+  // Models write `shape="block"` without a radius and got square corners.
+  it("rounds a block by default", () => {
+    const { container } = render(<Skeleton shape="block" />, { wrapper: wrap });
+    expect(container.firstElementChild?.className).toMatch(/radius-l\b/);
+    const { container: square } = render(<Skeleton shape="block" radius="xs" />, { wrapper: wrap });
+    expect(square.firstElementChild?.className).toMatch(/radius-xs\b/);
+  });
+
+  // Two generating skeletons side by side used to light up in step.
+  it("starts each generating skeleton's fields at its own point", () => {
+    const { container } = render(
+      <>
+        <Skeleton shape="block" effect="generating" />
+        <Skeleton shape="block" effect="generating" />
+      </>,
+      { wrapper: wrap },
+    );
+    const delays = [...container.querySelectorAll<HTMLElement>("[aria-hidden] > span")].map(
+      (field) => field.style.animationDelay,
+    );
+    expect(delays).toHaveLength(6);
+    expect(delays.every((delay) => delay.startsWith("-"))).toBe(true);
+    expect(new Set(delays.slice(0, 3)).size).toBe(3);
+    expect(delays.slice(0, 3)).not.toEqual(delays.slice(3));
+  });
+
   it("pulses by default and is not busy", () => {
     const { container } = render(<Skeleton shape="block" />, { wrapper: wrap });
     expect(container.firstElementChild?.className).not.toMatch(/generating/);

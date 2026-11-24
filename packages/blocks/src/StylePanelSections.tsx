@@ -1093,8 +1093,11 @@ function Options({
   name: ReactNode;
 }) {
   const stacked = useContext(StylePanelStackedContext);
+  // A small panel drops its buttons a size too, so they match its tighter rows.
+  const small = useContext(StylePanelSizeContext) === "s";
   const labels = useStylePanelLabels();
   const groupName = useGroupName(name);
+  const size = small ? (stacked ? "s" : "m") : stacked ? "m" : "l";
   return (
     <SegmentedControl
       semantics="radio"
@@ -1102,7 +1105,7 @@ function Options({
       maxWidth={stacked ? undefined : "22rem"}
       minWidth={0}
       labels={labels.scroller}
-      buttons={buttons.map((button) => ({ size: stacked ? "m" : "l", ...button }))}
+      buttons={buttons.map((button) => ({ size, ...button }))}
       {...rest}
     />
   );

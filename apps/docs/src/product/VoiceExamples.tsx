@@ -201,7 +201,14 @@ export function MascotCubeExample() {
   );
 }
 
-const SEED_IDEAS = ["happy-red-fox", "sleepyPandaDJ", "royal-ink-cat", "curious-mint-robot", "party-frog", "astro-owl"];
+const SEED_IDEAS = [
+  "happy-red-fox",
+  "sleepyPandaDJ",
+  "royal-ink-cat",
+  "curious-mint-robot",
+  "party-frog",
+  "astro-owl",
+];
 
 /** Type a seed and see the mascot it makes, with the words it understood. */
 export function MascotSeedExample() {
@@ -228,12 +235,19 @@ export function MascotSeedExample() {
           ))}
         </Row>
         <Text textVariant="body-default-xs" onBackground="neutral-weak">
-          Highlighted words set part of the look; the rest feed the hash, so the same seed is always the
-          same mascot.
+          Highlighted words set part of the look; the rest feed the hash, so the same seed is always
+          the same mascot.
         </Text>
         <Row gap="8" wrap>
           {SEED_IDEAS.map((idea) => (
-            <Button key={idea} size="s" variant="tertiary" label={idea} onClick={() => setSeed(idea)} />
+            <Button
+              key={idea}
+              size="s"
+              variant="secondary"
+              weight="default"
+              label={idea}
+              onClick={() => setSeed(idea)}
+            />
           ))}
         </Row>
       </Column>

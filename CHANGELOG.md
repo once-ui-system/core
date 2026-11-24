@@ -13,6 +13,29 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [3.1.1] - 2026-11-24
+
+Patch. Fixes only; nothing to change in your code. `foundations`, `fx` and `blocks` stay
+at 3.1.0.
+
+### Fixed
+
+- **`SidebarContent` uses the thin Once UI scrollbar** instead of the browser's own, so a
+  long sidebar scrolls like the rest of the app.
+- **`MascotPanel` tidies its One color row**, and small panels shrink their segmented
+  controls instead of overflowing.
+- **Mascot layers that share an origin move as one.** Moving layers used to take their
+  step in the loop from their position in the list, so a thing drawn in several layers (a
+  ghost and its eyes, a flame and its core) came apart as it moved. Layers that give the same
+  `motion` and `origin` now keep one phase; layers without an `origin` still drift out of
+  step, as before.
+- **A `block` Skeleton has rounded corners by default.** Lines and circles were round already,
+  but a block without a `radius` drew square corners. It now defaults to `radius="l"`, and a
+  radius you pass still wins.
+- **Generating skeletons don't move in step.** Each field of `effect="generating"` now
+  wanders the whole box on its own path, starting at a different point and speed for every
+  skeleton, so two side by side no longer light up together.
+
 ## [3.1.0] - 2026-11-24
 
 Minor. Everything is additive except a few default looks that change on purpose; they are
@@ -110,6 +133,7 @@ These change how existing code looks. Nothing needs editing; check the screens t
 
 ### Fixed
 
+- **`SidebarContent` scrolls with the thin Once UI scrollbar** (`scrollbar-minimal`) instead of the browser's default one.
 - **A fullscreen `CodeBlock` on a tab with no code keeps its preview full width.** The side-by-side fullscreen layout applied even when the selected tab had no code (such as a "Preview" tab), which left the right half empty.
 - Nested themes: a `StyleScope` that pins a theme and seeds a scheme (`theme="dark"` with
   `accentSeed`) inside a light section of a dark page took the light theme's text and

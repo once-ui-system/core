@@ -723,10 +723,28 @@ type CustomMDXProps = Omit<MDXRemoteProps, "components"> & {
   components?: Partial<MDXComponents>;
 };
 
+/**
+ * MDX takes up to two spaces of indent off every line of a JSX block, the
+ * lines of a template literal included, so each `code` sample lost its first
+ * level of nesting (`  layout="row"` rendered flush left). Spelling a code
+ * sample's leading spaces as `\x20` escapes keeps them out of MDX's reach and
+ * gives the same string once the literal is evaluated.
+ */
+const CODE_LITERAL = /(\bcode(?::\s*|=\{))`((?:\\[\s\S]|[^`\\])*)`/g;
+
+export function keepCodeIndent(source: string) {
+  return source.replace(
+    CODE_LITERAL,
+    (_, lead: string, body: string) =>
+      `${lead}\`${body.replace(/\n( +)/g, (_m, spaces: string) => `\n${"\\x20".repeat(spaces.length)}`)}\``,
+  );
+}
+
 export function CustomMDX(props: CustomMDXProps) {
   return (
     <MDXRemote
       {...props}
+      source={typeof props.source === "string" ? keepCodeIndent(props.source) : props.source}
       // `blockJS: false` is load-bearing: next-mdx-remote 6 blocks JS expressions
       // in MDX by default, and every doc page passes props like `codes={[…]}`.
       options={{

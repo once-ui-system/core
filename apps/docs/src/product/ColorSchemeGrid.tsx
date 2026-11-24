@@ -5,11 +5,25 @@ import { Column, Flex, Row } from "@once-ui-system/core";
 import { PropsTable } from "./PropsTable";
 
 const SCHEMES = [
-  "Sand", "Gray", "Slate", "Mint", "Rose", "Dusk",
-  "Red", "Orange", "Yellow",
-  "Moss", "Green", "Emerald",
-  "Aqua", "Cyan", "Blue",
-  "Indigo", "Violet", "Magenta", "Pink",
+  "Sand",
+  "Gray",
+  "Slate",
+  "Mint",
+  "Rose",
+  "Dusk",
+  "Red",
+  "Orange",
+  "Yellow",
+  "Moss",
+  "Green",
+  "Emerald",
+  "Aqua",
+  "Cyan",
+  "Blue",
+  "Indigo",
+  "Violet",
+  "Magenta",
+  "Pink",
 ];
 
 const WEIGHTS = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200];
@@ -19,7 +33,10 @@ function ColorSchemeGrid() {
     <>
       <Row fillWidth marginBottom="16" overflowX="auto">
         <Column fillWidth gap="1" minWidth="40rem" paddingY="8">
-          <Row gap="1" position="sticky" background="page" zIndex={1}>
+          {/* No fill: the grid scrolls sideways in its own box, so a sticky
+              header never stuck, and its page-coloured band sat darker than
+              the surface around it. */}
+          <Row gap="1">
             <Flex
               paddingX="8"
               paddingY="12"
