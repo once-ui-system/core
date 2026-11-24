@@ -62,7 +62,7 @@ Skeletons can be shaped as lines, circles, or blocks.
 
 ## Generating
 
-For work that takes seconds, such as an image a model is drawing, `effect="generating"` replaces the pulse with soft brand and accent fields that drift through each other under film grain, with a light sheen passing over them: the look of `GradientFx`, drawn in CSS. It follows the theme and the brand, holds still under reduced motion, and marks itself busy. Children sit above it, so a caption can say what is happening.
+For work that takes seconds, such as an image a model is drawing, `effect="generating"` replaces the pulse with a dot matrix: soft brand and accent fields drift under a fine grid, and the dots they pass swell and take their colour. It follows the theme and the brand, holds still under reduced motion, and marks itself busy. Children sit above it, so a caption can say what is happening.
 
 <CodeBlock
   marginTop="16"
@@ -70,7 +70,9 @@ For work that takes seconds, such as an image a model is drawing, `effect="gener
   preview={
     <Row gap="16" fillWidth s={{ direction: "column" }}>
       <Skeleton shape="block" effect="generating" radius="l" minHeight="160" aria-label="Painting logos" center>
-        <Text textVariant="label-default-s" onBackground="neutral-strong">Painting logos…</Text>
+        <Row background="surface" border="neutral-alpha-weak" radius="full" paddingX="16" paddingY="8">
+          <Text textVariant="label-default-s" onBackground="brand-strong">Painting logos…</Text>
+        </Row>
       </Skeleton>
       <Skeleton shape="block" effect="generating" radius="l" minHeight="160" aria-label="Drawing the cover" />
     </Row>
@@ -79,7 +81,9 @@ For work that takes seconds, such as an image a model is drawing, `effect="gener
     {
       code:
 `<Skeleton shape="block" effect="generating" radius="l" minHeight="160" aria-label="Painting logos" center>
-  <Text textVariant="label-default-s" onBackground="neutral-strong">Painting logos…</Text>
+  <Row background="surface" border="neutral-alpha-weak" radius="full" paddingX="16" paddingY="8">
+    <Text textVariant="label-default-s" onBackground="brand-strong">Painting logos…</Text>
+  </Row>
 </Skeleton>`,
       language: "tsx",
       label: "Generating"
@@ -151,7 +155,7 @@ Apply delay classes to stagger loading effects for multiple items.
     shape: "A line of text, a circle, or a filled block.",
     size: "Height of a line, or diameter of a circle. Width comes from Flex.",
     delay: "Milliseconds before the shimmer starts, to stagger a set.",
-    effect: "`pulse` (default), or `generating`: drifting brand and accent fields under grain for long work, still under reduced motion.",
+    effect: "`pulse` (default), or `generating`: a dot matrix that lights up in the brand and accent colours, for long work, still under reduced motion.",
   }}
   content={[
     ["className"],

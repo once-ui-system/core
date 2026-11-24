@@ -118,129 +118,103 @@ $skeleton-step: 2.5%; // 100% / $skeleton-cycles
     }
 }
 
-/* effect="generating": GradientFx's look, in CSS (core can't load fx's
-   shader). Four soft colour fields, brand and accent at full hue whatever the
-   solid style, drift through each other on their own slow paths; a light
-   sheen sweeps across now and then so it reads as working; film grain sits
-   on top. Every moving layer only changes transform, so the compositor runs
-   it: no filter, no animated blur. Reduced motion keeps one still frame.
-   Children sit above all of it. */
+/* effect="generating": a dot matrix that lights up. A fine grid of dim dots
+   covers the box; soft brand and accent fields drift underneath on their own
+   slow paths, and only show through a second, larger grid of dots, so the
+   dots they pass under swell and take their colour. The grids hold still and
+   only the fields move (transform), so the compositor runs it: no filter, no
+   per-frame paint. Reduced motion keeps one still frame. Children sit above
+   all of it. */
 @keyframes skeleton-drift-a {
-    0% { transform: translate3d(-18%, -14%, 0) rotate(-12deg) scale(1); }
-    50% { transform: translate3d(14%, 10%, 0) rotate(8deg) scale(1.18); }
-    100% { transform: translate3d(-6%, 16%, 0) rotate(-4deg) scale(0.94); }
+    0% { transform: translate3d(-22%, -16%, 0) scale(1); }
+    50% { transform: translate3d(18%, 12%, 0) scale(1.2); }
+    100% { transform: translate3d(-4%, 20%, 0) scale(0.9); }
 }
 
 @keyframes skeleton-drift-b {
-    0% { transform: translate3d(20%, 12%, 0) rotate(18deg) scale(1.1); }
-    50% { transform: translate3d(-12%, -8%, 0) rotate(-6deg) scale(0.92); }
-    100% { transform: translate3d(8%, -18%, 0) rotate(10deg) scale(1.2); }
-}
-
-@keyframes skeleton-sheen {
-    0%, 55% { transform: translate3d(-120%, 0, 0) skewX(-18deg); }
-    100% { transform: translate3d(220%, 0, 0) skewX(-18deg); }
+    0% { transform: translate3d(22%, 16%, 0) scale(1.1); }
+    50% { transform: translate3d(-16%, -10%, 0) scale(0.9); }
+    100% { transform: translate3d(6%, -20%, 0) scale(1.2); }
 }
 
 .skeleton.generating {
+    --skeleton-dot-pitch: var(--static-space-12);
     position: relative;
     overflow: hidden;
     isolation: isolate;
     animation: none;
-    background-color: var(--neutral-background-medium);
+    background-color: var(--neutral-background-weak);
 
-    /* Film grain: fractal noise as a small SVG tile, blended over the colours. */
-    &::after {
+    /* The resting grid: small, dim dots everywhere. */
+    &::before {
         content: "";
         position: absolute;
         inset: 0;
         z-index: -1;
         pointer-events: none;
-        opacity: 0.4;
-        mix-blend-mode: overlay;
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-        background-size: 160px 160px;
+        background-image: radial-gradient(
+            circle at center,
+            var(--neutral-alpha-medium) 0 1px,
+            transparent 1.5px
+        );
+        background-size: var(--skeleton-dot-pitch) var(--skeleton-dot-pitch);
+        background-position: center;
     }
 }
 
-.mist,
-.sheen {
+/* The fields show only through larger dots on the same grid. */
+.mist {
     position: absolute;
+    inset: 0;
     z-index: -1;
     pointer-events: none;
-}
-
-.mist {
-    inset: -25%;
+    overflow: hidden;
+    -webkit-mask-image: radial-gradient(circle at center, #000 0 1.75px, transparent 2.5px);
+    mask-image: radial-gradient(circle at center, #000 0 1.75px, transparent 2.5px);
+    -webkit-mask-size: var(--skeleton-dot-pitch) var(--skeleton-dot-pitch);
+    mask-size: var(--skeleton-dot-pitch) var(--skeleton-dot-pitch);
+    -webkit-mask-position: center;
+    mask-position: center;
 }
 
 .field {
     position: absolute;
-    width: 70%;
+    width: 60%;
     height: 70%;
     border-radius: 50%;
-    background: radial-gradient(closest-side, var(--skeleton-field) 0%, transparent 100%);
+    background: radial-gradient(closest-side, var(--skeleton-field) 0%, var(--skeleton-field) 25%, transparent 100%);
     will-change: transform;
     animation: skeleton-drift-a var(--skeleton-field-time) ease-in-out infinite alternate;
 
     &:nth-child(1) {
-        --skeleton-field: color-mix(in srgb, var(--brand-color-strong, var(--brand-solid-strong)) 75%, transparent);
-        --skeleton-field-time: 17s;
-        top: 10%;
-        left: 8%;
+        --skeleton-field: var(--brand-color-strong, var(--brand-solid-strong));
+        --skeleton-field-time: 11s;
+        top: 0;
+        left: 10%;
     }
     &:nth-child(2) {
-        --skeleton-field: color-mix(in srgb, var(--accent-color-strong, var(--accent-solid-strong)) 70%, transparent);
-        --skeleton-field-time: 23s;
+        --skeleton-field: var(--accent-color-strong, var(--accent-solid-strong));
+        --skeleton-field-time: 14s;
         top: 30%;
-        left: 30%;
+        left: 35%;
         animation-name: skeleton-drift-b;
     }
     &:nth-child(3) {
-        --skeleton-field: color-mix(in srgb, var(--brand-color-medium, var(--brand-solid-medium)) 55%, transparent);
-        --skeleton-field-time: 29s;
-        top: 25%;
-        left: 12%;
+        --skeleton-field: var(--brand-color-medium, var(--brand-solid-medium));
+        --skeleton-field-time: 17s;
+        top: 35%;
+        left: 0;
         animation-name: skeleton-drift-b;
         animation-direction: alternate-reverse;
     }
-    &:nth-child(4) {
-        --skeleton-field: color-mix(in srgb, var(--accent-color-medium, var(--accent-solid-medium)) 55%, transparent);
-        --skeleton-field-time: 19s;
-        top: 12%;
-        left: 28%;
-        animation-direction: alternate-reverse;
-    }
 }
 
-.sheen {
-    inset: 0;
-    width: 45%;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        color-mix(in srgb, var(--static-white) 14%, transparent),
-        transparent
-    );
-    will-change: transform;
-    animation: skeleton-sheen 4.5s ease-in-out infinite;
-}
-
-.group .generating {
-    .field,
-    .sheen {
-        animation: none;
-    }
-    .sheen {
-        display: none;
-    }
+.group .generating .field {
+    animation: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
     .field {
         animation: none;
-    }
-    .sheen {
-        display: none;
     }
 }
