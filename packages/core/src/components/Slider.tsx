@@ -3,10 +3,10 @@
 import classNames from "clsx";
 import React, { type ReactNode, useEffect, useId, useRef, useState } from "react";
 import type { FlexLayoutProps, LeafProps } from "../interfaces.js";
+import type { ChangeDetails } from "../internal/changeDetails.js";
 import { RangeSlider, type RangeSliderProps } from "../internal/RangeSlider.js";
 import { useControllableState } from "../internal/useControllableState.js";
 import type { TShirtSizes } from "../types.js";
-import type { ChangeDetails } from "../utils/changeDetails.js";
 import { takeLeafProps } from "../utils/leafLayout.js";
 import { Column } from "./Column.js";
 import { useControlLabel } from "./ControlLabelContext.js";

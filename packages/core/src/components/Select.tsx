@@ -3,10 +3,10 @@
 import classNames from "clsx";
 import type React from "react";
 import { type ReactNode, useCallback, useEffect, useId, useRef, useState } from "react";
+import type { ChangeDetails } from "../internal/changeDetails.js";
 import { mergeLabels } from "../internal/labels.js";
 import { useControllableState } from "../internal/useControllableState.js";
 import type { Placement } from "../types.js";
-import type { ChangeDetails } from "../utils/changeDetails.js";
 import { Column } from "./Column.js";
 import { Dropdown, type DropdownProps } from "./Dropdown.js";
 import {

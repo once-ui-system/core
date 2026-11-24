@@ -8,9 +8,9 @@ import {
   useRef,
   useState,
 } from "react";
+import type { ChangeDetails } from "../internal/changeDetails.js";
 import { mergeLabels } from "../internal/labels.js";
 import { useControllableState } from "../internal/useControllableState.js";
-import type { ChangeDetails } from "../utils/changeDetails.js";
 import { Flex } from "./Flex.js";
 import { useFieldSize } from "./FormContext.js";
 import { Input, InputProps } from "./Input.js";

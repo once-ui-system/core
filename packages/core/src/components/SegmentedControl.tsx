@@ -2,9 +2,9 @@
 
 import classNames from "clsx";
 import { type ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { type ChangeDetails, reportChange } from "../internal/changeDetails.js";
 import { revealInStrip } from "../internal/revealInStrip.js";
 import { useControllableState } from "../internal/useControllableState.js";
-import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 import { Flex } from "./Flex.js";
 import { Scroller } from "./Scroller.js";
 import styles from "./SegmentedControl.module.scss";

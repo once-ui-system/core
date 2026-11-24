@@ -6,7 +6,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { Column } from "../components/Column.js";
 import { Row } from "../components/Row.js";
 import { Text } from "../components/Text.js";
-import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
+import { type ChangeDetails, reportChange } from "./changeDetails.js";
 import styles from "./RangeSlider.module.scss";
 
 interface RangeSliderProps

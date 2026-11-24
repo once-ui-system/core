@@ -11,6 +11,7 @@ import {
   useRef,
   useState,
 } from "react";
+import type { ChangeDetails } from "../internal/changeDetails.js";
 import {
   CONTROL_TEXT,
   type ControlChromeProps,
@@ -19,7 +20,6 @@ import {
 } from "../internal/controlChrome.js";
 import { useFieldsetDisabled } from "../internal/fieldsetDisabled.js";
 import { useControllableState } from "../internal/useControllableState.js";
-import type { ChangeDetails } from "../utils/changeDetails.js";
 import { Column } from "./Column.js";
 import { FormFieldContext } from "./FormContext.js";
 import type { IconButtonProps } from "./IconButton.js";

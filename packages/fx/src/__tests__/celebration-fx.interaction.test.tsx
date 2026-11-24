@@ -117,7 +117,10 @@ describe("CelebrationFx", () => {
     act(() => {
       vi.advanceTimersByTime(1000);
     });
-    expect(onActiveChange).toHaveBeenCalledWith(false);
+    expect(onActiveChange).toHaveBeenCalledWith(
+      false,
+      expect.objectContaining({ source: expect.any(String) }),
+    );
     // Everything in the air lands within a few seconds, then no frame is asked for.
     frames.step(600, 16);
     expect(frames.pending()).toHaveLength(0);
@@ -135,7 +138,10 @@ describe("CelebrationFx", () => {
     act(() => {
       vi.advanceTimersByTime(1);
     });
-    expect(onActiveChange).toHaveBeenCalledWith(false);
+    expect(onActiveChange).toHaveBeenCalledWith(
+      false,
+      expect.objectContaining({ source: expect.any(String) }),
+    );
   });
 
   it("runs until `active` turns off with `duration={0}`", () => {
@@ -189,11 +195,17 @@ describe("CelebrationFx", () => {
     frames.step(30);
     expect(canvas.calls.get("stroke")).toBeUndefined();
     fireEvent.mouseEnter(root);
-    expect(onActiveChange).toHaveBeenLastCalledWith(true);
+    expect(onActiveChange).toHaveBeenLastCalledWith(
+      true,
+      expect.objectContaining({ source: expect.any(String) }),
+    );
     frames.step(30);
     expect(canvas.calls.get("stroke")).toBeGreaterThan(0);
     fireEvent.mouseLeave(root);
-    expect(onActiveChange).toHaveBeenLastCalledWith(false);
+    expect(onActiveChange).toHaveBeenLastCalledWith(
+      false,
+      expect.objectContaining({ source: expect.any(String) }),
+    );
   });
 
   it("keeps the trigger working when the parent passes its own handlers", () => {

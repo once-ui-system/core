@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useCallback, useId, useRef } from "react";
+import type { ChangeDetails } from "../internal/changeDetails.js";
 import { useControllableState } from "../internal/useControllableState.js";
 import type { CSSUnit } from "../types.js";
 import { fieldLocale } from "../utils/calendarLocale.js";
-import type { ChangeDetails } from "../utils/changeDetails.js";
 import { DatePicker, type DatePickerLabels, type DateRange } from "./DatePicker.js";
 import { Dropdown } from "./Dropdown.js";
 import { DropdownComboboxContext } from "./DropdownTriggerContext.js";

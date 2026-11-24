@@ -42,6 +42,12 @@ describe("copies of core's internal helpers", () => {
     );
   });
 
+  it("changeDetails is core's, word for word", () => {
+    expect(body(path.resolve(__dirname, "../internal/changeDetails.ts"))).toBe(
+      body(path.join(CORE, "internal/changeDetails.ts")),
+    );
+  });
+
   it("cannotHover is core's, word for word", () => {
     expect(body(path.resolve(__dirname, "../internal/pointer.ts"))).toBe(
       body(path.join(CORE, "internal/pointer.ts")),

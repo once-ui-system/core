@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import { type ChangeDetails, createChangeDetails } from "../utils/changeDetails.js";
+import { type ChangeDetails, createChangeDetails } from "./changeDetails.js";
 
 /**
  * The one value contract every stateful component follows in 3.0: state `X`

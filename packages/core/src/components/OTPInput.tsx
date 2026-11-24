@@ -2,8 +2,8 @@
 
 import React, { useEffect, useId, useRef, useState } from "react";
 import type { LeafProps } from "../interfaces.js";
+import { type ChangeDetails, reportChange } from "../internal/changeDetails.js";
 import { mergeLabels } from "../internal/labels.js";
-import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 import { Column } from "./Column.js";
 import { Flex } from "./Flex.js";
 import { Input } from "./Input.js";

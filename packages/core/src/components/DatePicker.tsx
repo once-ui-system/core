@@ -9,10 +9,10 @@ import React, {
   useState,
   useSyncExternalStore,
 } from "react";
+import { type ChangeDetails, reportChange } from "../internal/changeDetails.js";
 import { mergeLabels } from "../internal/labels.js";
 import { CondensedTShirtSizes } from "../types.js";
 import { getCalendarNames } from "../utils/calendarLocale.js";
-import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 import {
   clearLastOpenedDropdown,
   getLastOpenedDropdown,

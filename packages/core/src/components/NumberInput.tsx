@@ -2,7 +2,7 @@
 
 import classNames from "clsx";
 import React, { useState } from "react";
-import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
+import { type ChangeDetails, reportChange } from "../internal/changeDetails.js";
 import { Column } from "./Column.js";
 import { Flex } from "./Flex.js";
 import { useFieldSize } from "./FormContext.js";

@@ -1,7 +1,7 @@
 "use client";
 import React, { useCallback, useImperativeHandle, useRef, useState } from "react";
+import { type ChangeDetails, reportChange } from "../internal/changeDetails.js";
 import { mergeLabels } from "../internal/labels.js";
-import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 import { Column } from "./Column.js";
 import { Dropdown } from "./Dropdown.js";
 import { Flex } from "./Flex.js";

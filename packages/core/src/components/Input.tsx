@@ -11,8 +11,8 @@ import React, {
 } from "react";
 import { useDebounce } from "../hooks/useDebounce.js";
 import type { LeafProps } from "../interfaces.js";
+import { type ChangeDetails, reportChange } from "../internal/changeDetails.js";
 import type { FieldSize } from "../types.js";
-import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 import { takeLeafProps } from "../utils/leafLayout.js";
 import { Column } from "./Column.js";
 import { useFieldInvalid, useFieldSize, useWarnFieldOwnedProps } from "./FormContext.js";
