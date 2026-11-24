@@ -16,6 +16,7 @@ import { Flex } from "./Flex.js";
 import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails.js";
 import { useRadioGroupItem } from "./RadioGroupContext.js";
 import styles from "./SharedInteractiveStyles.module.scss";
+import type { ChangeDetails } from "../utils/changeDetails.js";
 
 interface RadioButtonProps
   extends LeafProps,
@@ -40,7 +41,7 @@ interface RadioButtonProps
   disabled?: boolean;
   /** Called with the state the radio moves to: `true` when it becomes the
    *  chosen one. As with a native radio, picking it again does nothing. */
-  onCheckedChange?: (checked: boolean) => void;
+  onCheckedChange?: (checked: boolean, details?: ChangeDetails) => void;
   hoverable?: boolean;
 }
 

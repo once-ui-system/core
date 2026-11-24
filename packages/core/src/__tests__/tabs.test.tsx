@@ -7,6 +7,7 @@ import { describe, expect, it, vi } from "vitest";
 import { Tab, TabList, TabPanel, Tabs } from "../components/Tabs";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -146,7 +147,7 @@ describe("Tabs: selection", () => {
 
     expect(selectedTab()).toBe(tab("Security"));
     expect(screen.getByText("Security panel")).toBeVisible();
-    expect(onChange).toHaveBeenCalledExactlyOnceWith("security");
+    expect(onChange).toHaveBeenCalledExactlyOnceWith("security", changeDetails);
   });
 
   it("does not report a click on the tab already selected", async () => {
@@ -165,7 +166,7 @@ describe("Tabs: selection", () => {
     });
 
     await user.click(tab("Style"));
-    expect(onChange).toHaveBeenCalledWith("style");
+    expect(onChange).toHaveBeenCalledWith("style", changeDetails);
     expect(selectedTab()).toBe(tab("General"));
 
     rerender(<Settings value="style" onValueChange={onChange} />);

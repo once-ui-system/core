@@ -15,6 +15,7 @@ import { useFieldSize } from "./FormContext.js";
 import { Input, InputProps } from "./Input.js";
 import { Tag } from "./Tag.js";
 import { VisuallyHidden } from "./VisuallyHidden.js";
+import type { ChangeDetails } from "../utils/changeDetails.js";
 
 /** What TagInput announces and names. Omitted fields keep the English default. */
 interface TagInputLabels {
@@ -36,7 +37,7 @@ interface TagInputProps extends Omit<InputProps, "value" | "defaultValue" | "onV
   /** The starting tags of an uncontrolled TagInput (no `value`). */
   defaultValue?: readonly string[];
   /** Receives the whole new list after an add or a remove. */
-  onValueChange?: (value: string[]) => void;
+  onValueChange?: (value: string[], details?: ChangeDetails) => void;
   /** The remove buttons' names and the removal announcement, for a translated interface. */
   labels?: TagInputLabels;
 }

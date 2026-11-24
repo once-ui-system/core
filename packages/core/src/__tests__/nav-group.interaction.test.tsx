@@ -8,6 +8,7 @@ import { NavGroup } from "../components/NavGroup";
 import { NavItem } from "../components/NavItem";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -52,7 +53,7 @@ describe("NavGroup", () => {
     expect(header()).toHaveFocus();
     await user.keyboard("{Enter}");
     expect(header()).toHaveAttribute("aria-expanded", "true");
-    expect(onOpenChange).toHaveBeenCalledWith(true);
+    expect(onOpenChange).toHaveBeenCalledWith(true, changeDetails);
     await user.tab();
     expect(screen.getByRole("link", { name: "Profile" })).toHaveFocus();
   });
@@ -70,7 +71,7 @@ describe("NavGroup", () => {
     const onOpenChange = vi.fn();
     const { rerender } = render(<Settings open={false} onOpenChange={onOpenChange} />, { wrapper });
     await user.click(header());
-    expect(onOpenChange).toHaveBeenCalledWith(true);
+    expect(onOpenChange).toHaveBeenCalledWith(true, changeDetails);
     expect(header()).toHaveAttribute("aria-expanded", "false");
     rerender(<Settings open onOpenChange={onOpenChange} />);
     expect(header()).toHaveAttribute("aria-expanded", "true");

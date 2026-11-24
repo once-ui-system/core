@@ -4,6 +4,7 @@ import type React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { DateInput } from "../components/DateInput";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import { changeDetails } from "../test/changeDetails";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -67,7 +68,7 @@ describe("DateRangeInput: interaction", () => {
     await waitFor(async () => expect(await day(first)).toHaveFocus());
     await user.keyboard("{Enter}{ArrowRight}{ArrowRight}{Enter}");
     const third = new Date(today.getFullYear(), today.getMonth(), 3);
-    expect(onChange).toHaveBeenLastCalledWith({ startDate: first, endDate: third });
+    expect(onChange).toHaveBeenLastCalledWith({ startDate: first, endDate: third }, changeDetails);
 
     await waitFor(() => expect(end()).toHaveAttribute("aria-expanded", "false"));
     expect(end()).toHaveFocus();

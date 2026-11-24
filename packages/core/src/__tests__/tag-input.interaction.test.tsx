@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from "vitest";
 import { TagInput } from "../components/TagInput";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -37,7 +38,7 @@ describe("TagInput: interaction", () => {
     const remove = screen.getByRole("button", { name: "Remove tag vue" });
     remove.focus();
     await user.keyboard("{Enter}");
-    expect(onChange).toHaveBeenLastCalledWith(["react", "svelte"]);
+    expect(onChange).toHaveBeenLastCalledWith(["react", "svelte"], changeDetails);
     expect(screen.queryByRole("button", { name: "Remove tag vue" })).not.toBeInTheDocument();
   });
 
@@ -52,7 +53,7 @@ describe("TagInput: interaction", () => {
     );
     const removes = screen.getAllByRole("button", { name: "Remove tag a" });
     await user.click(removes[1]);
-    expect(onChange).toHaveBeenCalledWith(["a", "b"]);
+    expect(onChange).toHaveBeenCalledWith(["a", "b"], changeDetails);
   });
 
   it("drives a parent's list as a controlled field", async () => {
@@ -83,7 +84,7 @@ describe("TagInput: interaction", () => {
       wrapper: wrap,
     });
     await user.type(field(), "x{Enter}");
-    expect(onChange).toHaveBeenCalledWith(["x"]);
+    expect(onChange).toHaveBeenCalledWith(["x"], changeDetails);
     expect(onKeyDown.mock.calls.map(([event]) => event.key)).toEqual(["x", "Enter"]);
   });
 
@@ -103,7 +104,7 @@ describe("TagInput: interaction", () => {
     );
     await user.type(field(), "a,b{Enter}");
     expect(onChange).toHaveBeenCalledTimes(1);
-    expect(onChange).toHaveBeenCalledWith(["ab"]);
+    expect(onChange).toHaveBeenCalledWith(["ab"], changeDetails);
   });
 
   it("keeps typing text in the field while it is not committed", async () => {

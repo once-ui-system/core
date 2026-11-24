@@ -7,6 +7,7 @@ import { RadioButton } from "../components/RadioButton";
 import { Switch } from "../components/Switch";
 import { TagInput } from "../components/TagInput";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import { changeDetails } from "../test/changeDetails";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -47,7 +48,7 @@ describe("Switch defaultChecked", () => {
     });
 
     await user.click(screen.getByText("Wi-Fi"));
-    expect(onCheckedChange).toHaveBeenLastCalledWith(false);
+    expect(onCheckedChange).toHaveBeenLastCalledWith(false, changeDetails);
     expect(screen.getByRole("switch", { name: "Wi-Fi" })).not.toBeChecked();
   });
 
@@ -78,7 +79,7 @@ describe("Switch defaultChecked", () => {
     const control = screen.getByRole("switch", { name: "Wi-Fi" });
     expect(control).not.toBeChecked();
     await user.click(control);
-    expect(onCheckedChange).toHaveBeenCalledWith(true);
+    expect(onCheckedChange).toHaveBeenCalledWith(true, changeDetails);
     expect(control).not.toBeChecked();
   });
 });
@@ -94,10 +95,10 @@ describe("Checkbox and RadioButton defaultChecked", () => {
     const checkbox = screen.getByRole("checkbox", { name: "Remember me" });
     expect(checkbox).toBeChecked();
     await user.click(checkbox);
-    expect(onCheckedChange).toHaveBeenLastCalledWith(false);
+    expect(onCheckedChange).toHaveBeenLastCalledWith(false, changeDetails);
     expect(checkbox).not.toBeChecked();
     await user.click(checkbox);
-    expect(onCheckedChange).toHaveBeenLastCalledWith(true);
+    expect(onCheckedChange).toHaveBeenLastCalledWith(true, changeDetails);
     expect(checkbox).toBeChecked();
   });
 
@@ -120,7 +121,7 @@ describe("Checkbox and RadioButton defaultChecked", () => {
 
     const checkbox = screen.getByRole("checkbox", { name: "Locked" });
     await user.click(checkbox);
-    expect(onCheckedChange).toHaveBeenCalledWith(false);
+    expect(onCheckedChange).toHaveBeenCalledWith(false, changeDetails);
     expect(checkbox).toBeChecked();
   });
 
@@ -156,7 +157,7 @@ describe("TagInput defaultValue", () => {
     });
 
     await user.type(field(), "vue{Enter}");
-    expect(onChange).toHaveBeenLastCalledWith(["react", "vue"]);
+    expect(onChange).toHaveBeenLastCalledWith(["react", "vue"], changeDetails);
   });
 
   it("does not pass the tag list to the text field", () => {

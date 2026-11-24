@@ -31,6 +31,7 @@ import { Option } from "./Option.js";
 import { Row } from "./Row.js";
 import { SegmentedControl } from "./SegmentedControl.js";
 import { Text } from "./Text.js";
+import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 
 /** The month an undated calendar renders before it knows today's (see Calendar). */
 const UNDATED_MONTH = new Date(2000, 0, 1);
@@ -100,7 +101,7 @@ interface CalendarProps
   /** The starting date of an uncontrolled DatePicker (no `value`). */
   defaultValue?: Date;
   /** Receives the date picked, and each time edit with `timePicker`. */
-  onValueChange?: (date: Date) => void;
+  onValueChange?: (date: Date, details?: ChangeDetails) => void;
   minDate?: Date;
   maxDate?: Date;
   previousMonth?: boolean;
@@ -470,12 +471,9 @@ const Calendar = ({
       newDate.setHours(selectedTime.hours);
       newDate.setMinutes(selectedTime.minutes);
     }
+    if (!timePicker && !reportChange(onValueChange, newDate)) return;
     setSelectedDate(newDate);
-    if (timePicker) {
-      handleTimeToggle(true);
-    } else {
-      onValueChange?.(newDate);
-    }
+    if (timePicker) handleTimeToggle(true);
   };
 
   const handleMonthChange = (increment: number) => {
@@ -576,7 +574,7 @@ const Calendar = ({
     const newDate = new Date(selectedDate);
     newDate.setHours(newTime.hours);
     newDate.setMinutes(minutes);
-    onValueChange?.(newDate);
+    reportChange(onValueChange, newDate);
   };
 
   const isInRange = (date: Date) => {
@@ -1245,7 +1243,7 @@ interface RangeDatePickerProps
   /** The starting range of an uncontrolled range picker (no `value`). */
   defaultValue?: DateRange;
   /** Receives the range after each pick: the start alone, then both ends. */
-  onValueChange?: (range: DateRange) => void;
+  onValueChange?: (range: DateRange, details?: ChangeDetails) => void;
   minDate?: Date;
   maxDate?: Date;
   /** How many months show side by side: 1 (the default) or 2. 2.x's `dual` was `months={2}`. */
@@ -1318,16 +1316,16 @@ const RangeCalendars = ({
     if (!internalValue.startDate || (internalValue.startDate && internalValue.endDate)) {
       // A new selection starts.
       const newRange = { startDate: date, endDate: undefined };
+      if (!reportChange(onValueChange, newRange)) return;
       setInternalValue(newRange);
-      onValueChange?.(newRange);
     } else {
       const newRange = { startDate: internalValue.startDate, endDate: date };
       if (newRange.startDate > date) {
         newRange.startDate = date;
         newRange.endDate = internalValue.startDate;
       }
+      if (!reportChange(onValueChange, newRange)) return;
       setInternalValue(newRange);
-      onValueChange?.(newRange);
     }
   };
 

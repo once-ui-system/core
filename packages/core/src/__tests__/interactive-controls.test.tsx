@@ -6,6 +6,7 @@ import { Accordion } from "../components/Accordion";
 import { Checkbox } from "../components/Checkbox";
 import { Switch } from "../components/Switch";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import { changeDetails } from "../test/changeDetails";
 
 /**
  * Interaction tests for the shared toggle-style controls
@@ -60,7 +61,7 @@ describe("Accordion", () => {
     const header = screen.getByRole("button", { name: /section title/i });
     await user.click(header);
 
-    expect(onOpenChange).toHaveBeenCalledExactlyOnceWith(true);
+    expect(onOpenChange).toHaveBeenCalledExactlyOnceWith(true, changeDetails);
     expect(header).toHaveAttribute("aria-expanded", "false");
   });
 });

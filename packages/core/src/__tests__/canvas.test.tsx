@@ -22,6 +22,7 @@ import {
   worldToScreen,
   zoomAt,
 } from "../modules/canvas/index";
+import { changeDetails } from "../test/changeDetails";
 
 const near = (a: number, b: number) => expect(a).toBeCloseTo(b, 6);
 const nearRect = (a: CanvasRect, b: CanvasRect) => {
@@ -184,7 +185,7 @@ describe("Canvas", () => {
     render(<Canvas height={400} onViewChange={onViewChange} />);
     const canvas = screen.getByRole("application", { name: "Canvas" });
     fireEvent.wheel(canvas, { deltaX: 10, deltaY: 20 });
-    expect(onViewChange).toHaveBeenLastCalledWith({ x: -10, y: -20, zoom: 1 });
+    expect(onViewChange).toHaveBeenLastCalledWith({ x: -10, y: -20, zoom: 1 }, changeDetails);
     fireEvent.wheel(canvas, { deltaY: -100, ctrlKey: true, clientX: 0, clientY: 0 });
     expect(onViewChange.mock.lastCall?.[0].zoom).toBeGreaterThan(1);
   });
@@ -217,7 +218,7 @@ describe("Canvas", () => {
     const canvas = screen.getByRole("application", { name: "Canvas" });
     fireEvent.pointerDown(canvas, { pointerId: 1, button: 0, clientX: 0, clientY: 0 });
     fireEvent.pointerMove(canvas, { pointerId: 1, clientX: 30, clientY: 15 });
-    expect(onViewChange).toHaveBeenLastCalledWith({ x: 30, y: 15, zoom: 1 });
+    expect(onViewChange).toHaveBeenLastCalledWith({ x: 30, y: 15, zoom: 1 }, changeDetails);
   });
 
   it("doesn't start a gesture from an item", () => {

@@ -6,6 +6,7 @@ import { Checkbox } from "../components/Checkbox";
 import { RadioButton } from "../components/RadioButton";
 import { Switch } from "../components/Switch";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import { changeDetails } from "../test/changeDetails";
 
 /**
  * Checkbox, RadioButton and Switch type the native input props, but spread
@@ -103,7 +104,7 @@ describe.each(cases)("%s native input props", (_name, role, renderControl) => {
     render(renderControl({ onCheckedChange }), { wrapper });
     await user.click(screen.getByRole(role, { name: "Accept" }));
     expect(onCheckedChange).toHaveBeenCalledTimes(1);
-    expect(onCheckedChange).toHaveBeenCalledWith(true);
+    expect(onCheckedChange).toHaveBeenCalledWith(true, changeDetails);
   });
 });
 

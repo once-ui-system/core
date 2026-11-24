@@ -6,6 +6,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { Column } from "../components/Column.js";
 import { Row } from "../components/Row.js";
 import { Text } from "../components/Text.js";
+import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 import styles from "./RangeSlider.module.scss";
 
 interface RangeSliderProps
@@ -15,7 +16,7 @@ interface RangeSliderProps
   /** The range selected first when RangeSlider manages its own state. Defaults to `[min, max]`. */
   defaultValue?: [number, number];
   /** Called with the new `[start, end]`, start never above end. */
-  onValueChange?: (value: [number, number]) => void;
+  onValueChange?: (value: [number, number], details?: ChangeDetails) => void;
   min?: number;
   max?: number;
   /** Every value lands on a multiple of `step` from `min`. */
@@ -128,9 +129,9 @@ const RangeSlider = ({
     const target = Math.min(high, Math.max(low, snapped ? snap(to) : to));
     const next: [number, number] = thumb === 0 ? [target, until] : [from, target];
     if (next[0] === from && next[1] === until) return;
+    if (!reportChange(onValueChange, next)) return;
     latest.current = next;
     if (!controlled) setUncontrolled(next);
-    onValueChange?.(next);
   };
 
   // Read on every gesture rather than on render, so it follows a `dir`

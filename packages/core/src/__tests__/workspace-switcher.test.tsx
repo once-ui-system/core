@@ -4,6 +4,7 @@ import type React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { WorkspaceSwitcher, type WorkspaceSwitcherItem } from "../components/WorkspaceSwitcher";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import { changeDetails } from "../test/changeDetails";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -91,7 +92,7 @@ describe("WorkspaceSwitcher", () => {
     await flush();
     await user.click(await screen.findByRole("option", { name: /Ember/ }));
     expect(onValueChange).toHaveBeenCalledWith("ember");
-    expect(onOpenChange).toHaveBeenCalledWith(false);
+    expect(onOpenChange).toHaveBeenCalledWith(false, changeDetails);
   });
 
   it("searches above six items, by name and keywords", async () => {

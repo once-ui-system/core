@@ -19,6 +19,7 @@ import { Option, type OptionProps } from "./Option.js";
 import { Row } from "./Row.js";
 import { Spinner } from "./Spinner.js";
 import { Text } from "./Text.js";
+import type { ChangeDetails } from "../utils/changeDetails.js";
 
 /** A suggestion. Its text is `label` when that is a string, else `value`. */
 type ComboboxOption = Omit<OptionProps, "selected" | "highlighted" | "onClick" | "href">;
@@ -44,7 +45,7 @@ interface ComboboxProps
   /** The starting text of an uncontrolled Combobox (no `value`). */
   defaultValue?: string;
   /** Receives the text on every keystroke and every pick. */
-  onValueChange?: (value: string) => void;
+  onValueChange?: (value: string, details?: ChangeDetails) => void;
   /** Called when a suggestion is picked, with the whole option. */
   onOptionSelect?: (option: ComboboxOption) => void;
   /** Whether the list is open, controlled. */

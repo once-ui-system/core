@@ -8,6 +8,7 @@ import { Flex } from "./Flex.js";
 import { Input } from "./Input.js";
 import styles from "./OTPInput.module.scss";
 import { Text } from "./Text.js";
+import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 
 /** The group's and the fields' accessible names. Omitted fields keep the English default. */
 interface OTPInputLabels {
@@ -32,7 +33,7 @@ interface OTPInputProps
   /** The starting code of an uncontrolled OTPInput (no `value`). */
   defaultValue?: string;
   /** Receives the code after every digit typed or erased. */
-  onValueChange?: (code: string) => void;
+  onValueChange?: (code: string, details?: ChangeDetails) => void;
   /** Receives the code once every digit is filled. */
   onComplete?: (code: string) => void;
   error?: boolean;
@@ -82,8 +83,8 @@ const OTPInput = ({
   }
 
   const setValues = (next: string[]) => {
+    if (!reportChange(onValueChange, next.join(""))) return;
     setDigits(next);
-    onValueChange?.(next.join(""));
   };
   const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
   // The fields' ids were `otp-0`…`otp-N`, the same in every OTPInput on a

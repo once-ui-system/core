@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 import { Slider, type SliderProps } from "../components/Slider";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 
 /**
  * Slider is a styled native range input, so the browser owns pointer and
@@ -43,7 +44,7 @@ describe("Slider", () => {
       wrapper,
     });
     fireEvent.change(screen.getByRole("slider"), { target: { value: "42.5" } });
-    expect(onChange).toHaveBeenCalledWith(42.5);
+    expect(onChange).toHaveBeenCalledWith(42.5, changeDetails);
   });
 
   it("is controlled: the input shows `value`, not the last change, until the parent updates it", () => {
@@ -57,7 +58,7 @@ describe("Slider", () => {
     const slider = screen.getByRole("slider") as HTMLInputElement;
 
     fireEvent.change(slider, { target: { value: "80" } });
-    expect(onChange).toHaveBeenCalledWith(80);
+    expect(onChange).toHaveBeenCalledWith(80, changeDetails);
     expect(slider.value).toBe("30");
 
     rerender(<Slider aria-label="Volume" value={80} onValueChange={onChange} />);
@@ -147,7 +148,7 @@ describe("Slider: uncontrolled", () => {
     expect(slider.value).toBe("30");
 
     fireEvent.change(slider, { target: { value: "70" } });
-    expect(onChange).toHaveBeenCalledWith(70);
+    expect(onChange).toHaveBeenCalledWith(70, changeDetails);
     expect(slider.value).toBe("70");
     expect(screen.getByText("70")).toBeInTheDocument();
   });
@@ -175,7 +176,7 @@ describe("Slider: uncontrolled", () => {
     const slider = screen.getByRole("slider") as HTMLInputElement;
     expect(slider.value).toBe("40");
     fireEvent.change(slider, { target: { value: "90" } });
-    expect(onChange).toHaveBeenCalledWith(90);
+    expect(onChange).toHaveBeenCalledWith(90, changeDetails);
     expect(slider.value).toBe("40");
   });
 

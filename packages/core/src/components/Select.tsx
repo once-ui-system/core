@@ -20,6 +20,7 @@ import { IconButton } from "./IconButton.js";
 import { Input, type InputProps } from "./Input.js";
 import inputStyles from "./Input.module.scss";
 import { Option, type OptionProps } from "./Option.js";
+import type { ChangeDetails } from "../utils/changeDetails.js";
 
 type SelectOptionType = Omit<OptionProps, "selected">;
 
@@ -46,7 +47,7 @@ interface SelectProps
   /** The starting value of an uncontrolled Select (no `value`). */
   defaultValue?: string | string[];
   /** Receives the new value after each pick: the whole array with `multiple`. */
-  onValueChange?: (value: string | string[]) => void;
+  onValueChange?: (value: string | string[], details?: ChangeDetails) => void;
   /** Whether the list is open, controlled. */
   open?: boolean;
   /** Whether the list starts open, uncontrolled (no `open`). */

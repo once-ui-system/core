@@ -7,6 +7,7 @@ import { Checkbox } from "../components/Checkbox";
 import { RadioButton } from "../components/RadioButton";
 import { Switch } from "../components/Switch";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import { changeDetails } from "../test/changeDetails";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -30,11 +31,11 @@ describe("onCheckedChange receives the new checked state", () => {
     );
 
     await user.click(screen.getByRole("checkbox", { name: "Terms" }));
-    expect(onCheckedChange).toHaveBeenLastCalledWith(true);
+    expect(onCheckedChange).toHaveBeenLastCalledWith(true, changeDetails);
 
     rerender(<Checkbox label="Terms" checked onCheckedChange={onCheckedChange} />);
     await user.keyboard("{Enter}");
-    expect(onCheckedChange).toHaveBeenLastCalledWith(false);
+    expect(onCheckedChange).toHaveBeenLastCalledWith(false, changeDetails);
   });
 
   it("RadioButton passes true when picked", async () => {
@@ -45,7 +46,7 @@ describe("onCheckedChange receives the new checked state", () => {
     });
 
     await user.click(screen.getByRole("radio", { name: "Monthly" }));
-    expect(onCheckedChange).toHaveBeenCalledWith(true);
+    expect(onCheckedChange).toHaveBeenCalledWith(true, changeDetails);
   });
 
   it("Switch passes the new state from a click and from the keyboard", async () => {
@@ -59,12 +60,12 @@ describe("onCheckedChange receives the new checked state", () => {
     );
 
     await user.click(screen.getByText("Wi-Fi"));
-    expect(onCheckedChange).toHaveBeenLastCalledWith(true);
+    expect(onCheckedChange).toHaveBeenLastCalledWith(true, changeDetails);
 
     rerender(<Switch label="Wi-Fi" checked onCheckedChange={onCheckedChange} />);
     await user.tab();
     await user.keyboard(" ");
-    expect(onCheckedChange).toHaveBeenLastCalledWith(false);
+    expect(onCheckedChange).toHaveBeenLastCalledWith(false, changeDetails);
     expect(onCheckedChange).toHaveBeenCalledTimes(2);
   });
 

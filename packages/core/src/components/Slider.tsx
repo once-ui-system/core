@@ -13,6 +13,7 @@ import { useFieldSizing } from "./FormContext.js";
 import { Row } from "./Row.js";
 import styles from "./Slider.module.scss";
 import { Text } from "./Text.js";
+import type { ChangeDetails } from "../utils/changeDetails.js";
 
 /** What both modes take. */
 interface SliderFieldProps extends LeafProps {
@@ -51,7 +52,7 @@ interface SingleSliderProps
   /** Where the slider starts when it manages its own state. Defaults to `min`. */
   defaultValue?: number;
   /** Called with the new value, as a number, on every step of a drag. */
-  onValueChange?: (value: number) => void;
+  onValueChange?: (value: number, details?: ChangeDetails) => void;
   /** Called with the value once a change is done: on pointer release, and
    *  after each key that moves the thumb. For work too heavy for every step. */
   onValueCommit?: (value: number) => void;
@@ -87,7 +88,7 @@ interface RangeModeSliderProps
   /** The range selected first when the slider manages its own state. Defaults to `[min, max]`. */
   defaultValue?: [number, number];
   /** Called with the new `[start, end]`, start never above end. */
-  onValueChange?: (value: [number, number]) => void;
+  onValueChange?: (value: [number, number], details?: ChangeDetails) => void;
   /** The smallest gap the two thumbs keep between them. */
   minDistance?: number;
   /** How a value reads in the readout and to a screen reader, such as `(v) => \`$${v}\``. */

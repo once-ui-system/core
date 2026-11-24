@@ -16,6 +16,7 @@ import { Flex } from "./Flex.js";
 import { Icon } from "./Icon.js";
 import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails.js";
 import styles from "./SharedInteractiveStyles.module.scss";
+import type { ChangeDetails } from "../utils/changeDetails.js";
 
 interface CheckboxProps
   extends LeafProps,
@@ -38,7 +39,7 @@ interface CheckboxProps
   indeterminate?: boolean;
   /** Called with the state the checkbox moves to: `true` when it becomes
    *  ticked. */
-  onCheckedChange?: (checked: boolean) => void;
+  onCheckedChange?: (checked: boolean, details?: ChangeDetails) => void;
   hoverable?: boolean;
 }
 

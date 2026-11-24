@@ -9,6 +9,7 @@ import { Scroller } from "./Scroller.js";
 import styles from "./SegmentedControl.module.scss";
 import { Text } from "./Text.js";
 import { ToggleButton, ToggleButtonProps } from "./ToggleButton.js";
+import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 
 /**
  * The rail's corners: the options' own radius plus the padding and border
@@ -53,7 +54,11 @@ interface SegmentedControlProps
   defaultValue?: string;
   /** Called with the picked button's `value` (and the click, when it was one)
    *  on every pick. */
-  onValueChange?: (value: string, event?: React.MouseEvent<HTMLButtonElement>) => void;
+  onValueChange?: (
+    value: string,
+    event: React.MouseEvent<HTMLButtonElement> | undefined,
+    details?: ChangeDetails,
+  ) => void;
   /** Disables every button. */
   disabled?: boolean;
   fillWidth?: boolean;
@@ -113,9 +118,9 @@ const SegmentedControl = ({
 
   const pick = (next: string, event?: React.MouseEvent<HTMLButtonElement>) => {
     if (disabled) return;
-    setInternalSelected(next);
-    if (event) onValueChange?.(next, event);
-    else onValueChange?.(next);
+    if (!reportChange((value, details) => onValueChange?.(value, event, details), next, event))
+      return;
+    setInternalSelected(next, event);
   };
 
   const handleButtonClick = (

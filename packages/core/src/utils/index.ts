@@ -1,3 +1,5 @@
+export type { ChangeDetails, ChangeSource } from "./changeDetails.js";
+export { withChangeSource } from "./changeDetails.js";
 export * from "./colorScheme.js";
 export type { CursorPreset, CursorPresetValue } from "./cursor.js";
 export * from "./navMatch.js";

@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from "vitest";
 import { DatePicker, type DateRange } from "../components/DatePicker";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -47,7 +48,10 @@ describe("DateRangePicker: interaction", () => {
     await user.keyboard("{ArrowRight}{ArrowRight}");
     expect(await day(jan(7))).toHaveFocus();
     await user.keyboard("{Enter}");
-    expect(onChange).toHaveBeenLastCalledWith({ startDate: jan(5), endDate: jan(7) });
+    expect(onChange).toHaveBeenLastCalledWith(
+      { startDate: jan(5), endDate: jan(7) },
+      changeDetails,
+    );
   });
 
   // Picking the start changes the first calendar's `value`, which remounted
@@ -66,10 +70,16 @@ describe("DateRangePicker: interaction", () => {
     );
     await waitFor(async () => expect(await day(jan(5))).toHaveFocus(), { timeout: 3000 });
     await user.keyboard("{ArrowRight}{Enter}");
-    expect(onChange).toHaveBeenLastCalledWith({ startDate: jan(6), endDate: undefined });
+    expect(onChange).toHaveBeenLastCalledWith(
+      { startDate: jan(6), endDate: undefined },
+      changeDetails,
+    );
     await waitFor(async () => expect(await day(jan(6))).toHaveFocus(), { timeout: 3000 });
     await user.keyboard("{ArrowDown}{Enter}");
-    expect(onChange).toHaveBeenLastCalledWith({ startDate: jan(6), endDate: jan(13) });
+    expect(onChange).toHaveBeenLastCalledWith(
+      { startDate: jan(6), endDate: jan(13) },
+      changeDetails,
+    );
   });
 
   it("starts a new range on the next pick after a complete one", async () => {
@@ -86,7 +96,10 @@ describe("DateRangePicker: interaction", () => {
     );
     await waitFor(async () => expect(await day(jan(5))).toHaveFocus());
     await user.keyboard("{ArrowDown}{Enter}");
-    expect(onChange).toHaveBeenLastCalledWith({ startDate: jan(12), endDate: undefined });
+    expect(onChange).toHaveBeenLastCalledWith(
+      { startDate: jan(12), endDate: undefined },
+      changeDetails,
+    );
   });
 
   it("drives a controlled parent through start, end and a fresh start", async () => {

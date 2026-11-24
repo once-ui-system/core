@@ -47,7 +47,7 @@ describe("Slider: interaction", () => {
     const slider = screen.getByRole("slider", { name: "Brightness" });
     fireEvent.change(slider, { target: { value: "35" } });
     fireEvent.change(slider, { target: { value: "36" } });
-    expect(onChange.mock.calls).toEqual([[35], [36]]);
+    expect(onChange.mock.calls.map((call) => call.slice(0, 1))).toEqual([[35], [36]]);
     expect(screen.getByText("36")).toBeInTheDocument();
   });
 

@@ -13,6 +13,7 @@ import { Select } from "../components/Select";
 import { TagInput } from "../components/TagInput";
 import { Textarea } from "../components/Textarea";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import { changeDetails } from "../test/changeDetails";
 
 /**
  * 3.0's one value contract for fields and pickers: state `X` is `X` /
@@ -46,7 +47,7 @@ describe("Input, Textarea and PasswordInput onValueChange", () => {
 
     await user.type(screen.getByRole("textbox", { name: "Name" }), "Al");
     expect(onChange).toHaveBeenLastCalledWith(nativeEvent);
-    expect(onValueChange).toHaveBeenLastCalledWith("Al");
+    expect(onValueChange).toHaveBeenLastCalledWith("Al", changeDetails);
     expect(calls).toEqual(["native", "value", "native", "value"]);
   });
 
@@ -56,7 +57,7 @@ describe("Input, Textarea and PasswordInput onValueChange", () => {
     render(<Textarea id="bio" label="Bio" onValueChange={onValueChange} />, { wrapper });
 
     await user.type(screen.getByRole("textbox", { name: "Bio" }), "Hi");
-    expect(onValueChange).toHaveBeenLastCalledWith("Hi");
+    expect(onValueChange).toHaveBeenLastCalledWith("Hi", changeDetails);
   });
 
   it("PasswordInput reports the text", async () => {
@@ -67,7 +68,7 @@ describe("Input, Textarea and PasswordInput onValueChange", () => {
     });
 
     await user.type(screen.getByLabelText("Password"), "s3cret");
-    expect(onValueChange).toHaveBeenLastCalledWith("s3cret");
+    expect(onValueChange).toHaveBeenLastCalledWith("s3cret", changeDetails);
   });
 
   it("validates an uncontrolled Input", () => {
@@ -131,7 +132,7 @@ describe("NumberInput", () => {
 
     await user.click(screen.getByRole("button", { name: "Increment value" }));
     expect(field.value).toBe("4");
-    expect(onValueChange).toHaveBeenLastCalledWith(4);
+    expect(onValueChange).toHaveBeenLastCalledWith(4, changeDetails);
   });
 
   it("forwards the native onChange to the input, and reports the number", async () => {
@@ -145,7 +146,7 @@ describe("NumberInput", () => {
 
     await user.type(screen.getByRole("spinbutton"), "7");
     expect(onChange).toHaveBeenCalledWith(nativeEvent);
-    expect(onValueChange).toHaveBeenLastCalledWith(7);
+    expect(onValueChange).toHaveBeenLastCalledWith(7, changeDetails);
   });
 });
 
@@ -166,7 +167,7 @@ describe("ColorInput", () => {
     fireEvent.change(field, { target: { value: "#ff8800" } });
 
     expect(onChange).toHaveBeenCalledWith(nativeEvent);
-    expect(onValueChange).toHaveBeenLastCalledWith("#ff8800");
+    expect(onValueChange).toHaveBeenLastCalledWith("#ff8800", changeDetails);
     expect(field.value).toBe("#ff8800");
   });
 });
@@ -182,7 +183,7 @@ describe("TagInput", () => {
 
     await user.type(screen.getByRole("textbox", { name: "Tags" }), "vue{Enter}");
     expect(onChange).toHaveBeenLastCalledWith(nativeEvent);
-    expect(onValueChange).toHaveBeenLastCalledWith(["vue"]);
+    expect(onValueChange).toHaveBeenLastCalledWith(["vue"], changeDetails);
   });
 
   it("runs the caller's onKeyDown and still adds the tag", async () => {
@@ -195,7 +196,7 @@ describe("TagInput", () => {
 
     await user.type(screen.getByRole("textbox", { name: "Tags" }), "go{Enter}");
     expect(onKeyDown).toHaveBeenCalled();
-    expect(onValueChange).toHaveBeenLastCalledWith(["go"]);
+    expect(onValueChange).toHaveBeenLastCalledWith(["go"], changeDetails);
   });
 });
 
@@ -222,7 +223,7 @@ describe("DateInput", () => {
       return button;
     });
     await user.click(day);
-    expect(onValueChange).toHaveBeenLastCalledWith(jan(9));
+    expect(onValueChange).toHaveBeenLastCalledWith(jan(9), changeDetails);
     expect(field().value).toBe("Jan 9, 2026");
   });
 
@@ -243,7 +244,7 @@ describe("DateInput", () => {
 
     act(() => field().focus());
     await user.keyboard("{Escape}");
-    expect(onOpenChange).toHaveBeenLastCalledWith(false);
+    expect(onOpenChange).toHaveBeenLastCalledWith(false, changeDetails);
     expect(field()).toHaveAttribute("aria-expanded", "false");
   });
 
@@ -254,7 +255,7 @@ describe("DateInput", () => {
       wrapper,
     });
     await user.click(field());
-    expect(onOpenChange).toHaveBeenCalledWith(true);
+    expect(onOpenChange).toHaveBeenCalledWith(true, changeDetails);
     expect(field()).toHaveAttribute("aria-expanded", "false");
   });
 
@@ -293,7 +294,7 @@ describe("DateInput range", () => {
       wrapper,
     });
     await user.click(screen.getByRole("combobox", { name: "From" }));
-    expect(onOpenChange).toHaveBeenLastCalledWith(true);
+    expect(onOpenChange).toHaveBeenLastCalledWith(true, changeDetails);
   });
 });
 
@@ -321,7 +322,7 @@ describe("DatePicker and DatePicker range defaultValue", () => {
       return button;
     });
     await user.click(day);
-    expect(onValueChange).toHaveBeenLastCalledWith(jan(20));
+    expect(onValueChange).toHaveBeenLastCalledWith(jan(20), changeDetails);
     await waitFor(() => expect(selectedDays()).toEqual(["20"]));
   });
 
@@ -358,7 +359,7 @@ describe("Select", () => {
 
     await user.click(field());
     await user.click(await screen.findByRole("option", { name: "Bravo" }));
-    expect(onValueChange).toHaveBeenLastCalledWith("b");
+    expect(onValueChange).toHaveBeenLastCalledWith("b", changeDetails);
     expect(field().value).toBe("Bravo");
   });
 
@@ -378,7 +379,7 @@ describe("Select", () => {
     );
     expect(field()).toHaveAttribute("aria-expanded", "true");
     await user.click(await screen.findByRole("option", { name: "Alpha" }));
-    expect(onOpenChange).toHaveBeenLastCalledWith(false);
+    expect(onOpenChange).toHaveBeenLastCalledWith(false, changeDetails);
     expect(field()).toHaveAttribute("aria-expanded", "false");
   });
 
@@ -413,7 +414,7 @@ describe("OTPInput", () => {
 
     await user.click(digit(3));
     await user.keyboard("3");
-    expect(onValueChange).toHaveBeenLastCalledWith("123");
+    expect(onValueChange).toHaveBeenLastCalledWith("123", changeDetails);
   });
 
   it("follows a controlled value", () => {

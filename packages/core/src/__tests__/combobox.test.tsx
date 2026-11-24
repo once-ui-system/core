@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 import { Combobox } from "../components/Combobox";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 
 const cities = [
   { value: "bud", label: "Budapest" },
@@ -24,7 +25,7 @@ describe("Combobox", () => {
     wrap(<Combobox id="c" label="City" options={cities} onValueChange={onValueChange} />);
     await user.type(field(), "Szeged");
     expect(field()).toHaveValue("Szeged");
-    expect(onValueChange).toHaveBeenLastCalledWith("Szeged");
+    expect(onValueChange).toHaveBeenLastCalledWith("Szeged", changeDetails);
     // Nothing matches and there is no emptyState: the list stays shut.
     expect(isOpen()).toBe(false);
     await user.keyboard("{Enter}");

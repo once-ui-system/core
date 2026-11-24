@@ -18,6 +18,7 @@ import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetail
 import commonStyles from "./SharedInteractiveStyles.module.scss";
 import { Spinner } from "./Spinner.js";
 import styles from "./Switch.module.scss";
+import type { ChangeDetails } from "../utils/changeDetails.js";
 
 interface SwitchProps
   extends LeafProps,
@@ -43,7 +44,7 @@ interface SwitchProps
   disabled?: boolean;
   reverse?: boolean;
   /** Called with the state the switch moves to: `true` when it turns on. */
-  onCheckedChange?: (checked: boolean) => void;
+  onCheckedChange?: (checked: boolean, details?: ChangeDetails) => void;
 }
 
 const Switch = ({

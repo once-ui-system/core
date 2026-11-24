@@ -6,6 +6,7 @@ import { NavGroup } from "../components/NavGroup";
 import { NavItem } from "../components/NavItem";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { ThemeProvider } from "../contexts/ThemeProvider";
+import { changeDetails } from "../test/changeDetails";
 import { selectNavHref } from "../utils/navMatch";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
@@ -84,7 +85,7 @@ describe("NavGroup", () => {
       { wrapper: wrap },
     );
     await userEvent.click(screen.getByText("Settings"));
-    expect(onOpenChange).toHaveBeenCalledExactlyOnceWith(true);
+    expect(onOpenChange).toHaveBeenCalledExactlyOnceWith(true, changeDetails);
   });
 });
 

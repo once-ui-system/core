@@ -17,6 +17,7 @@ import { LayoutProvider } from "../contexts/LayoutProvider";
 import * as modules from "../modules";
 import { MegaMenu } from "../modules/navigation/MegaMenu";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 
 /**
  * 3.0 F6: components folded into a survivor. Each block reaches the old
@@ -199,10 +200,13 @@ describe("DatePicker range and DateInput range (2.x DateRangePicker, DateRangeIn
       return button;
     });
     await user.click(february3);
-    expect(onValueChange).toHaveBeenLastCalledWith({
-      startDate: new Date(2026, 0, 10),
-      endDate: new Date(2026, 1, 3),
-    });
+    expect(onValueChange).toHaveBeenLastCalledWith(
+      {
+        startDate: new Date(2026, 0, 10),
+        endDate: new Date(2026, 1, 3),
+      },
+      changeDetails,
+    );
     await expectNoAxeViolations(container);
   });
 
