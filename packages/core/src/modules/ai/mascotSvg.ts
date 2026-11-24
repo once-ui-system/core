@@ -11,6 +11,7 @@
 import { mixColors, parseColor } from "../../utils/colorMath.js";
 import type { MascotLook, MascotMood } from "./Mascot.js";
 import { type MascotIdentityLayer, mascotIdentity } from "./mascotIdentities.js";
+import { furStrands, lowPolyFacets, mediumFilterMarkup, mediumTarget } from "./mascotMedium.js";
 import { bodyShape, clamp, DEFAULT_LOOK, EYE_BOX, mascotLook, TILE } from "./mascotShape.js";
 
 export interface MascotSvgOptions extends MascotLook {
@@ -22,6 +23,11 @@ export interface MascotSvgOptions extends MascotLook {
   mood?: MascotMood;
   /** SVG markup drawn with the body in its 200 × 200 box: a hat, an antenna. */
   accessory?: string;
+  /**
+   * Shapes it wears as path data, as on `Mascot` and in a `MascotDesign` (a saved look from the
+   * character designer). Drawn still: `motion` is for the animated component.
+   */
+  layers?: readonly MascotIdentityLayer[];
   /** SVG markup drawn on the face in the same box (a beak, glasses): it follows `lookAt` with the eyes. */
   faceAccessory?: string;
   /**
@@ -149,6 +155,7 @@ export function mascotSvg(options: MascotSvgOptions = {}): string {
     canonical = true,
     mood = "neutral",
     accessory,
+    layers,
     faceAccessory,
     schemes,
     lookAt,
@@ -157,6 +164,7 @@ export function mascotSvg(options: MascotSvgOptions = {}): string {
     title,
     bodyPath,
     eyeColor,
+    medium = "vector",
     ...passed
   } = options;
   const defined = Object.fromEntries(
@@ -193,11 +201,13 @@ export function mascotSvg(options: MascotSvgOptions = {}): string {
   const gx = clamp(lookAt?.x ?? 0, -1, 1);
   const gy = clamp((lookAt?.y ?? 0) + (pose.gy ?? 0), -1, 1);
   const id = idFor(JSON.stringify([options, size]));
-  // A canonical mascot's own layers, unless an `accessory` replaces them.
+  // Your layers, else a canonical mascot's own, unless an `accessory` replaces them.
   const worn =
-    identity && accessory === undefined
-      ? identitySvg(identity.layers, color, `url(#${id}-clip)`)
-      : { back: "", on: accessory ? `<g>${accessory}</g>` : "", front: "" };
+    accessory === undefined && layers?.length
+      ? identitySvg(layers, color, `url(#${id}-clip)`)
+      : identity && accessory === undefined
+        ? identitySvg(identity.layers, color, `url(#${id}-clip)`)
+        : { back: "", on: accessory ? `<g>${accessory}</g>` : "", front: "" };
   const surface = look.surface;
   const glossy = surface === "glossy" || surface === "glass";
 
@@ -263,6 +273,35 @@ export function mascotSvg(options: MascotSvgOptions = {}): string {
             ? `<ellipse cx="${n(70 - gx * 9)}" cy="${n(body.top + 26 - gy * 7)}" rx="20" ry="11" fill="#fff" fill-opacity="0.55"/>`
             : ""
         }</g>`;
+  // A medium redraws the body (lowpoly, toon) or runs a filter over part of the mascot.
+  const target = mediumTarget(medium);
+  const filterAttr = (on: boolean) => (on ? ` filter="url(#${id}-m)"` : "");
+  let skin = `<path d="${body.d}" fill="${color}" fill-opacity="${fillOpacity}"/>${sheen}`;
+  if (medium === "lowpoly") {
+    skin = lowPolyFacets(body.d)
+      .map((facet) => {
+        const fill =
+          facet.light >= 0
+            ? mixColors(color, "#ffffff", 1 - facet.light * 0.3)
+            : mixColors(color, "#000000", 1 + facet.light * 0.26);
+        return `<polygon points="${facet.points}" fill="${fill}" stroke="${fill}" stroke-width="0.6" stroke-linejoin="round"/>`;
+      })
+      .join("");
+  } else if (medium === "fur") {
+    skin = `<path d="${body.d}" fill="${mixColors(color, "#000000", 0.68)}"/>${furStrands(body.d)
+      .map((layer) => {
+        const fill =
+          layer.light >= 0
+            ? mixColors(color, "#ffffff", 1 - layer.light * 0.3)
+            : mixColors(color, "#000000", 1 + layer.light * 0.38);
+        return `<path d="${layer.d}" fill="${fill}"/>`;
+      })
+      .join("")}`;
+  } else if (medium === "toon") {
+    skin = `<path d="${body.d}" fill="${mixColors(color, "#000000", 0.74)}"/><g clip-path="url(#${id}-clip)"><path d="${body.d}" transform="translate(-9 -12)" fill="${color}"/><ellipse cx="${n(66 - gx * 9)}" cy="${n(body.top + 24 - gy * 7)}" rx="15" ry="8" transform="rotate(-28 66 ${n(body.top + 24)})" fill="#fff" fill-opacity="0.78"/></g>`;
+  } else if (target === "skin") {
+    skin = `<g${filterAttr(true)}>${skin}</g>`;
+  }
   const edge =
     surface === "glass"
       ? `<path d="${body.d}" fill="none" stroke="${mixColors(color, "#ffffff", 0.4)}" stroke-opacity="0.6" stroke-width="2"/>`
@@ -274,14 +313,15 @@ export function mascotSvg(options: MascotSvgOptions = {}): string {
     `<defs><radialGradient id="${id}-light" cx="34%" cy="26%" r="62%"><stop offset="0%" stop-color="#fff" stop-opacity="0.5"/><stop offset="100%" stop-color="#fff" stop-opacity="0"/></radialGradient>`,
     `<radialGradient id="${id}-shade" cx="44%" cy="38%" r="70%"><stop offset="55%" stop-color="#000" stop-opacity="0"/><stop offset="100%" stop-color="#000" stop-opacity="0.42"/></radialGradient>`,
     `<linearGradient id="${id}-rim" x1="0" y1="0" x2="0" y2="1"><stop offset="72%" stop-color="#fff" stop-opacity="0"/><stop offset="100%" stop-color="#fff" stop-opacity="0.22"/></linearGradient>`,
-    `<clipPath id="${id}-clip"><path d="${body.d}"/></clipPath></defs>`,
+    `<clipPath id="${id}-clip"><path d="${body.d}"/></clipPath>${mediumFilterMarkup(`${id}-m`, medium)}</defs>`,
+    `<g${filterAttr(target === "all")}>`,
     shadow
       ? `<ellipse cx="100" cy="196" rx="56" ry="5" fill="${mixColors(color, "#000000", 0.35)}" fill-opacity="0.22"/>`
       : "",
     `<g transform="rotate(${pose.rotate ?? 0} 100 ${n(body.bottom)})">`,
+    `<g${filterAttr(target === "body")}>`,
     worn.back,
-    `<path d="${body.d}" fill="${color}" fill-opacity="${fillOpacity}"/>`,
-    sheen,
+    skin,
     edge,
     worn.on,
     `<g transform="translate(${n(gx * 24)} ${n(gy * 16)})">`,
@@ -293,7 +333,7 @@ export function mascotSvg(options: MascotSvgOptions = {}): string {
     faceAccessory ? `<g>${faceAccessory}</g>` : "",
     "</g>",
     worn.front,
-    "</g></svg>",
+    "</g></g></g></svg>",
   ].join("");
 }
 

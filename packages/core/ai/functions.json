@@ -107,6 +107,11 @@
    "type": "readonly string[]",
    "doc": "Every name the registry holds, as keys: for reserving them in a sign-up or a name claim."
   },
+  "MASCOT_LAYER_MOTIONS": {
+   "group": "modules",
+   "kind": "value",
+   "type": "readonly [\"float\", \"bob\", \"sway\", \"spin\", \"pulse\", \"flicker\"]"
+  },
   "mascotIdentity": {
    "group": "modules",
    "kind": "function",
@@ -118,6 +123,11 @@
    "kind": "function",
    "signature": "(seed: string | number) => string",
    "doc": "A seed as the registry compares it: lowercase letters and digits only."
+  },
+  "MASCOT_MEDIUMS": {
+   "group": "modules",
+   "kind": "value",
+   "type": "readonly MascotMedium[]"
   },
   "cleanMascotUsername": {
    "group": "modules",
@@ -1421,7 +1431,8 @@
    "accessoryColor": "string",
    "working": "\"cube\" | \"d20\"",
    "sides": "MascotSides",
-   "face": "\"3d\" | \"flat\""
+   "face": "\"3d\" | \"flat\"",
+   "medium": "MascotMedium"
   },
   "MascotIdentity": {
    "handle": "!string",
@@ -1442,8 +1453,18 @@
    "opacity": "number",
    "transform": "string",
    "clip": "boolean",
-   "place": "\"back\" | \"on\" | \"front\""
+   "place": "\"back\" | \"on\" | \"front\"",
+   "motion": "MascotLayerMotion",
+   "origin": "string"
   },
+  "MascotLayerMotion": [
+   "float",
+   "bob",
+   "sway",
+   "spin",
+   "pulse",
+   "flicker"
+  ],
   "MascotLook": {
    "color": "\"brand\" | \"accent\" | \"neutral\" | (string & {})",
    "roundness": "number",
@@ -1460,8 +1481,18 @@
    "cheeks": "boolean",
    "personality": "\"calm\" | \"default\" | \"bouncy\"",
    "sides": "\"classic\" | \"tints\" | \"mono\" | Partial<Record<\"top\" | \"front\" | \"right\" | \"bottom\" | \"back\" | \"left\", string>>",
-   "face": "\"3d\" | \"flat\""
+   "face": "\"3d\" | \"flat\"",
+   "medium": "MascotMedium"
   },
+  "MascotMedium": [
+   "vector",
+   "fur",
+   "plush",
+   "clay",
+   "pixel",
+   "lowpoly",
+   "toon"
+  ],
   "MascotMood": [
    "neutral",
    "happy",
@@ -1527,6 +1558,7 @@
    "canonical": "boolean",
    "mood": "MascotMood",
    "accessory": "string",
+   "layers": "readonly MascotIdentityLayer[]",
    "faceAccessory": "string",
    "schemes": "Partial<Record<\"brand\" | \"accent\" | \"neutral\", string>>",
    "lookAt": "{ x: number; y: number }",
@@ -1548,7 +1580,8 @@
    "cheeks": "boolean",
    "personality": "\"calm\" | \"default\" | \"bouncy\"",
    "sides": "\"classic\" | \"tints\" | \"mono\" | Partial<Record<\"top\" | \"front\" | \"right\" | \"bottom\" | \"back\" | \"left\", string>>",
-   "face": "\"3d\" | \"flat\""
+   "face": "\"3d\" | \"flat\"",
+   "medium": "MascotMedium"
   },
   "MdxComponents": {
    "[key: string]": "ElementType"
@@ -1808,12 +1841,12 @@
   "ReactionMotion": [
    "pop",
    "none",
+   "spin",
+   "flicker",
    "beat",
    "nod",
    "shake",
    "droop",
-   "flicker",
-   "spin",
    "wave",
    "bounce"
   ],
