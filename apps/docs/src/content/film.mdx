@@ -83,11 +83,15 @@ The `mascot` scene puts one mascot on stage. Set `username` to a Once UI usernam
 | `dot-globe` | The world as a halftone of land dots on a dark glass sphere, turning slowly, with routes arcing between cities one after another. | `routes`, `size`, `dotColor`, `routeColor`, `rimColor`, `spin`, `facing`, `tilt`, `density`, `framing` |
 | `chart-draw` | A real core LineChart card: the line draws in, the number counts up, the delta pops. | `label`, `value`, `prefix`, `delta`, `series`, `compare`, `names`, `color`, `drawAt`, `drawFor` |
 | `count-ring` | A big number counts up in the middle while a ring of tiles pops in around it one by one and slowly turns. | `value`, `label`, `items`, `radius`, `tile`, `spin`, `stagger`, `size`, `tileColor`, `lit` |
+| `map-flyover` | A flyover on core's Map: the camera rests on a city over its 3D buildings, slowly turning, then climbs and glides to the next stop while the route draws, a pin lands and a glass card names the place. | `stops`, `hold`, `fly`, `pitch`, `spin`, `route`, `buildings`, `labels`, `theme` |
 
 ### Product UI
 
 | Scene | What it shows | Props |
 | --- | --- | --- |
+| `composition` | Any product screen as a film: real core components (headings, metrics, a live chart, lists, switches, inputs, chat, mascots) laid out on a canvas, each arriving on its beat, under a camera that pushes, pans, tilts and pulls focus from part to part. | `canvas`, `parts`, `camera`, `dof`, `drift`, `theme`, `backdrop` |
+| `device-stage` | A laptop and a phone with live UI on their screens rise into view and turn slowly while the screens fill part by part. | `device`, `screen`, `phone`, `turn`, `tilt`, `scroll`, `bootAt`, `theme` |
+| `exploded-view` | A core card turns to an isometric angle and splits into its layers (surface, border, content, actions), each named by the prop that draws it, then snaps back. | `title`, `text`, `cta`, `tag`, `labels`, `spread`, `apartAt`, `backAt`, `theme` |
 | `focus-pull` | A product page in focus, then the camera pulls focus: the page sinks into blur while one metric card lifts, tilts, takes a selection outline and counts up under a cursor. | `headline`, `sub`, `primary`, `secondary`, `metrics`, `focus`, `pullAt`, `blur`, `lift`, `zoom`, `outline`, `cursor`, `theme` |
 | `prop-edit` | A live prop: the code line under a real core component is retyped and the component follows each edit. | `component`, `label`, `states`, `every`, `zoom` |
 | `icon-grid` | The app's icons as a wall of tiles: a ripple out from the centre, then a sweep in the accent. | `icons`, `sweepAt` |
