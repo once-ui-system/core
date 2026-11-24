@@ -1,6 +1,7 @@
 "use client";
 import React, { useCallback, useImperativeHandle, useRef, useState } from "react";
 import { mergeLabels } from "../internal/labels.js";
+import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 import { Column } from "./Column.js";
 import { Dropdown } from "./Dropdown.js";
 import { Flex } from "./Flex.js";
@@ -11,7 +12,6 @@ import { Input, InputProps } from "./Input.js";
 import { Row } from "./Row.js";
 import { Slider } from "./Slider.js";
 import { Text } from "./Text.js";
-import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 
 /** The field's own controls. Omitted fields keep the English default. */
 interface ColorInputLabels {

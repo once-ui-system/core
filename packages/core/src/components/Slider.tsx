@@ -6,6 +6,7 @@ import type { FlexLayoutProps, LeafProps } from "../interfaces.js";
 import { RangeSlider, type RangeSliderProps } from "../internal/RangeSlider.js";
 import { useControllableState } from "../internal/useControllableState.js";
 import type { TShirtSizes } from "../types.js";
+import type { ChangeDetails } from "../utils/changeDetails.js";
 import { takeLeafProps } from "../utils/leafLayout.js";
 import { Column } from "./Column.js";
 import { useControlLabel } from "./ControlLabelContext.js";
@@ -13,7 +14,6 @@ import { useFieldSizing } from "./FormContext.js";
 import { Row } from "./Row.js";
 import styles from "./Slider.module.scss";
 import { Text } from "./Text.js";
-import type { ChangeDetails } from "../utils/changeDetails.js";
 
 /** What both modes take. */
 interface SliderFieldProps extends LeafProps {

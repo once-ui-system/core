@@ -13,10 +13,10 @@ import {
   useRef,
   useState,
 } from "react";
+import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 import { Column } from "./Column.js";
 import { Row } from "./Row.js";
 import { ToggleButton, type ToggleButtonProps } from "./ToggleButton.js";
-import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 
 // Written out on the props rather than as aliases, so the generated spec, the
 // docs' props table and an agent all see the values.

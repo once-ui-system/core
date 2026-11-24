@@ -19,6 +19,7 @@ import {
 } from "../internal/controlChrome.js";
 import { useFieldsetDisabled } from "../internal/fieldsetDisabled.js";
 import { useControllableState } from "../internal/useControllableState.js";
+import type { ChangeDetails } from "../utils/changeDetails.js";
 import { Column } from "./Column.js";
 import { FormFieldContext } from "./FormContext.js";
 import type { IconButtonProps } from "./IconButton.js";
@@ -26,7 +27,6 @@ import { RadioButton } from "./RadioButton.js";
 import { RadioGroupContext } from "./RadioGroupContext.js";
 import { Row } from "./Row.js";
 import { Text } from "./Text.js";
-import type { ChangeDetails } from "../utils/changeDetails.js";
 
 interface RadioGroupOption {
   /** What the group's `value` and `onValueChange` carry, and what a form submits. */

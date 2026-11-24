@@ -11,6 +11,7 @@ import {
 import { useFieldsetDisabled } from "../internal/fieldsetDisabled.js";
 import { splitAria, useHiddenInput } from "../internal/hiddenInput.js";
 import { useControllableState } from "../internal/useControllableState.js";
+import type { ChangeDetails } from "../utils/changeDetails.js";
 import { takeLeafProps } from "../utils/leafLayout.js";
 import { useControlLabel } from "./ControlLabelContext.js";
 import { Flex } from "./Flex.js";
@@ -18,7 +19,6 @@ import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetail
 import commonStyles from "./SharedInteractiveStyles.module.scss";
 import { Spinner } from "./Spinner.js";
 import styles from "./Switch.module.scss";
-import type { ChangeDetails } from "../utils/changeDetails.js";
 
 interface SwitchProps
   extends LeafProps,

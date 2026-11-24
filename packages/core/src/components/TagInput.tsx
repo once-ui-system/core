@@ -10,12 +10,12 @@ import {
 } from "react";
 import { mergeLabels } from "../internal/labels.js";
 import { useControllableState } from "../internal/useControllableState.js";
+import type { ChangeDetails } from "../utils/changeDetails.js";
 import { Flex } from "./Flex.js";
 import { useFieldSize } from "./FormContext.js";
 import { Input, InputProps } from "./Input.js";
 import { Tag } from "./Tag.js";
 import { VisuallyHidden } from "./VisuallyHidden.js";
-import type { ChangeDetails } from "../utils/changeDetails.js";
 
 /** What TagInput announces and names. Omitted fields keep the English default. */
 interface TagInputLabels {

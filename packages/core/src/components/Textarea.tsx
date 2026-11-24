@@ -12,13 +12,13 @@ import React, {
 import { useDebounce } from "../hooks/useDebounce.js";
 import type { LeafProps } from "../interfaces.js";
 import type { FieldSize } from "../types.js";
+import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 import { takeLeafProps } from "../utils/leafLayout.js";
 import { Column } from "./Column.js";
 import { useFieldInvalid, useFieldSize, useWarnFieldOwnedProps } from "./FormContext.js";
 import styles from "./Input.module.scss";
 import { Row } from "./Row.js";
 import { Text } from "./Text.js";
-import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 
 interface TextareaProps
   extends LeafProps,

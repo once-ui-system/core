@@ -4,12 +4,12 @@ import classNames from "clsx";
 import { type ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { revealInStrip } from "../internal/revealInStrip.js";
 import { useControllableState } from "../internal/useControllableState.js";
+import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 import { Flex } from "./Flex.js";
 import { Scroller } from "./Scroller.js";
 import styles from "./SegmentedControl.module.scss";
 import { Text } from "./Text.js";
 import { ToggleButton, ToggleButtonProps } from "./ToggleButton.js";
-import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 
 /**
  * The rail's corners: the options' own radius plus the padding and border

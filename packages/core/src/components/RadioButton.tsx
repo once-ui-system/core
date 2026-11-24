@@ -11,12 +11,12 @@ import {
 import { useFieldsetDisabled } from "../internal/fieldsetDisabled.js";
 import { splitAria, useHiddenInput } from "../internal/hiddenInput.js";
 import { useControllableState } from "../internal/useControllableState.js";
+import type { ChangeDetails } from "../utils/changeDetails.js";
 import { takeLeafProps } from "../utils/leafLayout.js";
 import { Flex } from "./Flex.js";
 import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails.js";
 import { useRadioGroupItem } from "./RadioGroupContext.js";
 import styles from "./SharedInteractiveStyles.module.scss";
-import type { ChangeDetails } from "../utils/changeDetails.js";
 
 interface RadioButtonProps
   extends LeafProps,

@@ -6,6 +6,7 @@ import { type ReactNode, useCallback, useId, useRef, useState } from "react";
 import { mergeLabels } from "../internal/labels.js";
 import { useControllableState } from "../internal/useControllableState.js";
 import type { Placement } from "../types.js";
+import type { ChangeDetails } from "../utils/changeDetails.js";
 import { Column } from "./Column.js";
 import { Dropdown, type DropdownProps } from "./Dropdown.js";
 import {
@@ -19,7 +20,6 @@ import { Option, type OptionProps } from "./Option.js";
 import { Row } from "./Row.js";
 import { Spinner } from "./Spinner.js";
 import { Text } from "./Text.js";
-import type { ChangeDetails } from "../utils/changeDetails.js";
 
 /** A suggestion. Its text is `label` when that is a string, else `value`. */
 type ComboboxOption = Omit<OptionProps, "selected" | "highlighted" | "onClick" | "href">;

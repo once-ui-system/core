@@ -3,12 +3,12 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import type { LeafProps } from "../interfaces.js";
 import { mergeLabels } from "../internal/labels.js";
+import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 import { Column } from "./Column.js";
 import { Flex } from "./Flex.js";
 import { Input } from "./Input.js";
 import styles from "./OTPInput.module.scss";
 import { Text } from "./Text.js";
-import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 
 /** The group's and the fields' accessible names. Omitted fields keep the English default. */
 interface OTPInputLabels {

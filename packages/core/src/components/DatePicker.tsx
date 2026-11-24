@@ -12,6 +12,7 @@ import React, {
 import { mergeLabels } from "../internal/labels.js";
 import { CondensedTShirtSizes } from "../types.js";
 import { getCalendarNames } from "../utils/calendarLocale.js";
+import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 import {
   clearLastOpenedDropdown,
   getLastOpenedDropdown,
@@ -31,7 +32,6 @@ import { Option } from "./Option.js";
 import { Row } from "./Row.js";
 import { SegmentedControl } from "./SegmentedControl.js";
 import { Text } from "./Text.js";
-import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 
 /** The month an undated calendar renders before it knows today's (see Calendar). */
 const UNDATED_MONTH = new Date(2000, 0, 1);

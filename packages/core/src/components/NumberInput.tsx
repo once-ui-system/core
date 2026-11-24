@@ -2,6 +2,7 @@
 
 import classNames from "clsx";
 import React, { useState } from "react";
+import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 import { Column } from "./Column.js";
 import { Flex } from "./Flex.js";
 import { useFieldSize } from "./FormContext.js";
@@ -9,7 +10,6 @@ import { IconButton } from "./IconButton.js";
 import { Input } from "./Input.js";
 import styles from "./NumberInput.module.scss";
 import { Row } from "./Row.js";
-import { type ChangeDetails, reportChange } from "../utils/changeDetails.js";
 
 interface NumberInputProps
   extends Omit<
