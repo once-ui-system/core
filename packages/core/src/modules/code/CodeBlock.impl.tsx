@@ -698,7 +698,8 @@ const CodeBlock = ({
       className={classNames(className, {
         [styles.fullscreen]: inPortal && isFullscreen,
         // Fullscreen with a preview and code: side by side on a wide screen.
-        [styles.split]: inPortal && isFullscreen && !!preview && codes.length > 0 && !hideCode,
+        // A tab with no code (a "Preview" tab) keeps the preview full width.
+        [styles.split]: inPortal && isFullscreen && !!preview && !!code && !hideCode,
       })}
       style={{
         isolation: "isolate",
