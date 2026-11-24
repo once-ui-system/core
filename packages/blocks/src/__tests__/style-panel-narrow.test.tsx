@@ -115,11 +115,11 @@ describe("a custom-colour row", () => {
     );
     const line = lineOf("Brand");
     expect(line).toHaveClass("flex-column", "g-12");
-    // Spacing still belongs to the row, which holds the line and the picker.
+    // Spacing still belongs to the row, which holds the line and the colour button.
     const row = container.querySelector('[class*="row"]') as HTMLElement;
     expect(row).toHaveClass("padding-x-16");
     expect(row).not.toHaveClass("flex-column");
-    expect(row).toContainElement(screen.getByLabelText("Custom brand colour"));
+    expect(row).toContainElement(screen.getByRole("button", { name: /^Custom brand colour/ }));
   });
 
   it("keeps a host's className beside the row's own", () => {

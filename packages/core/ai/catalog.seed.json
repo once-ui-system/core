@@ -161,6 +161,11 @@
     "tags": ["docs", "content"],
     "pairsWith": ["InlineCode", "Column"]
   },
+  "ColorButton": {
+    "purpose": "Compact colour trigger: a button with a swatch and the hex that opens the native picker, committing when it closes",
+    "tags": ["form", "settings"],
+    "pairsWith": ["ColorInput", "StylePanel"]
+  },
   "ColorInput": {
     "purpose": "Colour picker field showing the hex value and a swatch, with optional alpha",
     "tags": ["form", "settings"],

@@ -47,6 +47,7 @@ const fixtures: Record<string, Record<string, unknown>> = {
   Calendar: { events: [], defaultDate: new Date(2026, 10, 11) },
   AvatarGroup: { avatars: [avatar, avatar, { value: "AB" }] },
   Breadcrumbs: { items: [{ label: "Home", href: "/" }, { label: "Docs" }] },
+  ColorButton: { label: "Own colour", value: "#ff0000", onValueChange: noop },
   ColorInput: { id: "color", label: "Colour", value: "#ff0000", onValueChange: noop },
   CompareImage: {
     leftContent: { src: "/a.jpg", alt: "Before" },

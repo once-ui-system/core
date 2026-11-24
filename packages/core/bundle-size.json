@@ -1,5 +1,5 @@
 {
-  ".": 253035,
+  ".": 253604,
   "./components/Accordion": 26861,
   "./components/AccordionGroup": 27297,
   "./components/AlarmList": 29153,
@@ -16,6 +16,7 @@
   "./components/Card": 9808,
   "./components/Carousel": 51390,
   "./components/Checkbox": 39324,
+  "./components/ColorButton": 27105,
   "./components/ColorInput": 57208,
   "./components/Column": 8061,
   "./components/Combobox": 54358,

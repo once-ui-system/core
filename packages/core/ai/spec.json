@@ -3934,6 +3934,24 @@
     "hoverable": "boolean = true"
    }
   },
+  "ColorButton": {
+   "group": "components",
+   "props": {
+    "value": "string",
+    "defaultValue": "string",
+    "label": "!string",
+    "onValueChange": "(value: string) => void",
+    "onValueCommit": "(value: string) => void",
+    "size": "TShirtSizes = s",
+    "variant": "\"primary\" | \"secondary\" | \"tertiary\" = secondary",
+    "disabled": "boolean",
+    "showValue": "boolean = true",
+    "id": "string",
+    "aria-describedby": "string",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
   "ColorInput": {
    "group": "components",
    "extends": [
