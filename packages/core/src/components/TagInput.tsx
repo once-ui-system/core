@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
+import type { ChangeDetails } from "../internal/changeDetails.js";
 import { mergeLabels } from "../internal/labels.js";
 import { useControllableState } from "../internal/useControllableState.js";
 import { Flex } from "./Flex.js";
@@ -36,7 +37,7 @@ interface TagInputProps extends Omit<InputProps, "value" | "defaultValue" | "onV
   /** The starting tags of an uncontrolled TagInput (no `value`). */
   defaultValue?: readonly string[];
   /** Receives the whole new list after an add or a remove. */
-  onValueChange?: (value: string[]) => void;
+  onValueChange?: (value: string[], details?: ChangeDetails) => void;
   /** The remove buttons' names and the removal announcement, for a translated interface. */
   labels?: TagInputLabels;
 }

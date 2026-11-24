@@ -11,6 +11,7 @@ import React, {
 } from "react";
 import { useDebounce } from "../hooks/useDebounce.js";
 import type { LeafProps } from "../interfaces.js";
+import { type ChangeDetails, reportChange } from "../internal/changeDetails.js";
 import type { FieldSize } from "../types.js";
 import { takeLeafProps } from "../utils/leafLayout.js";
 import { Column } from "./Column.js";
@@ -66,7 +67,7 @@ interface TextareaProps
   resize?: "horizontal" | "vertical" | "both" | "none";
   /** Receives the field's text on every change, after the native `onChange`.
    *  The field is controlled only when `value` is set. */
-  onValueChange?: (value: string) => void;
+  onValueChange?: (value: string, details?: ChangeDetails) => void;
   /** Checks the field's text, controlled or not, a second after it last changed. */
   validate?: (value: ReactNode) => ReactNode | null;
   disabled?: boolean;
@@ -155,9 +156,14 @@ const Textarea = ({
     if (lines === "auto") {
       adjustHeight();
     }
-    if (!controlled) setOwnText(event.target.value);
     if (onChange) onChange(event);
-    onValueChange?.(event.target.value);
+    const next = event.target.value;
+    if (!reportChange(onValueChange, next, event)) {
+      // Refused: an uncontrolled field puts back what it held.
+      if (!controlled) event.target.value = ownText;
+      return;
+    }
+    if (!controlled) setOwnText(next);
   };
 
   const handleFocus = (event: React.FocusEvent<HTMLTextAreaElement>) => {

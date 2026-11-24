@@ -3,6 +3,7 @@
 import classNames from "clsx";
 import React, { useId } from "react";
 import type { LeafProps } from "../interfaces.js";
+import type { ChangeDetails } from "../internal/changeDetails.js";
 import {
   type ControlChromeProps,
   describedBy,
@@ -40,7 +41,7 @@ interface RadioButtonProps
   disabled?: boolean;
   /** Called with the state the radio moves to: `true` when it becomes the
    *  chosen one. As with a native radio, picking it again does nothing. */
-  onCheckedChange?: (checked: boolean) => void;
+  onCheckedChange?: (checked: boolean, details?: ChangeDetails) => void;
   hoverable?: boolean;
 }
 

@@ -11,6 +11,7 @@ import {
   useRef,
   useState,
 } from "react";
+import type { ChangeDetails } from "../internal/changeDetails.js";
 import {
   CONTROL_TEXT,
   type ControlChromeProps,
@@ -48,7 +49,7 @@ interface RadioGroupProps
   /** The option selected first when the group manages its own state. Without it, none is. */
   defaultValue?: string;
   /** Called with the newly selected `value`. Not called for the option already selected. */
-  onValueChange?: (value: string) => void;
+  onValueChange?: (value: string, details?: ChangeDetails) => void;
   /** Submitted with the selected `value` when the group is inside a form. */
   name?: string;
   /** Visible label that names the group. Without one, name it with `aria-label`. */

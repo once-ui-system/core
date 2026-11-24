@@ -15,6 +15,7 @@ import {
 import { resetScrollLockState } from "../components/ScrollLock";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 import { resetDialogState } from "../test/dialogTestUtils";
 import { mockReducedMotion } from "../test/fxTestUtils";
 
@@ -120,7 +121,7 @@ describe("PhotoViewer: keyboard", () => {
 
     expect(screen.getByRole("button", { name: "Previous photo" })).toBeDisabled();
     await user.keyboard("{ArrowRight}");
-    expect(onIndexChange).toHaveBeenLastCalledWith(1);
+    expect(onIndexChange).toHaveBeenLastCalledWith(1, changeDetails);
     expect(status()).toHaveTextContent("Photo 2 of 3. A ridge in fog");
 
     await user.click(screen.getByRole("button", { name: "Next photo" }));
@@ -131,7 +132,7 @@ describe("PhotoViewer: keyboard", () => {
     expect(onIndexChange).toHaveBeenCalledTimes(2);
 
     await user.keyboard("{ArrowLeft}");
-    expect(onIndexChange).toHaveBeenLastCalledWith(1);
+    expect(onIndexChange).toHaveBeenLastCalledWith(1, changeDetails);
   });
 
   it("follows a controlled index", () => {

@@ -16,6 +16,7 @@ import { Switch } from "../components/Switch";
 import { AdapterProvider } from "../contexts/AdapterProvider";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { Kbar } from "../modules/navigation/Kbar";
+import { changeDetails } from "../test/changeDetails";
 import { resetDialogState } from "../test/dialogTestUtils";
 
 /**
@@ -109,7 +110,7 @@ describe.each([
     expect(control).toBeChecked();
     await user.click(control);
     expect(control).not.toBeChecked();
-    expect(onCheckedChange).toHaveBeenLastCalledWith(false);
+    expect(onCheckedChange).toHaveBeenLastCalledWith(false, changeDetails);
   });
 
   it("asks again when a controlled parent declined the last change", async () => {
@@ -121,7 +122,7 @@ describe.each([
     const control = screen.getByRole(role, { name: "Terms" });
     await user.click(control);
     await user.click(control);
-    expect(onCheckedChange.mock.calls).toEqual([[true], [true]]);
+    expect(onCheckedChange.mock.calls.map((call) => call.slice(0, 1))).toEqual([[true], [true]]);
     expect(control).not.toBeChecked();
   });
 
@@ -180,7 +181,7 @@ describe("Slider", () => {
     );
     const input = screen.getByRole("slider", { name: "Volume" });
     fireEvent.change(input, { target: { value: "40" } });
-    expect(onValueChange).toHaveBeenCalledExactlyOnceWith(40);
+    expect(onValueChange).toHaveBeenCalledExactlyOnceWith(40, changeDetails);
     expect(onChange.mock.calls[0][0].target).toBe(input);
     expect(input).toHaveValue("40");
   });
@@ -232,7 +233,7 @@ describe("SegmentedControl", () => {
       { wrapper: wrap },
     );
     await user.click(screen.getByRole("tab", { name: "B" }));
-    expect(onValueChange).toHaveBeenCalledWith("b", expect.anything());
+    expect(onValueChange).toHaveBeenCalledWith("b", expect.anything(), changeDetails);
     expect(screen.getByRole("tab", { name: "A" })).toHaveAttribute("aria-selected", "true");
   });
 
@@ -269,7 +270,7 @@ describe("Accordion open state", () => {
     expect(header()).toHaveAttribute("aria-expanded", "true");
     await user.click(header());
     expect(header()).toHaveAttribute("aria-expanded", "false");
-    expect(onOpenChange).toHaveBeenCalledExactlyOnceWith(false);
+    expect(onOpenChange).toHaveBeenCalledExactlyOnceWith(false, changeDetails);
   });
 
   it("is controlled by open alone, with no handler", async () => {
@@ -341,7 +342,7 @@ describe("NavGroup", () => {
     expect(header).toHaveAttribute("aria-expanded", "true");
     await user.click(header);
     await user.click(header);
-    expect(onOpenChange.mock.calls).toEqual([[false], [true]]);
+    expect(onOpenChange.mock.calls.map((call) => call.slice(0, 1))).toEqual([[false], [true]]);
   });
 });
 
@@ -373,7 +374,7 @@ describe("Kbar open state", () => {
     );
     expect(await screen.findByRole("dialog", { name: "Command palette" })).toBeInTheDocument();
     await user.keyboard("{Escape}");
-    await waitFor(() => expect(onOpenChange).toHaveBeenLastCalledWith(false));
+    await waitFor(() => expect(onOpenChange).toHaveBeenLastCalledWith(false, changeDetails));
   });
 
   it("follows a controlled open", async () => {

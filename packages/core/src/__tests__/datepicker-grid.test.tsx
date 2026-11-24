@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from "vitest";
 import { DatePicker } from "../components/DatePicker";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 
 /**
  * DatePicker's calendar was a `role="grid"` with its day buttons straight
@@ -161,7 +162,7 @@ describe("DatePicker grid", () => {
     await user.keyboard("{ArrowLeft}");
     expect(await day(jan(11))).toHaveFocus();
     await user.keyboard("{Enter}");
-    expect(onChange).toHaveBeenLastCalledWith(jan(11));
+    expect(onChange).toHaveBeenLastCalledWith(jan(11), changeDetails);
   });
 
   it("ends on the last day that can be picked", async () => {
@@ -189,9 +190,12 @@ describe("DatePicker grid", () => {
     // the first calendar's day at the same position: January the 1st.
     await focusDay(new Date(2026, 1, 1));
     await user.keyboard("{Enter}");
-    expect(onChange).toHaveBeenLastCalledWith({
-      startDate: jan(28),
-      endDate: new Date(2026, 1, 1),
-    });
+    expect(onChange).toHaveBeenLastCalledWith(
+      {
+        startDate: jan(28),
+        endDate: new Date(2026, 1, 1),
+      },
+      changeDetails,
+    );
   });
 });

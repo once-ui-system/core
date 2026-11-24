@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from "vitest";
 import { ColorInput } from "../components/ColorInput";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 
 /**
  * ColorInput wraps a native colour field. It reports a hex string, or an
@@ -172,7 +173,7 @@ describe("ColorInput", () => {
 
     // The next pick keeps the opacity that came in with the value.
     fireEvent.change(field(), { target: { value: "#00ff00" } });
-    expect(onValueChange).toHaveBeenLastCalledWith("rgba(0, 255, 0, 0.25)");
+    expect(onValueChange).toHaveBeenLastCalledWith("rgba(0, 255, 0, 0.25)", changeDetails);
   });
 
   it("keeps the user's pick when the parent passes it back, or never does", () => {

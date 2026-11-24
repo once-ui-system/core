@@ -4,6 +4,7 @@ import type React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { DatePicker } from "../components/DatePicker";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import { changeDetails } from "../test/changeDetails";
 
 /**
  * DatePicker focused its selected day on a timer once it was ready and on
@@ -115,7 +116,7 @@ describe("DatePicker focus", () => {
     await user.keyboard("{ArrowDown}");
     await waitFor(async () => expect(await day(jan(12))).toHaveFocus());
     await user.keyboard("{Enter}");
-    expect(onChange).toHaveBeenLastCalledWith(jan(12));
+    expect(onChange).toHaveBeenLastCalledWith(jan(12), changeDetails);
 
     // The pick redraws the grid, and focus comes back to the picked day.
     await waitFor(async () => expect(await day(jan(12))).toHaveFocus());

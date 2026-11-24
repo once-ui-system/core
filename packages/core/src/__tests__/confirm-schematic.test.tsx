@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ConfirmButton } from "../components/ConfirmButton";
 import { Schematic, type SchematicLink, type SchematicNode } from "../components/Schematic";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 
 describe("ConfirmButton", () => {
   beforeEach(() => {
@@ -45,10 +46,10 @@ describe("ConfirmButton", () => {
     expect(onArmedChange.mock.calls.map((c) => c[0])).toEqual([true, false]);
     fireEvent.click(button);
     fireEvent.blur(button);
-    expect(onArmedChange).toHaveBeenLastCalledWith(false);
+    expect(onArmedChange).toHaveBeenLastCalledWith(false, changeDetails);
     fireEvent.click(button);
     act(() => vi.advanceTimersByTime(4000));
-    expect(onArmedChange).toHaveBeenLastCalledWith(false);
+    expect(onArmedChange).toHaveBeenLastCalledWith(false, changeDetails);
     expect(screen.getByRole("button", { name: "Trip" })).toBeTruthy();
   });
 

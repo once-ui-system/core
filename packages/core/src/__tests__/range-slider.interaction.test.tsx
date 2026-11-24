@@ -95,7 +95,7 @@ describe("RangeSlider: interaction", () => {
     );
     await user.tab();
     await user.keyboard("{ArrowRight}{ArrowRight}");
-    expect(onChange.mock.calls).toEqual([[[15, 95]], [[25, 95]]]);
+    expect(onChange.mock.calls.map((call) => call.slice(0, 1))).toEqual([[[15, 95]], [[25, 95]]]);
   });
 
   it("drives a controlled parent from the keyboard and the pointer", async () => {

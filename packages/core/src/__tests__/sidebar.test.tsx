@@ -15,6 +15,7 @@ import {
 } from "../components/Sidebar";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 import {
   parseSidebarCookie,
   serializeSidebarCookie,
@@ -152,7 +153,7 @@ describe("Sidebar", () => {
     expect(onWidthChange).not.toHaveBeenCalled();
     fireEvent.pointerUp(sep, { pointerId: 1 });
     expect(onWidthChange).toHaveBeenCalledTimes(1);
-    expect(onWidthChange).toHaveBeenCalledWith(320);
+    expect(onWidthChange).toHaveBeenCalledWith(320, changeDetails);
     expect(aside().hasAttribute("data-resizing")).toBe(false);
 
     fireEvent.pointerDown(sep, { button: 0, clientX: 320, pointerId: 2 });
@@ -179,7 +180,7 @@ describe("Sidebar", () => {
     const onCollapsedChange = vi.fn();
     render(app({ collapsed: false, onCollapsedChange }), { wrapper: wrap });
     await user.click(screen.getByRole("button", { name: "Collapse sidebar" }));
-    expect(onCollapsedChange).toHaveBeenCalledWith(true);
+    expect(onCollapsedChange).toHaveBeenCalledWith(true, changeDetails);
     // The host kept it open.
     expect(aside().getAttribute("data-state")).toBe("open");
   });

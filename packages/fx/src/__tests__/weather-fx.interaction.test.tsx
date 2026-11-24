@@ -108,7 +108,10 @@ describe("WeatherFx", () => {
     act(() => {
       vi.advanceTimersByTime(500);
     });
-    expect(onActiveChange).toHaveBeenCalledWith(false);
+    expect(onActiveChange).toHaveBeenCalledWith(
+      false,
+      expect.objectContaining({ source: expect.any(String) }),
+    );
     frames.step(200);
     expect(frames.pending()).toHaveLength(0);
   });

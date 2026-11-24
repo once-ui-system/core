@@ -62,9 +62,7 @@ describe("Mascot medium", () => {
     for (const medium of MASCOT_MEDIUMS) {
       const svg = mascotSvg({ medium, color: "#e86a5a" });
       expect(svg.startsWith("<svg")).toBe(true);
-      expect(svg.includes("filter=")).toBe(
-        ["plush", "clay", "pixel", "toon"].includes(medium),
-      );
+      expect(svg.includes("filter=")).toBe(["plush", "clay", "pixel", "toon"].includes(medium));
     }
     expect(mediumFilterMarkup("x", "toon")).toContain('flood-color="#111318"');
     expect(mascotSvg({ medium: "lowpoly" })).toContain("<polygon");

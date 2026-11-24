@@ -7,6 +7,7 @@ import { RadioButton } from "../components/RadioButton";
 import { RadioGroup, type RadioGroupOption } from "../components/RadioGroup";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -59,7 +60,7 @@ describe("RadioGroup: interaction", () => {
     expect(radio("Small")).toHaveFocus();
     await user.keyboard(" ");
     expect(radio("Small")).toBeChecked();
-    expect(onChange).toHaveBeenCalledWith("s");
+    expect(onChange).toHaveBeenCalledWith("s", changeDetails);
     unmount();
 
     render(<RadioGroup label="Size" options={sizes} onValueChange={onChange} />, { wrapper: wrap });
@@ -85,7 +86,7 @@ describe("RadioGroup: interaction", () => {
     const onChange = vi.fn();
     render(<RadioGroup label="Size" options={sizes} onValueChange={onChange} />, { wrapper: wrap });
     await user.click(screen.getByText("Large"));
-    expect(onChange).toHaveBeenCalledWith("l");
+    expect(onChange).toHaveBeenCalledWith("l", changeDetails);
     expect(radio("Large")).toBeChecked();
     expect(screen.getAllByRole("radio", { checked: true })).toHaveLength(1);
   });

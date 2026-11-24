@@ -29,6 +29,7 @@ import { LayoutProvider } from "../contexts/LayoutProvider";
 import { LinearGauge } from "../modules/data/LinearGauge";
 import { RadialGauge } from "../modules/data/RadialGauge";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 
 /**
  * Findings of the October 2026 accessibility drill: axe over every docs page
@@ -343,13 +344,13 @@ describe("accessibility drill", () => {
 
     await user.click(field);
     await user.keyboard("{Backspace}");
-    expect(onChange).toHaveBeenLastCalledWith(["React"]);
+    expect(onChange).toHaveBeenLastCalledWith(["React"], changeDetails);
     const live = container.querySelector('[aria-live="polite"]');
     expect(live).toHaveTextContent("Removed tag Sass");
 
     // A removed tag's button leaves with it; focus goes back to the field.
     await user.click(screen.getByRole("button", { name: "Remove tag React" }));
-    expect(onChange).toHaveBeenLastCalledWith([]);
+    expect(onChange).toHaveBeenLastCalledWith([], changeDetails);
     expect(field).toHaveFocus();
     expect(live).toHaveTextContent("Removed tag React");
     await user.keyboard("{Backspace}");

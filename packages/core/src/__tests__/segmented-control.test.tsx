@@ -8,6 +8,7 @@ import { SegmentedControl } from "../components/SegmentedControl";
 import styles from "../components/SegmentedControl.module.scss";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -64,7 +65,7 @@ describe("SegmentedControl accessibility", () => {
     await user.keyboard("{ArrowRight}");
     expect(screen.getByRole("tab", { name: "Yearly" })).toHaveFocus();
     await user.keyboard("{Enter}");
-    expect(onChange).toHaveBeenLastCalledWith("yearly");
+    expect(onChange).toHaveBeenLastCalledWith("yearly", undefined, changeDetails);
     expect(screen.getByRole("tab", { name: "Yearly" })).toHaveAttribute("aria-selected", "true");
   });
 });
@@ -214,7 +215,7 @@ describe("SegmentedControl without scrolling", () => {
     );
     expect(ref.current).toContainElement(screen.getByRole("tablist", { name: "Billing period" }));
     await user.click(screen.getByRole("tab", { name: "Yearly" }));
-    expect(onChange).toHaveBeenCalledWith("yearly", expect.anything());
+    expect(onChange).toHaveBeenCalledWith("yearly", expect.anything(), changeDetails);
     expect(screen.getByRole("tab", { name: "Yearly" })).toHaveAttribute("aria-selected", "true");
   });
 

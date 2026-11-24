@@ -3,6 +3,7 @@
 import classNames from "clsx";
 import React, { useId } from "react";
 import type { LeafProps } from "../interfaces.js";
+import type { ChangeDetails } from "../internal/changeDetails.js";
 import {
   type ControlChromeProps,
   describedBy,
@@ -38,7 +39,7 @@ interface CheckboxProps
   indeterminate?: boolean;
   /** Called with the state the checkbox moves to: `true` when it becomes
    *  ticked. */
-  onCheckedChange?: (checked: boolean) => void;
+  onCheckedChange?: (checked: boolean, details?: ChangeDetails) => void;
   hoverable?: boolean;
 }
 

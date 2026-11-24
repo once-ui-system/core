@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from "vitest";
 import { NumberInput } from "../components/NumberInput";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -44,7 +45,7 @@ describe("NumberInput: interaction", () => {
     render(<NumberInput id="qty" label="Quantity" onValueChange={onChange} />, { wrapper: wrap });
     await user.click(field());
     await user.keyboard("42");
-    expect(onChange.mock.calls).toEqual([[4], [42]]);
+    expect(onChange.mock.calls.map((call) => call.slice(0, 1))).toEqual([[4], [42]]);
     await user.clear(field());
     expect(onChange).toHaveBeenCalledTimes(2);
   });
@@ -62,14 +63,14 @@ describe("NumberInput: interaction", () => {
     fireEvent.click(down());
     fireEvent.click(down());
     expect(field()).toHaveValue(5);
-    expect(onChange.mock.calls).toEqual([[15], [10], [5]]);
+    expect(onChange.mock.calls.map((call) => call.slice(0, 1))).toEqual([[15], [10], [5]]);
   });
 
   it("starts stepping from zero when empty", () => {
     const onChange = vi.fn();
     render(<NumberInput id="qty" label="Quantity" onValueChange={onChange} />, { wrapper: wrap });
     fireEvent.click(up());
-    expect(onChange).toHaveBeenCalledWith(1);
+    expect(onChange).toHaveBeenCalledWith(1, changeDetails);
   });
 
   it("does not step past min or max", () => {
@@ -92,7 +93,7 @@ describe("NumberInput: interaction", () => {
     fireEvent.click(down());
     fireEvent.click(down());
     expect(field()).toHaveValue(1);
-    expect(onChange.mock.calls).toEqual([[3], [2], [1]]);
+    expect(onChange.mock.calls.map((call) => call.slice(0, 1))).toEqual([[3], [2], [1]]);
   });
 
   // A step that would pass a bound used to do nothing: 8 with step 5 and max
@@ -118,7 +119,7 @@ describe("NumberInput: interaction", () => {
     fireEvent.click(down());
     expect(field()).toHaveValue(1);
     fireEvent.click(down());
-    expect(onChange.mock.calls).toEqual([[10], [5], [1]]);
+    expect(onChange.mock.calls.map((call) => call.slice(0, 1))).toEqual([[10], [5], [1]]);
   });
 
   it("starts stepping from min when empty and min is above zero", () => {
@@ -128,7 +129,7 @@ describe("NumberInput: interaction", () => {
     });
     fireEvent.click(up());
     expect(field()).toHaveValue(5);
-    expect(onChange.mock.calls).toEqual([[5]]);
+    expect(onChange.mock.calls.map((call) => call.slice(0, 1))).toEqual([[5]]);
   });
 
   // 0.1 + 0.2 is 0.30000000000000004 in floating point, and that is what the
@@ -147,12 +148,12 @@ describe("NumberInput: interaction", () => {
     );
     fireEvent.click(up());
     expect(field().value).toBe("0.3");
-    expect(onChange).toHaveBeenLastCalledWith(0.3);
+    expect(onChange).toHaveBeenLastCalledWith(0.3, changeDetails);
     fireEvent.click(down());
     fireEvent.click(down());
     fireEvent.click(down());
     expect(field().value).toBe("0");
-    expect(onChange).toHaveBeenLastCalledWith(0);
+    expect(onChange).toHaveBeenLastCalledWith(0, changeDetails);
   });
 
   it("pads what it shows with padStart", () => {

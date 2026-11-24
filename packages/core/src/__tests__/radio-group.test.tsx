@@ -9,6 +9,7 @@ import { RadioButton } from "../components/RadioButton";
 import { RadioGroup, type RadioGroupOption } from "../components/RadioGroup";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -145,7 +146,7 @@ describe("RadioGroup: selection", () => {
     );
 
     await user.click(radio("Annual"));
-    expect(onChange).toHaveBeenCalledWith("annual");
+    expect(onChange).toHaveBeenCalledWith("annual", changeDetails);
     expect(checkedRadio()).toBe(radio("Monthly"));
 
     rerender(<RadioGroup label="Plan" options={plans} value="annual" onValueChange={onChange} />);

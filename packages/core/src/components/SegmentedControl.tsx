@@ -2,6 +2,7 @@
 
 import classNames from "clsx";
 import { type ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { type ChangeDetails, reportChange } from "../internal/changeDetails.js";
 import { revealInStrip } from "../internal/revealInStrip.js";
 import { useControllableState } from "../internal/useControllableState.js";
 import { Flex } from "./Flex.js";
@@ -53,7 +54,11 @@ interface SegmentedControlProps
   defaultValue?: string;
   /** Called with the picked button's `value` (and the click, when it was one)
    *  on every pick. */
-  onValueChange?: (value: string, event?: React.MouseEvent<HTMLButtonElement>) => void;
+  onValueChange?: (
+    value: string,
+    event: React.MouseEvent<HTMLButtonElement> | undefined,
+    details?: ChangeDetails,
+  ) => void;
   /** Disables every button. */
   disabled?: boolean;
   fillWidth?: boolean;
@@ -113,9 +118,9 @@ const SegmentedControl = ({
 
   const pick = (next: string, event?: React.MouseEvent<HTMLButtonElement>) => {
     if (disabled) return;
-    setInternalSelected(next);
-    if (event) onValueChange?.(next, event);
-    else onValueChange?.(next);
+    if (!reportChange((value, details) => onValueChange?.(value, event, details), next, event))
+      return;
+    setInternalSelected(next, event);
   };
 
   const handleButtonClick = (

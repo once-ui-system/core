@@ -70,7 +70,7 @@ describe("EmojiPickerDropdown", () => {
     await user.click(screen.getByRole("button", { name: "grinning face" }));
     expect(onSelect.mock.calls).toEqual([["😀"]]);
     await waitFor(() => expect(search()).toBeNull());
-    expect(onOpenChange.mock.calls).toEqual([[true], [false]]);
+    expect(onOpenChange.mock.calls.map((call) => call.slice(0, 1))).toEqual([[true], [false]]);
     expect(trigger()).toHaveAttribute("aria-expanded", "false");
   });
 

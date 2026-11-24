@@ -13,6 +13,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { type ChangeDetails, reportChange } from "../internal/changeDetails.js";
 import { Column } from "./Column.js";
 import { Row } from "./Row.js";
 import { ToggleButton, type ToggleButtonProps } from "./ToggleButton.js";
@@ -75,7 +76,7 @@ interface TabsProps extends Omit<React.ComponentProps<typeof Column>, "onChange"
    */
   defaultValue?: string;
   /** Called with the newly selected tab's `value`. Not called for the tab already selected. */
-  onValueChange?: (value: string) => void;
+  onValueChange?: (value: string, details?: ChangeDetails) => void;
   /**
    * Which arrow keys move between tabs: Left and Right for `horizontal`, Up and
    * Down for `vertical`. Also lays the list out beside the panels instead of above them.
@@ -122,8 +123,8 @@ const Tabs = ({
   const select = useCallback(
     (next: string) => {
       if (next === current) return;
+      if (!reportChange(onValueChange, next)) return;
       if (!controlled) setUncontrolled(next);
-      onValueChange?.(next);
     },
     [current, controlled, onValueChange],
   );

@@ -3,6 +3,7 @@
 import classNames from "clsx";
 import type React from "react";
 import { type ReactNode, useCallback, useId, useRef, useState } from "react";
+import type { ChangeDetails } from "../internal/changeDetails.js";
 import { mergeLabels } from "../internal/labels.js";
 import { useControllableState } from "../internal/useControllableState.js";
 import type { Placement } from "../types.js";
@@ -44,7 +45,7 @@ interface ComboboxProps
   /** The starting text of an uncontrolled Combobox (no `value`). */
   defaultValue?: string;
   /** Receives the text on every keystroke and every pick. */
-  onValueChange?: (value: string) => void;
+  onValueChange?: (value: string, details?: ChangeDetails) => void;
   /** Called when a suggestion is picked, with the whole option. */
   onOptionSelect?: (option: ComboboxOption) => void;
   /** Whether the list is open, controlled. */

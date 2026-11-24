@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useCallback, useId, useRef } from "react";
+import type { ChangeDetails } from "../internal/changeDetails.js";
 import { useControllableState } from "../internal/useControllableState.js";
+import type { CSSUnit } from "../types.js";
 import { fieldLocale } from "../utils/calendarLocale.js";
 import { DatePicker, type DatePickerLabels, type DateRange } from "./DatePicker.js";
 import { Dropdown } from "./Dropdown.js";
@@ -9,7 +11,6 @@ import { DropdownComboboxContext } from "./DropdownTriggerContext.js";
 import { Flex } from "./Flex.js";
 import { Input } from "./Input.js";
 import { Row } from "./Row.js";
-import type { CSSUnit } from "../types.js";
 
 interface SingleDateInputProps
   extends Omit<
@@ -29,7 +30,7 @@ interface SingleDateInputProps
   /** The starting date of an uncontrolled DateInput (no `value`). */
   defaultValue?: Date;
   /** Receives the date picked, and each time edit with `timePicker`. */
-  onValueChange?: (date: Date) => void;
+  onValueChange?: (date: Date, details?: ChangeDetails) => void;
   /** Whether the picker is open, controlled. */
   open?: boolean;
   /** Whether the picker starts open, uncontrolled (no `open`). */
@@ -121,8 +122,8 @@ const SingleDateInput = ({
   const [date, setDate] = useControllableState<Date | undefined>({
     value,
     defaultValue,
-    onChange: (next) => {
-      if (next) onValueChange?.(next);
+    onChange: (next, details) => {
+      if (next) onValueChange?.(next, details);
     },
   });
   const inputValue = date ? formatDate(date, timePicker, locale) : "";
@@ -272,7 +273,7 @@ interface RangeDateInputProps
   /** The starting range of an uncontrolled range input (no `value`). */
   defaultValue?: DateRange;
   /** Receives the range after each pick: the start alone, then both ends. */
-  onValueChange?: (range: DateRange) => void;
+  onValueChange?: (range: DateRange, details?: ChangeDetails) => void;
   /** Whether the picker is open, controlled. */
   open?: boolean;
   /** Whether the picker starts open, uncontrolled (no `open`). */
@@ -357,8 +358,8 @@ const RangeDateInput = ({
   const [range, setRange] = useControllableState<DateRange | undefined>({
     value,
     defaultValue,
-    onChange: (next) => {
-      if (next) onValueChange?.(next);
+    onChange: (next, details) => {
+      if (next) onValueChange?.(next, details);
     },
   });
   const inputValue = range ? formatDateRange(range, locale) : { startDate: "", endDate: "" };

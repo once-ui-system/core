@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from "vitest";
 import { NumberInput } from "../components/NumberInput";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -143,7 +144,7 @@ describe("NumberInput follows its value", () => {
     rerender(<NumberInput id="n" label="Count" value={9} onValueChange={onChange} />);
 
     await user.click(screen.getByRole("button", { name: "Increment value" }));
-    expect(onChange).toHaveBeenLastCalledWith(10);
+    expect(onChange).toHaveBeenLastCalledWith(10, changeDetails);
     expect(field().value).toBe("10");
   });
 

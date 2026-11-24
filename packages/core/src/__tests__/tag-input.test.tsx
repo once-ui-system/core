@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from "vitest";
 import { TagInput } from "../components/TagInput";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 
 /**
  * TagInput is controlled: `value` is the tag list and every change goes
@@ -114,7 +115,7 @@ describe("TagInput", () => {
       wrapper,
     });
     await user.type(field(), "vue{Enter}");
-    expect(onValueChange).toHaveBeenCalledWith(["react", "vue"]);
+    expect(onValueChange).toHaveBeenCalledWith(["react", "vue"], changeDetails);
     expect(screen.queryByText("vue")).toBeNull();
   });
 

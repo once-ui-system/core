@@ -3,6 +3,7 @@
 import classNames from "clsx";
 import React, { useId } from "react";
 import type { LeafProps } from "../interfaces.js";
+import type { ChangeDetails } from "../internal/changeDetails.js";
 import {
   type ControlChromeProps,
   describedBy,
@@ -43,7 +44,7 @@ interface SwitchProps
   disabled?: boolean;
   reverse?: boolean;
   /** Called with the state the switch moves to: `true` when it turns on. */
-  onCheckedChange?: (checked: boolean) => void;
+  onCheckedChange?: (checked: boolean, details?: ChangeDetails) => void;
 }
 
 const Switch = ({

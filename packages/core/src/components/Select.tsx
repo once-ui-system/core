@@ -3,6 +3,7 @@
 import classNames from "clsx";
 import type React from "react";
 import { type ReactNode, useCallback, useEffect, useId, useRef, useState } from "react";
+import type { ChangeDetails } from "../internal/changeDetails.js";
 import { mergeLabels } from "../internal/labels.js";
 import { useControllableState } from "../internal/useControllableState.js";
 import type { Placement } from "../types.js";
@@ -46,7 +47,7 @@ interface SelectProps
   /** The starting value of an uncontrolled Select (no `value`). */
   defaultValue?: string | string[];
   /** Receives the new value after each pick: the whole array with `multiple`. */
-  onValueChange?: (value: string | string[]) => void;
+  onValueChange?: (value: string | string[], details?: ChangeDetails) => void;
   /** Whether the list is open, controlled. */
   open?: boolean;
   /** Whether the list starts open, uncontrolled (no `open`). */

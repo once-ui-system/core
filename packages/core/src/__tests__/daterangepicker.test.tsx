@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from "vitest";
 import { DatePicker, type DateRange } from "../components/DatePicker";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { axeViolations, expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 
 /**
  * DatePicker range picks a range in clicks: the first sets the start, the
@@ -60,9 +61,15 @@ describe("DatePicker range", () => {
     );
     // A complete range is there, so the first click starts a new one.
     await user.click(await day(jan(12)));
-    expect(onChange).toHaveBeenLastCalledWith({ startDate: jan(12), endDate: undefined });
+    expect(onChange).toHaveBeenLastCalledWith(
+      { startDate: jan(12), endDate: undefined },
+      changeDetails,
+    );
     await user.click(await day(jan(20)));
-    expect(onChange).toHaveBeenLastCalledWith({ startDate: jan(12), endDate: jan(20) });
+    expect(onChange).toHaveBeenLastCalledWith(
+      { startDate: jan(12), endDate: jan(20) },
+      changeDetails,
+    );
   });
 
   it("starts from nothing: the first click sets the start", async () => {
@@ -73,7 +80,10 @@ describe("DatePicker range", () => {
     const now = new Date();
     const third = new Date(now.getFullYear(), now.getMonth(), 3);
     await user.click(await day(third));
-    expect(onChange).toHaveBeenLastCalledWith({ startDate: third, endDate: undefined });
+    expect(onChange).toHaveBeenLastCalledWith(
+      { startDate: third, endDate: undefined },
+      changeDetails,
+    );
   });
 
   it("puts the earlier date first when the second click is before the start", async () => {
@@ -90,7 +100,10 @@ describe("DatePicker range", () => {
       },
     );
     await user.click(await day(jan(8)));
-    expect(onChange).toHaveBeenLastCalledWith({ startDate: jan(8), endDate: jan(20) });
+    expect(onChange).toHaveBeenLastCalledWith(
+      { startDate: jan(8), endDate: jan(20) },
+      changeDetails,
+    );
   });
 
   it("marks the days of the range", async () => {
@@ -167,10 +180,13 @@ describe("DatePicker range", () => {
       { wrapper },
     );
     await user.click(await day(new Date(2026, 1, 3)));
-    expect(onChange).toHaveBeenLastCalledWith({
-      startDate: jan(28),
-      endDate: new Date(2026, 1, 3),
-    });
+    expect(onChange).toHaveBeenLastCalledWith(
+      {
+        startDate: jan(28),
+        endDate: new Date(2026, 1, 3),
+      },
+      changeDetails,
+    );
   });
 
   it("disables the days outside minDate and maxDate", async () => {
@@ -247,10 +263,13 @@ describe("DatePicker range", () => {
     render(<DatePicker range months={2} value={january} onValueChange={onChange} />, { wrapper });
     await user.click(await day(new Date(2026, 1, 10)));
 
-    expect(onChange).toHaveBeenLastCalledWith({
-      startDate: new Date(2026, 1, 10),
-      endDate: undefined,
-    });
+    expect(onChange).toHaveBeenLastCalledWith(
+      {
+        startDate: new Date(2026, 1, 10),
+        endDate: undefined,
+      },
+      changeDetails,
+    );
     expect(screen.getByRole("grid", { name: "January 2026" })).toBeInTheDocument();
     expect(screen.getByRole("grid", { name: "February 2026" })).toBeInTheDocument();
     // The new start is marked in the calendar that shows it.

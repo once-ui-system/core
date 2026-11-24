@@ -7,6 +7,7 @@ import { describe, expect, it, vi } from "vitest";
 import { Slider, type SliderProps } from "../components/Slider";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -126,7 +127,7 @@ describe("Slider range: value", () => {
     await user.tab();
     await user.keyboard("{ArrowLeft}");
     expect(endThumb()).toHaveAttribute("aria-valuenow", "79");
-    expect(onChange.mock.calls).toEqual([[[21, 80]], [[21, 79]]]);
+    expect(onChange.mock.calls.map((call) => call.slice(0, 1))).toEqual([[[21, 80]], [[21, 79]]]);
   });
 
   it("is controlled: shows `value`, not the last change, until the parent updates it", async () => {
@@ -140,7 +141,7 @@ describe("Slider range: value", () => {
     );
     await user.tab();
     await user.keyboard("{ArrowRight}");
-    expect(onChange).toHaveBeenCalledWith([21, 80]);
+    expect(onChange).toHaveBeenCalledWith([21, 80], changeDetails);
     expect(startThumb()).toHaveAttribute("aria-valuenow", "20");
 
     rerender(<Slider range label="Price" value={[21, 80]} onValueChange={onChange} />);
@@ -283,7 +284,7 @@ describe("Slider range: pointer", () => {
     fireEvent.pointerDown(track(), { button: 0, clientX: 100 });
     expect(startThumb()).toHaveAttribute("aria-valuenow", "10");
     expect(startThumb()).toHaveFocus();
-    expect(onChange.mock.calls.at(-1)).toEqual([[10, 66]]);
+    expect(onChange.mock.calls.at(-1)?.slice(0, 1)).toEqual([[10, 66]]);
   });
 
   it("stops a dragged thumb at the other one", () => {

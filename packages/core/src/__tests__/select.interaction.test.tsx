@@ -8,6 +8,7 @@ import { resetScrollLockState } from "../components/ScrollLock";
 import { Select } from "../components/Select";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 import { resetDialogState } from "../test/dialogTestUtils";
 import { failOnConsoleError } from "../test/failOnConsoleError";
 import { clearLastOpenedDropdown } from "../utils/dropdownState";
@@ -55,7 +56,7 @@ describe("an uncontrolled Select", () => {
     expect(field()).toHaveValue("");
     await open(user);
     await user.click(option("Bravo"));
-    expect(onSelect.mock.calls).toEqual([["b"]]);
+    expect(onSelect.mock.calls.map((call) => call.slice(0, 1))).toEqual([["b"]]);
     expect(field()).toHaveValue("Bravo");
 
     await open(user);
@@ -76,7 +77,11 @@ describe("an uncontrolled Select", () => {
     expect(field()).toHaveValue("2 options selected");
     await user.click(option("Bravo"));
     expect(field()).toHaveValue("Alpha");
-    expect(onSelect.mock.calls).toEqual([[["b"]], [["b", "a"]], [["a"]]]);
+    expect(onSelect.mock.calls.map((call) => call.slice(0, 1))).toEqual([
+      [["b"]],
+      [["b", "a"]],
+      [["a"]],
+    ]);
     expect(option("Alpha")).toHaveAttribute("aria-selected", "true");
     expect(option("Bravo")).toHaveAttribute("aria-selected", "false");
   });
@@ -92,7 +97,7 @@ describe("a controlled Select", () => {
     expect(field()).toHaveValue("Alpha");
     await open(user);
     await user.click(option("Bravo"));
-    expect(onSelect).toHaveBeenCalledWith("b");
+    expect(onSelect).toHaveBeenCalledWith("b", changeDetails);
     expect(field()).toHaveValue("Alpha");
   });
 
@@ -122,7 +127,7 @@ describe("Select options", () => {
     await open(user);
     await user.click(option("Alpha"));
     expect(onClick.mock.calls).toEqual([["a"]]);
-    expect(onSelect.mock.calls).toEqual([["a"]]);
+    expect(onSelect.mock.calls.map((call) => call.slice(0, 1))).toEqual([["a"]]);
   });
 
   it("does not pick a disabled option from a click", async () => {
@@ -148,7 +153,7 @@ describe("Select options", () => {
     await user.keyboard("{ArrowDown}");
     await waitFor(() => expect(isOpen()).toBe(true));
     await user.keyboard("{End}{Enter}");
-    expect(onSelect.mock.calls).toEqual([["b"]]);
+    expect(onSelect.mock.calls.map((call) => call.slice(0, 1))).toEqual([["b"]]);
   });
 });
 
@@ -219,7 +224,7 @@ describe("a searchable Select", () => {
     await user.keyboard("BRA");
     expect(screen.getAllByRole("option").map((el) => el.textContent)).toEqual(["Bravo"]);
     await user.keyboard("{Enter}");
-    expect(onSelect.mock.calls).toEqual([["b"]]);
+    expect(onSelect.mock.calls.map((call) => call.slice(0, 1))).toEqual([["b"]]);
     expect(field()).toHaveValue("Bravo");
   });
 });

@@ -13,6 +13,21 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Added
+
+- **Every value change says who made it, and can be refused.** `onValueChange`,
+  `onCheckedChange`, `onOpenChange` and the other `onXChange` callbacks of Input, Textarea,
+  NumberInput, OTPInput, ColorInput, Select, Combobox, TagInput, Checkbox, Switch,
+  RadioButton, RadioGroup, Slider (both thumbs), Tabs, DateInput, DatePicker and every
+  component on the shared value contract now pass a second argument,
+  `details: ChangeDetails`: `source` (`"pointer"`, `"keyboard"`, `"agent"` or
+  `"programmatic"`), the DOM `event` when there is one, and `cancel()`, which keeps an
+  uncontrolled component as it was. `withChangeSource("agent", fn)` marks the changes `fn`
+  makes, so an assistant's edits can be told apart from a person's. SegmentedControl keeps
+  its event second and passes `details` third. The argument is optional in the types, so a
+  wrapper that calls the callback with the value alone still compiles. A test that asserts
+  `toHaveBeenCalledWith(value)` on one of these callbacks now sees the extra argument.
+
 ## [3.1.1] - 2026-11-24
 
 Patch. Fixes only; nothing to change in your code. `foundations`, `fx` and `blocks` stay

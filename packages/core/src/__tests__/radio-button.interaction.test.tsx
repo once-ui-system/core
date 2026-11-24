@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from "vitest";
 import { RadioButton } from "../components/RadioButton";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -43,7 +44,7 @@ describe("RadioButton: interaction", () => {
     await user.tab();
     await user.keyboard(" ");
     expect(radio("A")).toBeChecked();
-    expect(onToggle).toHaveBeenLastCalledWith(true);
+    expect(onToggle).toHaveBeenLastCalledWith(true, changeDetails);
     unmount();
 
     render(<RadioButton label="B" onCheckedChange={onToggle} />, { wrapper: wrap });
@@ -72,7 +73,7 @@ describe("RadioButton: interaction", () => {
     render(<RadioButton label="Twice" onCheckedChange={onCheckedChange} />, { wrapper: wrap });
     await user.click(radio("Twice"));
     await user.click(radio("Twice"));
-    expect(onCheckedChange.mock.calls).toEqual([[true]]);
+    expect(onCheckedChange.mock.calls.map((call) => call.slice(0, 1))).toEqual([[true]]);
     expect(radio("Twice")).toBeChecked();
   });
 
@@ -106,7 +107,7 @@ describe("RadioButton: interaction", () => {
       },
     );
     await user.click(radio("C"));
-    expect(onToggle).toHaveBeenCalledWith(true);
+    expect(onToggle).toHaveBeenCalledWith(true, changeDetails);
     expect(radio("C")).not.toBeChecked();
     rerender(<RadioButton label="C" checked onCheckedChange={onToggle} />);
     expect(radio("C")).toBeChecked();

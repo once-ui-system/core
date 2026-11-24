@@ -1,5 +1,6 @@
 "use client";
 import React, { useCallback, useImperativeHandle, useRef, useState } from "react";
+import { type ChangeDetails, reportChange } from "../internal/changeDetails.js";
 import { mergeLabels } from "../internal/labels.js";
 import { Column } from "./Column.js";
 import { Dropdown } from "./Dropdown.js";
@@ -35,7 +36,7 @@ interface ColorInputProps extends Omit<InputProps, "value" | "defaultValue" | "o
   /** The starting colour of an uncontrolled ColorInput (no `value`). */
   defaultValue?: string;
   /** Receives the new colour after a pick, an opacity change or a clear (`""`). */
-  onValueChange?: (value: string) => void;
+  onValueChange?: (value: string, details?: ChangeDetails) => void;
   supportAlpha?: boolean;
   /** The clear and opacity controls' text, for a translated interface. */
   labels?: ColorInputLabels;
@@ -122,9 +123,9 @@ const ColorInput = ({
       onChange?.(e);
       if (supportAlpha) {
         const rgbaValue = hexToRgba(newHex, alpha);
-        onValueChange?.(rgbaValue);
+        reportChange(onValueChange, rgbaValue, e);
       } else {
-        onValueChange?.(newHex);
+        reportChange(onValueChange, newHex, e);
       }
     },
     [alpha, supportAlpha, onChange, onValueChange],
@@ -134,7 +135,7 @@ const ColorInput = ({
       setAlpha(newAlpha);
       if (hexValue) {
         const rgbaValue = hexToRgba(hexValue, newAlpha);
-        onValueChange?.(rgbaValue);
+        reportChange(onValueChange, rgbaValue);
       }
     },
     [hexValue, onValueChange],
@@ -142,7 +143,7 @@ const ColorInput = ({
   const handleReset = () => {
     setHexValue("");
     setAlpha(100);
-    onValueChange?.("");
+    reportChange(onValueChange, "");
     // The clear button unmounts with the colour; without this, focus
     // dropped to the page and a keyboard user lost their place.
     colorInputRef.current?.focus();

@@ -2,6 +2,7 @@
 
 import classNames from "clsx";
 import React, { useState } from "react";
+import { type ChangeDetails, reportChange } from "../internal/changeDetails.js";
 import { Column } from "./Column.js";
 import { Flex } from "./Flex.js";
 import { useFieldSize } from "./FormContext.js";
@@ -21,7 +22,7 @@ interface NumberInputProps
   /** The starting number of an uncontrolled NumberInput (no `value`). */
   defaultValue?: number;
   /** Receives the number on every change that reads as one, and on each step. */
-  onValueChange?: (value: number) => void;
+  onValueChange?: (value: number, details?: ChangeDetails) => void;
   min?: number;
   max?: number;
   step?: number;
@@ -92,13 +93,13 @@ const NumberInput = ({
 
     const numValue = parseFloat(newValue);
     if (!isNaN(numValue)) {
-      onValueChange?.(numValue);
+      reportChange(onValueChange, numValue, e);
     }
   };
 
   const updateValue = (newValue: number) => {
+    if (!reportChange(onValueChange, newValue)) return;
     setLocalValue(format(newValue, padStart));
-    onValueChange?.(newValue);
   };
 
   /**

@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from "vitest";
 import { SegmentedControl } from "../components/SegmentedControl";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { changeDetails } from "../test/changeDetails";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -75,7 +76,7 @@ describe("SegmentedControl: interaction", () => {
     expect(tab("Grid")).toHaveFocus();
     await user.keyboard(" ");
     expect(onChange).toHaveBeenCalledTimes(1);
-    expect(onChange).toHaveBeenLastCalledWith("grid");
+    expect(onChange).toHaveBeenLastCalledWith("grid", undefined, changeDetails);
     expect(tab("Grid")).toHaveAttribute("aria-selected", "true");
     expect(tab("Grid")).toHaveAttribute("tabindex", "0");
     expect(tab("List")).toHaveAttribute("tabindex", "-1");
@@ -158,7 +159,7 @@ describe("SegmentedControl: interaction", () => {
     );
     await user.click(tab("Grid"));
     expect(onClick).toHaveBeenCalledTimes(1);
-    expect(onChange).toHaveBeenCalledWith("grid", expect.anything());
+    expect(onChange).toHaveBeenCalledWith("grid", expect.anything(), changeDetails);
     expect(tab("Grid")).toHaveAttribute("aria-selected", "true");
   });
 
@@ -186,10 +187,10 @@ describe("SegmentedControl: interaction", () => {
     await user.keyboard("{ArrowRight}");
     expect(radio("Board")).toHaveFocus();
     expect(radio("Board")).toHaveAttribute("aria-checked", "true");
-    expect(onChange).toHaveBeenLastCalledWith("board");
+    expect(onChange).toHaveBeenLastCalledWith("board", undefined, changeDetails);
     await user.keyboard("{ArrowRight}");
     expect(radio("List")).toHaveFocus();
-    expect(onChange).toHaveBeenLastCalledWith("list");
+    expect(onChange).toHaveBeenLastCalledWith("list", undefined, changeDetails);
     expect(group).toContainElement(radio("List"));
     await expectNoAxeViolations(container);
   });
