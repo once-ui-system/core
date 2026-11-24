@@ -60,7 +60,7 @@ describe("layer motion", () => {
       { wrapper },
     );
     const delay = (d: string) =>
-      (container.querySelector(`path[d="${d}"]`)?.parentElement as HTMLElement).style
+      (container.querySelector(`path[d="${d}"]`)?.parentElement as HTMLElement | null)?.style
         .animationDelay;
     expect(new Set(ghost.map(delay)).size).toBe(1);
     expect(delay("M10 10h4v4h-4Z")).not.toBe(delay("M20 10h4v4h-4Z"));
