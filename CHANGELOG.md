@@ -13,7 +13,7 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
-## [3.1.0] - 2026-11-25
+## [3.1.0] - 2026-11-24
 
 Minor. Everything is additive except a few default looks that change on purpose; they are
 listed under **Changed** so you can check your screens. `@once-ui-system/foundations`,
