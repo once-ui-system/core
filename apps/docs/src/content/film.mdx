@@ -1,0 +1,109 @@
+---
+title: "Once UI Film"
+docs: "once-ui/film.mdx"
+github: "apps/docs/src/content/film.mdx"
+navLabel: "Film"
+updatedAt: "2026-11-24"
+summary: "Motion graphics built from real Once UI components. A film is a short film.json that you or your agent write: shots in order, each naming a scene and its props. It plays in the browser and renders to 16:9 and 9:16 with Remotion."
+navIcon: "sparkle"
+---
+
+## About
+
+Once UI Film is part of [Studio on once-ui.com](https://once-ui.com/dashboard/film). Its scenes are drawn from the components you already ship, such as charts, mascots, product pages and effects, so a launch film shows real UI. Every scene plays live in Studio. You tweak its props in the Customize panel and copy the film.json. Pro and Indie members also copy the engine and scene source to render on their own machine.
+
+## Direct a film from your agent
+
+Connect the hosted Once UI MCP and ask for a film ("a 16 second launch film for our 3.1 release, with our mascot"):
+
+```bash
+claude mcp add --transport http once-ui https://once-ui.com/api/mcp
+```
+
+The agent reads the scenes with `film_list_scenes`, writes a film.json and checks it with `film_check`. `film_open` hands back a link that opens the cut in Studio. The film travels inside that link, so nothing is stored. See [the hosted MCP](/ai-coding) for the full tool list and sign-in.
+
+## film.json
+
+```json
+{
+  "fps": 60,
+  "accent": "#3fe3f2",
+  "look": { "brand": "cyan", "accent": "blue", "solid": "color", "solidStyle": "flat", "border": "playful", "surface": "filled" },
+  "slate": { "sub": "Once UI 3.0", "footer": { "text": "npx once-ui create", "at": 13.2, "until": 16.1 } },
+  "shots": [
+    { "scene": "big-word", "props": { "word": "3.0" }, "seconds": 1.4, "in": "cut", "out": "whip" },
+    { "scene": "headline", "props": { "text": "Tell your AI.\nGet real UI.", "highlight": "real UI" }, "seconds": 2.6 },
+    { "scene": "mascot", "props": { "username": "once-ui", "line": "Even I'm a component." }, "seconds": 2.8, "in": "cut" },
+    { "scene": "lockup", "props": { "name": "Once UI 3.0", "line": "Free and open source", "icon": "sparkle" }, "seconds": 3.6, "in": "slam", "out": "cut" }
+  ]
+}
+```
+
+| Field | What it sets |
+| --- | --- |
+| `accent` | The one vibrant colour on a black stage |
+| `look` | The Once UI style the components inside the scenes use |
+| `slate` | Small type that stays on screen: `sub`, a `caption` per shot, a timed `footer` |
+| `shots` | The scenes in order. Each has `scene`, `props`, `seconds`, `in` (`whip`, `slam`, `rise`, `blur`, `zoom`, `cut`) and `out` (`whip`, `push`, `blur`, `sink`, `cut`) |
+| `shots[].behind` | A huge, dim word behind the shot |
+| `shots[].layers` | Other scenes on their own clock over or under the shot: `at`, `until`, `place`, `opacity`, `blend`, `fade` |
+| `backdrop` | A scene that runs under the whole film |
+
+A prop left out takes the scene's default. The house loop is 16.4 seconds and a whip takes 0.32 seconds. The film's length is the sum of its shots.
+
+## Your mascot
+
+The `mascot` scene puts one mascot on stage. Set `username` to a Once UI username to show that person's own mascot, the one they saved in Studio's character designer. Set it to `once-ui` or `quasar` for the brand mascots. In Studio, **Use my mascot** fills in your own.
+
+## Scenes
+
+### Text
+
+| Scene | What it shows | Props |
+| --- | --- | --- |
+| `headline` | The hero headline: huge type whose words arrive one by one, a quieter line under it and status chips drifting in around it. | `text`, `highlight`, `sub`, `chips`, `size`, `weight`, `tracking`, `uppercase`, `color`, `entrance`, `stagger`, `align` |
+| `big-word` | One huge word or number on black: a cover, a chapter, the last frame of a loop. | `word`, `size`, `color`, `weight`, `tracking` |
+| `arc-dial` | A word list curved onto a dial that steps through each word: the one at the centre takes the accent and grows, the rest bend away and fade. | `items`, `every`, `size`, `activeColor`, `activeScale`, `band`, `spacing`, `brackets`, `note`, `weight` |
+| `lockup` | The sign-off: the mark pops, the name rises out of a blur and the closing line types in. | `name`, `line`, `icon`, `logo` |
+
+### Cards and photos
+
+| Scene | What it shows | Props |
+| --- | --- | --- |
+| `card-cascade` | Cards on a diagonal through depth: the one in focus is big and sharp, its neighbours shrink and blur, and the focus walks down the line. | `cards`, `every`, `cardWidth`, `ratio`, `spacing`, `depth`, `frame`, `radius`, `titles` |
+| `card-fan` | A deck dealt into a fan: cards fly in one after another and settle on the stack, framed by two huge, dim words. | `cards`, `words`, `stagger`, `spread`, `step`, `cardWidth`, `ratio`, `frame`, `radius` |
+| `arc-gallery` | Photos ride an arc from the lower left over the top and off to the right, where each one breaks into pixels that scatter. | `images`, `speed`, `curve`, `cardWidth`, `ratio`, `radius`, `dissolve`, `pixel` |
+| `media-field` | A field of photo tiles hanging in depth with the camera drifting through them, and one headline sharp in the middle. | `images`, `headline`, `kicker`, `size`, `count`, `travel`, `dim`, `mono`, `seed` |
+| `editorial` | An editorial hero: headline with one italic serif word, a portrait card rising on a colour disc inside a dotted orbit, a slide counter, and the name huge and outlined behind. Slides change on their own. | `kicker`, `headline`, `slides`, `every`, `disc`, `paper`, `ink`, `serif`, `outlined`, `sparkles` |
+
+### Globes and data
+
+| Scene | What it shows | Props |
+| --- | --- | --- |
+| `dot-globe` | The world as a halftone of land dots on a dark glass sphere, turning slowly, with routes arcing between cities one after another. | `routes`, `size`, `dotColor`, `routeColor`, `rimColor`, `spin`, `facing`, `tilt`, `density`, `framing` |
+| `chart-draw` | A real core LineChart card: the line draws in, the number counts up, the delta pops. | `label`, `value`, `prefix`, `delta`, `series`, `compare`, `names`, `color`, `drawAt`, `drawFor` |
+| `count-ring` | A big number counts up in the middle while a ring of tiles pops in around it one by one and slowly turns. | `value`, `label`, `items`, `radius`, `tile`, `spin`, `stagger`, `size`, `tileColor`, `lit` |
+
+### Product UI
+
+| Scene | What it shows | Props |
+| --- | --- | --- |
+| `focus-pull` | A product page in focus, then the camera pulls focus: the page sinks into blur while one metric card lifts, tilts, takes a selection outline and counts up under a cursor. | `headline`, `sub`, `primary`, `secondary`, `metrics`, `focus`, `pullAt`, `blur`, `lift`, `zoom`, `outline`, `cursor`, `theme` |
+| `prop-edit` | A live prop: the code line under a real core component is retyped and the component follows each edit. | `component`, `label`, `states`, `every`, `zoom` |
+| `icon-grid` | The app's icons as a wall of tiles: a ripple out from the centre, then a sweep in the accent. | `icons`, `sweepAt` |
+| `mascot-cast` | Flat core Mascots pop in one after another and hop, each in its own colour, eyes and accessory. | `mascots`, `hopAt` |
+| `mascot` | One mascot, big and alone: it pops in, changes mood on a beat and says one line. Set username to star a person's own Once UI mascot (the one they saved in Studio), or once-ui or quasar for the brand mascots. | `username`, `color`, `eyes`, `accessory`, `moods`, `every`, `line`, `tag`, `size` |
+
+### Effects
+
+| Scene | What it shows | Props |
+| --- | --- | --- |
+| `silk` | Folds of silk in slow motion: a soft, moving floor for type to sit on. | `colors`, `folds`, `tone`, `speed`, `offset` |
+| `aurora` | Curtains of northern light rippling over a dark horizon. | `colors`, `intensity`, `horizon`, `speed`, `offset` |
+| `eclipse` | A total eclipse: a black disc, a breathing corona and a diamond ring on its edge. | `color`, `accent`, `framing`, `size`, `corona`, `diamond`, `rays`, `speed`, `offset` |
+| `stage-light` | One spotlight cutting through haze, sweeping to land on the subject. | `color`, `target`, `sweep`, `haze`, `dust`, `speed`, `offset` |
+| `cursor-smoke` | Ink Bloom's fluid smoke drawn by a scripted cursor: each stroke of the path trails coloured smoke that curls and thins away. | `path`, `colors`, `fade`, `curl`, `splatRadius`, `cursor`, `cursorColor` |
+
+## Rendering
+
+Studio's **Render** tab has the Remotion setup: one composition per shape, 1920 × 1080 and 1080 × 1920 at 60 fps, from the same film.json. Once UI ships compiled CSS modules, so the setup turns on css-loader's module mode, and it uses SwiftShader so the effects render on machines without a GPU.
