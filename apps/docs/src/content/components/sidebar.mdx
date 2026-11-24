@@ -28,27 +28,32 @@ anywhere outside a text field.
       label: "Sidebar",
       code:
 `<SidebarProvider persist="app">
-  <Row as="header">
-    <SidebarTrigger />
-    <Breadcrumbs items={crumbs} />
-  </Row>
   <Row fill>
     <Sidebar aria-label="Workspace">
       <SidebarHeader>
-        <User name="Fjell" subline="Pro workspace" />
+        <Row fillWidth gap="4" vertical="center">
+          <Column flex={1} minWidth={0}>
+            <WorkspaceSwitcher items={workspaces} value={current} onValueChange={open} />
+          </Column>
+          <SidebarTrigger icon="sidebar" />
+        </Row>
       </SidebarHeader>
       <SidebarContent>
         <Nav density="compact" aria-label="Product">
-          <NavItem icon="home" label="Dashboard" href="/" selected />
-          <NavSection label="Workspace">
-            <NavGroup icon="people" label="Manage">
-              <NavItem label="Users" href="/users" />
-            </NavGroup>
-          </NavSection>
+          <NavItem icon="home" label="Home" href="/" selected />
+          <Line marginY="4" background="neutral-alpha-weak" />
+          <NavItem icon="globe" label="Sites" href="/sites" />
+          <NavItem icon="mail" label="Newsletters" href="/newsletters" />
+          <Line marginY="4" background="neutral-alpha-weak" />
+          <NavItem icon="inbox" label="Inbox" href="/inbox" />
         </Nav>
       </SidebarContent>
       <SidebarFooter>
-        <UserMenu />
+        <Nav density="compact" aria-label="Account">
+          <NavItem icon="help" label="Help" />
+          <NavItem icon="bell" label="Notifications" />
+          <NavItem label={user.name} prefix={<Avatar size="xs" src={user.avatar} />} />
+        </Nav>
       </SidebarFooter>
     </Sidebar>
     <Column as="main" flex={1}>{children}</Column>
@@ -68,7 +73,8 @@ anywhere outside a text field.
 - **SidebarContent** takes the space left and scrolls on its own. It holds the
   Nav.
 - **SidebarTrigger** folds and unfolds it, or opens the drawer on a phone. Its
-  tooltip names the shortcut. Put it in the top bar or in the SidebarHeader.
+  tooltip names the shortcut. The Once UI apps put it beside the workspace
+  switcher in the SidebarHeader, with `icon="sidebar"`; a top bar works too.
 - **SidebarProvider** holds the state for the Sidebar and for anything outside
   it that reads or changes it: the trigger in the top bar, ⌘B, `useSidebar()`.
   A Sidebar with no provider around it makes its own.
