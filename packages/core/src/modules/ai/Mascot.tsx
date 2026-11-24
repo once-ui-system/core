@@ -449,11 +449,14 @@ function identityLayers(layers: readonly MascotIdentityLayer[], clip: string) {
       if (!layer.motion) return shape;
       // The loop runs on a group around the path, so the path's own transform stays put.
       const [ox, oy] = (layer.origin ?? "100 104").split(/\s+/);
+      // Loose layers drift out of step; layers that name the same origin keep one
+      // phase, so the parts of one thing (a ghost and its eyes) move as one.
+      const phase = layer.origin ? phaseOf(`${layer.motion} ${layer.origin}`) : i % 5;
       return (
         <g
           key={i}
           className={classNames(styles.layerMotion, styles[`motion-${layer.motion}`])}
-          style={{ transformOrigin: `${ox}px ${oy}px`, animationDelay: `${(i % 5) * -0.37}s` }}
+          style={{ transformOrigin: `${ox}px ${oy}px`, animationDelay: `${phase * -0.37}s` }}
         >
           {shape}
         </g>
@@ -474,6 +477,13 @@ function identityLayers(layers: readonly MascotIdentityLayer[], clip: string) {
     front: draw("front"),
   };
 }
+
+/** One of five steps of a loop, the same for the same key. */
+const phaseOf = (key: string) => {
+  let sum = 0;
+  for (let i = 0; i < key.length; i++) sum = (sum * 31 + key.charCodeAt(i)) % 9973;
+  return sum % 5;
+};
 
 /** A filter group around part of the mascot, or nothing at all when the medium has none there. */
 const MediumWrap = ({ filter, children }: { filter?: string; children: React.ReactNode }) =>

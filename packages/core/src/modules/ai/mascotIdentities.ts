@@ -41,7 +41,11 @@ export interface MascotIdentityLayer {
    * Off for people who ask for reduced motion, and in `mascotSvg` (a still).
    */
   motion?: MascotLayerMotion;
-  /** The point `spin`, `sway` and `pulse` turn or grow around, as `"x y"` in the 200 × 200 box. The body's centre by default. */
+  /**
+   * The point `spin`, `sway`, `pulse` and `flicker` turn or grow around, as `"x y"` in the 200 × 200 box.
+   * The body's centre by default. Moving layers that give the same origin keep in step, so a thing drawn
+   * in several layers moves as one; layers without one drift out of step.
+   */
   origin?: string;
 }
 
