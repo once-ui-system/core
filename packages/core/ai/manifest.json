@@ -1,6 +1,6 @@
 {
  "version": "3.0.0",
- "generated": "2026-11-23",
+ "generated": "2026-11-24",
  "imports": {
   "@once-ui-system/core": {
    "use": "Components, hooks, providers, defineConfig and types: everything not listed below"
@@ -563,6 +563,7 @@
     "StylePanelCustomLabels",
     "StylePanelGroupLabels",
     "StylePanelHeading",
+    "StylePanelLabelWidth",
     "StylePanelLabels",
     "StylePanelNameLabels",
     "StylePanelNeutralCustomLabels",
