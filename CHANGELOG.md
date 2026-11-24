@@ -79,8 +79,8 @@ listed under **Changed** so you can check your screens. `@once-ui-system/foundat
   without WebGL.
 - **Mascot mediums.** `medium` on `Mascot`, `mascotSvg` and `MascotDesign` draws the same character another way: `fur`, `plush` and `clay` give the body a material, `pixel` turns the whole mascot into a sprite with a one-pixel outline, `lowpoly` cuts the body into lit facets and `toon` inks it with cel shading. `vector` stays the default. Each one is an SVG filter or plain shapes, so it animates live with no WebGL, renders on the server through `mascotSvg`, and holds still under reduced motion like the vector mascot. `MASCOT_MEDIUMS` lists them; `parseMascotDesign` keeps a known one and drops anything else.
 - **Skeleton `effect="generating"`.** For work that takes seconds, such as an image a
-  model is drawing: soft brand and accent fields drift through each other under film
-  grain, with a light sheen passing over them, the look of `GradientFx` drawn in CSS.
+  model is drawing: a dot matrix whose dots swell and take the brand and accent
+  colours as soft fields drift under them.
   It moves only by `transform`, follows the theme and the brand, holds still under
   reduced motion and sets `aria-busy`. Children (a caption) sit above it.
 - **Mascot layers that move, and whole outfits.** A `MascotIdentityLayer` takes `motion` (`float`, `bob`, `sway`, `spin`, `pulse` or `flicker`) and an `origin` (`"x y"` in the 200 × 200 box) it turns or grows around; loops stop for reduced motion. A `MascotDesign` keeps up to 48 layers (was 16), enough for a hat, glasses, something held, a back piece and a pet. Built-in `accessory` names and `layers` are now drawn together instead of the built-ins replacing the layers, and `mascotSvg` takes `layers` (drawn still), so a saved look renders the same in an email, an OG image or a Discord card. `MASCOT_LAYER_MOTIONS` and `MascotLayerMotion` are exported. Non-breaking.
