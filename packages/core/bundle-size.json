@@ -1,5 +1,5 @@
 {
-  ".": 252144,
+  ".": 253035,
   "./components/Accordion": 26861,
   "./components/AccordionGroup": 27297,
   "./components/AlarmList": 29153,
@@ -73,7 +73,7 @@
   "./components/SegmentedControl": 45801,
   "./components/Select": 55748,
   "./components/Setting": 33968,
-  "./components/Sidebar": 46052,
+  "./components/Sidebar": 46077,
   "./components/Skeleton": 9136,
   "./components/Slider": 12249,
   "./components/SmartLink": 23688,
@@ -86,6 +86,7 @@
   "./components/Submenu": 34584,
   "./components/SubmitButton": 26162,
   "./components/Switch": 39754,
+  "./components/TabBar": 47026,
   "./components/Table": 67331,
   "./components/Tabs": 26256,
   "./components/Tag": 41237,

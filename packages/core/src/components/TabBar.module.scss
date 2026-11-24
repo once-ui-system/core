@@ -1,0 +1,156 @@
+// The phone's bottom navigation (TabBar). Hidden above its breakpoint, where
+// a Sidebar is the navigation; the edges match the `s={{ hide: true }}`
+// classes and Sidebar's `mobileBelow` (max-width, inclusive).
+.bar {
+    --tab-bar-height: 64px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 8;
+    display: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: var(--static-space-4);
+    padding: var(--static-space-4) var(--static-space-8) max(var(--static-space-8), env(safe-area-inset-bottom));
+    background: var(--page-background);
+    border-top: 1px solid var(--neutral-alpha-medium);
+}
+
+.spacer {
+    display: none;
+    flex: none;
+    height: calc(64px + env(safe-area-inset-bottom));
+}
+
+.always {
+    display: grid;
+
+    &.spacer {
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+    .bar.below-xs {
+        display: grid;
+    }
+
+    .spacer.below-xs {
+        display: block;
+    }
+}
+
+@media (max-width: 768px) {
+    .bar.below-s {
+        display: grid;
+    }
+
+    .spacer.below-s {
+        display: block;
+    }
+}
+
+@media (max-width: 1024px) {
+    .bar.below-m {
+        display: grid;
+    }
+
+    .spacer.below-m {
+        display: block;
+    }
+}
+
+@media (max-width: 1440px) {
+    .bar.below-l {
+        display: grid;
+    }
+
+    .spacer.below-l {
+        display: block;
+    }
+}
+
+.item {
+    appearance: none;
+    border: 0;
+    background: none;
+    font: inherit;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--static-space-2);
+    min-width: 0;
+    padding: var(--static-space-4);
+    border-radius: var(--radius-l);
+    color: var(--neutral-on-background-weak);
+    transition:
+        background-color var(--transition-duration-micro-medium) var(--transition-eased),
+        color var(--transition-duration-micro-medium) var(--transition-eased);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+
+    &:focus-visible {
+        outline: 2px solid var(--neutral-on-background-strong);
+        outline-offset: -2px;
+    }
+
+    &:active {
+        background: var(--neutral-alpha-weak);
+    }
+
+    &[data-selected] {
+        color: var(--neutral-on-background-strong);
+        background: var(--neutral-alpha-medium);
+
+        .label {
+            font-weight: var(--font-weight-label-strong);
+        }
+    }
+}
+
+.icon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 28px;
+}
+
+.label {
+    font-size: 11px;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.dot,
+.count {
+    position: absolute;
+    top: 2px;
+    left: 30px;
+    border-radius: var(--radius-full);
+    background: var(--brand-solid-strong);
+    color: var(--brand-on-solid-strong);
+    box-shadow: 0 0 0 2px var(--page-background);
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+}
+
+.count {
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    font-size: 10px;
+    line-height: 16px;
+    font-weight: 600;
+    text-align: center;
+}

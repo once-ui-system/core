@@ -1,0 +1,29 @@
+{
+ "name": "TabBarSidebarTrigger",
+ "partOf": "TabBar",
+ "purpose": "Last TabBar item (More) that opens the Sidebar's phone drawer, a bottom sheet with mobileSide bottom",
+ "group": "components",
+ "props": {
+  "label": "ReactNode",
+  "icon": "IconName",
+  "style": "React.CSSProperties",
+  "className": "string",
+  "aria-expanded": "boolean",
+  "aria-haspopup": "\"dialog\" | \"menu\"",
+  "selected": "boolean",
+  "badge": "number | boolean"
+ },
+ "tags": [
+  "navigation"
+ ],
+ "pairsWith": [
+  "TabBar",
+  "SidebarProvider",
+  "Sidebar"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "BuiltInIconName": "keyof typeof iconData",
+  "IconName": "BuiltInIconName | Extract<keyof IconLibraryOverrides, string>"
+ }
+}

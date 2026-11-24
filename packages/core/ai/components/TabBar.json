@@ -1,0 +1,28 @@
+{
+ "name": "TabBar",
+ "group": "components",
+ "props": {
+  "aria-label": "!string",
+  "showBelow": "TabBarBreakpoint | false = s",
+  "spacer": "boolean = true",
+  "children": "!ReactNode"
+ },
+ "tags": [
+  "navigation",
+  "layout"
+ ],
+ "pairsWith": [
+  "TabBarItem",
+  "TabBarSidebarTrigger",
+  "Sidebar"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "TabBarBreakpoint": [
+   "s",
+   "l",
+   "m",
+   "xs"
+  ]
+ }
+}
