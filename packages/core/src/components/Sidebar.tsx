@@ -533,7 +533,8 @@ function SidebarContent({ className, ...column }: React.ComponentProps<typeof Co
       paddingX="8"
       paddingY="4"
       gap="4"
-      className={classNames(styles.content, className)}
+      // The thin Once UI scrollbar, as Textarea uses, not the browser's own.
+      className={classNames(styles.content, "scrollbar-minimal", className)}
       {...column}
     />
   );
