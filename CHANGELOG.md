@@ -13,6 +13,14 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Added
+
+- **`Textarea` grows from a minimum: `lines={{ min: 3 }}`.** An empty growing textarea
+  starts at one row and reads as an input, so apps (and agents) set a fixed `lines` to make
+  it taller, which also turned growing off and added a drag handle. `{ min }` starts it
+  taller and keeps it growing; `{ min, max }` stops at `max` rows and scrolls. A number
+  still fixes the height. The validator now flags a fixed `lines={n}` without `resize`.
+
 ### Changed
 
 - **A `Button` or `IconButton` with no `onClick`, `href` or `type` is a real
