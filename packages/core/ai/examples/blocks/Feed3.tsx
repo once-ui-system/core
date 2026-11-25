@@ -162,7 +162,7 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
                 onSelect={(emoji) => setMessage(message + emoji)}
                 trigger={
                   <Row fillWidth themeBorder="rounded" style={{ marginLeft: "-0.25rem" }}>
-                    <IconButton icon="smiley" variant="tertiary" />
+                    <IconButton icon="smiley" variant="tertiary" aria-label="Add emoji" />
                   </Row>
                 }
               />
@@ -174,6 +174,7 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
               >
                 <IconButton
                   icon="send"
+                  aria-label="Send"
                   loading={isSubmitting}
                   onClick={handleSubmitMessage}
                   disabled={!message || isSubmitting}

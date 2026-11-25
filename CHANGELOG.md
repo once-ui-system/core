@@ -30,6 +30,13 @@ item (see `ROADMAP.md`, Week 4).
   `data-agent-confirm="Deletes the project"` puts `confirm` on the entry and on the step
   `allow` is asked about, so the app can ask a person first; without `allow` the step is
   refused. Each mark also applies to everything inside the element that carries it.
+- **`once-ui-validate-ai-code` reports controls with no name (`a11y.name`).** An Input,
+  Textarea, NumberInput, Switch, Checkbox, RadioButton, Slider, SegmentedControl, TabList or
+  self-closing IconButton without `label`, `aria-label`, `aria-labelledby` (or `tooltip`,
+  `placeholder` where they name it) or a `<label htmlFor>` is one a screen reader announces
+  only by its role and an agent cannot find. The gold examples and blocks now name every
+  control. The settings bundle asks for agent-operable settings, and a test renders its
+  example and changes all six settings through `@once-ui-system/core/agent`.
 
 - **Every value change says who made it, and can be refused.** `onValueChange`,
   `onCheckedChange`, `onOpenChange` and the other `onXChange` callbacks of Input, Textarea,

@@ -141,12 +141,12 @@ const MediaList = ({
             <Column fillWidth paddingX="16" paddingBottom="20" paddingTop="8" gap="8">
               <Row fillWidth horizontal="between" paddingBottom="12">
                 <Row gap="8" themeBorder="rounded">
-                  <IconButton size="l" icon="play" />
-                  <IconButton size="l" icon="plus" variant="secondary" />
+                  <IconButton size="l" icon="play" aria-label="Play" />
+                  <IconButton size="l" icon="plus" variant="secondary" aria-label="Add to list" />
                 </Row>
                 <Row gap="8" themeBorder="rounded">
-                  <IconButton size="l" icon="like" variant="secondary" />
-                  <IconButton size="l" icon="dislike" variant="secondary" />
+                  <IconButton size="l" icon="like" variant="secondary" aria-label="Like" />
+                  <IconButton size="l" icon="dislike" variant="secondary" aria-label="Dislike" />
                 </Row>
               </Row>
               <Heading as="h3" textVariant="heading-strong-l">

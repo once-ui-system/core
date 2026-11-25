@@ -92,6 +92,7 @@ export function DashboardExample() {
             </Heading>
           </Column>
           <SegmentedControl
+            aria-label="Date range"
             value={range}
             onValueChange={setRange}
             buttons={[

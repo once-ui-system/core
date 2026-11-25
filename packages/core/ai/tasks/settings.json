@@ -55,6 +55,7 @@
     "surfaceRecipe": "background=\"surface\" border radius=\"l\" padding=\"24\"",
     "dangerZone": "border=\"danger-alpha-medium\" on danger actions only",
     "states": "Every view that loads data shows loading (Skeleton shaped like the content), empty (title, one line, the action that fills it), error (Feedback tone=\"danger\" with Retry) and filled, through a typed lib/ data layer of async functions over mock data — even when the brief never mentions data",
-    "writes": "Writes are optimistic: loading on the pressed Button, rollback plus addToast({ tone: \"danger\" }) when the save fails"
+    "writes": "Writes are optimistic: loading on the pressed Button, rollback plus addToast({ tone: \"danger\" }) when the save fails",
+    "agentOperable": "Every control has a name: label, or aria-label repeating the Setting row's label (npx once-ui-validate-ai-code reports a11y.name). Then createAgent() from @once-ui-system/core/agent lists each setting by name and one act call can change them all. data-agent-confirm on destructive buttons, data-agent-secret on API keys and tokens"
   }
 }

@@ -180,6 +180,7 @@ export function Table1<T = Record<string, unknown>>({
                   checked={allCurrentSelected || (someCurrentSelected && !allCurrentSelected)}
                   indeterminate={someCurrentSelected && !allCurrentSelected}
                   onCheckedChange={toggleSelectAllCurrent}
+                  aria-label="Select all on this page"
                 />
               </Row>
             )}
@@ -228,6 +229,7 @@ export function Table1<T = Record<string, unknown>>({
                             key={`cb-${id}`}
                             checked={isSelected(id)}
                             onCheckedChange={() => toggleSelect(id)}
+                            aria-label="Select row"
                           />
                         </Row>
                       )}
@@ -273,6 +275,7 @@ export function Table1<T = Record<string, unknown>>({
         <Row fillWidth paddingY="12" gap="12" vertical="center">
           <IconButton
             icon="chevronLeft"
+            aria-label="Previous page"
             size="s"
             variant="ghost"
             onClick={() => setCurrentPage(currentPage - 1)}
@@ -303,7 +306,14 @@ export function Table1<T = Record<string, unknown>>({
             {totalitemsPerPage > 4 && (
               <Dropdown
                 placement="bottom-end"
-                trigger={<IconButton icon="moreHorizontal" size="s" variant="ghost" />}
+                trigger={
+                  <IconButton
+                    icon="moreHorizontal"
+                    size="s"
+                    variant="ghost"
+                    aria-label="More options"
+                  />
+                }
               >
                 <Column padding="4" gap="2" width="4rem">
                   {Array.from({ length: totalitemsPerPage - 4 }, (_, i) => i + 3).map((pageNum) => (
@@ -351,6 +361,7 @@ export function Table1<T = Record<string, unknown>>({
           </Row>
           <IconButton
             icon="chevronRight"
+            aria-label="Next page"
             size="s"
             variant="ghost"
             onClick={() => setCurrentPage(currentPage + 1)}
