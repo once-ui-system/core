@@ -1,0 +1,119 @@
+---
+title: "Let an agent use your app"
+docs: "once-ui/agents"
+github: "packages/core/src/modules/agent/createAgent.ts"
+navLabel: "Agent bridge"
+navIcon: "sparkle"
+navTag: "New"
+navTagVariant: "cyan"
+updatedAt: "2026-11-25"
+summary: "Once UI controls describe themselves to an AI agent: it reads the page as names and values, changes several settings in one call, and asks a person before anything you mark as dangerous."
+---
+
+An assistant inside your app should change a setting the same way a person does, without clicking through the page or guessing from a screenshot. With `@once-ui-system/core/agent` it can. Every Once UI control registers itself, so the agent reads a short list of names and values, sends the changes it wants, and gets back what actually changed. Your own `onValueChange` hears the change as coming from the agent and can refuse it.
+
+Try it: edit a field yourself, then press **Run the agent's steps**. The right column shows who made each change. **Ask it to delete** shows what happens to a control marked as needing a person's yes.
+
+<AgentSettingsExample />
+
+The steps are scripted here, so this page needs no API key. In your app they come from a model calling the three tools below.
+
+## Create the bridge
+
+```tsx
+import { createAgent } from "@once-ui-system/core/agent";
+
+const agent = createAgent({
+  // Decide each step before it runs. Return a promise to ask a person.
+  allow: async (step) => (step.confirm ? confirmWithPerson(step) : true),
+});
+
+agent.snapshot(); // what is on screen
+await agent.act({ steps: [{ ref: "Weekly digest", action: "setChecked", args: [false] }] });
+agent.query({ within: "Timezone", text: "central" }); // a long list's choices, 50 at a time
+```
+
+The bridge has no setup per control. Input, Textarea, Select, Checkbox, Switch, RadioGroup, Slider, SegmentedControl, Tabs, Button and the theme register themselves when they mount and leave when they unmount. `snapshot()` also lists the page's sections by their headings, so an agent can tell where it is.
+
+| Method | Returns |
+| --- | --- |
+| `snapshot()` | Each control's `ref`, `component`, `label`, state (`value`, `checked`, `open`, `theme`) and the `actions` it takes now. |
+| `act({ steps })` | Runs the steps in order and stops at the first that fails. Each result lists what `changed`, from and to. |
+| `query({ text, within, from })` | The choices of one list that match `text`, or the controls whose name or choices match it. |
+
+A step names its control by `ref` or by its label, and a choice in a list by its value or its label. Every action runs through the control's own code path, the one a click or a keypress takes. Validation, controlled state and your callbacks behave as they do for a person.
+
+## Tell the agent's changes apart
+
+Every `onXChange` callback gets a second argument, `details`. `details.source` is `"pointer"`, `"keyboard"`, `"agent"` or `"programmatic"`, and `details.cancel()` keeps the current value.
+
+```tsx
+<Select
+  label="Plan"
+  options={plans}
+  value={plan}
+  onValueChange={(next, details) => {
+    if (details?.source === "agent" && next === "enterprise") {
+      details.cancel(); // agents may not upgrade the plan
+      return;
+    }
+    setPlan(next as string);
+  }}
+/>
+```
+
+## Mark what needs care
+
+Three attributes control what an agent may see and do. They work on a control or on any element around it, and they apply to everything inside.
+
+| Mark | What the agent gets |
+| --- | --- |
+| `data-agent-confirm="Deletes the workspace"` | The entry and the step carry `confirm`. Your `allow` sees it and can ask a person first. Without an `allow`, the step is refused and the agent is told to ask the person. |
+| `data-agent-secret` | The agent can write the field but never read it back: values, choices and changes come back as `[redacted]`. |
+| `data-agent-hidden` | Out of `snapshot`, `act` and `query` altogether. |
+
+```tsx
+<Input label="API token" data-agent-secret />
+
+<Column data-agent-hidden>
+  <Switch label="Billing alerts" />
+</Column>
+
+<Button tone="danger" data-agent-confirm="Deletes the workspace and all its data">
+  Delete workspace
+</Button>
+```
+
+Mark anything that spends money, deletes data or sends a message. In our benchmark, Opus 5.5 driving the page through the bridge refused the delete every time and asked the person. Driving the same page through its accessibility tree, it pressed Delete every time.
+
+## Connect a model
+
+`agentTools` describes `snapshot`, `act` and `query` as JSON Schema, the shape the Claude API and other model APIs take. Pass them as tools and send each tool call to the bridge:
+
+```ts
+import { agentTools } from "@once-ui-system/core/agent";
+
+const tools = agentTools.map(({ name, description, inputSchema }) => ({
+  name,
+  description,
+  input_schema: inputSchema,
+}));
+
+// For each tool_use block the model returns:
+const result =
+  call.name === "snapshot" ? agent.snapshot()
+  : call.name === "query" ? agent.query(call.input)
+  : await agent.act(call.input);
+```
+
+Browsers that ship WebMCP let their own assistant use the page. `registerTools(agent, { allow })` offers the same three tools there, and does nothing where the browser has no WebMCP. You did not write that assistant, so `allow` is required.
+
+## Name every control
+
+An agent finds a control by its name, as a screen reader does. A Switch with no `label`, or an IconButton with no `tooltip` or `aria-label`, is invisible to both. `npx once-ui-validate-ai-code` reports these as `a11y.name`:
+
+```text
+a11y.name  An IconButton has no name: give it aria-label. Screen readers announce it by that name, and an agent operating the page finds it by it
+```
+
+The settings task bundle in the [agent harness](/once-ui/ai-coding) also checks that an agent can change every setting on the page through the bridge.
