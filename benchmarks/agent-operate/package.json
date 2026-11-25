@@ -1,0 +1,15 @@
+{
+  "name": "once-ui-agent-operate-benchmark",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "How an agent operates a settings page: through core's agent bridge (@once-ui-system/core/agent) or through browser tools on the accessibility tree. See README.md.",
+  "scripts": {
+    "page": "node page/build.mjs",
+    "run": "node runner/run.mjs",
+    "report": "node runner/report.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "0.133.0"
+  }
+}
