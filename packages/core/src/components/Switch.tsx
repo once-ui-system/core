@@ -1,8 +1,9 @@
 "use client";
 
 import classNames from "clsx";
-import React, { useId } from "react";
+import React, { useId, useRef } from "react";
 import type { LeafProps } from "../interfaces.js";
+import { useAgentControl } from "../internal/agentRegistry.js";
 import type { ChangeDetails } from "../internal/changeDetails.js";
 import {
   type ControlChromeProps,
@@ -84,6 +85,19 @@ const Switch = ({
     onChange: onCheckedChange,
   });
   const { inputRef, setRef, activate, relay } = useHiddenInput(ref);
+  const controlRef = useRef<HTMLDivElement>(null);
+  useAgentControl({
+    kind: "switch",
+    element: () => controlRef.current,
+    state: () => ({ checked }),
+    disabled: () => Boolean(disabled),
+    actions: {
+      setChecked: (next) => {
+        if (Boolean(next) !== checked) activate();
+      },
+      toggle: () => activate(),
+    },
+  });
   const { aria, native } = splitAria(rest);
   const ariaLabel = (aria["aria-label"] as string | undefined) ?? "Toggle switch";
 
@@ -150,6 +164,7 @@ const Switch = ({
               only stands in when there is nothing on screen to point at. */}
         <div
           {...aria}
+          ref={controlRef}
           role="switch"
           aria-checked={checked}
           aria-labelledby={hasLabel ? labelId : aria["aria-label"] ? undefined : outerLabelId}

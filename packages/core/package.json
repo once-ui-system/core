@@ -536,6 +536,10 @@
       "types": "./dist/modules/map/index.d.ts",
       "default": "./dist/modules/map/index.js"
     },
+    "./agent": {
+      "types": "./dist/modules/agent/index.d.ts",
+      "default": "./dist/modules/agent/index.js"
+    },
     "./scene": {
       "types": "./dist/modules/scene/index.d.ts",
       "default": "./dist/modules/scene/index.js"

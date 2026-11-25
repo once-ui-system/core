@@ -3,6 +3,7 @@
 import classNames from "clsx";
 import React, { type ReactNode, useEffect, useId, useRef, useState } from "react";
 import type { FlexLayoutProps, LeafProps } from "../interfaces.js";
+import { useAgentControl } from "../internal/agentRegistry.js";
 import type { ChangeDetails } from "../internal/changeDetails.js";
 import { RangeSlider, type RangeSliderProps } from "../internal/RangeSlider.js";
 import { useControllableState } from "../internal/useControllableState.js";
@@ -148,6 +149,19 @@ const SingleSlider = ({
 }) => {
   const [leaf, props] = takeLeafProps(rest);
   const sliderRef = useRef<HTMLInputElement>(null);
+  useAgentControl({
+    kind: "slider",
+    element: () => sliderRef.current ?? (ref && typeof ref === "object" ? ref.current : null),
+    state: () => ({ value: current, min, max }),
+    disabled: () => Boolean(disabled),
+    actions: {
+      setValue: (next) => {
+        const n = Number(next);
+        if (!Number.isFinite(n)) throw new Error(`${String(next)} is not a number.`);
+        setCurrent(Math.min(max, Math.max(min, n)));
+      },
+    },
+  });
   const [isDragging, setIsDragging] = useState(false);
   const labelId = useId();
   const outerLabelId = useControlLabel();

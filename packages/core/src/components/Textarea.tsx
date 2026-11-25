@@ -11,6 +11,7 @@ import React, {
 } from "react";
 import { useDebounce } from "../hooks/useDebounce.js";
 import type { LeafProps } from "../interfaces.js";
+import { typeInto, useAgentControl } from "../internal/agentRegistry.js";
 import { type ChangeDetails, reportChange } from "../internal/changeDetails.js";
 import type { FieldSize } from "../types.js";
 import { takeLeafProps } from "../utils/leafLayout.js";
@@ -151,6 +152,17 @@ const Textarea = ({
       window.scrollTo({ top: scrollY });
     }
   };
+
+  useAgentControl({
+    kind: "textarea",
+    element: () => textareaRef.current,
+    state: () => ({ value: text }),
+    disabled: () => Boolean(disabled),
+    actions: {
+      setValue: (next) => typeInto(textareaRef.current, String(next ?? "")),
+      clear: () => typeInto(textareaRef.current, ""),
+    },
+  });
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (lines === "auto") {

@@ -11,6 +11,7 @@ import React, {
 } from "react";
 import { useDebounce } from "../hooks/useDebounce.js";
 import type { LeafProps } from "../interfaces.js";
+import { typeInto, useAgentControl, useOwnRef } from "../internal/agentRegistry.js";
 import { type ChangeDetails, reportChange } from "../internal/changeDetails.js";
 import type { FieldSize } from "../types.js";
 import { takeLeafProps } from "../utils/leafLayout.js";
@@ -155,6 +156,20 @@ const Input = ({
   // What the error styling compares against, as before: the debounced
   // `value` when controlled, nothing when not.
   const styledValue = controlled ? debouncedValue : undefined;
+
+  const [fieldRef, setFieldRef] = useOwnRef(ref);
+  const secret = props.type === "password";
+  useAgentControl({
+    kind: "input",
+    element: () => fieldRef.current,
+    // A password's value never reaches an agent; it can still type one.
+    state: () => ({ value: secret && text ? "[redacted]" : text }),
+    disabled: () => Boolean(props.disabled || props.readOnly),
+    actions: {
+      setValue: (next) => typeInto(fieldRef.current, String(next ?? "")),
+      clear: () => typeInto(fieldRef.current, ""),
+    },
+  });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange?.(event);
@@ -301,7 +316,7 @@ const Input = ({
           <input
             {...props}
             type={revealable && revealed ? "text" : props.type}
-            ref={ref}
+            ref={setFieldRef}
             id={id}
             placeholder={shownPlaceholder}
             onFocus={handleFocus}
