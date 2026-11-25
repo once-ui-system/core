@@ -237,7 +237,7 @@ const NavigationItemComponent: React.FC<{
           textVariant={`label-${isSelected ? "strong" : "default"}-${depth === 0 ? "m" : "s"}`}
           style={{ minWidth: 0 }}
         >
-          {item.label || item.title}
+          {item.navLabel || item.label || item.title}
         </Text>
         {(() => {
           /* Availability outranks recency. Something can be both new and
