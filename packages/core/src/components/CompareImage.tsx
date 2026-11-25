@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { InsideControlContext } from "../internal/InsideControlContext.js";
 import styles from "./CompareImage.module.scss";
 import { Flex } from "./Flex.js";
 import { IconButton } from "./IconButton.js";
@@ -163,15 +164,18 @@ const CompareImage = ({
         aria-valuetext={`${Math.round(position)}% ${leftContent.alt || "left image"}`}
         onKeyDown={handleKeyDown}
       >
-        <IconButton
-          icon="chevronsLeftRight"
-          aria-hidden="true"
-          tabIndex={-1}
-          variant="secondary"
-          onMouseDown={handleMouseDown}
-          onTouchStart={handleMouseDown}
-          style={{ cursor: "grab" }}
-        />
+        {/* The slider is the control; the icon only draws its handle. */}
+        <InsideControlContext.Provider value>
+          <IconButton
+            icon="chevronsLeftRight"
+            aria-hidden="true"
+            tabIndex={-1}
+            variant="secondary"
+            onMouseDown={handleMouseDown}
+            onTouchStart={handleMouseDown}
+            style={{ cursor: "grab" }}
+          />
+        </InsideControlContext.Provider>
       </Flex>
     </Flex>
   );

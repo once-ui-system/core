@@ -26,11 +26,11 @@ const menu = (
 const settle = () => new Promise((resolve) => setTimeout(resolve, 120));
 
 /**
- * A Button or IconButton with neither `onClick` nor `href` renders a div
- * (ElementType). That is right where it decorates something else that is the
- * control, and wrong as a DropdownWrapper trigger: nothing could Tab to it,
- * so the dropdown only opened with a mouse. Apps worked around it with
- * `type="button"` (Shorty's Picker).
+ * A Button or IconButton with neither `onClick` nor `href` used to render a
+ * div (ElementType), so as a DropdownWrapper trigger nothing could Tab to it
+ * and the dropdown only opened with a mouse. Apps worked around it with
+ * `type="button"` (Shorty's Picker). It is a real button now, and says what
+ * it opens.
  */
 describe("a Button as a dropdown trigger", () => {
   it("is a real, focusable button that says what it opens", async () => {
@@ -143,10 +143,9 @@ describe("a Button as a dropdown trigger", () => {
 });
 
 describe("a Button with nothing to do, outside a trigger", () => {
-  it("still renders the plain div it always has", () => {
-    render(<Button>Decoration</Button>, { wrapper: wrap });
-    expect(screen.queryByRole("button")).toBeNull();
-    expect(screen.getByText("Decoration").closest("button")).toBeNull();
+  it("is a real button too, never a submit", () => {
+    render(<Button>Unwired</Button>, { wrapper: wrap });
+    expect(screen.getByRole("button", { name: "Unwired" })).toHaveAttribute("type", "button");
   });
 
   it("stays a div inside a clickable Card, even when that Card is a trigger", async () => {

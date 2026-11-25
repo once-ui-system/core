@@ -252,7 +252,7 @@
     "components": ["Map", "MapMarker", "MapMarkers", "MapPopup", "MapCircle"]
   },
   "Button.submit": {
-    "rule": "A Button in a form that should submit it needs type=\"submit\": with neither onClick, href nor type it renders a div, unlike a native <button>.",
+    "rule": "A Button in a form that should submit it needs type=\"submit\": with neither onClick, href nor type it renders <button type=\"button\">, which unlike a native <button> never submits.",
     "components": ["Button", "IconButton"]
   },
   "field.errorTiming": {

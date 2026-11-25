@@ -723,9 +723,10 @@ CSS, so look for these:
   layer you declare later than Once UI's lands above `once-ui`; one you list
   before it lands below.
 - A native `<button>` with no `type` submits its form. A `<Button>` with
-  neither `onClick`, `href` nor `type` renders a div (decoration inside
-  another control), so a form's save button needs `type="submit"`. In
-  development a typeless Button inside a `<form>` warns.
+  neither `onClick`, `href` nor `type` renders `<button type="button">` (a
+  plain div only inside a clickable Card or another control core draws), so
+  a form's save button needs `type="submit"`. In development a typeless
+  Button inside a `<form>` warns.
 - Your element styles (`input:focus { box-shadow }`, a `min-height` on every
   `input`) no longer reach inside fields: the field's own `<input>` and
   `<textarea>` state their outline, shadow, margin and min/max height.

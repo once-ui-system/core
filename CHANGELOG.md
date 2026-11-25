@@ -13,6 +13,23 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Changed
+
+- **A `Button` or `IconButton` with no `onClick`, `href` or `type` is a real
+  `<button type="button">`.** It used to render a plain div, so screen readers and agents
+  operating the page read an unwired "Delete workspace" as text. It still renders a plain
+  div inside a clickable `Card` and inside core controls that draw their own (Kbar's
+  trigger, `CompareImage`'s handle, an `Accordion` header), so no button nests in another.
+  It never submits a form: pass `type="submit"` for that, as before. In development a
+  Button that lands inside some other clickable element warns.
+
+### Added
+
+- **`InsideControl`** marks its content as part of a control you drew yourself (a
+  `role="button"` element with its own onClick): an unwired Button inside it stays a plain
+  div that decorates your control. A Button with `aria-hidden` stays decoration too.
+  `ScrollToTop` uses it for the Button it wraps.
+
 ## [3.1.1] - 2026-11-24
 
 Patch. Fixes only; nothing to change in your code. `foundations`, `fx` and `blocks` stay
