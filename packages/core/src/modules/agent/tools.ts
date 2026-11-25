@@ -7,7 +7,7 @@ const DATA =
 export const agentTools = [
   {
     name: "snapshot",
-    description: `List the controls and page sections on screen: each one's ref, component, label, state (value, checked, open, theme) and the actions it takes now. Read it before acting. ${DATA}`,
+    description: `List the controls and page sections on screen: each one's ref, component, label, state (value, checked, open, theme) and the actions it takes now. An entry with confirm runs only after a person says yes; tell them what the step does. One with secret hides its values. Read it before acting. ${DATA}`,
     inputSchema: { type: "object", properties: {}, additionalProperties: false },
   },
   {
@@ -91,6 +91,7 @@ export function registerTools(
         label: entry?.label ?? null,
         action: step.action,
         args: step.args ?? [],
+        ...(entry?.confirm ? { confirm: entry.confirm } : {}),
       });
       if (!ok) {
         return { ok: false, steps: [], error: { step: index, message: `Refused ${step.action}.` } };

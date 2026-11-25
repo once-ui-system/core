@@ -24,6 +24,12 @@ item (see `ROADMAP.md`, Week 4).
   register themselves; password values come back redacted. An `allow` callback decides
   each step. `agentTools` describes the three tools as JSON Schema, and `registerTools()`
   offers them to the browser's agent over WebMCP where it exists, with a required `allow`.
+- **Marks that tell an agent what it may touch.** `data-agent-hidden` keeps a control or a
+  whole region out of `snapshot`, `act` and `query`. `data-agent-secret` lets an agent write a
+  field but never read it: its values, choices and changes come back as `[redacted]`.
+  `data-agent-confirm="Deletes the project"` puts `confirm` on the entry and on the step
+  `allow` is asked about, so the app can ask a person first; without `allow` the step is
+  refused. Each mark also applies to everything inside the element that carries it.
 
 - **Every value change says who made it, and can be refused.** `onValueChange`,
   `onCheckedChange`, `onOpenChange` and the other `onXChange` callbacks of Input, Textarea,

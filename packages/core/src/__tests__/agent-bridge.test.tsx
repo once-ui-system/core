@@ -172,3 +172,61 @@ describe("agent bridge", () => {
     for (const tool of agentTools) expect(tool.inputSchema.type).toBe("object");
   });
 });
+
+describe("agent marks", () => {
+  const Danger = ({ onDelete }: { onDelete?: () => void }) => (
+    <section>
+      <h2>Danger zone</h2>
+      <Input id="token" label="API token" defaultValue="sk-live-123" data-agent-secret="" />
+      <div data-agent-hidden="">
+        <Switch label="Internal flag" />
+      </div>
+      <Button onClick={onDelete} data-agent-confirm="Deletes the project for everyone">
+        Delete project
+      </Button>
+    </section>
+  );
+
+  it("leaves hidden controls out and redacts secret ones", () => {
+    const agent = createAgent();
+    render(<Danger />, { wrapper: wrap });
+    const entries = agent.snapshot();
+    expect(entries.find((e) => e.label === "Internal flag")).toBeUndefined();
+    expect(entries.find((e) => e.label === "API token")).toMatchObject({
+      value: "[redacted]",
+      secret: true,
+    });
+    expect(JSON.stringify(entries)).not.toContain("sk-live-123");
+  });
+
+  it("writes a secret field without reading it back", async () => {
+    const agent = createAgent();
+    render(<Danger />, { wrapper: wrap });
+    const result = await run(agent, [{ ref: "API token", action: "setValue", args: ["sk-new"] }]);
+    expect(result.ok).toBe(true);
+    expect(JSON.stringify(result)).not.toMatch(/sk-live-123|sk-new/);
+    expect(screen.getByLabelText<HTMLInputElement>("API token").value).toBe("sk-new");
+  });
+
+  it("asks allow with the confirm text, and refuses without allow", async () => {
+    const onDelete = vi.fn();
+    const plain = createAgent();
+    render(<Danger onDelete={onDelete} />, { wrapper: wrap });
+    expect(plain.snapshot().find((e) => e.label === "Delete project")).toMatchObject({
+      confirm: "Deletes the project for everyone",
+    });
+
+    const refused = await run(plain, [{ ref: "Delete project", action: "press" }]);
+    expect(refused.error?.message).toMatch(/needs a person's yes/);
+    expect(onDelete).not.toHaveBeenCalled();
+
+    const allow = vi.fn(() => true);
+    const asked = createAgent({ allow });
+    const done = await run(asked, [{ ref: "Delete project", action: "press" }]);
+    expect(done.ok).toBe(true);
+    expect(allow).toHaveBeenCalledWith(
+      expect.objectContaining({ action: "press", confirm: "Deletes the project for everyone" }),
+    );
+    expect(onDelete).toHaveBeenCalledTimes(1);
+  });
+});

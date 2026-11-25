@@ -20,6 +20,10 @@ export interface AgentEntry {
   /** What it takes now. */
   actions: string[];
   disabled?: true;
+  /** Marked `data-agent-confirm`: a step on it runs only after `allow` says yes. The mark's text, when it has one. */
+  confirm?: string | true;
+  /** Marked `data-agent-secret`: its values read as `[redacted]`. */
+  secret?: true;
   /** A section's place on the page, 1-based, and how many there are. */
   index?: number;
   total?: number;
@@ -42,6 +46,12 @@ export interface AgentStepRequest {
   label: string | null;
   action: string;
   args: unknown[];
+  /**
+   * Set when the control or a parent is marked `data-agent-confirm`: ask a
+   * person before saying yes. It holds the mark's text, such as "Deletes the
+   * project", or `true` when the mark has none.
+   */
+  confirm?: string | true;
 }
 
 export interface AgentStepResult {
@@ -114,7 +124,27 @@ function namedBy(name: string | null, wanted: string): boolean {
 
 function shown(el: HTMLElement | null): boolean {
   if (!el?.isConnected) return false;
-  return !el.closest("[hidden], [aria-hidden='true'], [inert]");
+  return !el.closest("[hidden], [aria-hidden='true'], [inert], [data-agent-hidden]");
+}
+
+/**
+ * The `data-agent-*` mark on `el` or the nearest parent that has it:
+ * `undefined` when there is none, the mark's text (maybe empty) when there is.
+ */
+function mark(el: HTMLElement | null | undefined, name: "confirm" | "secret"): string | undefined {
+  const marked = el?.closest(`[data-agent-${name}]`);
+  return marked ? (marked.getAttribute(`data-agent-${name}`) ?? "") : undefined;
+}
+
+const REDACTED = "[redacted]";
+
+/** A secret control's state: whether it is on or open still reads, what it holds does not. */
+function redact(state: Record<string, unknown>): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(state)) {
+    out[key] = typeof value === "boolean" || value == null || value === "" ? value : REDACTED;
+  }
+  return out;
 }
 
 interface Live {
@@ -123,6 +153,8 @@ interface Live {
   spec?: AgentControlSpec;
   section?: HTMLElement;
   label: string | null;
+  confirm?: string | true;
+  secret: boolean;
 }
 
 const settle = () => new Promise<void>((resolve) => setTimeout(resolve, 0));
@@ -145,12 +177,15 @@ export function createAgent(options: CreateAgentOptions = {}): Agent {
     for (const control of agentControls()) {
       const spec = control.spec();
       const el = spec.element();
-      if (spec.kind !== "theme" && !shown(el)) continue;
+      if (spec.kind === "theme" ? el?.closest("[data-agent-hidden]") : !shown(el)) continue;
+      const confirm = mark(el, "confirm");
       found.push({
         ref: `c${control.id}`,
         control,
         spec,
         label: spec.label?.() ?? accessibleName(el),
+        confirm: confirm === undefined ? undefined : confirm.trim() || true,
+        secret: mark(el, "secret") !== undefined,
       });
     }
     const doc = getDocument();
@@ -161,10 +196,15 @@ export function createAgent(options: CreateAgentOptions = {}): Agent {
         const text = (heading?.textContent || section.getAttribute("aria-label") || "")
           .replace(/\s+/g, " ")
           .trim();
-        found.push({ ref: `s${i + 1}`, section, label: text || null });
+        found.push({ ref: `s${i + 1}`, section, label: text || null, secret: false });
       });
     }
     return found;
+  };
+
+  const stateOf = (item: Live) => {
+    const state = (item.control as AgentControl).spec().state();
+    return item.secret ? redact(state) : state;
   };
 
   const describe = (item: Live, all: Live[]): AgentEntry => {
@@ -185,9 +225,11 @@ export function createAgent(options: CreateAgentOptions = {}): Agent {
       ref: item.ref,
       component: spec.kind,
       label: item.label,
-      ...spec.state(),
+      ...stateOf(item),
       actions: disabled ? [] : Object.keys(spec.actions),
       ...(disabled ? { disabled: true as const } : {}),
+      ...(item.confirm ? { confirm: item.confirm } : {}),
+      ...(item.secret ? { secret: true as const } : {}),
     };
   };
 
@@ -248,6 +290,11 @@ export function createAgent(options: CreateAgentOptions = {}): Agent {
       const args = item.spec
         ? resolveArgs(item.spec, step.action, step.args ?? [])
         : (step.args ?? []);
+      if (item.confirm && !options.allow) {
+        return fail(
+          `${item.label ?? item.ref} needs a person's yes before ${step.action}, and this app has no way to ask. Ask the person to do it.`,
+        );
+      }
       if (options.allow) {
         const allowed = await options.allow({
           ref: item.ref,
@@ -255,6 +302,7 @@ export function createAgent(options: CreateAgentOptions = {}): Agent {
           label: item.label,
           action: step.action,
           args,
+          ...(item.confirm ? { confirm: item.confirm } : {}),
         });
         if (!allowed) return fail(`The app refused ${step.action} on ${item.label ?? item.ref}.`);
       }
@@ -267,6 +315,7 @@ export function createAgent(options: CreateAgentOptions = {}): Agent {
 
       const spec = item.spec as AgentControlSpec;
       const before = spec.state();
+      const shownValue = (value: unknown) => (item.secret ? redact({ value }).value : value);
       try {
         // Synchronous, so the state read below is the one the change left.
         let pending: unknown;
@@ -285,16 +334,15 @@ export function createAgent(options: CreateAgentOptions = {}): Agent {
           !Object.is(before[key], after[key]) &&
           JSON.stringify(before[key]) !== JSON.stringify(after[key])
         ) {
-          changed[key] = { from: before[key], to: after[key] };
+          changed[key] = { from: shownValue(before[key]), to: shownValue(after[key]) };
         }
       }
       results.push({ ref: item.ref, label: item.label, action: step.action, changed });
       // A set that changed nothing, though it asked for something new, was refused.
       const key = step.action.startsWith("set") ? lowerFirst(step.action.slice(3)) : null;
       if (key && key in after && !Object.keys(changed).length && !sameValue(before[key], args[0])) {
-        return fail(
-          `${item.label ?? item.ref} kept ${key} ${JSON.stringify(before[key])}: the app declined the change.`,
-        );
+        const kept = item.secret ? "its value" : `${key} ${JSON.stringify(before[key])}`;
+        return fail(`${item.label ?? item.ref} kept ${kept}: the app declined the change.`);
       }
     }
     return { ok: true, steps: results };
@@ -303,7 +351,7 @@ export function createAgent(options: CreateAgentOptions = {}): Agent {
   const query: Agent["query"] = ({ text, within, kind, from = 0 }) => {
     const all = live().filter((item) => !kind || (item.spec?.kind ?? "section") === kind);
     const pick = (item: Live): AgentQueryResult => {
-      const choices = item.spec?.choices?.() ?? [];
+      const choices = item.secret ? [] : (item.spec?.choices?.() ?? []);
       const matching = text
         ? choices.filter((c) => namedBy(c.label, text) || c.value === text)
         : choices;
@@ -325,7 +373,7 @@ export function createAgent(options: CreateAgentOptions = {}): Agent {
       .filter(
         (item) =>
           namedBy(item.label, text) ||
-          (item.spec?.choices?.() ?? []).some((c) => namedBy(c.label, text)),
+          (!item.secret && (item.spec?.choices?.() ?? []).some((c) => namedBy(c.label, text))),
       )
       .map(pick);
   };
