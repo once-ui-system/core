@@ -11,6 +11,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { accessibleName, useAgentControl } from "../internal/agentRegistry.js";
 import type { ChangeDetails } from "../internal/changeDetails.js";
 import {
   CONTROL_TEXT,
@@ -123,6 +124,28 @@ const RadioGroup = ({
     value,
     defaultValue,
     onChange: onValueChange as ((next: string | undefined) => void) | undefined,
+  });
+  useAgentControl({
+    kind: "radio-group",
+    element: () => groupRef.current,
+    state: () => ({ value: current }),
+    disabled: () => Boolean(disabled),
+    choices: () =>
+      groupRef.current
+        ? enabledRadios(groupRef.current).map((radio) => ({
+            value: radio.dataset.value ?? "",
+            label: accessibleName(radio) ?? radio.dataset.value ?? "",
+          }))
+        : [],
+    actions: {
+      setValue: (next) => {
+        const group = groupRef.current;
+        if (!group || !enabledRadios(group).some((r) => r.dataset.value === String(next))) {
+          throw new Error(`No choice ${String(next)}: query the group for its choices.`);
+        }
+        setCurrent(String(next));
+      },
+    },
   });
 
   // Exactly one radio must be reachable with the Tab key: the selected one,

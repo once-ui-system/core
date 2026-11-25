@@ -2,6 +2,7 @@
 
 import classNames from "clsx";
 import { type ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useAgentControl } from "../internal/agentRegistry.js";
 import { type ChangeDetails, reportChange } from "../internal/changeDetails.js";
 import { revealInStrip } from "../internal/revealInStrip.js";
 import { useControllableState } from "../internal/useControllableState.js";
@@ -115,6 +116,27 @@ const SegmentedControl = ({
   });
 
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  useAgentControl({
+    kind: "segmented-control",
+    element: () => tablistRef.current,
+    state: () => ({ value: internalSelected }),
+    disabled: () => Boolean(disabled),
+    choices: () =>
+      buttons
+        .filter((button) => !button.disabled)
+        .map((button) => ({
+          value: button.value,
+          label: typeof button.label === "string" ? button.label : button.value,
+        })),
+    actions: {
+      setValue: (next) => {
+        const button = buttons.find((b) => b.value === next && !b.disabled);
+        if (!button)
+          throw new Error(`No choice ${String(next)}: query the control for its choices.`);
+        pick(button.value);
+      },
+    },
+  });
 
   const pick = (next: string, event?: React.MouseEvent<HTMLButtonElement>) => {
     if (disabled) return;

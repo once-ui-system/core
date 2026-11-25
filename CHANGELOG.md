@@ -15,6 +15,16 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **`@once-ui-system/core/agent`: an agent can read and operate the page.** `createAgent()`
+  returns `snapshot()` (every mounted control and page section with its name, state and
+  the actions it takes now), `act({ steps })` (several changes in one call, each run
+  through the control's own path, so `onXChange` hears `details.source === "agent"` and can
+  cancel) and `query()` (a list's choices, 50 at a time). Input, Textarea, Select,
+  Checkbox, Switch, RadioGroup, Slider, SegmentedControl, Tabs, Button and the theme
+  register themselves; password values come back redacted. An `allow` callback decides
+  each step. `agentTools` describes the three tools as JSON Schema, and `registerTools()`
+  offers them to the browser's agent over WebMCP where it exists, with a required `allow`.
+
 - **Every value change says who made it, and can be refused.** `onValueChange`,
   `onCheckedChange`, `onOpenChange` and the other `onXChange` callbacks of Input, Textarea,
   NumberInput, OTPInput, ColorInput, Select, Combobox, TagInput, Checkbox, Switch,

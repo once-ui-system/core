@@ -3,6 +3,7 @@
 import classNames from "clsx";
 import type React from "react";
 import { type ReactNode, useCallback, useEffect, useId, useRef, useState } from "react";
+import { AgentOwnedContext, useAgentControl } from "../internal/agentRegistry.js";
 import type { ChangeDetails } from "../internal/changeDetails.js";
 import { mergeLabels } from "../internal/labels.js";
 import { useControllableState } from "../internal/useControllableState.js";
@@ -370,6 +371,38 @@ const Select = ({
     }
   };
 
+  const choiceLabel = (option: SelectOptionType) =>
+    typeof option.label === "string" ? option.label : option.value;
+  useAgentControl({
+    kind: "select",
+    element: () => fieldRef.current,
+    disabled: () => Boolean(rest.disabled),
+    state: () => ({ value: currentValue, open: isDropdownOpen, multiple: Boolean(multiple) }),
+    choices: () =>
+      options
+        .filter((option) => !option.disabled)
+        .map((option) => ({ value: option.value, label: choiceLabel(option) })),
+    actions: {
+      setValue: (next) => {
+        const wanted = Array.isArray(next) ? next.map(String) : String(next);
+        const known = new Set(options.filter((o) => !o.disabled).map((o) => o.value));
+        const missing = (Array.isArray(wanted) ? wanted : [wanted]).filter((v) => !known.has(v));
+        if (missing.length)
+          throw new Error(`No choice ${missing.join(", ")}: query the list for its choices.`);
+        setValue(
+          multiple
+            ? Array.isArray(wanted)
+              ? wanted
+              : [wanted]
+            : Array.isArray(wanted)
+              ? wanted[0]
+              : wanted,
+        );
+      },
+      setOpen: (next) => setOpen(Boolean(next)),
+    },
+  });
+
   const handleQueryChange = (query: string) => {
     setSearchQuery(query);
     setActiveIndex(null);
@@ -564,151 +597,153 @@ const Select = ({
   return (
     // Tells the wrapper its trigger is a combobox: no `role="button"` around
     // the field, and focus stays in it (see DropdownComboboxContext).
-    <DropdownComboboxContext.Provider value={true}>
-      <Dropdown
-        fillWidth={fillWidth}
-        minWidth={minWidth}
-        maxWidth={maxWidth}
-        ref={(node) => {
-          selectRef.current = node;
-          if (typeof ref === "function") ref(node);
-          else if (ref) ref.current = node;
-        }}
-        onFocusCapture={() => setIsFocused(true)}
-        open={isDropdownOpen}
-        onOpenChange={setOpen}
-        placement={placement}
-        // A search field would sit over the field, and a multiple Select has
-        // no one option to put there.
-        alignSelected={alignSelected && !searchable && !multiple}
-        closeAfterClick={false}
-        disableTriggerClick={true}
-        style={{
-          ...style,
-        }}
-        trigger={
-          <SelectField
-            {...rest}
-            ref={fieldRef}
-            activeIndex={currentActive}
-            suffix={rest.suffix === undefined ? chevron : rest.suffix}
-            style={{
-              textOverflow: "ellipsis",
-              ...style,
-            }}
-            cursor="interactive"
-            value={getDisplayText()}
-            onFocus={handleFocus}
-            // Focus alone cannot reopen a field that already has it: after a
-            // pick, focus is back on the field with the list closed, and a
-            // click there fires no focus event.
-            // A press on the field toggles the list, so the field closes what
-            // it opened. Whether it was open is read on mousedown, before the
-            // focus that the same press brings has opened it.
-            onMouseDown={(event: React.MouseEvent<HTMLInputElement>) => {
-              rest.onMouseDown?.(event);
-              openOnPressRef.current = isOpenRef.current;
-            }}
-            onClick={(event: React.MouseEvent<HTMLInputElement>) => {
-              rest.onClick?.(event);
-              setOpen(!openOnPressRef.current);
-              openOnPressRef.current = false;
-            }}
-            onKeyDown={handleFieldKeyDown}
-            readOnly
-            // `{ className }` in the object put the literal string "className"
-            // on the element when the prop was truthy and dropped the caller's
-            // class entirely. It is a value, not a condition.
-            className={classNames("fill-width", className, isFocused && inputStyles.focused)}
-            role="combobox"
-            aria-haspopup="listbox"
-            aria-expanded={isDropdownOpen}
-            aria-controls={isDropdownOpen ? listboxId : undefined}
-            aria-activedescendant={activeOptionId}
-          />
-        }
-      >
-        <Column fillWidth padding="4" data-dropdown="true">
-          {searchable && (
-            <SearchInput
-              ref={searchRef}
-              id={`select-search-${searchInputId}`}
-              searchQuery={searchQuery}
-              onQueryChange={handleQueryChange}
-              onOpen={() => setOpen(true)}
-              onClear={handleClearSearch}
-              onEscape={() => {
-                setOpen(false);
-                handleQueryChange("");
-                fieldRef.current?.focus();
+    <AgentOwnedContext.Provider value={true}>
+      <DropdownComboboxContext.Provider value={true}>
+        <Dropdown
+          fillWidth={fillWidth}
+          minWidth={minWidth}
+          maxWidth={maxWidth}
+          ref={(node) => {
+            selectRef.current = node;
+            if (typeof ref === "function") ref(node);
+            else if (ref) ref.current = node;
+          }}
+          onFocusCapture={() => setIsFocused(true)}
+          open={isDropdownOpen}
+          onOpenChange={setOpen}
+          placement={placement}
+          // A search field would sit over the field, and a multiple Select has
+          // no one option to put there.
+          alignSelected={alignSelected && !searchable && !multiple}
+          closeAfterClick={false}
+          disableTriggerClick={true}
+          style={{
+            ...style,
+          }}
+          trigger={
+            <SelectField
+              {...rest}
+              ref={fieldRef}
+              activeIndex={currentActive}
+              suffix={rest.suffix === undefined ? chevron : rest.suffix}
+              style={{
+                textOverflow: "ellipsis",
+                ...style,
               }}
-              onListKey={handleListKey}
-              handleBlur={handleBlur}
-              selectRef={selectRef}
-              listboxId={listboxId}
-              activeOptionId={activeOptionId}
-              names={names}
-              size={searchSize}
+              cursor="interactive"
+              value={getDisplayText()}
+              onFocus={handleFocus}
+              // Focus alone cannot reopen a field that already has it: after a
+              // pick, focus is back on the field with the list closed, and a
+              // click there fires no focus event.
+              // A press on the field toggles the list, so the field closes what
+              // it opened. Whether it was open is read on mousedown, before the
+              // focus that the same press brings has opened it.
+              onMouseDown={(event: React.MouseEvent<HTMLInputElement>) => {
+                rest.onMouseDown?.(event);
+                openOnPressRef.current = isOpenRef.current;
+              }}
+              onClick={(event: React.MouseEvent<HTMLInputElement>) => {
+                rest.onClick?.(event);
+                setOpen(!openOnPressRef.current);
+                openOnPressRef.current = false;
+              }}
+              onKeyDown={handleFieldKeyDown}
+              readOnly
+              // `{ className }` in the object put the literal string "className"
+              // on the element when the prop was truthy and dropped the caller's
+              // class entirely. It is a value, not a condition.
+              className={classNames("fill-width", className, isFocused && inputStyles.focused)}
+              role="combobox"
+              aria-haspopup="listbox"
+              aria-expanded={isDropdownOpen}
+              aria-controls={isDropdownOpen ? listboxId : undefined}
+              aria-activedescendant={activeOptionId}
             />
-          )}
-
-          <Column
-            id={listboxId}
-            role="listbox"
-            aria-label={listboxLabel}
-            aria-multiselectable={multiple || undefined}
-            fillWidth
-            // Space under the search field only: without one, the
-            // dropdown's own padding is the same above and below the list.
-            paddingTop={searchable ? "4" : undefined}
-            gap="2"
-            // The highlight follows the pointer, as it did when the options
-            // took focus, so the active option is the one under it. Only
-            // when the pointer moves: the list scrolling under a resting
-            // pointer (the arrow keys bringing an option into view) fired
-            // mouseover, which pulled the highlight back under it. An
-            // aligned list opens right under the pointer that opened it,
-            // so there the arrow keys barely moved at all.
-            onMouseMove={(event: React.MouseEvent<HTMLDivElement>) => {
-              const last = pointerRef.current;
-              pointerRef.current = { x: event.clientX, y: event.clientY };
-              if (last && last.x === event.clientX && last.y === event.clientY) return;
-              const option = (event.target as Element).closest('[role="option"]');
-              if (!option?.id.startsWith(optionIdPrefix)) return;
-              const index = Number(option.id.slice(optionIdPrefix.length));
-              if (index !== currentActive && !filteredOptions[index]?.disabled) {
-                setActiveIndex(index);
-              }
-            }}
-          >
-            {filteredOptions.map((option, index) => (
-              <Option
-                key={option.value}
-                {...option}
-                id={optionId(index)}
-                // handleSelect closes a single Select. A multiple one stays
-                // open to pick more, as it already did from the keyboard;
-                // a click used to close it too, and only looked open
-                // because the returning focus reopened it at once.
-                onClick={() => {
-                  option.onClick?.(option.value);
-                  handleSelect(option.value);
+          }
+        >
+          <Column fillWidth padding="4" data-dropdown="true">
+            {searchable && (
+              <SearchInput
+                ref={searchRef}
+                id={`select-search-${searchInputId}`}
+                searchQuery={searchQuery}
+                onQueryChange={handleQueryChange}
+                onOpen={() => setOpen(true)}
+                onClear={handleClearSearch}
+                onEscape={() => {
+                  setOpen(false);
+                  handleQueryChange("");
+                  fieldRef.current?.focus();
                 }}
-                selected={isSelected(option)}
-                highlighted={index === currentActive}
-                tabIndex={-1}
-                prefix={optionPrefix(option)}
+                onListKey={handleListKey}
+                handleBlur={handleBlur}
+                selectRef={selectRef}
+                listboxId={listboxId}
+                activeOptionId={activeOptionId}
+                names={names}
+                size={searchSize}
               />
-            ))}
+            )}
+
+            <Column
+              id={listboxId}
+              role="listbox"
+              aria-label={listboxLabel}
+              aria-multiselectable={multiple || undefined}
+              fillWidth
+              // Space under the search field only: without one, the
+              // dropdown's own padding is the same above and below the list.
+              paddingTop={searchable ? "4" : undefined}
+              gap="2"
+              // The highlight follows the pointer, as it did when the options
+              // took focus, so the active option is the one under it. Only
+              // when the pointer moves: the list scrolling under a resting
+              // pointer (the arrow keys bringing an option into view) fired
+              // mouseover, which pulled the highlight back under it. An
+              // aligned list opens right under the pointer that opened it,
+              // so there the arrow keys barely moved at all.
+              onMouseMove={(event: React.MouseEvent<HTMLDivElement>) => {
+                const last = pointerRef.current;
+                pointerRef.current = { x: event.clientX, y: event.clientY };
+                if (last && last.x === event.clientX && last.y === event.clientY) return;
+                const option = (event.target as Element).closest('[role="option"]');
+                if (!option?.id.startsWith(optionIdPrefix)) return;
+                const index = Number(option.id.slice(optionIdPrefix.length));
+                if (index !== currentActive && !filteredOptions[index]?.disabled) {
+                  setActiveIndex(index);
+                }
+              }}
+            >
+              {filteredOptions.map((option, index) => (
+                <Option
+                  key={option.value}
+                  {...option}
+                  id={optionId(index)}
+                  // handleSelect closes a single Select. A multiple one stays
+                  // open to pick more, as it already did from the keyboard;
+                  // a click used to close it too, and only looked open
+                  // because the returning focus reopened it at once.
+                  onClick={() => {
+                    option.onClick?.(option.value);
+                    handleSelect(option.value);
+                  }}
+                  selected={isSelected(option)}
+                  highlighted={index === currentActive}
+                  tabIndex={-1}
+                  prefix={optionPrefix(option)}
+                />
+              ))}
+            </Column>
+            {searchQuery && filteredOptions.length === 0 && (
+              <Flex fillWidth center paddingX="16" paddingY="32">
+                {emptyState}
+              </Flex>
+            )}
           </Column>
-          {searchQuery && filteredOptions.length === 0 && (
-            <Flex fillWidth center paddingX="16" paddingY="32">
-              {emptyState}
-            </Flex>
-          )}
-        </Column>
-      </Dropdown>
-    </DropdownComboboxContext.Provider>
+        </Dropdown>
+      </DropdownComboboxContext.Provider>
+    </AgentOwnedContext.Provider>
   );
 };
 

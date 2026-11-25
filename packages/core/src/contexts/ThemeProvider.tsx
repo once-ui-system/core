@@ -10,6 +10,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { useAgentControl } from "../internal/agentRegistry.js";
 import type { Schemes } from "../types.js";
 import type { ThemedSchemeScale } from "../utils/colorScheme.js";
 import type { CursorPresetValue } from "../utils/cursor.js";
@@ -543,6 +544,33 @@ export function ThemeProvider({
     }),
     [theme, resolvedTheme, setThemeAndSave],
   );
+
+  useAgentControl({
+    kind: "theme",
+    element: () => (typeof document === "undefined" ? null : document.documentElement),
+    label: () => "Theme",
+    state: () => ({
+      theme,
+      resolvedTheme,
+      brand: style.brand,
+      accent: style.accent,
+      neutral: style.neutral,
+    }),
+    choices: () => [
+      { value: "light", label: "Light" },
+      { value: "dark", label: "Dark" },
+      { value: "system", label: "System" },
+    ],
+    disabled: () => isForced,
+    actions: {
+      setTheme: (next) => {
+        if (next !== "light" && next !== "dark" && next !== "system") {
+          throw new Error(`The theme is light, dark or system, not ${String(next)}.`);
+        }
+        setThemeAndSave(next);
+      },
+    },
+  });
 
   const styleValue: StyleProviderState = useMemo(
     () => ({

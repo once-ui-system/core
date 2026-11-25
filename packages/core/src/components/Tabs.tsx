@@ -13,6 +13,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { useAgentControl } from "../internal/agentRegistry.js";
 import { type ChangeDetails, reportChange } from "../internal/changeDetails.js";
 import { Column } from "./Column.js";
 import { Row } from "./Row.js";
@@ -187,6 +188,27 @@ const TabList = ({ ref, children, onKeyDown, ...flex }: TabListProps) => {
   const { value, controlled, orientation, activation, select, adopt } = useTabsContext("TabList");
   const listRef = useRef<HTMLDivElement | null>(null);
   const [fallback, setFallback] = useState<string | null>(null);
+
+  useAgentControl({
+    kind: "tabs",
+    element: () => listRef.current,
+    state: () => ({ value }),
+    choices: () =>
+      listRef.current
+        ? enabledTabs(listRef.current).map((tab) => ({
+            value: tab.dataset.value ?? "",
+            label: tab.textContent?.replace(/\s+/g, " ").trim() || (tab.dataset.value ?? ""),
+          }))
+        : [],
+    actions: {
+      setValue: (next) => {
+        const list = listRef.current;
+        const tab = list && enabledTabs(list).find((t) => t.dataset.value === String(next));
+        if (!tab) throw new Error(`No tab ${String(next)}: query the tabs for their choices.`);
+        select(String(next));
+      },
+    },
+  });
 
   const setRefs = useCallback(
     (node: HTMLDivElement | null) => {

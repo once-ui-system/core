@@ -4,6 +4,7 @@ import classNames from "clsx";
 import React, { ReactNode } from "react";
 import { IconName } from "../icons.js";
 import type { LeafProps } from "../interfaces.js";
+import { accessibleName, useAgentControl, useOwnRef } from "../internal/agentRegistry.js";
 import { defaultButtonTone } from "../internal/buttonTone.js";
 import { Tone, TShirtSizes } from "../types.js";
 import { leafLayout, takeLeafProps } from "../utils/leafLayout.js";
@@ -98,12 +99,24 @@ const Button = ({
   const iconSize = size === "l" || size === "xl" ? "s" : size === "m" ? "s" : "xs";
   const radiusSize = size === "xs" ? "s" : size === "s" || size === "m" ? "m" : "l";
   const trigger = useDropdownTrigger();
+  const [ownRef, setOwnRef] = useOwnRef<HTMLButtonElement>(ref);
+  useAgentControl({
+    kind: href ? "link" : "button",
+    element: () => ownRef.current,
+    // Without href or onClick it renders a plain element, which has no name of its own.
+    label: () =>
+      accessibleName(ownRef.current) ??
+      (ownRef.current?.textContent?.replace(/\s+/g, " ").trim() || null),
+    state: () => (loading ? { busy: true } : {}),
+    disabled: () => Boolean(disabled || loading),
+    actions: { press: () => ownRef.current?.click() },
+  });
 
   return (
     <ElementType
       id={id}
       href={href}
-      ref={ref}
+      ref={setOwnRef}
       decorationOf="Button"
       {...dropdownTriggerProps(trigger, href, props.onClick)}
       disabled={disabled}

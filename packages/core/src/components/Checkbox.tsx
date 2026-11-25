@@ -1,8 +1,9 @@
 "use client";
 
 import classNames from "clsx";
-import React, { useId } from "react";
+import React, { useId, useRef } from "react";
 import type { LeafProps } from "../interfaces.js";
+import { useAgentControl } from "../internal/agentRegistry.js";
 import type { ChangeDetails } from "../internal/changeDetails.js";
 import {
   type ControlChromeProps,
@@ -74,6 +75,19 @@ const Checkbox = ({
     onChange: onCheckedChange,
   });
   const { setRef, activate, relay } = useHiddenInput(ref);
+  const controlRef = useRef<HTMLDivElement>(null);
+  useAgentControl({
+    kind: "checkbox",
+    element: () => controlRef.current,
+    state: () => ({ checked: isChecked }),
+    disabled: () => Boolean(disabled),
+    actions: {
+      setChecked: (next) => {
+        if (Boolean(next) !== isChecked) activate();
+      },
+      toggle: () => activate(),
+    },
+  });
   const { aria, native } = splitAria(rest);
   const chrome = useControlChrome({ size: sizeProp, error, errorMessage });
   const labelId = useId();
@@ -128,6 +142,7 @@ const Checkbox = ({
         style={{
           borderRadius: "min(var(--static-space-4), var(--radius-xs))",
         }}
+        ref={controlRef}
         role="checkbox"
         tabIndex={0}
         cursor={disabled ? "not-allowed" : undefined}
