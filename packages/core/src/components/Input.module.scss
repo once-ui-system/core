@@ -426,6 +426,14 @@
   align-self: center;
 }
 
+// A read-only combobox field (Select, a DatePicker's field) is a button that
+// opens a list, not a place to type, but browsers still blink a text caret in
+// a focused read-only input, so a click read as "type here". Focus still shows
+// on the field's border.
+.input[readonly][role="combobox"] {
+  caret-color: transparent;
+}
+
 .input[type="color"] {
   opacity: 0;
 }
