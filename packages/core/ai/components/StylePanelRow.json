@@ -15,7 +15,8 @@
  "props": {
   "label": "ReactNode | false",
   "hint": "ReactNode | false",
-  "hintFor": "keyof StylePanelRowLabels"
+  "hintFor": "keyof StylePanelRowLabels",
+  "above": "boolean = false"
  },
  "tags": [
   "settings",
@@ -157,7 +158,8 @@
    "transition": "ReactNode",
    "dataStyle": "ReactNode",
    "bodySize": "ReactNode",
-   "bodyLineHeight": "ReactNode"
+   "bodyLineHeight": "ReactNode",
+   "fonts": "ReactNode"
   }
  }
 }

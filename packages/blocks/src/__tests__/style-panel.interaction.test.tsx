@@ -13,7 +13,7 @@ import {
   StylePanelShape,
   StylePanelSurface,
 } from "../StylePanel.js";
-import { type StylePanelValue } from "../StylePanelSections.js";
+import type { StylePanelValue } from "../StylePanelSections.js";
 import { expectNoAxeViolations } from "../test/axe.js";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (

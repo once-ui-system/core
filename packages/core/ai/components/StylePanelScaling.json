@@ -13,6 +13,8 @@
   "StyleProps"
  ],
  "props": {
+  "named": "boolean = false",
+  "steps": "readonly ScalingSize[]",
   "label": "ReactNode | false",
   "hint": "ReactNode | false"
  },
@@ -141,5 +143,14 @@
    "themeSurface": "SurfaceStyle",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`"
   }
+ },
+ "types": {
+  "ScalingSize": [
+   "100",
+   "90",
+   "110",
+   "95",
+   "105"
+  ]
  }
 }

@@ -141,6 +141,47 @@ one with a [custom colour](#custom-colour), still takes the layout props of a
 size, so that they fit a sidebar; whatever still overflows scrolls, and the chosen swatch or
 option is scrolled into view.
 
+## Site builders
+
+For a site owner rather than a developer, `StylePanelSite` arranges the same
+parts so that every option is on screen and drawn as the thing it changes:
+a Look section with your own templates, Colour (the main colour as swatches
+that wrap, then light or dark), Shape and buttons (corners, finish and fill as
+tiles, each holding a real button that wears that option), Fonts as pairings,
+and Fine-tune folded away (text size as Small, Normal and Large, surfaces, the
+second colour, the greys and any rows of your own).
+
+```tsx
+<StylePanelSite
+  value={style}
+  onValueChange={setStyle}
+  customColors
+  look={<TemplateTiles />}
+  lookAction={edited && <Button size="s" variant="tertiary" label="Reset" onClick={reset} />}
+  fonts={{ pairs, value: pair, onValueChange: setPair, more: <FontPickers /> }}
+  fineTune={<PageWidth />}
+/>
+```
+
+The pieces work on their own too:
+
+- `tiles` on `StylePanelRoot` (or on `StylePanelShape`, `StylePanelEffect`,
+  `StylePanelSolid`) draws those rows as tiles, so a narrow panel never hides
+  an option behind scroll buttons.
+- `swatches="wrap"` on the Root (or `swatches` on a colour row) lays every
+  swatch out in rows that wrap instead of one strip that scrolls.
+- `StylePanelScaling named` offers Small, Normal and Large (95, 100 and 105),
+  worded by `labels.options.scalingNames`.
+- `StylePanelFonts` takes `pairs` (a name and a heading face each) and a
+  `value`; the panel keeps no font state. `more` is shown under a "One by one"
+  toggle, for your own per-role pickers.
+- `StylePanelSection` is a plain titled section whose rows sit flush, label
+  above control.
+
+The tiles' sample says "Button" (`labels.tiles.sample`); a booking site might
+say "Book". The new headings are `labels.groups.look`, `shape`, `fonts` and
+`fineTune`.
+
 ## Size
 
 `size="s"` tightens the panel: less padding in each row and less room between
@@ -373,6 +414,8 @@ generated from one colour.
     customColors: "End the colour rows' swatches with a custom colour, reported as brandSeed, accentSeed or neutralSeed. true is Brand and Accent; list the rows to include Neutral. Controlled mode only.",
     stacked: "Put each row's label above its control, for a narrow sidebar.",
     size: "How much room rows and groups take: m (default), or s for a denser panel.",
+    tiles: "Draw the Shape, Solid and Effect rows as tiles, a real button per option. A row's own tiles still wins.",
+    swatches: "How the colour rows lay out their swatches: scroll (default) or wrap.",
   }}
   content={[
     ["className"],

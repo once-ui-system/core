@@ -155,3 +155,25 @@
 .strip {
     max-width: 100%;
 }
+
+/* Option tiles: hover lifts the edge, as on a Card. The sample inside is a
+   picture of the option, so it never takes the pointer. */
+.tile {
+    transition: var(--transition-micro-medium);
+
+    @media (hover: hover) {
+        &:hover:not([aria-checked="true"]) {
+            border-color: var(--neutral-alpha-strong);
+        }
+    }
+}
+
+.sample {
+    pointer-events: none;
+}
+
+/* A font pairing's sample, drawn large in its heading face. */
+.pairSample {
+    font-size: var(--font-size-heading-m);
+    line-height: 1.1;
+}

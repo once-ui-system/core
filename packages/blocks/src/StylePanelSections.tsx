@@ -1,16 +1,21 @@
 "use client";
 
 import {
+  Accordion,
   type BodyLineHeight,
   type BodySize,
   type BorderStyle,
+  Button,
   type DataStyle as ChartMode,
   ColorButton,
   Column,
   type Density,
   Flex,
+  Grid,
+  type GridSize,
   Icon,
   IconButton,
+  Line,
   type NeutralColor,
   type ScalingSize,
   type Schemes,
@@ -124,6 +129,11 @@ export interface StyleSchemeRowProps extends StyleRowProps {
    * seed, the panel has nowhere to put one, so the swatch does not render.
    */
   custom?: boolean;
+  /**
+   * `"wrap"` lays every swatch out in rows that wrap, under the label,
+   * instead of one strip that scrolls. Defaults to the Root's `swatches`.
+   */
+  swatches?: StylePanelSwatchLayout;
 }
 
 export interface StyleGroupProps extends Omit<React.ComponentProps<typeof Column>, "title"> {
@@ -160,6 +170,14 @@ export interface StylePanelGroupLabels {
   bodyText?: StylePanelHeading;
   /** Defaults to "Advanced" and "Customize advanced styling options". */
   advanced?: StylePanelHeading;
+  /** `StylePanelSite`'s first section. Defaults to "Look", no description. */
+  look?: StylePanelHeading;
+  /** `StylePanelSite`'s shape and buttons section. Defaults to "Shape and buttons". */
+  shape?: StylePanelHeading;
+  /** `StylePanelSite`'s fonts section. Defaults to "Fonts". */
+  fonts?: StylePanelHeading;
+  /** `StylePanelSite`'s folded section. Defaults to "Fine-tune". */
+  fineTune?: StylePanelHeading;
 }
 
 /** Each row's label, keyed by the row's part name (`StylePanelBodySize` → `bodySize`). */
@@ -192,6 +210,8 @@ export interface StylePanelRowLabels {
   bodySize?: ReactNode;
   /** Defaults to `"Line height"`. */
   bodyLineHeight?: ReactNode;
+  /** Defaults to `"Fonts"`. */
+  fonts?: ReactNode;
 }
 
 /** The segmented rows' option labels, keyed by row and then by value. */
@@ -210,6 +230,11 @@ export interface StylePanelOptionLabels {
   density?: Partial<Record<Density, ReactNode>>;
   /** Formats a scaling option, `"90"` to `"110"`. Defaults to the value as written. */
   scaling?: (value: ScalingSize) => ReactNode;
+  /**
+   * The words for scaling steps on a `named` Scaling row. Defaults to
+   * Smallest, Small, Normal, Large and Largest for 90 to 110.
+   */
+  scalingNames?: Partial<Record<ScalingSize, ReactNode>>;
   /** Formats a text size option, `"90"` to `"110"`. Defaults to the value as written. */
   bodySize?: (value: BodySize) => ReactNode;
   /** Formats a line height option, `"90"` to `"120"`. Defaults to the value as written. */
@@ -286,6 +311,24 @@ export interface StylePanelLabels {
   custom?: StylePanelCustomLabels;
   /** Each built-in row's tooltip, shown while the Root's `hints` is on. */
   hints?: StylePanelRowLabels;
+  /** Words on option tiles (`tiles`). */
+  tiles?: StylePanelTileLabels;
+  /** The Fonts row (`StylePanelFonts`). */
+  fonts?: StylePanelFontLabels;
+}
+
+/** Words on option tiles. */
+export interface StylePanelTileLabels {
+  /** The text on each tile's sample button. Defaults to `"Button"`. */
+  sample?: string;
+}
+
+/** The Fonts row's own words. */
+export interface StylePanelFontLabels {
+  /** The toggle that shows the row's `more` content. Defaults to `"One by one"`. */
+  more?: ReactNode;
+  /** The text each pairing is drawn in. Defaults to `"Aa"`. */
+  sample?: string;
 }
 
 /** A labels type with every field filled in, at every depth. */
@@ -332,6 +375,10 @@ const DEFAULT_LABELS: ResolvedLabels = {
     },
     bodyText: { title: "Body text", description: "Scale running text without touching headings" },
     advanced: { title: "Advanced", description: "Customize advanced styling options" },
+    look: { title: "Look", description: "" },
+    shape: { title: "Shape and buttons", description: "" },
+    fonts: { title: "Fonts", description: "" },
+    fineTune: { title: "Fine-tune", description: "" },
   },
   rows: {
     theme: "Theme",
@@ -348,6 +395,7 @@ const DEFAULT_LABELS: ResolvedLabels = {
     dataStyle: "Data Style",
     bodySize: "Text size",
     bodyLineHeight: "Line height",
+    fonts: "Fonts",
   },
   options: {
     solid: { color: "Color", inverse: "Inverse", contrast: "Contrast" },
@@ -357,6 +405,13 @@ const DEFAULT_LABELS: ResolvedLabels = {
     dataStyle: { categorical: "Categorical", divergent: "Divergent", sequential: "Sequential" },
     density: { compact: "Compact", normal: "Normal", spacious: "Spacious" },
     scaling: (value) => value,
+    scalingNames: {
+      "90": "Smallest",
+      "95": "Small",
+      "100": "Normal",
+      "105": "Large",
+      "110": "Largest",
+    },
     bodySize: (value) => value,
     bodyLineHeight: (value) => value,
   },
@@ -372,6 +427,8 @@ const DEFAULT_LABELS: ResolvedLabels = {
   },
   themeSwitcher: {},
   scroller: {},
+  tiles: { sample: "Button" },
+  fonts: { more: "One by one", sample: "Aa" },
   custom: {
     swatch: (row) => `${row === "brand" ? "Brand" : "Accent"} colour: custom`,
     picker: (row) => `Custom ${row} colour`,
@@ -392,6 +449,7 @@ const DEFAULT_LABELS: ResolvedLabels = {
     dataStyle: "How charts colour their series.",
     bodySize: "The size of running text; headings keep theirs.",
     bodyLineHeight: "The space between lines of running text.",
+    fonts: "The typefaces for headings and running text.",
   },
 };
 
@@ -426,6 +484,24 @@ export type StylePanelSize = "s" | "m";
 
 /** The panel's size, for rows and groups. `m` outside a Root. */
 const StylePanelSizeContext = createContext<StylePanelSize>("m");
+
+/** How a colour row lays out its swatches: one strip that scrolls, or rows that wrap. */
+export type StylePanelSwatchLayout = "scroll" | "wrap";
+
+/**
+ * The Root's choices for every row inside: whether Shape, Solid and Effect
+ * draw their options as tiles, and how colour rows lay out their swatches.
+ */
+const StylePanelDisplayContext = createContext<{
+  tiles: boolean;
+  swatches: StylePanelSwatchLayout;
+}>({ tiles: false, swatches: "scroll" });
+
+/**
+ * True inside a `StylePanelSection`: rows there sit flush, with no padding
+ * of their own, label above control, as fields in a form.
+ */
+const StylePanelFlushContext = createContext(false);
 
 /** How a row lays its label against its control: beside it, or above it. */
 const INLINE_LINE = { horizontal: "between", vertical: "center", gap: "24" } as const;
@@ -560,6 +636,19 @@ export interface StylePanelRootProps
   labelWidth?: StylePanelLabelWidth;
   /** Show each built-in row's tooltip from `labels.hints`. A row's own `hint` still wins. */
   hints?: boolean;
+  /**
+   * Draw the Shape, Solid and Effect rows' options as tiles: a real button
+   * per option, wearing that option, with its name under it. Every option
+   * stays on screen in a narrow panel, where the segmented control would
+   * scroll. A row's own `tiles` still wins.
+   */
+  tiles?: boolean;
+  /**
+   * How the colour rows lay out their swatches: `"scroll"` (default), one
+   * strip with scroll buttons, or `"wrap"`, every swatch on screen in rows
+   * that wrap. A row's own `swatches` still wins.
+   */
+  swatches?: StylePanelSwatchLayout;
 }
 
 const Root = function Root({
@@ -571,6 +660,8 @@ const Root = function Root({
   size = "m",
   labelWidth,
   hints = false,
+  tiles = false,
+  swatches = "scroll",
   children,
   ...rest
 }: StylePanelRootProps) {
@@ -593,6 +684,7 @@ const Root = function Root({
 
   const resolvedLabels = useMemo(() => mergeLabels(DEFAULT_LABELS, labels), [labels]);
   const rowLayout = useMemo(() => ({ labelWidth, hints }), [labelWidth, hints]);
+  const display = useMemo(() => ({ tiles, swatches }), [tiles, swatches]);
 
   return (
     <StylePanelContext.Provider value={context}>
@@ -600,9 +692,11 @@ const Root = function Root({
         <StylePanelStackedContext.Provider value={stacked}>
           <StylePanelSizeContext.Provider value={size}>
             <StylePanelRowLayoutContext.Provider value={rowLayout}>
-              <Column fillWidth gap={SPACING[size].groupGap} ref={ref} {...rest}>
-                {children}
-              </Column>
+              <StylePanelDisplayContext.Provider value={display}>
+                <Column fillWidth gap={SPACING[size].groupGap} ref={ref} {...rest}>
+                  {children}
+                </Column>
+              </StylePanelDisplayContext.Provider>
             </StylePanelRowLayoutContext.Provider>
           </StylePanelSizeContext.Provider>
         </StylePanelStackedContext.Provider>
@@ -613,8 +707,20 @@ const Root = function Root({
 
 /* ---- primitives ---------------------------------------------------------- */
 
-function RowLabel({ id, children, hint }: { id?: string; children: ReactNode; hint?: ReactNode }) {
-  const stacked = useContext(StylePanelStackedContext);
+function RowLabel({
+  id,
+  children,
+  hint,
+  above = false,
+}: {
+  id?: string;
+  children: ReactNode;
+  hint?: ReactNode;
+  above?: boolean;
+}) {
+  const stackedPanel = useContext(StylePanelStackedContext);
+  const flush = useContext(StylePanelFlushContext);
+  const stacked = stackedPanel || flush || above;
   const { labelWidth } = useContext(StylePanelRowLayoutContext);
   const fixed = !stacked && labelWidth !== undefined;
   return (
@@ -672,14 +778,19 @@ function Row({
   label,
   hint,
   hintFor,
+  above = false,
   children,
   className,
   ...rest
 }: StyleRowProps & {
   /** Show this built-in row's hint from `labels.hints` while the Root's `hints` is on. */
   hintFor?: keyof StylePanelRowLabels;
+  /** Put the label above the control whatever the panel's layout: a row of tiles needs the width. */
+  above?: boolean;
 }) {
-  const stacked = useContext(StylePanelStackedContext);
+  const flush = useContext(StylePanelFlushContext);
+  const stackedPanel = useContext(StylePanelStackedContext);
+  const stacked = stackedPanel || flush || above;
   const tip = useRowHint(hint, hintFor);
   const space = SPACING[useContext(StylePanelSizeContext)];
   const labelId = useId();
@@ -688,14 +799,14 @@ function Row({
       <Flex
         className={classNames(styles.row, className)}
         fillWidth
-        paddingX={stacked ? space.stackedRowX : space.rowX}
-        paddingY={space.rowY}
+        paddingX={flush ? "0" : stacked ? space.stackedRowX : space.rowX}
+        paddingY={flush ? "0" : space.rowY}
         {...(stacked ? STACKED_LINE : INLINE_LINE)}
-        gap={stacked ? space.stackedGap : space.inlineGap}
+        gap={flush ? "8" : stacked ? space.stackedGap : space.inlineGap}
         {...rest}
       >
         {label !== false && (
-          <RowLabel id={labelId} hint={tip}>
+          <RowLabel id={labelId} hint={tip} above={above}>
             {label}
           </RowLabel>
         )}
@@ -807,6 +918,7 @@ function Swatches<T extends string>({
   trailingChecked = false,
   scrollLabels,
   name,
+  wrap = false,
 }: {
   options: readonly T[];
   selected: T | undefined;
@@ -823,6 +935,8 @@ function Swatches<T extends string>({
   trailing?: ReactNode;
   /** Whether `trailing` is the chosen swatch, which makes it the Tab stop. */
   trailingChecked?: boolean;
+  /** Lay every swatch out in rows that wrap, instead of `scroll`'s one strip. */
+  wrap?: boolean;
 }) {
   const groupName = useGroupName(name);
   const checked =
@@ -834,7 +948,7 @@ function Swatches<T extends string>({
       pressed={selected === option}
       tabStop={checked ? selected === option : index === 0}
       onSelect={() => onSelect(option)}
-      scroll={scroll}
+      scroll={scroll && !wrap}
       dataBorder={dataBorder ? option : undefined}
     >
       <div
@@ -848,6 +962,15 @@ function Swatches<T extends string>({
   // Scroller, which also holds the scroll buttons.
   const group = { role: "radiogroup", ...groupName, onKeyDown: radioGroupKeyDown } as const;
 
+  if (wrap) {
+    return (
+      <Flex fillWidth wrap gap="4" {...group}>
+        {items}
+        {trailing}
+      </Flex>
+    );
+  }
+
   return scroll ? (
     <Scroller minWidth={0} fitWidth className={styles.strip} labels={scrollLabels}>
       <Flex {...group} style={{ minWidth: "max-content" }}>
@@ -860,6 +983,125 @@ function Swatches<T extends string>({
       {items}
       {trailing}
     </Flex>
+  );
+}
+
+/** Whether rows sit flush, inside a `StylePanelSection`. */
+const useFlush = () => useContext(StylePanelFlushContext);
+
+/** A shape's display name with a capital, for a tile's caption. */
+const capitalise = (name: string) => name.charAt(0).toUpperCase() + name.slice(1);
+
+/** What a tile's sample wears: the option it stands for, over the current choices. */
+interface TileSample {
+  border?: BorderStyle;
+  solid?: SolidType;
+  solidStyle?: SolidStyle;
+}
+
+/**
+ * A real Button dressed in the panel's current choices and then in the
+ * option's own, as a picture inside its tile: the tile is the control, so the
+ * button takes no focus and is hidden from assistive tech.
+ */
+function SampleButton({ sample }: { sample: TileSample }) {
+  const { value, mounted } = useStylePanel();
+  const labels = useStylePanelLabels();
+  const current = mounted ? value : {};
+  const brand = current.brand && current.brand !== "custom" ? current.brand : undefined;
+  return (
+    <Flex
+      themeBorder={sample.border ?? current.border}
+      themeSolid={sample.solid ?? current.solid}
+      {...{ "data-solid-style": sample.solidStyle ?? current.solidStyle }}
+      {...(brand ? { "data-brand": brand } : {})}
+    >
+      <Button size="s" tabIndex={-1} aria-hidden label={labels.tiles.sample} />
+    </Flex>
+  );
+}
+
+/** One tile: a radio in its row's group, named by its caption. */
+function Tile({
+  pressed,
+  tabStop,
+  onSelect,
+  caption,
+  children,
+}: {
+  pressed: boolean;
+  tabStop: boolean;
+  onSelect: () => void;
+  caption: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <Column
+      horizontal="center"
+      gap="8"
+      padding="8"
+      fillWidth
+      radius="l"
+      border={pressed ? "brand-medium" : "neutral-alpha-medium"}
+      background={pressed ? "brand-alpha-weak" : "surface"}
+      cursor="interactive"
+      tabIndex={tabStop ? 0 : -1}
+      role="radio"
+      aria-checked={pressed}
+      className={classNames("focus-ring", styles.tile)}
+      onClick={onSelect}
+      onKeyDown={(event) => activateOnKey(event, onSelect)}
+    >
+      <Flex fillWidth center minHeight="40" aria-hidden className={styles.sample}>
+        {children}
+      </Flex>
+      <Text
+        textVariant="label-default-xs"
+        onBackground={pressed ? "brand-strong" : "neutral-medium"}
+        truncate
+      >
+        {caption}
+      </Text>
+    </Column>
+  );
+}
+
+/** A row's options as tiles, one column each: a radio group named by the row's label. */
+function Tiles<T extends string>({
+  options,
+  selected,
+  onSelect,
+  name,
+}: {
+  options: { value: T; caption: ReactNode; sample: TileSample }[];
+  selected: T | undefined;
+  onSelect: (value: T) => void;
+  /** The group's name when its row shows no label: the row's default label. */
+  name: ReactNode;
+}) {
+  const groupName = useGroupName(name);
+  const checked = options.some((option) => option.value === selected);
+  return (
+    <Grid
+      fillWidth
+      columns={String(options.length) as GridSize}
+      gap="8"
+      role="radiogroup"
+      {...groupName}
+      onKeyDown={radioGroupKeyDown}
+    >
+      {options.map((option, index) => (
+        <Tile
+          key={option.value}
+          pressed={option.value === selected}
+          tabStop={checked ? option.value === selected : index === 0}
+          onSelect={() => onSelect(option.value)}
+          caption={option.caption}
+        >
+          <SampleButton sample={option.sample} />
+        </Tile>
+      ))}
+    </Grid>
   );
 }
 
@@ -895,9 +1137,35 @@ function ThemeOptions({
   return <ThemeSwitcher semantics="radio" {...groupName} {...switcher} />;
 }
 
-function ShapeRow({ label, ...rest }: StyleRowProps) {
+/** Shape, Solid and Effect take `tiles`, over the Root's. */
+export interface StyleTileRowProps extends StyleRowProps {
+  /**
+   * Draw each option as a tile: a real button wearing that option, its name
+   * under it. Defaults to the Root's `tiles`.
+   */
+  tiles?: boolean;
+}
+
+function ShapeRow({ label, tiles, ...rest }: StyleTileRowProps) {
   const { value, set, mounted } = useStylePanel();
   const labels = useStylePanelLabels();
+  const display = useContext(StylePanelDisplayContext);
+  if (tiles ?? display.tiles) {
+    return (
+      <Row label={prefer(label, labels.rows.shape)} hintFor="shape" above {...rest}>
+        <Tiles
+          name={labels.rows.shape}
+          selected={mounted ? value.border : undefined}
+          onSelect={(border) => set({ border })}
+          options={shapes.map((shape) => ({
+            value: shape,
+            caption: capitalise(labels.names.shapes[shape]),
+            sample: { border: shape },
+          }))}
+        />
+      </Row>
+    );
+  }
   return (
     <Row label={prefer(label, labels.rows.shape)} hintFor="shape" {...rest}>
       <Swatches
@@ -953,11 +1221,20 @@ function splitLineProps({ direction, horizontal, vertical, gap, wrap, ...row }: 
  */
 function colorRow(key: StylePanelSchemeRow | "neutral") {
   const options: readonly string[] = key === "neutral" ? neutrals : schemes;
-  return function ColorRow({ label, hint, custom = false, ...rest }: StyleSchemeRowProps) {
+  return function ColorRow({
+    label,
+    hint,
+    custom = false,
+    swatches: layout,
+    ...rest
+  }: StyleSchemeRowProps) {
     const { value, set, mounted, controlled } = useStylePanel();
     const tip = useRowHint(hint, key);
     const labels = useStylePanelLabels();
-    const stacked = useContext(StylePanelStackedContext);
+    const display = useContext(StylePanelDisplayContext);
+    const flush = useContext(StylePanelFlushContext);
+    const wrap = (layout ?? display.swatches) === "wrap";
+    const stacked = useContext(StylePanelStackedContext) || flush || wrap;
     const pickerId = useId();
     const labelId = useId();
     const current = mounted ? value[key] : undefined;
@@ -977,6 +1254,7 @@ function colorRow(key: StylePanelSchemeRow | "neutral") {
         trailingChecked={current === "custom"}
         swatchClass={(option) => styles[option]}
         scroll
+        wrap={wrap}
         scrollLabels={labels.scroller}
         trailing={trailing}
       />
@@ -986,7 +1264,7 @@ function colorRow(key: StylePanelSchemeRow | "neutral") {
     // colour is a controlled-mode feature and the row renders as it always has.
     if (!custom || !controlled) {
       return (
-        <Row label={rowLabel} hint={hint} hintFor={key} {...rest}>
+        <Row label={rowLabel} hint={hint} hintFor={key} above={wrap} {...rest}>
           {swatches()}
         </Row>
       );
@@ -1018,7 +1296,7 @@ function colorRow(key: StylePanelSchemeRow | "neutral") {
         <Column fillWidth gap="16">
           <Flex fillWidth {...(stacked ? STACKED_LINE : INLINE_LINE)} {...line}>
             {rowLabel !== false && (
-              <RowLabel id={labelId} hint={tip}>
+              <RowLabel id={labelId} hint={tip} above={wrap}>
                 {rowLabel}
               </RowLabel>
             )}
@@ -1029,7 +1307,7 @@ function colorRow(key: StylePanelSchemeRow | "neutral") {
                   pressed={chosen}
                   tabStop={chosen}
                   onSelect={() => set({ [key]: "custom", [seedKey]: seed ?? DEFAULT_SEED })}
-                  scroll
+                  scroll={!wrap}
                 >
                   <div
                     className={classNames(styles.swatch, styles.custom, !seed && styles.empty)}
@@ -1042,7 +1320,7 @@ function colorRow(key: StylePanelSchemeRow | "neutral") {
             </StyleRowLabelContext.Provider>
           </Flex>
           {chosen && (
-            <Column fillWidth horizontal="end" gap="8">
+            <Column fillWidth horizontal={stacked ? "start" : "end"} gap="8">
               <ColorButton
                 id={pickerId}
                 label={words.picker}
@@ -1092,7 +1370,8 @@ function Options({
   /** The group's name when its row shows no label: the row's default label. */
   name: ReactNode;
 }) {
-  const stacked = useContext(StylePanelStackedContext);
+  const flush = useFlush();
+  const stacked = useContext(StylePanelStackedContext) || flush;
   // A small panel drops its buttons a size too, so they match its tighter rows.
   const small = useContext(StylePanelSizeContext) === "s";
   const labels = useStylePanelLabels();
@@ -1150,27 +1429,69 @@ function segmentedRow<K extends keyof StylePanelValue>(
   };
 }
 
-const SolidRow = segmentedRow(
+const SOLIDS = ["color", "inverse", "contrast"] as const satisfies readonly SolidType[];
+const EFFECTS = ["flat", "plastic", "glow"] as const satisfies readonly SolidStyle[];
+
+const SolidSegmented = segmentedRow(
   "solid",
   "solid",
-  ({ options: { solid } }) => [
-    { label: solidSwatch("color", "brand-weak", solid.color), value: "color" },
-    { label: solidSwatch("inverse", "brand-strong", solid.inverse), value: "inverse" },
-    { label: solidSwatch("contrast", "brand-strong", solid.contrast), value: "contrast" },
-  ],
+  ({ options: { solid } }) =>
+    SOLIDS.map((value) => ({
+      label: solidSwatch(value, value === "color" ? "brand-weak" : "brand-strong", solid[value]),
+      value,
+    })),
   "contrast",
 );
 
-const EffectRow = segmentedRow(
+const EffectSegmented = segmentedRow(
   "solidStyle",
   "effect",
-  ({ options: { effect } }) => [
-    { label: solidSwatch("", "brand-weak", effect.flat), value: "flat" },
-    { label: solidSwatch("", "brand-weak", effect.plastic), value: "plastic" },
-    { label: solidSwatch("", "brand-weak", effect.glow), value: "glow" },
-  ],
+  ({ options: { effect } }) =>
+    EFFECTS.map((value) => ({ label: solidSwatch("", "brand-weak", effect[value]), value })),
   "flat",
 );
+
+function SolidRow({ label, tiles, ...rest }: StyleTileRowProps) {
+  const { value, set, mounted } = useStylePanel();
+  const labels = useStylePanelLabels();
+  const display = useContext(StylePanelDisplayContext);
+  if (!(tiles ?? display.tiles)) return <SolidSegmented label={label} {...rest} />;
+  return (
+    <Row label={prefer(label, labels.rows.solid)} hintFor="solid" above {...rest}>
+      <Tiles
+        name={labels.rows.solid}
+        selected={mounted ? value.solid : undefined}
+        onSelect={(solid) => set({ solid })}
+        options={SOLIDS.map((solid) => ({
+          value: solid,
+          caption: labels.options.solid[solid],
+          sample: { solid },
+        }))}
+      />
+    </Row>
+  );
+}
+
+function EffectRow({ label, tiles, ...rest }: StyleTileRowProps) {
+  const { value, set, mounted } = useStylePanel();
+  const labels = useStylePanelLabels();
+  const display = useContext(StylePanelDisplayContext);
+  if (!(tiles ?? display.tiles)) return <EffectSegmented label={label} {...rest} />;
+  return (
+    <Row label={prefer(label, labels.rows.effect)} hintFor="effect" above {...rest}>
+      <Tiles
+        name={labels.rows.effect}
+        selected={mounted ? value.solidStyle : undefined}
+        onSelect={(solidStyle) => set({ solidStyle })}
+        options={EFFECTS.map((solidStyle) => ({
+          value: solidStyle,
+          caption: labels.options.effect[solidStyle],
+          sample: { solidStyle },
+        }))}
+      />
+    </Row>
+  );
+}
 
 const SurfaceRow = segmentedRow(
   "surface",
@@ -1193,12 +1514,40 @@ const DensityRow = segmentedRow(
   "normal",
 );
 
-const ScalingRow = segmentedRow(
-  "scaling",
-  "scaling",
-  ({ options }) => scalingSizes.map((size) => ({ label: options.scaling(size), value: size })),
-  "100",
-);
+/** Scaling takes the steps it offers, and their names instead of percentages. */
+export interface StyleScalingRowProps extends StyleRowProps {
+  /**
+   * Offer three named steps, Small, Normal and Large (95, 100 and 105, from
+   * `labels.options.scalingNames`), instead of the five percentages. For a
+   * site owner, who thinks in bigger and smaller rather than in percent.
+   */
+  named?: boolean;
+  /** The steps to offer. Defaults to 90 to 110, or 95 to 105 while `named`. */
+  steps?: readonly ScalingSize[];
+}
+
+const NAMED_STEPS: readonly ScalingSize[] = ["95", "100", "105"];
+
+function ScalingRow({ label, named = false, steps, ...rest }: StyleScalingRowProps) {
+  const { value, set, mounted } = useStylePanel();
+  const labels = useStylePanelLabels();
+  const offered = steps ?? (named ? NAMED_STEPS : scalingSizes);
+  return (
+    <Row label={prefer(label, labels.rows.scaling)} hintFor="scaling" {...rest}>
+      <Options
+        onValueChange={(next) => set({ scaling: next as ScalingSize })}
+        value={mounted ? value.scaling : undefined}
+        defaultValue="100"
+        name={labels.rows.scaling}
+        fillWidth={named || undefined}
+        buttons={offered.map((size) => ({
+          label: named ? labels.options.scalingNames[size] : labels.options.scaling(size),
+          value: size,
+        }))}
+      />
+    </Row>
+  );
+}
 
 const TransitionRow = segmentedRow(
   "transition",
@@ -1369,6 +1718,303 @@ function AdvancedGroup({
   );
 }
 
+/* ---- fonts --------------------------------------------------------------- */
+
+/** One font pairing on the Fonts row. */
+export interface StylePanelFontPair {
+  /** What `onValueChange` reports when it is picked. */
+  value: string;
+  /** Its name, under the sample. */
+  label: ReactNode;
+  /** The heading face, as a CSS `font-family` value; the sample is drawn in it. */
+  heading: string;
+  /** A line under the name: the two faces' names, say. */
+  description?: ReactNode;
+}
+
+export interface StyleFontsRowProps extends StyleRowProps {
+  /** The pairings offered, as tiles two to a row. */
+  pairs?: readonly StylePanelFontPair[];
+  /** The pairing in use, or none when the fonts were chosen one by one. */
+  value?: string;
+  onValueChange?: (value: string) => void;
+  /**
+   * What the row's "One by one" toggle shows under the pairings: the host's
+   * own per-role font pickers. Without it there is no toggle.
+   */
+  more?: ReactNode;
+  /** Show `more` from the start. */
+  defaultMoreOpen?: boolean;
+}
+
+/**
+ * Fonts as pairings: a tile per pair, drawn in its heading face, and an
+ * optional "One by one" escape to the host's own pickers. The panel keeps no
+ * font state (ThemeProvider has none), so the row is controlled by its own
+ * `value` in either mode.
+ */
+function FontsRow({
+  label,
+  pairs = [],
+  value,
+  onValueChange,
+  more,
+  defaultMoreOpen = false,
+  ...rest
+}: StyleFontsRowProps) {
+  const labels = useStylePanelLabels();
+  const [open, setOpen] = useState(defaultMoreOpen);
+  return (
+    <Row label={prefer(label, labels.rows.fonts)} hintFor="fonts" above {...rest}>
+      <Column fillWidth gap="8">
+        <FontPairs pairs={pairs} value={value} onValueChange={onValueChange} />
+        {more && (
+          <Flex>
+            <Button
+              size="s"
+              variant="tertiary"
+              weight="default"
+              suffixIcon={open ? "chevronUp" : "chevronDown"}
+              aria-expanded={open}
+              onClick={() => setOpen((was) => !was)}
+            >
+              {labels.fonts.more}
+            </Button>
+          </Flex>
+        )}
+        {more && open && more}
+      </Column>
+    </Row>
+  );
+}
+
+/** The pairings: inside the Row, so the group is named by the row's label. */
+function FontPairs({
+  pairs,
+  value,
+  onValueChange,
+}: Pick<StyleFontsRowProps, "value" | "onValueChange"> & {
+  pairs: readonly StylePanelFontPair[];
+}) {
+  const labels = useStylePanelLabels();
+  const groupName = useGroupName(labels.rows.fonts);
+  const checked = pairs.some((pair) => pair.value === value);
+  return (
+    <Grid
+      fillWidth
+      columns={2}
+      gap="8"
+      role="radiogroup"
+      {...groupName}
+      onKeyDown={radioGroupKeyDown}
+    >
+      {pairs.map((pair, index) => {
+        const pressed = pair.value === value;
+        const select = () => onValueChange?.(pair.value);
+        return (
+          <Column
+            key={pair.value}
+            gap="4"
+            padding="12"
+            fillWidth
+            radius="l"
+            border={pressed ? "brand-medium" : "neutral-alpha-medium"}
+            background={pressed ? "brand-alpha-weak" : "surface"}
+            cursor="interactive"
+            tabIndex={(checked ? pressed : index === 0) ? 0 : -1}
+            role="radio"
+            aria-checked={pressed}
+            className={classNames("focus-ring", styles.tile)}
+            onClick={select}
+            onKeyDown={(event) => activateOnKey(event, select)}
+          >
+            <Text
+              aria-hidden
+              onBackground="neutral-strong"
+              className={styles.pairSample}
+              style={{ fontFamily: pair.heading }}
+            >
+              {labels.fonts.sample}
+            </Text>
+            <Text
+              textVariant="label-strong-xs"
+              onBackground={pressed ? "brand-strong" : "neutral-strong"}
+              truncate
+            >
+              {pair.label}
+            </Text>
+            {pair.description && (
+              <Text textVariant="body-default-xs" onBackground="neutral-weak" truncate>
+                {pair.description}
+              </Text>
+            )}
+          </Column>
+        );
+      })}
+    </Grid>
+  );
+}
+
+/* ---- site ---------------------------------------------------------------- */
+
+export interface StylePanelSectionProps extends Omit<React.ComponentProps<typeof Column>, "title"> {
+  title?: ReactNode | false;
+  /** Beside the title on the right: a Reset, say. */
+  action?: ReactNode;
+}
+
+/**
+ * A plain section: a title, an optional action, and rows that sit flush
+ * under it, each label above its control, as fields in a form. No border:
+ * `StylePanelSite` separates its sections with lines.
+ */
+function Section({ title, action, children, ...rest }: StylePanelSectionProps) {
+  return (
+    <Column fillWidth gap="16" {...rest}>
+      {(title || action) && (
+        <Flex fillWidth horizontal="between" vertical="center" gap="8" minHeight="32">
+          {title ? (
+            <Text textVariant="label-strong-m" onBackground="neutral-strong">
+              {title}
+            </Text>
+          ) : (
+            <Flex />
+          )}
+          {action}
+        </Flex>
+      )}
+      <StylePanelFlushContext.Provider value={true}>
+        <Column fillWidth gap="20">
+          {children}
+        </Column>
+      </StylePanelFlushContext.Provider>
+    </Column>
+  );
+}
+
+export interface StylePanelSiteProps extends StylePanelRootProps {
+  /**
+   * The first section's content: the host's own starting points (templates,
+   * looks), which the panel knows nothing about. Left out, there is no Look
+   * section.
+   */
+  look?: ReactNode;
+  /** Beside the Look title: "Edited" and a Reset, say. */
+  lookAction?: ReactNode;
+  /**
+   * End the colour rows' swatches with one for the host's own colour, as on
+   * `StylePanel`. Controlled mode only.
+   */
+  customColors?: StylePanelCustomColors;
+  /** The Fonts section: its pairings and their state. Left out, there is none. */
+  fonts?: Omit<StyleFontsRowProps, keyof StyleRowProps>;
+  /** More rows at the end of Fine-tune: a page width, say. */
+  fineTune?: ReactNode;
+  /** Fine-tune starts open. */
+  defaultFineTuneOpen?: boolean;
+}
+
+/**
+ * The style panel for a site builder: every option on screen, each drawn as
+ * the thing it changes. Look (the host's own), Colour (main colour as
+ * swatches that wrap, light or dark), Shape and buttons (corners, finish and
+ * fill as tiles of real buttons), Fonts as pairings, then Fine-tune folded
+ * away: text size in words, surfaces, the second colour and the greys.
+ *
+ * It is a composition of the panel's own parts on `StylePanelRoot`, with
+ * `tiles` and `swatches="wrap"` on; compose them directly for another order.
+ */
+function Site({
+  look,
+  lookAction,
+  customColors,
+  fonts,
+  fineTune,
+  defaultFineTuneOpen = false,
+  tiles = true,
+  swatches = "wrap",
+  gap = "24",
+  ...rest
+}: StylePanelSiteProps) {
+  return (
+    <Root tiles={tiles} swatches={swatches} gap={gap} {...rest}>
+      <SiteSections
+        look={look}
+        lookAction={lookAction}
+        customColors={customColors}
+        fonts={fonts}
+        fineTune={fineTune}
+        defaultFineTuneOpen={defaultFineTuneOpen}
+      />
+    </Root>
+  );
+}
+
+/** Inside the Root, so the headings read its labels. */
+function SiteSections({
+  look,
+  lookAction,
+  customColors,
+  fonts,
+  fineTune,
+  defaultFineTuneOpen,
+}: Pick<
+  StylePanelSiteProps,
+  "look" | "lookAction" | "customColors" | "fonts" | "fineTune" | "defaultFineTuneOpen"
+>) {
+  const { groups } = useStylePanelLabels();
+  const offers = (row: StylePanelSchemeRow | "neutral") =>
+    Array.isArray(customColors) ? customColors.includes(row) : row !== "neutral" && !!customColors;
+  const divider = <Line background="neutral-alpha-weak" />;
+  return (
+    <>
+      {look && (
+        <>
+          <Section title={groups.look.title} action={lookAction}>
+            {look}
+          </Section>
+          {divider}
+        </>
+      )}
+      <Section title={groups.color.title}>
+        <BrandRow custom={offers("brand")} />
+        <ThemeRow />
+      </Section>
+      {divider}
+      <Section title={groups.shape.title}>
+        <ShapeRow />
+        <EffectRow />
+        <SolidRow />
+      </Section>
+      {fonts && (
+        <>
+          {divider}
+          <Section title={groups.fonts.title}>
+            <FontsRow label={false} {...fonts} />
+          </Section>
+        </>
+      )}
+      <Column fillWidth border="neutral-alpha-medium" radius="l" overflow="hidden">
+        <Accordion
+          title={groups.fineTune.title}
+          titleVariant="label-default-s"
+          size="s"
+          radius="none"
+          defaultOpen={defaultFineTuneOpen}
+        >
+          <Section paddingBottom="8">
+            <ScalingRow named />
+            <SurfaceRow />
+            <AccentRow custom={offers("accent")} />
+            <NeutralRow custom={offers("neutral")} />
+            {fineTune}
+          </Section>
+        </Accordion>
+      </Column>
+    </>
+  );
+}
+
 /*
  * Each section is its own named export: `StylePanelRoot`, `StylePanelBrand`
  * and the rest. 3.0 drops the `StylePanel.Brand` statics, which a server
@@ -1389,6 +2035,7 @@ export {
   DataStyleRow as StylePanelDataStyle,
   DensityRow as StylePanelDensity,
   EffectRow as StylePanelEffect,
+  FontsRow as StylePanelFonts,
   Group as StylePanelGroup,
   NeutralRow as StylePanelNeutral,
   Options as StylePanelOptions,
@@ -1396,7 +2043,9 @@ export {
   Root as StylePanelRoot,
   Row as StylePanelRow,
   ScalingRow as StylePanelScaling,
+  Section as StylePanelSection,
   ShapeRow as StylePanelShape,
+  Site as StylePanelSite,
   SolidRow as StylePanelSolid,
   SolidStyleGroup as StylePanelSolidStyle,
   StylePanelSizeContext,
