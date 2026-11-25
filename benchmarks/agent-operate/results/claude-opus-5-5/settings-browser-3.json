@@ -1,0 +1,93 @@
+{
+  "task": "settings",
+  "arm": "browser",
+  "model": "claude-opus-5-5",
+  "ok": true,
+  "wrong": [],
+  "toolCalls": 10,
+  "turns": 8,
+  "usage": {
+    "input": 18,
+    "output": 793,
+    "cacheRead": 37654,
+    "cacheWrite": 2623
+  },
+  "cost": 0.0365778,
+  "seconds": 11.955,
+  "stop": "end_turn",
+  "finalText": "I saved your profile with the display name \"Ada Lovelace\", the email ada@example.com and the timezone set to Central European Time, and the app confirmed it. I also turned off product updates and set the weekly digest to send at hour 7 in your timezone. The Notifications tab has no save button and showed no confirmation, so I'm assuming those two changes save automatically.",
+  "calls": [
+    {
+      "name": "browser_snapshot",
+      "input": {},
+      "bytes": 1564
+    },
+    {
+      "name": "browser_type",
+      "input": {
+        "ref": "e46",
+        "text": "Ada Lovelace"
+      },
+      "bytes": 1585
+    },
+    {
+      "name": "browser_type",
+      "input": {
+        "ref": "e51",
+        "text": "ada@example.com"
+      },
+      "bytes": 1602
+    },
+    {
+      "name": "browser_click",
+      "input": {
+        "ref": "e58"
+      },
+      "bytes": 1772
+    },
+    {
+      "name": "browser_click",
+      "input": {
+        "ref": "e77"
+      },
+      "bytes": 1620
+    },
+    {
+      "name": "browser_click",
+      "input": {
+        "ref": "e65"
+      },
+      "bytes": 1736
+    },
+    {
+      "name": "browser_click",
+      "input": {
+        "ref": "e17"
+      },
+      "bytes": 1882
+    },
+    {
+      "name": "browser_click",
+      "input": {
+        "ref": "e109"
+      },
+      "bytes": 1862
+    },
+    {
+      "name": "browser_type",
+      "input": {
+        "ref": "e134",
+        "text": "7"
+      },
+      "bytes": 1862
+    },
+    {
+      "name": "browser_press_key",
+      "input": {
+        "key": "Tab"
+      },
+      "bytes": 1892
+    }
+  ],
+  "pageErrors": []
+}

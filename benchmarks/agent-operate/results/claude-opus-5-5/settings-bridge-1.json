@@ -1,0 +1,110 @@
+{
+  "task": "settings",
+  "arm": "bridge",
+  "model": "claude-opus-5-5",
+  "ok": true,
+  "wrong": [],
+  "toolCalls": 6,
+  "turns": 5,
+  "usage": {
+    "input": 12,
+    "output": 630,
+    "cacheRead": 8148,
+    "cacheWrite": 1335
+  },
+  "cost": 0.0209526,
+  "seconds": 7.182,
+  "stop": "end_turn",
+  "finalText": "I set your display name to \"Ada Lovelace\", your email to \"ada@example.com\" and the timezone to Central European Time, then pressed Save changes. On the Notifications tab, I turned off product updates and changed the weekly digest's \"Send at\" from 9 to 7. That tab has no save button, and the field only takes a plain number, so I couldn't check whether 7 means 7 AM.",
+  "calls": [
+    {
+      "name": "snapshot",
+      "input": {},
+      "bytes": 808
+    },
+    {
+      "name": "query",
+      "input": {
+        "within": "c5",
+        "text": "Central European"
+      },
+      "bytes": 121
+    },
+    {
+      "name": "query",
+      "input": {
+        "within": "c1",
+        "text": ""
+      },
+      "bytes": 210
+    },
+    {
+      "name": "act",
+      "input": {
+        "steps": [
+          {
+            "ref": "c3",
+            "action": "setValue",
+            "args": [
+              "Ada Lovelace"
+            ]
+          },
+          {
+            "ref": "c4",
+            "action": "setValue",
+            "args": [
+              "ada@example.com"
+            ]
+          },
+          {
+            "ref": "c5",
+            "action": "setValue",
+            "args": [
+              "cet"
+            ]
+          },
+          {
+            "ref": "c6",
+            "action": "press"
+          },
+          {
+            "ref": "c1",
+            "action": "setValue",
+            "args": [
+              "notifications"
+            ]
+          }
+        ]
+      },
+      "bytes": 518
+    },
+    {
+      "name": "snapshot",
+      "input": {},
+      "bytes": 582
+    },
+    {
+      "name": "act",
+      "input": {
+        "steps": [
+          {
+            "ref": "c9",
+            "action": "setChecked",
+            "args": [
+              false
+            ]
+          },
+          {
+            "ref": "c11",
+            "action": "setValue",
+            "args": [
+              "7"
+            ]
+          }
+        ]
+      },
+      "bytes": 223
+    }
+  ],
+  "pageErrors": []
+}

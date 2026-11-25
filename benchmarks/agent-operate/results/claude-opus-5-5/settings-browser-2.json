@@ -1,0 +1,93 @@
+{
+  "task": "settings",
+  "arm": "browser",
+  "model": "claude-opus-5-5",
+  "ok": true,
+  "wrong": [],
+  "toolCalls": 10,
+  "turns": 8,
+  "usage": {
+    "input": 18,
+    "output": 827,
+    "cacheRead": 39285,
+    "cacheWrite": 918
+  },
+  "cost": 0.029059,
+  "seconds": 12.187,
+  "stop": "end_turn",
+  "finalText": "I saved your profile with the display name \"Ada Lovelace\", the email ada@example.com and the timezone set to Central European Time, and the app confirmed it. On the Notifications tab, I turned off product updates and set the weekly digest to send at 7, which the app treats as 7 AM in your timezone; that tab has no save button and showed no confirmation, so I couldn't confirm those two changes were saved.",
+  "calls": [
+    {
+      "name": "browser_snapshot",
+      "input": {},
+      "bytes": 1564
+    },
+    {
+      "name": "browser_type",
+      "input": {
+        "ref": "e46",
+        "text": "Ada Lovelace"
+      },
+      "bytes": 1585
+    },
+    {
+      "name": "browser_type",
+      "input": {
+        "ref": "e51",
+        "text": "ada@example.com"
+      },
+      "bytes": 1602
+    },
+    {
+      "name": "browser_click",
+      "input": {
+        "ref": "e58"
+      },
+      "bytes": 1772
+    },
+    {
+      "name": "browser_click",
+      "input": {
+        "ref": "e77"
+      },
+      "bytes": 1620
+    },
+    {
+      "name": "browser_click",
+      "input": {
+        "ref": "e65"
+      },
+      "bytes": 1736
+    },
+    {
+      "name": "browser_click",
+      "input": {
+        "ref": "e17"
+      },
+      "bytes": 1882
+    },
+    {
+      "name": "browser_click",
+      "input": {
+        "ref": "e109"
+      },
+      "bytes": 1862
+    },
+    {
+      "name": "browser_type",
+      "input": {
+        "ref": "e134",
+        "text": "7"
+      },
+      "bytes": 1862
+    },
+    {
+      "name": "browser_press_key",
+      "input": {
+        "key": "Tab"
+      },
+      "bytes": 1892
+    }
+  ],
+  "pageErrors": []
+}
