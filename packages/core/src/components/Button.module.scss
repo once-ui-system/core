@@ -77,7 +77,7 @@ $solid-tokens: brand, danger, neutral;
   background: var(--button-solid);
   border-style: solid;
   border-width: var(--solid-border-width);
-  border-color: glow.ink(var(--button-solid-border));
+  @include glow.ink-border(var(--button-solid-border));
   color: var(--button-on-solid);
 
   &:active:not([data-disabled]) {

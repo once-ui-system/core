@@ -32,6 +32,11 @@
     @return color-mix(in srgb, var(--neutral-on-background-strong) var(--solid-ink-mix), #{$fallback});
 }
 
+// Cartoon's ink outline over the control's own border colour.
+@mixin ink-border($fallback) {
+    border-color: ink($fallback);
+}
+
 // Pushes a solid onto its offset shadow while pressed (cartoon only; the
 // press is zero under the other styles). Put it inside the control's
 // :active rule.
