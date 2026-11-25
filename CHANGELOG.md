@@ -13,6 +13,14 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Fixed
+
+- **`RichTextEditor` fills its parent with `fill` or `fillHeight`.** The writing area takes
+  the height the toolbar (and the link row, while it is open) leave, and scrolls, so a
+  layout no longer has to measure the room and hand a height back. Doing that grew the
+  editor without end once the link row opened. `minHeight` and `maxHeight` still set the
+  writing area's height when the editor does not fill.
+
 ## [3.1.1] - 2026-11-24
 
 Patch. Fixes only; nothing to change in your code. `foundations`, `fx` and `blocks` stay
