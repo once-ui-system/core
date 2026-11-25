@@ -1709,6 +1709,18 @@ function shippedComponentIssues(source) {
         "Imports maplibre-gl.css, which is unlayered and overrides Map's own styles (controls, popups, the canvas): remove it, <Map> brings what it needs",
     });
   }
+  // A fixed row count switches growing off and adds a drag handle; agents set
+  // one only to make an empty field taller. `resize=` says the fixed size and
+  // its handle are meant.
+  for (const tag of source.match(/<Textarea\b[^>]*?\blines=\{\s*\d+\s*\}[^>]*>/g) || []) {
+    if (/\bresize=/.test(tag)) continue;
+    found.push({
+      rule: "components.textarea",
+      message:
+        "A fixed `lines={n}` on Textarea turns growing off and adds a drag handle: use lines={{ min: n }} to start taller and still grow with the text (add `max` to cap it); keep a number only for a fixed box, and say so with resize=\"vertical\"",
+    });
+    break;
+  }
   if (/<input[^>]*type=["']file["']/.test(source) && !uses("MediaUpload")) {
     found.push({
       rule: "components.upload",

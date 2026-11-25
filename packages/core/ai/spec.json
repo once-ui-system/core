@@ -5795,7 +5795,7 @@
     "id": "!string",
     "label": "string",
     "placeholder": "string",
-    "lines": "number | \"auto\" = auto",
+    "lines": "number | \"auto\" | { min?: number; max?: number } = auto",
     "size": "FieldSize",
     "error": "boolean = false",
     "errorMessage": "ReactNode",
