@@ -8,6 +8,10 @@
   position: relative;
   user-select: none;
   padding: 0;
+  // A native <button> takes the browser's 13.33px form font, not the page's;
+  // the label inside sets its own size, but em-based children read this one.
+  font: inherit;
+  letter-spacing: inherit;
   white-space: nowrap;
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
