@@ -70,9 +70,11 @@ describe("Button: element and name", () => {
     expect(screen.getByText("Bad")).toBeInTheDocument();
   });
 
-  it("renders neither a button nor a link with no handler, href or type", () => {
-    render(<Button>Decoration</Button>, { wrapper });
-    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+  it("is still a real button with no handler, href or type", () => {
+    render(<Button>Delete workspace</Button>, { wrapper });
+    const button = screen.getByRole("button", { name: "Delete workspace" });
+    expect(button.tagName).toBe("BUTTON");
+    expect(button).toHaveAttribute("type", "button");
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 

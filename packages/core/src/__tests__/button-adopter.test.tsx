@@ -59,6 +59,7 @@ describe("Button types", () => {
         { wrapper: wrap },
       );
       expect(warn.mock.calls.flat().join(" ")).toMatch(/inside a <form>.*type="submit"/);
+      expect(screen.getByRole("button", { name: "Save" })).toHaveAttribute("type", "button");
     } finally {
       vi.unstubAllEnvs();
       warn.mockRestore();
