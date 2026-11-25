@@ -86,6 +86,11 @@ const RichTextEditorImpl = ({
   const labelId = `${id}-label`;
   const invalid = ariaInvalid === true || ariaInvalid === "true";
   const editable = !disabled && !readOnly;
+  // `fill` or `fillHeight` gives the editor its parent's height: the writing
+  // area takes what the toolbar (and the link row, while it is open) leave
+  // and scrolls, so nobody has to measure the room and hand a height back,
+  // which grew without end once the link row opened.
+  const fills = Boolean(flex.fill || flex.fillHeight);
 
   // A Field's <label htmlFor> cannot name a contenteditable element, so the
   // editor points at it with aria-labelledby instead.
@@ -254,6 +259,8 @@ const RichTextEditorImpl = ({
       )}
       <Column
         fillWidth
+        flex={fills ? 1 : undefined}
+        minHeight={fills ? 0 : undefined}
         className={classNames(styles.frame, {
           [styles.invalid]: invalid,
           [styles.disabled]: disabled,
@@ -324,9 +331,15 @@ const RichTextEditorImpl = ({
             </Button>
           </Row>
         )}
-        <div className={maxHeight ? styles.scroll : undefined} style={{ minHeight, maxHeight }}>
-          <EditorContent editor={editor} style={{ minHeight }} />
-        </div>
+        {fills ? (
+          <div className={classNames(styles.scroll, styles.grow)}>
+            <EditorContent editor={editor} className={styles.fillContent} />
+          </div>
+        ) : (
+          <div className={maxHeight ? styles.scroll : undefined} style={{ minHeight, maxHeight }}>
+            <EditorContent editor={editor} style={{ minHeight }} />
+          </div>
+        )}
       </Column>
     </Column>
   );

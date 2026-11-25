@@ -110,4 +110,43 @@ describe("RichTextEditor", () => {
     await editorFor("Notes");
     await expectNoAxeViolations(container);
   });
+
+  it("takes its parent's height with fillHeight, so opening the link row never grows it", async () => {
+    const user = userEvent.setup();
+    const { container } = render(
+      <RichTextEditor
+        aria-label="Journal"
+        fillHeight
+        minHeight="17rem"
+        maxHeight="17rem"
+        tools={["bold", "link"]}
+        defaultValue="<p>Tea is free.</p>"
+      />,
+      { wrapper },
+    );
+    const editor = await editorFor("Journal");
+    const area = editor.parentElement?.parentElement as HTMLElement;
+    // No fixed height for a caller to measure and feed back: the frame flexes
+    // and the writing area takes what the toolbar leaves.
+    expect(area.style.minHeight).toBe("");
+    expect(area.style.maxHeight).toBe("");
+    expect(editor.style.minHeight).toBe("");
+
+    // jsdom has no layout; ProseMirror scrolls the selection into view on focus.
+    const rects = () => ({ length: 0, item: () => null, [Symbol.iterator]: [][Symbol.iterator] });
+    const restore = [Range.prototype, Element.prototype].map((proto) => {
+      const own = Object.getOwnPropertyDescriptor(proto, "getClientRects");
+      Object.defineProperty(proto, "getClientRects", { configurable: true, value: rects });
+      Range.prototype.getBoundingClientRect ??= () => new DOMRect();
+      return () =>
+        own
+          ? Object.defineProperty(proto, "getClientRects", own)
+          : delete (proto as { getClientRects?: unknown }).getClientRects;
+    });
+    await user.click(screen.getByRole("button", { name: "Link" }));
+    expect(screen.getByRole("textbox", { name: "Link address" })).toBeInTheDocument();
+    expect(area.style.minHeight).toBe("");
+    expect(container.querySelectorAll("[style*='17rem']")).toHaveLength(0);
+    for (const undo of restore) undo();
+  });
 });
