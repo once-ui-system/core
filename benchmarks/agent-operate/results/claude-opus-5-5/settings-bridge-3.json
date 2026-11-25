@@ -1,0 +1,123 @@
+{
+  "task": "settings",
+  "arm": "bridge",
+  "model": "claude-opus-5-5",
+  "ok": true,
+  "wrong": [],
+  "toolCalls": 8,
+  "turns": 6,
+  "usage": {
+    "input": 14,
+    "output": 693,
+    "cacheRead": 11178,
+    "cacheWrite": 1836
+  },
+  "cost": 0.0253316,
+  "seconds": 8.335,
+  "stop": "end_turn",
+  "finalText": "I set your display name to \"Ada Lovelace\", your email to ada@example.com and the timezone to Central European Time, then saved the profile. I also turned off product updates and changed the weekly digest's \"Send at\" time from 9 to 7. It's still on, and the field only takes an hour, so there was no AM or PM to choose.",
+  "calls": [
+    {
+      "name": "snapshot",
+      "input": {},
+      "bytes": 808
+    },
+    {
+      "name": "query",
+      "input": {
+        "text": "Central",
+        "within": "c5"
+      },
+      "bytes": 121
+    },
+    {
+      "name": "query",
+      "input": {
+        "text": "",
+        "within": "c1"
+      },
+      "bytes": 210
+    },
+    {
+      "name": "act",
+      "input": {
+        "steps": [
+          {
+            "ref": "c3",
+            "action": "setValue",
+            "args": [
+              "Ada Lovelace"
+            ]
+          },
+          {
+            "ref": "c4",
+            "action": "setValue",
+            "args": [
+              "ada@example.com"
+            ]
+          },
+          {
+            "ref": "c5",
+            "action": "setValue",
+            "args": [
+              "cet"
+            ]
+          },
+          {
+            "ref": "c6",
+            "action": "press"
+          }
+        ]
+      },
+      "bytes": 397
+    },
+    {
+      "name": "snapshot",
+      "input": {},
+      "bytes": 835
+    },
+    {
+      "name": "act",
+      "input": {
+        "steps": [
+          {
+            "ref": "c1",
+            "action": "setValue",
+            "args": [
+              "notifications"
+            ]
+          }
+        ]
+      },
+      "bytes": 142
+    },
+    {
+      "name": "snapshot",
+      "input": {},
+      "bytes": 582
+    },
+    {
+      "name": "act",
+      "input": {
+        "steps": [
+          {
+            "ref": "c9",
+            "action": "setChecked",
+            "args": [
+              false
+            ]
+          },
+          {
+            "ref": "c11",
+            "action": "setValue",
+            "args": [
+              "7"
+            ]
+          }
+        ]
+      },
+      "bytes": 223
+    }
+  ],
+  "pageErrors": []
+}
