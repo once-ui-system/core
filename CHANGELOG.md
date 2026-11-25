@@ -21,6 +21,13 @@ item (see `ROADMAP.md`, Week 4).
   taller and keeps it growing; `{ min, max }` stops at `max` rows and scrolls. A number
   still fixes the height. The validator now flags a fixed `lines={n}` without `resize`.
 
+### Fixed
+
+- **A `Select` no longer blinks a text cursor when clicked.** Its field is read-only, but
+  browsers still show a caret in a focused read-only input, so the field looked like it
+  wanted typing. Every read-only combobox field now hides the caret; focus still shows on
+  its border.
+
 ### Changed
 
 - **A `Button` or `IconButton` with no `onClick`, `href` or `type` is a real
