@@ -45,6 +45,7 @@ import {
   ColorButton,
   ColorInput,
   Column,
+  Combobox,
   ConfirmButton,
   ConversationItem,
   DateInput,
@@ -108,17 +109,18 @@ import {
   SegmentedControl,
   Select,
   Setting,
-  Skeleton,
-  Slider,
-  SmartLink,
-  Spinner,
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarProvider,
   SidebarTrigger,
+  Skeleton,
+  Slider,
+  SmartLink,
+  Spinner,
   SplitView,
+  StatTile,
   StatusIndicator,
   Submenu,
   SubmitButton,
@@ -143,19 +145,8 @@ import {
   VisuallyHidden,
   VoiceVisualizer,
   WorkingIndicator,
-  Combobox,
-  StatTile,
 } from "@once-ui-system/core";
 import { CodeBlock } from "@once-ui-system/core/code";
-import { IconGallery } from "@/product/IconGallery";
-import {
-  ComboboxControlledExample,
-  ComboboxFilterExample,
-  ComboboxServerExample,
-  RichTextEditorControlledExample,
-  RichTextEditorFieldExample,
-} from "@/product/NewPagesExamples";
-import { RichTextEditor } from "@once-ui-system/core/richtext";
 import {
   BarChart,
   ChartHeader,
@@ -172,6 +163,7 @@ import {
 import { EmojiPicker } from "@once-ui-system/core/emoji";
 import { createMdxComponents } from "@once-ui-system/core/mdx";
 import { CompareImage, MediaUpload, Scrubber } from "@once-ui-system/core/media";
+import { RichTextEditor } from "@once-ui-system/core/richtext";
 import {
   BlobFx,
   CelebrationFx,
@@ -193,7 +185,6 @@ import {
 import type { MDXRemoteProps } from "next-mdx-remote/rsc";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
-
 // ─── Product components (explicit imports, skip `Modal` which conflicts with core) ───
 import {
   AdditionalTokens,
@@ -206,6 +197,8 @@ import {
   BasicEmojiPickerDropdown,
   BasicRawDropdown,
   BasicSwitch,
+  CalendarExample,
+  CanvasExample,
   CelebrationFxExample,
   CharacterCountExample,
   ChatComposerExample,
@@ -257,28 +250,29 @@ import {
   DrawerNavigationExample,
   DrawerSidesExample,
   DropdownWithIcons,
+  FamilyFooterExample,
   IconButtonEmojiPickerDropdown,
   IconsRawDropdown,
   IndeterminateCheckboxExample,
   InfiniteScrollExample,
-  CanvasExample,
   InteractiveChipExample,
   LineChartStreamingExample,
   LocalizedDatePickerExample,
-  CalendarExample,
   MapAreaExample,
-  MapRouteExample,
   MapAvatarExample,
   MapBasicExample,
   MapControlledExample,
   MapGlobeExample,
   MapListingsExample,
+  MapRouteExample,
   MapStatusExample,
   MascotCubeExample,
   MascotD20Example,
   MascotSeedExample,
   MascotStatesExample,
   MatrixFxExample,
+  MegaMenuCustomExample,
+  MegaMenuSiteExample,
   ModalExample,
   ModalWithBackdrop,
   NavIconStates,
@@ -306,9 +300,9 @@ import {
   SceneBasicExample,
   SceneRobotExample,
   ScrollCountExample,
+  ScrubberEditorExample,
   ScrubberSeekExample,
   ScrubberTracksExample,
-  ScrubberEditorExample,
   SearchableDropdown,
   SearchInput,
   SemanticColorSections,
@@ -316,14 +310,11 @@ import {
   SettingBasicExample,
   SettingGroupExample,
   SettingsBlocksExample,
-  FamilyFooterExample,
-  SliderBasicExample,
-  SliderDisabledExample,
-  MegaMenuCustomExample,
-  MegaMenuSiteExample,
   SidebarExample,
   SidebarOffcanvasExample,
   SidebarPeekExample,
+  SliderBasicExample,
+  SliderDisabledExample,
   SliderLabelExample,
   SliderMinMaxExample,
   SliderShowValueExample,
@@ -350,6 +341,15 @@ import {
   VoiceStatesExample,
   WeatherFxExample,
 } from "@/product";
+import { AgentSettingsExample } from "@/product/AgentExample";
+import { IconGallery } from "@/product/IconGallery";
+import {
+  ComboboxControlledExample,
+  ComboboxFilterExample,
+  ComboboxServerExample,
+  RichTextEditorControlledExample,
+  RichTextEditorFieldExample,
+} from "@/product/NewPagesExamples";
 
 // Markdown renders through the core map from `@once-ui-system/core/mdx`:
 // headings with ids and copy-link anchors (HeadingNav reads them), links
@@ -574,6 +574,7 @@ const mdxComponents = createMdxComponents({
   MapBasicExample,
   MapControlledExample,
   MapListingsExample,
+  AgentSettingsExample,
   MapStatusExample,
   SceneBasicExample,
   SceneRobotExample,
