@@ -39,7 +39,8 @@ const cases: [type: string, attribute: string, unstyledDefaults: string[]][] = [
   ["NeutralColor", "neutral", []],
   ["BorderStyle", "border", []],
   ["SolidType", "solid", []],
-  ["SolidStyle", "solid-style", ["flat"]],
+  // Flat has its own selector since 3.2: a flat scope inside a glowing page resets it.
+  ["SolidStyle", "solid-style", []],
   ["SurfaceStyle", "surface", []],
   ["TransitionStyle", "transition", ["none"]],
   ["ScalingSize", "scaling", ["100"]],
