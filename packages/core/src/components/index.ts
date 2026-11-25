@@ -43,6 +43,7 @@ export * from "./IconButton.js";
 export * from "./InfiniteScroll.js";
 export * from "./InlineCode.js";
 export * from "./Input.js";
+export * from "./InsideControl.js";
 export * from "./Kbd.js";
 export * from "./Line.js";
 export * from "./List.js";

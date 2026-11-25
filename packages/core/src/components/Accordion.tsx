@@ -1,13 +1,15 @@
 "use client";
 
 import classNames from "clsx";
-import React, { useCallback, useEffect, useId, useImperativeHandle, useRef } from "react";
+import type React from "react";
+import { useCallback, useEffect, useId, useImperativeHandle, useRef } from "react";
 import type { IconName } from "../icons.js";
+import { InsideControlContext } from "../internal/InsideControlContext.js";
 import { useControllableState } from "../internal/useControllableState.js";
 import type { RadiusSize, TextVariant, TShirtSizes } from "../types.js";
 import styles from "./Accordion.module.scss";
 import { Column } from "./Column.js";
-import { Flex } from "./Flex.js";
+import type { Flex } from "./Flex.js";
 import { Grid } from "./Grid.js";
 import { Icon } from "./Icon.js";
 import { Row } from "./Row.js";
@@ -162,7 +164,8 @@ const Accordion = ({
         {...headerRest}
       >
         <Row fillWidth textVariant={titleVariant}>
-          {title}
+          {/* The header is the control: a Button in the title only decorates it. */}
+          <InsideControlContext.Provider value>{title}</InsideControlContext.Provider>
         </Row>
         <Icon
           name={icon}

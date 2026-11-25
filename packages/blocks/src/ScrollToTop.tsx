@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex } from "@once-ui-system/core";
+import { Flex, InsideControl } from "@once-ui-system/core";
 import classNames from "clsx";
 import { useEffect, useState } from "react";
 import styles from "./ScrollToTop.module.scss";
@@ -55,7 +55,8 @@ export const ScrollToTop = ({ children, offset = 300, className, ...rest }: Scro
       cursor="pointer"
       {...rest}
     >
-      {children}
+      {/* This Flex is the button; a Button inside only draws it. */}
+      <InsideControl>{children}</InsideControl>
     </Flex>
   );
 };

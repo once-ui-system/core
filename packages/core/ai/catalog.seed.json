@@ -424,6 +424,11 @@
     "tags": ["form"],
     "pairsWith": ["Select", "Switch", "Form"]
   },
+  "InsideControl": {
+    "purpose": "Wraps a Button inside your own role=\"button\" control so it renders as decoration, not a nested button",
+    "tags": ["action", "a11y"],
+    "pairsWith": ["Button", "IconButton"]
+  },
   "Kbar": {
     "purpose": "Command palette opened with ⌘K: searchable sections of links and actions",
     "tags": ["navigation", "overlay"],
