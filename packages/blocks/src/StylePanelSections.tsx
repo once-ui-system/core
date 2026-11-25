@@ -351,7 +351,7 @@ const DEFAULT_LABELS: ResolvedLabels = {
   },
   options: {
     solid: { color: "Color", inverse: "Inverse", contrast: "Contrast" },
-    effect: { flat: "Flat", plastic: "Plastic", glow: "Glow" },
+    effect: { flat: "Flat", plastic: "Plastic", glow: "Glow", cartoon: "Cartoon" },
     surface: { filled: "Filled", translucent: "Translucent" },
     transition: { all: "All", micro: "Micro", macro: "Macro", none: "None" },
     dataStyle: { categorical: "Categorical", divergent: "Divergent", sequential: "Sequential" },
@@ -384,7 +384,7 @@ const DEFAULT_LABELS: ResolvedLabels = {
     accent: "A second colour for small touches such as badges.",
     neutral: "The tint in the greys of text, borders and backgrounds.",
     solid: "What fills a solid button: the colour, its inverse or high contrast.",
-    effect: "The finish of solid buttons: flat, plastic or glow.",
+    effect: "The finish of solid buttons: flat, plastic, glow or cartoon.",
     surface: "Filled surfaces, or translucent ones that blur what is behind.",
     density: "How much room controls and lists take.",
     scaling: "Makes all text and spacing a little smaller or larger.",
@@ -1168,6 +1168,7 @@ const EffectRow = segmentedRow(
     { label: solidSwatch("", "brand-weak", effect.flat), value: "flat" },
     { label: solidSwatch("", "brand-weak", effect.plastic), value: "plastic" },
     { label: solidSwatch("", "brand-weak", effect.glow), value: "glow" },
+    { label: solidSwatch("", "brand-weak", effect.cartoon), value: "cartoon" },
   ],
   "flat",
 );

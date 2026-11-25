@@ -507,7 +507,7 @@ type SchemeScale = Partial< Record<SchemeRampWeight | "600-15" | "600-30" | "600
 type SchemeScaleByTheme = { light?: SchemeScale; dark?: SchemeScale }
 // type Schemes is one of these strings: blue indigo violet magenta pink red orange yellow moss green emerald aqua cyan
 type ShadowSize = "s" | "xl" | "l" | "m" | "xs"
-type SolidStyle = "flat" | "plastic" | "glow"
+type SolidStyle = "flat" | "plastic" | "glow" | "cartoon"
 type SolidType = "color" | "contrast" | "inverse"
 // type SpacingToken is one of these strings: s xl l m xs 0 1 2 4 8 12 16 20 24 32 40 48 56 64 72 80 104 128 160
 type Speed = "number" | "medium" | "slow" | "fast"

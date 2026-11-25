@@ -655,11 +655,14 @@
 --solid-glow-near
 --solid-glow-near-mix
 --solid-glow-rim
+--solid-ink-mix
 --solid-inset-color-brand
 --solid-inset-color-danger
 --solid-inset-color-neutral
 --solid-inset-distance
 --solid-inset-size
+--solid-offset
+--solid-press
 --static-black
 --static-black-medium
 --static-height-160

@@ -34,6 +34,9 @@
     --solid-glow-near-mix:   0%;
     --solid-glow-far-mix:    0%;
     --solid-glow-rim:        var(--static-transparent);
+    --solid-offset:          0rem;
+    --solid-press:           0rem;
+    --solid-ink-mix:         0%;
     --backdrop-filter:       none;
     --surface-border:        var(--static-transparent);
     --surface-background:    var(--neutral-background-medium);
@@ -719,6 +722,17 @@
     --solid-glow-far:        1.25rem;
     --solid-glow-near-mix:   45%;
     --solid-glow-far-mix:    14%;
+}
+
+/* Cartoon: a hard ink outline and a solid offset shadow, like a sticker or
+   a comic panel. The ink is the page's strongest text colour, mixed in by
+   each control so it follows nested themes. Pressing a button pushes it
+   onto its shadow. */
+[data-solid-style="cartoon"] {
+    --solid-border-width:    2px;
+    --solid-offset:          0.25rem;
+    --solid-press:           0.1875rem;
+    --solid-ink-mix:         100%;
 }
 
 [data-transition="all"],[data-transition="micro"] {

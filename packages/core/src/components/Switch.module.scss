@@ -49,7 +49,7 @@
     &.checked {
         @include glow.solid-shadow(var(--brand-solid-medium), var(--solid-inset-color-brand), 0.8);
         background-color: var(--brand-solid-medium);
-        border-color: var(--solid-border-color-brand);
+        border-color: glow.ink(var(--solid-border-color-brand));
 
         .element {
             left: calc(100% - var(--static-space-20));

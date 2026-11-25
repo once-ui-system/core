@@ -33,7 +33,7 @@
     &.checked {
         @include glow.solid-shadow(var(--brand-solid-medium), var(--solid-inset-color-brand), 0.6);
         background-color: var(--brand-solid-medium);
-        border-color: var(--solid-border-color-brand);
+        border-color: glow.ink(var(--solid-border-color-brand));
     }
 }
 
