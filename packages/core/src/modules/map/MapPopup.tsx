@@ -43,7 +43,7 @@ const MapPopup = ({
     const frame = requestAnimationFrame(() => {
       if (!card.current) return;
       const box = card.current.getBoundingClientRect();
-      const view = map.getContainer().getBoundingClientRect();
+      const view = map.getContainer?.().getBoundingClientRect();
       const margin = 16;
       const dx =
         box.left < view.left + margin

@@ -188,12 +188,12 @@ const sourceLayer = (layer: { "source-layer"?: unknown }) =>
  * with a halo in the page colour.
  */
 function tintStyle(map: MapLibreMap, dark: boolean) {
-  const background = tokenColor("--page-background", undefined, map.getContainer());
+  const background = tokenColor("--page-background", undefined, map.getContainer?.());
   const colors = dark
     ? {
-        water: tokenColor("--neutral-background-medium", undefined, map.getContainer()),
-        road: tokenColor("--neutral-border-medium", undefined, map.getContainer()),
-        label: tokenColor("--neutral-on-background-weak", undefined, map.getContainer()),
+        water: tokenColor("--neutral-background-medium", undefined, map.getContainer?.()),
+        road: tokenColor("--neutral-border-medium", undefined, map.getContainer?.()),
+        label: tokenColor("--neutral-on-background-weak", undefined, map.getContainer?.()),
       }
     : null;
   for (const layer of map.getStyle()?.layers ?? []) {

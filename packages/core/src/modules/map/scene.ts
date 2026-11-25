@@ -53,11 +53,11 @@ export function applyScene(
     ["linear"],
     height,
     0,
-    tokenColor("--neutral-background-strong", undefined, map.getContainer()),
+    tokenColor("--neutral-background-strong", undefined, map.getContainer?.()),
     25,
-    tokenColor("--brand-background-strong", undefined, map.getContainer()),
+    tokenColor("--brand-background-strong", undefined, map.getContainer?.()),
     70,
-    tokenColor("--brand-on-background-weak", undefined, map.getContainer()),
+    tokenColor("--brand-on-background-weak", undefined, map.getContainer?.()),
   ];
   if (!map.getLayer(BUILDINGS_3D)) {
     // Above roads and water, which would otherwise draw over the walls, and

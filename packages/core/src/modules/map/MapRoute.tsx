@@ -105,9 +105,9 @@ const MapRoute = ({ path, tone = "brand", width = 4, progress, dashed = false }:
   useEffect(() => {
     if (styleVersion === 0) return;
     const colors = {
-      casing: tokenColor("--page-background", undefined, map.getContainer()),
-      ahead: tokenColor("--neutral-on-background-weak", undefined, map.getContainer()),
-      behind: tokenColor(`--${tone}-solid-strong`, undefined, map.getContainer()),
+      casing: tokenColor("--page-background", undefined, map.getContainer?.()),
+      ahead: tokenColor("--neutral-on-background-weak", undefined, map.getContainer?.()),
+      behind: tokenColor(`--${tone}-solid-strong`, undefined, map.getContainer?.()),
     };
     for (const part of layers) {
       const layerId = `${id}-${part}`;
