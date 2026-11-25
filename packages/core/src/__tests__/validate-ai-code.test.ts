@@ -1215,6 +1215,18 @@ describe("ship, not screenshot", () => {
     );
   });
 
+  it("points a fixed Textarea `lines` at { min }, unless resize says it is meant", () => {
+    expect(rules(`const f = <Textarea id="bio" label="Bio" lines={3} />;`)).toContain(
+      "components.textarea",
+    );
+    expect(rules(`const f = <Textarea id="bio" label="Bio" lines={{ min: 3 }} />;`)).not.toContain(
+      "components.textarea",
+    );
+    expect(
+      rules(`const f = <Textarea id="log" label="Log" lines={8} resize="vertical" />;`),
+    ).not.toContain("components.textarea");
+  });
+
   it("asks loaded data for loading and error states", () => {
     const src = `export function Plants() {
       const [plants, setPlants] = useState([]);

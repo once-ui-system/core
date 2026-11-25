@@ -93,7 +93,7 @@ A `Field` takes `span` like any other field, and lays out in a `Form` grid. With
         <Input id="field-last" />
       </Field>
       <Field label="Bio" hint="Shown on your profile." span={2}>
-        <Textarea id="field-bio" lines={3} />
+        <Textarea id="field-bio" lines={{ min: 3 }} />
       </Field>
     </Form>
   }
@@ -104,7 +104,7 @@ A `Field` takes `span` like any other field, and lays out in a `Form` grid. With
     <Field label="First name"><Input id="first" /></Field>
     <Field label="Last name"><Input id="last" /></Field>
     <Field label="Bio" hint="Shown on your profile." span={2}>
-        <Textarea id="bio" lines={3} />
+        <Textarea id="bio" lines={{ min: 3 }} />
     </Field>
 </Form>`,
       language: "tsx",
