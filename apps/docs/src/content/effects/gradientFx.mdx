@@ -1,0 +1,207 @@
+---
+title: "GradientFx"
+summary: "Soft colour bands that drift through each other under film grain: the blurred-mesh hero look, from your theme or any palette."
+updatedAt: "2026-11-25"
+docs: "once-ui/effects/gradientFx.mdx"
+github: "fx/src/GradientFx.tsx"
+navLabel: "GradientFx"
+navIcon: "sparkle"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+`GradientFx` draws a field of soft colour bands that bend and flow through each other under a fine film grain, the look of a blurred mesh gradient behind a hero. It is one small shader, capped at 30 frames a second, that sleeps while it is off screen or in a hidden tab. Children sit on top of it, so the field is the section itself rather than a layer you position. It ships in `@once-ui-system/fx` from 3.1.
+
+```tsx
+import { GradientFx } from "@once-ui-system/fx";
+```
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <GradientFx height="24rem" />
+  }
+  codes={[
+    {
+      code:
+`<GradientFx height="24rem" />`,
+      language: "tsx",
+      label: "GradientFx"
+    }
+  ]}
+/>
+
+With no `colors`, the field runs from the page background through your brand to your accent, so it follows the theme, the scheme and any `StyleScope` around it, and redraws when the theme changes.
+
+## Colours
+
+`colors` is a ramp from shadow to highlight, two to six stops. The first stop is the ground the bands rest on. Each stop can be a token (`brand-solid-strong`, `accent-weak`, `page-background`), a custom property (`--my-color`) or any CSS colour.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Grid fillWidth columns="2" gap="16" padding="16" m={{columns: "1"}}>
+      <GradientFx radius="l" height="16rem" colors={["#0c0f14", "#123540", "#2a8f9a", "#5fd6c4", "#eef6e8"]} seed={2} />
+      <GradientFx radius="l" height="16rem" colors={["#120a0a", "#4a1410", "#c2401f", "#f39a4a", "#fde7c8"]} seed={4} />
+      <GradientFx radius="l" height="16rem" colors={["page-background", "accent-solid-strong", "brand-solid-medium"]} seed={6} />
+      <GradientFx radius="l" height="16rem" colors={["#0b0a1a", "#2b1d5c", "#7a3fd1", "#e46fb4", "#ffe3f0"]} seed={9} />
+    </Grid>
+  }
+  codes={[
+    {
+      code:
+`// Any CSS colours, shadow to highlight
+<GradientFx colors={["#0c0f14", "#123540", "#2a8f9a", "#5fd6c4", "#eef6e8"]} />
+
+// Or tokens, so it follows the theme
+<GradientFx colors={["page-background", "accent-solid-strong", "brand-solid-medium"]} />`,
+      language: "tsx",
+      label: "Colours"
+    }
+  ]}
+/>
+
+## Blur and grain
+
+`blur` sets how soft the bands are, from crisp ribbons at `0` to a haze at `1` (default `0.6`). `grain` sets the film grain, from clean at `0` to heavy at `1` (default `0.35`).
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Grid fillWidth columns="3" gap="16" padding="16" m={{columns: "1"}}>
+      <GradientFx radius="l" height="14rem" blur={0.1} grain={0} seed={3} />
+      <GradientFx radius="l" height="14rem" seed={3} />
+      <GradientFx radius="l" height="14rem" blur={1} grain={0.9} seed={3} />
+    </Grid>
+  }
+  codes={[
+    {
+      code:
+`<GradientFx blur={0.1} grain={0} />   // crisp, clean
+<GradientFx />                         // blur 0.6, grain 0.35
+<GradientFx blur={1} grain={0.9} />   // haze, heavy grain`,
+      language: "tsx",
+      label: "Blur and grain"
+    }
+  ]}
+/>
+
+## Direction, speed and seed
+
+`angle` turns the bands, in degrees: `0` runs them left to right and a positive angle turns them clockwise (default `-30`). `speed` scales the drift, as a number or `"slow"`, `"medium"` and `"fast"` (0.5, 1 and 2). `seed` picks the field: the same seed draws the same field on every visit and on the server, so a page doesn't change between renders.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Grid fillWidth columns="3" gap="16" padding="16" m={{columns: "1"}}>
+      <GradientFx radius="l" height="14rem" angle={0} seed={1} />
+      <GradientFx radius="l" height="14rem" angle={45} seed={12} speed="slow" />
+      <GradientFx radius="l" height="14rem" angle={-90} seed={27} speed="fast" />
+    </Grid>
+  }
+  codes={[
+    {
+      code:
+`<GradientFx angle={0} seed={1} />
+<GradientFx angle={45} seed={12} speed="slow" />
+<GradientFx angle={-90} seed={27} speed="fast" />`,
+      language: "tsx",
+      label: "Direction, speed and seed"
+    }
+  ]}
+/>
+
+## As a hero
+
+`GradientFx` is a `Flex`, so it takes layout props and lays out its children like a `Column` or `Row`. A dark palette reads the same in both themes; wrap it in a `StyleScope` with `config={{ theme: "dark" }}` so the text on it is set for a dark ground.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <StyleScope config={{ theme: "dark" }} fillWidth>
+      <GradientFx
+        colors={["#0c0f14", "#123540", "#2a8f9a", "#5fd6c4", "#eef6e8"]}
+        angle={-28}
+        seed={2}
+        direction="column"
+        minHeight="32rem"
+        padding="48"
+        gap="16"
+        vertical="end"
+        s={{padding: "24"}}
+      >
+        <Heading textVariant="display-strong-m" onBackground="neutral-strong">
+          Own your identity. Everywhere.
+        </Heading>
+        <Text textVariant="body-default-l" onBackground="neutral-medium">
+          Soft bands drifting through each other under film grain, from any palette.
+        </Text>
+        <Row gap="8" paddingTop="8">
+          <Button size="m">Get started</Button>
+          <Button size="m" variant="secondary">Learn more</Button>
+        </Row>
+      </GradientFx>
+    </StyleScope>
+  }
+  codes={[
+    {
+      code:
+`<StyleScope config={{ theme: "dark" }} fillWidth>
+  <GradientFx
+    colors={["#0c0f14", "#123540", "#2a8f9a", "#5fd6c4", "#eef6e8"]}
+    angle={-28}
+    seed={2}
+    direction="column"
+    minHeight="32rem"
+    padding="48"
+    gap="16"
+    vertical="end"
+  >
+    <Heading textVariant="display-strong-m">Own your identity. Everywhere.</Heading>
+    <Text textVariant="body-default-l" onBackground="neutral-medium">
+      Soft bands drifting through each other under film grain, from any palette.
+    </Text>
+    <Row gap="8">
+      <Button>Get started</Button>
+      <Button variant="secondary">Learn more</Button>
+    </Row>
+  </GradientFx>
+</StyleScope>`,
+      language: "tsx",
+      label: "Hero"
+    }
+  ]}
+/>
+
+## How it works
+
+- **One shader.** A single fragment shader draws the bands from layered noise, warps them so they bend, and adds a fresh grain each frame with a little dither against banding.
+- **Cheap to keep on screen.** It renders at most 30 frames a second, pauses when it scrolls out of view or the tab is hidden, and resumes where it left off.
+- **Reduced motion.** With `reducedMotion="auto"` (the default) it follows the visitor's setting and holds a still frame. `true` always holds still; `false` always moves.
+- **Server and no WebGL.** On the server, and in a browser without WebGL, it draws blurred CSS blobs from the same seed and colours, so the first paint already looks right and the shader fades in over it.
+- **Decoration only.** The field is hidden from assistive technology; only its children are read.
+
+## API reference
+
+<PropsTable
+  component="GradientFx"
+  describe={{
+    colors: "The ramp, shadow to highlight, 2 to 6 stops: tokens, custom properties or CSS colours. The first is the ground. Default: page background, brand, accent.",
+    speed: "A multiplier on the drift (1), or \"slow\", \"medium\", \"fast\" (0.5, 1, 2).",
+    grain: "Film grain, 0 (clean) to 1 (heavy). Default 0.35.",
+    blur: "How soft the bands are, 0 (crisp ribbons) to 1 (a haze). Default 0.6.",
+    angle: "Degrees the bands run along; 0 is left to right, positive turns them clockwise. Default -30.",
+    seed: "Picks the field. The same seed draws the same field, on the server too.",
+    reducedMotion: "\"auto\" follows the visitor's setting; true holds a still frame; false always moves.",
+  }}
+/>

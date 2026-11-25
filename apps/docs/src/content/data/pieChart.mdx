@@ -106,6 +106,30 @@ total or a label goes.
 Keep `outer` under 100 — the arc is drawn inside the panel, and a value at 100
 leaves no room for the labels around it.
 
+### Gaps and rounded slices
+
+A ring's slices sit 2px apart and round their corners by 4px. `gap` and
+`cornerRadius` change both, in pixels; set them to `0` for touching, square
+slices, the look before 3.1. A full pie (`inner: 0`) ignores them.
+
+<PieChart
+  marginTop="16"
+  marginBottom="24"
+  title="Wider gaps, rounder slices"
+  description="gap={6} cornerRadius={8}"
+  ring={{ inner: 55, outer: 70 }}
+  gap={6}
+  cornerRadius={8}
+  legend={{ display: true, position: "top-left", direction: "column" }}
+  series={{ key: "value" }}
+  data={[
+    { name: "Direct", value: 4200 },
+    { name: "Search", value: 3100 },
+    { name: "Social", value: 1800 },
+    { name: "Referral", value: 900 }
+  ]}
+/>
+
 ## Naming the slices
 
 A pie reads two fields per row: the number that sizes the slice and the string
@@ -151,6 +175,8 @@ crowded against it.
   exclude={["data-viz-style"]}
   describe={{
     ring: "Inner and outer radius as percentages. inner: 0 is a solid pie.",
+    gap: "Room between a ring's slices, in px. Default 2; a full pie ignores it.",
+    cornerRadius: "How much a ring's slices round their corners, in px. Default 4; 0 for square.",
     dataKey: "Field holding the number that sizes each slice.",
     nameKey: "Field holding the slice label.",
     origo: "Centre of the pie within the panel, as percentages.",

@@ -1,7 +1,7 @@
 ---
 title: "WorkspaceSwitcher"
 summary: "Switch between the workspaces, organizations, venues or sites a person belongs to: a dropdown on desktop, a sheet from the bottom on a phone."
-updatedAt: "2026-11-22"
+updatedAt: "2026-11-25"
 docs: "once-ui/components/workspaceSwitcher.mdx"
 github: "components/WorkspaceSwitcher.tsx"
 navLabel: "WorkspaceSwitcher"
@@ -11,6 +11,52 @@ navIcon: "components"
 One switcher for every multi-tenant app. Put it in `SidebarHeader`, or in the top bar on a phone. The trigger shows the current item's mark and name. The list pins the current item on top, groups the rest under headings with counts, shows a search field once there are more than six items, and ends with a create button.
 
 On a phone (at and below `mobileBelow`, default `"s"`) the list opens as a sheet from the bottom of the screen: near the thumb, as wide as the screen, so long names wrap instead of being cut. Elsewhere it is a dropdown under the trigger, at least 20rem wide. In a Sidebar folded to its rail, the trigger is the mark alone.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth maxWidth="20rem" paddingY="24">
+      <WorkspaceSwitcher
+        defaultValue="fjell"
+        groups={[
+          { id: "own", label: "Your workspaces" },
+          { id: "shared", label: "Shared with you" },
+        ]}
+        items={[
+          { value: "fjell", label: "Fjell", description: "Owner", group: "own" },
+          { value: "halden", label: "Halden & Co", description: "Admin", group: "own" },
+          { value: "ember", label: "Ember", description: "Member", group: "shared" },
+          { value: "northwind", label: "Northwind Studio", description: "Member", group: "shared" },
+        ]}
+        labels={{ title: "Workspaces", create: "New workspace" }}
+      />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<WorkspaceSwitcher
+  defaultValue="fjell"
+  groups={[
+    { id: "own", label: "Your workspaces" },
+    { id: "shared", label: "Shared with you" },
+  ]}
+  items={[
+    { value: "fjell", label: "Fjell", description: "Owner", group: "own" },
+    { value: "halden", label: "Halden & Co", description: "Admin", group: "own" },
+    { value: "ember", label: "Ember", description: "Member", group: "shared" },
+    { value: "northwind", label: "Northwind Studio", description: "Member", group: "shared" },
+  ]}
+  labels={{ title: "Workspaces", create: "New workspace" }}
+/>`,
+      language: "tsx",
+      label: "WorkspaceSwitcher"
+    }
+  ]}
+/>
+
+In an app it lives in the Sidebar's header and moves the person to the picked workspace:
 
 <CodeBlock
   marginTop="16"
@@ -64,3 +110,26 @@ export function Switcher({ orgs, current }) {
 - **Your own trigger:** `trigger` replaces the default one. On a phone it is given `onClick`, so use a Button or an IconButton.
 - **Controlled or not:** `value` / `defaultValue` / `onValueChange` and `open` / `defaultOpen` / `onOpenChange`.
 - **Words:** `labels` (`title`, `current`, `search`, `noMatch`, `empty`, `loading`, `pick`, `create`) for another language.
+
+## API reference
+
+<PropsTable
+  component="WorkspaceSwitcher"
+  describe={{
+    items: "Every place the person can switch to: value, label, an optional description, src (a logo) or prefix (your own mark), group, keywords and disabled.",
+    value: "The current item's id, controlled.",
+    defaultValue: "The current item's id, uncontrolled.",
+    onValueChange: "Called with the picked item's id.",
+    groups: "The headings and their order; items name their group by id.",
+    pinCurrent: "Show the current item on top under its own heading.",
+    counts: "Add the number of items to each heading.",
+    searchAbove: "Show a search field above this many items. false never.",
+    loading: "Show placeholders the size of the mark and name until the list arrives.",
+    onCreate: "Add a create button at the foot of the list.",
+    footer: "More content under the create button.",
+    trigger: "Your own trigger instead of the mark and name. On a phone it is given onClick.",
+    mobileBelow: "At and below this breakpoint the list opens as a bottom sheet. false keeps the dropdown.",
+    minWidth: "The dropdown's least width on desktop.",
+    labels: "The words, for another language: title, current, search, noMatch, empty, loading, pick, create.",
+  }}
+/>

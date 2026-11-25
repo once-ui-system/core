@@ -379,6 +379,9 @@ it or `front` of the face, and can carry a small loop with `motion`: `float`, `b
 `pulse` or `flicker`. `spin`, `sway` and `pulse` turn around `origin`, written as `"x y"`. Built-in
 accessories and layers can be worn together: a crown from the list over a hand-drawn jetpack. Loops
 stop for people who ask for reduced motion, and `mascotSvg` draws layers as a still.
+Layers that give the same `motion` and `origin` keep one phase, so a thing drawn in several
+layers, such as a ghost and its eyes or a flame and its core, moves as one. A `MascotDesign` holds up
+to 48 layers: enough for a hat, glasses, something held, a back piece and a pet.
 
 <CodeBlock
   marginTop="16"
@@ -421,6 +424,46 @@ stop for people who ask for reduced motion, and `mascotSvg` draws layers as a st
 />`,
       language: "tsx",
       label: "Layers with motion",
+    },
+  ]}
+/>
+
+### Mediums
+
+`medium` draws the same character another way. `fur` grows a soft coat in clumped tufts, `plush`
+gives the body felt, `clay` models it in plasticine, `pixel` turns the whole mascot into a sprite with a
+one-pixel outline, `lowpoly` cuts the body into lit facets and `toon` inks it with cel shading.
+`vector`, the flat mascot, stays the default. Each medium is an SVG filter or plain shapes, so it
+animates live with no WebGL, renders on the server through `mascotSvg({ medium })`, and holds still
+under reduced motion like the vector mascot. `MASCOT_MEDIUMS` lists them for a picker, and
+`parseMascotDesign` keeps a known medium in a saved design and drops anything else.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="24" center wrap>
+      <Mascot size="l" surface="flat" medium="fur" color="#ff8a5c" mouth="smile" />
+      <Mascot size="l" surface="flat" medium="plush" color="#a78bfa" mouth="smile" cheeks />
+      <Mascot size="l" surface="flat" medium="clay" color="#5ee68a" mouth="dot" />
+      <Mascot size="l" surface="flat" medium="pixel" color="#3fb6ff" mouth="smile" />
+      <Mascot size="l" surface="flat" medium="lowpoly" color="#ffd24d" mouth="smile" />
+      <Mascot size="l" surface="flat" medium="toon" color="#ff7aa8" mouth="smile" />
+    </Row>
+  }
+  codes={[
+    {
+      code: `<Mascot medium="fur" />
+<Mascot medium="plush" />
+<Mascot medium="clay" />
+<Mascot medium="pixel" />
+<Mascot medium="lowpoly" />
+<Mascot medium="toon" />
+
+// The same look as a still SVG, for an email or an OG image
+mascotSvg({ seed: "quasar", medium: "plush" })`,
+      language: "tsx",
+      label: "Mediums",
     },
   ]}
 />

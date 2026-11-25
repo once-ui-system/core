@@ -151,6 +151,40 @@ MascotPanel takes the same prop.
 <StylePanel size="s" />
 ```
 
+## Hints and label width
+
+`hints` puts a small info tooltip beside every built-in row's label, saying what the setting
+changes ("The main colour: buttons, links and highlights."). The words live in `labels.hints`, so
+they translate with the rest. A row's own `hint` adds a tooltip to that row alone, or replaces the
+built-in one, and `hint={false}` drops it.
+
+`labelWidth` gives every side label one width, so the controls line up in a column and a long label
+truncates instead of wrapping. It is ignored while the panel is `stacked`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column maxWidth="32rem" fillWidth>
+      <StylePanel hints labelWidth="7rem" />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<StylePanel hints labelWidth="7rem" />
+
+// Composed: one row's own hint, another's dropped
+<StylePanelRoot hints labelWidth="7rem">
+  <StylePanelBrand hint="Your logo colour." />
+  <StylePanelAccent hint={false} />
+</StylePanelRoot>`,
+      language: "tsx",
+      label: "Hints"
+    }
+  ]}
+/>
+
 ## Owning the state
 
 By default the panel reads and writes `ThemeProvider`, which persists to
@@ -370,6 +404,8 @@ generated from one colour.
     value: "Take ownership of the state. The panel then writes nothing to the providers or to storage.",
     onValueChange: "Called with the whole state and just the keys that changed — the latter being what you send to a server.",
     labels: "Every string the panel shows or announces, over the English defaults. Groups and rows read it; their own props still win.",
+    hints: "Show an info tooltip beside every built-in row, from labels.hints. A row's own hint still wins.",
+    labelWidth: "One width for every side label, so controls line up and long labels truncate. Ignored while stacked.",
     customColors: "End the colour rows' swatches with a custom colour, reported as brandSeed, accentSeed or neutralSeed. true is Brand and Accent; list the rows to include Neutral. Controlled mode only.",
     stacked: "Put each row's label above its control, for a narrow sidebar.",
     size: "How much room rows and groups take: m (default), or s for a denser panel.",

@@ -1,0 +1,102 @@
+---
+title: "TabBar"
+summary: "Bottom navigation for phones: the four places people go most in thumb reach, with a More tab that opens the Sidebar as a sheet."
+updatedAt: "2026-11-25"
+docs: "once-ui/components/tabBar.mdx"
+github: "components/TabBar.tsx"
+navLabel: "TabBar"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+`TabBar` is the phone's bottom navigation. It pairs with [`Sidebar`](/components/sidebar): at and below `showBelow` (default `"s"`) the bar holds the four places people go most, in thumb reach, and its last item, More, opens the Sidebar's drawer with everything else. Above that breakpoint the bar hides and the Sidebar is the navigation again. It arrived in 3.1.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<TabBarExample />}
+  codes={[
+    {
+      code:
+`<TabBar aria-label="Product">
+  <TabBarItem href="/" icon="home" label="Overview" selected />
+  <TabBarItem href="/clients" icon="people" label="Clients" />
+  <TabBarItem href="/projects" icon="folder" label="Projects" />
+  <TabBarItem href="/inbox" icon="inbox" label="Inbox" badge={3} />
+  <TabBarSidebarTrigger label="More" />
+</TabBar>`,
+      language: "tsx",
+      label: "TabBar"
+    }
+  ]}
+/>
+
+The preview shows the bar at every width (`showBelow={false}`) inside a phone-sized frame. In an app it is fixed to the bottom of the screen and appears only on phones.
+
+## Items
+
+Each `TabBarItem` fills its share of the bar, its icon centred over a short label. One word fits best; a longer label ends in an ellipsis.
+
+- **`selected`** marks the current page: a soft tile that fills the item's slot, and `aria-current="page"` on its link.
+- **`badge`** takes a count, read out as unread and printed as 9+ past nine, or `true` for a dot when no number is worth showing. `0` hides it.
+- **`href`** goes through the app's Link adapter, like `NavItem`; pass `onClick` instead for an item that opens something.
+
+## With a Sidebar
+
+`TabBarSidebarTrigger` is the bar's last item. It opens the Sidebar's phone drawer and stays selected while the drawer is open; pass `selected` when the current page is one only the drawer lists. Give the Sidebar `mobileSide="bottom"` and its drawer rises from the bar as a sheet instead of sliding in from the left. Both need a `SidebarProvider` around them.
+
+```tsx
+<SidebarProvider>
+  <Sidebar aria-label="Workspace" mobileSide="bottom">…</Sidebar>
+  <main>
+    {children}
+    <TabBar aria-label="Product">
+      <TabBarItem href="/" icon="home" label="Overview" selected />
+      <TabBarItem href="/clients" icon="people" label="Clients" />
+      <TabBarItem href="/projects" icon="folder" label="Projects" />
+      <TabBarItem href="/inbox" icon="inbox" label="Inbox" badge={3} />
+      <TabBarSidebarTrigger label="More" />
+    </TabBar>
+  </main>
+</SidebarProvider>
+```
+
+## Room for the bar
+
+The bar sits over the page, so it leaves a `spacer` of its own height where it is rendered: put it at the end of the scrolling column and the last content never hides under it. The spacer shows and hides with the bar, and both leave room for the phone's safe area at the bottom. Pass `spacer={false}` when your layout already makes room.
+
+## Accessibility
+
+The bar is a `nav`; give it an `aria-label`. The current item carries `aria-current="page"`, a badge's count is read as "3 unread", and the More trigger reports `aria-haspopup="dialog"` and whether the drawer is open.
+
+## API reference
+
+<PropsTable
+  component="TabBar"
+  describe={{
+    showBelow: "Shown at and below this breakpoint, hidden above it. false shows it always.",
+    spacer: "Leave room for the bar where it is rendered. Default true.",
+  }}
+/>
+
+<PropsTable
+  component="TabBarItem"
+  describe={{
+    href: "Where it goes, through the app's Link adapter.",
+    onClick: "Instead of href, for an item that opens something.",
+    icon: "The icon over the label.",
+    label: "One short word.",
+    selected: "The current page.",
+    badge: "A count (9+ past nine, 0 hides it) or true for a dot.",
+  }}
+/>
+
+<PropsTable
+  component="TabBarSidebarTrigger"
+  describe={{
+    label: "The word under the icon. Default More.",
+    icon: "Default moreHorizontal.",
+    selected: "Selected while the drawer is open; pass it when the page is one only the drawer lists.",
+  }}
+/>
