@@ -5,6 +5,7 @@ import { Accordion } from "../components/Accordion";
 import { Button } from "../components/Button";
 import { Card } from "../components/Card";
 import { IconButton } from "../components/IconButton";
+import { InsideControl } from "../components/InsideControl";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
 
@@ -76,6 +77,26 @@ describe("a Button with nothing wired", () => {
     expect(screen.getByText("Switch").closest("button")?.textContent).toContain("Workspace");
     expect(screen.getByText("Billing").closest("button")).toBeNull();
     expect(document.querySelector("a button, button button")).toBeNull();
+  });
+
+  it("stays a div inside InsideControl, or when aria-hidden", () => {
+    render(
+      <>
+        {/* biome-ignore lint/a11y/useSemanticElements: an app's own control */}
+        <div role="button" tabIndex={0}>
+          <InsideControl>
+            <Button>Top</Button>
+          </InsideControl>
+        </div>
+        {/* biome-ignore lint/a11y/useSemanticElements: an app's own control */}
+        <div role="radio" aria-checked="false" aria-label="Blue" tabIndex={0}>
+          <IconButton icon="check" aria-hidden />
+        </div>
+      </>,
+      { wrapper: wrap },
+    );
+    expect(screen.getAllByRole("button")).toHaveLength(1);
+    expect(document.querySelector("button")).toBeNull();
   });
 
   it("warns in development when it lands inside some other clickable element", () => {

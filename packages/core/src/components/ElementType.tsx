@@ -68,7 +68,10 @@ const ElementType = ({
   // A Button or IconButton outside any control core drew is a button even
   // with nothing wired yet (a "Delete workspace" an app hooks up elsewhere):
   // a div there reads as plain text to assistive tech and to agents.
-  const implicitButton = Boolean(decorationOf) && !explicitControl && !insideControl;
+  // `aria-hidden` says the same as the context: it only draws another
+  // control (a swatch's radio, a slider's handle), so it is no control itself.
+  const hidden = props["aria-hidden"] === true || props["aria-hidden"] === "true";
+  const implicitButton = Boolean(decorationOf) && !explicitControl && !insideControl && !hidden;
   const isControl = explicitControl || implicitButton;
 
   const decoration = useRef<HTMLElement | null>(null);
@@ -86,7 +89,7 @@ const ElementType = ({
     if (!node) return;
     if (node.parentElement?.closest(INTERACTIVE)) {
       dev.warn(
-        `${decorationOf} has no onClick, href or type and sits inside another clickable element, so it renders a <button> nested in that control. Make the outer element a core Card, SmartLink or Button (it then renders a plain div inside), or give this one its own onClick or href.`,
+        `${decorationOf} has no onClick, href or type and sits inside another clickable element, so it renders a <button> nested in that control. Make the outer element a core Card, SmartLink or Button, wrap this Button in <InsideControl> (it then renders a plain div that decorates the outer control), or give it its own onClick or href.`,
         node,
       );
     } else if (node.closest("form")) {

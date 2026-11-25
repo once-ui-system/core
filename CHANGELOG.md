@@ -23,6 +23,13 @@ item (see `ROADMAP.md`, Week 4).
   It never submits a form: pass `type="submit"` for that, as before. In development a
   Button that lands inside some other clickable element warns.
 
+### Added
+
+- **`InsideControl`** marks its content as part of a control you drew yourself (a
+  `role="button"` element with its own onClick): an unwired Button inside it stays a plain
+  div that decorates your control. A Button with `aria-hidden` stays decoration too.
+  `ScrollToTop` uses it for the Button it wraps.
+
 ## [3.1.1] - 2026-11-24
 
 Patch. Fixes only; nothing to change in your code. `foundations`, `fx` and `blocks` stay
