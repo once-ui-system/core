@@ -286,6 +286,8 @@ Mixins: LeafProps.
 - decorative?: boolean = true
 - tooltip?: ReactNode
 - tooltipPosition?: "top" | "bottom" | "left" | "right" = top
+- animate?: boolean | IconMotionTrigger
+- active?: boolean
 
 ### Input
 Mixins: LeafProps.
@@ -493,6 +495,7 @@ type GradientProps = { display?: boolean; opacity?: DisplayProps["opacity"]; x?:
 // style textVariant background solid border* radius shadow padding* margin* gap top right bottom left width height maxWidth minWidth minHeight maxHeight fit* fill* aspectRatio onBackground onSolid align hide pointerEvents position overflow* scrollbar transition opacity zIndex columns rows
 // type GridSize is one of these strings: 1 2 3 4 8 12 5 6 7 9 10 11
 type IconButtonProps = IconButton props
+type IconMotionTrigger = "in" | "active" | "hover"
 type IconName = BuiltInIconName | Extract<keyof IconLibraryOverrides, string>
 type LegacyToast = { variant?: Tone; tone?: Tone; children?: ReactNode; message?: ReactNode; action?: ReactNode; duration?: number }
 type LinesProps = { display?: boolean; opacity?: DisplayProps["opacity"]; size?: SpacingToken; thickness?: number; angle?: number; color?: ColorValue }
@@ -530,6 +533,7 @@ type UserSelect = "text" | "auto" | "none" | "all"
 
 ## Gotchas
 
+- Button arrowIcon and Tag arrow need no id or trigger: the arrow follows the hover and keyboard focus of the link or button around it. A standalone Arrow in a card follows the card when the card is a link or has data-arrow-trigger; pass trigger only for an element that is not an ancestor.
 - overflow="hidden" on full-bleed sections clips glows into hard bands — only use when parent has radius.
 - A display face reaches Heading only through --font-heading: load it with next/font as variable: "--font-x", put that class on the StyleScope or above it, and pass fonts={{ heading: "var(--font-x)" }}. Never heading: "var(--font-heading)" (a variable that names itself is invalid, and headings fall back to the body sans). Check the first screenshot: are the headings in the display face?
 - StyleScope sets a look but paints nothing: pageBackground and surfaceBackground only define the variables. A light paper card inside a dark page needs background="page" (or "surface") on the StyleScope itself, or its dark text sits on the dark page.
@@ -543,6 +547,7 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - Leaf components (Button, IconButton, ToggleButton, the fields, Switch, Checkbox, RadioButton, Text, Heading, Icon, Avatar, Spinner, StatusIndicator, Kbd, InlineCode, ProgressBar, Logo, SmartLink, NavIcon) take only margins, flex, fillWidth, position, top/right/bottom/left, className and style besides their own props. Padding, background, border, radius, sizes, hide and breakpoints go on a Row around it (a Column around Text or Heading; <Row fit> for an Icon's box).
 - A Button in a form that should submit it needs type="submit": with neither onClick, href nor type it renders <button type="button">, which unlike a native <button> never submits.
 - Show a field's error after it is blurred or the form is submitted, never on open: keep a touched flag per field and pass errorMessage={touched.email ? errors.email : undefined}. A form or Dialog that opens with red required-field errors reads as broken.
+- Built-in icons move with CSS: check, checkbox, bell, plus, the chevrons, the arrows, refresh, eye, heart, trash and menu (others ignore animate). A state icon follows active: <Icon name="chevronDown" active={open} />, <Icon name="heart" active={liked} />, <Icon name="plus" active={adding} /> (turns into a cross). Never rotate an icon with style transform. Button, IconButton and ToggleButton already move their bell, trash, refresh, eye and arrow icons on hover, and ToggleButton passes selected to heart and plus. Timing follows the theme's border; reduced motion stays still.
 
 ## Quality bar
 

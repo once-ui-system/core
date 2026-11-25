@@ -3,6 +3,7 @@
 import classNames from "clsx";
 import type React from "react";
 import { useCallback, useEffect, useId, useImperativeHandle, useRef } from "react";
+import { iconMotions } from "../icons/motion.js";
 import type { IconName } from "../icons.js";
 import { InsideControlContext } from "../internal/InsideControlContext.js";
 import { useControllableState } from "../internal/useControllableState.js";
@@ -24,6 +25,11 @@ interface AccordionProps extends Omit<React.ComponentProps<typeof Flex>, "title"
   title: React.ReactNode;
   children: React.ReactNode;
   icon?: IconName;
+  /**
+   * Degrees the icon turns while open. Left out, an icon with its own open
+   * motion uses it (`chevronDown` flips, `plus` turns into a cross, timed by
+   * the theme's border shape); any other icon turns 180°.
+   */
   iconRotation?: number;
   size?: TShirtSizes;
   /** Corner radius of the header. `none` for square corners, e.g. flush in a card. */
@@ -55,7 +61,7 @@ const Accordion = ({
   open,
   defaultOpen = false,
   onOpenChange,
-  iconRotation = 180,
+  iconRotation,
   radius = "m",
   titleVariant = "heading-strong-s",
   icon = "chevronDown",
@@ -83,6 +89,12 @@ const Accordion = ({
   useEffect(() => {
     if (contentRef.current) contentRef.current.inert = !isAccordionOpen;
   }, [isAccordionOpen]);
+
+  // An icon with an open motion of its own (chevrons, plus) plays it; any
+  // other icon, or a set rotation, turns.
+  const ownMotion =
+    iconRotation === undefined &&
+    (iconMotions as Partial<Record<string, string>>)[icon] === "active";
 
   const toggleAccordion = useCallback(() => setOpen((prev) => !prev), [setOpen]);
 
@@ -171,11 +183,15 @@ const Accordion = ({
           name={icon}
           size={size === "s" || size === "xs" ? "xs" : "s"}
           onBackground={isAccordionOpen ? "neutral-strong" : "neutral-weak"}
-          style={{
-            display: "flex",
-            transform: isAccordionOpen ? `rotate(${iconRotation}deg)` : "rotate(0deg)",
-            transition: "var(--transition-micro-medium)",
-          }}
+          {...(ownMotion
+            ? { active: isAccordionOpen }
+            : {
+                style: {
+                  display: "flex",
+                  transform: isAccordionOpen ? `rotate(${iconRotation ?? 180}deg)` : "rotate(0deg)",
+                  transition: "var(--transition-micro-medium)",
+                },
+              })}
         />
       </Row>
       <Grid

@@ -97,11 +97,11 @@ describe("NavIcon", () => {
 describe("NavIcon glyph", () => {
   it("draws the menu icon's three lines and marks the open state", () => {
     const { container, rerender } = render(<NavIcon active={false} />, { wrapper });
-    const svg = container.querySelector("svg");
-    expect(svg).toHaveAttribute("aria-hidden", "true");
+    const icon = container.querySelector('[data-icon="menu"]');
+    expect(icon).toHaveAttribute("aria-hidden", "true");
     expect(container.querySelectorAll("path")).toHaveLength(3);
-    const closed = svg?.getAttribute("class") ?? "";
+    expect(icon).not.toHaveAttribute("data-active");
     rerender(<NavIcon active />);
-    expect(container.querySelector("svg")?.getAttribute("class")).not.toBe(closed);
+    expect(container.querySelector('[data-icon="menu"]')).toHaveAttribute("data-active");
   });
 });

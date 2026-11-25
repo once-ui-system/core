@@ -1,7 +1,7 @@
 ---
 title: "Icon"
 summary: "The Icon component displays an icon with various styles and sizes."
-updatedAt: "2026-11-19"
+updatedAt: "2026-11-25"
 docs: "once-ui/components/icon.mdx"
 github: "components/Icon.tsx"
 navLabel: "Icon"
@@ -147,6 +147,72 @@ By default, icons are considered decorative and hidden from screen readers. Use 
   ]}
 />
 
+## Motion
+
+Seventeen built-in icons move, with CSS alone. `animate` plays an icon's own motion on the trigger it is made for; `active` is the on state of the icons that follow one, and implies `animate`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" horizontal="center">
+      <Row gap="8" wrap horizontal="center">
+        <Button variant="secondary" size="s" prefixIcon="bell">Notifications</Button>
+        <Button variant="secondary" size="s" prefixIcon="trash">Delete</Button>
+        <Button variant="secondary" size="s" prefixIcon="refresh">Refresh</Button>
+        <Button variant="secondary" size="s" suffixIcon="arrowRight">Continue</Button>
+      </Row>
+      <Row gap="24" horizontal="center">
+        <Icon name="check" animate size="l" />
+        <Icon name="chevronDown" active size="l" />
+        <Icon name="plus" active size="l" />
+        <Icon name="heart" active size="l" />
+        <Icon name="checkbox" active size="l" />
+        <Icon name="menu" active size="l" />
+      </Row>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`// Moves while the button is hovered or keyboard-focused: Button does this for you
+<Button prefixIcon="bell">Notifications</Button>
+
+// Draws itself in when it appears (mount it when the save lands)
+{saved && <Icon name="check" animate />}
+
+// Follow a state
+<Icon name="chevronDown" active={open} />   // flips
+<Icon name="plus" active={adding} />        // turns into a cross
+<Icon name="heart" active={liked} />        // fills with a beat
+<Icon name="checkbox" active={checked} />   // fills, then ticks; empty when off
+<Icon name="menu" active={open} />          // folds into a cross`,
+      language: "tsx",
+      label: "Motion"
+    }
+  ]}
+/>
+
+| Icon | Trigger | Motion |
+| --- | --- | --- |
+| `check` | in | the short leg goes quickly, the long leg settles, a small pop |
+| `checkbox` | active | the box fills, then the tick draws through it |
+| `bell` | hover | the body swings from its top, the clapper lags a beat |
+| `plus` | active | turns into a cross, for add buttons that become cancel |
+| `chevronDown`, `chevronUp`, `chevronLeft`, `chevronRight` | active | flips |
+| `arrowRight`, `arrowLeft`, `arrowUp`, `arrowDown` | hover | leans the way it points |
+| `refresh` | hover | one full turn |
+| `eye` | hover | blinks |
+| `heart` | active | the line turns solid with a beat |
+| `trash` | hover | the lid lifts and tips |
+| `menu` | active | three lines fold into a cross ([NavIcon](/components/navIcon)) |
+
+- **Triggers.** `animate` (or `animate={true}`) uses the trigger above. `"hover"` plays while the icon or the control around it (a link, button, menu item, option, tab, label or summary) is hovered or keyboard-focused; `"in"` plays once when the icon appears; `"active"` follows `active`. Icons without a motion ignore both props.
+- **Components do it for you.** `Button`, `IconButton` and `ToggleButton` move a bell, trash, refresh, eye or arrow icon on hover; `ToggleButton` passes `selected` to a heart or plus. `Accordion` flips its chevron (or turns its plus into a cross), `Select` flips its chevron, `Checkbox` draws its tick in when checked, and `NavIcon` folds the menu icon.
+- **Timing follows the shape.** The theme's [border](/basics/border) sets it: `playful` 420ms with an overshoot, `rounded` 320ms with a soft settle, `conservative` 200ms, exact, no pop. The tokens are `--icon-motion-duration`, `--icon-motion-ease`, `--icon-motion-ease-out` and `--icon-motion-pop`.
+- **Reduced motion.** Under `prefers-reduced-motion`, or a theme with micro transitions off, nothing moves; states still change.
+- **Your own icons.** An icon you register under one of these names still turns, flips and leans as a whole; motions that move one part (bell, trash, check, checkbox, menu) need the built-in drawing.
+
 ## Icon library
 
 Once UI ships its own icons: 178 names drawn in one line style. The SVG data is
@@ -206,5 +272,7 @@ codemod reports every use of these names without rewriting them. See the
     decorative: "Hide it from assistive tech. Turn it off when the icon is the only label.",
     tooltip: "Label shown on hover.",
     tooltipPosition: "Which side the tooltip appears on.",
+    animate: "Play the icon's own motion: true for its trigger, or \"hover\", \"in\", \"active\". See Motion.",
+    active: "The on state (open, checked, liked) of an icon that follows one. Implies animate.",
   }}
 />

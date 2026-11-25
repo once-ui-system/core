@@ -1443,6 +1443,10 @@
         "border": "playful"
       },
       "tokens": {
+        "icon-motion-duration": "420ms",
+        "icon-motion-ease": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "icon-motion-ease-out": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "icon-motion-pop": 1.14,
         "radius-xs": "0.25rem",
         "radius-xs-nest-4": "0.375rem",
         "radius-xs-nest-8": "0.5rem",
@@ -1468,6 +1472,10 @@
       "tokens": {
         "icon-linecap": "square",
         "icon-linejoin": "miter",
+        "icon-motion-duration": "200ms",
+        "icon-motion-ease": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "icon-motion-ease-out": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "icon-motion-pop": 1,
         "radius-xs": "0.125rem",
         "radius-xs-nest-4": "0.25rem",
         "radius-xs-nest-8": "0.375rem",
@@ -1491,6 +1499,10 @@
         "border": "rounded"
       },
       "tokens": {
+        "icon-motion-duration": "320ms",
+        "icon-motion-ease": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "icon-motion-ease-out": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "icon-motion-pop": 1.07,
         "radius-xs": "1rem",
         "radius-xs-nest-4": "1.25rem",
         "radius-xs-nest-8": "1.5rem",

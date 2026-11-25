@@ -17,3 +17,281 @@
 .xl { 
     font-size: var(--static-space-40)
 }
+
+// ---------------------------------------------------------------------------
+// Motion (`animate`, `active`). CSS only, the same motion as the icons repo's
+// src/motion.css; change both. The span carries data-icon, data-animate and
+// data-active; the moving pieces carry data-part (src/icons/data.ts).
+// Timing comes from the theme's border shape (foundations' border tokens):
+// playful overshoots, rounded settles, conservative is quick with no pop.
+// Under prefers-reduced-motion foundations ends every motion at once, so
+// states still change and nothing moves.
+// ---------------------------------------------------------------------------
+
+$dur: var(--icon-motion-duration, 320ms);
+$ease: var(--icon-motion-ease, cubic-bezier(0.22, 1, 0.36, 1));
+$ease-out: var(--icon-motion-ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+$pop: var(--icon-motion-pop, 1.07);
+// The controls whose hover or keyboard focus plays a hover motion inside them.
+$controls: "a, button, [role='button'], [role='link'], [role='menuitem'], [role='option'], [role='tab'], label, summary";
+
+// The motion's on state: `active`, appearing (`in`), or hovered (`hover`).
+@mixin on($in: true, $hover: true) {
+    @if $in and $hover {
+        &[data-active],
+        &[data-animate="in"],
+        :where(#{$controls}):focus-visible &[data-animate="hover"] {
+            @content;
+        }
+    } @else if $hover {
+        &[data-active],
+        :where(#{$controls}):focus-visible &[data-animate="hover"] {
+            @content;
+        }
+    } @else if $in {
+        &[data-active],
+        &[data-animate="in"] {
+            @content;
+        }
+    } @else {
+        &[data-active] {
+            @content;
+        }
+    }
+    @if $hover {
+        // Hover only where a pointer can hover, so a tap leaves nothing stuck.
+        @media (hover: hover) {
+            &[data-animate="hover"]:hover,
+            :where(#{$controls}):hover &[data-animate="hover"] {
+                @content;
+            }
+        }
+    }
+}
+
+.icon[data-animate] {
+    svg {
+        overflow: visible;
+        transform-origin: center;
+    }
+    path {
+        // Parts turn around the centre of the 24 grid unless they say otherwise.
+        transform-box: view-box;
+        transform-origin: 12px 12px;
+    }
+}
+
+// Check: the short leg goes quickly, the long leg settles, then a small pop.
+.icon[data-animate][data-icon="check"] {
+    [data-part="tick"] {
+        stroke-dasharray: 1;
+    }
+    @include on {
+        [data-part="tick"] {
+            animation: draw-check calc(#{$dur} * 1.9) linear both;
+        }
+        svg {
+            animation: pop calc(#{$dur} * 1.1) #{$ease} calc(#{$dur} * 1.5) both;
+        }
+    }
+}
+
+// Checkbox: the box fills, then the tick draws through it. Off, the box is empty.
+.icon[data-animate][data-icon="checkbox"] {
+    [data-part="box"] {
+        transition: fill $dur $ease-out;
+    }
+    [data-part="tick"] {
+        stroke: var(--icon-knock, var(--page-background));
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+        transition: stroke-dashoffset 0s;
+    }
+    @include on($hover: false) {
+        svg {
+            animation: pop calc(#{$dur} * 1.2) #{$ease};
+        }
+        [data-part="box"] {
+            fill: currentColor;
+        }
+        [data-part="tick"] {
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset calc(#{$dur} * 1.4) #{$ease-out} calc(#{$dur} * 0.45);
+        }
+    }
+}
+
+// Bell: the body swings from its top, the clapper follows a beat later.
+.icon[data-animate][data-icon="bell"] {
+    path {
+        transform-origin: 12px 4px;
+    }
+    @include on {
+        [data-part="body"] {
+            animation: swing calc(#{$dur} * 2.4) ease-out;
+        }
+        [data-part="clapper"] {
+            animation: swing-clapper calc(#{$dur} * 2.4) ease-out 50ms;
+        }
+    }
+}
+
+// Plus to close, and chevrons that flip for an accordion or a select.
+.icon[data-animate]:is([data-icon="plus"], [data-icon^="chevron"]) svg {
+    transition: transform $dur $ease;
+}
+.icon[data-animate][data-active][data-icon="plus"] svg {
+    transform: rotate(135deg) scale(1.1);
+}
+.icon[data-animate][data-active][data-icon^="chevron"] svg {
+    transform: rotate(180deg);
+}
+
+// Arrows lean the way they point (2.5 of the 24 grid).
+.icon[data-animate][data-icon="arrowRight"] { --icon-lean: 0.104em, 0em; }
+.icon[data-animate][data-icon="arrowLeft"] { --icon-lean: -0.104em, 0em; }
+.icon[data-animate][data-icon="arrowUp"] { --icon-lean: 0em, -0.104em; }
+.icon[data-animate][data-icon="arrowDown"] { --icon-lean: 0em, 0.104em; }
+.icon[data-animate][data-icon^="arrow"] {
+    svg {
+        transition: transform $dur $ease;
+    }
+    @include on($in: false) {
+        svg {
+            transform: translate(var(--icon-lean, 0em, 0em));
+        }
+    }
+}
+
+// Refresh: one full turn.
+.icon[data-animate][data-icon="refresh"] {
+    @include on {
+        svg {
+            animation: spin calc(#{$dur} * 3.8) cubic-bezier(0.45, 0, 0.2, 1);
+        }
+    }
+}
+
+// Eye: blinks once.
+.icon[data-animate][data-icon="eye"] {
+    @include on {
+        svg {
+            animation: blink calc(#{$dur} * 1.1) ease-in-out;
+        }
+    }
+}
+
+// Heart: the line turns solid with a beat, for like and favourite.
+.icon[data-animate][data-icon="heart"] {
+    path {
+        transition: fill calc(#{$dur} * 0.6) #{$ease-out};
+    }
+    @include on($hover: false) {
+        path {
+            fill: currentColor;
+        }
+        svg {
+            animation: beat calc(#{$dur} * 1.8) #{$ease};
+        }
+    }
+}
+
+// Trash: the lid lifts and tips before a delete.
+.icon[data-animate][data-icon="trash"] {
+    [data-part="lid"] {
+        transform-origin: 19px 6.5px;
+        transition: transform $dur $ease;
+    }
+    @include on($in: false) {
+        [data-part="lid"] {
+            transform: translateY(-1.6px) rotate(14deg);
+        }
+    }
+}
+
+// Menu: three lines fold into a cross in the same spot (NavIcon).
+.icon[data-animate][data-icon="menu"] {
+    path {
+        transition:
+            transform $dur $ease,
+            opacity calc(#{$dur} * 0.6) ease;
+    }
+    &[data-active] {
+        [data-part="top"] {
+            transform: translateY(5.25px) rotate(45deg);
+        }
+        [data-part="middle"] {
+            opacity: 0;
+            transform: scaleX(0.2);
+        }
+        [data-part="bottom"] {
+            transform: translateY(-5.25px) rotate(-45deg);
+        }
+    }
+}
+
+@keyframes draw-check {
+    0% {
+        stroke-dashoffset: 1;
+        animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.6);
+    }
+    32% {
+        stroke-dashoffset: 0.68;
+        animation-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1);
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+@keyframes pop {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    45% {
+        transform: scale($pop);
+    }
+}
+@keyframes swing {
+    0% { transform: rotate(0); }
+    15% { transform: rotate(14deg); }
+    35% { transform: rotate(-11deg); }
+    55% { transform: rotate(7deg); }
+    75% { transform: rotate(-3deg); }
+    100% { transform: rotate(0); }
+}
+@keyframes swing-clapper {
+    0% { transform: rotate(0); }
+    20% { transform: rotate(18deg); }
+    42% { transform: rotate(-14deg); }
+    62% { transform: rotate(8deg); }
+    82% { transform: rotate(-3deg); }
+    100% { transform: rotate(0); }
+}
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+@keyframes blink {
+    0%,
+    100% {
+        transform: scaleY(1);
+    }
+    45%,
+    55% {
+        transform: scaleY(0.08);
+    }
+}
+@keyframes beat {
+    0% { transform: scale(1); }
+    25% { transform: scale(calc(#{$pop} + 0.08)); }
+    50% { transform: scale(0.94); }
+    100% { transform: scale(1); }
+}
+
+// Micro transitions off in the theme (`transition="macro"` or `"none"`): icons stay still too.
+:where([data-transition="none"], [data-transition="macro"]) .icon[data-animate] :is(svg, path) {
+    animation: none !important;
+    transition: none !important;
+}

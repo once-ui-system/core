@@ -1,7 +1,7 @@
 ---
 title: "NavIcon"
 summary: "The menu button: the built-in menu icon, whose lines fold into a cross in place while its menu is open."
-updatedAt: "2025-05-11"
+updatedAt: "2026-11-25"
 docs: "once-ui/components/navIcon.mdx"
 github: "components/NavIcon.tsx"
 navLabel: "NavIcon"
@@ -9,6 +9,8 @@ navIcon: "components"
 ---
 
 A simple yet effective component for creating hamburger menu icons that can toggle between active and inactive states. NavIcon is commonly used in responsive navigation interfaces to indicate the presence of a menu.
+
+It draws `<Icon name="menu" active={active} />`: the built-in menu icon, whose three lines fold into a cross with the [icon motion](/components/icon#motion) timing for the theme's border shape, and stay still under reduced motion.
 
 <CodeBlock
   marginTop="16"

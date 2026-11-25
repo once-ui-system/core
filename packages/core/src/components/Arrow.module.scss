@@ -1,39 +1,72 @@
+// The arrowRight icon: its head is a chevron at rest; on hover or keyboard
+// focus of the control around it the shaft grows in from the tip and the head
+// moves forward. Timing is the icon motion's (foundations' border tokens).
+$dur: var(--icon-motion-duration, 320ms);
+$ease: var(--icon-motion-ease, cubic-bezier(0.22, 1, 0.36, 1));
+
 .arrowContainer {
-    transition: var(--transition-micro-medium);
-    height: var(--static-space-16);
-    width: var(--static-space-0);
-    visibility: hidden;
-}
-
-.arrowHead {
-    transition: var(--transition-micro-medium);
-    width: var(--static-space-0);
-    right: 0;
-    transform-origin: right center;
-    transform: rotate(0);
-}
-
-.active {
     width: var(--static-space-16);
-    visibility: visible;
+    height: var(--static-space-16);
+    flex-shrink: 0;
+}
 
-    .arrowHead {
-        width: var(--static-space-8);
+.glyph {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    stroke-linecap: var(--icon-linecap, round);
+    stroke-linejoin: var(--icon-linejoin, round);
+
+    path {
+        transform-box: view-box;
+        transition: transform $dur $ease;
     }
 
-    .arrowHead:nth-child(1) {
-        transform: rotate(45deg);
+    [data-part="shaft"] {
+        transform-origin: 18.75px 12px;
+        transform: scaleX(0);
+        opacity: 0;
+        transition:
+            transform $dur $ease,
+            opacity calc(#{$dur} * 0.5) ease;
     }
 
-    .arrowHead:nth-child(2) {
-        transform: rotate(-45deg);
+    [data-part="head"] {
+        transform: translateX(-3px);
     }
+}
+
+@mixin drawn {
+    [data-part="shaft"] {
+        transform: scaleX(1);
+        opacity: 1;
+    }
+
+    [data-part="head"] {
+        transform: translateX(0);
+    }
+}
+
+.active,
+:where(a, button, [role="button"], [role="link"], [data-arrow-trigger]):focus-visible .arrowContainer {
+    @include drawn;
+}
+
+// Hover only where a pointer can hover, so a tap leaves nothing stuck.
+@media (hover: hover) {
+    :where(a, button, [role="button"], [role="link"], [data-arrow-trigger]):hover .arrowContainer {
+        @include drawn;
+    }
+}
+
+:where([data-transition="none"], [data-transition="macro"]) .glyph path {
+    transition: none !important;
 }
 
 .onSolid {
-    background: var(--brand-on-solid-strong);
+    color: var(--brand-on-solid-strong);
 }
 
 .onBackground {
-    background: var(--brand-on-background-strong);
+    color: var(--brand-on-background-strong);
 }

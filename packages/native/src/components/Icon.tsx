@@ -58,7 +58,8 @@ function shapes(nodes: IconNode[]): ReactNode {
   return nodes.map((node, i) => {
     const Shape = SHAPES[node.tag];
     if (!Shape) return null;
-    const { "aria-hidden": _hidden, ...attr } = node.attr;
+    // data-part and pathLength only drive web motion (core's Icon `animate`).
+    const { "aria-hidden": _hidden, "data-part": _part, pathLength: _length, ...attr } = node.attr;
     return createElement(Shape, { key: i, ...attr }, shapes(node.child));
   });
 }

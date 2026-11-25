@@ -31,6 +31,7 @@
     "compose": ["Dashboard1", "Table1"]
   },
   "gotchas": [
+    "Icon.motion",
     "layout.shorthands",
     "layout.defaults",
     "Icon.names",

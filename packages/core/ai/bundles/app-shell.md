@@ -357,6 +357,8 @@ Mixins: LeafProps.
 - decorative?: boolean = true
 - tooltip?: ReactNode
 - tooltipPosition?: "top" | "bottom" | "left" | "right" = top
+- animate?: boolean | IconMotionTrigger
+- active?: boolean
 
 ### Grid
 Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProps.
@@ -586,6 +588,7 @@ type DropdownProps = Dropdown props
 // style textVariant background solid border* radius shadow padding* margin* gap top right bottom left width height maxWidth minWidth minHeight maxHeight fit* fill* aspectRatio onBackground onSolid align hide pointerEvents position overflow* scrollbar transition opacity zIndex columns rows
 // type GridSize is one of these strings: 1 2 3 4 8 12 5 6 7 9 10 11
 type IconButtonProps = IconButton props
+type IconMotionTrigger = "in" | "active" | "hover"
 type IconName = BuiltInIconName | Extract<keyof IconLibraryOverrides, string>
 type KbarFilter = (items: KbarItem[], query: string) => KbarItem[]
 type KbarItem = { id: string; name: string; section: string; shortcut?: string[]; keywords?: string; href?: string; perform?: () => void; icon?: IconName; description?: ReactNode; placeholder?: string }
@@ -628,6 +631,7 @@ type UserSelect = "text" | "auto" | "none" | "all"
 
 ## Gotchas
 
+- Built-in icons move with CSS: check, checkbox, bell, plus, the chevrons, the arrows, refresh, eye, heart, trash and menu (others ignore animate). A state icon follows active: <Icon name="chevronDown" active={open} />, <Icon name="heart" active={liked} />, <Icon name="plus" active={adding} /> (turns into a cross). Never rotate an icon with style transform. Button, IconButton and ToggleButton already move their bell, trash, refresh, eye and arrow icons on hover, and ToggleButton passes selected to heart and plus. Timing follows the theme's border; reduced motion stays still.
 - Never cast an icon name with `as IconName`: the cast compiles a name the registry does not have, and it renders nothing. Use a name from iconNames; in data, type the field as IconName ({ icon: IconName }[]) or write the literal `as const`, so the type check still runs.
 - Field heights run a step above Button's: Input size xs is 40px, s 48px, m 56px (the default). A field beside a size="s" Button (32px), as in a toolbar or filter row, takes size="xxs", which is 32px too; Form size="xxs" sets it for every field inside. An xxs field has no floating label: label shows as the placeholder, so keep label for the accessible name.
 - Fixed in 2.1: a Button or IconButton that is a Dropdown trigger renders a real <button type="button"> with aria-haspopup and aria-expanded, so it is reachable by keyboard. Pass it as trigger as is; do not add type="button" or a no-op onClick, or wrap it in a focusable Row, to make it one.
@@ -640,6 +644,7 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - A Button in a form that should submit it needs type="submit": with neither onClick, href nor type it renders <button type="button">, which unlike a native <button> never submits.
 - Show a field's error after it is blurred or the form is submitted, never on open: keep a touched flag per field and pass errorMessage={touched.email ? errors.email : undefined}. A form or Dialog that opens with red required-field errors reads as broken.
 - A display face reaches Heading only through --font-heading: load it with next/font as variable: "--font-x", put that class on the StyleScope or above it, and pass fonts={{ heading: "var(--font-x)" }}. Never heading: "var(--font-heading)" (a variable that names itself is invalid, and headings fall back to the body sans). Check the first screenshot: are the headings in the display face?
+- Button arrowIcon and Tag arrow need no id or trigger: the arrow follows the hover and keyboard focus of the link or button around it. A standalone Arrow in a card follows the card when the card is a link or has data-arrow-trigger; pass trigger only for an element that is not an ancestor.
 
 ## Quality bar
 

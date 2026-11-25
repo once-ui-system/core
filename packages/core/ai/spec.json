@@ -1580,6 +1580,11 @@
    "FunctionComponent<SVGProps<SVGSVGElement>>"
   ],
   "IconLibrary": "Record<IconName, IconComponent>",
+  "IconMotionTrigger": [
+   "in",
+   "active",
+   "hover"
+  ],
   "IconName": "BuiltInIconName | Extract<keyof IconLibraryOverrides, string>",
   "Identity": {
    "id": "!string",
@@ -3716,7 +3721,7 @@
     "title": "!React.ReactNode",
     "children": "!React.ReactNode",
     "icon": "IconName = chevronDown",
-    "iconRotation": "number = 180",
+    "iconRotation": "number",
     "size": "TShirtSizes = m",
     "radius": "RadiusSize = m",
     "titleVariant": "TextVariant = heading-strong-s",
@@ -3828,7 +3833,7 @@
     "StyleProps"
    ],
    "props": {
-    "trigger": "!string",
+    "trigger": "string",
     "scale": "number = 0.8",
     "color": "\"onBackground\" | \"onSolid\" = onBackground",
     "as": "\"div\" | \"span\""
@@ -4532,7 +4537,9 @@
     "size": "TShirtSizes = m",
     "decorative": "boolean = true",
     "tooltip": "ReactNode",
-    "tooltipPosition": "\"top\" | \"bottom\" | \"left\" | \"right\" = top"
+    "tooltipPosition": "\"top\" | \"bottom\" | \"left\" | \"right\" = top",
+    "animate": "boolean | IconMotionTrigger",
+    "active": "boolean"
    }
   },
   "IconButton": {

@@ -549,10 +549,8 @@ const Select = ({
         name="chevronDown"
         size="s"
         onBackground="neutral-medium"
-        style={{
-          transition: "transform var(--transition-duration-micro-medium) var(--transition-eased)",
-          transform: isDropdownOpen ? "rotate(180deg)" : undefined,
-        }}
+        // Flips while the list is open, timed by the theme's border shape.
+        active={isDropdownOpen}
       />
     </Flex>
   );

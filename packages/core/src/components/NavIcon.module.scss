@@ -5,38 +5,12 @@
     color: var(--neutral-on-background-strong);
 }
 
-// The `menu` icon of the built-in set; `active` folds it into `close`.
+// The menu icon: caps and joins from the theme, like every built-in icon.
 .glyph {
-    overflow: visible;
-    stroke-linecap: var(--icon-linecap, round);
-    stroke-linejoin: var(--icon-linejoin, round);
+    display: inline-flex;
 
-    path {
-        transform-box: view-box;
-        transform-origin: 12px 12px;
-        transition:
-            transform 0.32s cubic-bezier(0.65, 0, 0.35, 1),
-            opacity 0.2s ease;
-    }
-}
-
-.active {
-    .top {
-        transform: translateY(5.25px) rotate(45deg);
-    }
-
-    .middle {
-        opacity: 0;
-        transform: scaleX(0.2);
-    }
-
-    .bottom {
-        transform: translateY(-5.25px) rotate(-45deg);
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .glyph path {
-        transition: none;
+    svg {
+        stroke-linecap: var(--icon-linecap, round);
+        stroke-linejoin: var(--icon-linejoin, round);
     }
 }

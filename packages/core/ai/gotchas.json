@@ -266,5 +266,17 @@
   "StyleScope.paint": {
     "rule": "StyleScope sets a look but paints nothing: pageBackground and surfaceBackground only define the variables. A light paper card inside a dark page needs background=\"page\" (or \"surface\") on the StyleScope itself, or its dark text sits on the dark page.",
     "components": ["StyleScope"]
+  },
+  "Icon.motion": {
+    "rule": "Built-in icons move with CSS: check, checkbox, bell, plus, the chevrons, the arrows, refresh, eye, heart, trash and menu (others ignore animate). A state icon follows active: <Icon name=\"chevronDown\" active={open} />, <Icon name=\"heart\" active={liked} />, <Icon name=\"plus\" active={adding} /> (turns into a cross). Never rotate an icon with style transform. Button, IconButton and ToggleButton already move their bell, trash, refresh, eye and arrow icons on hover, and ToggleButton passes selected to heart and plus. Timing follows the theme's border; reduced motion stays still.",
+    "components": ["Icon", "Button", "IconButton", "ToggleButton"]
+  },
+  "Arrow.trigger": {
+    "rule": "Button arrowIcon and Tag arrow need no id or trigger: the arrow follows the hover and keyboard focus of the link or button around it. A standalone Arrow in a card follows the card when the card is a link or has data-arrow-trigger; pass trigger only for an element that is not an ancestor.",
+    "components": ["Arrow", "Button", "Tag"]
+  },
+  "Accordion.icon": {
+    "rule": "Leave iconRotation unset with icon=\"chevronDown\" (default) or icon=\"plus\": they play their own open motion (flip, plus to cross). iconRotation turns the icon instead.",
+    "components": ["Accordion"]
   }
 }

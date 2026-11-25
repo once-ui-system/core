@@ -25,6 +25,7 @@
     "patterns": ["Background6", "Footer3"]
   },
   "gotchas": [
+    "Arrow.trigger",
     "Background.gradient.width",
     "Background.absolute",
     "section.gaps",
