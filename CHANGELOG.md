@@ -23,6 +23,12 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **A `Map` inside a `StyleScope` paints in that scope's colours.** Routes, areas,
+  circles, 3D buildings and the dark basemap tint read their tokens on the page root, so a
+  map in a scoped section (another brand, accent or theme) drew its `tone="accent"` route
+  in the page's accent instead of the section's. They now read the tokens on the map's own
+  container.
+
 - **A `Select` no longer blinks a text cursor when clicked.** Its field is read-only, but
   browsers still show a caret in a focused read-only input, so the field looked like it
   wanted typing. Every read-only combobox field now hides the caret; focus still shows on

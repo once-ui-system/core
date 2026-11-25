@@ -50,7 +50,7 @@ const MapCircle = ({ position, radius, tone = "brand", opacity = 0.2 }: MapCircl
   // biome-ignore lint/correctness/useExhaustiveDependencies: theme re-reads the token colours
   useEffect(() => {
     if (styleVersion === 0) return;
-    const solid = tokenColor(toneVars(tone).solid);
+    const solid = tokenColor(toneVars(tone).solid, undefined, map.getContainer?.());
     if (!map.getSource(id)) map.addSource(id, { type: "geojson", data });
     if (!map.getLayer(`${id}-fill`)) {
       map.addLayer({ id: `${id}-fill`, type: "fill", source: id, paint: {} });
