@@ -17,6 +17,12 @@
  * the right — and stacks into a panel on its own, so a list of them needs no
  * surface around it. With `control` and `open` it is a group that keeps its sub-settings inside its box,
  * which is what keeps the relationship readable in a long panel.
+ *
+ * Every control has a name (its label, or aria-label where the Setting row
+ * shows the words), so a screen reader announces it and an agent operating
+ * the page (`@once-ui-system/core/agent`) can change every setting in one
+ * call. The destructive button carries `data-agent-confirm`, so an agent
+ * asks a person first.
  */
 import {
   Avatar,
@@ -142,6 +148,7 @@ export function SettingsExample() {
               <Setting label="Send at" description="Hour of the day, in your timezone">
                 <NumberInput
                   id="digest-hour"
+                  aria-label="Send at"
                   min={0}
                   max={23}
                   value={digestHour}
@@ -166,7 +173,11 @@ export function SettingsExample() {
                 Permanently delete your workspace and all associated data.
               </Text>
               <Row>
-                <Button tone="danger" size="s">
+                <Button
+                  tone="danger"
+                  size="s"
+                  data-agent-confirm="Deletes the workspace and all its data"
+                >
                   Delete workspace
                 </Button>
               </Row>

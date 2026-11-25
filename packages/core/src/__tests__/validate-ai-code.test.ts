@@ -1258,3 +1258,66 @@ describe("ship, not screenshot", () => {
     }
   });
 });
+
+describe("a11y.name", () => {
+  it("flags controls a screen reader or an agent cannot name", () => {
+    expect(rules(`<Switch isChecked={on} onCheckedChange={setOn} />`)).toContain("a11y.name");
+    expect(rules(`<IconButton icon="close" onClick={close} />`)).toContain("a11y.name");
+    expect(rules(`<TabList><Tab value="a">A</Tab></TabList>`)).toContain("a11y.name");
+    const message = issues(`<Input id="a" />\n<Input id="b" />`).find(
+      (i) => i.rule === "a11y.name",
+    );
+    expect(message?.message).toMatch(/^2 Inputs have no name/);
+  });
+
+  it("accepts a label, an aria name, a tooltip, a spread or a label element", () => {
+    for (const src of [
+      `<Switch label="Weekly digest" />`,
+      `<Input id="q" aria-label="Search" />`,
+      `<Input id="q" placeholder="Search" />`,
+      `<IconButton icon="close" tooltip="Close" />`,
+      `<TabList aria-label="Sections" />`,
+      `<Checkbox {...field} />`,
+      `<label htmlFor="email">Email</label><Input id="email" />`,
+      `<Slider aria-labelledby="volume-label" />`,
+    ]) {
+      expect({ src, found: rules(src).filter((r) => r === "a11y.name") }).toEqual({
+        src,
+        found: [],
+      });
+    }
+  });
+
+  it("does not read a name off a tag nested in a prop value", () => {
+    expect(rules(`<Switch description={<Text label="x" />} />`)).toContain("a11y.name");
+  });
+});
+
+describe("a11y.name wording", () => {
+  it("names one or many with the right article and plural", () => {
+    const text = (src: string) => issues(src).find((i) => i.rule === "a11y.name")?.message;
+    expect(text(`<Input id="a" />`)).toMatch(/^An Input has/);
+    expect(text(`<Checkbox />\n<Checkbox />`)).toMatch(/^2 Checkboxes have/);
+    expect(rules(`<IconButton variant="secondary">2</IconButton>`)).not.toContain("a11y.name");
+  });
+});
+
+describe("a11y.name in what the bundles ship", () => {
+  it("finds no unnamed control in any example or block", () => {
+    const dir = path.join(__dirname, "..", "..", "ai", "examples");
+    const files = [
+      ...fs.readdirSync(dir).filter((f) => f.endsWith(".tsx")),
+      ...fs
+        .readdirSync(path.join(dir, "blocks"))
+        .filter((f) => f.endsWith(".tsx"))
+        .map((f) => `blocks/${f}`),
+    ];
+    for (const file of files) {
+      const src = fs.readFileSync(path.join(dir, file), "utf8");
+      expect({ file, found: rules(src).filter((r) => r === "a11y.name") }).toEqual({
+        file,
+        found: [],
+      });
+    }
+  });
+});

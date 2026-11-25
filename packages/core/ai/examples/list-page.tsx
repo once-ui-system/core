@@ -115,6 +115,7 @@ export function ListPageExample({
 
         <Row gap="8" vertical="center" wrap>
           <SegmentedControl
+            aria-label="Filter"
             fillWidth={false}
             value={filter}
             onValueChange={(value) => setFilter(value as Filter)}

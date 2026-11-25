@@ -169,6 +169,7 @@ export const Waitlist1 = () => {
                     size="l"
                     style={{ marginRight: "-0.5rem" }}
                     icon="send"
+                    aria-label="Join the waitlist"
                     onClick={() => subscribe()}
                   />
                 }

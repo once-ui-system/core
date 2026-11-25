@@ -1137,6 +1137,28 @@ const NAMED_BREAKPOINT_PROPS = {
   tabletColumns: ["m", "columns"],
 };
 
+/**
+ * The props that name each control, the visible one first. A control with
+ * none of them (and no <label htmlFor>) has no accessible name.
+ */
+const CONTROL_NAME_PROPS = {
+  Input: ["label", "aria-label", "aria-labelledby", "placeholder"],
+  Textarea: ["label", "aria-label", "aria-labelledby", "placeholder"],
+  NumberInput: ["label", "aria-label", "aria-labelledby", "placeholder"],
+  PasswordInput: ["label", "aria-label", "aria-labelledby", "placeholder"],
+  ColorInput: ["label", "aria-label", "aria-labelledby"],
+  DateInput: ["label", "aria-label", "aria-labelledby", "placeholder"],
+  TagInput: ["label", "aria-label", "aria-labelledby", "placeholder"],
+  Combobox: ["label", "aria-label", "aria-labelledby", "placeholder"],
+  Switch: ["label", "aria-label", "aria-labelledby"],
+  Checkbox: ["label", "aria-label", "aria-labelledby"],
+  RadioButton: ["label", "aria-label", "aria-labelledby"],
+  Slider: ["label", "aria-label", "aria-labelledby"],
+  SegmentedControl: ["aria-label", "aria-labelledby"],
+  TabList: ["aria-label", "aria-labelledby"],
+  IconButton: ["aria-label", "tooltip", "aria-labelledby"],
+};
+
 function validate(source, spec, iconNames, options = {}) {
   const issues = [];
 
@@ -1623,6 +1645,37 @@ function validate(source, spec, iconNames, options = {}) {
   }
   if (selectChevron) {
     add("Select.chevron", "Select draws its own chevron since 3.0: drop the chevronDown suffix");
+  }
+
+  // A control with no name: a screen reader reads "edit text" or "switch",
+  // and an agent operating the page (`@once-ui-system/core/agent`) cannot
+  // find it, since a step names its control by label. Select has its own
+  // rule above. A spread may carry the name, and so may a <label htmlFor>.
+  const unnamed = new Map();
+  for (const t of tags) {
+    const props = CONTROL_NAME_PROPS[t.name];
+    if (!props || hasSpread(t.attrs)) continue;
+    // An IconButton with children shows text, which names it.
+    if (t.name === "IconButton" && !/\/\s*$/.test(t.attrs)) continue;
+    const own = ownProps(t.attrs);
+    if (props.some((prop) => hasProp(own, prop))) continue;
+    const id = stringValue(propValue(own, "id") ?? "");
+    if (
+      id &&
+      new RegExp(`htmlFor=["'{\`]*${id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["'}\`]`).test(source)
+    ) {
+      continue;
+    }
+    unnamed.set(t.name, (unnamed.get(t.name) ?? 0) + 1);
+  }
+  for (const [name, count] of unnamed) {
+    const props = CONTROL_NAME_PROPS[name];
+    const one = /^[AEIOU]/.test(name) ? `An ${name}` : `A ${name}`;
+    const many = `${count} ${name}${/(x|s)$/.test(name) ? "es" : "s"}`;
+    add(
+      "a11y.name",
+      `${count === 1 ? `${one} has` : `${many} have`} no name: give ${count === 1 ? "it" : "each"} ${props[0]}${props[0] === "aria-label" ? "" : " (or aria-label when no visible label fits)"}. Screen readers announce it by that name, and an agent operating the page finds it by it`,
+    );
   }
 
   if (/<Fade[^>]*>[\s\S]*<(Column|Row)[^>]*overflowY/.test(source)) {

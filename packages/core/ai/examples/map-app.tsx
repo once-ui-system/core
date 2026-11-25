@@ -193,6 +193,7 @@ export function MapAppExample() {
         </Row>
         <Column padding="12" borderBottom>
           <SegmentedControl
+            aria-label="Filter"
             compact
             value={filter}
             onValueChange={(value) => setFilter(value as Filter)}

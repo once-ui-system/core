@@ -111,6 +111,7 @@ export function PricingExample() {
               Three plans, one decision
             </Heading>
             <SegmentedControl
+              aria-label="Billing period"
               value={billing}
               onValueChange={(value) => setBilling(value as Billing)}
               buttons={[

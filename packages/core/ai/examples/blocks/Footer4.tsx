@@ -330,6 +330,7 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                 <IconButton
                   data-border="rounded"
                   icon={item.icon}
+                  aria-label={item.label}
                   variant="secondary"
                   size="l"
                   key={index}
