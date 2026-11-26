@@ -16,7 +16,9 @@
   "open": "boolean",
   "defaultOpen": "boolean = false",
   "onOpenChange": "(open: boolean) => void",
-  "selected": "boolean = false"
+  "selected": "boolean = false",
+  "badge": "number | ReactNode",
+  "indicator": "boolean"
  },
  "tags": [
   "navigation"

@@ -183,9 +183,10 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 - label, children: ReactNode
 - icon?: IconName
-- open?: boolean
+- open, indicator?: boolean
 - defaultOpen, selected?: boolean = false
 - onOpenChange?: (open: boolean) => void
+- badge?: number | ReactNode
 
 ### NavItem
 Extends ToggleButton.

@@ -8,7 +8,7 @@ import { Icon } from "./Icon.js";
 import { useNavStyle } from "./Nav.js";
 import styles from "./Nav.module.scss";
 import { Row } from "./Row.js";
-import { Text } from "./Text.js";
+import { NavTrailing, showsBadge } from "./NavTrailing.js";
 import { ToggleButton } from "./ToggleButton.js";
 
 interface NavItemProps
@@ -61,13 +61,8 @@ const NavItem = ({
 }: NavItemProps) => {
   const { variant, density, sizes, collapsed, tone: navTone } = useNavStyle();
   const tone = ownTone ?? navTone;
-  const count = typeof badge === "number" ? badge : undefined;
   // A number shows above 0, as it always did; any other badge shows unless empty.
-  const showBadge =
-    count !== undefined
-      ? count > 0
-      : badge !== undefined && badge !== null && badge !== false && badge !== "";
-  const trailing = indicator || showBadge;
+  const trailing = indicator || showsBadge(badge);
   const selected = Boolean(toggle.selected);
   // `solid` keeps today's look: every row at full contrast, the current one
   // filled. The other two dim the rest and set the current row in strong.
@@ -130,32 +125,7 @@ const NavItem = ({
             label
           )}
         </Row>
-        {showBadge && !collapsed && (
-          <Row
-            minWidth="16"
-            height="16"
-            paddingX="4"
-            radius="full"
-            solid="brand-strong"
-            horizontal="center"
-            vertical="center"
-            aria-label={count !== undefined ? `${count} unread` : undefined}
-          >
-            <Text textVariant="label-default-xs" onSolid="brand-strong">
-              {count !== undefined ? (count > 9 ? "9+" : count) : badge}
-            </Text>
-          </Row>
-        )}
-        {indicator && badge === undefined && !collapsed && (
-          <Row
-            width="8"
-            minWidth="8"
-            height="8"
-            radius="full"
-            solid="brand-strong"
-            aria-hidden="true"
-          />
-        )}
+        {!collapsed && <NavTrailing badge={badge} indicator={indicator} />}
       </Row>
     </ToggleButton>
   );

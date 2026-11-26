@@ -12,6 +12,7 @@ import { Icon } from "./Icon.js";
 import { Line } from "./Line.js";
 import { Nav, NavSection, useNavStyle } from "./Nav.js";
 import { NavItem } from "./NavItem.js";
+import { NavTrailing, showsBadge } from "./NavTrailing.js";
 import { Row } from "./Row.js";
 
 interface NavGroupProps extends Omit<React.ComponentProps<typeof Row>, "title" | "onToggle"> {
@@ -29,6 +30,15 @@ interface NavGroupProps extends Omit<React.ComponentProps<typeof Row>, "title" |
   onOpenChange?: (open: boolean) => void;
   /** Mark the header itself as the current page, for a group that is also a link. */
   selected?: boolean;
+  /**
+   * A pill at the end of the header, as on a NavItem: a number is a count
+   * (0 hides it, above 9 prints 9+), anything else (`"New"`) prints as given.
+   * It sits at the header's right edge, before the chevron, so it lines up
+   * with the items' badges instead of trailing the label.
+   */
+  badge?: number | ReactNode;
+  /** A dot at the end of the header, for unread with no number worth showing. */
+  indicator?: boolean;
 }
 
 /**
@@ -60,6 +70,8 @@ const NavGroup = ({
   onOpenChange,
   defaultOpen = false,
   selected = false,
+  badge,
+  indicator,
   ...row
 }: NavGroupProps) => {
   const { variant, rail, sizes, collapsed, density, tone } = useNavStyle();
@@ -93,7 +105,15 @@ const NavGroup = ({
           placement="right-start"
           minWidth={192}
           style={{ width: "100%" }}
-          trigger={<NavItem icon={icon} label={label} selected={selected} />}
+          trigger={
+            <NavItem
+              icon={icon}
+              label={label}
+              selected={selected}
+              badge={badge}
+              indicator={indicator}
+            />
+          }
         >
           {/* The menu is a Nav of its own at full labels, whatever the rail is. */}
           <SidebarRailContext.Provider value={null}>
@@ -134,13 +154,17 @@ const NavGroup = ({
             fillWidth
             gap={sizes.iconGap}
             vertical="center"
+            horizontal={indicator || showsBadge(badge) ? "between" : "start"}
             textVariant={`label-${emphasis && selected ? "strong" : "default"}-${sizes.text}`}
             onBackground={emphasis ? (selected ? "neutral-strong" : "neutral-weak") : undefined}
           >
-            {icon && <Icon name={icon} onBackground="neutral-weak" size="xs" />}
-            <Row opacity={collapsed ? 0 : 100} transition="micro-medium">
-              {label}
+            <Row gap={sizes.iconGap} vertical="center" minWidth={0}>
+              {icon && <Icon name={icon} onBackground="neutral-weak" size="xs" />}
+              <Row opacity={collapsed ? 0 : 100} transition="micro-medium">
+                {label}
+              </Row>
             </Row>
+            {!collapsed && <NavTrailing badge={badge} indicator={indicator} />}
           </Row>
         }
       >
