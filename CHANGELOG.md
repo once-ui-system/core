@@ -28,6 +28,10 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **`TabBar` tabs no longer turn brand-coloured.** A tab with an `href` is a link, and the
+  global link colour outranked the bar's own, so every tab but the current one showed in
+  brand ink (brand-strong on hover). Tabs keep the neutral ink, the current one strong.
+
 - **A `Map` inside a `StyleScope` paints in that scope's colours.** Routes, areas,
   circles, 3D buildings and the dark basemap tint read their tokens on the page root, so a
   map in a scoped section (another brand, accent or theme) drew its `tone="accent"` route
