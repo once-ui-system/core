@@ -27,9 +27,12 @@ interface TextareaProps
   placeholder?: string;
   /**
    * How tall the field is. `"auto"` (the default) grows with the content and
-   * drops the resize handle; a number fixes that many rows and keeps it.
+   * drops the resize handle. `{ min, max }` grows too, from `min` rows (so an
+   * empty field already reads as a textarea, not an input) up to `max`, then
+   * scrolls. A number fixes that many rows and keeps the resize handle: it
+   * turns growing off, so reach for `{ min }` when you only want it taller.
    */
-  lines?: number | "auto";
+  lines?: number | "auto" | { min?: number; max?: number };
   /**
    * Type scale and the height of the first line, the same as `Input`'s: `xxs`
    * 32px, `xs` 40px, `s` 48px, `m` 56px (the default), `l` 64px, `xl` 72px.
@@ -142,17 +145,37 @@ const Textarea = ({
   // `value` when controlled, nothing when not.
   const styledValue = controlled ? debouncedValue : undefined;
 
+  // `{ min, max }` is auto too: it grows, starting at `min` rows.
+  const grows = typeof lines !== "number";
+  const minLines = typeof lines === "object" ? Math.max(1, lines.min ?? 1) : 1;
+  const maxLines = typeof lines === "object" ? lines.max : undefined;
+
   const adjustHeight = () => {
-    if (textareaRef.current) {
-      const scrollY = window.scrollY;
-      textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-      window.scrollTo({ top: scrollY });
+    const node = textareaRef.current;
+    if (!node) return;
+    const scrollY = window.scrollY;
+    // `rows` keeps the least height: with `height: auto` the box is `min`
+    // rows tall, and scrollHeight never reports less than that.
+    node.style.height = "auto";
+    let height = node.scrollHeight;
+    if (maxLines) {
+      const css = window.getComputedStyle(node);
+      const lineHeight = Number.parseFloat(css.lineHeight);
+      if (Number.isFinite(lineHeight)) {
+        const cap =
+          lineHeight * Math.max(maxLines, minLines) +
+          Number.parseFloat(css.paddingTop || "0") +
+          Number.parseFloat(css.paddingBottom || "0");
+        node.style.overflowY = height > cap ? "auto" : "";
+        height = Math.min(height, cap);
+      }
     }
+    node.style.height = `${height}px`;
+    window.scrollTo({ top: scrollY });
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (lines === "auto") {
+    if (grows) {
       adjustHeight();
     }
     if (!controlled) setOwnText(event.target.value);
@@ -216,11 +239,12 @@ const Textarea = ({
     setIsFilled(!!props.value);
   }, [props.value]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: adjustHeight reads the node and these values
   useEffect(() => {
-    if (lines === "auto") {
+    if (grows) {
       adjustHeight();
     }
-  }, [props.value, lines]);
+  }, [props.value, grows, minLines, maxLines]);
 
   const displayError = validationError || errorMessage;
   const showsErrorMessage = Boolean(displayError) && errorMessage !== false;
@@ -264,13 +288,13 @@ const Textarea = ({
           variant === "ghost" && styles.ghost,
           focusRing && styles.focusRing,
           styles[resolvedSize],
-          lines !== "auto" && resize !== "none" && styles.resizeHandle,
+          !grows && resize !== "none" && styles.resizeHandle,
           corners === "none"
             ? "radius-none"
             : corners
               ? `radius-${compact ? "m" : "l"}-${corners}`
               : `radius-${compact ? "m" : "l"}`,
-          lines !== "auto" && resize !== "none" && "radius-s-bottom-right",
+          !grows && resize !== "none" && "radius-s-bottom-right",
         )}
       >
         {prefix && (
@@ -290,7 +314,7 @@ const Textarea = ({
               textareaRef.current = node as HTMLTextAreaElement | null;
             }}
             id={id}
-            rows={typeof lines === "number" ? lines : 1}
+            rows={typeof lines === "number" ? lines : minLines}
             placeholder={shownPlaceholder}
             disabled={disabled}
             onFocus={handleFocus}
@@ -312,7 +336,7 @@ const Textarea = ({
             aria-invalid={invalid || !!displayError}
             style={{
               ...style,
-              resize: lines === "auto" ? "none" : resize,
+              resize: grows ? "none" : resize,
             }}
             onChange={handleChange}
           />

@@ -10,7 +10,7 @@ navIcon: "switch"
 
 import { ValidationTextareaExample, TextareaCharacterCountExample } from "../../product/TextareaExamples"
 
-The `Textarea` component provides a multi-line text input field for collecting longer form text content from users. It grows with its content by default; pass `lines` a number to fix it at that many rows instead.
+The `Textarea` component provides a multi-line text input field for collecting longer form text content from users. It grows with its content by default. Pass `lines={{ min: 3 }}` to start it taller and still grow, or a number to fix it at that many rows.
 
 <CodeBlock
   marginTop="16"
@@ -49,7 +49,7 @@ Add a description to provide additional context or instructions for the textarea
       label="Bio"
       placeholder="Tell us about yourself"
       description="Your bio will be displayed on your public profile"
-      lines={5}
+      lines={{ min: 5 }}
     />
   }
   codes={[
@@ -60,7 +60,7 @@ Add a description to provide additional context or instructions for the textarea
     label="Bio"
     placeholder="Tell us about yourself"
     description="Your bio will be displayed on your public profile"
-    lines={5}
+    lines={{ min: 5 }}
 />`,
       language: "tsx",
       label: "Description"
@@ -151,10 +151,44 @@ so it has no resize handle to give you.
   ]}
 />
 
+## Minimum height
+
+An empty textarea that grows starts at one row, so it can read as a plain input.
+Pass `lines={{ min: 3 }}` to start it at three rows: it still grows with the
+text, without a drag handle. Add `max` to stop growing at that many rows, after
+which it scrolls.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Textarea
+      id="min-height-textarea"
+      label="Message"
+      placeholder="Write a few lines"
+      lines={{ min: 3, max: 8 }}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Textarea
+    id="min-height-textarea"
+    label="Message"
+    placeholder="Write a few lines"
+    lines={{ min: 3, max: 8 }}
+/>`,
+      language: "tsx",
+      label: "Minimum height"
+    }
+  ]}
+/>
+
 ## Fixed height
 
-A textarea resizes itself to fit its content. Pass `lines` a number to fix it at
-that many rows instead, which is also what gives it a resize handle.
+Pass `lines` a number to fix the textarea at that many rows instead. It stops
+growing, and gets a resize handle. Reach for it only when the box should stay
+one size; to make it taller, use `{ min }` above.
 
 <CodeBlock
   marginTop="16"

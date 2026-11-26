@@ -255,6 +255,10 @@
     "rule": "A Button in a form that should submit it needs type=\"submit\": with neither onClick, href nor type it renders <button type=\"button\">, which unlike a native <button> never submits.",
     "components": ["Button", "IconButton"]
   },
+  "Textarea.lines": {
+    "rule": "Textarea grows with its text by default. To start it taller, pass lines={{ min: 3 }} (add max to cap it, then it scrolls). A number such as lines={3} fixes the height, turns growing off and adds a drag handle; use it only for a fixed box.",
+    "components": ["Textarea"]
+  },
   "field.errorTiming": {
     "rule": "Show a field's error after it is blurred or the form is submitted, never on open: keep a touched flag per field and pass errorMessage={touched.email ? errors.email : undefined}. A form or Dialog that opens with red required-field errors reads as broken.",
     "components": ["Input", "Textarea", "Select", "NumberInput", "Form"]

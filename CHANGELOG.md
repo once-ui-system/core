@@ -13,6 +13,32 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Added
+
+- **`Textarea` grows from a minimum: `lines={{ min: 3 }}`.** An empty growing textarea
+  starts at one row and reads as an input, so apps (and agents) set a fixed `lines` to make
+  it taller, which also turned growing off and added a drag handle. `{ min }` starts it
+  taller and keeps it growing; `{ min, max }` stops at `max` rows and scrolls. A number
+  still fixes the height. The validator now flags a fixed `lines={n}` without `resize`.
+- **`NavGroup` takes `badge` and `indicator`, like `NavItem`.** A "New" on a group used to
+  go inside its `label`, so it trailed the text while the items' badges sat at the row's
+  right edge. The group's badge now sits at the end of its header, before the chevron, in
+  the same pill as an item's (a number is a count: 0 hides it, above 9 prints 9+). In an
+  icon rail it rides the menu's trigger row.
+
+### Fixed
+
+- **A `Map` inside a `StyleScope` paints in that scope's colours.** Routes, areas,
+  circles, 3D buildings and the dark basemap tint read their tokens on the page root, so a
+  map in a scoped section (another brand, accent or theme) drew its `tone="accent"` route
+  in the page's accent instead of the section's. They now read the tokens on the map's own
+  container.
+
+- **A `Select` no longer blinks a text cursor when clicked.** Its field is read-only, but
+  browsers still show a caret in a focused read-only input, so the field looked like it
+  wanted typing. Every read-only combobox field now hides the caret; focus still shows on
+  its border.
+
 ### Changed
 
 - **Components use the icon motion.** `Accordion` flips its chevron (and turns a `plus`
