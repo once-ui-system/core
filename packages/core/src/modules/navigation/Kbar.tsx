@@ -21,6 +21,7 @@ import { ScrollLock } from "../../components/ScrollLock.js";
 import { Text } from "../../components/Text.js";
 import { useAdapters } from "../../contexts/AdapterProvider.js";
 import type { IconName } from "../../icons.js";
+import { InsideControlContext } from "../../internal/InsideControlContext.js";
 import { KbdCap } from "../../internal/KbdCap.js";
 import { mergeLabels } from "../../internal/labels.js";
 import { useControllableState } from "../../internal/useControllableState.js";
@@ -631,7 +632,7 @@ export const Kbar = ({
         <KbarTrigger
           tabIndex={0}
           // It is the element Tab lands on (its Button child stays a plain
-          // div), so it is the button: it had no role, and said nothing about
+          // div, through InsideControlContext), so it is the button: it had no role, and said nothing about
           // the palette it opens.
           role="button"
           aria-haspopup="dialog"
@@ -645,7 +646,7 @@ export const Kbar = ({
           }}
           {...rest}
         >
-          {children}
+          <InsideControlContext.Provider value>{children}</InsideControlContext.Provider>
         </KbarTrigger>
       )}
       {open &&

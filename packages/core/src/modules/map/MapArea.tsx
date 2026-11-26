@@ -78,7 +78,7 @@ const MapArea = ({
   // biome-ignore lint/correctness/useExhaustiveDependencies: theme re-reads the token colours
   useEffect(() => {
     if (styleVersion === 0) return;
-    const solid = tokenColor(`--${tone}-solid-strong`);
+    const solid = tokenColor(`--${tone}-solid-strong`, undefined, map.getContainer?.());
     const before = firstLabelLayer(map.getStyle()?.layers);
     if (!map.getSource(id)) map.addSource(id, { type: "geojson", data: shape });
     if (!map.getLayer(`${id}-fill`)) {

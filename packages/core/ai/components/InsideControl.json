@@ -1,0 +1,16 @@
+{
+ "name": "InsideControl",
+ "group": "components",
+ "props": {
+  "children": "ReactNode"
+ },
+ "tags": [
+  "action",
+  "a11y"
+ ],
+ "pairsWith": [
+  "Button",
+  "IconButton"
+ ],
+ "mixinsRef": []
+}

@@ -3,6 +3,7 @@
 import type React from "react";
 import { type ReactNode, useCallback, useContext, useEffect, useRef } from "react";
 import { useAdapters } from "../contexts/AdapterProvider.js";
+import { InsideControlContext } from "../internal/InsideControlContext.js";
 import { dev } from "../utils/devLogger.js";
 import { sanitizeHref } from "../utils/safe-html.js";
 import { DropdownTriggerContext } from "./DropdownTriggerContext.js";
@@ -18,9 +19,13 @@ type ElementTypeProps = {
   type?: string;
   /**
    * Set by Button and IconButton to their name. With neither `href`,
-   * `onClick` nor a button `type` they render a div, which is right as
-   * decoration inside another control and a dead control anywhere else: in
-   * development this warns when no interactive element is around it.
+   * `onClick` nor a button `type` they are still a real
+   * `<button type="button">`, so the accessibility tree (screen readers,
+   * agents operating the page) sees a button and not text. Only inside a link
+   * or button core drew (a clickable Card's "Read more") do they stay a plain
+   * div: decoration inside the control around them, not a control nested in
+   * one. In development this warns when the button lands inside some other
+   * clickable element, or in a form it will not submit.
    */
   decorationOf?: string;
 } & (
@@ -51,7 +56,8 @@ const ElementType = ({
   const safeHref = sanitizeHref(href);
   // Any button `type` (submit, reset, button) or a `form` it belongs to
   // makes it a real <button>; 2.x and beta.1 left `type="reset"` a dead div.
-  const isControl = Boolean(
+  const insideControl = useContext(InsideControlContext);
+  const explicitControl = Boolean(
     safeHref ||
       onClick ||
       type === "submit" ||
@@ -59,10 +65,18 @@ const ElementType = ({
       type === "reset" ||
       "form" in props,
   );
+  // A Button or IconButton outside any control core drew is a button even
+  // with nothing wired yet (a "Delete workspace" an app hooks up elsewhere):
+  // a div there reads as plain text to assistive tech and to agents.
+  // `aria-hidden` says the same as the context: it only draws another
+  // control (a swatch's radio, a slider's handle), so it is no control itself.
+  const hidden = props["aria-hidden"] === true || props["aria-hidden"] === "true";
+  const implicitButton = Boolean(decorationOf) && !explicitControl && !insideControl && !hidden;
+  const isControl = explicitControl || implicitButton;
 
   const decoration = useRef<HTMLElement | null>(null);
   const decorationRef = useCallback(
-    (node: HTMLDivElement | null) => {
+    (node: HTMLElement | null) => {
       decoration.current = node;
       if (typeof ref === "function") return ref(node);
       if (ref) (ref as React.RefObject<HTMLElement | null>).current = node;
@@ -70,30 +84,34 @@ const ElementType = ({
     [ref],
   );
   useEffect(() => {
-    if (!decorationOf || isControl || process.env.NODE_ENV !== "development") return;
-    const control = decoration.current?.parentElement?.closest(INTERACTIVE);
-    if (decoration.current && !control) {
-      // A native <button> with no type submits its form; this one is a div.
-      const inForm = decoration.current.closest("form") !== null;
+    if (!implicitButton || process.env.NODE_ENV !== "development") return;
+    const node = decoration.current;
+    if (!node) return;
+    if (node.parentElement?.closest(INTERACTIVE)) {
       dev.warn(
-        inForm
-          ? `${decorationOf} inside a <form> renders a div: unlike a native <button>, it does not submit the form without type="submit". Pass type="submit" (or type="button" with an onClick).`
-          : `${decorationOf} renders a div: it has no onClick, href or type, and no clickable element is around it, so nothing can focus or press it. Pass onClick, href or type="submit".`,
-        decoration.current,
+        `${decorationOf} has no onClick, href or type and sits inside another clickable element, so it renders a <button> nested in that control. Make the outer element a core Card, SmartLink or Button, wrap this Button in <InsideControl> (it then renders a plain div that decorates the outer control), or give it its own onClick or href.`,
+        node,
+      );
+    } else if (node.closest("form")) {
+      // A native <button> with no type submits its form; this one does not.
+      dev.warn(
+        `${decorationOf} inside a <form> renders <button type="button">: unlike a native <button>, it does not submit the form without type="submit". Pass type="submit" (or an onClick).`,
+        node,
       );
     }
-  }, [decorationOf, isControl]);
+  }, [decorationOf, implicitButton]);
 
   // A real link or button is itself the interactive element, so a Button
   // inside it must not answer to a dropdown trigger above: it stays the
   // plain div it has always been there (see Button), instead of nesting
   // one interactive control inside another.
   const trigger = useContext(DropdownTriggerContext);
-  const children = trigger ? (
+  const cleared = trigger ? (
     <DropdownTriggerContext.Provider value={null}>{content}</DropdownTriggerContext.Provider>
   ) : (
     content
   );
+  const children = <InsideControlContext.Provider value>{cleared}</InsideControlContext.Provider>;
 
   if (safeHref) {
     // A link runs the `onClick` it is given, then `onLinkClick`. It used to
@@ -137,11 +155,20 @@ const ElementType = ({
   if (isControl) {
     return (
       <button
-        ref={ref as React.Ref<HTMLButtonElement>}
+        ref={
+          implicitButton
+            ? (decorationRef as React.Ref<HTMLButtonElement>)
+            : (ref as React.Ref<HTMLButtonElement>)
+        }
         className={className}
         onClick={onClick}
         style={style}
-        type={type as React.ButtonHTMLAttributes<HTMLButtonElement>["type"]}
+        // never a submit by accident: a native <button> with no type submits its form
+        type={
+          (implicitButton
+            ? "button"
+            : type) as React.ButtonHTMLAttributes<HTMLButtonElement>["type"]
+        }
         {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}
       >
         {children}

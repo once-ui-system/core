@@ -244,6 +244,10 @@
       "types": "./dist/components/Input.d.ts",
       "default": "./dist/components/Input.js"
     },
+    "./components/InsideControl": {
+      "types": "./dist/components/InsideControl.d.ts",
+      "default": "./dist/components/InsideControl.js"
+    },
     "./components/Kbd": {
       "types": "./dist/components/Kbd.d.ts",
       "default": "./dist/components/Kbd.js"

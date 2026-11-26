@@ -13,6 +13,57 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Added
+
+- **`Textarea` grows from a minimum: `lines={{ min: 3 }}`.** An empty growing textarea
+  starts at one row and reads as an input, so apps (and agents) set a fixed `lines` to make
+  it taller, which also turned growing off and added a drag handle. `{ min }` starts it
+  taller and keeps it growing; `{ min, max }` stops at `max` rows and scrolls. A number
+  still fixes the height. The validator now flags a fixed `lines={n}` without `resize`.
+- **`NavGroup` takes `badge` and `indicator`, like `NavItem`.** A "New" on a group used to
+  go inside its `label`, so it trailed the text while the items' badges sat at the row's
+  right edge. The group's badge now sits at the end of its header, before the chevron, in
+  the same pill as an item's (a number is a count: 0 hides it, above 9 prints 9+). In an
+  icon rail it rides the menu's trigger row.
+
+### Fixed
+
+- **A `Map` inside a `StyleScope` paints in that scope's colours.** Routes, areas,
+  circles, 3D buildings and the dark basemap tint read their tokens on the page root, so a
+  map in a scoped section (another brand, accent or theme) drew its `tone="accent"` route
+  in the page's accent instead of the section's. They now read the tokens on the map's own
+  container.
+
+- **A `Select` no longer blinks a text cursor when clicked.** Its field is read-only, but
+  browsers still show a caret in a focused read-only input, so the field looked like it
+  wanted typing. Every read-only combobox field now hides the caret; focus still shows on
+  its border.
+
+### Changed
+
+- **A `Button` or `IconButton` with no `onClick`, `href` or `type` is a real
+  `<button type="button">`.** It used to render a plain div, so screen readers and agents
+  operating the page read an unwired "Delete workspace" as text. It still renders a plain
+  div inside a clickable `Card` and inside core controls that draw their own (Kbar's
+  trigger, `CompareImage`'s handle, an `Accordion` header), so no button nests in another.
+  It never submits a form: pass `type="submit"` for that, as before. In development a
+  Button that lands inside some other clickable element warns.
+
+### Added
+
+- **`InsideControl`** marks its content as part of a control you drew yourself (a
+  `role="button"` element with its own onClick): an unwired Button inside it stays a plain
+  div that decorates your control. A Button with `aria-hidden` stays decoration too.
+  `ScrollToTop` uses it for the Button it wraps.
+
+### Fixed
+
+- **`RichTextEditor` fills its parent with `fill` or `fillHeight`.** The writing area takes
+  the height the toolbar (and the link row, while it is open) leave, and scrolls, so a
+  layout no longer has to measure the room and hand a height back. Doing that grew the
+  editor without end once the link row opened. `minHeight` and `maxHeight` still set the
+  writing area's height when the editor does not fill.
+
 ## [3.1.1] - 2026-11-24
 
 Patch. Fixes only; nothing to change in your code. `foundations`, `fx` and `blocks` stay

@@ -65,9 +65,13 @@ interface RichTextEditorProps
   tools?: RichTextTool[] | false;
   disabled?: boolean;
   readOnly?: boolean;
-  /** The writing area's least height, as a CSS length. Default `"8rem"`. */
+  /**
+   * The writing area's least height, as a CSS length. Default `"8rem"`.
+   * Ignored with `fill` or `fillHeight`, which give the editor its parent's
+   * height and let the writing area take what the toolbar leaves.
+   */
   minHeight?: string;
-  /** The writing area scrolls past this height, as a CSS length. */
+  /** The writing area scrolls past this height, as a CSS length. Ignored with `fill` or `fillHeight`. */
   maxHeight?: string;
   /** Focus the editor when it mounts. */
   autoFocus?: boolean;

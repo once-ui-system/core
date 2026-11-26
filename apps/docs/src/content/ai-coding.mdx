@@ -3,7 +3,7 @@ title: "Design system for AI coding agents"
 docs: "once-ui/ai-coding"
 github: "packages/core/src/components/ai-coding.mdx"
 navLabel: "AI coding"
-updatedAt: "2026-10-11"
+updatedAt: "2026-11-24"
 summary: "Once UI is an agentic design system: compact rules, a component catalog, task bundles and gold examples that Claude, Cursor and other coding agents follow."
 navIcon: "code"
 ---
@@ -84,6 +84,26 @@ Drop `@next` once 3.0 is the `latest` release. In a project that already has the
 | `get_rules` | The codegen rules, compact or full |
 | `validate_code` | The checks of `once-ui-validate-ai-code`, on code the agent just wrote |
 | `get_brand` | The app's own brand, read from its files: schemes, exact colour, fonts, logo files with the `<Logo>` to render them, the mascot. Run from the app's root, or pass `dir` |
+
+## Hosted MCP on once-ui.com
+
+The local server above knows the library. The hosted one at `https://once-ui.com/api/mcp` works with your Once UI account: it generates and saves brands with Brand Kit, and directs films with [Once UI Film](/film). It signs in with OAuth: your agent finds the sign-in on its own and you approve it once on once-ui.com. The CLI's `once-ui login` token works too.
+
+```bash
+claude mcp add --transport http once-ui https://once-ui.com/api/mcp
+```
+
+Other agents take the URL as a remote MCP connector.
+
+| Tool | What it does |
+| --- | --- |
+| `generate_brand`, `refine_brand`, `get_generation` | Generate a brand from a description, refine a generation, read one back |
+| `save_brand`, `list_brands`, `get_brand`, `delete_brand` | Your saved brands |
+| `get_allowance` | How many generations you have left today |
+| `film_list_scenes` | Film's scenes with their props, the house rules and example films |
+| `film_check` | Checks a film.json: scene names, props, timing, length |
+| `film_my_mascot` | Your own mascot, ready to star in the `mascot` scene |
+| `film_open` | A link that opens the film in Studio to play, tweak and render |
 
 For open questions about the docs, [Context7](https://context7.com/once-ui-system/core) also indexes them (`npx -y @upstash/context7-mcp@latest`, then `get-library-docs /once-ui-system/core`).
 
