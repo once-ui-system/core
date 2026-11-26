@@ -91,6 +91,7 @@ const NavIcon = ({
           fill="none"
           stroke="currentColor"
           strokeWidth="1.5"
+          aria-hidden="true"
         >
           {MENU.map(([part, d]) => (
             <path key={part} data-part={part} d={d} />
