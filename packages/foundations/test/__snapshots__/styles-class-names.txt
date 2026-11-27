@@ -223,6 +223,7 @@
 .grid-hide
 .grid-show
 .height-below-header
+.icon-stroke
 .info-background-alpha-medium
 .info-background-alpha-strong
 .info-background-alpha-weak
@@ -2518,7 +2519,18 @@
 .success-solid-weak
 .surface-background
 .surface-border
+.text-align-center
+.text-align-end
+.text-align-justify
+.text-align-left
+.text-align-right
+.text-align-start
 .text-decoration-none
+.text-wrap-balance
+.text-wrap-nowrap
+.text-wrap-pretty
+.text-wrap-stable
+.text-wrap-wrap
 .transition-macro-long
 .transition-macro-medium
 .transition-macro-short
