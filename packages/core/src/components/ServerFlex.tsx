@@ -10,6 +10,7 @@ import {
   elementReset,
   hiddenAboveBreakpoints,
   isCSSUnit,
+  isZeroLength,
   offsetClasses,
   offsetValue,
   scrollsOn,
@@ -17,6 +18,7 @@ import {
   spacingClass,
   spacingClasses,
   spacingValue,
+  textClasses,
   themeAttributes,
   translateTransform,
   withTokenLengths,
@@ -222,8 +224,10 @@ const ServerFlex = ({
   };
 
   const cursorProp = cursorProps(cursor);
+  const text = textClasses(align, undefined);
 
   let classes = classNames(
+    ...text.classes,
     inline ? "display-inline-flex" : "display-flex",
     elementReset(Component),
     position && `position-${position}`,
@@ -317,8 +321,9 @@ const ServerFlex = ({
     fitWidth && "fit-width",
     fitHeight && "fit-height",
     fill && "fill",
-    fillWidth && !minWidth && "min-width-0",
-    fillHeight && !minHeight && "min-height-0",
+    // `minWidth={0}` is the class too, not an inline `min-width: 0px`.
+    ((fillWidth && !minWidth) || isZeroLength(minWidth)) && "min-width-0",
+    ((fillHeight && !minHeight) || isZeroLength(minHeight)) && "min-height-0",
     fill && "min-height-0",
     fill && "min-width-0",
     (fillWidth || maxWidth) && "fill-width",
@@ -482,13 +487,13 @@ const ServerFlex = ({
     maxWidth: ["xs", "s", "m", "l", "xl"].includes(maxWidth as string)
       ? undefined
       : sizeValue(maxWidth, "width"),
-    minWidth: sizeValue(minWidth, "width"),
-    minHeight: sizeValue(minHeight, "height"),
+    minWidth: isZeroLength(minWidth) ? undefined : sizeValue(minWidth, "width"),
+    minHeight: isZeroLength(minHeight) ? undefined : sizeValue(minHeight, "height"),
     maxHeight: sizeValue(maxHeight, "height"),
     width: sizeValue(width, "width"),
     height: sizeValue(height, "height"),
     aspectRatio: aspectRatio,
-    textAlign: align,
+    ...text.style,
     cursor: cursorProp.style,
     ...numericSpacingStyle({
       padding,

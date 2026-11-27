@@ -518,6 +518,15 @@ export const belowHeaderValue = "calc(100dvh - var(--header-height))";
 
 export const FONT_SIZES = ["xl", "l", "m", "s", "xs"];
 
+/**
+ * `align` and `wrap` on Text, Heading and Flex. They were inline styles on
+ * every element that set them (a `nowrap` label, a centred heading), the most
+ * frequent inline declarations core wrote after icon caps. Values outside
+ * these lists still go inline.
+ */
+export const TEXT_ALIGNS = ["left", "center", "right", "justify", "start", "end"];
+export const TEXT_WRAPS = ["wrap", "nowrap", "balance", "pretty", "stable"];
+
 export const FONT_WEIGHTS = ["default", "normal", "medium", "strong"];
 
 /**

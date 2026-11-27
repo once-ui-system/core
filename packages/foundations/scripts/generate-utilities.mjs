@@ -32,6 +32,8 @@ import {
   FONT_SIZES,
   FONT_TYPES,
   FONT_WEIGHTS,
+  TEXT_ALIGNS,
+  TEXT_WRAPS,
   GRID_AUTO_FIT,
   GRID_COLUMNS,
   GRID_ROWS,
@@ -533,6 +535,8 @@ function typography() {
     rule(".font-size-inherit", ["font-size: inherit;"]),
     rule(".font-weight-inherit", ["font-weight: inherit;"]),
   ];
+  for (const a of TEXT_ALIGNS) out.push(rule(`.text-align-${a}`, [`text-align: ${a};`]));
+  for (const w of TEXT_WRAPS) out.push(rule(`.text-wrap-${w}`, [`text-wrap: ${w};`]));
 
   // All four weights read the display ramp, whatever family they land on.
   for (const w of FONT_WEIGHTS) {

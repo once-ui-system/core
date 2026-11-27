@@ -149,6 +149,34 @@ function tokenLengthDeclaration(key: string): string {
   return `calc(${Number(key.replace("_", ".")) / 16}rem * var(--scaling, 1))`;
 }
 
+/** `0`, `"0"` or `"0px"`: a `minWidth`/`minHeight` the `min-*-0` class carries. */
+export const isZeroLength = (value: unknown) => value === 0 || value === "0" || value === "0px";
+
+const TEXT_ALIGNS = new Set(["left", "center", "right", "justify", "start", "end"]);
+const TEXT_WRAPS = new Set(["wrap", "nowrap", "balance", "pretty", "stable"]);
+
+/**
+ * `align` and `wrap` as foundations classes (`text-align-center`,
+ * `text-wrap-nowrap`) where one exists, and as inline style otherwise, so an
+ * unusual value (`match-parent`, a CSS-wide keyword) still applies.
+ */
+export function textClasses(
+  align: unknown,
+  wrap: unknown,
+): { classes: (string | undefined)[]; style: Pick<CSSProperties, "textAlign" | "textWrap"> } {
+  const alignClass =
+    typeof align === "string" && TEXT_ALIGNS.has(align) ? `text-align-${align}` : undefined;
+  const wrapClass =
+    typeof wrap === "string" && TEXT_WRAPS.has(wrap) ? `text-wrap-${wrap}` : undefined;
+  return {
+    classes: [alignClass, wrapClass],
+    style: {
+      textAlign: alignClass ? undefined : (align as CSSProperties["textAlign"]),
+      textWrap: wrapClass ? undefined : (wrap as CSSProperties["textWrap"]),
+    },
+  };
+}
+
 /** A number on the token scale ({@link tokenLength}), a string as written. */
 export function cssLength<T extends string | undefined>(value: number | T): string | T {
   return typeof value === "number" ? tokenLength(value) : value;

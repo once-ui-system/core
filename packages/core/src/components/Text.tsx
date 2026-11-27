@@ -14,7 +14,7 @@ import type {
   TextProps,
 } from "../interfaces.js";
 import type { ColorScheme, ColorWeight, TextVariant } from "../types.js";
-import { withWeight } from "../utils/layoutClasses.js";
+import { textClasses, withWeight } from "../utils/layoutClasses.js";
 import { leafLayout } from "../utils/leafLayout.js";
 
 type TypeProps<T extends ElementType> = TextProps<T> &
@@ -129,8 +129,11 @@ const Text: TextComponent = function Text<T extends ElementType = "span">({
     left,
   });
 
+  // `align` and `wrap` are classes for their common values, not inline style.
+  const text = textClasses(align, wrap);
   const combinedClasses = classNames(
     ...classes,
+    ...text.classes,
     colorClass,
     className,
     opacity !== undefined && `opacity-${opacity}`,
@@ -146,8 +149,7 @@ const Text: TextComponent = function Text<T extends ElementType = "span">({
   );
 
   const combinedStyle = {
-    textAlign: align,
-    textWrap: wrap,
+    ...text.style,
     ...layout.style,
     ...style,
   };
