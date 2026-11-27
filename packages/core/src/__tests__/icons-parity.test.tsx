@@ -32,7 +32,11 @@ describe("built-in icons", () => {
       expect(html).toContain('stroke="currentColor"');
       expect(html).toContain('stroke-width="1.5"');
       expect(html).toMatch(/<path d="/);
-      expect(html).toContain("stroke-linecap:var(--icon-linecap, round)");
+      // The theme's caps come from the `icon-stroke` class (foundations'
+      // utilities.scss); the icon's own round caps stay as the fallback.
+      expect(html).toContain('class="icon-stroke"');
+      expect(html).toContain('stroke-linecap="round"');
+      expect(html).not.toContain("style=");
     });
   }
 
@@ -40,5 +44,11 @@ describe("built-in icons", () => {
     const Icon = iconLibrary.check;
     const html = renderToStaticMarkup(<Icon style={{ strokeLinecap: "butt" }} />);
     expect(html).toContain("stroke-linecap:butt");
+  });
+
+  it("keeps a caller's className beside the themed caps", () => {
+    const Icon = iconLibrary.check;
+    const html = renderToStaticMarkup(<Icon className="mine" />);
+    expect(html).toContain('class="icon-stroke mine"');
   });
 });

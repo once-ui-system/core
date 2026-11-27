@@ -14,7 +14,7 @@ import type {
   TextProps,
 } from "../interfaces.js";
 import type { ColorScheme, ColorWeight, TextVariant } from "../types.js";
-import { withWeight } from "../utils/layoutClasses.js";
+import { textClasses, withWeight } from "../utils/layoutClasses.js";
 import { leafLayout } from "../utils/leafLayout.js";
 
 type HeadingProps<T extends ElementType = "h1"> = TextProps<T> &
@@ -130,8 +130,11 @@ const Heading: HeadingComponent = function Heading<T extends ElementType = "h1">
     left,
   });
 
+  // `align` and `wrap` are classes for their common values, not inline style.
+  const text = textClasses(align, wrap);
   const combinedClasses = classNames(
     ...classes,
+    ...text.classes,
     colorClass,
     className,
     truncate && "truncate",
@@ -147,8 +150,7 @@ const Heading: HeadingComponent = function Heading<T extends ElementType = "h1">
   );
 
   const combinedStyle = {
-    textAlign: align,
-    textWrap: wrap,
+    ...text.style,
     ...layout.style,
     ...style,
   };

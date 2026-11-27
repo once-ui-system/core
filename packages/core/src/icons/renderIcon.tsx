@@ -33,13 +33,9 @@ const toElements = (nodes: IconNode[]): React.ReactNode =>
 export const createIcon = (data: IconNode): IconComponent => {
   // Line icons take their caps and joins from the theme: round by default,
   // square under `data-border="conservative"` (foundations' border tokens).
-  const themed =
-    data.attr.strokeLinecap !== undefined
-      ? {
-          strokeLinecap: `var(--icon-linecap, ${data.attr.strokeLinecap})`,
-          strokeLinejoin: `var(--icon-linejoin, ${data.attr.strokeLinejoin ?? "round"})`,
-        }
-      : undefined;
+  // The `icon-stroke` class carries that; the icon's own attributes stay the
+  // fallback where foundations' CSS isn't loaded (an OG image, say).
+  const themed = data.attr.strokeLinecap !== undefined;
   const Icon: IconComponent = (props) =>
     React.createElement(
       "svg",
@@ -52,7 +48,11 @@ export const createIcon = (data: IconNode): IconComponent => {
         width: "1em",
         xmlns: "http://www.w3.org/2000/svg",
         ...props,
-        style: themed ? { ...themed, ...props.style } : props.style,
+        className: themed
+          ? props.className
+            ? `icon-stroke ${props.className}`
+            : "icon-stroke"
+          : props.className,
       },
       toElements(data.child),
     );

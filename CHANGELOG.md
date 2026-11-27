@@ -26,6 +26,20 @@ item (see `ROADMAP.md`, Week 4).
   the same pill as an item's (a number is a count: 0 hides it, above 9 prints 9+). In an
   icon rail it rides the menu's trigger row.
 
+### Changed
+
+- **Common inline styles are utility classes now.** Core wrote the same declarations inline
+  on nearly every page; they are foundations classes instead, so a page carries less inline
+  style and an app's own CSS can override them. Behaviour is unchanged:
+  - `minWidth={0}` / `minHeight={0}` (`"0"`, `"0px"`) on Flex and Grid add `min-width-0` /
+    `min-height-0` (the class `fillWidth` already added) instead of `min-width: 0px`.
+  - `align` on Text, Heading, Flex and Grid is `text-align-{left,center,right,justify,start,end}`,
+    and `wrap` on Text and Heading is `text-wrap-{wrap,nowrap,balance,pretty,stable}`. Any
+    other value still goes inline.
+  - Line icons get the `icon-stroke` class for the theme's caps and joins instead of an inline
+    `var(--icon-linecap)` / `var(--icon-linejoin)` style on every icon; the icon's own round
+    caps stay as the fallback where foundations' CSS isn't loaded.
+
 ### Fixed
 
 - **A `Map` inside a `StyleScope` paints in that scope's colours.** Routes, areas,

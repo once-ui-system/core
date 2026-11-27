@@ -45,7 +45,7 @@ describe("BlockQuote", () => {
     const content = screen.getByText("Ship small.");
     expect(content.tagName).toBe("DIV");
     expect(content).toHaveClass("font-heading", "font-strong", "font-xl");
-    expect(content.style.textWrap).toBe("balance");
+    expect(content).toHaveClass("text-wrap-balance");
   });
 
   it("has no axe violations", async () => {

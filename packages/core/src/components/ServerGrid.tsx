@@ -9,6 +9,7 @@ import {
   elementReset,
   hiddenAboveBreakpoints,
   isCSSUnit,
+  isZeroLength,
   offsetClasses,
   offsetValue,
   scrollsOn,
@@ -16,6 +17,7 @@ import {
   spacingClass,
   spacingClasses,
   spacingValue,
+  textClasses,
   themeAttributes,
   translateTransform,
   withTokenLengths,
@@ -210,7 +212,10 @@ const ServerGrid = ({
 
   const cursorProp = cursorProps(cursor);
 
+  const text = textClasses(align, undefined);
+
   let classes = classNames(
+    ...text.classes,
     position && `position-${position}`,
     inline ? "display-inline-grid" : "display-grid",
     elementReset(Component),
@@ -224,6 +229,8 @@ const ServerGrid = ({
     (fillHeight || maxHeight) && "fill-height",
     height === BELOW_HEADER && "height-below-header",
     minHeight === BELOW_HEADER && "min-height-below-header",
+    isZeroLength(minWidth) && "min-width-0",
+    isZeroLength(minHeight) && "min-height-0",
     maxHeight === BELOW_HEADER && "max-height-below-header",
     minColumnWidthValue ? "grid-columns-auto-fit" : columns && `grid-columns-${columns}`,
     // Taken out of the props here, so it never reaches the DOM as a `rows`
@@ -341,13 +348,13 @@ const ServerGrid = ({
     maxWidth: ["xs", "s", "m", "l", "xl"].includes(maxWidth as string)
       ? undefined
       : sizeValue(maxWidth, "width"),
-    minWidth: sizeValue(minWidth, "width"),
-    minHeight: sizeValue(minHeight, "height"),
+    minWidth: isZeroLength(minWidth) ? undefined : sizeValue(minWidth, "width"),
+    minHeight: isZeroLength(minHeight) ? undefined : sizeValue(minHeight, "height"),
     maxHeight: sizeValue(maxHeight, "height"),
     width: sizeValue(width, "width"),
     height: sizeValue(height, "height"),
     aspectRatio: aspectRatio,
-    textAlign: align,
+    ...text.style,
     cursor: cursorProp.style,
     ...numericSpacingStyle({
       padding,

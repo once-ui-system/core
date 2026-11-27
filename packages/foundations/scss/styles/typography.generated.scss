@@ -25,6 +25,50 @@ h1, h2, h3, h4, h5, h6, p {
   font-weight: inherit;
 }
 
+.text-align-left {
+  text-align: left;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.text-align-right {
+  text-align: right;
+}
+
+.text-align-justify {
+  text-align: justify;
+}
+
+.text-align-start {
+  text-align: start;
+}
+
+.text-align-end {
+  text-align: end;
+}
+
+.text-wrap-wrap {
+  text-wrap: wrap;
+}
+
+.text-wrap-nowrap {
+  text-wrap: nowrap;
+}
+
+.text-wrap-balance {
+  text-wrap: balance;
+}
+
+.text-wrap-pretty {
+  text-wrap: pretty;
+}
+
+.text-wrap-stable {
+  text-wrap: stable;
+}
+
 .font-default {
   font-weight: var(--font-weight-display-default);
 }

@@ -16,6 +16,14 @@
   }
 }
 
+// Core's line icons take their caps and joins from the theme: round by
+// default, square and mitred under `data-border="conservative"`. Was an inline
+// style on every icon.
+.icon-stroke {
+  stroke-linecap: var(--icon-linecap, round);
+  stroke-linejoin: var(--icon-linejoin, round);
+}
+
 .truncate {
   overflow: hidden;
   text-overflow: ellipsis;

@@ -60,12 +60,13 @@ describe("size tokens", () => {
   it("writes every step as a Flex size on the server", () => {
     for (const token of STATIC_SPACING_TOKENS) {
       const t = token as SpacingToken;
-      const style = styleOf(
-        renderToStaticMarkup(<Flex width={t} height={t} minWidth={t} maxHeight={t} />),
-      );
+      const html = renderToStaticMarkup(<Flex width={t} height={t} minWidth={t} maxHeight={t} />);
+      const style = styleOf(html);
       expect(style, token).toContain(`width:var(--static-space-${token})`);
       expect(style, token).toContain(`height:var(--static-space-${token})`);
-      expect(style, token).toContain(`min-width:var(--static-space-${token})`);
+      // `minWidth="0"` is the `min-width-0` class rather than an inline value.
+      if (token === "0") expect(html, token).toContain("min-width-0");
+      else expect(style, token).toContain(`min-width:var(--static-space-${token})`);
       expect(style, token).toContain(`max-height:var(--static-space-${token})`);
     }
   });
