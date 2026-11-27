@@ -113,11 +113,16 @@ describe("harness entry points", () => {
     expect([...(imports["@once-ui-system/core/media"].exports ?? [])].sort()).toEqual([
       "CompareImage",
       "MediaAudioPlayer",
+      "MediaLibrary",
+      "MediaPicker",
       "MediaUpload",
       "MediaVideoPlayer",
       "Scrubber",
       "ScrubberFilmstrip",
       "ScrubberWaveform",
+      "createMemoryMediaAdapter",
+      "formatMediaSize",
+      "mediaKindOfFile",
     ]);
     expect(imports["@once-ui-system/core/media"].types).toEqual(
       expect.arrayContaining(["MediaAudioPlayerProps", "ScrubberProps", "MediaUploadProps"]),

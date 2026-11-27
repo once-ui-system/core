@@ -117,6 +117,7 @@ const fixtures: Record<string, Record<string, unknown>> = {
   Icon: { name: "check" },
   Logo: { wordmark: "/logo.svg" },
   ProgressBar: { value: 40 },
+  MediaLibrary: { adapter: { list: async () => ({ items: [] }) } },
   Toast: { tone: "success", children: "Saved" },
   LinearGauge: { value: 40 },
   ChartSummary: { series: [{ key: "a" }], data: [{ label: "Jan", a: 1 }] },

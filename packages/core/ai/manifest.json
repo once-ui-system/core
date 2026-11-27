@@ -1,6 +1,6 @@
 {
  "version": "3.1.1",
- "generated": "2026-11-26",
+ "generated": "2026-11-27",
  "imports": {
   "@once-ui-system/core": {
    "use": "Components, hooks, providers, defineConfig and types: everything not listed below"
@@ -87,11 +87,28 @@
     "Scrubber",
     "ScrubberFilmstrip",
     "ScrubberWaveform",
-    "MediaUpload"
+    "MediaLibrary",
+    "MediaPicker",
+    "MediaUpload",
+    "createMemoryMediaAdapter",
+    "formatMediaSize",
+    "mediaKindOfFile"
    ],
    "types": [
+    "MediaAsset",
     "MediaAudioPlayerProps",
+    "MediaFolder",
+    "MediaKind",
+    "MediaLibraryAdapter",
+    "MediaLibraryLabels",
+    "MediaLibraryProps",
+    "MediaListPage",
+    "MediaListQuery",
+    "MediaPickerLabels",
+    "MediaPickerProps",
+    "MediaUploadContext",
     "MediaUploadProps",
+    "MemoryMediaAdapterOptions",
     "ScrubberBlock",
     "ScrubberFilmstripProps",
     "ScrubberMarker",

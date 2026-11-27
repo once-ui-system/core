@@ -1,0 +1,150 @@
+{
+ "name": "MediaPicker",
+ "group": "media",
+ "importFrom": "@once-ui-system/core/media",
+ "props": {
+  "open": "!boolean",
+  "onClose": "!() => void",
+  "onPick": "!(assets: MediaAsset[]) => void",
+  "adapter": "!MediaLibraryAdapter",
+  "multiple": "boolean = false",
+  "accept": "MediaKind[]",
+  "defaultFolderId": "string | null = null",
+  "readOnly": "boolean = false",
+  "columns": "2 | 3 | 4 | 5 | 6 = 4",
+  "height": "number | CSSUnit = 32rem",
+  "labels": "Partial<MediaPickerLabels>",
+  "libraryLabels": "Partial<MediaLibraryLabels>",
+  "stack": "boolean"
+ },
+ "tags": [
+  "media",
+  "form",
+  "app"
+ ],
+ "pairsWith": [
+  "MediaLibrary",
+  "Button",
+  "Media"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "CSSUnit": [
+   "`${number}px`",
+   "`${number}rem`",
+   "`${number}em`",
+   "`${number}ch`",
+   "`${number}%`",
+   "`${number}vh`",
+   "`${number}vw`",
+   "`${number}dvh`",
+   "`${number}dvw`",
+   "`${number}svh`",
+   "`${number}svw`",
+   "`${number}lvh`",
+   "`${number}lvw`",
+   "`${number}vmin`",
+   "`${number}vmax`",
+   "`${number}cqw`",
+   "`${number}cqh`",
+   "`calc(${string})`",
+   "`min(${string})`",
+   "`max(${string})`",
+   "`clamp(${string})`",
+   "`var(${string})`"
+  ],
+  "MediaAsset": {
+   "id": "!string",
+   "name": "!string",
+   "src": "!string",
+   "url": "string",
+   "kind": "!MediaKind",
+   "folderId": "string | null",
+   "poster": "string",
+   "size": "number",
+   "width": "number",
+   "height": "number",
+   "createdAt": "string"
+  },
+  "MediaFolder": {
+   "id": "!string",
+   "name": "!string",
+   "parentId": "!string | null"
+  },
+  "MediaKind": [
+   "audio",
+   "video",
+   "image",
+   "file"
+  ],
+  "MediaLibraryAdapter": {
+   "list": "!(query: MediaListQuery) => Promise<MediaListPage>",
+   "listFolders": "() => Promise<MediaFolder[]>",
+   "upload": "(file: File, context: MediaUploadContext) => Promise<MediaAsset>",
+   "remove": "(ids: string[]) => Promise<void>",
+   "move": "(ids: string[], folderId: string | null) => Promise<void>",
+   "rename": "(id: string, name: string) => Promise<void>",
+   "createFolder": "(name: string, parentId: string | null) => Promise<MediaFolder>",
+   "renameFolder": "(id: string, name: string) => Promise<void>",
+   "removeFolder": "(id: string) => Promise<void>"
+  },
+  "MediaLibraryLabels": {
+   "allMedia": "!string",
+   "folders": "!string",
+   "newFolder": "!string",
+   "search": "!string",
+   "upload": "!string",
+   "dropToUpload": "!string",
+   "uploading": "!string",
+   "emptyTitle": "!string",
+   "emptyDescription": "!string",
+   "noResultsTitle": "!string",
+   "noResultsDescription": "!string",
+   "loadFailed": "!string",
+   "retry": "!string",
+   "actions": "!string",
+   "rename": "!string",
+   "moveTo": "!string",
+   "topLevel": "!string",
+   "delete": "!string",
+   "cancel": "!string",
+   "save": "!string",
+   "create": "!string",
+   "name": "!string",
+   "folderName": "!string",
+   "renameFolder": "!string",
+   "deleteFolder": "!string",
+   "deleteFolderDescription": "!(name: string) => string",
+   "deleteTitle": "!(count: number) => string",
+   "deleteDescription": "!(count: number) => string",
+   "selected": "!(count: number) => string",
+   "clearSelection": "!string",
+   "select": "!(name: string) => string",
+   "uploadFailed": "!(name: string) => string",
+   "notAccepted": "!(name: string) => string",
+   "actionFailed": "!string"
+  },
+  "MediaListPage": {
+   "items": "!MediaAsset[]",
+   "nextCursor": "string | null"
+  },
+  "MediaListQuery": {
+   "folderId": "!string | null",
+   "search": "string",
+   "kinds": "MediaKind[]",
+   "cursor": "string"
+  },
+  "MediaPickerLabels": {
+   "title": "!string",
+   "cancel": "!string",
+   "choose": "!string",
+   "chooseCount": "!(count: number) => string",
+   "hint": "!string"
+  },
+  "MediaUploadContext": {
+   "folderId": "!string | null",
+   "onProgress": "!(fraction: number) => void",
+   "signal": "!AbortSignal"
+  }
+ }
+}

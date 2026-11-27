@@ -16,5 +16,24 @@ export type {
 } from "../../components/Scrubber.js";
 export { Scrubber } from "../../components/Scrubber.js";
 export { ScrubberFilmstrip, ScrubberWaveform } from "../../components/Scrubber.js";
+export type { MediaLibraryLabels, MediaLibraryProps } from "./MediaLibrary.js";
+export { MediaLibrary } from "./MediaLibrary.js";
+export type { MediaPickerLabels, MediaPickerProps } from "./MediaPicker.js";
+export { MediaPicker } from "./MediaPicker.js";
 export type { MediaUploadProps } from "./MediaUpload.js";
 export { MediaUpload } from "./MediaUpload.js";
+export type {
+  MediaAsset,
+  MediaFolder,
+  MediaKind,
+  MediaLibraryAdapter,
+  MediaListPage,
+  MediaListQuery,
+  MediaUploadContext,
+  MemoryMediaAdapterOptions,
+} from "./mediaAdapter.js";
+export {
+  createMemoryMediaAdapter,
+  formatMediaSize,
+  mediaKindOfFile,
+} from "./mediaAdapter.js";

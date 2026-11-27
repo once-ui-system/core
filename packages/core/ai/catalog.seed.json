@@ -719,6 +719,16 @@
     "tags": ["media"],
     "pairsWith": ["Column", "Text"]
   },
+  "MediaLibrary": {
+    "purpose": "Media library on any storage via an adapter: folder tree, searchable grid, drop to upload, select, move, delete",
+    "tags": ["media", "app"],
+    "pairsWith": ["MediaPicker", "MediaUpload"]
+  },
+  "MediaPicker": {
+    "purpose": "Choose-an-image dialog: MediaLibrary in a Dialog that returns the picked assets",
+    "tags": ["media", "form", "app"],
+    "pairsWith": ["MediaLibrary", "Button", "Media"]
+  },
   "MediaUpload": {
     "purpose": "Drag-and-drop image upload with preview, compression and resizing (needs compressorjs)",
     "tags": ["form", "settings", "media"],

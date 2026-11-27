@@ -280,6 +280,27 @@
    "signature": "(values: readonly number[], box: Rect) => Rect[]",
    "doc": "Squarified treemap (Bruls, Huizing, van Wijk): rows of tiles kept close to square."
   },
+  "createMemoryMediaAdapter": {
+   "group": "media",
+   "importFrom": "@once-ui-system/core/media",
+   "kind": "function",
+   "signature": "(options?: MemoryMediaAdapterOptions) => MediaLibraryAdapter",
+   "doc": "An adapter that keeps everything in memory, for prototypes, docs and tests."
+  },
+  "formatMediaSize": {
+   "group": "media",
+   "importFrom": "@once-ui-system/core/media",
+   "kind": "function",
+   "signature": "(bytes: number) => string",
+   "doc": "Bytes as a short size: 820 B, 14 kB, 3.2 MB."
+  },
+  "mediaKindOfFile": {
+   "group": "media",
+   "importFrom": "@once-ui-system/core/media",
+   "kind": "function",
+   "signature": "(file: Pick<File, \"type\" | \"name\">) => MediaKind",
+   "doc": "The kind of a browser `File`, from its MIME type and then its name."
+  },
   "clusterPoints": {
    "group": "map",
    "importFrom": "@once-ui-system/core/map",
@@ -1670,6 +1691,62 @@
   },
   "MdxComponents": {
    "[key: string]": "ElementType"
+  },
+  "MediaAsset": {
+   "id": "!string",
+   "name": "!string",
+   "src": "!string",
+   "url": "string",
+   "kind": "!MediaKind",
+   "folderId": "string | null",
+   "poster": "string",
+   "size": "number",
+   "width": "number",
+   "height": "number",
+   "createdAt": "string"
+  },
+  "MediaFolder": {
+   "id": "!string",
+   "name": "!string",
+   "parentId": "!string | null"
+  },
+  "MediaKind": [
+   "audio",
+   "video",
+   "image",
+   "file"
+  ],
+  "MediaLibraryAdapter": {
+   "list": "!(query: MediaListQuery) => Promise<MediaListPage>",
+   "listFolders": "() => Promise<MediaFolder[]>",
+   "upload": "(file: File, context: MediaUploadContext) => Promise<MediaAsset>",
+   "remove": "(ids: string[]) => Promise<void>",
+   "move": "(ids: string[], folderId: string | null) => Promise<void>",
+   "rename": "(id: string, name: string) => Promise<void>",
+   "createFolder": "(name: string, parentId: string | null) => Promise<MediaFolder>",
+   "renameFolder": "(id: string, name: string) => Promise<void>",
+   "removeFolder": "(id: string) => Promise<void>"
+  },
+  "MediaListPage": {
+   "items": "!MediaAsset[]",
+   "nextCursor": "string | null"
+  },
+  "MediaListQuery": {
+   "folderId": "!string | null",
+   "search": "string",
+   "kinds": "MediaKind[]",
+   "cursor": "string"
+  },
+  "MediaUploadContext": {
+   "folderId": "!string | null",
+   "onProgress": "!(fraction: number) => void",
+   "signal": "!AbortSignal"
+  },
+  "MemoryMediaAdapterOptions": {
+   "assets": "MediaAsset[]",
+   "folders": "MediaFolder[]",
+   "pageSize": "number",
+   "latency": "number"
   },
   "MotionCapability": {
    "prefersReducedMotion": "!boolean",

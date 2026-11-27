@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "3.1.1",
- "generated": "2026-11-26",
+ "generated": "2026-11-27",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root; '@once-ui-system/fx' and '@once-ui-system/blocks' are packages of their own, installed beside core.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -1934,6 +1934,105 @@
    "h5",
    "h6"
   ],
+  "MediaAsset": {
+   "id": "!string",
+   "name": "!string",
+   "src": "!string",
+   "url": "string",
+   "kind": "!MediaKind",
+   "folderId": "string | null",
+   "poster": "string",
+   "size": "number",
+   "width": "number",
+   "height": "number",
+   "createdAt": "string"
+  },
+  "MediaFolder": {
+   "id": "!string",
+   "name": "!string",
+   "parentId": "!string | null"
+  },
+  "MediaKind": [
+   "audio",
+   "video",
+   "image",
+   "file"
+  ],
+  "MediaLibraryAdapter": {
+   "list": "!(query: MediaListQuery) => Promise<MediaListPage>",
+   "listFolders": "() => Promise<MediaFolder[]>",
+   "upload": "(file: File, context: MediaUploadContext) => Promise<MediaAsset>",
+   "remove": "(ids: string[]) => Promise<void>",
+   "move": "(ids: string[], folderId: string | null) => Promise<void>",
+   "rename": "(id: string, name: string) => Promise<void>",
+   "createFolder": "(name: string, parentId: string | null) => Promise<MediaFolder>",
+   "renameFolder": "(id: string, name: string) => Promise<void>",
+   "removeFolder": "(id: string) => Promise<void>"
+  },
+  "MediaLibraryLabels": {
+   "allMedia": "!string",
+   "folders": "!string",
+   "newFolder": "!string",
+   "search": "!string",
+   "upload": "!string",
+   "dropToUpload": "!string",
+   "uploading": "!string",
+   "emptyTitle": "!string",
+   "emptyDescription": "!string",
+   "noResultsTitle": "!string",
+   "noResultsDescription": "!string",
+   "loadFailed": "!string",
+   "retry": "!string",
+   "actions": "!string",
+   "rename": "!string",
+   "moveTo": "!string",
+   "topLevel": "!string",
+   "delete": "!string",
+   "cancel": "!string",
+   "save": "!string",
+   "create": "!string",
+   "name": "!string",
+   "folderName": "!string",
+   "renameFolder": "!string",
+   "deleteFolder": "!string",
+   "deleteFolderDescription": "!(name: string) => string",
+   "deleteTitle": "!(count: number) => string",
+   "deleteDescription": "!(count: number) => string",
+   "selected": "!(count: number) => string",
+   "clearSelection": "!string",
+   "select": "!(name: string) => string",
+   "uploadFailed": "!(name: string) => string",
+   "notAccepted": "!(name: string) => string",
+   "actionFailed": "!string"
+  },
+  "MediaListPage": {
+   "items": "!MediaAsset[]",
+   "nextCursor": "string | null"
+  },
+  "MediaListQuery": {
+   "folderId": "!string | null",
+   "search": "string",
+   "kinds": "MediaKind[]",
+   "cursor": "string"
+  },
+  "MediaPickerLabels": {
+   "title": "!string",
+   "cancel": "!string",
+   "choose": "!string",
+   "chooseCount": "!(count: number) => string",
+   "hint": "!string"
+  },
+  "MediaUploadContext": {
+   "folderId": "!string | null",
+   "onProgress": "!(fraction: number) => void",
+   "signal": "!AbortSignal"
+  },
+  "MemoryMediaAdapterOptions": {
+   "assets": "MediaAsset[]",
+   "folders": "MediaFolder[]",
+   "pageSize": "number",
+   "latency": "number"
+  },
   "MenuGroup": {
    "id": "!string",
    "label": "!ReactNode",
@@ -6890,6 +6989,52 @@
     "tone": "Tone = brand"
    }
   },
+  "MediaLibrary": {
+   "group": "media",
+   "importFrom": "@once-ui-system/core/media",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "adapter": "!MediaLibraryAdapter",
+    "accept": "MediaKind[]",
+    "selectionMode": "\"none\" | \"single\" | \"multiple\" = multiple",
+    "selectedIds": "string[]",
+    "defaultSelectedIds": "string[] = []",
+    "onSelectionChange": "(ids: string[], assets: MediaAsset[]) => void",
+    "onOpen": "(asset: MediaAsset) => void",
+    "defaultFolderId": "string | null = null",
+    "onFolderChange": "(folderId: string | null) => void",
+    "readOnly": "boolean = false",
+    "columns": "2 | 3 | 4 | 5 | 6 = 4",
+    "refreshKey": "string | number",
+    "labels": "Partial<MediaLibraryLabels>"
+   }
+  },
+  "MediaPicker": {
+   "group": "media",
+   "importFrom": "@once-ui-system/core/media",
+   "props": {
+    "open": "!boolean",
+    "onClose": "!() => void",
+    "onPick": "!(assets: MediaAsset[]) => void",
+    "adapter": "!MediaLibraryAdapter",
+    "multiple": "boolean = false",
+    "accept": "MediaKind[]",
+    "defaultFolderId": "string | null = null",
+    "readOnly": "boolean = false",
+    "columns": "2 | 3 | 4 | 5 | 6 = 4",
+    "height": "number | CSSUnit = 32rem",
+    "labels": "Partial<MediaPickerLabels>",
+    "libraryLabels": "Partial<MediaLibraryLabels>",
+    "stack": "boolean"
+   }
+  },
   "MediaUpload": {
    "group": "media",
    "importFrom": "@once-ui-system/core/media",
@@ -9169,6 +9314,27 @@
    "kind": "function",
    "signature": "(values: readonly number[], box: Rect) => Rect[]",
    "doc": "Squarified treemap (Bruls, Huizing, van Wijk): rows of tiles kept close to square."
+  },
+  "createMemoryMediaAdapter": {
+   "group": "media",
+   "importFrom": "@once-ui-system/core/media",
+   "kind": "function",
+   "signature": "(options?: MemoryMediaAdapterOptions) => MediaLibraryAdapter",
+   "doc": "An adapter that keeps everything in memory, for prototypes, docs and tests."
+  },
+  "formatMediaSize": {
+   "group": "media",
+   "importFrom": "@once-ui-system/core/media",
+   "kind": "function",
+   "signature": "(bytes: number) => string",
+   "doc": "Bytes as a short size: 820 B, 14 kB, 3.2 MB."
+  },
+  "mediaKindOfFile": {
+   "group": "media",
+   "importFrom": "@once-ui-system/core/media",
+   "kind": "function",
+   "signature": "(file: Pick<File, \"type\" | \"name\">) => MediaKind",
+   "doc": "The kind of a browser `File`, from its MIME type and then its name."
   },
   "clusterPoints": {
    "group": "map",
