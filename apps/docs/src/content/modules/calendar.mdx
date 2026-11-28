@@ -30,6 +30,8 @@ const events: CalendarEvent[] = [
 
 An event's `end` is exclusive: an event from 9:00 to 10:00 ends at 10:00, and an all-day event on 12 November ends at midnight on 13 November. `tone` gives an event its palette (the default is `brand`), and `description` adds a second line in the week and day views, such as a room or a client.
 
+An event's stripe and dot use the same colour as a `Tag` dot of its tone, in every solid style, so an event matches the calendar's tag in a legend or a filter. All-day and multi-day bars take the tone's tint with strong text rather than a solid fill, and a half-hour event centres its title in its tile.
+
 ## Booking and rescheduling
 
 - `onSlotSelect` makes empty time pickable. In the week and day views, people drag down the hours to pick a stretch, or click to pick `defaultDuration` minutes. In the month view, they press a day. Both snap to `snapMinutes`.

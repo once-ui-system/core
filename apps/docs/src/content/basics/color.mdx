@@ -276,3 +276,11 @@ carry more chroma than their own step 600. A ramp built from a single seed
 cannot know that. Regenerating each built-in scheme from its own step 600
 lands within 0.11 OKLab ΔE at the worst step, and inside 0.05 for most.
 
+### Pale seeds
+
+A seed light enough that white text on it would fall below 2.25:1, such as a lime, a yellow or a
+pale cyan, gets dark text instead. With `solid="color"`, its solid buttons rest on the seed itself
+with black on-solid text, and hover a shade darker, rather than white text on a darkened, olive
+rest. Mid and dark seeds, the built-in schemes and neutral are unchanged, and a scale that pins
+its own 400 or 500 keeps its solids. This is 3.1's behaviour; earlier versions always wrote white.
+

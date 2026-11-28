@@ -1,7 +1,7 @@
 ---
 title: "Border"
 summary: "Adjusting shape language with border radius and border style."
-updatedAt: "2025-05-04"
+updatedAt: "2026-11-25"
 docs: "once-ui/basics/border.mdx"
 navLabel: "Border"
 navIcon: "lightbulb"
@@ -130,6 +130,19 @@ In Once UI, we adopt the T-shirt size model for managing border radius, with val
     </Flex>
   }
 />
+
+Each shape style sets its own values for the sizes:
+
+| Style | `xs` | `s` | `m` | `l` | `xl` |
+|---|---|---|---|---|---|
+| `sharp` | 0 | 0 | 0 | 0 | 0 |
+| `conservative` | 2px | 4px | 6px | 10px | 12px |
+| `playful` | 4px | 8px | 12px | 16px | 20px |
+| `rounded` | 16px | 20px | 20px | 24px | 28px |
+
+In 3.1 `rounded` became calmer on large surfaces: `l` is 24px and `xl` 28px (they were 28px and
+32px), so cards, panels and dialogs keep a soft corner without reading as bubbles. `xs`, `s` and
+`m`, the pill shapes of controls, did not change.
 
 ## Nested radius
 

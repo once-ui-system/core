@@ -108,6 +108,8 @@ import {
   SegmentedControl,
   Select,
   Setting,
+  StyleScope,
+  WorkspaceSwitcher,
   Skeleton,
   Slider,
   SmartLink,
@@ -148,6 +150,7 @@ import {
 } from "@once-ui-system/core";
 import { CodeBlock } from "@once-ui-system/core/code";
 import { IconGallery } from "@/product/IconGallery";
+import { TabBarExample } from "@/product/TabBarExample";
 import {
   ComboboxControlledExample,
   ComboboxFilterExample,
@@ -180,6 +183,7 @@ import {
   Effect,
   FlipFx,
   GlitchFx,
+  GradientFx,
   HoloFx,
   LetterFx,
   MatrixFx,
@@ -480,6 +484,7 @@ const mdxComponents = createMdxComponents({
   ChatConversationExample,
   VoiceStatesExample,
   MascotStatesExample,
+  TabBarExample,
   MascotSeedExample,
   MascotCubeExample,
   MascotD20Example,
@@ -525,6 +530,7 @@ const mdxComponents = createMdxComponents({
   CountFx,
   CountdownFx,
   BlobFx,
+  GradientFx,
   ParticleFx,
   MatrixFx,
   WeatherFx,
@@ -532,6 +538,8 @@ const mdxComponents = createMdxComponents({
   Effect,
   Scrubber,
   Setting,
+  StyleScope,
+  WorkspaceSwitcher,
 
   // ─── Core data visualization ───
   BarChart,

@@ -100,6 +100,10 @@ category: easier to read when the category names are long. `stack` puts the
 series on top of each other; `stack="percent"` makes every bar the same length
 and shows each series as its share.
 
+Since 3.1 a stack leaves 2px between its segments and rounds each one on its own,
+square only where it meets the baseline, so the series stay apart and a floating
+waterfall step still reads as a bar.
+
 <BarChart
   marginTop="16"
   marginBottom="24"
