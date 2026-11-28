@@ -1,0 +1,76 @@
+---
+title: "Icons"
+summary: "Once UI's own icon set: 178 icons in one line style, with caps that follow your theme's shape."
+updatedAt: "2026-11-28"
+docs: "once-ui/basics/icons.mdx"
+navLabel: "Icons"
+navIcon: "lightbulb"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+Once UI ships its own icons: 178 names drawn on a 24 grid with a 1.5 stroke, in
+one line style. The SVG data is inlined in the package, so there is no icon
+dependency to install, and every icon is one `Icon` component away.
+
+Pick an icon below to see it at every size, then try it in your theme's colours
+and with round or square caps. Copy the name or the JSX when you have the one you
+want.
+
+<IconExplorer />
+
+## Shape follows your theme
+
+Icons take their caps and joins from the theme's
+[border style](/basics/border). They are round by default and square and mitred
+under `data-border="conservative"`, so crisp corners get crisp icons with no
+extra prop. "Square" above previews that.
+
+## Colour and size
+
+An icon is `currentColor`, so it takes the colour of the text around it. Set
+`onBackground` or `onSolid` to give it its own, and `size` (`xs` to `xl`) to set
+how large it draws. See [Icon](/components/icon) for every prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Icon name="sparkle" />
+<Icon name="sparkle" size="l" onBackground="brand-medium" />
+<Button prefixIcon="sparkle">Generate</Button>`,
+      language: "tsx",
+      label: "Using an icon"
+    }
+  ]}
+/>
+
+## Typed names
+
+`name` is typed as `IconName`, a union of the built-in names, so a typo is a
+build error rather than a blank space at runtime. The list is exported as
+`iconLibrary`, and `BuiltInIconName` is the type of its keys, if you need to
+build your own picker:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`import { iconLibrary, type BuiltInIconName } from "@once-ui-system/core";
+
+const names = Object.keys(iconLibrary) as BuiltInIconName[];`,
+      language: "tsx",
+      label: "List the icons"
+    }
+  ]}
+/>
+
+## Your own icons
+
+To add icons from [react-icons](https://react-icons.github.io/react-icons/),
+another set, or hand-written SVG, and to extend `IconName` with them, see
+[IconProvider](/contexts/iconProvider).

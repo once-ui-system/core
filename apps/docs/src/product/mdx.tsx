@@ -147,7 +147,7 @@ import {
   StatTile,
 } from "@once-ui-system/core";
 import { CodeBlock } from "@once-ui-system/core/code";
-import { IconGallery } from "@/product/IconGallery";
+import { IconExplorer } from "@/product/IconExplorer";
 import {
   ComboboxControlledExample,
   ComboboxFilterExample,
@@ -693,7 +693,7 @@ const mdxComponents = createMdxComponents({
   DataTableToolbarExample,
   RadioGroupControlledExample,
   RangeSliderPriceExample,
-  IconGallery,
+  IconExplorer,
   Combobox,
   StatTile,
   RichTextEditor,
