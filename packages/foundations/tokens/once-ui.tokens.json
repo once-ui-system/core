@@ -1776,6 +1776,9 @@
         "solid-glow-near-mix": "0%",
         "solid-glow-far-mix": "0%",
         "solid-glow-rim": "{static-transparent}",
+        "solid-offset": "0rem",
+        "solid-press": "0rem",
+        "solid-ink-mix": "0%",
         "backdrop-filter": "none",
         "surface-border": "{static-transparent}",
         "surface-background": "{neutral-background-medium}",
@@ -2379,6 +2382,17 @@
         "solid-glow-far": "1.25rem",
         "solid-glow-near-mix": "45%",
         "solid-glow-far-mix": "14%"
+      }
+    },
+    {
+      "when": {
+        "solidStyle": "cartoon"
+      },
+      "tokens": {
+        "solid-border-width": "2px",
+        "solid-offset": "0.25rem",
+        "solid-press": "0.1875rem",
+        "solid-ink-mix": "100%"
       }
     },
     {

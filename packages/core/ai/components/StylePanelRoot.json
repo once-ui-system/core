@@ -214,7 +214,8 @@
   "SolidStyle": [
    "flat",
    "plastic",
-   "glow"
+   "glow",
+   "cartoon"
   ],
   "SolidType": [
    "color",
