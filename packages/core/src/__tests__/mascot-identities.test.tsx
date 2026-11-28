@@ -47,6 +47,8 @@ describe("canonical mascots", () => {
       expect(handles).toContain(handle);
     }
     expect(MASCOT_IDENTITY_KEYS).not.toContain("xeso");
+    // Claude is here as the assistant the apps work with, owned by Anthropic, not Dopler.
+    expect(mascotIdentity("Claude")?.owner).toBe("anthropic");
     expect(new Set(MASCOT_IDENTITY_KEYS).size).toBe(MASCOT_IDENTITY_KEYS.length);
     expect(MASCOT_IDENTITY_KEYS.every((key) => key === mascotIdentityKey(key))).toBe(true);
   });
