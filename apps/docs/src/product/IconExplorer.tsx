@@ -158,7 +158,7 @@ export function IconExplorer() {
           No icon matches “{query}”.
         </Text>
       ) : (
-        <Grid fillWidth columns="6" m={{ columns: "4" }} s={{ columns: "3" }} gap="4">
+        <Grid fillWidth columns="4" m={{ columns: "3" }} s={{ columns: "2" }} gap="4">
           {shown.map((name) => (
             <ToggleButton
               key={name}
@@ -167,11 +167,16 @@ export function IconExplorer() {
               selected={name === picked}
               aria-label={`Show ${name}`}
               onClick={() => setPicked(name)}
-              style={{ height: "auto" }}
+              style={{ height: "auto", minWidth: 0 }}
             >
               <Column horizontal="center" gap="8" paddingY="16" fillWidth>
                 <Icon name={name} size={size} onBackground={color} />
-                <Text variant="code-default-xs" onBackground="neutral-weak" wrap="balance">
+                <Text
+                  variant="code-default-xs"
+                  onBackground="neutral-weak"
+                  wrap="balance"
+                  style={{ whiteSpace: "normal", overflowWrap: "anywhere" }}
+                >
                   {name}
                 </Text>
               </Column>
