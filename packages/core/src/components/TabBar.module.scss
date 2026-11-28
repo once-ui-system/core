@@ -109,6 +109,27 @@
             font-weight: var(--font-weight-label-strong);
         }
     }
+
+    // An item with an href is a link, and the global link rule
+    // (`a:not(.button)`, brand ink, brand-strong on hover) outranks `.item`.
+    // Restate the item's own ink at a weight that wins, hover included.
+    &:not(.button) {
+        color: var(--neutral-on-background-weak);
+    }
+
+    &[data-selected]:not(.button) {
+        color: var(--neutral-on-background-strong);
+    }
+
+    @media (hover: hover) {
+        &:not(.button):hover {
+            color: var(--neutral-on-background-weak);
+        }
+
+        &[data-selected]:not(.button):hover {
+            color: var(--neutral-on-background-strong);
+        }
+    }
 }
 
 .icon {
