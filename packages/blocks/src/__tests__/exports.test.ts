@@ -96,6 +96,9 @@ const SECTIONS = [
   "SolidStyle",
   "BodyText",
   "Advanced",
+  "Fonts",
+  "Section",
+  "Site",
 ].map((part) => `StylePanel${part}`);
 
 /** MascotPanel (after 3.0): the panel, its parts and hooks, and a random design. */

@@ -1173,6 +1173,12 @@
     "tags": ["settings", "theme"],
     "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
   },
+  "StylePanelFonts": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: font pairings as tiles drawn in their faces, with a One by one escape to the host's pickers",
+    "tags": ["settings", "theme", "typography"],
+    "pairsWith": ["StylePanelSite", "StylePanelRoot"]
+  },
   "StylePanelGroup": {
     "partOf": "StylePanel",
     "purpose": "Titled group of StylePanel rows inside a StylePanelRoot",
@@ -1209,11 +1215,23 @@
     "tags": ["settings", "theme"],
     "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
   },
+  "StylePanelSection": {
+    "partOf": "StylePanel",
+    "purpose": "Plain titled StylePanel section whose rows sit flush, label above control; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelSite", "StylePanelRoot"]
+  },
   "StylePanelShape": {
     "partOf": "StylePanel",
     "purpose": "StylePanel row: corner shape (sharp to rounded); inside a StylePanelRoot",
     "tags": ["settings", "theme"],
     "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelSite": {
+    "partOf": "StylePanel",
+    "purpose": "Style panel for a site builder: look, colour, shape and buttons as tiles of real buttons, font pairings, fine-tune folded away",
+    "tags": ["settings", "theme", "site-builder"],
+    "pairsWith": ["StylePanelFonts", "StylePanelSection"]
   },
   "StylePanelSolid": {
     "partOf": "StylePanel",

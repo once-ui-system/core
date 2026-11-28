@@ -13,6 +13,7 @@
   "StyleProps"
  ],
  "props": {
+  "tiles": "boolean",
   "label": "ReactNode | false",
   "hint": "ReactNode | false"
  },

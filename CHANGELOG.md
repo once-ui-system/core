@@ -15,6 +15,18 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **`StylePanelSite`: the style panel for a site builder (blocks).** Every option on
+  screen, each drawn as the thing it changes: a Look section for the host's own templates
+  (`look`, `lookAction`), Colour (main colour as swatches that wrap, light or dark), Shape
+  and buttons (corners, finish and fill as tiles of real buttons), Fonts as pairings, and
+  a folded Fine-tune (text size as Small / Normal / Large, surfaces, second colour, greys,
+  `fineTune` rows of the host's own). Ported from Tavilio's design tab. Its parts work on
+  their own: `tiles` on `StylePanelRoot`, `StylePanelShape`, `StylePanelEffect` and
+  `StylePanelSolid`; `swatches="wrap"` on the Root or a colour row; `StylePanelScaling
+  named` (and `steps`); the new `StylePanelFonts` (pairs, value, a "One by one" `more`)
+  and `StylePanelSection`. New labels: `tiles.sample`, `fonts.more`, `fonts.sample`,
+  `options.scalingNames`, `rows.fonts`, `groups.look`, `shape`, `fonts`, `fineTune`.
+
 - **`Textarea` grows from a minimum: `lines={{ min: 3 }}`.** An empty growing textarea
   starts at one row and reads as an input, so apps (and agents) set a fixed `lines` to make
   it taller, which also turned growing off and added a drag handle. `{ min }` starts it
@@ -42,6 +54,10 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **A flat, plastic or glow scope inside another solid style is that style alone.**
+  `data-solid-style="flat"` restates the solid defaults, and plastic and glow reset each
+  other's tokens, so a flat button inside a glowing page no longer glows (StylePanel's
+  tiles rely on it).
 - **A `Map` inside a `StyleScope` paints in that scope's colours.** Routes, areas,
   circles, 3D buildings and the dark basemap tint read their tokens on the page root, so a
   map in a scoped section (another brand, accent or theme) drew its `tone="accent"` route

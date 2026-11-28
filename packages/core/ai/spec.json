@@ -2973,6 +2973,13 @@
    "setRunning": "!React.Dispatch<React.SetStateAction<boolean>>",
    "reset": "!() => void"
   },
+  "StyleFontsRowProps": {
+   "pairs": "readonly StylePanelFontPair[]",
+   "value": "string",
+   "onValueChange": "(value: string) => void",
+   "more": "ReactNode",
+   "defaultMoreOpen": "boolean"
+  },
   "StyleOptions": {
    "theme": "!Theme",
    "neutral": "!NeutralColor | \"custom\"",
@@ -3011,12 +3018,26 @@
    "remove": "string",
    "neutral": "StylePanelNeutralCustomLabels"
   },
+  "StylePanelFontLabels": {
+   "more": "ReactNode",
+   "sample": "string"
+  },
+  "StylePanelFontPair": {
+   "value": "!string",
+   "label": "!ReactNode",
+   "heading": "!string",
+   "description": "ReactNode"
+  },
   "StylePanelGroupLabels": {
    "page": "StylePanelHeading",
    "color": "StylePanelHeading",
    "solidStyle": "StylePanelHeading",
    "bodyText": "StylePanelHeading",
-   "advanced": "StylePanelHeading"
+   "advanced": "StylePanelHeading",
+   "look": "StylePanelHeading",
+   "shape": "StylePanelHeading",
+   "fonts": "StylePanelHeading",
+   "fineTune": "StylePanelHeading"
   },
   "StylePanelHeading": {
    "title": "ReactNode",
@@ -3031,7 +3052,9 @@
    "themeSwitcher": "ThemeSwitcherLabels",
    "scroller": "ScrollerLabels",
    "custom": "StylePanelCustomLabels",
-   "hints": "StylePanelRowLabels"
+   "hints": "StylePanelRowLabels",
+   "tiles": "StylePanelTileLabels",
+   "fonts": "StylePanelFontLabels"
   },
   "StylePanelLabelWidth": [
    "undefined",
@@ -3101,6 +3124,7 @@
    "dataStyle": "Partial<Record<ChartMode, ReactNode>>",
    "density": "Partial<Record<Density, ReactNode>>",
    "scaling": "(value: ScalingSize) => ReactNode",
+   "scalingNames": "Partial<Record<ScalingSize, ReactNode>>",
    "bodySize": "(value: BodySize) => ReactNode",
    "bodyLineHeight": "(value: BodyLineHeight) => ReactNode"
   },
@@ -3119,7 +3143,8 @@
    "transition": "ReactNode",
    "dataStyle": "ReactNode",
    "bodySize": "ReactNode",
-   "bodyLineHeight": "ReactNode"
+   "bodyLineHeight": "ReactNode",
+   "fonts": "ReactNode"
   },
   "StylePanelSchemeRow": [
    "brand",
@@ -3133,6 +3158,13 @@
    "shape": "(name: string) => string",
    "scheme": "(name: string, row: StylePanelSchemeRow) => string",
    "neutral": "(name: string) => string"
+  },
+  "StylePanelSwatchLayout": [
+   "wrap",
+   "scroll"
+  ],
+  "StylePanelTileLabels": {
+   "sample": "string"
   },
   "StylePanelValue": {
    "theme": "Theme",
@@ -3223,6 +3255,10 @@
    "cursorInteractive": "InteractiveCursor",
    "cursor": "CursorPresetValue",
    "setStyle": "!(style: Partial<StyleOptions>) => void"
+  },
+  "StyleRowProps": {
+   "label": "ReactNode | false",
+   "hint": "ReactNode | false"
   },
   "StyleScopeConfig": {
    "solid": "SolidType",
@@ -8269,6 +8305,7 @@
    ],
    "props": {
     "custom": "boolean",
+    "swatches": "StylePanelSwatchLayout",
     "label": "ReactNode | false",
     "hint": "ReactNode | false"
    }
@@ -8352,6 +8389,7 @@
    ],
    "props": {
     "custom": "boolean",
+    "swatches": "StylePanelSwatchLayout",
     "label": "ReactNode | false",
     "hint": "ReactNode | false"
    }
@@ -8418,6 +8456,28 @@
     "StyleProps"
    ],
    "props": {
+    "tiles": "boolean",
+    "label": "ReactNode | false",
+    "hint": "ReactNode | false"
+   }
+  },
+  "StylePanelFonts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "pairs": "readonly StylePanelFontPair[] = []",
+    "value": "string",
+    "onValueChange": "(value: string) => void",
+    "more": "ReactNode",
+    "defaultMoreOpen": "boolean = false",
     "label": "ReactNode | false",
     "hint": "ReactNode | false"
    }
@@ -8451,6 +8511,7 @@
    ],
    "props": {
     "custom": "boolean",
+    "swatches": "StylePanelSwatchLayout",
     "label": "ReactNode | false",
     "hint": "ReactNode | false"
    }
@@ -8490,7 +8551,9 @@
     "stacked": "boolean = false",
     "size": "StylePanelSize = m",
     "labelWidth": "StylePanelLabelWidth",
-    "hints": "boolean = false"
+    "hints": "boolean = false",
+    "tiles": "boolean = false",
+    "swatches": "StylePanelSwatchLayout = scroll"
    }
   },
   "StylePanelRow": {
@@ -8507,7 +8570,8 @@
    "props": {
     "label": "ReactNode | false",
     "hint": "ReactNode | false",
-    "hintFor": "keyof StylePanelRowLabels"
+    "hintFor": "keyof StylePanelRowLabels",
+    "above": "boolean = false"
    }
   },
   "StylePanelScaling": {
@@ -8522,8 +8586,26 @@
     "StyleProps"
    ],
    "props": {
+    "named": "boolean = false",
+    "steps": "readonly ScalingSize[]",
     "label": "ReactNode | false",
     "hint": "ReactNode | false"
+   }
+  },
+  "StylePanelSection": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "title": "ReactNode | false",
+    "action": "ReactNode"
    }
   },
   "StylePanelShape": {
@@ -8538,8 +8620,39 @@
     "StyleProps"
    ],
    "props": {
+    "tiles": "boolean",
     "label": "ReactNode | false",
     "hint": "ReactNode | false"
+   }
+  },
+  "StylePanelSite": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "look": "ReactNode",
+    "lookAction": "ReactNode",
+    "customColors": "StylePanelCustomColors",
+    "fonts": "Omit<StyleFontsRowProps, keyof StyleRowProps>",
+    "fineTune": "ReactNode",
+    "defaultFineTuneOpen": "boolean = false",
+    "value": "StylePanelValue",
+    "onValueChange": "(next: StylePanelValue, changed: Partial<StylePanelValue>) => void",
+    "labels": "StylePanelLabels",
+    "stacked": "boolean",
+    "size": "StylePanelSize",
+    "labelWidth": "StylePanelLabelWidth",
+    "hints": "boolean",
+    "tiles": "boolean = true",
+    "swatches": "StylePanelSwatchLayout = wrap",
+    "gap": "SpacingToken | number | CSSUnit | \"-1\" = 24"
    }
   },
   "StylePanelSolid": {
@@ -8554,6 +8667,7 @@
     "StyleProps"
    ],
    "props": {
+    "tiles": "boolean",
     "label": "ReactNode | false",
     "hint": "ReactNode | false"
    }
@@ -8638,6 +8752,8 @@
     "size": "StylePanelSize",
     "labelWidth": "StylePanelLabelWidth",
     "hints": "boolean",
+    "tiles": "boolean",
+    "swatches": "StylePanelSwatchLayout",
     "visibility": "StylePanelVisibility",
     "value": "StylePanelRootProps[\"value\"]",
     "onValueChange": "StylePanelRootProps[\"onValueChange\"]",

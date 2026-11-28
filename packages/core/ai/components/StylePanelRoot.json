@@ -19,7 +19,9 @@
   "stacked": "boolean = false",
   "size": "StylePanelSize = m",
   "labelWidth": "StylePanelLabelWidth",
-  "hints": "boolean = false"
+  "hints": "boolean = false",
+  "tiles": "boolean = false",
+  "swatches": "StylePanelSwatchLayout = scroll"
  },
  "tags": [
   "settings",
@@ -228,12 +230,20 @@
    "remove": "string",
    "neutral": "StylePanelNeutralCustomLabels"
   },
+  "StylePanelFontLabels": {
+   "more": "ReactNode",
+   "sample": "string"
+  },
   "StylePanelGroupLabels": {
    "page": "StylePanelHeading",
    "color": "StylePanelHeading",
    "solidStyle": "StylePanelHeading",
    "bodyText": "StylePanelHeading",
-   "advanced": "StylePanelHeading"
+   "advanced": "StylePanelHeading",
+   "look": "StylePanelHeading",
+   "shape": "StylePanelHeading",
+   "fonts": "StylePanelHeading",
+   "fineTune": "StylePanelHeading"
   },
   "StylePanelHeading": {
    "title": "ReactNode",
@@ -298,7 +308,9 @@
    "themeSwitcher": "ThemeSwitcherLabels",
    "scroller": "ScrollerLabels",
    "custom": "StylePanelCustomLabels",
-   "hints": "StylePanelRowLabels"
+   "hints": "StylePanelRowLabels",
+   "tiles": "StylePanelTileLabels",
+   "fonts": "StylePanelFontLabels"
   },
   "StylePanelNameLabels": {
    "shapes": "Partial<Record<BorderStyle, string>>",
@@ -318,6 +330,7 @@
    "dataStyle": "Partial<Record<ChartMode, ReactNode>>",
    "density": "Partial<Record<Density, ReactNode>>",
    "scaling": "(value: ScalingSize) => ReactNode",
+   "scalingNames": "Partial<Record<ScalingSize, ReactNode>>",
    "bodySize": "(value: BodySize) => ReactNode",
    "bodyLineHeight": "(value: BodyLineHeight) => ReactNode"
   },
@@ -335,7 +348,8 @@
    "transition": "ReactNode",
    "dataStyle": "ReactNode",
    "bodySize": "ReactNode",
-   "bodyLineHeight": "ReactNode"
+   "bodyLineHeight": "ReactNode",
+   "fonts": "ReactNode"
   },
   "StylePanelSchemeRow": [
    "brand",
@@ -349,6 +363,13 @@
    "shape": "(name: string) => string",
    "scheme": "(name: string, row: StylePanelSchemeRow) => string",
    "neutral": "(name: string) => string"
+  },
+  "StylePanelSwatchLayout": [
+   "wrap",
+   "scroll"
+  ],
+  "StylePanelTileLabels": {
+   "sample": "string"
   },
   "StylePanelValue": {
    "theme": "Theme",
