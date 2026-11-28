@@ -71,7 +71,10 @@ export interface MascotIdentity {
   layers: MascotIdentityLayer[];
 }
 
-/** Every canonical mascot. XESO and client brands are not here on purpose. */
+/**
+ * Every canonical mascot. XESO and client brands are not here on purpose. Claude is, as the
+ * assistant the apps work with, so "via Claude" looks the same everywhere (owner `anthropic`).
+ */
 export const MASCOT_IDENTITIES: readonly MascotIdentity[] = [
   {
     handle: "dopler",
@@ -487,6 +490,38 @@ export const MASCOT_IDENTITIES: readonly MascotIdentity[] = [
         d: "M48 150Q49.6 158.4 58 160Q49.6 161.6 48 170Q46.4 161.6 38 160Q46.4 158.4 48 150Z",
         fill: "#ff4fd8",
       },
+    ],
+  },
+  {
+    handle: "claude",
+    name: "Claude",
+    aliases: ["claude-ai", "anthropic-claude"],
+    owner: "anthropic",
+    about:
+      "Claude, the assistant our apps work with: a terracotta block with tall square eyes, little arms and four short legs, after the critter in Claude Code. It marks what Claude wrote or did (a reply via Claude, an assistant card).",
+    seed: "terracotta-block-tall-none-arms-legs",
+    look: {
+      color: "#d97757",
+      eyeColor: "#1f1e1d",
+      surface: "flat",
+      bodyPath: "M42 62H158Q166 62 166 70V134Q166 142 158 142H42Q34 142 34 134V70Q34 62 42 62Z",
+      eyes: { path: "M-7 -14H7V14H-7Z" },
+      eyeSpacing: 1.14,
+      eyeHeight: -0.17,
+      mouth: "none",
+      cheeks: false,
+      brows: false,
+      personality: "calm",
+    },
+    layers: [
+      // Arms: a short stub on each side, level with the eyes.
+      { d: "M14 88H38V110H14Z", fill: "body", place: "back" },
+      { d: "M162 88H186V110H162Z", fill: "body", place: "back" },
+      // Four short legs, two at each end.
+      { d: "M46 138H58V164H46Z", fill: "body", place: "back" },
+      { d: "M68 138H80V164H68Z", fill: "body", place: "back" },
+      { d: "M120 138H132V164H120Z", fill: "body", place: "back" },
+      { d: "M142 138H154V164H142Z", fill: "body", place: "back" },
     ],
   },
   {

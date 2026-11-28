@@ -15,6 +15,12 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **Claude on `Mascot`: `<Mascot seed="claude" />`.** A canonical mascot for Claude, the
+  assistant the apps work with: a flat terracotta block with tall square eyes, little arms
+  and four short legs, after the critter in Claude Code. Use it wherever an app marks what
+  Claude wrote or did (a reply "via Claude", an assistant card). It idles, listens, thinks
+  and speaks like every mascot, draws as a still with `mascotSvg({ seed: "claude" })`, and
+  its owner is `anthropic`, so apps that guard typed names keep "claude" reserved.
 - **`MediaLibrary` and `MediaPicker` on `@once-ui-system/core/media`.** A media library
   that works on any storage: a folder tree (`FileTree`), a searchable tile grid with paging,
   drop to upload with progress, select one or several, rename, move (menu or drag onto a
