@@ -15,6 +15,16 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **`MediaLibrary` and `MediaPicker` on `@once-ui-system/core/media`.** A media library
+  that works on any storage: a folder tree (`FileTree`), a searchable tile grid with paging,
+  drop to upload with progress, select one or several, rename, move (menu or drag onto a
+  folder) and delete, with loading, empty and error states. It never fetches: every read
+  and write goes through an `adapter` (`list`, and optionally `upload`, `remove`, `move`,
+  `rename`, `listFolders`, `createFolder`, `renameFolder`, `removeFolder`), and each control
+  shows only when the adapter has the method behind it. Writes are optimistic and roll back
+  with a danger toast. `MediaPicker` is the "choose an image" dialog over it.
+  `createMemoryMediaAdapter()` backs prototypes and tests. Ported from Aveiro's media
+  library.
 - **`Textarea` grows from a minimum: `lines={{ min: 3 }}`.** An empty growing textarea
   starts at one row and reads as an input, so apps (and agents) set a fixed `lines` to make
   it taller, which also turned growing off and added a drag handle. `{ min }` starts it
