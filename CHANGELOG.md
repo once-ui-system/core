@@ -38,6 +38,9 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Changed
 
+- **The `brush` icon is an upright flat brush** (handle, ferrule, bristles with two splits) instead of
+  the diagonal round brush, so it reads at 16 px and matches the set's upright drawings.
+
 - **Common inline styles are utility classes now.** Core wrote the same declarations inline
   on nearly every page; they are foundations classes instead, so a page carries less inline
   style and an app's own CSS can override them. Behaviour is unchanged:
