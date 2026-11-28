@@ -5,6 +5,7 @@ import type React from "react";
 import type { ReactNode } from "react";
 import type { IconName } from "../icons.js";
 import type { LeafProps } from "../interfaces.js";
+import { controlIconMotion } from "../internal/controlIconMotion.js";
 import type { RadiusSize, Tone, TShirtSizes } from "../types.js";
 import { leafLayout, takeLeafProps } from "../utils/leafLayout.js";
 import { dropdownTriggerProps, useDropdownTrigger } from "./DropdownTriggerContext.js";
@@ -154,6 +155,7 @@ const ToggleButton = ({
           name={prefixIcon}
           size={size === "xl" ? "m" : size === "l" ? "s" : "xs"}
           className={classNames(iconClass, styles.fixed)}
+          {...controlIconMotion(prefixIcon, selected)}
         />
       )}
       {content && (
@@ -177,6 +179,7 @@ const ToggleButton = ({
           name={suffixIcon}
           size={size === "xl" ? "m" : size === "l" ? "s" : "xs"}
           className={classNames(iconClass, styles.fixed)}
+          {...controlIconMotion(suffixIcon, selected)}
         />
       )}
     </ElementType>

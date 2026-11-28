@@ -1,11 +1,13 @@
 "use client";
 
 import classNames from "clsx";
-import React, { ReactNode } from "react";
-import { IconName } from "../icons.js";
+import type React from "react";
+import type { ReactNode } from "react";
+import type { IconName } from "../icons.js";
 import type { LeafProps } from "../interfaces.js";
 import { defaultButtonTone } from "../internal/buttonTone.js";
-import { Tone, TShirtSizes } from "../types.js";
+import { controlIconMotion } from "../internal/controlIconMotion.js";
+import type { Tone, TShirtSizes } from "../types.js";
 import { leafLayout, takeLeafProps } from "../utils/leafLayout.js";
 import { Arrow } from "./Arrow.js";
 import styles from "./Button.module.scss";
@@ -138,7 +140,12 @@ const Button = ({
       {...props}
     >
       {prefixIcon && !loading && (
-        <Icon name={prefixIcon} size={iconSize} className={auto ? styles.icon : undefined} />
+        <Icon
+          name={prefixIcon}
+          size={iconSize}
+          className={auto ? styles.icon : undefined}
+          {...controlIconMotion(prefixIcon)}
+        />
       )}
       {loading && <Spinner size={size} />}
       {(label || children) && (
@@ -152,17 +159,22 @@ const Button = ({
         </Flex>
       )}
       {arrowIcon && (
+        // Follows this button's hover and focus with CSS: no trigger needed.
         <Arrow
           style={{
             marginLeft: "calc(-1 * var(--static-space-4))",
           }}
-          trigger={"#" + id}
           scale={size === "s" ? 0.8 : size === "m" ? 0.9 : 1}
           color={variant === "primary" ? "onSolid" : "onBackground"}
         />
       )}
       {suffixIcon && (
-        <Icon name={suffixIcon} size={iconSize} className={auto ? styles.icon : undefined} />
+        <Icon
+          name={suffixIcon}
+          size={iconSize}
+          className={auto ? styles.icon : undefined}
+          {...controlIconMotion(suffixIcon)}
+        />
       )}
     </ElementType>
   );

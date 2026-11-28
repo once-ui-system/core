@@ -1,11 +1,13 @@
 "use client";
 
 import classNames from "clsx";
-import React, { ReactNode, useEffect } from "react";
-import { IconName } from "../icons.js";
+import type React from "react";
+import { type ReactNode, useEffect } from "react";
+import type { IconName } from "../icons.js";
 import type { LeafProps } from "../interfaces.js";
 import { defaultButtonTone } from "../internal/buttonTone.js";
-import { Tone, TShirtSizes } from "../types.js";
+import { controlIconMotion } from "../internal/controlIconMotion.js";
+import type { Tone, TShirtSizes } from "../types.js";
 import { dev } from "../utils/devLogger.js";
 import { leafLayout, takeLeafProps } from "../utils/leafLayout.js";
 import type { ButtonVariant } from "./Button.js";
@@ -152,7 +154,7 @@ const IconButton = ({
         ) : children ? (
           children
         ) : (
-          <Icon name={icon} size="s" />
+          <Icon name={icon} size="s" {...controlIconMotion(icon)} />
         )}
       </Flex>
     </ElementType>

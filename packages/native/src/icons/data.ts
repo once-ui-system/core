@@ -91,28 +91,40 @@ export const iconData = {
     tag: "svg",
     attr: line,
     child: [
-      { tag: "path", attr: { d: "M12 5.25L12 17.75M18.25 12.5L12 18.75L5.75 12.5" }, child: [] },
+      { tag: "path", attr: { d: "M12 5.25L12 17.75", "data-part": "shaft" }, child: [] },
+      {
+        tag: "path",
+        attr: { d: "M18.25 12.5L12 18.75L5.75 12.5", "data-part": "head" },
+        child: [],
+      },
     ],
   },
   arrowLeft: {
     tag: "svg",
     attr: line,
     child: [
-      { tag: "path", attr: { d: "M18.75 12L6.25 12M11.5 18.25L5.25 12L11.5 5.75" }, child: [] },
+      { tag: "path", attr: { d: "M18.75 12L6.25 12", "data-part": "shaft" }, child: [] },
+      { tag: "path", attr: { d: "M11.5 18.25L5.25 12L11.5 5.75", "data-part": "head" }, child: [] },
     ],
   },
   arrowRight: {
     tag: "svg",
     attr: line,
     child: [
-      { tag: "path", attr: { d: "M5.25 12L17.75 12M12.5 5.75L18.75 12L12.5 18.25" }, child: [] },
+      { tag: "path", attr: { d: "M5.25 12L17.75 12", "data-part": "shaft" }, child: [] },
+      {
+        tag: "path",
+        attr: { d: "M12.5 5.75L18.75 12L12.5 18.25", "data-part": "head" },
+        child: [],
+      },
     ],
   },
   arrowUp: {
     tag: "svg",
     attr: line,
     child: [
-      { tag: "path", attr: { d: "M12 18.75L12 6.25M5.75 11.5L12 5.25L18.25 11.5" }, child: [] },
+      { tag: "path", attr: { d: "M12 18.75L12 6.25", "data-part": "shaft" }, child: [] },
+      { tag: "path", attr: { d: "M5.75 11.5L12 5.25L18.25 11.5", "data-part": "head" }, child: [] },
     ],
   },
   arrowUpRight: {
@@ -273,9 +285,13 @@ export const iconData = {
     tag: "svg",
     attr: line,
     child: [
-      { tag: "path", attr: { d: "M6.25 16.75V11a5.75 5.75 0 0 1 11.5 0v5.75" }, child: [] },
-      { tag: "path", attr: { d: "M4.75 16.75L19.25 16.75" }, child: [] },
-      { tag: "path", attr: { d: "M10 20a2 2 0 0 0 4 0" }, child: [] },
+      {
+        tag: "path",
+        attr: { d: "M6.25 16.75V11a5.75 5.75 0 0 1 11.5 0v5.75", "data-part": "body" },
+        child: [],
+      },
+      { tag: "path", attr: { d: "M4.75 16.75L19.25 16.75", "data-part": "body" }, child: [] },
+      { tag: "path", attr: { d: "M10 20a2 2 0 0 0 4 0", "data-part": "clapper" }, child: [] },
     ],
   },
   bolt: {
@@ -450,7 +466,13 @@ export const iconData = {
   check: {
     tag: "svg",
     attr: line,
-    child: [{ tag: "path", attr: { d: "M4.75 12.5L9.5 17.25L19.25 7" }, child: [] }],
+    child: [
+      {
+        tag: "path",
+        attr: { d: "M4.75 12.5L9.5 17.25L19.25 7", pathLength: "1", "data-part": "tick" },
+        child: [],
+      },
+    ],
   },
   checkBadge: {
     tag: "svg",
@@ -486,10 +508,15 @@ export const iconData = {
         tag: "path",
         attr: {
           d: "M6.5 3.75L17.5 3.75A2.75 2.75 0 0 1 20.25 6.5L20.25 17.5A2.75 2.75 0 0 1 17.5 20.25L6.5 20.25A2.75 2.75 0 0 1 3.75 17.5L3.75 6.5A2.75 2.75 0 0 1 6.5 3.75Z",
+          "data-part": "box",
         },
         child: [],
       },
-      { tag: "path", attr: { d: "M8 12.25L10.75 15L16 9.25" }, child: [] },
+      {
+        tag: "path",
+        attr: { d: "M8 12.25L10.75 15L16 9.25", pathLength: "1", "data-part": "tick" },
+        child: [],
+      },
     ],
   },
   chevronDoubleLeft: {
@@ -1584,7 +1611,11 @@ export const iconData = {
   menu: {
     tag: "svg",
     attr: line,
-    child: [{ tag: "path", attr: { d: "M4 6.75L20 6.75M4 12L20 12M4 17.25L20 17.25" }, child: [] }],
+    child: [
+      { tag: "path", attr: { d: "M4 6.75L20 6.75", "data-part": "top" }, child: [] },
+      { tag: "path", attr: { d: "M4 12L20 12", "data-part": "middle" }, child: [] },
+      { tag: "path", attr: { d: "M4 17.25L20 17.25", "data-part": "bottom" }, child: [] },
+    ],
   },
   message: {
     tag: "svg",
@@ -2560,11 +2591,12 @@ export const iconData = {
     tag: "svg",
     attr: line,
     child: [
-      { tag: "path", attr: { d: "M4 6.5L20 6.5" }, child: [] },
+      { tag: "path", attr: { d: "M4 6.5L20 6.5", "data-part": "lid" }, child: [] },
       {
         tag: "path",
         attr: {
           d: "M9.25 6.5L9.25 4.47A0.72 0.72 0 0 1 9.97 3.75L14.03 3.75A0.72 0.72 0 0 1 14.75 4.47L14.75 6.5",
+          "data-part": "lid",
         },
         child: [],
       },

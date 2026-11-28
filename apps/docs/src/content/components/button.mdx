@@ -1,7 +1,7 @@
 ---
 title: "Button"
 summary: "The Button component provides interactive elements for user actions with various styles, sizes, and states."
-updatedAt: "2026-10-17"
+updatedAt: "2026-11-25"
 docs: "once-ui/components/button.mdx"
 github: "components/Button.tsx"
 navLabel: "Button"
@@ -327,24 +327,24 @@ Buttons can function as links when provided with an `href` property.
 
 ## Arrow animation
 
-Add an animated arrow that responds to hover events.
+`arrowIcon` adds a trailing arrow: a chevron at rest whose shaft grows in while the button is hovered or keyboard-focused. It is CSS only, so the button needs no `id`. A `bell`, `trash`, `refresh`, `eye` or arrow in `prefixIcon` or `suffixIcon` moves on hover the same way (see [icon motion](/components/icon#motion)).
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
     <Row gap="16" horizontal="center">
-      <Button id="arrow-button-1" arrowIcon>Primary</Button>
-      <Button id="arrow-button-2" variant="secondary" arrowIcon>Secondary</Button>
+      <Button arrowIcon>Primary</Button>
+      <Button variant="secondary" arrowIcon>Secondary</Button>
     </Row>
   }
   codes={[
     {
       code:
-`<Button id="arrow-button-1" arrowIcon>
+`<Button arrowIcon>
     Primary
   </Button>
-  <Button id="arrow-button-2" variant="secondary" arrowIcon>
+  <Button variant="secondary" arrowIcon>
     Secondary
 </Button>`,
       language: "tsx",
@@ -423,7 +423,7 @@ Override default styles with data attributes.
   component="Button"
   describe={{
     loading: "Swaps the label for a spinner and blocks further clicks.",
-    arrowIcon: "Adds a trailing arrow that slides on hover, for links that lead somewhere.",
+    arrowIcon: "Adds a trailing arrow, a chevron whose shaft grows in on hover and focus, for links that lead somewhere.",
     href: "Renders an anchor instead of a button.",
   }}
   content={[

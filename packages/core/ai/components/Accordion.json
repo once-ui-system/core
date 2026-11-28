@@ -13,7 +13,7 @@
   "title": "!React.ReactNode",
   "children": "!React.ReactNode",
   "icon": "IconName = chevronDown",
-  "iconRotation": "number = 180",
+  "iconRotation": "number",
   "size": "TShirtSizes = m",
   "radius": "RadiusSize = m",
   "titleVariant": "TextVariant = heading-strong-s",

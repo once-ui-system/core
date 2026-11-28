@@ -55,6 +55,17 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Changed
 
+- **Components use the icon motion.** `Accordion` flips its chevron (and turns a `plus`
+  into a cross) unless `iconRotation` is set; `Select` flips its chevron; `Checkbox` draws
+  its tick in when checked; `NavIcon` is `<Icon name="menu" active>`; `Button`,
+  `IconButton` and `ToggleButton` move a bell, trash, refresh, eye or arrow icon on hover,
+  and `ToggleButton` passes `selected` to a heart or plus.
+- **`Arrow` (Button `arrowIcon`, Tag `arrow`) is the `arrowRight` icon, CSS only.** A
+  chevron at rest; on hover or keyboard focus of the link or button around it the shaft
+  grows in. It no longer needs an `id` or `trigger` (a Button without an `id` never drew
+  its arrow before), and it takes the same width at rest, so the button no longer widens on
+  hover. `trigger` is optional and still works for an element that is not an ancestor.
+
 - **A `Button` or `IconButton` with no `onClick`, `href` or `type` is a real
   `<button type="button">`.** It used to render a plain div, so screen readers and agents
   operating the page read an unwired "Delete workspace" as text. It still renders a plain
@@ -64,6 +75,13 @@ item (see `ROADMAP.md`, Week 4).
   Button that lands inside some other clickable element warns.
 
 ### Added
+
+- **Icons that move.** `Icon` takes `animate` and `active`: seventeen built-ins move with
+  CSS alone (check draws in, checkbox fills and ticks, bell swings, plus turns into a
+  cross, chevrons flip, arrows lean, refresh turns, eye blinks, heart fills with a beat,
+  trash lifts its lid, menu folds into a cross). Timing follows the theme's border shape
+  (new foundations tokens `--icon-motion-*`); nothing moves under reduced motion. The
+  motion comes from `once-ui-system/icons`, whose drawings now mark their moving parts.
 
 - **`InsideControl`** marks its content as part of a control you drew yourself (a
   `role="button"` element with its own onClick): an unwired Button inside it stays a plain

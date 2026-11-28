@@ -11,7 +11,9 @@
   "size": "TShirtSizes = m",
   "decorative": "boolean = true",
   "tooltip": "ReactNode",
-  "tooltipPosition": "\"top\" | \"bottom\" | \"left\" | \"right\" = top"
+  "tooltipPosition": "\"top\" | \"bottom\" | \"left\" | \"right\" = top",
+  "animate": "boolean | IconMotionTrigger",
+  "active": "boolean"
  },
  "tags": [
   "basics"
@@ -60,6 +62,11 @@
    "strong",
    "medium",
    "weak"
+  ],
+  "IconMotionTrigger": [
+   "in",
+   "active",
+   "hover"
   ],
   "IconName": "BuiltInIconName | Extract<keyof IconLibraryOverrides, string>",
   "TShirtSizes": [

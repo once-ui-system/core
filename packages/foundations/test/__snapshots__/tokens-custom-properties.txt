@@ -257,6 +257,10 @@
 --header-height
 --icon-linecap
 --icon-linejoin
+--icon-motion-duration
+--icon-motion-ease
+--icon-motion-ease-out
+--icon-motion-pop
 --info-alpha
 --info-alpha-medium
 --info-alpha-strong

@@ -66,10 +66,12 @@ describe("NavIcon with a menu", () => {
 
   it("draws the cross while active", () => {
     const { rerender, container } = render(<NavIcon active={false} />, { wrapper });
-    const glyph = () => container.querySelector("[role=button] > svg")?.getAttribute("class") ?? "";
-    expect(glyph()).not.toMatch(/_active_/);
+    // The menu icon's motion: data-active folds its three lines into a cross.
+    const icon = () => container.querySelector('[role=button] [data-icon="menu"]');
+    expect(icon()).toHaveAttribute("data-animate", "active");
+    expect(icon()).not.toHaveAttribute("data-active");
     rerender(<NavIcon active />);
-    expect(container.querySelectorAll("[role=button] > svg path")).toHaveLength(3);
-    expect(glyph()).toMatch(/_active_/);
+    expect(container.querySelectorAll("[role=button] svg [data-part]")).toHaveLength(3);
+    expect(icon()).toHaveAttribute("data-active");
   });
 });

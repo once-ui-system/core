@@ -1,7 +1,8 @@
 "use client";
 
 import classNames from "clsx";
-import React, { useId } from "react";
+import type React from "react";
+import { useId, useState } from "react";
 import type { LeafProps } from "../interfaces.js";
 import {
   type ControlChromeProps,
@@ -14,7 +15,7 @@ import { useControllableState } from "../internal/useControllableState.js";
 import { takeLeafProps } from "../utils/leafLayout.js";
 import { Flex } from "./Flex.js";
 import { Icon } from "./Icon.js";
-import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails.js";
+import { InteractiveDetails, type InteractiveDetailsProps } from "./InteractiveDetails.js";
 import styles from "./SharedInteractiveStyles.module.scss";
 
 interface CheckboxProps
@@ -81,8 +82,11 @@ const Checkbox = ({
 
   // Every change goes through the native input, so its `onChange` hears
   // the same event a plain checkbox would send.
+  // The tick draws itself in when a person checks the box, not on page load.
+  const [toggled, setToggled] = useState(false);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (disabled) return;
+    setToggled(true);
     setIsChecked(event.target.checked);
     onChange?.(event);
   };
@@ -158,7 +162,13 @@ const Checkbox = ({
       >
         {isChecked && !indeterminate && (
           <Flex className={styles.icon}>
-            <Icon onSolid="brand-strong" name="check" size="xs" />
+            {/* Mounted on check, so it draws itself in. */}
+            <Icon
+              onSolid="brand-strong"
+              name="check"
+              size="xs"
+              animate={toggled ? "in" : undefined}
+            />
           </Flex>
         )}
         {indeterminate && (
