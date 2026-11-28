@@ -7,7 +7,8 @@
     "spacing": 3,
     "typography": 4,
     "border": 5,
-    "responsive": 6,
-    "components": 7
+    "icons": 6,
+    "responsive": 7,
+    "components": 8
   }
 }

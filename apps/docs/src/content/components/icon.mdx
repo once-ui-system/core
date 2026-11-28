@@ -149,36 +149,11 @@ By default, icons are considered decorative and hidden from screen readers. Use 
 
 ## Icon library
 
-Once UI ships its own icons: 178 names drawn in one line style. The SVG data is
-inlined in the package, so no icon dependency is installed with it.
-
-`name` is typed as `IconName`, a union of those names, so a typo is a build
-error rather than a blank space at runtime. To add your own icons, from
-[react-icons](https://react-icons.github.io/react-icons/), another set, or
-hand-written SVG, and to extend that union with them, see
-[IconProvider](/contexts/iconProvider).
-
-Search the full set below. Click an icon to copy its name.
-
-<IconGallery />
-
-The same list is exported as `iconLibrary`, and `BuiltInIconName` is the type of
-its keys, if you need to build your own picker:
-
-<CodeBlock
-  marginTop="16"
-  marginBottom="24"
-  codes={[
-    {
-      code:
-`import { iconLibrary, type BuiltInIconName } from "@once-ui-system/core";
-
-const names = Object.keys(iconLibrary) as BuiltInIconName[];`,
-      language: "tsx",
-      label: "List the icons"
-    }
-  ]}
-/>
+Once UI ships its own icons: 178 names drawn in one line style, inlined in the
+package. Browse them on the [Icons](/basics/icons) page, where you can try each
+one at every size, in your theme's colours and with round or square caps, and
+copy its name or JSX. `name` is typed as `IconName`, so a typo is a build error.
+To add your own icons, see [IconProvider](/contexts/iconProvider).
 
 ### Coming from 2.x
 
